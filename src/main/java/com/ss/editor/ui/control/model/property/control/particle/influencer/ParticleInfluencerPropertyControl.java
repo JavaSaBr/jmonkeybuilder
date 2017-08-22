@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
-import com.ss.editor.ui.control.property.AbstractPropertyControl;
+import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.rlib.function.SixObjectConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ import java.util.function.BiConsumer;
  * @author JavaSaBr
  */
 public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> extends
-        AbstractPropertyControl<ModelChangeConsumer, D, T> {
+        PropertyControl<ModelChangeConsumer, D, T> {
 
     /**
      * New change handler six object consumer.
@@ -30,8 +30,8 @@ public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> 
      * @return the six object consumer
      */
     @NotNull
-    public static <D extends ParticleInfluencer, T> SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>>
-    newChangeHandler(@NotNull final Object parent) {
+    public static <D extends ParticleInfluencer, T> SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler(
+            @NotNull final Object parent) {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
             final ParticleInfluencerPropertyOperation<D, T> operation =
@@ -43,14 +43,6 @@ public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> 
         };
     }
 
-    /**
-     * Instantiates a new Particle influencer property control.
-     *
-     * @param propertyValue  the property value
-     * @param propertyName   the property name
-     * @param changeConsumer the change consumer
-     * @param parent         the parent
-     */
     public ParticleInfluencerPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                              @NotNull final ModelChangeConsumer changeConsumer,
                                              @NotNull final Object parent) {

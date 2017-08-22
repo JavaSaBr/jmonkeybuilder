@@ -20,7 +20,7 @@ import com.ss.editor.ui.component.editing.terrain.control.*;
 import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import com.ss.editor.ui.control.property.AbstractPropertyControl;
+import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -56,11 +56,11 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     /**
      * The constant LABEL_PERCENT.
      */
-    public static final double LABEL_PERCENT = 1D - AbstractPropertyControl.CONTROL_WIDTH_PERCENT_2;
+    public static final double LABEL_PERCENT = 1D - PropertyControl.CONTROL_WIDTH_PERCENT_2;
     /**
      * The constant FIELD_PERCENT.
      */
-    public static final double FIELD_PERCENT = AbstractPropertyControl.CONTROL_WIDTH_PERCENT_2;
+    public static final double FIELD_PERCENT = PropertyControl.CONTROL_WIDTH_PERCENT_2;
 
     /**
      * The constant TERRAIN_PARAM.

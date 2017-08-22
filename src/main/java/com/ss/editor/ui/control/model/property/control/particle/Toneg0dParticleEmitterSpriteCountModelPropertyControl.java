@@ -2,26 +2,19 @@ package com.ss.editor.ui.control.model.property.control.particle;
 
 import com.jme3.math.Vector2f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector2FPropertyControl;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The implementation of the {@link Vector2fModelPropertyControl} to edit sprite count of the {@link
+ * The implementation of the {@link Vector2FPropertyControl} to edit sprite count of the {@link
  * ParticleEmitterNode}*.
  *
  * @author JavaSaBr.
  */
 public class Toneg0dParticleEmitterSpriteCountModelPropertyControl extends
-        Vector2fModelPropertyControl<ParticleEmitterNode> {
+        Vector2FPropertyControl<ModelChangeConsumer, ParticleEmitterNode> {
 
-    /**
-     * Instantiates a new Toneg0d particle emitter sprite count model property control.
-     *
-     * @param element             the element
-     * @param paramName           the param name
-     * @param modelChangeConsumer the model change consumer
-     */
     public Toneg0dParticleEmitterSpriteCountModelPropertyControl(@NotNull final Vector2f element,
                                                                  @NotNull final String paramName,
                                                                  @NotNull final ModelChangeConsumer modelChangeConsumer) {

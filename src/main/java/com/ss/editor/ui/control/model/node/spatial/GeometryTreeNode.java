@@ -1,9 +1,12 @@
 package com.ss.editor.ui.control.model.node.spatial;
 
+import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.GenerateLoDAction;
@@ -50,8 +53,11 @@ public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
 
         final Geometry geometry = getElement();
         final Mesh mesh = geometry.getMesh();
+        final Material material = geometry.getMaterial();
+
         if (mesh != null) result.add(FACTORY_REGISTRY.createFor(mesh));
 
+        result.add(FACTORY_REGISTRY.createFor(material));
         result.addAll(super.getChildren(nodeTree));
 
         return result;
@@ -78,5 +84,35 @@ public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
             final Mesh element = (Mesh) child.getElement();
             geometry.setMesh(element);
         }
+    }
+
+    @Override
+    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
+        final Object element = child.getElement();
+        return (element instanceof Material && isCopy) || super.canAccept(child, isCopy);
+    }
+
+    @Override
+    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
+                       final boolean isCopy) {
+
+        final Geometry geometry = getElement();
+
+        if (object instanceof Material) {
+
+            final Material material = (Material) object;
+
+            if (isCopy) {
+
+                final Material clone = material.clone();
+                final ModelPropertyOperation<Geometry, Material> operation =
+                        new ModelPropertyOperation<>(geometry, "Material", clone, geometry.getMaterial());
+                operation.setApplyHandler(Geometry::setMaterial);
+
+                changeConsumer.execute(operation);
+            }
+        }
+
+        super.accept(changeConsumer, object, isCopy);
     }
 }

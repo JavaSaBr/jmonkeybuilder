@@ -84,8 +84,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the name of this node.
      */
-    @NotNull
-    public String getName() {
+    public @NotNull String getName() {
         return "unknown name";
     }
 
@@ -122,8 +121,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param nodeTree the node tree
      * @return the array of children of this node.
      */
-    @NotNull
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         return EMPTY_ARRAY;
     }
 
@@ -151,8 +149,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the icon of this node.
      */
-    @Nullable
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return null;
     }
 

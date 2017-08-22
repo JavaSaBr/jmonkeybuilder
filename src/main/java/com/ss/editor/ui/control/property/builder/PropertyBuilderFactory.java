@@ -35,6 +35,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(CollisionShapePropertyBuilder.getInstance());
         BUILDERS.add(PrimitivePropertyBuilder.getInstance());
         BUILDERS.add(MeshPropertyBuilder.getInstance());
+        BUILDERS.add(MaterialPropertyBuilder.getInstance());
         BUILDERS.add(ParticleInfluencerPropertyBuilder.getInstance());
         BUILDERS.add(EmitterShapePropertyBuilder.getInstance());
         BUILDERS.add(Toneg0dParticleInfluencerPropertyBuilder.getInstance());

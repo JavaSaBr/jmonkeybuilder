@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.choose;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.ui.control.property.AbstractPropertyControl;
+import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Label;
@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class NamedChooseTextureControl extends ChooseTextureControl {
 
-    private static final double LABEL_PERCENT = 1D - AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
-    private static final double FIELD_PERCENT = AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
+    private static final double LABEL_PERCENT = 1D - PropertyControl.CONTROL_WIDTH_PERCENT;
+    private static final double FIELD_PERCENT = PropertyControl.CONTROL_WIDTH_PERCENT;
 
     /**
      * The name of this control.

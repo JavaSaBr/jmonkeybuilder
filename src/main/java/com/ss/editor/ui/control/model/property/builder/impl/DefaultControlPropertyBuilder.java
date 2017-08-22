@@ -17,9 +17,10 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.*;
+import com.ss.editor.ui.control.model.property.control.WheelElementModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.editor.ui.control.property.impl.*;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -46,8 +47,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
      *
      * @return the instance
      */
-    @NotNull
-    public static PropertyBuilder getInstance() {
+    public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
 
@@ -99,29 +99,29 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         final float speed = control.getSpeed();
         final float time = control.getTime();
 
-        final EnumModelPropertyControl<AbstractCinematicEvent, LoopMode> loopModeControl =
-                new EnumModelPropertyControl<>(loopMode, Messages.MODEL_PROPERTY_LOOP_MODE, changeConsumer, LOOP_MODES);
+        final EnumPropertyControl<ModelChangeConsumer, AbstractCinematicEvent, LoopMode> loopModeControl =
+                new EnumPropertyControl<>(loopMode, Messages.MODEL_PROPERTY_LOOP_MODE, changeConsumer, LOOP_MODES);
 
         loopModeControl.setApplyHandler(AbstractCinematicEvent::setLoopMode);
         loopModeControl.setSyncHandler(AbstractCinematicEvent::getLoopMode);
         loopModeControl.setEditObject(control);
 
-        final FloatModelPropertyControl<AbstractCinematicEvent> initialDurationControl =
-                new FloatModelPropertyControl<>(initialDuration, Messages.MODEL_PROPERTY_INITIAL_DURATION, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, AbstractCinematicEvent> initialDurationControl =
+                new FloatPropertyControl<>(initialDuration, Messages.MODEL_PROPERTY_INITIAL_DURATION, changeConsumer);
 
         initialDurationControl.setApplyHandler(AbstractCinematicEvent::setInitialDuration);
         initialDurationControl.setSyncHandler(AbstractCinematicEvent::getInitialDuration);
         initialDurationControl.setEditObject(control);
 
-        final FloatModelPropertyControl<AbstractCinematicEvent> speedControl =
-                new FloatModelPropertyControl<>(speed, Messages.MODEL_PROPERTY_SPEED, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, AbstractCinematicEvent> speedControl =
+                new FloatPropertyControl<>(speed, Messages.MODEL_PROPERTY_SPEED, changeConsumer);
 
         speedControl.setApplyHandler(AbstractCinematicEvent::setSpeed);
         speedControl.setSyncHandler(AbstractCinematicEvent::getSpeed);
         speedControl.setEditObject(control);
 
-        final FloatModelPropertyControl<AbstractCinematicEvent> timeControl =
-                new FloatModelPropertyControl<>(time, Messages.MODEL_PROPERTY_TIME, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, AbstractCinematicEvent> timeControl =
+                new FloatPropertyControl<>(time, Messages.MODEL_PROPERTY_TIME, changeConsumer);
 
         timeControl.setApplyHandler(AbstractCinematicEvent::setSpeed);
         timeControl.setSyncHandler(AbstractCinematicEvent::getSpeed);
@@ -138,8 +138,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
 
         final boolean enabled = control.isEnabled();
 
-        final BooleanModelPropertyControl<AbstractControl> enabledControl =
-                new BooleanModelPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, AbstractControl> enabledControl =
+                new BooleanPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
 
         enabledControl.setApplyHandler(AbstractControl::setEnabled);
         enabledControl.setSyncHandler(AbstractControl::isEnabled);
@@ -156,22 +156,22 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
 
         final MotionEvent.Direction directionType = control.getDirectionType();
 
-        final EnumModelPropertyControl<MotionEvent, MotionEvent.Direction> directionTypeControl =
-                new EnumModelPropertyControl<>(directionType, Messages.MODEL_PROPERTY_DIRECTION_TYPE, changeConsumer, DIRECTIONS);
+        final EnumPropertyControl<ModelChangeConsumer, MotionEvent, MotionEvent.Direction> directionTypeControl =
+                new EnumPropertyControl<>(directionType, Messages.MODEL_PROPERTY_DIRECTION_TYPE, changeConsumer, DIRECTIONS);
 
         directionTypeControl.setApplyHandler(MotionEvent::setDirectionType);
         directionTypeControl.setSyncHandler(MotionEvent::getDirectionType);
         directionTypeControl.setEditObject(control);
 
-        final Vector3fModelPropertyControl<MotionEvent> directionControl =
-                new Vector3fModelPropertyControl<>(direction, Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, MotionEvent> directionControl =
+                new Vector3FPropertyControl<>(direction, Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
 
         directionControl.setApplyHandler(MotionEvent::setDirection);
         directionControl.setSyncHandler(MotionEvent::getDirection);
         directionControl.setEditObject(control);
 
-        final QuaternionModelPropertyControl<MotionEvent> rotationControl =
-                new QuaternionModelPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
+        final QuaternionPropertyControl<ModelChangeConsumer, MotionEvent> rotationControl =
+                new QuaternionPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
 
         rotationControl.setApplyHandler(MotionEvent::setRotation);
         rotationControl.setSyncHandler(MotionEvent::getRotation);
@@ -200,64 +200,64 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         final boolean useViewDirection = control.isUseViewDirection();
         final boolean enabled = control.isEnabled();
 
-        final BooleanModelPropertyControl<CharacterControl> enabledControl =
-                new BooleanModelPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, CharacterControl> enabledControl =
+                new BooleanPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
 
         enabledControl.setApplyHandler(CharacterControl::setEnabled);
         enabledControl.setSyncHandler(CharacterControl::isEnabled);
         enabledControl.setEditObject(control);
 
-        final Vector3fModelPropertyControl<CharacterControl> viewDirectionControl =
-                new Vector3fModelPropertyControl<>(viewDirection, Messages.MODEL_PROPERTY_VIEW_DIRECTION, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, CharacterControl> viewDirectionControl =
+                new Vector3FPropertyControl<>(viewDirection, Messages.MODEL_PROPERTY_VIEW_DIRECTION, changeConsumer);
 
         viewDirectionControl.setApplyHandler(CharacterControl::setViewDirection);
         viewDirectionControl.setSyncHandler(CharacterControl::getViewDirection);
         viewDirectionControl.setEditObject(control);
 
-        final Vector3fModelPropertyControl<CharacterControl> walkDirectionControl =
-                new Vector3fModelPropertyControl<>(walkDirection, Messages.MODEL_PROPERTY_WALK_DIRECTION, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, CharacterControl> walkDirectionControl =
+                new Vector3FPropertyControl<>(walkDirection, Messages.MODEL_PROPERTY_WALK_DIRECTION, changeConsumer);
 
         walkDirectionControl.setApplyHandler(CharacterControl::setWalkDirection);
         walkDirectionControl.setSyncHandler(CharacterControl::getWalkDirection);
         walkDirectionControl.setEditObject(control);
 
-        final FloatModelPropertyControl<CharacterControl> fallSpeedControl =
-                new FloatModelPropertyControl<>(fallSpeed, Messages.MODEL_PROPERTY_FALL_SPEED, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> fallSpeedControl =
+                new FloatPropertyControl<>(fallSpeed, Messages.MODEL_PROPERTY_FALL_SPEED, changeConsumer);
 
         fallSpeedControl.setApplyHandler(CharacterControl::setFallSpeed);
         fallSpeedControl.setSyncHandler(CharacterControl::getFallSpeed);
         fallSpeedControl.setEditObject(control);
 
-        final FloatModelPropertyControl<CharacterControl> gravityControl =
-                new FloatModelPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> gravityControl =
+                new FloatPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
 
         gravityControl.setApplyHandler(CharacterControl::setGravity);
         gravityControl.setSyncHandler(CharacterControl::getGravity);
         gravityControl.setEditObject(control);
 
-        final FloatModelPropertyControl<CharacterControl> jumpSpeedControl =
-                new FloatModelPropertyControl<>(jumpSpeed, Messages.MODEL_PROPERTY_JUMP_SPEED, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> jumpSpeedControl =
+                new FloatPropertyControl<>(jumpSpeed, Messages.MODEL_PROPERTY_JUMP_SPEED, changeConsumer);
 
         jumpSpeedControl.setApplyHandler(CharacterControl::setJumpSpeed);
         jumpSpeedControl.setSyncHandler(CharacterControl::getJumpSpeed);
         jumpSpeedControl.setEditObject(control);
 
-        final FloatModelPropertyControl<CharacterControl> maxSlopeControl =
-                new FloatModelPropertyControl<>(maxSlope, Messages.MODEL_PROPERTY_MAX_SLOPE, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> maxSlopeControl =
+                new FloatPropertyControl<>(maxSlope, Messages.MODEL_PROPERTY_MAX_SLOPE, changeConsumer);
 
         maxSlopeControl.setApplyHandler(CharacterControl::setMaxSlope);
         maxSlopeControl.setSyncHandler(CharacterControl::getMaxSlope);
         maxSlopeControl.setEditObject(control);
 
-        final BooleanModelPropertyControl<CharacterControl> applyPhysicsLocalControl =
-                new BooleanModelPropertyControl<>(applyPhysicsLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, CharacterControl> applyPhysicsLocalControl =
+                new BooleanPropertyControl<>(applyPhysicsLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
 
         applyPhysicsLocalControl.setApplyHandler(CharacterControl::setApplyPhysicsLocal);
         applyPhysicsLocalControl.setSyncHandler(CharacterControl::isApplyPhysicsLocal);
         applyPhysicsLocalControl.setEditObject(control);
 
-        final BooleanModelPropertyControl<CharacterControl> useViewDirectionControl =
-                new BooleanModelPropertyControl<>(useViewDirection, Messages.MODEL_PROPERTY_IS_USE_VIEW_DIRECTION, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, CharacterControl> useViewDirectionControl =
+                new BooleanPropertyControl<>(useViewDirection, Messages.MODEL_PROPERTY_IS_USE_VIEW_DIRECTION, changeConsumer);
 
         useViewDirectionControl.setApplyHandler(CharacterControl::setUseViewDirection);
         useViewDirectionControl.setSyncHandler(CharacterControl::isUseViewDirection);
@@ -282,8 +282,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
 
         final boolean hardwareSkinningPreferred = control.isHardwareSkinningPreferred();
 
-        final BooleanModelPropertyControl<SkeletonControl> hardwareSkinningPreferredControl =
-                new BooleanModelPropertyControl<>(hardwareSkinningPreferred, Messages.MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, SkeletonControl> hardwareSkinningPreferredControl =
+                new BooleanPropertyControl<>(hardwareSkinningPreferred, Messages.MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED, changeConsumer);
 
         hardwareSkinningPreferredControl.setApplyHandler(SkeletonControl::setHardwareSkinningPreferred);
         hardwareSkinningPreferredControl.setSyncHandler(SkeletonControl::isHardwareSkinningPreferred);
@@ -297,8 +297,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
 
         final float length = animation.getLength();
 
-        final DefaultModelSinglePropertyControl<Animation, Float> lengthControl =
-                new DefaultModelSinglePropertyControl<>(length, Messages.MODEL_PROPERTY_LENGTH, changeConsumer);
+        final DefaultSinglePropertyControl<ModelChangeConsumer, Animation, Float> lengthControl =
+                new DefaultSinglePropertyControl<>(length, Messages.MODEL_PROPERTY_LENGTH, changeConsumer);
 
         lengthControl.setSyncHandler(Animation::getLength);
         lengthControl.setToStringFunction(value -> Float.toString(value));
@@ -314,15 +314,15 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         final boolean kinematicSpatial = control.isKinematicSpatial();
         final boolean enabled = control.isEnabled();
 
-        final BooleanModelPropertyControl<RigidBodyControl> enabledControl =
-                new BooleanModelPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, RigidBodyControl> enabledControl =
+                new BooleanPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
 
         enabledControl.setApplyHandler(RigidBodyControl::setEnabled);
         enabledControl.setSyncHandler(RigidBodyControl::isEnabled);
         enabledControl.setEditObject(control);
 
-        final BooleanModelPropertyControl<RigidBodyControl> kinematicSpatialControl =
-                new BooleanModelPropertyControl<>(kinematicSpatial, Messages.MODEL_PROPERTY_IS_KINEMATIC_SPATIAL, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, RigidBodyControl> kinematicSpatialControl =
+                new BooleanPropertyControl<>(kinematicSpatial, Messages.MODEL_PROPERTY_IS_KINEMATIC_SPATIAL, changeConsumer);
 
         kinematicSpatialControl.setApplyHandler(RigidBodyControl::setKinematicSpatial);
         kinematicSpatialControl.setSyncHandler(RigidBodyControl::isKinematicSpatial);
@@ -338,15 +338,15 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         final boolean enabled = control.isEnabled();
         final boolean applyPhysicsLocal = control.isApplyPhysicsLocal();
 
-        final BooleanModelPropertyControl<VehicleControl> enabledControl =
-                new BooleanModelPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, VehicleControl> enabledControl =
+                new BooleanPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
 
         enabledControl.setApplyHandler(VehicleControl::setEnabled);
         enabledControl.setSyncHandler(VehicleControl::isEnabled);
         enabledControl.setEditObject(control);
 
-        final BooleanModelPropertyControl<VehicleControl> applyPhysicsLocalControl =
-                new BooleanModelPropertyControl<>(applyPhysicsLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, VehicleControl> applyPhysicsLocalControl =
+                new BooleanPropertyControl<>(applyPhysicsLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
 
         applyPhysicsLocalControl.setApplyHandler(VehicleControl::setApplyPhysicsLocal);
         applyPhysicsLocalControl.setSyncHandler(VehicleControl::isApplyPhysicsLocal);
@@ -380,78 +380,78 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         final boolean frontWheel = control.isFrontWheel();
         final boolean applyLocal = control.isApplyLocal();
 
-        final BooleanModelPropertyControl<VehicleWheel> frontWheelControl =
-                new BooleanModelPropertyControl<>(frontWheel, Messages.MODEL_PROPERTY_IS_FRONT, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, VehicleWheel> frontWheelControl =
+                new BooleanPropertyControl<>(frontWheel, Messages.MODEL_PROPERTY_IS_FRONT, changeConsumer);
 
         frontWheelControl.setApplyHandler(VehicleWheel::setFrontWheel);
         frontWheelControl.setSyncHandler(VehicleWheel::isFrontWheel);
         frontWheelControl.setEditObject(control);
 
-        final BooleanModelPropertyControl<VehicleWheel> applyLocalControl =
-                new BooleanModelPropertyControl<>(applyLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, VehicleWheel> applyLocalControl =
+                new BooleanPropertyControl<>(applyLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
 
         applyLocalControl.setApplyHandler(VehicleWheel::setApplyLocal);
         applyLocalControl.setSyncHandler(VehicleWheel::isApplyLocal);
         applyLocalControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> dampingCompressionControl =
-                new FloatModelPropertyControl<>(wheelsDampingCompression, Messages.MODEL_PROPERTY_DAMPING_COMPRESSION, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> dampingCompressionControl =
+                new FloatPropertyControl<>(wheelsDampingCompression, Messages.MODEL_PROPERTY_DAMPING_COMPRESSION, changeConsumer);
 
         dampingCompressionControl.setApplyHandler(VehicleWheel::setWheelsDampingCompression);
         dampingCompressionControl.setSyncHandler(VehicleWheel::getWheelsDampingCompression);
         dampingCompressionControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> frictionSlipControl =
-                new FloatModelPropertyControl<>(frictionSlip, Messages.MODEL_PROPERTY_FRICTION_SLIP, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> frictionSlipControl =
+                new FloatPropertyControl<>(frictionSlip, Messages.MODEL_PROPERTY_FRICTION_SLIP, changeConsumer);
 
         frictionSlipControl.setApplyHandler(VehicleWheel::setFrictionSlip);
         frictionSlipControl.setSyncHandler(VehicleWheel::getFrictionSlip);
         frictionSlipControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> radiusControl =
-                new FloatModelPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> radiusControl =
+                new FloatPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
 
         radiusControl.setApplyHandler(VehicleWheel::setRadius);
         radiusControl.setSyncHandler(VehicleWheel::getRadius);
         radiusControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> maxSuspensionForceControl =
-                new FloatModelPropertyControl<>(maxSuspensionForce, Messages.MODEL_PROPERTY_MAX_SUSPENSION_FORCE, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> maxSuspensionForceControl =
+                new FloatPropertyControl<>(maxSuspensionForce, Messages.MODEL_PROPERTY_MAX_SUSPENSION_FORCE, changeConsumer);
 
         maxSuspensionForceControl.setApplyHandler(VehicleWheel::setMaxSuspensionForce);
         maxSuspensionForceControl.setSyncHandler(VehicleWheel::getMaxSuspensionForce);
         maxSuspensionForceControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> maxSuspensionTravelCmControl =
-                new FloatModelPropertyControl<>(maxSuspensionTravelCm, Messages.MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> maxSuspensionTravelCmControl =
+                new FloatPropertyControl<>(maxSuspensionTravelCm, Messages.MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM, changeConsumer);
 
         maxSuspensionTravelCmControl.setApplyHandler(VehicleWheel::setMaxSuspensionTravelCm);
         maxSuspensionTravelCmControl.setSyncHandler(VehicleWheel::getMaxSuspensionTravelCm);
         maxSuspensionTravelCmControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> wheelsDampingRelaxationControl =
-                new FloatModelPropertyControl<>(wheelsDampingRelaxation, Messages.MODEL_PROPERTY_DAMPING_RELAXATION, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> wheelsDampingRelaxationControl =
+                new FloatPropertyControl<>(wheelsDampingRelaxation, Messages.MODEL_PROPERTY_DAMPING_RELAXATION, changeConsumer);
 
         wheelsDampingRelaxationControl.setApplyHandler(VehicleWheel::setWheelsDampingRelaxation);
         wheelsDampingRelaxationControl.setSyncHandler(VehicleWheel::getWheelsDampingRelaxation);
         wheelsDampingRelaxationControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> suspensionStiffnessControl =
-                new FloatModelPropertyControl<>(suspensionStiffness, Messages.MODEL_PROPERTY_SUSPENSION_STIFFNESS, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> suspensionStiffnessControl =
+                new FloatPropertyControl<>(suspensionStiffness, Messages.MODEL_PROPERTY_SUSPENSION_STIFFNESS, changeConsumer);
 
         suspensionStiffnessControl.setApplyHandler(VehicleWheel::setSuspensionStiffness);
         suspensionStiffnessControl.setSyncHandler(VehicleWheel::getSuspensionStiffness);
         suspensionStiffnessControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> restLengthControl =
-                new FloatModelPropertyControl<>(restLength, Messages.MODEL_PROPERTY_REST_LENGTH, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> restLengthControl =
+                new FloatPropertyControl<>(restLength, Messages.MODEL_PROPERTY_REST_LENGTH, changeConsumer);
 
         restLengthControl.setApplyHandler(VehicleWheel::setRestLength);
         restLengthControl.setSyncHandler(VehicleWheel::getRestLength);
         restLengthControl.setEditObject(control);
 
-        final FloatModelPropertyControl<VehicleWheel> rollInfluenceControl =
-                new FloatModelPropertyControl<>(rollInfluence, Messages.MODEL_PROPERTY_ROLL_INFLUENCE, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, VehicleWheel> rollInfluenceControl =
+                new FloatPropertyControl<>(rollInfluence, Messages.MODEL_PROPERTY_ROLL_INFLUENCE, changeConsumer);
 
         rollInfluenceControl.setApplyHandler(VehicleWheel::setRollInfluence);
         rollInfluenceControl.setSyncHandler(VehicleWheel::getRollInfluence);
@@ -464,29 +464,29 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         wheelSpatialControl.setSyncHandler(VehicleWheel::getWheelSpatial);
         wheelSpatialControl.setEditObject(control);
 
-        final DefaultModelSinglePropertyControl<VehicleWheel, Long> wheelIdControl =
-                new DefaultModelSinglePropertyControl<>(wheelId, Messages.MODEL_PROPERTY_OBJECT_ID, changeConsumer);
+        final DefaultSinglePropertyControl<ModelChangeConsumer, VehicleWheel, Long> wheelIdControl =
+                new DefaultSinglePropertyControl<>(wheelId, Messages.MODEL_PROPERTY_OBJECT_ID, changeConsumer);
 
         wheelIdControl.setSyncHandler(VehicleWheel::getWheelId);
         wheelIdControl.setToStringFunction(value -> Long.toString(value));
         wheelIdControl.setEditObject(control);
 
-        final DefaultModelSinglePropertyControl<VehicleWheel, Vector3f> locationControl =
-                new DefaultModelSinglePropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final DefaultSinglePropertyControl<ModelChangeConsumer, VehicleWheel, Vector3f> locationControl =
+                new DefaultSinglePropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
 
         locationControl.setSyncHandler(VehicleWheel::getLocation);
         locationControl.setToStringFunction(Vector3f::toString);
         locationControl.setEditObject(control);
 
-        final DefaultModelSinglePropertyControl<VehicleWheel, Vector3f> directionControl =
-                new DefaultModelSinglePropertyControl<>(direction, Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
+        final DefaultSinglePropertyControl<ModelChangeConsumer, VehicleWheel, Vector3f> directionControl =
+                new DefaultSinglePropertyControl<>(direction, Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
 
         directionControl.setSyncHandler(VehicleWheel::getDirection);
         directionControl.setToStringFunction(Vector3f::toString);
         directionControl.setEditObject(control);
 
-        final DefaultModelSinglePropertyControl<VehicleWheel, Vector3f> axleControl =
-                new DefaultModelSinglePropertyControl<>(axle, Messages.MODEL_PROPERTY_AXLE, changeConsumer);
+        final DefaultSinglePropertyControl<ModelChangeConsumer, VehicleWheel, Vector3f> axleControl =
+                new DefaultSinglePropertyControl<>(axle, Messages.MODEL_PROPERTY_AXLE, changeConsumer);
 
         axleControl.setSyncHandler(VehicleWheel::getAxle);
         axleControl.setToStringFunction(Vector3f::toString);
@@ -527,36 +527,36 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
 
         final boolean kinematic = control.isKinematic();
 
-        final BooleanModelPropertyControl<PhysicsRigidBody> kinematicControl =
-                new BooleanModelPropertyControl<>(kinematic, Messages.MODEL_PROPERTY_IS_KINEMATIC, changeConsumer);
+        final BooleanPropertyControl<ModelChangeConsumer, PhysicsRigidBody> kinematicControl =
+                new BooleanPropertyControl<>(kinematic, Messages.MODEL_PROPERTY_IS_KINEMATIC, changeConsumer);
 
         kinematicControl.setApplyHandler(PhysicsRigidBody::setKinematic);
         kinematicControl.setSyncHandler(PhysicsRigidBody::isKinematic);
         kinematicControl.setEditObject(control);
 
-        final Vector3fModelPropertyControl<PhysicsRigidBody> angularVelocityControl =
-                new Vector3fModelPropertyControl<>(angularVelocity, Messages.MODEL_PROPERTY_ANGULAR_VELOCITY, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, PhysicsRigidBody> angularVelocityControl =
+                new Vector3FPropertyControl<>(angularVelocity, Messages.MODEL_PROPERTY_ANGULAR_VELOCITY, changeConsumer);
 
         angularVelocityControl.setApplyHandler(PhysicsRigidBody::setAngularVelocity);
         angularVelocityControl.setSyncHandler(PhysicsRigidBody::getAngularVelocity);
         angularVelocityControl.setEditObject(control);
 
-        final Vector3fModelPropertyControl<PhysicsRigidBody> gravityControl =
-                new Vector3fModelPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, PhysicsRigidBody> gravityControl =
+                new Vector3FPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
 
         gravityControl.setApplyHandler(PhysicsRigidBody::setGravity);
         gravityControl.setSyncHandler(PhysicsRigidBody::getGravity);
         gravityControl.setEditObject(control);
 
-        final Vector3fModelPropertyControl<PhysicsRigidBody> linearFactorControl =
-                new Vector3fModelPropertyControl<>(linearFactor, Messages.MODEL_PROPERTY_LINEAR_FACTOR, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, PhysicsRigidBody> linearFactorControl =
+                new Vector3FPropertyControl<>(linearFactor, Messages.MODEL_PROPERTY_LINEAR_FACTOR, changeConsumer);
 
         linearFactorControl.setApplyHandler(PhysicsRigidBody::setLinearFactor);
         linearFactorControl.setSyncHandler(PhysicsRigidBody::getLinearFactor);
         linearFactorControl.setEditObject(control);
 
-        final FloatModelPropertyControl<PhysicsRigidBody> angularDampingControl =
-                new FloatModelPropertyControl<>(angularDamping, Messages.MODEL_PROPERTY_ANGULAR_DAMPING, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> angularDampingControl =
+                new FloatPropertyControl<>(angularDamping, Messages.MODEL_PROPERTY_ANGULAR_DAMPING, changeConsumer);
 
         angularDampingControl.setApplyHandler(PhysicsRigidBody::setAngularDamping);
         angularDampingControl.setSyncHandler(PhysicsRigidBody::getAngularDamping);
@@ -564,22 +564,22 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         angularDampingControl.setScrollPower(1F);
         angularDampingControl.setEditObject(control);
 
-        final FloatModelPropertyControl<PhysicsRigidBody> angularFactorControl =
-                new FloatModelPropertyControl<>(angularFactor, Messages.MODEL_PROPERTY_ANGULAR_FACTOR, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> angularFactorControl =
+                new FloatPropertyControl<>(angularFactor, Messages.MODEL_PROPERTY_ANGULAR_FACTOR, changeConsumer);
 
         angularFactorControl.setApplyHandler(PhysicsRigidBody::setAngularFactor);
         angularFactorControl.setSyncHandler(PhysicsRigidBody::getAngularFactor);
         angularFactorControl.setEditObject(control);
 
-        final FloatModelPropertyControl<PhysicsRigidBody> angularSleepingThresholdControl =
-                new FloatModelPropertyControl<>(angularSleepingThreshold, Messages.MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> angularSleepingThresholdControl =
+                new FloatPropertyControl<>(angularSleepingThreshold, Messages.MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD, changeConsumer);
 
         angularSleepingThresholdControl.setApplyHandler(PhysicsRigidBody::setAngularSleepingThreshold);
         angularSleepingThresholdControl.setSyncHandler(PhysicsRigidBody::getAngularSleepingThreshold);
         angularSleepingThresholdControl.setEditObject(control);
 
-        final FloatModelPropertyControl<PhysicsRigidBody> frictionControl =
-                new FloatModelPropertyControl<>(friction, Messages.MODEL_PROPERTY_FRICTION, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> frictionControl =
+                new FloatPropertyControl<>(friction, Messages.MODEL_PROPERTY_FRICTION, changeConsumer);
 
         frictionControl.setApplyHandler(PhysicsRigidBody::setFriction);
         frictionControl.setSyncHandler(PhysicsRigidBody::getFriction);
@@ -587,8 +587,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         frictionControl.setScrollPower(10F);
         frictionControl.setEditObject(control);
 
-        final FloatModelPropertyControl<PhysicsRigidBody> linearDampingControl =
-                new FloatModelPropertyControl<>(linearDamping, Messages.MODEL_PROPERTY_LINEAR_DAMPING, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> linearDampingControl =
+                new FloatPropertyControl<>(linearDamping, Messages.MODEL_PROPERTY_LINEAR_DAMPING, changeConsumer);
 
         linearDampingControl.setApplyHandler(PhysicsRigidBody::setLinearDamping);
         linearDampingControl.setSyncHandler(PhysicsRigidBody::getLinearDamping);
@@ -596,11 +596,11 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         linearDampingControl.setScrollPower(1F);
         linearDampingControl.setEditObject(control);
 
-        FloatModelPropertyControl<PhysicsRigidBody> massControl = null;
+        FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> massControl = null;
 
         if (control.getMass() != 0F) {
 
-            massControl = new FloatModelPropertyControl<>(mass, Messages.MODEL_PROPERTY_MASS, changeConsumer);
+            massControl = new FloatPropertyControl<>(mass, Messages.MODEL_PROPERTY_MASS, changeConsumer);
 
             massControl.setApplyHandler(PhysicsRigidBody::setMass);
             massControl.setSyncHandler(PhysicsRigidBody::getMass);
@@ -609,8 +609,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
             massControl.setEditObject(control);
         }
 
-        final FloatModelPropertyControl<PhysicsRigidBody> restitutionControl =
-                new FloatModelPropertyControl<>(restitution, Messages.MODEL_PROPERTY_RESTITUTION, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PhysicsRigidBody> restitutionControl =
+                new FloatPropertyControl<>(restitution, Messages.MODEL_PROPERTY_RESTITUTION, changeConsumer);
 
         restitutionControl.setApplyHandler(PhysicsRigidBody::setRestitution);
         restitutionControl.setSyncHandler(PhysicsRigidBody::getRestitution);

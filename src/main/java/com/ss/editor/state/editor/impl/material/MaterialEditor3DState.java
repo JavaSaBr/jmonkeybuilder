@@ -87,12 +87,6 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     private final Geometry testQuad;
 
     /**
-     * The camera node.
-     */
-    @Nullable
-    private Node cameraNode;
-
-    /**
      * The current model mode.
      */
     @Nullable
@@ -266,16 +260,6 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         changeModeImpl(getCurrentModelType());
-    }
-
-    @Override
-    protected @NotNull Node getNodeForCamera() {
-
-        if (cameraNode == null) {
-            cameraNode = new Node("CameraNode");
-        }
-
-        return cameraNode;
     }
 
     @Override

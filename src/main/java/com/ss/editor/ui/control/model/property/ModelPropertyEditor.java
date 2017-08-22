@@ -5,7 +5,7 @@ import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.property.AbstractPropertyEditor;
+import com.ss.editor.ui.control.property.PropertyEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
@@ -16,7 +16,7 @@ import tonegod.emitter.node.ParticleNode;
  *
  * @author JavaSaBr
  */
-public class ModelPropertyEditor extends AbstractPropertyEditor<ModelChangeConsumer> {
+public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
 
     /**
      * Instantiates a new Model property editor.

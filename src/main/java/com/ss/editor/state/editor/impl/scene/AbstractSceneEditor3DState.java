@@ -274,12 +274,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private Node collisionPlane;
 
     /**
-     * The node on which the camera is looking.
-     */
-    @Nullable
-    private Node cameraNode;
-
-    /**
      * Grid of the scene.
      */
     @Nullable
@@ -339,9 +333,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
-        final Node stateNode = getStateNode();
-        stateNode.attachChild(getCameraNode());
-
         modelNode.attachChild(lightNode);
         modelNode.attachChild(audioNode);
         modelNode.attachChild(presentableNode);
@@ -376,20 +367,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
     }
 
-    @Override
-    @FromAnyThread
-    protected @NotNull Node getNodeForCamera() {
-        if (cameraNode == null) cameraNode = new Node("CameraNode");
-        return cameraNode;
-    }
-
-    /**
-     * @return the node on which the camera is looking.
-     */
-    @FromAnyThread
-    private @NotNull Node getCameraNode() {
-        return notNull(cameraNode);
-    }
 
     @Override
     @FromAnyThread

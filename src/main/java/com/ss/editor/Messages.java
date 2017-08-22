@@ -476,6 +476,10 @@ public class Messages {
      */
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
     /**
+     * The constant MODEL_FILE_EDITOR_NODE_MATERIAL.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_MATERIAL;
+    /**
      * The constant MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT.
      */
     public static final String MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT;
@@ -2455,6 +2459,7 @@ public class Messages {
         MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
         MODEL_FILE_EDITOR_TRANSFORM_MODE = bundle.getString("ModelFileEditorTransformMode");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
+        MODEL_FILE_EDITOR_NODE_MATERIAL = bundle.getString("ModelFileEditorNodeMaterial");
         MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT = bundle.getString("ModelFileEditorNodeAmbientLight");
         MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT = bundle.getString("ModelFileEditorNodeDirectionLight");
         MODEL_FILE_EDITOR_NODE_POINT_LIGHT = bundle.getString("ModelFileEditorNodePointLight");

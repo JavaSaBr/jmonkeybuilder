@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.operation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
-import com.ss.editor.ui.control.property.operation.AbstractPropertyOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type parameter
  * @author JavaSaBr
  */
-public class ModelPropertyOperation<D, T> extends AbstractPropertyOperation<ModelChangeConsumer, D, T> {
+public class ModelPropertyOperation<D, T> extends PropertyOperation<ModelChangeConsumer, D, T> {
 
     /**
      * Instantiates a new Model property operation.
