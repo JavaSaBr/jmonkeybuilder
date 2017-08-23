@@ -68,7 +68,8 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     protected void redoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(target));
+            editor.notifyJMEChangeProperty(target, propertyName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 
@@ -77,7 +78,8 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     protected void undoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(target));
+            editor.notifyJMEChangeProperty(target, propertyName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 
