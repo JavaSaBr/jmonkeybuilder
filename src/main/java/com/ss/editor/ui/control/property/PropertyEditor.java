@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.UpdatableControl;
-import com.ss.editor.ui.control.property.builder.PropertyBuilderFactory;
+import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
+    @NotNull
+    private static final PropertyBuilderRegistry BUILDER_REGISTRY = PropertyBuilderRegistry.getInstance();
 
     /**
      * The consumer of changes.
@@ -107,7 +109,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilderFactory.buildFor(object, parent, container, changeConsumer);
+            BUILDER_REGISTRY.buildFor(object, parent, container, changeConsumer);
         }
 
         container.setDisable(object == null || !canEdit(object, parent));
@@ -140,7 +142,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilderFactory.buildFor(object, parent, container, changeConsumer);
+            BUILDER_REGISTRY.buildFor(object, parent, container, changeConsumer);
         }
     }
 
