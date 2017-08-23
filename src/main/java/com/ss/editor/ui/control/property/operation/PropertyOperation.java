@@ -12,9 +12,9 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of the {@link AbstractEditorOperation} to edit properties of objects.
  *
- * @param <C> the type parameter
- * @param <D> the type parameter
- * @param <T> the type parameter
+ * @param <C> the type of changed consumer
+ * @param <D> the type of edited object
+ * @param <T> the type of edited property
  * @author JavaSaBr
  */
 public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractEditorOperation<C> {

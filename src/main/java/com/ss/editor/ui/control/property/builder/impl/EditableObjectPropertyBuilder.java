@@ -52,10 +52,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case BOOLEAN: {
 
                 final EditableProperty<Boolean, ?> property = cast(description);
-                final Boolean value = notNull(property.getValue(), "Boolean value can't be null.");
+                final Boolean currentValue = property.getValue();
 
                 final BooleanPropertyControl<C, EditableProperty<Boolean, ?>> propertyControl =
-                        new BooleanPropertyControl<>(value, property.getName(), changeConsumer);
+                        new BooleanPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -63,10 +63,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case FLOAT: {
 
                 final EditableProperty<Float, ?> property = cast(description);
-                final Float value = notNull(property.getValue(), "Float value can't be null.");
+                final Float currentValue = property.getValue();
 
                 final FloatPropertyControl<C, EditableProperty<Float, ?>> propertyControl =
-                        new FloatPropertyControl<>(value, property.getName(), changeConsumer);
+                        new FloatPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 final float scrollPower = propertyControl.getScrollPower();
                 final float mod = property.getScrollPower();
@@ -91,10 +91,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case INTEGER: {
 
                 final EditableProperty<Integer, ?> property = cast(description);
-                final Integer value = notNull(property.getValue(), "Integer value can't be null.");
+                final Integer currentValue = property.getValue();
 
                 final IntegerPropertyControl<C, EditableProperty<Integer, ?>> propertyControl =
-                        new IntegerPropertyControl<>(value, property.getName(), changeConsumer);
+                        new IntegerPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -102,10 +102,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case STRING: {
 
                 final EditableProperty<String, ?> property = cast(description);
-                final String value = property.getValue();
+                final String currentValue = property.getValue();
 
                 final StringPropertyControl<C, EditableProperty<String, ?>> propertyControl =
-                        new StringPropertyControl<>(value, property.getName(), changeConsumer);
+                        new StringPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -113,10 +113,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case VECTOR_2F: {
 
                 final EditableProperty<Vector2f, ?> property = cast(description);
-                final Vector2f value = notNull(property.getValue(), "Vector2f value can't be null.");
+                final Vector2f currentValue = property.getValue();
 
                 final Vector2FPropertyControl<C, EditableProperty<Vector2f, ?>> propertyControl =
-                        new Vector2FPropertyControl<>(value, property.getName(), changeConsumer);
+                        new Vector2FPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -124,10 +124,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case VECTOR_3F: {
 
                 final EditableProperty<Vector3f, ?> property = cast(description);
-                final Vector3f value = notNull(property.getValue(), "Vector3f value can't be null.");
+                final Vector3f currentValue = property.getValue();
 
                 final Vector3FPropertyControl<C, EditableProperty<Vector3f, ?>> propertyControl =
-                        new Vector3FPropertyControl<>(value, property.getName(), changeConsumer);
+                        new Vector3FPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;

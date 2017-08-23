@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
+public class NodeTree<C extends ChangeConsumer> extends VBox {
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -92,7 +92,7 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
      */
     @NotNull
     protected NodeTreeCell<C, ?> createNodeTreeCell() {
-        throw new UnsupportedOperationException();
+        return new NodeTreeCell<>(this);
     }
 
     /**

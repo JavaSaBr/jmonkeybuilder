@@ -6,9 +6,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +35,6 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
 
         private final int hash;
 
-        /**
-         * Instantiates a new Height point.
-         *
-         * @param x      the x
-         * @param y      the y
-         * @param xIndex the x index
-         * @param yIndex the y index
-         */
         public HeightPoint(final float x, final float y, final int xIndex, final int yIndex) {
             this.x = x;
             this.y = y;
@@ -90,8 +83,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     /**
      * @return the table of original heights.
      */
-    @NotNull
-    private ObjectDictionary<HeightPoint, Float> getOriginalHeight() {
+    private @NotNull ObjectDictionary<HeightPoint, Float> getOriginalHeight() {
         return originalHeight;
     }
 
@@ -147,8 +139,8 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
             newValues.put(point, terrain.getHeightmapHeight(point));
         });
 
-        final ModelPropertyOperation<Terrain, ObjectDictionary<Vector2f, Float>> operation =
-                new ModelPropertyOperation<>(terrain, "Heightmap", newValues, oldValues);
+        final PropertyOperation<ChangeConsumer, Terrain, ObjectDictionary<Vector2f, Float>> operation =
+                new PropertyOperation<>(terrain, "Heightmap", newValues, oldValues);
 
         operation.setApplyHandler((toChange, heightMap) -> {
 

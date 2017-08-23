@@ -8,11 +8,11 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
 import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -31,12 +31,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements HideableNode<SceneChangeConsumer> {
 
-    /**
-     * Instantiates a new Scene layer model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public SceneLayerTreeNode(@NotNull final SceneLayer element, final long objectId) {
         super(element, objectId);
     }
@@ -67,9 +61,8 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
         return true;
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final SceneLayer element = getElement();
 
@@ -104,8 +97,8 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
             final Spatial spatial = (Spatial) object;
             final SceneLayer currentLayer = SceneLayer.getLayer(spatial);
 
-            final ModelPropertyOperation<Spatial, SceneLayer> operation =
-                    new ModelPropertyOperation<>(spatial, SceneLayer.KEY, targetLayer, currentLayer);
+            final PropertyOperation<ChangeConsumer, Spatial, SceneLayer> operation =
+                    new PropertyOperation<>(spatial, SceneLayer.KEY, targetLayer, currentLayer);
 
             operation.setApplyHandler((sp, layer) -> SceneLayer.setLayer(layer, sp));
 
@@ -115,9 +108,8 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
         super.accept(changeConsumer, object, isCopy);
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         final String name = getElement().getName();
         return name == null ? "name is null" : name;
     }
@@ -137,9 +129,8 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
         return false;
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return Icons.LAYERS_16;
     }
 

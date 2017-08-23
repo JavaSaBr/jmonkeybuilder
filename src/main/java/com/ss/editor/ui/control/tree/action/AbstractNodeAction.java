@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.action;
+package com.ss.editor.ui.control.tree.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.Editor;
@@ -27,21 +27,27 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem {
 
     /**
-     * The constant LOGGER.
+     * The logger.
      */
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractNodeAction.class);
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executor manager.
      */
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
-     * The constant JFX_APPLICATION.
+     * The FX application of this Editor.
      */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
-     * The constant EDITOR.
+     * The Editor.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -56,12 +62,6 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     @NotNull
     private final TreeNode<?> node;
 
-    /**
-     * Instantiates a new Abstract node action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
@@ -80,8 +80,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the name of this action.
      */
-    @NotNull
-    protected abstract String getName();
+    protected abstract @NotNull String getName();
 
     /**
      * Execute this action.
@@ -96,8 +95,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return he icon or null.
      */
-    @Nullable
-    protected Image getIcon() {
+    protected @Nullable Image getIcon() {
         return null;
     }
 
@@ -106,8 +104,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the component of the model three.
      */
-    @NotNull
-    protected NodeTree<C> getNodeTree() {
+    protected @NotNull NodeTree<C> getNodeTree() {
         return nodeTree;
     }
 
@@ -116,8 +113,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the node of the model.
      */
-    @NotNull
-    protected TreeNode<?> getNode() {
+    protected @NotNull TreeNode<?> getNode() {
         return node;
     }
 

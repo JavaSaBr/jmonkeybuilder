@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.GeometryTreeNode;
-import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.lod.GenerateLodLevelsDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;

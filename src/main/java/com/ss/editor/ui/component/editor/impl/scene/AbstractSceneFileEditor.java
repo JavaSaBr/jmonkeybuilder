@@ -37,6 +37,7 @@ import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.editor.ModelEditingProvider;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
 import com.ss.editor.scene.EditorAudioNode;
@@ -54,12 +55,12 @@ import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.impl.BaseEditorSceneEditorState;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -232,9 +233,6 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      */
     private boolean ignoreCameraMove;
 
-    /**
-     * Instantiates a new Abstract scene file editor.
-     */
     public AbstractSceneFileEditor() {
         this.statsAppState = new Stats3DState(statsContainer);
         addEditorState(statsAppState);
@@ -1088,8 +1086,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Material material = assetManager.loadAsset(materialKey);
 
-            final ModelPropertyOperation<Geometry, Material> operation =
-                    new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_MATERIAL, material, geometry.getMaterial());
+            final PropertyOperation<ChangeConsumer, Geometry, Material> operation =
+                    new PropertyOperation<>(geometry, Messages.MODEL_PROPERTY_MATERIAL, material, geometry.getMaterial());
 
             operation.setApplyHandler(Geometry::setMaterial);
 

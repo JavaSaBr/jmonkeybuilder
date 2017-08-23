@@ -5,10 +5,11 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.property.PropertyControl;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
@@ -66,8 +67,8 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
     public @NotNull SixObjectConsumer<ModelChangeConsumer, Spatial, String, SceneLayer, SceneLayer, BiConsumer<Spatial, SceneLayer>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
-            final ModelPropertyOperation<Spatial, SceneLayer> operation =
-                    new ModelPropertyOperation<>(object, SceneLayer.KEY, newValue, oldValue);
+            final PropertyOperation<ChangeConsumer, Spatial, SceneLayer> operation =
+                    new PropertyOperation<>(object, SceneLayer.KEY, newValue, oldValue);
             operation.setApplyHandler(handler);
 
             changeConsumer.execute(operation);
@@ -114,8 +115,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
      *
      * @return the layers combo box.
      */
-    @NotNull
-    protected ComboBox<SceneLayer> getLayerComboBox() {
+    protected @NotNull ComboBox<SceneLayer> getLayerComboBox() {
         return notNull(layerComboBox);
     }
 

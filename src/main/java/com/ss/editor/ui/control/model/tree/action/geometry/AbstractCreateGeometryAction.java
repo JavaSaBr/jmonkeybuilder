@@ -9,7 +9,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;

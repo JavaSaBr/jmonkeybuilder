@@ -11,6 +11,7 @@ import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.container.impl.AbstractProcessingComponent;
@@ -19,8 +20,8 @@ import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.control.*;
 import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.property.PropertyControl;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -371,8 +372,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void loadState(@NotNull final EditorState editorState) {
         this.state = editorState.getOrCreateAdditionalState(TerrainEditingStateWithEditorTool.class, TerrainEditingStateWithEditorTool::new);
         getLevelControlLevelField().setValue(state.getLevelValue());
@@ -392,40 +393,35 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     /**
      * @return the list of all tool controls.
      */
-    @NotNull
-    private Array<TerrainToolControl> getToolControls() {
+    private @NotNull Array<TerrainToolControl> getToolControls() {
         return toolControls;
     }
 
     /**
      * @return the list of all toggle buttons.
      */
-    @NotNull
-    private Array<ToggleButton> getToggleButtons() {
+    private @NotNull Array<ToggleButton> getToggleButtons() {
         return toggleButtons;
     }
 
     /**
      * @return the map with mapping toggle button to terrain control.
      */
-    @NotNull
-    private ObjectDictionary<ToggleButton, TerrainToolControl> getButtonToControl() {
+    private @NotNull ObjectDictionary<ToggleButton, TerrainToolControl> getButtonToControl() {
         return buttonToControl;
     }
 
     /**
      * @return the map with mapping toggle button to its settings.
      */
-    @NotNull
-    private ObjectDictionary<ToggleButton, Pane> getButtonToSettings() {
+    private @NotNull ObjectDictionary<ToggleButton, Pane> getButtonToSettings() {
         return buttonToSettings;
     }
 
     /**
      * @return the current tool control.
      */
-    @Nullable
-    private TerrainToolControl getToolControl() {
+    private @Nullable TerrainToolControl getToolControl() {
         return toolControl;
     }
 
@@ -439,72 +435,63 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     /**
      * @return the container of control settings.
      */
-    @NotNull
-    private VBox getControlSettings() {
+    private @NotNull VBox getControlSettings() {
         return notNull(controlSettings);
     }
 
     /**
      * @return the button to change height of terrain by level.
      */
-    @NotNull
-    private ToggleButton getLevelButton() {
+    private @NotNull ToggleButton getLevelButton() {
         return notNull(levelButton);
     }
 
     /**
      * @return the button to paint on terrain.
      */
-    @NotNull
-    private ToggleButton getPaintButton() {
+    private @NotNull ToggleButton getPaintButton() {
         return notNull(paintButton);
     }
 
     /**
      * @return the button to make slopes on terrain.
      */
-    @NotNull
-    private ToggleButton getSlopeButton() {
+    private @NotNull ToggleButton getSlopeButton() {
         return notNull(slopeButton);
     }
 
     /**
      * @return the button to make rough terrain.
      */
-    @NotNull
-    private ToggleButton getRoughButton() {
+    private @NotNull ToggleButton getRoughButton() {
         return notNull(roughButton);
     }
 
     /**
      * @return the button to smooth terrain.
      */
-    @NotNull
-    private ToggleButton getSmoothButton() {
+    private @NotNull ToggleButton getSmoothButton() {
         return notNull(smoothButton);
     }
 
     /**
      * @return The button to raise/lower terrain.
      */
-    @NotNull
-    private ToggleButton getRaiseLowerButton() {
+    private @NotNull ToggleButton getRaiseLowerButton() {
         return notNull(raiseLowerButton);
     }
 
     /**
      * @return the brush power field.
      */
-    @NotNull
-    private FloatTextField getBrushPowerField() {
+    private @NotNull FloatTextField getBrushPowerField() {
         return notNull(brushPowerField);
     }
 
     /**
      * @return the brush size field.
      */
-    @NotNull
-    private FloatTextField getBrushSizeField() {
+    private @NotNull FloatTextField getBrushSizeField() {
         return notNull(brushSizeField);
     }
 
@@ -771,24 +758,21 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     /**
      * @return the control to make some levels terrain.
      */
-    @NotNull
-    private LevelTerrainToolControl getLevelToolControl() {
+    private @NotNull LevelTerrainToolControl getLevelToolControl() {
         return levelToolControl;
     }
 
     /**
      * @return the control to make slopes on terrain.
      */
-    @NotNull
-    private SlopeTerrainToolControl getSlopeToolControl() {
+    private @NotNull SlopeTerrainToolControl getSlopeToolControl() {
         return slopeToolControl;
     }
 
     /**
      * @return the control to make rough surface terrain.
      */
-    @NotNull
-    private RoughTerrainToolControl getRoughToolControl() {
+    private @NotNull RoughTerrainToolControl getRoughToolControl() {
         return roughToolControl;
     }
 
@@ -797,8 +781,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      *
      * @return the control to paint textures.
      */
-    @NotNull
-    public PaintTerrainToolControl getPaintToolControl() {
+    public @NotNull PaintTerrainToolControl getPaintToolControl() {
         return paintToolControl;
     }
 
@@ -814,8 +797,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         final MatParam param = mat.getParam("Shininess");
         final float shininess = param == null ? 0F : (float) param.getValue();
 
-        final ModelPropertyOperation<TerrainQuad, Float> operation =
-                new ModelPropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, shininess);
+        final PropertyOperation<ChangeConsumer, TerrainQuad, Float> operation =
+                new PropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, shininess);
 
         operation.setApplyHandler((terrainQuad, value) -> {
             NodeUtils.visitGeometry(terrainQuad, geometry -> {
@@ -837,8 +820,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         final TerrainQuad processedObject = getProcessedObject();
 
-        final ModelPropertyOperation<TerrainQuad, Boolean> operation =
-                new ModelPropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, !newValue);
+        final PropertyOperation<ChangeConsumer, TerrainQuad, Boolean> operation =
+                new PropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, !newValue);
 
         operation.setApplyHandler((terrainQuad, value) -> {
             NodeUtils.visitGeometry(terrainQuad, geometry -> {
@@ -970,8 +953,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      *
      * @return the box to use tri-planar.
      */
-    @NotNull
-    protected CheckBox getTriPlanarCheckBox() {
+    protected @NotNull CheckBox getTriPlanarCheckBox() {
         return notNull(triPlanarCheckBox);
     }
 
@@ -980,96 +962,84 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      *
      * @return the shininess field.
      */
-    @NotNull
-    protected FloatTextField getShininessField() {
+    protected @NotNull FloatTextField getShininessField() {
         return notNull(shininessField);
     }
 
     /**
      * @return the setting of using smoothly changing of terrain height.
      */
-    @NotNull
-    private CheckBox getLevelControlSmoothly() {
+    private @NotNull CheckBox getLevelControlSmoothly() {
         return notNull(levelControlSmoothly);
     }
 
     /**
      * @return the setting of using marker to detect a level.
      */
-    @NotNull
-    private CheckBox getLevelControlUseMarker() {
+    private @NotNull CheckBox getLevelControlUseMarker() {
         return notNull(levelControlUseMarker);
     }
 
     /**
      * @return the setting of target level.
      */
-    @NotNull
-    private FloatTextField getLevelControlLevelField() {
+    private @NotNull FloatTextField getLevelControlLevelField() {
         return notNull(levelControlLevelField);
     }
 
     /**
      * @return the setting of using limited between markers.
      */
-    @NotNull
-    private CheckBox getSlopeControlLimited() {
+    private @NotNull CheckBox getSlopeControlLimited() {
         return notNull(slopeControlLimited);
     }
 
     /**
      * @return the setting of using smoothly changing of terrain height.
      */
-    @NotNull
-    private CheckBox getSlopeControlSmoothly() {
+    private @NotNull CheckBox getSlopeControlSmoothly() {
         return notNull(slopeControlSmoothly);
     }
 
     /**
      * @return the settings of frequency.
      */
-    @NotNull
-    private FloatTextField getRoughControlFrequencyField() {
+    private @NotNull FloatTextField getRoughControlFrequencyField() {
         return notNull(roughControlFrequencyField);
     }
 
     /**
      * @return the settings of lacunarity.
      */
-    @NotNull
-    private FloatTextField getRoughControlLacunarityField() {
+    private @NotNull FloatTextField getRoughControlLacunarityField() {
         return notNull(roughControlLacunarityField);
     }
 
     /**
      * @return the settings of octaves.
      */
-    @NotNull
-    private FloatTextField getRoughControlOctavesField() {
+    private @NotNull FloatTextField getRoughControlOctavesField() {
         return notNull(roughControlOctavesField);
     }
 
     /**
      * @return the settings of roughness.
      */
-    @NotNull
-    private FloatTextField getRoughControlRoughnessField() {
+    private @NotNull FloatTextField getRoughControlRoughnessField() {
         return notNull(roughControlRoughnessField);
     }
 
     /**
      * @return the settings of scale.
      */
-    @NotNull
-    private FloatTextField getRoughControlScaleField() {
+    private @NotNull FloatTextField getRoughControlScaleField() {
         return notNull(roughControlScaleField);
     }
 
     /**
      * @return the settings of painting control.
      */
-    @NotNull
-    private TextureLayerSettings getTextureLayerSettings() {
+    private @NotNull TextureLayerSettings getTextureLayerSettings() {
         return notNull(textureLayerSettings);
     }
 
@@ -1197,9 +1167,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         return ignoreListeners;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "Terrain editor";
     }
 }

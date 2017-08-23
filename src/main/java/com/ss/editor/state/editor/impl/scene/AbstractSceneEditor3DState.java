@@ -39,11 +39,12 @@ import com.ss.editor.control.transform.*;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.EditorCamera;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
 import com.ss.editor.scene.*;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.geom.util.AngleUtils;
@@ -1440,8 +1441,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
-        final ModelPropertyOperation<Spatial, Transform> operation =
-                new ModelPropertyOperation<>(toTransform, "transform", newValue, oldValue);
+        final PropertyOperation<ChangeConsumer, Spatial, Transform> operation =
+                new PropertyOperation<>(toTransform, "transform", newValue, oldValue);
 
         operation.setApplyHandler(Spatial::setLocalTransform);
 

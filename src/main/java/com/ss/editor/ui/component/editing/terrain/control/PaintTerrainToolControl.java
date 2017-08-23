@@ -10,9 +10,10 @@ import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,15 +39,6 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         private float blue;
         private float alpha;
 
-        /**
-         * Instantiates a new Color point.
-         *
-         * @param index the index
-         * @param red   the red
-         * @param green the green
-         * @param blue  the blue
-         * @param alpha the alpha
-         */
         public ColorPoint(final int index, final float red, final float green, final float blue, final float alpha) {
             this.index = index;
             this.red = red;
@@ -132,19 +124,13 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      */
     private int layer;
 
-    /**
-     * Instantiates a new Paint terrain tool control.
-     *
-     * @param component the component
-     */
     public PaintTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
         this.colorPoints = ArrayFactory.newArray(ColorPoint.class);
     }
 
-    @NotNull
     @Override
-    protected ColorRGBA getBrushColor() {
+    protected @NotNull ColorRGBA getBrushColor() {
         return ColorRGBA.Blue;
     }
 
@@ -200,8 +186,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * @return the list of color points.
      */
-    @NotNull
-    private Array<ColorPoint> getColorPoints() {
+    private @NotNull Array<ColorPoint> getColorPoints() {
         return colorPoints;
     }
 
@@ -257,8 +242,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * @return the previous image buffer.
      */
-    @NotNull
-    private ByteBuffer getPrevBuffer() {
+    private @NotNull ByteBuffer getPrevBuffer() {
         return notNull(prevBuffer);
     }
 
@@ -278,8 +262,8 @@ public class PaintTerrainToolControl extends TerrainToolControl {
 
         fillPrevColorPoints(prevBuffer, image, colorPoints, prevColorPoints);
 
-        final ModelPropertyOperation<Image, Array<ColorPoint>> operation =
-                new ModelPropertyOperation<>(image, "AlphaMap", newColorPoints, prevColorPoints);
+        final PropertyOperation<ChangeConsumer, Image, Array<ColorPoint>> operation =
+                new PropertyOperation<>(image, "AlphaMap", newColorPoints, prevColorPoints);
         operation.setApplyHandler((img, toApply) -> applyColorPoints(img, toApply, toApply == newColorPoints));
 
         colorPoints.clear();
@@ -380,8 +364,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * @return the alpha texture to paint.
      */
-    @Nullable
-    private Texture getAlphaTexture() {
+    private @Nullable Texture getAlphaTexture() {
         return alphaTexture;
     }
 
@@ -442,8 +425,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         image.setUpdateNeeded();
     }
 
-    @NotNull
-    private Vector2f getPointPercentagePosition(@NotNull final Terrain terrain, @NotNull final Vector3f localPoint,
+    private @NotNull Vector2f getPointPercentagePosition(@NotNull final Terrain terrain, @NotNull final Vector3f localPoint,
                                                 @NotNull final Vector3f localScale, @NotNull final Vector2f result) {
         result.set(localPoint.x, -localPoint.z);
 

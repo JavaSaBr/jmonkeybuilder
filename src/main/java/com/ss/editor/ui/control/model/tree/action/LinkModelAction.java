@@ -21,6 +21,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
