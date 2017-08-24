@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -52,6 +53,37 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
      */
     private @NotNull IntegerTextField getValueField() {
         return notNull(valueField);
+    }
+
+    /**
+     * Set value limits for this field.
+     *
+     * @param min the min value.
+     * @param max the max value.
+     */
+    @FXThread
+    public void setMinMax(final int min, final int max) {
+        getValueField().setMinMax(min, max);
+    }
+
+    /**
+     * Sets scroll power.
+     *
+     * @param scrollPower the scroll power.
+     */
+    @FXThread
+    public void setScrollPower(final int scrollPower) {
+        getValueField().setScrollPower(scrollPower);
+    }
+
+    /**
+     * Gets scroll power.
+     *
+     * @return the scroll power.
+     */
+    @FXThread
+    public int getScrollPower() {
+        return getValueField().getScrollPower();
     }
 
     @Override
