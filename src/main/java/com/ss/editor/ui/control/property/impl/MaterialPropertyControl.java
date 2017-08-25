@@ -37,7 +37,7 @@ import java.util.Set;
  * @param <V> the type of material property
  * @author JavaSaBr
  */
-public class MaterialPropertyControl<C extends ChangeConsumer, T extends Spatial, V> extends PropertyControl<C, T, V> {
+public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends PropertyControl<C, T, V> {
 
     /**
      * The constant NO_MATERIAL.

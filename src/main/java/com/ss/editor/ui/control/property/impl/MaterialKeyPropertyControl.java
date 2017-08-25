@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.property.impl;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.UIUtils;
@@ -22,7 +21,7 @@ import java.nio.file.Paths;
  * @param <T> the type parameter
  * @author JavaSaBr
  */
-public class MaterialKeyPropertyControl<C extends ChangeConsumer, T extends Spatial> extends MaterialPropertyControl<C, T, MaterialKey> {
+public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends MaterialPropertyControl<C, T, MaterialKey> {
 
     public MaterialKeyPropertyControl(@Nullable final MaterialKey element, @NotNull final String paramName,
                                       @NotNull final C changeConsumer) {
