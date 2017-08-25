@@ -154,6 +154,7 @@
             <fx:fileset dir="dist" includes="licenses/libraries-licenses/*"/>
             <fx:fileset dir="dist" includes="libs/*"/>
             <fx:fileset dir="dist" includes="embedded-plugins/*/*"/>
+            <fx:fileset dir="dist" includes="embedded-plugins/*/*/*"/>
             <fx:fileset dir="package"/>
         </fx:resources>
 
