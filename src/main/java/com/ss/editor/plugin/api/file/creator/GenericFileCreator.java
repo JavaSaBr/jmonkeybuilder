@@ -64,13 +64,12 @@ public class GenericFileCreator extends AbstractFileCreator {
     /**
      * @return the result vars of the creator.
      */
-    @NotNull
-    protected VarTable getVars() {
+    protected @NotNull VarTable getVars() {
         return notNull(vars);
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void validateFileName() {
         super.validateFileName();
 
@@ -110,9 +109,8 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) {
     }
 
-    @NotNull
     @FromAnyThread
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return EMPTY_ARRAY;
     }
 }

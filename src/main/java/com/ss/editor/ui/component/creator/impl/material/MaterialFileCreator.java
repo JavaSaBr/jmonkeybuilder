@@ -70,21 +70,18 @@ public class MaterialFileCreator extends GenericFileCreator {
         super();
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return Messages.MATERIAL_FILE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    protected @NotNull String getFileExtension() {
         return JME_MATERIAL;
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
 
@@ -108,10 +105,8 @@ public class MaterialFileCreator extends GenericFileCreator {
     /**
      * @return the list of available definitions.
      */
-    @NotNull
-
     @FromAnyThread
-    private Array<String> getDefinitions() {
+    private @NotNull Array<String> getDefinitions() {
         return notNull(definitions);
     }
 

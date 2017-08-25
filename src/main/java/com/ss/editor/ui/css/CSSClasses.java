@@ -421,6 +421,11 @@ public interface CSSClasses {
     String FILE_CREATOR_DIALOG = "file-creator-dialog";
 
     /**
+     * The constant SAVE_AS_DIALOG.
+     */
+    String SAVE_AS_DIALOG = "save-as-dialog";
+
+    /**
      * The constant GENERATE_LOD_DIALOG.
      */
     String GENERATE_LOD_DIALOG = "generate-lod-dialog";

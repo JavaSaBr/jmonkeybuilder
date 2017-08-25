@@ -79,6 +79,10 @@ public interface Icons {
      */
     Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/svg/grid.svg");
     /**
+     * The constant MESH_16.
+     */
+    Image MATERIAL_16 = ICON_MANAGER.getImage("/ui/icons/svg/draws.svg");
+    /**
      * The constant EDIT_16.
      */
     Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/svg/pencil-edit-button.svg");

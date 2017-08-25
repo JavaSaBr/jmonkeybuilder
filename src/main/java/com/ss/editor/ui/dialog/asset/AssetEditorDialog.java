@@ -67,25 +67,25 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected static final Point DIALOG_SIZE = new Point(-1, -1);
 
     /**
-     * The constant JAVA_FX_IMAGE_MANAGER.
+     * The image manager.
      */
     @NotNull
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executing manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The constant FX_EVENT_MANAGER.
+     * The event manager.
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * The constant EDITOR.
+     * The editor.
      */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
@@ -227,8 +227,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @param container the container
      * @return the parent
      */
-    @NotNull
-    protected Region buildSecondPart(@NotNull final HBox container) {
+    protected @NotNull Region buildSecondPart(@NotNull final HBox container) {
 
         final StackPane previewContainer = new StackPane();
 
@@ -255,8 +254,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the ok button.
      */
-    @NotNull
-    public Button getOkButton() {
+    public @NotNull Button getOkButton() {
         return notNull(okButton);
     }
 
@@ -344,24 +342,21 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the list of waited files to select.
      */
-    @NotNull
-    private Array<Path> getWaitedFilesToSelect() {
+    private @NotNull Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
 
     /**
      * @return the image preview.
      */
-    @NotNull
-    private ImageView getImageView() {
+    private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 
     /**
      * @return the text preview.
      */
-    @NotNull
-    private TextArea getTextView() {
+    private @NotNull TextArea getTextView() {
         return notNull(textView);
     }
 
@@ -370,16 +365,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the function for validating the choose.
      */
-    @Nullable
-    Function<C, String> getValidator() {
+    protected @Nullable Function<C, String> getValidator() {
         return validator;
     }
 
     /**
      * @return the label with any warning.
      */
-    @NotNull
-    private Label getWarningLabel() {
+    private @NotNull Label getWarningLabel() {
         return notNull(warningLabel);
     }
 
@@ -502,7 +495,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the boolean binding
      */
-    protected BooleanBinding buildDisableCondition() {
+    protected @NotNull BooleanBinding buildDisableCondition() {
 
         final ResourceTree resourceTree = getResourceTree();
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
@@ -517,16 +510,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the function for handling the choose.
      */
-    @NotNull
-    protected Consumer<C> getConsumer() {
+    protected @NotNull Consumer<C> getConsumer() {
         return consumer;
     }
 
     /**
      * @return the tree with all resources.
      */
-    @NotNull
-    private ResourceTree getResourceTree() {
+    private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 
@@ -547,15 +538,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
         processOpen(selectedItem.getValue());
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return ASSET_EDITOR_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

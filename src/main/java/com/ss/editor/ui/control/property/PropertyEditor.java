@@ -44,6 +44,12 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     private Object currentObject;
 
     /**
+     * The current parent.
+     */
+    @Nullable
+    private Object currentParent;
+
+    /**
      * Instantiates a new Abstract property editor.
      *
      * @param changeConsumer the change consumer
@@ -56,8 +62,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * @return The container of controls.
      */
-    @NotNull
-    private VBox getContainer() {
+    private @NotNull VBox getContainer() {
         return notNull(container);
     }
 
@@ -87,6 +92,8 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
         if (!isNeedUpdate(object)) return;
 
         final VBox container = getContainer();
+        container.setDisable(object == null || !canEdit(object, getCurrentParent()));
+
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> {
             if (node instanceof UpdatableControl) {
@@ -115,6 +122,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
         container.setDisable(object == null || !canEdit(object, parent));
 
         setCurrentObject(object);
+        setCurrentParent(parent);
     }
 
     /**
@@ -176,8 +184,25 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      *
      * @return the current editable object.
      */
-    @Nullable
-    protected Object getCurrentObject() {
+    protected @Nullable Object getCurrentObject() {
         return currentObject;
+    }
+
+    /**
+     * Sets the current parent.
+     *
+     * @param currentParent the current parent.
+     */
+    protected void setCurrentParent(@Nullable final Object currentParent) {
+        this.currentParent = currentParent;
+    }
+
+    /**
+     * Gets the current parent.
+     *
+     * @return the current parent.
+     */
+    protected @Nullable Object getCurrentParent() {
+        return currentParent;
     }
 }

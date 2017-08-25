@@ -178,6 +178,14 @@ public class Messages {
      * The constant ASSET_EDITOR_DIALOG_TITLE.
      */
     public static final String ASSET_EDITOR_DIALOG_TITLE;
+    /**
+     * The constant SAVE_AS_EDITOR_DIALOG_TITLE.
+     */
+    public static final String SAVE_AS_EDITOR_DIALOG_TITLE;
+    /**
+     * The constant SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME.
+     */
+    public static final String SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
 
     /**
      * The constant PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL.
@@ -718,6 +726,10 @@ public class Messages {
      * The constant MODEL_NODE_TREE_ACTION_LOAD_MODEL.
      */
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_SAVE_AS.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_SAVE_AS;
     /**
      * The constant MODEL_NODE_TREE_ACTION_LINK_MODEL.
      */
@@ -1851,6 +1863,10 @@ public class Messages {
      */
     public static final String SIMPLE_DIALOG_BUTTON_ADD;
     /**
+     * The constant SIMPLE_DIALOG_BUTTON_SAVE.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_SAVE;
+    /**
      * The constant SIMPLE_DIALOG_BUTTON_GENERATE.
      */
     public static final String SIMPLE_DIALOG_BUTTON_GENERATE;
@@ -2374,6 +2390,8 @@ public class Messages {
         MATERIAL_FILE_EDITOR_ACTION_LIGHT = bundle.getString("MaterialFileEditorActionLight");
 
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
+        SAVE_AS_EDITOR_DIALOG_TITLE = bundle.getString("SaveAsEditorDialogTitle");
+        SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME = bundle.getString("SaveAsEditorDialogFieldFilename");
 
         PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureParamLabel");
         PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
@@ -2521,6 +2539,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE = bundle.getString("ModelNodeTreeActionCreatePrimitiveSphere");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
+        MODEL_NODE_TREE_ACTION_SAVE_AS = bundle.getString("ModelNodeTreeActionSaveAs");
         MODEL_NODE_TREE_ACTION_LINK_MODEL = bundle.getString("ModelNodeTreeActionLinkModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
         MODEL_NODE_TREE_ACTION_LOD_GENERATOR = bundle.getString("ModelNodeTreeActionLoDGenerator");
@@ -2813,6 +2832,7 @@ public class Messages {
         SIMPLE_DIALOG_BUTTON_OK = bundle.getString("SimpleDialogButtonOk");
         SIMPLE_DIALOG_BUTTON_SELECT = bundle.getString("SimpleDialogButtonSelect");
         SIMPLE_DIALOG_BUTTON_ADD = bundle.getString("SimpleDialogButtonAdd");
+        SIMPLE_DIALOG_BUTTON_SAVE = bundle.getString("SimpleDialogButtonSave");
         SIMPLE_DIALOG_BUTTON_GENERATE = bundle.getString("SimpleDialogButtonGenerate");
         SIMPLE_DIALOG_BUTTON_CREATE = bundle.getString("SimpleDialogButtonCreate");
         SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");

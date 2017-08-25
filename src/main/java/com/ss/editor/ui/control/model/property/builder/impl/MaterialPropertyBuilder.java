@@ -41,7 +41,9 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
 
         SIZE_MAP.put(VarType.Texture2D, -1);
         SIZE_MAP.put(VarType.Vector3, -2);
-        SIZE_MAP.put(VarType.Boolean, 2);
+        SIZE_MAP.put(VarType.Boolean, 3);
+        SIZE_MAP.put(VarType.Float, 2);
+        SIZE_MAP.put(VarType.Int, 2);
     }
 
     private static final Comparator<MatParam> MAT_PARAM_COMPARATOR = (first, second) -> {

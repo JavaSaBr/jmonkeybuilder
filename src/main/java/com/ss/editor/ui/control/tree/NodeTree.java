@@ -179,6 +179,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final ObservableList<TreeItem<TreeNode<?>>> items = treeItem.getChildren();
         items.clear();
 
+        final boolean expanded = treeItem.isExpanded();
+        final TreeNode<?> selected = getSelected();
+
         final TreeNode<?> element = treeItem.getValue();
         if (!element.hasChildren(this)) return;
 
@@ -186,6 +189,11 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
         items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, true, -1));
+        treeItem.setExpanded(expanded);
+
+        if (selected == treeNode) {
+            select(treeNode);
+        }
     }
 
     /**

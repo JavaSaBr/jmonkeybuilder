@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import static com.ss.editor.util.NodeUtils.findParent;
+import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.node.Toneg0dParticleInfluencers;
@@ -42,7 +43,10 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
     @Override
     protected boolean canEdit(@NotNull final Object object, @Nullable final Object parent) {
 
-        if (object instanceof Spatial) {
+        if (object instanceof Material) {
+            final Material material = (Material) object;
+            if (material.getKey() != null) return false;
+        } else if (object instanceof Spatial) {
             final Object linkNode = findParent((Spatial) object, AssetLinkNode.class::isInstance);
             return linkNode == null || linkNode == object;
         } else if (parent instanceof Spatial) {

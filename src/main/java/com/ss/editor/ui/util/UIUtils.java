@@ -10,6 +10,7 @@ import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
+import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
@@ -549,11 +550,34 @@ public class UIUtils {
                                        @Nullable final Predicate<Class<?>> actionTester) {
 
         final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
 
         final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
         dialog.setExtensionFilter(extensions);
         dialog.setActionTester(actionTester);
+        dialog.show(jfxApplication.getLastWindow());
+    }
+
+    /**
+     * Open a save as dialog.
+     *
+     * @param handler      the result handler.
+     * @param extension    the file extension.
+     * @param actionTester the action tester.
+     */
+    @FXThread
+    public static void openSaveAsDialog(@NotNull final Consumer<@NotNull Path> handler, @NotNull final String extension,
+                                        @Nullable final Predicate<@NotNull Class<?>> actionTester) {
+
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final EditorFXScene scene = jfxApplication.getScene();
+
+        final SaveAsEditorDialog dialog = new SaveAsEditorDialog(handler);
+        dialog.setExtension(extension);
+
+        if (actionTester != null) {
+            dialog.setActionTester(actionTester);
+        }
+
         dialog.show(scene.getWindow());
     }
 

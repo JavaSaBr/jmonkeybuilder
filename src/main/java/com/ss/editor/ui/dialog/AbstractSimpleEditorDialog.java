@@ -58,7 +58,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     public static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executing manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -115,8 +115,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the ok button.
      */
-    @Nullable
-    protected Button getOkButton() {
+    protected @Nullable Button getOkButton() {
         return okButton;
     }
 
@@ -125,8 +124,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the close button.
      */
-    @Nullable
-    protected Button getCloseButton() {
+    protected @Nullable Button getCloseButton() {
         return closeButton;
     }
 
@@ -193,8 +191,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the the button's close text.
      */
-    @NotNull
-    protected String getButtonCloseText() {
+    protected @NotNull String getButtonCloseText() {
         return Messages.SIMPLE_DIALOG_BUTTON_CLOSE;
     }
 
@@ -203,8 +200,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the button's ok text.
      */
-    @NotNull
-    protected String getButtonOkText() {
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_OK;
     }
 
