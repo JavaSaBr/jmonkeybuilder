@@ -123,6 +123,10 @@ public interface Icons {
      */
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/svg/settings.svg", 16);
     /**
+     * The constant EXPORT_16.
+     */
+    Image EXPORT_16 = ICON_MANAGER.getImage("/ui/icons/svg/scale-symbol.svg", 16);
+    /**
      * The constant BONE_16.
      */
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/svg/bone.svg", 16);

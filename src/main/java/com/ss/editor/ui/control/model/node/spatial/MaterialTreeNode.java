@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.model.node.spatial;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
@@ -29,14 +28,6 @@ public class MaterialTreeNode extends TreeNode<Material> {
     }
 
     @Override
-    public @NotNull Material getElement() {
-        final TreeNode<?> parent = getParent();
-        if (parent == null) return super.getElement();
-        final Geometry geometry = (Geometry) parent.getElement();
-        return geometry.getMaterial();
-    }
-
-    @Override
     public @Nullable Image getIcon() {
         return Icons.MATERIAL_16;
     }
@@ -51,10 +42,11 @@ public class MaterialTreeNode extends TreeNode<Material> {
         super.fillContextMenu(nodeTree, items);
 
         final TreeNode<?> parent = notNull(getParent());
-        final Spatial element = (Spatial) parent.getElement();
-        final Object linkNode = NodeUtils.findParent(element, AssetLinkNode.class::isInstance);
+        final Object parentElement = parent.getElement();
+        final Object linkNode = parentElement instanceof Spatial ?
+                NodeUtils.findParent((Spatial) parentElement, AssetLinkNode.class::isInstance) : null;
 
-        if (linkNode == null && element instanceof Geometry) {
+        if (linkNode == null) {
             items.add(new SaveAsMaterialAction(nodeTree, this));
         }
     }

@@ -1,16 +1,16 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
-import com.jme3.scene.Geometry;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -37,8 +37,9 @@ import java.util.function.Predicate;
  *
  * @author JavaSaBr
  */
-public class SaveAsMaterialAction extends AbstractNodeAction<ModelChangeConsumer> {
+public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
 
+    @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
@@ -72,8 +73,6 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ModelChangeConsumer
     private void processSave(@NotNull final Path file) {
 
         final TreeNode<?> node = getNode();
-        final TreeNode<?> parent = notNull(node.getParent());
-        final Geometry geometry = (Geometry) notNull(parent.getElement());
         final Material material = (Material) node.getElement();
         final String materialContent = MaterialSerializer.serializeToString(material);
 
@@ -81,17 +80,18 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ModelChangeConsumer
             out.print(materialContent);
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
+            return;
         }
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = notNull(getAssetFile(file));
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Material savedMaterial = assetManager.loadMaterial(EditorUtil.toAssetPath(assetFile));
+        final Material savedMaterial = assetManager.loadMaterial(notNull(toAssetPath(assetFile)));
 
         final PropertyOperation<ChangeConsumer, Material, AssetKey> operation =
-                new PropertyOperation<>(material, "Material", savedMaterial.getKey(), null);
+                new PropertyOperation<>(material, "AssetKey", savedMaterial.getKey(), null);
         operation.setApplyHandler(Material::setKey);
 
-        final ModelChangeConsumer changeConsumer = notNull(getNodeTree().getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(getNodeTree().getChangeConsumer());
         changeConsumer.execute(operation);
     }
 }
