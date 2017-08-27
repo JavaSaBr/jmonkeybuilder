@@ -76,7 +76,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         return NAME_COMPARATOR.compare(firstElement, secondElement);
     };
-    public static final @NotNull AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY = AssetTreeContextMenuFillerRegistry.getInstance();
+
+    @NotNull
+    private static final AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY = AssetTreeContextMenuFillerRegistry.getInstance();
 
     private static int getLevel(@Nullable final ResourceElement element) {
         if (element instanceof FolderResourceElement) return 1;
@@ -205,8 +207,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the handler for listening expand items.
      */
-    @Nullable
-    private IntObjectConsumer<ResourceTree> getExpandHandler() {
+    private @Nullable IntObjectConsumer<ResourceTree> getExpandHandler() {
         return expandHandler;
     }
 
@@ -222,8 +223,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the list of filtered extensions.
      */
-    @NotNull
-    private Array<String> getExtensionFilter() {
+    private @NotNull Array<String> getExtensionFilter() {
         return extensionFilter;
     }
 
@@ -239,8 +239,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the post loading handler.
      */
-    @Nullable
-    private Consumer<Boolean> getOnLoadHandler() {
+    private @Nullable Consumer<Boolean> getOnLoadHandler() {
         return onLoadHandler;
     }
 
@@ -254,8 +253,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the action tester.
      */
-    @NotNull
-    private Predicate<Class<?>> getActionTester() {
+    private @NotNull Predicate<Class<?>> getActionTester() {
         return actionTester;
     }
 
@@ -265,7 +263,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param element the element
      * @return the context menu for the element.
      */
-    protected ContextMenu getContextMenu(@NotNull final ResourceElement element) {
+    protected @Nullable ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
         final ContextMenu contextMenu = new ContextMenu();
@@ -304,16 +302,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the list of expanded elements.
      */
-    @NotNull
-    private ConcurrentArray<ResourceElement> getExpandedElements() {
+    private @NotNull ConcurrentArray<ResourceElement> getExpandedElements() {
         return expandedElements;
     }
 
     /**
      * @return the list of selected elements.
      */
-    @NotNull
-    private ConcurrentArray<ResourceElement> getSelectedElements() {
+    private @NotNull ConcurrentArray<ResourceElement> getSelectedElements() {
         return selectedElements;
     }
 
@@ -664,8 +660,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @return the open resource function.
      */
-    @Nullable
-    Consumer<ResourceElement> getOpenFunction() {
+    protected @Nullable Consumer<ResourceElement> getOpenFunction() {
         return openFunction;
     }
 

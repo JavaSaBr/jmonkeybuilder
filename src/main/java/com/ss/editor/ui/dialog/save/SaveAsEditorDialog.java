@@ -20,6 +20,7 @@ import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -148,15 +149,6 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         getResourceTree().setActionTester(actionTester);
     }
 
-    /**
-     * Sets only folders.
-     *
-     * @param onlyFolders true if need to show only folders.
-     */
-    public void setOnlyFolders(final boolean onlyFolders) {
-        getResourceTree().setOnlyFolders(onlyFolders);
-    }
-
     @Override
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
@@ -172,7 +164,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         resourceTree.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
 
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFileName());
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelection(newValue));
 
         createSettings(settingsContainer);
 
@@ -206,6 +198,28 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
 
         FXUtils.addClassTo(fileNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
         FXUtils.addClassTo(fileNameField, CSSClasses.DIALOG_FIELD);
+    }
+
+    /**
+     * Handle the new selected item.
+     *
+     * @param newValue the new selected item.
+     */
+    protected void processSelection(@Nullable final TreeItem<ResourceElement> newValue) {
+
+        if (newValue != null) {
+
+            final TextField fileNameField = getFileNameField();
+
+            final ResourceElement value = newValue.getValue();
+            final Path file = value.getFile();
+
+            if (!Files.isDirectory(file)) {
+                fileNameField.setText(FileUtils.getNameWithoutExtension(file));
+            }
+        }
+
+        validateFileName();
     }
 
     /**
@@ -279,10 +293,10 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         super.show(owner);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-
-        final ResourceTree resourceTree = getResourceTree();
         final Path currentAsset = notNull(editorConfig.getCurrentAsset());
 
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.setOnLoadHandler(finished -> expand(currentAsset, resourceTree, finished));
         resourceTree.fill(currentAsset);
 
         FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
@@ -292,6 +306,12 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         validateFileName();
 
         EXECUTOR_MANAGER.addFXTask(getFileNameField()::requestFocus);
+    }
+
+    @FXThread
+    private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
+                        @NotNull final Boolean finished) {
+        if (finished) resourceTree.expandTo(file, true);
     }
 
     /**
