@@ -554,6 +554,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyChanged(parent, object);
 
+        if (object instanceof Geometry && Messages.MODEL_PROPERTY_MATERIAL.equals(propertyName)) {
+            modelNodeTree.refresh(object);
+        }
+
         final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
         editingComponentContainer.notifyChangeProperty(object, propertyName);
     }

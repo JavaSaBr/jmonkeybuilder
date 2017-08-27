@@ -511,7 +511,7 @@ public abstract class EditorUtil {
 
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
-        try (final ObjectInputStream in = new ObjectInputStream(bin)) {
+        try (final ObjectInputStream in = new SSObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
         } catch (final ClassNotFoundException | IOException e) {
             LOGGER.warning(e);

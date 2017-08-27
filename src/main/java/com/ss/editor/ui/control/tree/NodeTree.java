@@ -166,16 +166,17 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     }
 
     /**
-     * Fill the node.
+     * Refresh the object in this tree.
      *
-     * @param treeNode the model node
+     * @param object the object.
      */
     @FXThread
-    public void refresh(@NotNull final TreeNode<?> treeNode) {
+    public void refresh(@NotNull final Object object) {
 
-        final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), treeNode);
+        final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), object);
         if (treeItem == null) return;
 
+        final TreeNode<?> treeNode = treeItem.getValue();
         final ObservableList<TreeItem<TreeNode<?>>> items = treeItem.getChildren();
         items.clear();
 
@@ -188,7 +189,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final Array<TreeNode<?>> children = element.getChildren(this);
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
-        items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, true, -1));
+        items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, false, -1));
         treeItem.setExpanded(expanded);
 
         if (selected == treeNode) {
@@ -311,23 +312,6 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         parentNode.notifyChildPreAdd(node);
         treeItem.setValue(node);
         parentNode.notifyChildAdded(node);
-    }
-
-    /**
-     * Refresh all children of the parent.
-     *
-     * @param parent the parent.
-     */
-    @FXThread
-    public void refreshChildren(@NotNull final Object parent) {
-
-        final TreeView<TreeNode<?>> treeView = getTreeView();
-        final TreeItem<TreeNode<?>> treeItem = findItemForValue(treeView, parent);
-        if(treeItem == null) return;
-
-        treeItem.getChildren().clear();
-
-        fill(treeItem, false, -1);
     }
 
     /**

@@ -108,8 +108,7 @@ public class ClasspathManager {
      *
      * @return the list of resources.
      */
-    @NotNull
-    public Array<String> getAllResources() {
+    public @NotNull Array<String> getAllResources() {
         final Array<String> result = ArrayFactory.newArray(String.class);
         coreScanner.getAllResources(result);
         return result;
@@ -238,9 +237,8 @@ public class ClasspathManager {
      *
      * @return the library loader.
      */
-    @Nullable
     @FromAnyThread
-    public URLClassLoader getLibrariesLoader() {
+    public @Nullable URLClassLoader getLibrariesLoader() {
         return librariesLoader;
     }
 
@@ -258,9 +256,8 @@ public class ClasspathManager {
      *
      * @return the classes loader.
      */
-    @Nullable
     @FromAnyThread
-    private URLClassLoader getClassesLoader() {
+    public @Nullable URLClassLoader getClassesLoader() {
         return classesLoader;
     }
 
@@ -269,8 +266,7 @@ public class ClasspathManager {
      *
      * @return the list of all available implementations.
      */
-    @NotNull
-    public <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass) {
+    public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass) {
 
         final Array<Class<T>> result = ArrayFactory.newArray(Class.class);
 
