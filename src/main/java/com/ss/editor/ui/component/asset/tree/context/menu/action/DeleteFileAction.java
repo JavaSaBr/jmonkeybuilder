@@ -12,6 +12,7 @@ import com.ss.rlib.util.array.Array;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -66,8 +67,8 @@ public class DeleteFileAction extends MenuItem {
     /**
      * Handle the answer.
      */
-    private void handle(@NotNull final Path file, @NotNull final Boolean result) {
-        if (!result) return;
+    private void handle(@NotNull final Path file, @Nullable final Boolean result) {
+        if (!Boolean.TRUE.equals(result)) return;
         final Array<FileDeleteHandler> handlers = FileDeleteHandlerFactory.findFor(file);
         handlers.forEach(file, FileDeleteHandler::preDelete);
         FileUtils.delete(file);

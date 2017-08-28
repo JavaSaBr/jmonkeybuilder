@@ -16,9 +16,8 @@ public interface ScreenComponent {
      *
      * @return the component id.
      */
-    @Nullable
     @FromAnyThread
-    default String getComponentId() {
+    default @Nullable String getComponentId() {
         return null;
     }
 

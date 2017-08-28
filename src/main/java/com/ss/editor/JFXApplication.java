@@ -381,7 +381,7 @@ public class JFXApplication extends Application {
             final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
 
                 editorConfig.setAnalyticsQuestion(true);
-                editorConfig.setAnalytics(result);
+                editorConfig.setAnalytics(Boolean.TRUE.equals(result));
                 editorConfig.save();
 
             }, Messages.ANALYTICS_CONFIRM_DIALOG_MESSAGE);

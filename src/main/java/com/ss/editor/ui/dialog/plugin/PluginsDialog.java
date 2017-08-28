@@ -171,7 +171,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         }
 
         final ConfirmDialog dialog = new ConfirmDialog(result -> {
-            if (result) Platform.exit();
+            if (Boolean.TRUE.equals(result)) Platform.exit();
         }, Messages.PLUGINS_DIALOG_QUESTION);
         dialog.show(getDialog());
     }

@@ -52,6 +52,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.function.Consumer;
 
 /**
  * The base implementation of an editor.
@@ -116,6 +117,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private volatile LocalTime showedTime;
 
     /**
+     * The save callback.
+     */
+    @Nullable
+    private Consumer<@NotNull FileEditor> saveCallback;
+
+    /**
      * The root element of this editor.
      */
     @Nullable
@@ -146,6 +153,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The flag of saving process.
      */
     private boolean saving;
+
 
     /**
      * Instantiates a new Abstract file editor.
@@ -344,8 +352,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FXThread
-    public void save() {
+    public void save(@Nullable final Consumer<@NotNull FileEditor> callback) {
         if(isSaving()) return;
+
+        this.saveCallback = callback;
         notifyStartSaving();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
@@ -724,5 +734,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected void notifyFinishSaving() {
         setSaving(false);
         EditorUtil.decrementLoading();
+        if (saveCallback != null) {
+            saveCallback.accept(this);
+            saveCallback = null;
+        }
     }
 }

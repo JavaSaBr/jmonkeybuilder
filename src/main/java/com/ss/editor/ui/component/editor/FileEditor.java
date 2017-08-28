@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 /**
  * The interface for implementing file editor.
@@ -89,6 +90,16 @@ public interface FileEditor {
      */
     @FXThread
     default void save() {
+        save(null);
+    }
+
+    /**
+     * Save new changes.
+     *
+     * @param callback the callback.
+     */
+    @FXThread
+    default void save(@Nullable Consumer<@NotNull FileEditor> callback) {
     }
 
     /**

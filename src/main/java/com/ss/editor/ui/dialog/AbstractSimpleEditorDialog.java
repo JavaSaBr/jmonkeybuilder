@@ -158,10 +158,16 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
             FXUtils.addToPane(closeButton, container);
         }
 
+        createAdditionalActions(container);
+
         if (container != null) {
             FXUtils.addToPane(container, root);
             FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         }
+    }
+
+    protected void createAdditionalActions(@NotNull final HBox container) {
+
     }
 
     /**

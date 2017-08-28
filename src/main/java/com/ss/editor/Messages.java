@@ -71,6 +71,11 @@ public class Messages {
     public static final String EDITOR_TOOL_ASSET;
 
     /**
+     * The constant EDITOR_AREA_SAVE_FILE_QUESTION.
+     */
+    public static final String EDITOR_AREA_SAVE_FILE_QUESTION;
+
+    /**
      * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE.
      */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
@@ -1732,14 +1737,6 @@ public class Messages {
      * The constant QUESTION_DIALOG_TITLE.
      */
     public static final String QUESTION_DIALOG_TITLE;
-    /**
-     * The constant QUESTION_DIALOG_BUTTON_OK.
-     */
-    public static final String QUESTION_DIALOG_BUTTON_OK;
-    /**
-     * The constant QUESTION_DIALOG_BUTTON_CANCEL.
-     */
-    public static final String QUESTION_DIALOG_BUTTON_CANCEL;
 
     /**
      * The constant FOLDER_CREATOR_DESCRIPTION.
@@ -1890,6 +1887,14 @@ public class Messages {
      * The constant SIMPLE_DIALOG_BUTTON_CLOSE.
      */
     public static final String SIMPLE_DIALOG_BUTTON_CLOSE;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_YES.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_YES;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_NO.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_NO;
 
     /**
      * The constant EMPTY_MODEL_CREATOR_DESCRIPTION.
@@ -2368,6 +2373,8 @@ public class Messages {
 
         EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
+        EDITOR_AREA_SAVE_FILE_QUESTION = bundle.getString("EditorAreaSaveFileQuestion");
+        
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenWithFile");
@@ -2803,8 +2810,6 @@ public class Messages {
         MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK = bundle.getString("ManualExtractAnimationDialogButtonOk");
 
         QUESTION_DIALOG_TITLE = bundle.getString("QuestionDialogTitle");
-        QUESTION_DIALOG_BUTTON_OK = bundle.getString("QuestionDialogButtonOk");
-        QUESTION_DIALOG_BUTTON_CANCEL = bundle.getString("QuestionDialogButtonCancel");
 
         FOLDER_CREATOR_DESCRIPTION = bundle.getString("FolderCreatorDescription");
         FOLDER_CREATOR_TITLE = bundle.getString("FolderCreatorTitle");
@@ -2847,6 +2852,8 @@ public class Messages {
         SIMPLE_DIALOG_BUTTON_CREATE = bundle.getString("SimpleDialogButtonCreate");
         SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");
         SIMPLE_DIALOG_BUTTON_CLOSE = bundle.getString("SimpleDialogButtonClose");
+        SIMPLE_DIALOG_BUTTON_YES = bundle.getString("SimpleDialogButtonYes");
+        SIMPLE_DIALOG_BUTTON_NO = bundle.getString("SimpleDialogButtonNo");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
