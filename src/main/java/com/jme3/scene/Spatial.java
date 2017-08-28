@@ -201,7 +201,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      */
     protected Spatial(String name) {
         this.name = name;
-        visible = true;
+        this.visible = true;
         localTransform = new Transform();
         worldTransform = new Transform();
 

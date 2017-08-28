@@ -257,22 +257,6 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     protected void writeData(@NotNull final Path resultFile) {
     }
 
-    /**
-     * Notify about the file created.
-     *
-     * @param createdFile the created file
-     * @param needSelect  the need select
-     */
-    @FromAnyThread
-    protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
-        if (!needSelect) return;
-
-        final RequestSelectFileEvent event = new RequestSelectFileEvent();
-        event.setFile(createdFile);
-
-        FX_EVENT_MANAGER.notify(event);
-    }
-
     @Override
     @FXThread
     protected void createContent(@NotNull final VBox root) {
@@ -325,6 +309,22 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         FXUtils.addClassTo(root, CSSClasses.FILE_CREATOR_DIALOG);
         FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
+    }
+
+    /**
+     * Notify about the file created.
+     *
+     * @param createdFile the created file
+     * @param needSelect  the need select
+     */
+    @FromAnyThread
+    protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
+        if (!needSelect) return;
+
+        final RequestSelectFileEvent event = new RequestSelectFileEvent();
+        event.setFile(createdFile);
+
+        FX_EVENT_MANAGER.notify(event);
     }
 
     /**
