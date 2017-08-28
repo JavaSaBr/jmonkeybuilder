@@ -350,6 +350,10 @@ public class Messages {
      */
     public static final String SETTINGS_DIALOG_FXAA;
     /**
+     * The constant SETTINGS_DIALOG_NATIVE_FILE_CHOOSER.
+     */
+    public static final String SETTINGS_DIALOG_NATIVE_FILE_CHOOSER;
+    /**
      * The constant SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS.
      */
     public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
@@ -422,9 +426,13 @@ public class Messages {
      */
     public static final String SETTINGS_DIALOG_OPEN_GL_LABEL;
     /**
-     * The constant SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE.
+     * The constant SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE.
      */
-    public static final String SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
+    public static final String SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE;
+    /**
+     * The constant SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE.
+     */
+    public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
     /**
      * The constant SETTINGS_DIALOG_ENVS_FOLDER_LABEL.
      */
@@ -2442,6 +2450,7 @@ public class Messages {
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
+        SETTINGS_DIALOG_NATIVE_FILE_CHOOSER = bundle.getString("SettingsDialogNativeFileChooser");
         SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsDialogStopRenderOnLostFocus");
         SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
@@ -2460,7 +2469,8 @@ public class Messages {
         SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL = bundle.getString("SettingsDialogUserClassesFolderLabel");
         SETTINGS_DIALOG_THEME_LABEL = bundle.getString("SettingsDialogThemeLabel");
         SETTINGS_DIALOG_OPEN_GL_LABEL = bundle.getString("SettingsDialogOpenGLLabel");
-        SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClasspathFolderChooserTitle");
+        SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClassesFolderChooserTitle");
+        SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogLibrariesFolderChooserTitle");
         SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
 

@@ -458,6 +458,11 @@ public interface CSSClasses {
     String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "asset-editor-dialog-preview-container";
 
     /**
+     * The constant OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG.
+     */
+    String OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG = "open-external-folder-editor-dialog";
+
+    /**
      * The constant AUDIO_VIEW_EDITOR_CONTAINER.
      */
     String AUDIO_VIEW_EDITOR_CONTAINER = "audio-view-editor-container";

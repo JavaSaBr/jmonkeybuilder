@@ -16,7 +16,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.dialog.folder.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.OpenGLVersion;
@@ -178,6 +178,12 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox defaultCameraLampEnabledCheckBox;
 
     /**
+     * The checkbox to enable using native file choosers.
+     */
+    @Nullable
+    private CheckBox nativeFileChooserCheckBox;
+
+    /**
      * The libraries folder field.
      */
     @Nullable
@@ -303,6 +309,7 @@ public class SettingsDialog extends EditorDialog {
         createAutoTangentGeneratingControl(otherRoot);
         createUseFlippedTextureDefaultControl(otherRoot);
         createDefaultCameraLampEnabledControl(otherRoot);
+        createNativeFileChooserControl(otherRoot);
 
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty());
         FXUtils.addClassTo(messageLabel, CSSClasses.SETTINGS_DIALOG_MESSAGE_LABEL);
@@ -485,21 +492,34 @@ public class SettingsDialog extends EditorDialog {
      */
     private void processAddLibrariesFolder() {
 
-        final DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
-
+        final CheckBox checkBox = getNativeFileChooserCheckBox();
         final EditorConfig config = EditorConfig.getInstance();
-        final Path librariesPath = config.getLibrariesPath();
-        final File currentFolder = librariesPath == null ? null : librariesPath.toFile();
-        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
-        final File folder = chooser.showDialog(getDialog());
-        if (folder == null) return;
+        if (checkBox.isSelected()) {
 
-        setLibrariesFolder(folder.toPath());
+            final DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle(Messages.SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE);
 
-        final TextField textField = getLibrariesFolderField();
-        textField.setText(folder.toString());
+            final Path librariesPath = config.getLibrariesPath();
+            final File currentFolder = librariesPath == null ? null : librariesPath.toFile();
+            if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+            final File folder = chooser.showDialog(getDialog());
+            if (folder == null) return;
+
+            setLibrariesFolder(folder.toPath());
+            getLibrariesFolderField().setText(folder.toString());
+
+        } else {
+
+            final OpenExternalFolderEditorDialog dialog = new OpenExternalFolderEditorDialog(path -> {
+                setLibrariesFolder(path);
+                getLibrariesFolderField().setText(path.toString());
+            });
+            dialog.setInitDirectory(config.getLibrariesPath());
+            dialog.setTitleText(Messages.SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE);
+            dialog.show(JFX_APPLICATION.getLastWindow());
+        }
     }
 
     /**
@@ -507,21 +527,34 @@ public class SettingsDialog extends EditorDialog {
      */
     private void processAddClassesFolder() {
 
-        final DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
-
+        final CheckBox checkBox = getNativeFileChooserCheckBox();
         final EditorConfig config = EditorConfig.getInstance();
-        final Path classesPath = config.getClassesPath();
-        final File currentFolder = classesPath == null ? null : classesPath.toFile();
-        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
-        final File folder = chooser.showDialog(getDialog());
-        if (folder == null) return;
+        if (checkBox.isSelected()) {
 
-        setClassesFolder(folder.toPath());
+            final DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE);
 
-        final TextField textField = getClassesFolderField();
-        textField.setText(folder.toString());
+            final Path classesPath = config.getClassesPath();
+            final File currentFolder = classesPath == null ? null : classesPath.toFile();
+            if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+            final File folder = chooser.showDialog(getDialog());
+            if (folder == null) return;
+
+            setClassesFolder(folder.toPath());
+            getClassesFolderField().setText(folder.toString());
+
+        } else {
+
+            final OpenExternalFolderEditorDialog dialog = new OpenExternalFolderEditorDialog(path -> {
+                setClassesFolder(path);
+                getClassesFolderField().setText(path.toString());
+            });
+            dialog.setInitDirectory(config.getClassesPath());
+            dialog.setTitleText(Messages.SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE);
+            dialog.show(JFX_APPLICATION.getLastWindow());
+        }
     }
 
     /**
@@ -529,22 +562,34 @@ public class SettingsDialog extends EditorDialog {
      */
     private void processAddEF() {
 
-        final DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(Messages.SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE);
-
+        final CheckBox checkBox = getNativeFileChooserCheckBox();
         final EditorConfig config = EditorConfig.getInstance();
-        final Path currentAdditionalEnvs = config.getAdditionalEnvs();
-        final File currentFolder = currentAdditionalEnvs == null ? null : currentAdditionalEnvs.toFile();
-        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final File folder = chooser.showDialog(scene.getWindow());
-        if (folder == null) return;
+        if (checkBox.isSelected()) {
 
-        setAdditionalEnvsFolder(folder.toPath());
+            final DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle(Messages.SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE);
 
-        final TextField textField = getAdditionalEnvsField();
-        textField.setText(folder.toString());
+            final Path additionalEnvs = config.getAdditionalEnvs();
+            final File currentFolder = additionalEnvs == null ? null : additionalEnvs.toFile();
+            if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+            final File folder = chooser.showDialog(getDialog());
+            if (folder == null) return;
+
+            setAdditionalEnvsFolder(folder.toPath());
+            getAdditionalEnvsField().setText(folder.toString());
+
+        } else {
+
+            final OpenExternalFolderEditorDialog dialog = new OpenExternalFolderEditorDialog(path -> {
+                setAdditionalEnvsFolder(path);
+                getAdditionalEnvsField().setText(path.toString());
+            });
+            dialog.setInitDirectory(config.getAdditionalEnvs());
+            dialog.setTitleText(Messages.SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE);
+            dialog.show(JFX_APPLICATION.getLastWindow());
+        }
     }
 
     /**
@@ -694,6 +739,27 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+    }
+
+    /**
+     * Create native file chooser control.
+     */
+    private void createNativeFileChooserControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_NATIVE_FILE_CHOOSER + ":");
+
+        nativeFileChooserCheckBox = new CheckBox();
+        nativeFileChooserCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(nativeFileChooserCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(nativeFileChooserCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -931,118 +997,112 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the gamma correction checkbox.
      */
-    @NotNull
-    private CheckBox getGammaCorrectionCheckBox() {
+    private @NotNull CheckBox getGammaCorrectionCheckBox() {
         return notNull(gammaCorrectionCheckBox);
     }
 
     /**
      * @return the tone map filter checkbox.
      */
-    @NotNull
-    private CheckBox getToneMapFilterCheckBox() {
+    private @NotNull CheckBox getToneMapFilterCheckBox() {
         return notNull(toneMapFilterCheckBox);
     }
 
     /**
      * @return the white point X.
      */
-    @NotNull
-    private Spinner<Double> getToneMapFilterWhitePointX() {
+    private @NotNull Spinner<Double> getToneMapFilterWhitePointX() {
         return notNull(toneMapFilterWhitePointX);
     }
 
     /**
      * @return the white point Y.
      */
-    @NotNull
-    private Spinner<Double> getToneMapFilterWhitePointY() {
+    private @NotNull Spinner<Double> getToneMapFilterWhitePointY() {
         return notNull(toneMapFilterWhitePointY);
     }
 
     /**
      * @return the white point Z.
      */
-    @NotNull
-    private Spinner<Double> getToneMapFilterWhitePointZ() {
+    private @NotNull Spinner<Double> getToneMapFilterWhitePointZ() {
         return notNull(toneMapFilterWhitePointZ);
     }
 
     /**
      * @return the FXAA checkbox.
      */
-    @NotNull
-    private CheckBox getFXAAFilterCheckBox() {
+    private @NotNull CheckBox getFXAAFilterCheckBox() {
         return notNull(fxaaFilterCheckBox);
+    }
+
+    /**
+     * @return the checkbox to enable using native file choosers.
+     */
+    private @NotNull CheckBox getNativeFileChooserCheckBox() {
+        return notNull(nativeFileChooserCheckBox);
     }
 
     /**
      * @return the Stop Render On Lost Focus checkbox.
      */
-    @NotNull
-    private CheckBox getStopRenderOnLostFocusCheckBox() {
+    private @NotNull CheckBox getStopRenderOnLostFocusCheckBox() {
         return notNull(stopRenderOnLostFocusCheckBox);
     }
 
     /**
      * @return the list with anisotropy levels.
      */
-    @NotNull
-    private ComboBox<Integer> getAnisotropyComboBox() {
+    private @NotNull ComboBox<Integer> getAnisotropyComboBox() {
         return notNull(anisotropyComboBox);
     }
 
     /**
      * @return The frame rate field.
      */
-    private IntegerTextField getFrameRateField() {
+    private @NotNull IntegerTextField getFrameRateField() {
         return notNull(frameRateField);
     }
 
     /**
      * @return the camera angle field.
      */
-    private IntegerTextField getCameraAngleField() {
+    private @NotNull IntegerTextField getCameraAngleField() {
         return notNull(cameraAngleField);
     }
 
     /**
      * @return the checkbox for enabling auto tangent generating.
      */
-    @NotNull
-    private CheckBox getAutoTangentGeneratingCheckBox() {
+    private @NotNull CheckBox getAutoTangentGeneratingCheckBox() {
         return notNull(autoTangentGeneratingCheckBox);
     }
 
     /**
      * @return the checkbox for enabling camera lamp by default.
      */
-    @NotNull
-    private CheckBox getDefaultCameraLampEnabledCheckBox() {
+    private @NotNull CheckBox getDefaultCameraLampEnabledCheckBox() {
         return notNull(defaultCameraLampEnabledCheckBox);
     }
 
     /**
      * @return the checkbox for enabling use flip texture by default.
      */
-    @NotNull
-    private CheckBox getDefaultUseFlippedTextureCheckBox() {
+    private @NotNull CheckBox getDefaultUseFlippedTextureCheckBox() {
         return notNull(defaultUseFlippedTextureCheckBox);
     }
 
     /**
      * @return the checkbox for enabling google analytics.
      */
-    @NotNull
-    private CheckBox getGoogleAnalyticsCheckBox() {
+    private @NotNull CheckBox getGoogleAnalyticsCheckBox() {
         return notNull(googleAnalyticsCheckBox);
     }
 
     /**
      * @return the message label.
      */
-    @NotNull
-    private Label getMessageLabel() {
+    private @NotNull Label getMessageLabel() {
         return notNull(messageLabel);
     }
 
@@ -1134,6 +1194,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox defaultUseFlippedTextureCheckBox = getDefaultUseFlippedTextureCheckBox();
         defaultUseFlippedTextureCheckBox.setSelected(editorConfig.isDefaultUseFlippedTexture());
 
+        final CheckBox nativeFileChooserCheckBox = getNativeFileChooserCheckBox();
+        nativeFileChooserCheckBox.setSelected(editorConfig.isNativeFileChooser());
+
         final Vector3f toneMapFilterWhitePoint = editorConfig.getToneMapFilterWhitePoint();
 
         final Spinner<Double> toneMapFilterWhitePointX = getToneMapFilterWhitePointX();
@@ -1179,32 +1242,28 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the list with themes.
      */
-    @NotNull
-    private ComboBox<CssColorTheme> getThemeComboBox() {
+    private @NotNull ComboBox<CssColorTheme> getThemeComboBox() {
         return notNull(themeComboBox);
     }
 
     /**
      * @return the list with open GL versions.
      */
-    @NotNull
-    private ComboBox<OpenGLVersion> getOpenGLVersionComboBox() {
+    private @NotNull ComboBox<OpenGLVersion> getOpenGLVersionComboBox() {
         return notNull(openGLVersionComboBox);
     }
 
     /**
      * @return the libraries folder.
      */
-    @Nullable
-    private Path getLibrariesFolder() {
+    private @Nullable Path getLibrariesFolder() {
         return librariesFolder;
     }
 
     /**
      * @return the classes folder.
      */
-    @Nullable
-    private Path getClassesFolder() {
+    private @Nullable Path getClassesFolder() {
         return classesFolder;
     }
 
@@ -1232,8 +1291,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the additional envs folder.
      */
-    @Nullable
-    private Path getAdditionalEnvsFolder() {
+    private @Nullable Path getAdditionalEnvsFolder() {
         return additionalEnvsFolder;
     }
 
@@ -1309,6 +1367,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox defaultUseFlippedTextureCheckBox = getDefaultUseFlippedTextureCheckBox();
         final boolean useFlippedTextures = defaultUseFlippedTextureCheckBox.isSelected();
 
+        final CheckBox nativeFileChooserCheckBox = getNativeFileChooserCheckBox();
+        final boolean nativeFileChooser = nativeFileChooserCheckBox.isSelected();
+
         final float toneMapFilterWhitePointX = getToneMapFilterWhitePointX().getValue().floatValue();
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
@@ -1359,6 +1420,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setDefaultEditorCameraEnabled(cameraLampEnabled);
         editorConfig.setTheme(theme);
         editorConfig.setOpenGLVersion(glVersion);
+        editorConfig.setNativeFileChooser(nativeFileChooser);
         editorConfig.save();
 
         if (cameraAngle != currentCameraAngle) {
@@ -1395,15 +1457,13 @@ public class SettingsDialog extends EditorDialog {
         }
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return Messages.SETTINGS_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

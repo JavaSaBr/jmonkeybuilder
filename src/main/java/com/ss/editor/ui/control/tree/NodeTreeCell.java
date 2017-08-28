@@ -274,8 +274,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * @return the icon of node.
      */
-    @NotNull
-    private ImageView getIcon() {
+    private @NotNull ImageView getIcon() {
         return icon;
     }
 
@@ -329,8 +328,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      *
      * @return the tree.
      */
-    @NotNull
-    protected M getNodeTree() {
+    protected @NotNull M getNodeTree() {
         return nodeTree;
     }
 

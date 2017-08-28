@@ -169,9 +169,8 @@ public class UIUtils {
      * @param type the type
      * @return the array
      */
-    @NotNull
     @FXThread
-    public static <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
+    public static @NotNull <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
         final Array<T> container = ArrayFactory.newArray(type);
         fillComponents(container, node, type);
         return container;
@@ -207,9 +206,8 @@ public class UIUtils {
      * @param menuBar the menu bar
      * @return the all items
      */
-    @NotNull
     @FXThread
-    public static Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
+    public static @NotNull Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
 
         final Array<MenuItem> container = ArrayFactory.newArray(MenuItem.class);
 
@@ -313,9 +311,8 @@ public class UIUtils {
      * @param objectId the object id.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItem(@NotNull final TreeView<T> treeView, final long objectId) {
+    public static @Nullable <T> TreeItem<T> findItem(@NotNull final TreeView<T> treeView, final long objectId) {
         return findItem(treeView.getRoot(), objectId);
     }
 
@@ -327,9 +324,8 @@ public class UIUtils {
      * @param objectId the object id.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItem(@NotNull final TreeItem<T> root, final long objectId) {
+    public static @Nullable <T> TreeItem<T> findItem(@NotNull final TreeItem<T> root, final long objectId) {
 
         final T value = root.getValue();
 
@@ -357,9 +353,8 @@ public class UIUtils {
      * @param object   the value.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
+    public static @Nullable <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
         return findItemForValue(treeView.getRoot(), object);
     }
 
@@ -371,9 +366,8 @@ public class UIUtils {
      * @param object the value.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
+    public @Nullable static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
         if (object == null) return null;
 
         if (Objects.equals(root.getValue(), object)) {
@@ -399,9 +393,8 @@ public class UIUtils {
      * @param treeView the tree view.
      * @return the list of all items.
      */
-    @NotNull
     @FXThread
-    public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeView<T> treeView) {
+    public static @NotNull <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeView<T> treeView) {
 
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
 
@@ -454,9 +447,8 @@ public class UIUtils {
      * @param color the color
      * @return the jme color
      */
-    @Nullable
     @FXThread
-    public static ColorRGBA from(@Nullable final Color color) {
+    public static @Nullable ColorRGBA from(@Nullable final Color color) {
         if (color == null) return null;
         return new ColorRGBA((float) color.getRed(), (float) color.getGreen(),
                 (float) color.getBlue(), (float) color.getOpacity());
@@ -468,9 +460,8 @@ public class UIUtils {
      * @param color the color
      * @return the FX color
      */
-    @Nullable
     @FXThread
-    public static Color from(@Nullable final ColorRGBA color) {
+    public static @Nullable Color from(@Nullable final ColorRGBA color) {
         if (color == null) return null;
 
         final float red = min(color.getRed(), 1F);

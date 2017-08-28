@@ -92,6 +92,7 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
+        if (o instanceof Path) return file.equals(o);
         final ResourceElement that = (ResourceElement) o;
         return file.equals(that.file);
     }
