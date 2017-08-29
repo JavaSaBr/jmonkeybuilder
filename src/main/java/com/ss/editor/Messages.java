@@ -184,6 +184,11 @@ public class Messages {
      */
     public static final String ASSET_EDITOR_DIALOG_TITLE;
     /**
+     * The constant ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE.
+     */
+    public static final String ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
+
+    /**
      * The constant SAVE_AS_EDITOR_DIALOG_TITLE.
      */
     public static final String SAVE_AS_EDITOR_DIALOG_TITLE;
@@ -2425,6 +2430,7 @@ public class Messages {
         MATERIAL_FILE_EDITOR_ACTION_LIGHT = bundle.getString("MaterialFileEditorActionLight");
 
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
+        ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE = bundle.getString("AssetEditorDialogWarningSelectFile");
         SAVE_AS_EDITOR_DIALOG_TITLE = bundle.getString("SaveAsEditorDialogTitle");
         SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME = bundle.getString("SaveAsEditorDialogFieldFilename");
 

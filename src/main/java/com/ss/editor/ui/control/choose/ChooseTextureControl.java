@@ -115,8 +115,7 @@ public class ChooseTextureControl extends HBox {
     /**
      * tThe handler.
      */
-    @Nullable
-    private Runnable getChangeHandler() {
+    private @Nullable Runnable getChangeHandler() {
         return changeHandler;
     }
 
@@ -168,8 +167,7 @@ public class ChooseTextureControl extends HBox {
      *
      * @return the label for the path to a texture.
      */
-    @NotNull
-    protected Label getTextureLabel() {
+    protected @NotNull Label getTextureLabel() {
         return notNull(textureLabel);
     }
 
@@ -178,16 +176,14 @@ public class ChooseTextureControl extends HBox {
      *
      * @return the wrapper.
      */
-    @NotNull
-    protected HBox getWrapper() {
+    protected @NotNull HBox getWrapper() {
         return notNull(wrapper);
     }
 
     /**
      * @return The image channels preview.
      */
-    @NotNull
-    private ImageChannelPreview getTextureTooltip() {
+    private @NotNull ImageChannelPreview getTextureTooltip() {
         return notNull(textureTooltip);
     }
 
@@ -203,8 +199,7 @@ public class ChooseTextureControl extends HBox {
      *
      * @return the selected file.
      */
-    @Nullable
-    public Path getTextureFile() {
+    public @Nullable Path getTextureFile() {
         return textureFile;
     }
 
@@ -232,8 +227,7 @@ public class ChooseTextureControl extends HBox {
     /**
      * @return the image preview.
      */
-    @NotNull
-    private ImageView getTexturePreview() {
+    private @NotNull ImageView getTexturePreview() {
         return notNull(texturePreview);
     }
 
