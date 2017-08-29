@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.UpdatableControl;
@@ -169,6 +170,9 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      */
     protected boolean isNeedUpdate(@Nullable final Object object) {
         final Object currentObject = getCurrentObject();
+        if (object instanceof EditableProperty) {
+            return currentObject == ((EditableProperty) object).getObject();
+        }
         return currentObject == object;
     }
 

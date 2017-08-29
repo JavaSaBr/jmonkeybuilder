@@ -4,14 +4,12 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ReflectionUtils.getStaticField;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
@@ -540,12 +538,10 @@ public class UIUtils {
     public static void openAssetDialog(@NotNull final Consumer<Path> handler, @NotNull final Array<String> extensions,
                                        @Nullable final Predicate<Class<?>> actionTester) {
 
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-
         final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
         dialog.setExtensionFilter(extensions);
         dialog.setActionTester(actionTester);
-        dialog.show(jfxApplication.getLastWindow());
+        dialog.show();
     }
 
     /**
@@ -559,9 +555,6 @@ public class UIUtils {
     public static void openSaveAsDialog(@NotNull final Consumer<@NotNull Path> handler, @NotNull final String extension,
                                         @Nullable final Predicate<@NotNull Class<?>> actionTester) {
 
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
-
         final SaveAsEditorDialog dialog = new SaveAsEditorDialog(handler);
         dialog.setExtension(extension);
 
@@ -569,25 +562,7 @@ public class UIUtils {
             dialog.setActionTester(actionTester);
         }
 
-        dialog.show(scene.getWindow());
-    }
-
-    /**
-     * Open an asset dialog.
-     *
-     * @param owner        the owner.
-     * @param handler      the result handler.
-     * @param extensions   the extensions list.
-     * @param actionTester the action tester.
-     */
-    @FXThread
-    public static void openAssetDialog(@NotNull Node owner, @NotNull final Consumer<Path> handler,
-                                       @NotNull final Array<String> extensions,
-                                       @Nullable final Predicate<Class<?>> actionTester) {
-        final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
-        dialog.setExtensionFilter(extensions);
-        dialog.setActionTester(actionTester);
-        dialog.show(owner);
+        dialog.show();
     }
 
     /**
@@ -607,7 +582,6 @@ public class UIUtils {
         dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();
     }
-
 
     /**
      * Accept a drag event if it has a file with required extension.

@@ -31,6 +31,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     @NotNull
     private static final PropertyBuilder INSTANCE = new MaterialPropertyBuilder();
 
+    @NotNull
     private static final ObjectDictionary<VarType, Integer> SIZE_MAP = DictionaryFactory.newObjectDictionary();
 
     static {
@@ -46,6 +47,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
         SIZE_MAP.put(VarType.Int, 2);
     }
 
+    @NotNull
     private static final Comparator<MatParam> MAT_PARAM_COMPARATOR = (first, second) -> {
         final VarType firstType = first.getVarType();
         final VarType secondType = second.getVarType();
@@ -80,16 +82,25 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
                 .collect(toList());
     }
 
-    private @Nullable EditableProperty<?, MatParam> convert(@NotNull final MatParam param, @NotNull final Material material) {
+    private @Nullable EditableProperty<?, Material> convert(@NotNull final MatParam param, @NotNull final Material material) {
 
         final EditablePropertyType propertyType = convert(param.getVarType());
         if (propertyType == null) {
             return null;
         }
 
-        return new SimpleProperty<>(propertyType, param.getName(), param,
-                object -> getParamValue(param, material),
-                (object, newValue) -> material.setParam(object.getName(), object.getVarType(), newValue));
+        return new SimpleProperty<>(propertyType, param.getName(), 0.1F, material,
+                object -> getParamValue(param, object),
+                (object, newValue) -> applyParam(param, object, newValue));
+    }
+
+    private void applyParam(@NotNull final MatParam param, @NotNull final Material object,
+                            @Nullable final Object newValue) {
+        if (newValue == null) {
+            object.clearParam(param.getName());
+        } else {
+            object.setParam(param.getName(), param.getVarType(), newValue);
+        }
     }
 
     private static @Nullable Object getParamValue(@NotNull final MatParam param, @NotNull final Material material) {

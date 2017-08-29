@@ -6,15 +6,23 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
+import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Messages;
+import com.ss.editor.config.EditorConfig;
+import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -43,6 +51,21 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      */
     @NotNull
     protected static final String NO_TEXTURE = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
+
+    @NotNull
+    protected static final String PROP_FLIP = "flip";
+
+    @NotNull
+    protected static final String PROP_WRAP_MODE_S = "wrapModeS";
+
+    @NotNull
+    protected static final String PROP_WRAP_MODE_T = "wrapModeT";
+
+    @NotNull
+    protected static final String PROP_MAG_FILTER = "magFilter";
+
+    @NotNull
+    protected static final String PROP_MIN_FILTER = "minFilter";
 
     /**
      * The image channels preview.
@@ -98,6 +121,11 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
 
         Tooltip.install(texturePreview, textureTooltip);
 
+        final Button settingsButton = new Button();
+        settingsButton.setGraphic(new ImageView(Icons.SETTINGS_16));
+        settingsButton.setOnAction(event -> openSettings());
+        settingsButton.disableProperty().bind(buildDisableRemoveCondition());
+
         final Button addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
@@ -110,11 +138,13 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         textureLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(removeButton.widthProperty())
                 .subtract(previewContainer.widthProperty())
+                .subtract(settingsButton.widthProperty())
                 .subtract(addButton.widthProperty()));
 
         FXUtils.addToPane(textureLabel, container);
         FXUtils.addToPane(previewContainer, container);
         FXUtils.addToPane(addButton, container);
+        FXUtils.addToPane(settingsButton, container);
         FXUtils.addToPane(removeButton, container);
         FXUtils.addToPane(texturePreview, previewContainer);
 
@@ -122,7 +152,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
                 CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassTo(previewContainer, CSSClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
         FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
+        FXUtils.addClassesTo(settingsButton, addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
@@ -157,6 +187,75 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     /**
+     * Process to open texture's settings.
+     */
+    protected void openSettings() {
+
+        final Texture2D texture = notNull(getPropertyValue());
+        final TextureKey key = (TextureKey) texture.getKey();
+        final boolean flipY = key.isFlipY();
+        final Texture.WrapMode wrapS = texture.getWrap(Texture.WrapAxis.S);
+        final Texture.WrapMode wrapT = texture.getWrap(Texture.WrapAxis.T);
+        final Texture.MagFilter magFilter = texture.getMagFilter();
+        final Texture.MinFilter minFilter = texture.getMinFilter();
+
+        final Array<PropertyDefinition> properties = ArrayFactory.newArray(PropertyDefinition.class);
+        properties.add(new PropertyDefinition(EditablePropertyType.BOOLEAN, "Flip Y", PROP_FLIP, flipY));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Wrap mode S", PROP_WRAP_MODE_S, wrapS));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Wrap mode T", PROP_WRAP_MODE_T, wrapT));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Mag filter", PROP_MAG_FILTER, magFilter));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Min filter", PROP_MIN_FILTER, minFilter));
+
+        final GenericFactoryDialog dialog = new GenericFactoryDialog(properties, this::applyChanges);
+        dialog.setTitle(Messages.MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS);
+        dialog.setButtonOkText(Messages.SIMPLE_DIALOG_BUTTON_APPLY);
+        dialog.setButtonCloseText(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
+        dialog.show();
+    }
+
+    /**
+     * Apple new changes if need.
+     *
+     * @param varTable the var table.
+     */
+    private void applyChanges(@NotNull final VarTable varTable) {
+
+        final Texture2D texture = notNull(getPropertyValue());
+        final TextureKey key = (TextureKey) texture.getKey();
+        final boolean flipY = key.isFlipY();
+        final Texture.WrapMode wrapS = texture.getWrap(Texture.WrapAxis.S);
+        final Texture.WrapMode wrapT = texture.getWrap(Texture.WrapAxis.T);
+        final Texture.MagFilter magFilter = texture.getMagFilter();
+        final Texture.MinFilter minFilter = texture.getMinFilter();
+
+        final boolean needFlipY = varTable.getBoolean(PROP_FLIP);
+        final Texture.WrapMode needWrapS = varTable.getEnum(PROP_WRAP_MODE_S, Texture.WrapMode.class);
+        final Texture.WrapMode needWrapT = varTable.getEnum(PROP_WRAP_MODE_T, Texture.WrapMode.class);
+        final Texture.MagFilter needMagFilter = varTable.getEnum(PROP_MAG_FILTER, Texture.MagFilter.class);
+        final Texture.MinFilter needMinFilter = varTable.getEnum(PROP_MIN_FILTER, Texture.MinFilter.class);
+
+        if (flipY == needFlipY && wrapS == needWrapS && wrapT == needWrapT && magFilter == needMagFilter &&
+                minFilter == needMinFilter) {
+            return;
+        }
+
+        final TextureKey newKey = new TextureKey(key.getName());
+        newKey.setFlipY(needFlipY);
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.deleteFromCache(key);
+
+        final Texture2D loadedTexture = (Texture2D) assetManager.loadTexture(newKey);
+        loadedTexture.setWrap(Texture.WrapAxis.S, needWrapS);
+        loadedTexture.setWrap(Texture.WrapAxis.T, needWrapT);
+        loadedTexture.setMagFilter(needMagFilter);
+        loadedTexture.setMinFilter(needMinFilter);
+
+        changed(loadedTexture, texture);
+    }
+
+
+    /**
      * Sets new texture to this property.
      *
      * @param file the file to new texture.
@@ -167,20 +266,16 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
             changed(null, getPropertyValue());
         } else {
 
+            final EditorConfig config = EditorConfig.getInstance();
             final Path assetFile = notNull(getAssetFile(file));
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
+            textureKey.setFlipY(config.isDefaultUseFlippedTexture());
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Texture2D texture = (Texture2D) assetManager.loadTexture(textureKey);
+            texture.setWrap(Texture.WrapMode.Repeat);
 
             changed(texture, getPropertyValue());
-        }
-
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
         }
     }
 
@@ -199,7 +294,12 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         if (key == null) {
             preview.setImage(null);
             textureTooltip.clean();
+            preview.setDisable(true);
+            preview.setMouseTransparent(true);
         } else {
+
+            preview.setDisable(false);
+            preview.setMouseTransparent(false);
 
             final Path realFile = notNull(getRealFile(key.getName()));
 

@@ -55,7 +55,7 @@ public class RenameFileAction extends MenuItem {
         renameDialog.setValidator(this::checkName);
         renameDialog.setHandler(this::processRename);
         renameDialog.setInitName(FileUtils.getNameWithoutExtension(file));
-        renameDialog.show(JFX_APPLICATION.getLastWindow());
+        renameDialog.show();
     }
 
     /**

@@ -518,7 +518,7 @@ public class SettingsDialog extends EditorDialog {
             });
             dialog.setInitDirectory(config.getLibrariesPath());
             dialog.setTitleText(Messages.SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE);
-            dialog.show(JFX_APPLICATION.getLastWindow());
+            dialog.show();
         }
     }
 
@@ -553,7 +553,7 @@ public class SettingsDialog extends EditorDialog {
             });
             dialog.setInitDirectory(config.getClassesPath());
             dialog.setTitleText(Messages.SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE);
-            dialog.show(JFX_APPLICATION.getLastWindow());
+            dialog.show();
         }
     }
 
@@ -588,7 +588,7 @@ public class SettingsDialog extends EditorDialog {
             });
             dialog.setInitDirectory(config.getAdditionalEnvs());
             dialog.setTitleText(Messages.SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE);
-            dialog.show(JFX_APPLICATION.getLastWindow());
+            dialog.show();
         }
     }
 

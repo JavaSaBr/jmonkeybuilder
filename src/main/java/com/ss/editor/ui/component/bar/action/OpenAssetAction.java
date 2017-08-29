@@ -98,7 +98,7 @@ public class OpenAssetAction extends MenuItem {
             dialog.setInitDirectory(currentAsset);
         }
 
-        dialog.show(JFX_APPLICATION.getLastWindow());
+        dialog.show();
     }
 
     private void openAssetFolder(@NotNull final Path newAsset) {

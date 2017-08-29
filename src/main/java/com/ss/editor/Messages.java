@@ -1670,6 +1670,10 @@ public class Messages {
      */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
     /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS;
+    /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL.
      */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
@@ -1879,6 +1883,10 @@ public class Messages {
      * The constant SIMPLE_DIALOG_BUTTON_CREATE.
      */
     public static final String SIMPLE_DIALOG_BUTTON_CREATE;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_APPLY.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_APPLY;
     /**
      * The constant SIMPLE_DIALOG_BUTTON_CANCEL.
      */
@@ -2790,6 +2798,7 @@ public class Messages {
         MODEL_PROPERTY_DATA_TYPE = bundle.getString("ModelPropertyDataType");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
+        MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS = bundle.getString("MaterialModelPropertyControlTextureSettings");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
         LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");
@@ -2850,6 +2859,7 @@ public class Messages {
         SIMPLE_DIALOG_BUTTON_SAVE = bundle.getString("SimpleDialogButtonSave");
         SIMPLE_DIALOG_BUTTON_GENERATE = bundle.getString("SimpleDialogButtonGenerate");
         SIMPLE_DIALOG_BUTTON_CREATE = bundle.getString("SimpleDialogButtonCreate");
+        SIMPLE_DIALOG_BUTTON_APPLY = bundle.getString("SimpleDialogButtonApply");
         SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");
         SIMPLE_DIALOG_BUTTON_CLOSE = bundle.getString("SimpleDialogButtonClose");
         SIMPLE_DIALOG_BUTTON_YES = bundle.getString("SimpleDialogButtonYes");

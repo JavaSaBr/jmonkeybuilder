@@ -543,7 +543,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         }, question);
 
-        dialog.show(JFX_APPLICATION.getLastWindow());
+        dialog.show();
         event.consume();
     }
 

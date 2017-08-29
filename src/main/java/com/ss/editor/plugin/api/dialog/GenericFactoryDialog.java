@@ -99,9 +99,17 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
         getOkButton().setText(text);
     }
 
-    @NotNull
+    /**
+     * Sets the text to the Close button.
+     *
+     * @param text the new text.
+     */
+    public void setButtonCloseText(@NotNull final String text) {
+        getCloseButton().setText(text);
+    }
+
     @Override
-    protected String getButtonOkText() {
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_CREATE;
     }
 
@@ -116,8 +124,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      *
      * @return the root.
      */
-    @NotNull
-    private VBox getRoot() {
+    private @NotNull VBox getRoot() {
         return notNull(root);
     }
 
@@ -136,17 +143,15 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
         });
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 
     /**
      * @return the list of all definitions.
      */
-    @NotNull
-    private Array<PropertyDefinition> getDefinitions() {
+    private @NotNull Array<PropertyDefinition> getDefinitions() {
         return definitions;
     }
 

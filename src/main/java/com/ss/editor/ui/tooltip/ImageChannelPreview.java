@@ -25,26 +25,26 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * The red image.
      */
-    @NotNull
-    private final WritableImage redImage;
+    @Nullable
+    private WritableImage redImage;
 
     /**
      * The green image.
      */
-    @NotNull
-    private final WritableImage greenImage;
+    @Nullable
+    private WritableImage greenImage;
 
     /**
      * The blue image.
      */
-    @NotNull
-    private final WritableImage blueImage;
+    @Nullable
+    private WritableImage blueImage;
 
     /**
      * The alpha image.
      */
-    @NotNull
-    private final WritableImage alphaImage;
+    @Nullable
+    private WritableImage alphaImage;
 
     /**
      * The red image view.
@@ -71,69 +71,61 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     private ImageView alphaView;
 
     /**
-     * Instantiates a new Image channel preview.
+     * The file.
      */
-    public ImageChannelPreview() {
-        redImage = new WritableImage(120, 120);
-        greenImage = new WritableImage(120, 120);
-        blueImage = new WritableImage(120, 120);
-        alphaImage = new WritableImage(120, 120);
-    }
+    @Nullable
+    private Path file;
+
+    /**
+     * The resource path.
+     */
+    @Nullable
+    private String resourcePath;
+
+    /**
+     * The flag to build preview from the file.
+     */
+    private boolean needToBuildFile;
+
+    /**
+     * The flag to build preview from the resource path.
+     */
+    private boolean needToBuildResource;
 
     /**
      * @return the alpha image.
      */
-    @NotNull
     @FXThread
-    private WritableImage getAlphaImage() {
-        return alphaImage;
+    private @NotNull WritableImage getAlphaImage() {
+        return notNull(alphaImage);
     }
 
     /**
      * @return the red image.
      */
-    @NotNull
     @FXThread
-    private WritableImage getRedImage() {
-        return redImage;
+    private @NotNull WritableImage getRedImage() {
+        return notNull(redImage);
     }
 
     /**
      * @return the blue image.
      */
-    @NotNull
     @FXThread
-    private WritableImage getBlueImage() {
-        return blueImage;
+    private @NotNull WritableImage getBlueImage() {
+        return notNull(blueImage);
     }
 
     /**
      * @return the green image.
      */
-    @NotNull
     @FXThread
-    private WritableImage getGreenImage() {
-        return greenImage;
+    private @NotNull WritableImage getGreenImage() {
+        return notNull(greenImage);
     }
 
     @Override
-    protected void createContent(@NotNull final GridPane root) {
-        super.createContent(root);
-
-        redView = new ImageView();
-        greenView = new ImageView();
-        blueView = new ImageView();
-        alphaView = new ImageView();
-
-        root.add(redView, 0, 0);
-        root.add(greenView, 1, 0);
-        root.add(blueView, 0, 1);
-        root.add(alphaView, 1, 1);
-    }
-
-    @NotNull
-    @Override
-    protected GridPane createRoot() {
+    protected @NotNull GridPane createRoot() {
         final GridPane gridPane = new GridPane();
         FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.IMAGE_CHANNEL_PREVIEW);
         return gridPane;
@@ -142,36 +134,32 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the alpha image view.
      */
-    @NotNull
     @FXThread
-    private ImageView getAlphaView() {
+    private @NotNull ImageView getAlphaView() {
         return notNull(alphaView);
     }
 
     /**
      * @return the blue image view.
      */
-    @NotNull
     @FXThread
-    private ImageView getBlueView() {
+    private @NotNull ImageView getBlueView() {
         return notNull(blueView);
     }
 
     /**
      * @return the green image view.
      */
-    @NotNull
     @FXThread
-    private ImageView getGreenView() {
+    private @NotNull ImageView getGreenView() {
         return notNull(greenView);
     }
 
     /**
      * @return the red image view.
      */
-    @NotNull
     @FXThread
-    private ImageView getRedView() {
+    private @NotNull ImageView getRedView() {
         return notNull(redView);
     }
 
@@ -182,15 +170,9 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
      */
     @FXThread
     public void showImage(@Nullable final Path file) {
-        buildPreview(file == null ? null : IMAGE_MANAGER.getImagePreview(file, 120, 120));
-    }
-
-    /**
-     * Clean.
-     */
-    @FXThread
-    public void clean() {
-        buildPreview(null);
+        setFile(file);
+        setNeedToBuildFile(true);
+        setNeedToBuildResource(false);
     }
 
     /**
@@ -200,7 +182,108 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
      */
     @FXThread
     public void showImage(@Nullable final String resourcePath) {
-        buildPreview(IMAGE_MANAGER.getImagePreview(resourcePath, 120, 120));
+        setResourcePath(resourcePath);
+        setNeedToBuildResource(true);
+        setNeedToBuildFile(false);
+    }
+
+    /**
+     * Clean.
+     */
+    @FXThread
+    public void clean() {
+        setNeedToBuildFile(true);
+        setNeedToBuildResource(false);
+        setFile(null);
+    }
+
+    /**
+     * @param resourcePath the resource path.
+     */
+    private void setResourcePath(@Nullable final String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
+
+    /**
+     * @return the resource path.
+     */
+    private @Nullable String getResourcePath() {
+        return resourcePath;
+    }
+
+    /**
+     * @param file the file.
+     */
+    private void setFile(@Nullable final Path file) {
+        this.file = file;
+    }
+
+    /**
+     * @return the file.
+     */
+    private @Nullable Path getFile() {
+        return file;
+    }
+
+    /**
+     * @param needToBuildFile true of need to build from the file.
+     */
+    private void setNeedToBuildFile(final boolean needToBuildFile) {
+        this.needToBuildFile = needToBuildFile;
+    }
+
+    /**
+     * @return true of need to build from the file.
+     */
+    private boolean isNeedToBuildFile() {
+        return needToBuildFile;
+    }
+
+    /**
+     * @param needToBuildResource true of need to build from the resource path.
+     */
+    private void setNeedToBuildResource(final boolean needToBuildResource) {
+        this.needToBuildResource = needToBuildResource;
+    }
+
+    /**
+     * @return true of need to build from the resource path.
+     */
+    private boolean isNeedToBuildResource() {
+        return needToBuildResource;
+    }
+
+    @Override
+    protected void show() {
+        super.show();
+
+        if (redImage == null) {
+            redImage = new WritableImage(120, 120);
+            greenImage = new WritableImage(120, 120);
+            blueImage = new WritableImage(120, 120);
+            alphaImage = new WritableImage(120, 120);
+
+            redView = new ImageView();
+            greenView = new ImageView();
+            blueView = new ImageView();
+            alphaView = new ImageView();
+
+            final GridPane root = getRoot();
+            root.add(redView, 0, 0);
+            root.add(greenView, 1, 0);
+            root.add(blueView, 0, 1);
+            root.add(alphaView, 1, 1);
+        }
+
+        if (isNeedToBuildFile()) {
+            final Path file = getFile();
+            buildPreview(file == null ? null : IMAGE_MANAGER.getImagePreview(file, 120, 120));
+            setNeedToBuildFile(false);
+        } else if (isNeedToBuildResource()) {
+            final String resourcePath = getResourcePath();
+            buildPreview(IMAGE_MANAGER.getImagePreview(resourcePath, 120, 120));
+            setNeedToBuildResource(false);
+        }
     }
 
     private void buildPreview(@Nullable final Image image) {
