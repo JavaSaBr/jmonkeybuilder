@@ -752,6 +752,10 @@ public class Messages {
      */
     public static final String MODEL_NODE_TREE_ACTION_SAVE_AS;
     /**
+     * The constant MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED;
+    /**
      * The constant MODEL_NODE_TREE_ACTION_LINK_MODEL.
      */
     public static final String MODEL_NODE_TREE_ACTION_LINK_MODEL;
@@ -2575,6 +2579,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
         MODEL_NODE_TREE_ACTION_SAVE_AS = bundle.getString("ModelNodeTreeActionSaveAs");
+        MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED = bundle.getString("ModelNodeTreeActionMakeEmbedded");
         MODEL_NODE_TREE_ACTION_LINK_MODEL = bundle.getString("ModelNodeTreeActionLinkModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
         MODEL_NODE_TREE_ACTION_LOD_GENERATOR = bundle.getString("ModelNodeTreeActionLoDGenerator");

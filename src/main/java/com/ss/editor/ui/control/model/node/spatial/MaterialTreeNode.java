@@ -6,6 +6,7 @@ import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.action.MakeAsEmbeddedMaterialAction;
 import com.ss.editor.ui.control.model.tree.action.SaveAsMaterialAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -41,6 +42,7 @@ public class MaterialTreeNode extends TreeNode<Material> {
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         super.fillContextMenu(nodeTree, items);
 
+        final Material material = getElement();
         final TreeNode<?> parent = notNull(getParent());
         final Object parentElement = parent.getElement();
         final Object linkNode = parentElement instanceof Spatial ?
@@ -48,6 +50,10 @@ public class MaterialTreeNode extends TreeNode<Material> {
 
         if (linkNode == null) {
             items.add(new SaveAsMaterialAction(nodeTree, this));
+        }
+
+        if (material.getKey() != null) {
+            items.add(new MakeAsEmbeddedMaterialAction(nodeTree, this));
         }
     }
 
