@@ -366,20 +366,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
                 final Path editFile = getEditFile();
 
-                LOGGER.info(this, "Try to save data to the file " + tempFile + ", isReadable " +
-                        Files.isReadable(tempFile) + ", isWritable " + Files.isWritable(tempFile));
-
                 doSave(tempFile);
-
-                LOGGER.info(this, "Try to move the file " + tempFile + " to the file " + editFile + ", isReadable " +
-                        Files.isReadable(editFile) + ", isWritable " + Files.isWritable(editFile));
-
                 try {
                     Files.move(tempFile, editFile, REPLACE_EXISTING, ATOMIC_MOVE);
                 } catch (final AtomicMoveNotSupportedException e) {
                     Files.move(tempFile, editFile, REPLACE_EXISTING);
                 } catch (final AccessDeniedException e) {
-                    LOGGER.error("Access error: " + e.getMessage() + ", " + e.getReason());
                     Files.copy(tempFile, editFile, StandardCopyOption.REPLACE_EXISTING);
                     FileUtils.delete(tempFile);
                 }

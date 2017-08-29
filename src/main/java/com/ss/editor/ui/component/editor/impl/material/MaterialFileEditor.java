@@ -10,19 +10,26 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
+import com.jme3.asset.TextureKey;
+import com.jme3.material.MatParam;
+import com.jme3.material.MatParamTexture;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
-import com.jme3.material.RenderState;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.shader.VarType;
+import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.model.node.material.RootMaterialSettings;
 import com.ss.editor.model.undo.EditorOperationControl;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
-import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithRightTool;
+import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
 import com.ss.editor.state.editor.impl.material.MaterialEditor3DState.ModelType;
@@ -31,7 +38,10 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
-import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
+import com.ss.editor.ui.control.property.PropertyEditor;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
+import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -55,6 +65,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -63,7 +76,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class MaterialFileEditor extends
-        Advanced3DFileEditorWithRightTool<MaterialEditor3DState, EditorMaterialEditorState> implements MaterialChangeConsumer {
+        Advanced3DFileEditorWithSplitRightTool<MaterialEditor3DState, EditorMaterialEditorState> implements MaterialChangeConsumer {
 
     /**
      * The constant DESCRIPTION.
@@ -90,28 +103,16 @@ public class MaterialFileEditor extends
     private static final ObservableList<RenderQueue.Bucket> BUCKETS = observableArrayList(values());
 
     /**
-     * The textures editor.
+     * The settings tree.
      */
     @Nullable
-    private MaterialTexturesComponent materialTexturesComponent;
+    private NodeTree<MaterialChangeConsumer> settingsTree;
 
     /**
-     * The colors editor.
+     * The property editor.
      */
     @Nullable
-    private MaterialColorsComponent materialColorsComponent;
-
-    /**
-     * The other parameters editor.
-     */
-    @Nullable
-    private MaterialOtherParamsComponent materialOtherParamsComponent;
-
-    /**
-     * The render settings editor.
-     */
-    @Nullable
-    private MaterialRenderParamsComponent materialRenderParamsComponent;
+    private PropertyEditor<MaterialChangeConsumer> propertyEditor;
 
     /**
      * The current editing material.
@@ -247,18 +248,55 @@ public class MaterialFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
-        materialTexturesComponent = new MaterialTexturesComponent(this);
-        materialColorsComponent = new MaterialColorsComponent(this);
-        materialRenderParamsComponent = new MaterialRenderParamsComponent(this);
-        materialOtherParamsComponent = new MaterialOtherParamsComponent(this);
+        settingsTree = new NodeTree<>(this::selectedFromTree, this);
+        propertyEditor = new PropertyEditor<>(this);
+        propertyEditor.prefHeightProperty().bind(root.heightProperty());
 
-        container.addComponent(materialTexturesComponent, Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
-        container.addComponent(materialColorsComponent, Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
-        container.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
-        container.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
+        container.addComponent(buildSplitComponent(settingsTree, propertyEditor, root), Messages.MATERIAL_SETTINGS_MAIN);
+
+        FXUtils.addClassTo(settingsTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+    }
+
+    /**
+     * @return the settings tree.
+     */
+    @FromAnyThread
+    private @NotNull NodeTree<MaterialChangeConsumer> getSettingsTree() {
+        return notNull(settingsTree);
+    }
+
+    /**
+     * @return the property editor.
+     */
+    @FromAnyThread
+    private @NotNull PropertyEditor<MaterialChangeConsumer> getPropertyEditor() {
+        return notNull(propertyEditor);
+    }
+
+    /**
+     * Handle selected object from tree.
+     *
+     * @param object the selected object.
+     */
+    private void selectedFromTree(@Nullable final Object object) {
+
+        Object parent = null;
+        Object element;
+
+        if (object instanceof TreeNode<?>) {
+            final TreeNode treeNode = (TreeNode) object;
+            final TreeNode parentNode = treeNode.getParent();
+            parent = parentNode == null ? null : parentNode.getElement();
+            element = treeNode.getElement();
+        } else {
+            element = object;
+        }
+
+        getPropertyEditor().buildFor(element, parent);
     }
 
     /**
@@ -279,17 +317,42 @@ public class MaterialFileEditor extends
         }
 
         final String[] paramNames = MaterialUtils.getPossibleParamNames(textureType);
-        final MaterialTexturesComponent component = editor.materialTexturesComponent;
+        final Material currentMaterial = getCurrentMaterial();
+        final MaterialDef materialDef = currentMaterial.getMaterialDef();
 
-        for (final String paramName : paramNames) {
-            final Texture2DMaterialParamControl control = component.findControl(paramName, Texture2DMaterialParamControl.class);
-            if (control == null) {
-                continue;
-            }
+        final Optional<MatParam> param = Arrays.stream(paramNames)
+                .map(materialDef::getMaterialParam)
+                .filter(Objects::nonNull)
+                .filter(p -> p.getVarType() == VarType.Texture2D)
+                .findAny();
 
-            control.addTexture(path);
-            break;
+        if (!param.isPresent()) {
+            return;
         }
+
+        final MatParam matParam = param.get();
+
+        EXECUTOR_MANAGER.addJMETask(() -> {
+
+            final EditorConfig config = EditorConfig.getInstance();
+            final Path assetFile = notNull(getAssetFile(path));
+            final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
+            textureKey.setFlipY(config.isDefaultUseFlippedTexture());
+
+            final AssetManager assetManager = EDITOR.getAssetManager();
+            final Texture texture = assetManager.loadTexture(textureKey);
+            texture.setWrap(Texture.WrapMode.Repeat);
+
+            final String paramName = matParam.getName();
+            final MatParamTexture textureParam = currentMaterial.getTextureParam(paramName);
+            final Texture currentTexture = textureParam.getTextureValue();
+
+            PropertyOperation<ChangeConsumer, Material, Texture> operation =
+                    new PropertyOperation<>(currentMaterial, paramName, texture, currentTexture);
+            operation.setApplyHandler((material, newTexture) -> material.setTexture(paramName, newTexture));
+
+            execute(operation);
+        });
     }
 
     @Override
@@ -305,37 +368,6 @@ public class MaterialFileEditor extends
         UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
     }
 
-    /**
-     * @return the textures editor.
-     */
-    @FromAnyThread
-    private @NotNull MaterialTexturesComponent getMaterialTexturesComponent() {
-        return notNull(materialTexturesComponent);
-    }
-
-    /**
-     * @return the colors editor.
-     */
-    @FromAnyThread
-    private @NotNull MaterialColorsComponent getMaterialColorsComponent() {
-        return notNull(materialColorsComponent);
-    }
-
-    /**
-     * @return the other parameters editor.
-     */
-    @FromAnyThread
-    private @NotNull MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
-        return notNull(materialOtherParamsComponent);
-    }
-
-    /**
-     * @return the render settings editor.
-     */
-    @FromAnyThread
-    private @NotNull MaterialRenderParamsComponent getMaterialRenderParamsComponent() {
-        return notNull(materialRenderParamsComponent);
-    }
 
     @Override
     @FXThread
@@ -361,18 +393,18 @@ public class MaterialFileEditor extends
 
         switch (ModelType.valueOf(editorState.getModelType())) {
             case BOX:
-                cubeButton.setSelected(true);
+                getCubeButton().setSelected(true);
                 break;
             case SPHERE:
-                sphereButton.setSelected(true);
+                getSphereButton().setSelected(true);
                 break;
             case QUAD:
-                planeButton.setSelected(true);
+                getPlaneButton().setSelected(true);
                 break;
         }
 
-        bucketComboBox.getSelectionModel().select(editorState.getBucketType());
-        lightButton.setSelected(editorState.isLightEnable());
+        getBucketComboBox().getSelectionModel().select(editorState.getBucketType());
+        getLightButton().setSelected(editorState.isLightEnable());
     }
 
     @Override
@@ -386,24 +418,13 @@ public class MaterialFileEditor extends
     @FXThread
     private void reload(@NotNull final Material material) {
         setCurrentMaterial(material);
-
         setIgnoreListeners(true);
         try {
 
             final MaterialEditor3DState editor3DState = getEditor3DState();
             editor3DState.updateMaterial(material);
 
-            final MaterialTexturesComponent materialTexturesComponent = getMaterialTexturesComponent();
-            materialTexturesComponent.buildFor(material);
-
-            final MaterialColorsComponent materialColorsComponent = getMaterialColorsComponent();
-            materialColorsComponent.buildFor(material);
-
-            final MaterialOtherParamsComponent materialOtherParamsComponent = getMaterialOtherParamsComponent();
-            materialOtherParamsComponent.buildFor(material);
-
-            final MaterialRenderParamsComponent materialRenderParamsComponent = getMaterialRenderParamsComponent();
-            materialRenderParamsComponent.buildFor(material);
+            getSettingsTree().fill(new RootMaterialSettings(material));
 
             final ComboBox<String> materialDefinitionBox = getMaterialDefinitionBox();
             final ObservableList<String> items = materialDefinitionBox.getItems();
@@ -579,6 +600,14 @@ public class MaterialFileEditor extends
     }
 
     /**
+     * @return the list of RenderQueue.Bucket.
+     */
+    @FromAnyThread
+    private @NotNull ComboBox<RenderQueue.Bucket> getBucketComboBox() {
+        return notNull(bucketComboBox);
+    }
+
+    /**
      * Handle the changed model type.
      */
     @FXThread
@@ -630,21 +659,11 @@ public class MaterialFileEditor extends
     @Override
     @FXThread
     public void notifyFXChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-
-        if (object instanceof RenderState) {
-            final MaterialRenderParamsComponent renderParamsComponent = getMaterialRenderParamsComponent();
-            renderParamsComponent.buildFor(getCurrentMaterial());
-            return;
+        if (object instanceof Material) {
+            getPropertyEditor().refresh();
+        } else {
+            getPropertyEditor().syncFor(object);
         }
-
-        final MaterialOtherParamsComponent otherParamsComponent = getMaterialOtherParamsComponent();
-        otherParamsComponent.updateParam(propertyName);
-
-        final MaterialColorsComponent colorsComponent = getMaterialColorsComponent();
-        colorsComponent.updateParam(propertyName);
-
-        final MaterialTexturesComponent texturesComponent = getMaterialTexturesComponent();
-        texturesComponent.updateParam(propertyName);
     }
 
     /**

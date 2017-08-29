@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d;
 
 import com.ss.editor.Messages;
-import com.ss.editor.model.node.Toneg0dParticleInfluencers;
+import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;

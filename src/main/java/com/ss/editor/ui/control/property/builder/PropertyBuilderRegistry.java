@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.property.builder;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.builder.impl.AppStatePropertyBuilder;
 import com.ss.editor.ui.control.filter.property.builder.impl.FilterPropertyBuilder;
+import com.ss.editor.ui.control.material.property.builder.MaterialSettingsPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.*;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -45,6 +46,7 @@ public class PropertyBuilderRegistry {
         builders.add(ParticleInfluencerPropertyBuilder.getInstance());
         builders.add(EmitterShapePropertyBuilder.getInstance());
         builders.add(Toneg0dParticleInfluencerPropertyBuilder.getInstance());
+        builders.add(MaterialSettingsPropertyBuilder.getInstance());
     }
     /**
      * Register a new property builder.

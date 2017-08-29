@@ -48,7 +48,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     }
 
     @NotNull
-    private static final Comparator<MatParam> MAT_PARAM_COMPARATOR = (first, second) -> {
+    protected static final Comparator<MatParam> MAT_PARAM_COMPARATOR = (first, second) -> {
         final VarType firstType = first.getVarType();
         final VarType secondType = second.getVarType();
         return SIZE_MAP.get(secondType) - SIZE_MAP.get(firstType);
@@ -63,7 +63,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
         return INSTANCE;
     }
 
-    private MaterialPropertyBuilder() {
+    protected MaterialPropertyBuilder() {
         super(ChangeConsumer.class);
     }
 
@@ -82,7 +82,8 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
                 .collect(toList());
     }
 
-    private @Nullable EditableProperty<?, Material> convert(@NotNull final MatParam param, @NotNull final Material material) {
+    private @Nullable EditableProperty<?, Material> convert(@NotNull final MatParam param,
+                                                            @NotNull final Material material) {
 
         final EditablePropertyType propertyType = convert(param.getVarType());
         if (propertyType == null) {
@@ -94,7 +95,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
                 (object, newValue) -> applyParam(param, object, newValue));
     }
 
-    private void applyParam(@NotNull final MatParam param, @NotNull final Material object,
+    protected void applyParam(@NotNull final MatParam param, @NotNull final Material object,
                             @Nullable final Object newValue) {
         if (newValue == null) {
             object.clearParam(param.getName());
@@ -103,20 +104,19 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
         }
     }
 
-    private static @Nullable Object getParamValue(@NotNull final MatParam param, @NotNull final Material material) {
+    protected @Nullable Object getParamValue(@NotNull final MatParam param, @NotNull final Material material) {
         final MatParam currentParam = material.getParam(param.getName());
         return currentParam == null ? null : currentParam.getValue();
     }
 
-    private @Nullable EditablePropertyType convert(@NotNull final VarType varType) {
+    protected @Nullable EditablePropertyType convert(@NotNull final VarType varType) {
 
         switch (varType) {
             case Boolean: return EditablePropertyType.BOOLEAN;
             case Float: return EditablePropertyType.FLOAT;
             case Int: return EditablePropertyType.INTEGER;
-            case Vector3: return EditablePropertyType.VECTOR_3F;
+            case Vector4: return EditablePropertyType.COLOR;
             case Texture2D: return EditablePropertyType.TEXTURE_2D;
-            case Vector2: return EditablePropertyType.VECTOR_2F;
         }
 
         return null;

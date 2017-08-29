@@ -211,23 +211,6 @@ public class Messages {
     public static final String MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL;
 
     /**
-     * The constant MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE;
-
-    /**
      * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT.
      */
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
@@ -250,6 +233,27 @@ public class Messages {
     public static final String COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
 
     /**
+     * The constant MATERIAL_SETTINGS_MAIN.
+     */
+    public static final String MATERIAL_SETTINGS_MAIN;
+    /**
+     * The constant MATERIAL_SETTINGS_TEXTURES.
+     */
+    public static final String MATERIAL_SETTINGS_TEXTURES;
+    /**
+     * The constant MATERIAL_SETTINGS_COLORS.
+     */
+    public static final String MATERIAL_SETTINGS_COLORS;
+    /**
+     * The constant MATERIAL_SETTINGS_RENDER.
+     */
+    public static final String MATERIAL_SETTINGS_RENDER;
+    /**
+     * The constant MATERIAL_SETTINGS_OTHER.
+     */
+    public static final String MATERIAL_SETTINGS_OTHER;
+
+    /**
      * The constant MATERIAL_RENDER_STATE_FACE_CULL_MODE.
      */
     public static final String MATERIAL_RENDER_STATE_FACE_CULL_MODE;
@@ -258,6 +262,14 @@ public class Messages {
      */
     public static final String MATERIAL_RENDER_STATE_BLEND_MODE;
     /**
+     * The constant MATERIAL_RENDER_STATE_BLEND_EQUATION.
+     */
+    public static final String MATERIAL_RENDER_STATE_BLEND_EQUATION;
+    /**
+     * The constant MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA.
+     */
+    public static final String MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA;
+    /**
      * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR.
      */
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR;
@@ -265,10 +277,6 @@ public class Messages {
      * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS.
      */
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS;
-    /**
-     * The constant MATERIAL_RENDER_STATE_POINT_SPRITE.
-     */
-    public static final String MATERIAL_RENDER_STATE_POINT_SPRITE;
     /**
      * The constant MATERIAL_RENDER_STATE_DEPTH_WRITE.
      */
@@ -2419,11 +2427,6 @@ public class Messages {
         PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureParamLabel");
         PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
 
-        MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialFileEditorTexturesComponentTitle");
-        MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorColorsComponentTitle");
-        MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE = bundle.getString("MaterialFileEditorOtherComponentTitle");
-        MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorRenderParamsComponentTitle");
-
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT = bundle.getString("Texture2DMaterialParamControlRepeat");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP = bundle.getString("Texture2DMaterialParamControlFlip");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD = bundle.getString("Texture2DMaterialParamControlAdd");
@@ -2431,11 +2434,18 @@ public class Messages {
 
         COLOR_MATERIAL_PARAM_CONTROL_REMOVE = bundle.getString("ColorMaterialParamControlRemove");
 
+        MATERIAL_SETTINGS_MAIN = bundle.getString("MaterialSettingsMain");
+        MATERIAL_SETTINGS_TEXTURES = bundle.getString("MaterialSettingsTextures");
+        MATERIAL_SETTINGS_COLORS = bundle.getString("MaterialSettingsColors");
+        MATERIAL_SETTINGS_RENDER = bundle.getString("MaterialSettingsRender");
+        MATERIAL_SETTINGS_OTHER = bundle.getString("MaterialSettingsOther");
         MATERIAL_RENDER_STATE_FACE_CULL_MODE = bundle.getString("MaterialRenderStateFaceCullMode");
         MATERIAL_RENDER_STATE_BLEND_MODE = bundle.getString("MaterialRenderStateBlendMode");
+        MATERIAL_RENDER_STATE_BLEND_EQUATION = bundle.getString("MaterialRenderStateBlendEquation");
+        MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA = bundle.getString("MaterialRenderStateBlendEquationAlpha");
+
         MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR = bundle.getString("MaterialRenderStatePolyOffsetFactor");
         MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS = bundle.getString("MaterialRenderStatePolyOffsetUnits");
-        MATERIAL_RENDER_STATE_POINT_SPRITE = bundle.getString("MaterialRenderStatePointSprite");
         MATERIAL_RENDER_STATE_DEPTH_WRITE = bundle.getString("MaterialRenderStateDepthWrite");
         MATERIAL_RENDER_STATE_COLOR_WRITE = bundle.getString("MaterialRenderStateColorWrite");
         MATERIAL_RENDER_STATE_DEPTH_TEST = bundle.getString("MaterialRenderStateDepthTest");

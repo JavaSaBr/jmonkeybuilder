@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d;
 
-import com.ss.editor.model.node.Toneg0dParticleInfluencers;
+import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 

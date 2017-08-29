@@ -4,7 +4,7 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
-import com.ss.editor.model.node.Toneg0dParticleInfluencers;
+import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyEditor;
 import org.jetbrains.annotations.NotNull;

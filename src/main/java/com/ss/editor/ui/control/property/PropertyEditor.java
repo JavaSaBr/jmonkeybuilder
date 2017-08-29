@@ -104,6 +104,25 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     }
 
     /**
+     * Sync all properties with controls.
+     */
+    public void refresh() {
+
+        final Object object = getCurrentObject();
+        if (object == null) return;
+
+        final VBox container = getContainer();
+        container.setDisable(!canEdit(object, getCurrentParent()));
+
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> {
+            if (node instanceof UpdatableControl) {
+                ((UpdatableControl) node).sync();
+            }
+        });
+    }
+
+    /**
      * Build property controls for the object.
      *
      * @param object the object

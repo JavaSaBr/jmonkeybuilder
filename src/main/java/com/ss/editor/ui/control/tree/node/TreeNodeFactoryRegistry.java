@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.tree.node;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import com.ss.editor.ui.control.material.tree.factory.MaterialSettingsTreeNodeFactory;
 import com.ss.editor.ui.control.tree.node.impl.*;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -46,6 +47,7 @@ public class TreeNodeFactoryRegistry {
         register(new DefaultTreeNodeFactory());
         register(new LightTreeNodeFactory());
         register(new Toneg0dTreeNodeFactory());
+        register(new MaterialSettingsTreeNodeFactory());
     }
 
     /**

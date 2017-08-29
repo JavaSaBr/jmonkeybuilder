@@ -311,6 +311,10 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
 
         propertyNameLabel = new Label(getPropertyName() + ":");
 
+        if (isSingleRow()) {
+            propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
+        }
+
         FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
                 CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);

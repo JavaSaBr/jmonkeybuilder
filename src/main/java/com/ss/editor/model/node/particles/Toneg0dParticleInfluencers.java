@@ -1,4 +1,4 @@
-package com.ss.editor.model.node;
+package com.ss.editor.model.node.particles;
 
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
