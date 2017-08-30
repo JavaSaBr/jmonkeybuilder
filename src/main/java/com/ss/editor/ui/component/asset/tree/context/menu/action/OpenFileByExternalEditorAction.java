@@ -1,9 +1,11 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +25,10 @@ public class OpenFileByExternalEditorAction extends FileAction {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
     }
 
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.EDIT_2_16;
+    }
 
     @Override
     protected void execute(@Nullable final ActionEvent event) {

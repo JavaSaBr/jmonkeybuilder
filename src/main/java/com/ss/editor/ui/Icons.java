@@ -127,6 +127,14 @@ public interface Icons {
      */
     Image EXPORT_16 = ICON_MANAGER.getImage("/ui/icons/svg/scale-symbol.svg", 16);
     /**
+     * The constant EXPORT_16.
+     */
+    Image EXPLORER_16 = ICON_MANAGER.getImage("/ui/icons/svg/inbox.svg", 16);
+    /**
+     * The constant EXPORT_16.
+     */
+    Image EDIT_2_16 = ICON_MANAGER.getImage("/ui/icons/svg/font-selection-editor.svg", 16);
+    /**
      * The constant BONE_16.
      */
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/svg/bone.svg", 16);

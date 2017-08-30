@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
@@ -34,6 +35,11 @@ class OpenFileByEditorAction extends FileAction {
         if (icon != null) {
             setGraphic(new ImageView(icon));
         }
+    }
+
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.EDIT_16;
     }
 
     @Override

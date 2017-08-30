@@ -480,6 +480,63 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Open the file in a system explorer.
+     *
+     * @param path the path
+     */
+    public static void openFileInSystemExplorer(@NotNull final Path path) {
+
+        final Platform platform = JmeSystem.getPlatform();
+        final List<String> commands = new ArrayList<>();
+
+        if (platform == Platform.MacOSX64 || platform == Platform.MacOSX_PPC64) {
+            commands.add("/System/Library/CoreServices/Finder.app");
+        } else if (platform == Platform.Windows32 || platform == Platform.Windows64) {
+            commands.add("explorer");
+        } else if (platform == Platform.Linux32 || platform == Platform.Linux64) {
+            if (isAppExists("nautilus -v")) {
+                commands.add("nautilus");
+            } else if (isAppExists("dolphin -v")) {
+                commands.add("dolphin");
+            }
+        }
+
+        if (commands.isEmpty()) return;
+
+        final String url;
+        try {
+            url = path.toUri().toURL().toString();
+        } catch (final MalformedURLException e) {
+            handleException(LOGGER, null, e);
+            return;
+        }
+
+        commands.add(url);
+
+        final ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command(commands);
+        try {
+            processBuilder.start();
+        } catch (final IOException e) {
+            handleException(LOGGER, null, e);
+        }
+    }
+
+    private static boolean isAppExists(@NotNull final String command) {
+
+        final Runtime runtime = Runtime.getRuntime();
+        final int result;
+        try {
+            final Process exec = runtime.exec(command);
+            result = exec.waitFor();
+        } catch (final InterruptedException | IOException e) {
+            return false;
+        }
+
+        return result >= 0;
+    }
+
+    /**
      * Convert the object to byte array.
      *
      * @param object the object

@@ -1,15 +1,13 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * The action to open a file in an system explorer.
@@ -24,7 +22,7 @@ public class OpenFileInExplorerAction extends FileAction {
 
     @Override
     protected @Nullable Image getIcon() {
-        return super.getIcon();
+        return Icons.EXPLORER_16;
     }
 
     @Override
@@ -35,13 +33,6 @@ public class OpenFileInExplorerAction extends FileAction {
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);
-
-        final Path file = getElement().getFile();
-
-        if (Files.isDirectory(file)) {
-            EditorUtil.openFileInExternalEditor(file);
-        } else {
-            EditorUtil.openFileInExternalEditor(file.getParent());
-        }
+        EditorUtil.openFileInSystemExplorer(getElement().getFile());
     }
 }

@@ -29,11 +29,15 @@ public class ResourceAssetTreeSingleContextMenuFiller implements AssetTreeSingle
     public void fill(@NotNull final ResourceElement element, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
 
+        if (element instanceof FolderResourceElement && actionTester.test(NewFileAction.class)) {
+            items.add(new NewFileAction(element));
+        }
+
         if(actionTester.test(OpenFileInExplorerAction.class)) {
             items.add(new OpenFileInExplorerAction(element));
         }
 
-        if (actionTester.test(NewFileAction.class)) {
+        if (element instanceof FileResourceElement && actionTester.test(NewFileAction.class)) {
             items.add(new NewFileAction(element));
         }
 
