@@ -1682,6 +1682,7 @@ public class Messages {
      * The constant MODEL_PROPERTY_DATA_TYPE.
      */
     public static final String MODEL_PROPERTY_DATA_TYPE;
+
     /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
      */
@@ -1694,6 +1695,27 @@ public class Messages {
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL.
      */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER;
+
     /**
      * The constant ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT.
      */
@@ -2821,6 +2843,12 @@ public class Messages {
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS = bundle.getString("MaterialModelPropertyControlTextureSettings");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
+        MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y = bundle.getString("MaterialModelPropertyControlFlipY");
+        MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S = bundle.getString("MaterialModelPropertyControlWrapModeS");
+        MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T = bundle.getString("MaterialModelPropertyControlWrapModeT");
+        MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER = bundle.getString("MaterialModelPropertyControlMagFilter");
+        MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER = bundle.getString("MaterialModelPropertyControlMinFilter");
+
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
         LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");
         AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO = bundle.getString("AudioKeyPropertyControlNoAudio");

@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -51,6 +52,9 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      */
     @NotNull
     protected static final String NO_TEXTURE = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
+
+    @NotNull
+    protected static final Point DIALOG_SIZE = new Point(600, -1);
 
     @NotNull
     protected static final String PROP_FLIP = "flip";
@@ -200,16 +204,17 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         final Texture.MinFilter minFilter = texture.getMinFilter();
 
         final Array<PropertyDefinition> properties = ArrayFactory.newArray(PropertyDefinition.class);
-        properties.add(new PropertyDefinition(EditablePropertyType.BOOLEAN, "Flip Y", PROP_FLIP, flipY));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Wrap mode S", PROP_WRAP_MODE_S, wrapS));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Wrap mode T", PROP_WRAP_MODE_T, wrapT));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Mag filter", PROP_MAG_FILTER, magFilter));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, "Min filter", PROP_MIN_FILTER, minFilter));
+        properties.add(new PropertyDefinition(EditablePropertyType.BOOLEAN, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y, PROP_FLIP, flipY));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S, PROP_WRAP_MODE_S, wrapS));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T, PROP_WRAP_MODE_T, wrapT));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER, PROP_MAG_FILTER, magFilter));
+        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER, PROP_MIN_FILTER, minFilter));
 
         final GenericFactoryDialog dialog = new GenericFactoryDialog(properties, this::applyChanges);
         dialog.setTitle(Messages.MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS);
         dialog.setButtonOkText(Messages.SIMPLE_DIALOG_BUTTON_APPLY);
         dialog.setButtonCloseText(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
+        dialog.configureSize(DIALOG_SIZE);
         dialog.show();
     }
 

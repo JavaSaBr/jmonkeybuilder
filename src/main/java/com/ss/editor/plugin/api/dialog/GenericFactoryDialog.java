@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(400, 0);
+    private static final Point DIALOG_SIZE = new Point(400, -1);
 
     /**
      * The result vars of the dialog.

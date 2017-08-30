@@ -196,6 +196,16 @@ public class EditorDialog {
     }
 
     /**
+     * Configure size of this dialog.
+     *
+     * @param size the size.
+     */
+    @FXThread
+    public void configureSize(@NotNull final Point size) {
+        configureSize(container, size);
+    }
+
+    /**
      * Configure size of the root container.
      *
      * @param container the root container.
