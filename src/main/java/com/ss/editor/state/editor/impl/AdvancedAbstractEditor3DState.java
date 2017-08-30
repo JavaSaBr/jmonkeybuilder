@@ -1096,7 +1096,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
             return;
         }
 
-        editorCamera.update(tpf);
+        editorCamera.updateCamera(tpf);
 
         final boolean[] cameraKeysState = getCameraKeysState();
 

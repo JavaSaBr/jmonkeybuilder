@@ -187,7 +187,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      * Process to add a new texture.
      */
     protected void processAdd() {
-        UIUtils.openAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UIUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     /**

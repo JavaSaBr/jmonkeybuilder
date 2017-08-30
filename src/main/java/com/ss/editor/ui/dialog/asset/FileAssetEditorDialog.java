@@ -18,21 +18,10 @@ import java.util.function.Function;
  */
 public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
 
-    /**
-     * Instantiates a new File asset editor dialog.
-     *
-     * @param consumer the consumer
-     */
     public FileAssetEditorDialog(@NotNull final Consumer<Path> consumer) {
         super(consumer);
     }
 
-    /**
-     * Instantiates a new File asset editor dialog.
-     *
-     * @param consumer  the consumer
-     * @param validator the validator
-     */
     public FileAssetEditorDialog(@NotNull final Consumer<Path> consumer, @Nullable final Function<Path, String> validator) {
         super(consumer, validator);
     }
@@ -56,7 +45,7 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
         final Function<Path, String> validator = getValidator();
         String message = validator == null ? null : validator.apply(element.getFile());
 
-        if (message == null && element instanceof FolderResourceElement) {
+        if (message == null && element instanceof FolderResourceElement ) {
             message = Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
         }
 

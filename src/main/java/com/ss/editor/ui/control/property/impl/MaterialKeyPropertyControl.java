@@ -30,7 +30,7 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
 
     @Override
     protected void processChange() {
-        UIUtils.openAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UIUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     @Override

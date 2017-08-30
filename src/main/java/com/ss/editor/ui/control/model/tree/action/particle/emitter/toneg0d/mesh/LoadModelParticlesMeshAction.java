@@ -76,7 +76,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
     @FXThread
     @Override
     protected void process() {
-        UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
+        UIUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
@@ -535,11 +536,27 @@ public class UIUtils {
      * @param actionTester the action tester.
      */
     @FXThread
-    public static void openAssetDialog(@NotNull final Consumer<Path> handler, @NotNull final Array<String> extensions,
-                                       @Nullable final Predicate<Class<?>> actionTester) {
+    public static void openFileAssetDialog(@NotNull final Consumer<Path> handler,
+                                           @NotNull final Array<String> extensions,
+                                           @Nullable final Predicate<Class<?>> actionTester) {
 
         final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
         dialog.setExtensionFilter(extensions);
+        dialog.setActionTester(actionTester);
+        dialog.show();
+    }
+
+    /**
+     * Open an asset dialog.
+     *
+     * @param handler      the result handler.
+     * @param actionTester the action tester.
+     */
+    @FXThread
+    public static void openFolderAssetDialog(@NotNull final Consumer<Path> handler,
+                                             @Nullable final Predicate<Class<?>> actionTester) {
+
+        final AssetEditorDialog<Path> dialog = new FolderAssetEditorDialog(handler);
         dialog.setActionTester(actionTester);
         dialog.show();
     }

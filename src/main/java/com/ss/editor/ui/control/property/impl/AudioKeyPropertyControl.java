@@ -109,7 +109,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      * Show dialog for choosing another audio key.
      */
     protected void processChange() {
-        UIUtils.openAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UIUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     private void addAudioData(@NotNull final Path file) {
