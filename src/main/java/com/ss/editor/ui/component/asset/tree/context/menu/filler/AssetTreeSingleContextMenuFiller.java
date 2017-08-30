@@ -13,7 +13,7 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 @FunctionalInterface
-public interface AssetTreeContextMenuFiller {
+public interface AssetTreeSingleContextMenuFiller {
 
     /**
      * Fill the context menu of the resource element.

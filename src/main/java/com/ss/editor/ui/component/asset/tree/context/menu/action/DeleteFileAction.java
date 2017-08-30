@@ -9,8 +9,8 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
+import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,47 +21,51 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class DeleteFileAction extends MenuItem {
+public class DeleteFileAction extends FileAction {
 
-    /**
-     * The node in the tree.
-     */
-    @NotNull
-    private final ResourceElement element;
-
-    /**
-     * Instantiates a new Delete file action.
-     *
-     * @param element the element
-     */
-    public DeleteFileAction(@NotNull final ResourceElement element) {
-        this.element = element;
-        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
-        setOnAction(event -> processDelete());
-        setGraphic(new ImageView(Icons.REMOVE_12));
+    public DeleteFileAction(@NotNull final Array<ResourceElement> elements) {
+        super(elements);
     }
 
-    /**
-     * Handle deleting.
-     */
-    private void processDelete() {
+    @Override
+    protected @NotNull String getName() {
+        return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
+    }
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return;
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.REMOVE_12;
+    }
 
-        final Path file = element.getFile();
+    @Override
+    protected void execute(@Nullable final ActionEvent event) {
+        super.execute(event);
 
-        if (currentAsset.equals(file)) {
-            //TODO нужно варнинг показать
-            return;
+        final Array<ResourceElement> elements = getElements();
+        final ResourceElement first = elements.first();
+
+        if(elements.size() == 1) {
+
+            final Path file = first.getFile();
+
+            final EditorConfig editorConfig = EditorConfig.getInstance();
+            final Path currentAsset = editorConfig.getCurrentAsset();
+            if (currentAsset == null || currentAsset.equals(file)) return;
+
+            String question = Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION;
+            question = question.replace("%file_name%", file.getFileName().toString());
+
+            final ConfirmDialog confirmDialog = new ConfirmDialog(result -> handle(file, result), question);
+            confirmDialog.show();
+
+        } else {
+
+            String question = Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION;
+            question = question.replace("%file_count%", String.valueOf(elements.size()));
+
+            final ConfirmDialog confirmDialog = new ConfirmDialog(result -> handle(elements, result), question);
+            confirmDialog.show();
         }
-
-        String question = Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION;
-        question = question.replace("%file_name%", file.getFileName().toString());
-
-        final ConfirmDialog confirmDialog = new ConfirmDialog(result -> handle(file, result), question);
-        confirmDialog.show();
     }
 
     /**
@@ -69,9 +73,28 @@ public class DeleteFileAction extends MenuItem {
      */
     private void handle(@NotNull final Path file, @Nullable final Boolean result) {
         if (!Boolean.TRUE.equals(result)) return;
+        deleteFile(file);
+    }
+
+    private void deleteFile(@NotNull final Path file) {
         final Array<FileDeleteHandler> handlers = FileDeleteHandlerFactory.findFor(file);
         handlers.forEach(file, FileDeleteHandler::preDelete);
         FileUtils.delete(file);
         handlers.forEach(file, FileDeleteHandler::postDelete);
+    }
+
+    /**
+     * Handle the answer.
+     */
+    private void handle(@NotNull final Array<ResourceElement> elements, @Nullable final Boolean result) {
+        if (!Boolean.TRUE.equals(result)) return;
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) return;
+
+        elements.stream().map(ResourceElement::getFile)
+                .filter(path -> !currentAsset.equals(path))
+                .forEach(this::deleteFile);
     }
 }

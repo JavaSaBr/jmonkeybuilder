@@ -4,20 +4,18 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
+import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,34 +28,25 @@ import java.util.List;
  *
  * @author JavaSaBr
  */
-public class PasteFileAction extends MenuItem {
+public class PasteFileAction extends FileAction {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(PasteFileAction.class);
-
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The action element.
-     */
-    @NotNull
-    private final ResourceElement element;
-
-    /**
-     * Instantiates a new Paste file action.
-     *
-     * @param element the element
-     */
     public PasteFileAction(@NotNull final ResourceElement element) {
-        this.element = element;
-        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE);
-        setOnAction(event -> processCopy());
-        setGraphic(new ImageView(Icons.PASTE_16));
+        super(element);
     }
 
-    /**
-     * Process of copying.
-     */
-    private void processCopy() {
+    @Override
+    protected @NotNull String getName() {
+        return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
+    }
+
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.PASTE_16;
+    }
+
+    @Override
+    protected void execute(@Nullable final ActionEvent event) {
+        super.execute(event);
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         if (clipboard == null) return;
@@ -65,21 +54,23 @@ public class PasteFileAction extends MenuItem {
         final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
         if (files == null || files.isEmpty()) return;
 
-        final Path currentFile = element.getFile();
+        final Path currentFile = getElement().getFile();
         final boolean isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
 
         if (isCut) {
             files.forEach(file -> moveFile(currentFile, file.toPath()));
         } else {
-            files.forEach(file -> copyFile(clipboard, currentFile, file.toPath()));
+            files.forEach(file -> copyFile(currentFile, file.toPath()));
         }
+
+        clipboard.clear();
     }
 
-    private void copyFile(@NotNull final Clipboard clipboard, @NotNull final Path currentFile, @NotNull final Path file) {
+    private void copyFile(@NotNull final Path currentFile, @NotNull final Path file) {
         if (Files.isDirectory(currentFile)) {
-            processCopy(clipboard, currentFile, file);
+            processCopy(currentFile, file);
         } else {
-            processCopy(clipboard, currentFile.getParent(), file);
+            processCopy(currentFile.getParent(), file);
         }
     }
 
@@ -101,7 +92,7 @@ public class PasteFileAction extends MenuItem {
 
         try {
             Files.move(file, newFile);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
@@ -116,8 +107,7 @@ public class PasteFileAction extends MenuItem {
     /**
      * Process of copying.
      */
-    private void processCopy(@NotNull final Clipboard clipboard, @NotNull final Path targetFolder,
-                             @NotNull final Path file) {
+    private void processCopy(@NotNull final Path targetFolder, @NotNull final Path file) {
 
         final Array<Path> toCopy = ArrayFactory.newArray(Path.class);
         final Array<Path> copied = ArrayFactory.newArray(Path.class);
@@ -141,8 +131,6 @@ public class PasteFileAction extends MenuItem {
         event.setFile(newFile);
 
         FX_EVENT_MANAGER.notify(event);
-
-        clipboard.clear();
     }
 
     /**

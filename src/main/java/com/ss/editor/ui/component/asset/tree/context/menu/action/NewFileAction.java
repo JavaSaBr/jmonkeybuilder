@@ -23,11 +23,6 @@ public class NewFileAction extends Menu {
     @NotNull
     private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
 
-    /**
-     * Instantiates a new New file action.
-     *
-     * @param element the element
-     */
     public NewFileAction(@NotNull final ResourceElement element) {
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE);
         setGraphic(new ImageView(Icons.NEW_FILE_16));

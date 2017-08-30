@@ -15,13 +15,13 @@ import java.nio.file.Path;
 public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
 
     /**
-     * The constant JFX_APPLICATION.
+     * The javaFX application.
      */
     @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
-     * The constant EDITOR.
+     * The editor.
      */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
@@ -41,7 +41,7 @@ public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
     }
 
     @Override
-    public FileDeleteHandler clone() {
+    public @NotNull FileDeleteHandler clone() {
         try {
             return (FileDeleteHandler) super.clone();
         } catch (final CloneNotSupportedException e) {

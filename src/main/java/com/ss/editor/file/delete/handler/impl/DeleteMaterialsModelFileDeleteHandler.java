@@ -58,8 +58,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     /**
      * @return the list of used materials.
      */
-    @NotNull
-    private Array<String> getAssetKeys() {
+    private @NotNull Array<String> getAssetKeys() {
         return assetKeys;
     }
 

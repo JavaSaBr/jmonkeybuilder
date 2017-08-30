@@ -10,7 +10,8 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -172,6 +174,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         expandedItemCountProperty()
                 .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
 
+        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setFixedCellSize(FXConstants.RESOURCE_TREE_CELL_HEIGHT);
         setCellFactory(param -> new ResourceTreeCell());
         setOnKeyPressed(this::processKey);
@@ -373,9 +376,32 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final Predicate<Class<?>> actionTester = getActionTester();
 
-        final Array<AssetTreeContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getFillers();
-        for (final AssetTreeContextMenuFiller filler : fillers) {
-            filler.fill(element, items, actionTester);
+        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+        final ObservableList<TreeItem<ResourceElement>> selectedItems = selectionModel.getSelectedItems();
+
+        if (selectedItems.size() == 1) {
+            final Array<AssetTreeSingleContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getSingleFillers();
+            for (final AssetTreeSingleContextMenuFiller filler : fillers) {
+                filler.fill(element, items, actionTester);
+            }
+        }
+
+        if (selectedItems.size() >= 1) {
+            updateSelectedElements();
+
+            final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
+
+            final long stamp = selectedElements.readLock();
+            try {
+
+                final Array<AssetTreeMultiContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getMultiFillers();
+                for (final AssetTreeMultiContextMenuFiller filler : fillers) {
+                    filler.fill(selectedElements, items, actionTester);
+                }
+
+            } finally {
+                selectedElements.readUnlock(stamp);
+            }
         }
 
         if (items.isEmpty()) return null;
@@ -723,44 +749,66 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void processKey(@NotNull final KeyEvent event) {
         if (isReadOnly()) return;
 
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
-        final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
-        if (selectedItem == null) return;
-
-        final ResourceElement item = selectedItem.getValue();
-        if (item == null || item instanceof LoadingResourceElement) return;
-
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return;
+
+        updateSelectedElements();
+
+        final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
+        if (selectedElements.isEmpty()) return;
+
+        final ResourceElement firstElement = selectedElements.first();
+        if (firstElement instanceof LoadingResourceElement) return;
+
+        boolean onlyFiles = true;
+        boolean onlyFolders = true;
+        boolean selectedAsset = false;
+
+        for (final ResourceElement element : selectedElements.array()) {
+            if (element == null) break;
+
+            if (element instanceof FileResourceElement) {
+                onlyFolders = false;
+            } else if (element instanceof FolderResourceElement) {
+                onlyFiles = false;
+            }
+
+            if (Objects.equals(currentAsset, element.getFile())) {
+                selectedAsset = true;
+            }
+        }
 
         final Predicate<Class<?>> actionTester = getActionTester();
         final KeyCode keyCode = event.getCode();
         final boolean controlDown = event.isControlDown();
 
-        if (!currentAsset.equals(item.getFile())) {
-            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class)) {
+        if (!currentAsset.equals(firstElement.getFile())) {
+            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class) && selectedAsset &&
+                    (onlyFiles || selectedElements.size() == 1)) {
 
-                final CopyFileAction action = new CopyFileAction(item);
+                final CopyFileAction action = new CopyFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
 
-            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class)) {
+            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class) && selectedAsset &&
+                    (onlyFiles || selectedElements.size() == 1)) {
 
-                final CutFileAction action = new CutFileAction(item);
+                final CutFileAction action = new CutFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
 
-            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class)) {
+            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class) && selectedAsset &&
+                    (onlyFiles || selectedElements.size() == 1)) {
 
-                final DeleteFileAction action = new DeleteFileAction(item);
+                final DeleteFileAction action = new DeleteFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
             }
         }
 
         if (controlDown && keyCode == KeyCode.V && hasFileInClipboard() && actionTester.test(PasteFileAction.class)) {
-            final PasteFileAction action = new PasteFileAction(item);
+            final PasteFileAction action = new PasteFileAction(firstElement);
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
         }

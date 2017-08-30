@@ -6,7 +6,8 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.ConvertFileActi
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileByExternalEditorAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.rlib.util.array.Array;
@@ -22,7 +23,8 @@ import java.util.function.Predicate;
  *
  * @author JavaSaBr
  */
-public class FileAssetTreeContextMenuFiller implements AssetTreeContextMenuFiller {
+public class FileAssetTreeSingleContextMenuFiller implements AssetTreeSingleContextMenuFiller,
+        AssetTreeMultiContextMenuFiller {
 
     @NotNull
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
@@ -35,10 +37,6 @@ public class FileAssetTreeContextMenuFiller implements AssetTreeContextMenuFille
 
             if (actionTester.test(OpenFileAction.class)) {
                 items.add(new OpenFileAction(element));
-            }
-
-            if (actionTester.test(OpenFileByExternalEditorAction.class)) {
-                items.add(new OpenFileByExternalEditorAction(element));
             }
 
             if (actionTester.test(OpenWithFileAction.class)) {
@@ -54,6 +52,15 @@ public class FileAssetTreeContextMenuFiller implements AssetTreeContextMenuFille
                     items.add(new ConvertFileAction(element, descriptions));
                 }
             }
+
+            if (actionTester.test(OpenFileByExternalEditorAction.class)) {
+                items.add(new OpenFileByExternalEditorAction(element));
+            }
         }
+    }
+
+    @Override
+    public void fill(@NotNull final Array<ResourceElement> elements, @NotNull final List<MenuItem> items,
+                     @NotNull final Predicate<Class<?>> actionTester) {
     }
 }
