@@ -345,7 +345,7 @@ public class MaterialFileEditor extends
 
             final String paramName = matParam.getName();
             final MatParamTexture textureParam = currentMaterial.getTextureParam(paramName);
-            final Texture currentTexture = textureParam.getTextureValue();
+            final Texture currentTexture = textureParam == null? null : textureParam.getTextureValue();
 
             PropertyOperation<ChangeConsumer, Material, Texture> operation =
                     new PropertyOperation<>(currentMaterial, paramName, texture, currentTexture);

@@ -44,6 +44,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -484,20 +485,27 @@ public abstract class EditorUtil {
      *
      * @param path the path
      */
-    public static void openFileInSystemExplorer(@NotNull final Path path) {
+    public static void openFileInSystemExplorer(@NotNull Path path) {
 
         final Platform platform = JmeSystem.getPlatform();
         final List<String> commands = new ArrayList<>();
 
         if (platform == Platform.MacOSX64 || platform == Platform.MacOSX_PPC64) {
-            commands.add("/System/Library/CoreServices/Finder.app");
+            commands.add("open");
+            commands.add("-R");
         } else if (platform == Platform.Windows32 || platform == Platform.Windows64) {
             commands.add("explorer");
+            commands.add("/select,");
         } else if (platform == Platform.Linux32 || platform == Platform.Linux64) {
             if (isAppExists("nautilus -v")) {
                 commands.add("nautilus");
             } else if (isAppExists("dolphin -v")) {
                 commands.add("dolphin");
+            } else {
+                commands.add("xdg-open");
+                if (!Files.isDirectory(path)) {
+                    path = path.getParent();
+                }
             }
         }
 

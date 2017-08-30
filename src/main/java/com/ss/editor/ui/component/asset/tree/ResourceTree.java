@@ -784,21 +784,21 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final boolean controlDown = event.isControlDown();
 
         if (!currentAsset.equals(firstElement.getFile())) {
-            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class) && selectedAsset &&
+            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class) && !selectedAsset &&
                     (onlyFiles || selectedElements.size() == 1)) {
 
                 final CopyFileAction action = new CopyFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
 
-            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class) && selectedAsset &&
+            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class) && !selectedAsset &&
                     (onlyFiles || selectedElements.size() == 1)) {
 
                 final CutFileAction action = new CutFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
 
-            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class) && selectedAsset &&
+            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class) && !selectedAsset &&
                     (onlyFiles || selectedElements.size() == 1)) {
 
                 final DeleteFileAction action = new DeleteFileAction(selectedElements);
