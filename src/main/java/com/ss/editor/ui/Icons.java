@@ -71,6 +71,10 @@ public interface Icons {
      */
     Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/svg/molecule_2.svg", 16);
     /**
+     * The DEBUG_16 PARTICLES_16.
+     */
+    Image DEBUG_16 = ICON_MANAGER.getImage("/ui/icons/svg/debug.svg", 16);
+    /**
      * The constant GEOMETRY_16.
      */
     Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/svg/cube-divisions.svg");

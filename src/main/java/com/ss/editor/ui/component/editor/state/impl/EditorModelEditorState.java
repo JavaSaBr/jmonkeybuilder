@@ -25,11 +25,20 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
     private volatile boolean enableLight;
 
     /**
-     * Instantiates a new Model file editor state.
+     * Is enabled physics.
      */
+    private volatile boolean enablePhysics;
+
+    /**
+     * Is enabled debug physics.
+     */
+    private volatile boolean enableDebugPhysics;
+
     public EditorModelEditorState() {
         this.skyType = 0;
         this.enableLight = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
+        this.enablePhysics = false;
+        this.enableDebugPhysics = false;
     }
 
     /**
@@ -70,6 +79,38 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
      */
     public boolean isEnableLight() {
         return enableLight;
+    }
+
+    /**
+     * @return true if physics is enabled.
+     */
+    public boolean isEnablePhysics() {
+        return enablePhysics;
+    }
+
+    /**
+     * @param enablePhysics true if physics is enabled.
+     */
+    public void setEnablePhysics(final boolean enablePhysics) {
+        final boolean changed = isEnablePhysics() != enablePhysics;
+        this.enablePhysics = enablePhysics;
+        if (changed) notifyChange();
+    }
+
+    /**
+     * @return true if debug physics is enabled.
+     */
+    public boolean isEnableDebugPhysics() {
+        return enableDebugPhysics;
+    }
+
+    /**
+     * @param enableDebugPhysics true if debug physics is enabled.
+     */
+    public void setEnableDebugPhysics(final boolean enableDebugPhysics) {
+        final boolean changed = isEnableDebugPhysics() != enableDebugPhysics;
+        this.enableDebugPhysics = enableDebugPhysics;
+        if (changed) notifyChange();
     }
 
     @Override

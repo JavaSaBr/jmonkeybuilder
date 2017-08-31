@@ -17,6 +17,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.model.ModelEditor3DState;
+import com.ss.editor.state.editor.impl.model.ModelEditorBulletState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -77,6 +78,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         FAST_SKY_LIST.add("graphics/textures/sky/inside.hdr");
     }
 
+    @NotNull
+    private final ModelEditorBulletState bulletState;
+
     /**
      * The list of fast skies.
      */
@@ -89,8 +93,25 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     @Nullable
     private ToggleButton lightButton;
 
+    /**
+     * The physics toggle.
+     */
+    @Nullable
+    private ToggleButton physicsButton;
+
+    /**
+     * The debug physics toggle.
+     */
+    @Nullable
+    private ToggleButton debugPhysicsButton;
+
     private ModelFileEditor() {
         super();
+        this.bulletState = new ModelEditorBulletState(getEditor3DState());
+        this.bulletState.setEnabled(false);
+        this.bulletState.setDebugEnabled(false);
+        this.bulletState.setSpeed(1F);
+        addEditorState(bulletState);
     }
 
     @Override
@@ -111,6 +132,20 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      */
     private @NotNull ToggleButton getLightButton() {
         return notNull(lightButton);
+    }
+
+    /**
+     * @return the physics toggle.
+     */
+    private @NotNull ToggleButton getPhysicsButton() {
+        return notNull(physicsButton);
+    }
+
+    /**
+     * @return the debug physics button.
+     */
+    private @NotNull ToggleButton getDebugPhysicsButton() {
+        return notNull(debugPhysicsButton);
     }
 
     @Override
@@ -156,6 +191,12 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
         final ToggleButton lightButton = getLightButton();
         lightButton.setSelected(editorState.isEnableLight());
+
+        final ToggleButton physicsButton = getPhysicsButton();
+        physicsButton.setSelected(editorState.isEnablePhysics());
+
+        final ToggleButton debugPhysicsButton = getDebugPhysicsButton();
+        debugPhysicsButton.setSelected(editorState.isEnableDebugPhysics());
     }
 
     @Override
@@ -176,6 +217,25 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             geometries.forEach(geometry -> {
                 if (geometry.getQueueBucket() == RenderQueue.Bucket.Sky) {
                     editor3DState.addCustomSky(geometry);
+                }
+            });
+        }
+    }
+
+    @FXThread
+    @Override
+    protected void handleRemovedObject(@NotNull final Spatial model) {
+        super.handleRemovedObject(model);
+
+        final ModelEditor3DState editor3DState = getEditor3DState();
+        final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
+
+        NodeUtils.addGeometry(model, geometries);
+
+        if (!geometries.isEmpty()) {
+            geometries.forEach(geometry -> {
+                if (geometry.getQueueBucket() == RenderQueue.Bucket.Sky) {
+                    editor3DState.removeCustomSky(geometry);
                 }
             });
         }
@@ -219,10 +279,24 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         lightButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
-        DynamicIconSupport.addSupport(lightButton);
+        physicsButton = new ToggleButton();
+        physicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
+        physicsButton.setGraphic(new ImageView(Icons.PHYSICS_16));
+        physicsButton.setSelected(false);
+        physicsButton.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changePhysics(newValue));
 
-        FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addToPane(lightButton, container);
+        debugPhysicsButton = new ToggleButton();
+        debugPhysicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
+        debugPhysicsButton.setGraphic(new ImageView(Icons.DEBUG_16));
+        debugPhysicsButton.setSelected(false);
+        debugPhysicsButton.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeDebugPhysics(newValue));
+
+        DynamicIconSupport.addSupport(lightButton, physicsButton, debugPhysicsButton);
+
+        FXUtils.addClassTo(lightButton, physicsButton, debugPhysicsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addToPane(lightButton, physicsButton, debugPhysicsButton, container);
     }
 
     /**
@@ -259,6 +333,35 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     /**
+     * @return the bullet state.
+     */
+    private @NotNull ModelEditorBulletState getBulletState() {
+        return bulletState;
+    }
+
+    /**
+     * Handle to change enabling of physics.
+     */
+    private void changePhysics(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setEnabled(newValue));
+
+        if (editorState != null) editorState.setEnablePhysics(newValue);
+    }
+
+    /**
+     * Handle to change enabling of physics.
+     */
+    private void changeDebugPhysics(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setDebugEnabled(newValue));
+
+        if (editorState != null) editorState.setEnableDebugPhysics(newValue);
+    }
+
+    /**
      * Handle changing camera light visibility.
      */
     private void changeLight(@NotNull final Boolean newValue) {
@@ -287,6 +390,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
                 editor3DState.updateLightProbe();
             }
         }
+
+        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyAdded(added));
     }
 
     @Override
@@ -305,6 +410,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
                 editor3DState.updateLightProbe();
             }
         }
+
+        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyRemoved(removed));
     }
 
     @Override

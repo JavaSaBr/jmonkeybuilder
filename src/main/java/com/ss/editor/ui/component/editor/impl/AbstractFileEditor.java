@@ -152,7 +152,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     private boolean saving;
 
-
     /**
      * Instantiates a new Abstract file editor.
      */

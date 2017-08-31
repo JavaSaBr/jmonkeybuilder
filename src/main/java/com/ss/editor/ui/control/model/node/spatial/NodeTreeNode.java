@@ -49,35 +49,28 @@ import tonegod.emitter.ParticleEmitterNode;
 import java.nio.file.Path;
 import java.util.List;
 
+
 /**
  * The implementation of the {@link SpatialTreeNode} for representing the {@link Node} in the editor.
  *
- * @param <T> the type parameter
+ * @param <T> the type of Node
  * @author JavaSaBr
  */
 public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
-    /**
-     * Instantiates a new Node model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public NodeTreeNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    protected Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
+    protected @Nullable Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
         final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
         return toolMenu;
     }
 
-    @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final Menu menu = super.createCreationMenu(nodeTree);
         if (menu == null) return null;
@@ -131,9 +124,8 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         return nodeTree instanceof ModelNodeTree;
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final List<Spatial> children = getSpatials();
@@ -148,8 +140,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      *
      * @return the spatials
      */
-    @NotNull
-    protected List<Spatial> getSpatials() {
+    protected @NotNull List<Spatial> getSpatials() {
         final Node element = getElement();
         return element.getChildren();
     }
@@ -222,9 +213,8 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         }
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
