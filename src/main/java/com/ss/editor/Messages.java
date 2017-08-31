@@ -162,6 +162,14 @@ public class Messages {
      */
     public static final String SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT;
     /**
+     * The constant SCENE_FILE_EDITOR_ACTION_PHYSICS.
+     */
+    public static final String SCENE_FILE_EDITOR_ACTION_PHYSICS;
+    /**
+     * The constant SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS.
+     */
+    public static final String SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS;
+    /**
      * The constant SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS.
      */
     public static final String SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS;
@@ -2453,6 +2461,8 @@ public class Messages {
         SCENE_FILE_EDITOR_ACTION_SCALE_TOOL = bundle.getString("SceneFileEditorActionScaleTool");
         SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL = bundle.getString("SceneFileEditorActionRotationTool");
         SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT = bundle.getString("SceneFileEditorActionCameraLight");
+        SCENE_FILE_EDITOR_ACTION_PHYSICS = bundle.getString("SceneFileEditorActionPhysics");
+        SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS = bundle.getString("SceneFileEditorActionDebugPhysics");
         SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS = bundle.getString("SceneFileEditorActionShowLights");
         SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO = bundle.getString("SceneFileEditorActionShowAudio");
 

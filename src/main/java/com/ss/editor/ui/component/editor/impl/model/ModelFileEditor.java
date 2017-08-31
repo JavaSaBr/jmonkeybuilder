@@ -280,14 +280,14 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
                 .addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
         physicsButton = new ToggleButton();
-        physicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
+        physicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_PHYSICS));
         physicsButton.setGraphic(new ImageView(Icons.PHYSICS_16));
         physicsButton.setSelected(false);
         physicsButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changePhysics(newValue));
 
         debugPhysicsButton = new ToggleButton();
-        debugPhysicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
+        debugPhysicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS));
         debugPhysicsButton.setGraphic(new ImageView(Icons.DEBUG_16));
         debugPhysicsButton.setSelected(false);
         debugPhysicsButton.selectedProperty()
