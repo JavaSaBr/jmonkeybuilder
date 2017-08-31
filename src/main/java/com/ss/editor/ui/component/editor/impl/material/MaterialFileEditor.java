@@ -185,7 +185,7 @@ public class MaterialFileEditor extends
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) {
+    public void doSave(@NotNull final Path toStore) throws IOException {
         super.doSave(toStore);
 
         final Material currentMaterial = getCurrentMaterial();
@@ -193,8 +193,6 @@ public class MaterialFileEditor extends
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(content);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
         }
     }
 

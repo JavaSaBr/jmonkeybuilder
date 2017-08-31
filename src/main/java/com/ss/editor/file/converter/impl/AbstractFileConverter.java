@@ -18,6 +18,7 @@ import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -119,7 +120,8 @@ public abstract class AbstractFileConverter implements FileConverter {
      * @param destination the target file.
      * @param overwrite   is need to overwrite.
      */
-    protected void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite) {
+    protected void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite)
+            throws IOException {
     }
 
     /**

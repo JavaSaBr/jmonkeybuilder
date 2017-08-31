@@ -230,7 +230,6 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
             try {
 
                 writeData(tempFile);
-
                 try {
                     Files.move(tempFile, fileToCreate, REPLACE_EXISTING, ATOMIC_MOVE);
                 } catch (final AtomicMoveNotSupportedException ex) {
@@ -254,7 +253,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @param resultFile the result file.
      */
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) {
+    protected void writeData(@NotNull final Path resultFile) throws IOException {
     }
 
     @Override

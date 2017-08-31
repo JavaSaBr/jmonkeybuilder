@@ -394,7 +394,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param toStore the file to store.
      */
     @BackgroundThread
-    protected void doSave(@NotNull final Path toStore) {
+    protected void doSave(@NotNull final Path toStore) throws IOException {
     }
 
     /**

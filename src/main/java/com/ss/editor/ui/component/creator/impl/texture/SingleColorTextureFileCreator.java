@@ -140,7 +140,7 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final VarTable vars, final @NotNull Path resultFile) {
+    protected void writeData(@NotNull final VarTable vars, final @NotNull Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
         final Color color = UIUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
@@ -161,8 +161,6 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
 
         try (final OutputStream out = Files.newOutputStream(resultFile)) {
             ImageIO.write(bufferedImage, "png", out);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

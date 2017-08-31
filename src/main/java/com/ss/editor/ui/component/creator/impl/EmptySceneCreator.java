@@ -49,7 +49,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) {
+    protected void writeData(@NotNull final Path resultFile) throws IOException {
         super.writeData(resultFile);
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
@@ -57,8 +57,6 @@ public class EmptySceneCreator extends AbstractFileCreator {
 
         try (final OutputStream out = Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             exporter.save(newNode, out);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
         }
     }
 

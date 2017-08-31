@@ -76,7 +76,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
      * Convert a file using settings from the dialog.
      */
     @BackgroundThread
-    private void convertImpl(@NotNull final Path source, @NotNull final ModelConverterDialog dialog) {
+    private void convertImpl(@NotNull final Path source, @NotNull final ModelConverterDialog dialog) throws IOException {
 
         final String filename = dialog.getFilename();
         final Path destinationFolder = dialog.getDestinationFolder();
@@ -110,8 +110,6 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
 
         try (final OutputStream out = Files.newOutputStream(destination, WRITE, TRUNCATE_EXISTING, CREATE)) {
             exporter.save(model, out);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
         }
 
         if (isOverwrite) {

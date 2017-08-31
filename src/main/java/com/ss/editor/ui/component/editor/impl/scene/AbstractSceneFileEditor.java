@@ -760,7 +760,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) {
+    public void doSave(@NotNull final Path toStore) throws IOException {
         super.doSave(toStore);
 
         final M currentModel = getCurrentModel();
@@ -771,8 +771,6 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         try (final OutputStream out = Files.newOutputStream(toStore)) {
             exporter.save(currentModel, out);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
         }
     }
 
