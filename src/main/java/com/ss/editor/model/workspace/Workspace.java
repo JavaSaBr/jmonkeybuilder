@@ -116,8 +116,7 @@ public class Workspace implements Serializable {
      *
      * @return the current edited file.
      */
-    @Nullable
-    public String getCurrentEditedFile() {
+    public @Nullable String getCurrentEditedFile() {
         return currentEditedFile;
     }
 
@@ -140,16 +139,14 @@ public class Workspace implements Serializable {
     /**
      * @return the table with states of editors.
      */
-    @NotNull
-    private Map<String, EditorState> getEditorStateMap() {
+    private @NotNull Map<String, EditorState> getEditorStateMap() {
         return notNull(editorStateMap);
     }
 
     /**
      * @return the list of expanded folders.
      */
-    @NotNull
-    private List<String> getExpandedFolders() {
+    private @NotNull List<String> getExpandedFolders() {
         return notNull(expandedFolders);
     }
 
@@ -158,8 +155,7 @@ public class Workspace implements Serializable {
      *
      * @return the list of expanded absolute folders.
      */
-    @NotNull
-    public synchronized Array<Path> getExpandedAbsoluteFolders() {
+    public synchronized @NotNull Array<Path> getExpandedAbsoluteFolders() {
 
         final Array<Path> result = ArrayFactory.newArray(Path.class);
         final Path assetFolder = getAssetFolder();
@@ -194,9 +190,8 @@ public class Workspace implements Serializable {
      * @param stateFactory the state factory.
      * @return the state of the editor.
      */
-    @NotNull
-    public synchronized <T extends EditorState> T getEditorState(@NotNull final Path file,
-                                                                 @NotNull final Supplier<EditorState> stateFactory) {
+    public synchronized <T extends EditorState> @NotNull T getEditorState(@NotNull final Path file,
+                                                                          @NotNull final Supplier<EditorState> stateFactory) {
 
         final Path assetFile = getAssetFile(getAssetFolder(), file);
         final String assetPath = toAssetPath(assetFile);
@@ -211,23 +206,6 @@ public class Workspace implements Serializable {
         }
 
         return unsafeCast(editorStateMap.get(assetPath));
-    }
-
-    /**
-     * Update an editor state of a file.
-     *
-     * @param file        the file.
-     * @param editorState the editor state.
-     */
-    public synchronized void updateEditorState(@NotNull final Path file, @NotNull final EditorState editorState) {
-
-        final Path assetFile = getAssetFile(getAssetFolder(), file);
-        final String assetPath = toAssetPath(assetFile);
-
-        final Map<String, EditorState> editorStateMap = getEditorStateMap();
-        editorStateMap.put(assetPath, editorState);
-
-        incrementChanges();
     }
 
     /**
@@ -247,28 +225,6 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Update an editor state for moved/renamed file.
-     *
-     * @param prevFile the previous file.
-     * @param newFile  the new file.
-     */
-    public synchronized void updateEditorState(@NotNull final Path prevFile, @NotNull final Path newFile) {
-
-        final Path prevAssetFile = getAssetFile(getAssetFolder(), prevFile);
-        final String prevAssetPath = toAssetPath(prevAssetFile);
-
-        final Map<String, EditorState> editorStateMap = getEditorStateMap();
-        final EditorState editorState = editorStateMap.remove(prevAssetPath);
-        if (editorState == null) return;
-
-        final Path newAssetFile = getAssetFile(getAssetFolder(), newFile);
-        final String newAssetPath = toAssetPath(newAssetFile);
-
-        editorStateMap.put(newAssetPath, editorState);
-        incrementChanges();
-    }
-
-    /**
      * Sets asset folder.
      *
      * @param assetFolder the asset folder of this workspace.
@@ -282,8 +238,7 @@ public class Workspace implements Serializable {
      *
      * @return the table of opened files.
      */
-    @NotNull
-    public Map<String, String> getOpenedFiles() {
+    public @NotNull Map<String, String> getOpenedFiles() {
         return notNull(openedFiles);
     }
 
@@ -328,8 +283,7 @@ public class Workspace implements Serializable {
      *
      * @return the asset folder of this workspace.
      */
-    @NotNull
-    public Path getAssetFolder() {
+    public @NotNull Path getAssetFolder() {
         return notNull(assetFolder);
     }
 
@@ -381,7 +335,7 @@ public class Workspace implements Serializable {
             }
 
         } catch (final UnsupportedOperationException | IllegalArgumentException e) {
-            // we can igone that
+            // we can ignore that
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
