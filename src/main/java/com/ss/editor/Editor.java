@@ -280,6 +280,7 @@ public class Editor extends JmeToJFXApplication {
 
         // create preview view port
         previewCamera = cam.clone();
+
         previewViewPort = renderManager.createPostView("Preview viewport", previewCamera);
         previewViewPort.setClearFlags(true, true, true);
         previewViewPort.attachScene(previewNode);
@@ -292,7 +293,6 @@ public class Editor extends JmeToJFXApplication {
 
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
-
 
         final FilterPostProcessor postProcessor = getPostProcessor();
 
@@ -534,8 +534,7 @@ public class Editor extends JmeToJFXApplication {
     /**
      * @return the light probe.
      */
-    @Nullable
-    private LightProbe getLightProbe() {
+    private @Nullable LightProbe getLightProbe() {
         return lightProbe;
     }
 
@@ -544,24 +543,21 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return The preview view port.
      */
-    @NotNull
-    public ViewPort getPreviewViewPort() {
+    public @NotNull ViewPort getPreviewViewPort() {
         return notNull(previewViewPort);
     }
 
     /**
      * @return the preview light probe.
      */
-    @Nullable
-    private LightProbe getPreviewLightProbe() {
+    private @Nullable LightProbe getPreviewLightProbe() {
         return previewLightProbe;
     }
 
     /**
      * @return the environment camera.
      */
-    @Nullable
-    private EnvironmentCamera getEnvironmentCamera() {
+    private @Nullable EnvironmentCamera getEnvironmentCamera() {
         return environmentCamera;
     }
 
@@ -570,16 +566,14 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the camera for preview.
      */
-    @NotNull
-    public Camera getPreviewCamera() {
+    public @NotNull Camera getPreviewCamera() {
         return notNull(previewCamera);
     }
 
     /**
      * @return the preview environment camera.
      */
-    @Nullable
-    private EnvironmentCamera getPreviewEnvironmentCamera() {
+    private @Nullable EnvironmentCamera getPreviewEnvironmentCamera() {
         return previewEnvironmentCamera;
     }
 
@@ -588,8 +582,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the node for preview.
      */
-    @NotNull
-    public Node getPreviewNode() {
+    public @NotNull Node getPreviewNode() {
         return notNull(previewNode);
     }
 
@@ -598,8 +591,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the filter of color correction.
      */
-    @NotNull
-    public ToneMapFilter getToneMapFilter() {
+    public @NotNull ToneMapFilter getToneMapFilter() {
         return notNull(toneMapFilter);
     }
 
@@ -608,8 +600,8 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return The FXAA filter.
      */
-    public FXAAFilter getFXAAFilter() {
-        return fxaaFilter;
+    public @NotNull FXAAFilter getFXAAFilter() {
+        return notNull(fxaaFilter);
     }
 
     /**
@@ -617,8 +609,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the translucent bucket filter.
      */
-    @NotNull
-    public TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
+    public @NotNull TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
         return notNull(translucentBucketFilter);
     }
 
@@ -636,8 +627,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the gui font.
      */
-    @Nullable
-    public BitmapFont getGuiFont() {
+    public @Nullable BitmapFont getGuiFont() {
         return notNull(guiFont);
     }
 
@@ -646,8 +636,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the default material.
      */
-    @NotNull
-    public Material getDefaultMaterial() {
+    public @NotNull Material getDefaultMaterial() {
         return notNull(defaultMaterial);
     }
 }
