@@ -12,7 +12,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 4;
+    public static final long serialVersionUID = 5;
 
     /**
      * The sky type.

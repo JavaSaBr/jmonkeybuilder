@@ -16,7 +16,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 5;
+    public static final long serialVersionUID = 6;
 
     @NotNull
     private static transient final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();

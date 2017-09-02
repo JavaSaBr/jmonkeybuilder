@@ -579,7 +579,6 @@ public abstract class EditorUtil {
         try (final ObjectInputStream in = new SSObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
         } catch (final ClassNotFoundException | IOException e) {
-            LOGGER.warning(e);
             throw new RuntimeException(e);
         }
     }

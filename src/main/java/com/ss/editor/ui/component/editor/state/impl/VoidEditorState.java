@@ -12,6 +12,11 @@ import java.util.function.Supplier;
  */
 public final class VoidEditorState implements EditorState {
 
+    /**
+     * The constant serialVersionUID.
+     */
+    public static final long serialVersionUID = 1;
+
     private VoidEditorState() {
         throw new RuntimeException();
     }

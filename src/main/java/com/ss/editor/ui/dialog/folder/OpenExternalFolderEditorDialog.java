@@ -77,6 +77,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
         resourceTree = new ResourceTree(this::processOpen, false);
         resourceTree.prefHeightProperty().bind(heightProperty());
         resourceTree.prefWidthProperty().bind(widthProperty());
+        resourceTree.setActionTester(type -> false);
         resourceTree.setLazyMode(true);
         resourceTree.setOnlyFolders(true);
         resourceTree.setShowRoot(false);
