@@ -164,7 +164,7 @@ public class MaterialFileEditor extends
     @Override
     @FXThread
     protected @NotNull MaterialEditor3DState create3DEditorState() {
-        return new MaterialEditor3DState(this);
+        return new MaterialEditor3DState<>(this);
     }
 
     @Override

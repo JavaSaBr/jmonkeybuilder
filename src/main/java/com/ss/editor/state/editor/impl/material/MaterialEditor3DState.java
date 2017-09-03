@@ -9,9 +9,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -23,6 +21,7 @@ import com.jme3.scene.shape.Sphere;
 import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
+import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
 import com.ss.editor.plugin.api.editor.part3d.AdvancedPBRWithStudioSky3DEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtil;
@@ -34,11 +33,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation the 3D part of the {@link MaterialFileEditor}.
+ * The implementation the 3D part of the {@link MaterialFileEditor} but it can be reused in other cases.
  *
  * @author JavaSaBr
  */
-public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState<MaterialFileEditor> {
+public class MaterialEditor3DState<T extends Advanced3DFileEditor> extends AdvancedPBRWithStudioSky3DEditorState<T> {
 
     @NotNull
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
@@ -102,7 +101,7 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
      *
      * @param fileEditor the file editor
      */
-    public MaterialEditor3DState(@NotNull final MaterialFileEditor fileEditor) {
+    public MaterialEditor3DState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
@@ -128,7 +127,7 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
 
-        final MaterialFileEditor fileEditor = getFileEditor();
+        final T fileEditor = getFileEditor();
 
         actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isButtonMiddleDown()));
         actionHandlers.put(KEY_C, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isButtonMiddleDown()));
@@ -145,21 +144,21 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     /**
      * @return the test box.
      */
-    private @NotNull Geometry getTestBox() {
+    protected @NotNull Geometry getTestBox() {
         return testBox;
     }
 
     /**
      * @return the test quad.
      */
-    private @NotNull Geometry getTestQuad() {
+    protected @NotNull Geometry getTestQuad() {
         return testQuad;
     }
 
     /**
      * @return the test sphere.
      */
-    private @NotNull Geometry getTestSphere() {
+    protected @NotNull Geometry getTestSphere() {
         return testSphere;
     }
 
@@ -175,7 +174,7 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     /**
      * Update the {@link Material} in the {@link EditorThread}.
      */
-    private void updateMaterialImpl(@NotNull final Material material) {
+    protected void updateMaterialImpl(@NotNull final Material material) {
 
         final Geometry testBox = getTestBox();
         testBox.setMaterial(material);
@@ -209,7 +208,7 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     /**
      * Change the {@link ModelType} in the {@link EditorThread}.
      */
-    private void changeModeImpl(@NotNull final ModelType modelType) {
+    protected void changeModeImpl(@NotNull final ModelType modelType) {
 
         final Node modelNode = getModelNode();
         modelNode.detachAllChildren();
@@ -244,7 +243,7 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     /**
      * Change the {@link Bucket} in the {@link EditorThread}.
      */
-    private void changeBucketTypeImpl(@NotNull final Bucket bucket) {
+    protected void changeBucketTypeImpl(@NotNull final Bucket bucket) {
 
         final Geometry testQuad = getTestQuad();
         testQuad.setQueueBucket(bucket);
@@ -280,29 +279,28 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     /**
      * @return the current model mode.
      */
-    @NotNull
-    private ModelType getCurrentModelType() {
+    protected @NotNull ModelType getCurrentModelType() {
         return notNull(currentModelType);
     }
 
     /**
      * @param currentModelType the current model mode.
      */
-    private void setCurrentModelType(@NotNull final ModelType currentModelType) {
+    protected void setCurrentModelType(@NotNull final ModelType currentModelType) {
         this.currentModelType = currentModelType;
     }
 
     /**
      * @return true if the light is enabled.
      */
-    private boolean isLightEnabled() {
+    protected boolean isLightEnabled() {
         return lightEnabled;
     }
 
     /**
      * @param lightEnabled true if the light is enabled.
      */
-    private void setLightEnabled(final boolean lightEnabled) {
+    protected void setLightEnabled(final boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
     }
 
@@ -318,7 +316,7 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
     /**
      * Update the light in the scene in the {@link EditorThread}.
      */
-    private void updateLightEnabledImpl(boolean enabled) {
+    protected void updateLightEnabledImpl(boolean enabled) {
         if (enabled == isLightEnabled()) return;
 
         final DirectionalLight light = getLightForCamera();
@@ -331,22 +329,6 @@ public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState
         }
 
         setLightEnabled(enabled);
-    }
-
-    @Override
-    protected void postCameraUpdate(final float tpf) {
-        super.postCameraUpdate(tpf);
-
-        final Geometry testQuad = getTestQuad();
-
-        if (testQuad.getParent() != null) {
-
-            final Quaternion localRotation = testQuad.getLocalRotation();
-            final Camera camera = EDITOR.getCamera();
-
-            localRotation.lookAt(camera.getLocation(), camera.getUp());
-            testQuad.setLocalRotation(localRotation);
-        }
     }
 
     @Override
