@@ -49,10 +49,7 @@ import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
@@ -155,7 +152,6 @@ public class MaterialFileEditor extends
      */
     @Nullable
     private ComboBox<String> materialDefinitionBox;
-
 
     private MaterialFileEditor() {
         super();
@@ -408,6 +404,12 @@ public class MaterialFileEditor extends
     @Override
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;
+    }
+
+    @Override
+    @FXThread
+    protected void calcVSplitSize(@NotNull final SplitPane splitPane) {
+        splitPane.setDividerPosition(0, 0.2);
     }
 
     /**
