@@ -63,7 +63,7 @@ public class MaterialFileEditor extends
         BaseMaterialFileEditor<MaterialEditor3DState, EditorMaterialEditorState, ChangeConsumer> {
 
     /**
-     * The constant DESCRIPTION.
+     * The description.
      */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
