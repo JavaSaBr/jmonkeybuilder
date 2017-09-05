@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 1.0.1 #
+# jMonkeyEngine 3 SpaceShift Editor 1.1.0 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -9,7 +9,21 @@
 * [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jme3-spaceshift-editor/35179)
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
-## [Video about this editor](https://youtu.be/h6azH-D28qk) ##
+## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
+
+## ver. 1.1.0 ##
+* -Added the new plugin to generate trees.
+* -Updated the Material Editor.
+* -Added integration with Bullet physics to Model Editor.
+* -Added an action to Asset Tree to open file/folder in system explorer.
+* -Added an action to Model Tree to make a material as embedded.
+* -Added a possibility to edit embedded materials inside Model Editor.
+* -Updated a control to set a texture for material, now we can configure all settings of this texture.
+* -Added a dialog to ask about unsaved changes when a user try to close an editor.
+* -Implemented java version of the Folder Chooser to open asset folder/other external folders and added 
+an option to the Settings Dialog to enable/disable native Folder Chooser.
+* -Added an action to the Model Tree to save a material as a separated file. 
+* -Improved usability and fixed bugs with UI.
 
 ## ver. 1.0.1 ##
 * -Implemented D&D of controls in a model tree.
