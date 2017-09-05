@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
 import com.jme3.renderer.queue.RenderQueue;
-import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      * Instantiates a new Material file editor state.
      */
     public EditorMaterialEditorState() {
-        modelType = MaterialEditor3DState.ModelType.BOX.ordinal();
+        modelType = BaseMaterialEditor3DState.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
         lightEnable = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
     }
@@ -91,7 +91,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param modelType the model type.
      */
-    public void setModelType(@NotNull final MaterialEditor3DState.ModelType modelType) {
+    public void setModelType(@NotNull final BaseMaterialEditor3DState.ModelType modelType) {
         final boolean changed = getModelType() != modelType.ordinal();
         this.modelType = modelType.ordinal();
         final Runnable changeHandler = getChangeHandler();

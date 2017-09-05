@@ -2,7 +2,7 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="native-build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="1.1.0"/>
+    <property name="editor.version" value="1.2.0"/>
     <property environment="env"/>
 
     <condition property="gradle.executable" value="${env.GRADLE_HOME}/bin/gradle.bat"

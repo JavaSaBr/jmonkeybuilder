@@ -51,15 +51,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     @Override
     @FXThread
     protected void createContent(@NotNull final StackPane root) {
-
-        editorAreaPane = new StackPane();
-        editorAreaPane.setOnDragOver(this::dragOver);
-        editorAreaPane.setOnDragDropped(this::dragDropped);
-
-        editor3DArea = new BorderPane();
-        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
-        editor3DArea.setOnKeyReleased(Event::consume);
-        editor3DArea.setOnKeyPressed(Event::consume);
+        createEditorAreaPane();
 
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
 
@@ -74,11 +66,27 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
             if (editorState != null) editorState.setOpenedTool(newValue.intValue());
         });
 
-        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
+        mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
 
         FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+    }
+
+    /**
+     * Create editor area pane.
+     */
+    protected void createEditorAreaPane() {
+
+        editorAreaPane = new StackPane();
+        editorAreaPane.setOnDragOver(this::dragOver);
+        editorAreaPane.setOnDragDropped(this::dragDropped);
+
+        editor3DArea = new BorderPane();
+        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
+        editor3DArea.setOnKeyReleased(Event::consume);
+        editor3DArea.setOnKeyPressed(Event::consume);
+
+        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
     }
 
