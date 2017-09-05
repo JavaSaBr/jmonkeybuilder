@@ -17,12 +17,13 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.model.ModelEditor3DState;
+import com.ss.editor.state.editor.impl.model.ModelEditorBulletState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
+import com.ss.editor.ui.component.editor.state.impl.EditorModelEditorState;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.MaterialUtils;
@@ -45,7 +46,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditor3DState, ModelFileEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DState, EditorModelEditorState> {
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -77,6 +78,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         FAST_SKY_LIST.add("graphics/textures/sky/inside.hdr");
     }
 
+    @NotNull
+    private final ModelEditorBulletState bulletState;
+
     /**
      * The list of fast skies.
      */
@@ -89,36 +93,65 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     @Nullable
     private ToggleButton lightButton;
 
+    /**
+     * The physics toggle.
+     */
+    @Nullable
+    private ToggleButton physicsButton;
+
+    /**
+     * The debug physics toggle.
+     */
+    @Nullable
+    private ToggleButton debugPhysicsButton;
+
     private ModelFileEditor() {
         super();
+        this.bulletState = new ModelEditorBulletState(getEditor3DState());
+        this.bulletState.setEnabled(false);
+        this.bulletState.setDebugEnabled(false);
+        this.bulletState.setSpeed(1F);
+        addEditorState(bulletState);
     }
 
-    @NotNull
     @Override
-    protected ModelEditor3DState createEditor3DState() {
+    @FXThread
+    protected @NotNull ModelEditor3DState create3DEditorState() {
         return new ModelEditor3DState(this);
     }
 
     /**
      * @return the list of fast skies.
      */
-    @NotNull
-    private ComboBox<String> getFastSkyComboBox() {
+    private @NotNull ComboBox<String> getFastSkyComboBox() {
         return notNull(fastSkyComboBox);
     }
 
     /**
      * @return the light toggle.
      */
-    @NotNull
-    private ToggleButton getLightButton() {
+    private @NotNull ToggleButton getLightButton() {
         return notNull(lightButton);
     }
 
-    @FXThread
+    /**
+     * @return the physics toggle.
+     */
+    private @NotNull ToggleButton getPhysicsButton() {
+        return notNull(physicsButton);
+    }
+
+    /**
+     * @return the debug physics button.
+     */
+    private @NotNull ToggleButton getDebugPhysicsButton() {
+        return notNull(debugPhysicsButton);
+    }
+
     @Override
-    public void openFile(@NotNull final Path file) {
-        super.openFile(file);
+    @FXThread
+    protected void doOpenFile(@NotNull final Path file) {
+        super.doOpenFile(file);
 
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
@@ -145,27 +178,30 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         } finally {
             setIgnoreListeners(false);
         }
-
-        EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
     @Override
     protected void loadState() {
         super.loadState();
 
-        final ModelFileEditorState editorState = notNull(getEditorState());
+        final EditorModelEditorState editorState = notNull(getEditorState());
 
         final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
         fastSkyComboBox.getSelectionModel().select(editorState.getSkyType());
 
         final ToggleButton lightButton = getLightButton();
         lightButton.setSelected(editorState.isEnableLight());
+
+        final ToggleButton physicsButton = getPhysicsButton();
+        physicsButton.setSelected(editorState.isEnablePhysics());
+
+        final ToggleButton debugPhysicsButton = getDebugPhysicsButton();
+        debugPhysicsButton.setSelected(editorState.isEnableDebugPhysics());
     }
 
-    @NotNull
     @Override
-    protected Supplier<EditorState> getStateConstructor() {
-        return ModelFileEditorState::new;
+    protected @Nullable Supplier<EditorState> getEditorStateFactory() {
+        return EditorModelEditorState::new;
     }
 
     @Override
@@ -186,9 +222,27 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         }
     }
 
-    @NotNull
+    @FXThread
     @Override
-    public EditorDescription getDescription() {
+    protected void handleRemovedObject(@NotNull final Spatial model) {
+        super.handleRemovedObject(model);
+
+        final ModelEditor3DState editor3DState = getEditor3DState();
+        final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
+
+        NodeUtils.addGeometry(model, geometries);
+
+        if (!geometries.isEmpty()) {
+            geometries.forEach(geometry -> {
+                if (geometry.getQueueBucket() == RenderQueue.Bucket.Sky) {
+                    editor3DState.removeCustomSky(geometry);
+                }
+            });
+        }
+    }
+
+    @Override
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 
@@ -225,10 +279,24 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         lightButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
-        DynamicIconSupport.addSupport(lightButton);
+        physicsButton = new ToggleButton();
+        physicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_PHYSICS));
+        physicsButton.setGraphic(new ImageView(Icons.PHYSICS_16));
+        physicsButton.setSelected(false);
+        physicsButton.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changePhysics(newValue));
 
-        FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addToPane(lightButton, container);
+        debugPhysicsButton = new ToggleButton();
+        debugPhysicsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS));
+        debugPhysicsButton.setGraphic(new ImageView(Icons.DEBUG_16));
+        debugPhysicsButton.setSelected(false);
+        debugPhysicsButton.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeDebugPhysics(newValue));
+
+        DynamicIconSupport.addSupport(lightButton, physicsButton, debugPhysicsButton);
+
+        FXUtils.addClassTo(lightButton, physicsButton, debugPhysicsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addToPane(lightButton, physicsButton, debugPhysicsButton, container);
     }
 
     /**
@@ -241,7 +309,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         if (NO_FAST_SKY.equals(newSky)) {
             editor3DState.changeFastSky(null);
-            final ModelFileEditorState editorState = getEditorState();
+            final EditorModelEditorState editorState = getEditorState();
             if (editorState != null) editorState.setSkyType(0);
             return;
         }
@@ -260,8 +328,37 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final SingleSelectionModel<String> selectionModel = fastSkyComboBox.getSelectionModel();
         final int selectedIndex = selectionModel.getSelectedIndex();
 
-        final ModelFileEditorState editorState = getEditorState();
+        final EditorModelEditorState editorState = getEditorState();
         if (editorState != null) editorState.setSkyType(selectedIndex);
+    }
+
+    /**
+     * @return the bullet state.
+     */
+    private @NotNull ModelEditorBulletState getBulletState() {
+        return bulletState;
+    }
+
+    /**
+     * Handle to change enabling of physics.
+     */
+    private void changePhysics(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setEnabled(newValue));
+
+        if (editorState != null) editorState.setEnablePhysics(newValue);
+    }
+
+    /**
+     * Handle to change enabling of physics.
+     */
+    private void changeDebugPhysics(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setDebugEnabled(newValue));
+
+        if (editorState != null) editorState.setEnableDebugPhysics(newValue);
     }
 
     /**
@@ -293,6 +390,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
                 editor3DState.updateLightProbe();
             }
         }
+
+        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyAdded(added));
     }
 
     @Override
@@ -311,6 +410,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
                 editor3DState.updateLightProbe();
             }
         }
+
+        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyRemoved(removed));
     }
 
     @Override

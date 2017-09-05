@@ -39,9 +39,8 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     @Nullable
     private CodeArea codeArea;
 
-    @NotNull
     @Override
-    protected VBox createRoot() {
+    protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
@@ -65,8 +64,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
      * @param text the text
      * @return the style spans
      */
-    @NotNull
-    protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
+    protected @NotNull StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         throw new RuntimeException("unsupported");
     }
 
@@ -91,13 +89,12 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the code area.
      */
-    @NotNull
-    private CodeArea getCodeArea() {
+    private @NotNull CodeArea getCodeArea() {
         return notNull(codeArea);
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
@@ -116,8 +113,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
-    @NotNull
-    private String getOriginalContent() {
+    private @NotNull String getOriginalContent() {
         return notNull(originalContent);
     }
 
@@ -130,7 +126,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) {
+    public void doSave(@NotNull final Path toStore) throws IOException {
         super.doSave(toStore);
 
         final CodeArea codeArea = getCodeArea();
@@ -138,13 +134,11 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(newContent);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
         }
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void postSave() {
         super.postSave();
 

@@ -3,18 +3,13 @@ package com.ss.editor.state.editor.impl.material;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
-import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -23,11 +18,11 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.util.SkyFactory;
 import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
+import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
+import com.ss.editor.plugin.api.editor.part3d.AdvancedPBRWithStudioSky3DEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.BooleanFloatConsumer;
@@ -38,11 +33,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation the 3D part of the {@link MaterialFileEditor}.
+ * The implementation the 3D part of the {@link MaterialFileEditor} but it can be reused in other cases.
  *
  * @author JavaSaBr
  */
-public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<MaterialFileEditor> {
+public class MaterialEditor3DState<T extends Advanced3DFileEditor> extends AdvancedPBRWithStudioSky3DEditorState<T> {
 
     @NotNull
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
@@ -72,16 +67,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
         TRIGGERS.put(KEY_L, new KeyTrigger(KeyInput.KEY_L));
     }
 
-    @NotNull
-    private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
-
-        @Override
-        public void done(final LightProbe result) {
-            if (!isInitialized()) return;
-            attachModelNode();
-        }
-    };
-
     /**
      * The test box.
      */
@@ -101,12 +86,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     private final Geometry testQuad;
 
     /**
-     * The model node.
-     */
-    @Nullable
-    private Node modelNode;
-
-    /**
      * The current model mode.
      */
     @Nullable
@@ -118,16 +97,11 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     private boolean lightEnabled;
 
     /**
-     * The count of frames.
-     */
-    private int frame;
-
-    /**
      * Instantiates a new Material editor app state.
      *
      * @param fileEditor the file editor
      */
-    public MaterialEditor3DState(@NotNull final MaterialFileEditor fileEditor) {
+    public MaterialEditor3DState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
@@ -139,27 +113,21 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
         TangentGenerator.useMikktspaceGenerator(testSphere);
         TangentGenerator.useMikktspaceGenerator(testQuad);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
-
-        final Geometry sky = (Geometry) SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
-                SkyFactory.EnvMapType.EquirectMap);
-
-        final Node stateNode = getStateNode();
-        stateNode.attachChild(sky);
-
         final DirectionalLight light = notNull(getLightForCamera());
         light.setDirection(LIGHT_DIRECTION);
 
         final EditorCamera editorCamera = notNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
+
+        getModelNode().attachChild(getNodeForCamera());
     }
 
     @Override
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
 
-        final MaterialFileEditor fileEditor = getFileEditor();
+        final T fileEditor = getFileEditor();
 
         actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isButtonMiddleDown()));
         actionHandlers.put(KEY_C, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isButtonMiddleDown()));
@@ -174,34 +142,23 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     }
 
     /**
-     * Attach model node to state node.
-     */
-    private void attachModelNode() {
-        final Node stateNode = getStateNode();
-        stateNode.attachChild(modelNode);
-    }
-
-    /**
      * @return the test box.
      */
-    @NotNull
-    private Geometry getTestBox() {
+    protected @NotNull Geometry getTestBox() {
         return testBox;
     }
 
     /**
      * @return the test quad.
      */
-    @NotNull
-    private Geometry getTestQuad() {
+    protected @NotNull Geometry getTestQuad() {
         return testQuad;
     }
 
     /**
      * @return the test sphere.
      */
-    @NotNull
-    private Geometry getTestSphere() {
+    protected @NotNull Geometry getTestSphere() {
         return testSphere;
     }
 
@@ -217,7 +174,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     /**
      * Update the {@link Material} in the {@link EditorThread}.
      */
-    private void updateMaterialImpl(@NotNull final Material material) {
+    protected void updateMaterialImpl(@NotNull final Material material) {
 
         final Geometry testBox = getTestBox();
         testBox.setMaterial(material);
@@ -240,14 +197,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     }
 
     /**
-     * @return the model node.
-     */
-    @NotNull
-    private Node getModelNode() {
-        return notNull(modelNode);
-    }
-
-    /**
      * Change the {@link ModelType}.
      *
      * @param modelType the model type
@@ -259,7 +208,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     /**
      * Change the {@link ModelType} in the {@link EditorThread}.
      */
-    private void changeModeImpl(@NotNull final ModelType modelType) {
+    protected void changeModeImpl(@NotNull final ModelType modelType) {
 
         final Node modelNode = getModelNode();
         modelNode.detachAllChildren();
@@ -294,7 +243,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     /**
      * Change the {@link Bucket} in the {@link EditorThread}.
      */
-    private void changeBucketTypeImpl(@NotNull final Bucket bucket) {
+    protected void changeBucketTypeImpl(@NotNull final Bucket bucket) {
 
         final Geometry testQuad = getTestQuad();
         testQuad.setQueueBucket(bucket);
@@ -309,28 +258,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     @Override
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
-
         changeModeImpl(getCurrentModelType());
-
-        frame = 0;
-    }
-
-    @Override
-    public void cleanup() {
-        super.cleanup();
-
-        final Node modelNode = getModelNode();
-        modelNode.detachAllChildren();
-
-        final Node stateNode = getStateNode();
-        stateNode.detachChild(modelNode);
-    }
-
-    @NotNull
-    @Override
-    protected Node getNodeForCamera() {
-        if (modelNode == null) modelNode = new Node("TreeNode");
-        return modelNode;
     }
 
     @Override
@@ -351,29 +279,28 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     /**
      * @return the current model mode.
      */
-    @NotNull
-    private ModelType getCurrentModelType() {
+    protected @NotNull ModelType getCurrentModelType() {
         return notNull(currentModelType);
     }
 
     /**
      * @param currentModelType the current model mode.
      */
-    private void setCurrentModelType(@NotNull final ModelType currentModelType) {
+    protected void setCurrentModelType(@NotNull final ModelType currentModelType) {
         this.currentModelType = currentModelType;
     }
 
     /**
      * @return true if the light is enabled.
      */
-    private boolean isLightEnabled() {
+    protected boolean isLightEnabled() {
         return lightEnabled;
     }
 
     /**
      * @param lightEnabled true if the light is enabled.
      */
-    private void setLightEnabled(final boolean lightEnabled) {
+    protected void setLightEnabled(final boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
     }
 
@@ -389,7 +316,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     /**
      * Update the light in the scene in the {@link EditorThread}.
      */
-    private void updateLightEnabledImpl(boolean enabled) {
+    protected void updateLightEnabledImpl(boolean enabled) {
         if (enabled == isLightEnabled()) return;
 
         final DirectionalLight light = getLightForCamera();
@@ -405,49 +332,8 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     }
 
     @Override
-    public void update(float tpf) {
-        super.update(tpf);
-
-        if (frame == 2) EDITOR.updateLightProbe(probeHandler);
-
-        final Geometry testQuad = getTestQuad();
-
-        if (testQuad.getParent() != null) {
-
-            final Quaternion localRotation = testQuad.getLocalRotation();
-            final Camera camera = EDITOR.getCamera();
-
-            localRotation.lookAt(camera.getLocation(), camera.getUp());
-            testQuad.setLocalRotation(localRotation);
-        }
-
-        frame++;
-    }
-
-    @Override
-    protected void undo() {
-        final MaterialFileEditor fileEditor = getFileEditor();
-        fileEditor.undo();
-    }
-
-    @Override
-    protected void redo() {
-        final MaterialFileEditor fileEditor = getFileEditor();
-        fileEditor.redo();
-    }
-
-    @Override
     protected boolean needUpdateCameraLight() {
         return false;
-    }
-
-    @Override
-    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                               final float vRotation, final float targetDistance,
-                                               final float cameraSpeed) {
-        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
-                vRotation, targetDistance, cameraSpeed));
     }
 
     /**

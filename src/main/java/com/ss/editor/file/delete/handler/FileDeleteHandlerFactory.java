@@ -15,6 +15,7 @@ import java.nio.file.Path;
  */
 public class FileDeleteHandlerFactory {
 
+    @NotNull
     private static final Array<FileDeleteHandler> HANDLERS = ArrayFactory.newArray(FileDeleteHandler.class);
 
     static {
@@ -28,7 +29,7 @@ public class FileDeleteHandlerFactory {
      * @return the list of handlers.
      */
     @FromAnyThread
-    public static Array<FileDeleteHandler> findFor(@NotNull final Path file) {
+    public static @NotNull Array<FileDeleteHandler> findFor(@NotNull final Path file) {
 
         final Array<FileDeleteHandler> result = ArrayFactory.newArray(FileDeleteHandler.class);
 

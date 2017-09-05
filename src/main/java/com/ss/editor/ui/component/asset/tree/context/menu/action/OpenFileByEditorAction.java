@@ -1,31 +1,21 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-
-import org.jetbrains.annotations.NotNull;
-
-import javafx.scene.control.MenuItem;
+import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The action to open a file by an editor.
  *
  * @author JavaSaBr
  */
-class OpenFileByEditorAction extends MenuItem {
-
-    @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The action element.
-     */
-    @NotNull
-    private final ResourceElement element;
+class OpenFileByEditorAction extends FileAction {
 
     /**
      * The editor description.
@@ -33,18 +23,12 @@ class OpenFileByEditorAction extends MenuItem {
     @NotNull
     private final EditorDescription description;
 
-    /**
-     * Instantiates a new Open file by editor action.
-     *
-     * @param element     the element
-     * @param description the description
-     */
-    OpenFileByEditorAction(@NotNull final ResourceElement element, @NotNull final EditorDescription description) {
-        this.element = element;
+    public OpenFileByEditorAction(@NotNull final ResourceElement element,
+                                  @NotNull final EditorDescription description) {
+        super(element);
         this.description = description;
 
         setText(description.getEditorName());
-        setOnAction(event -> processOpen());
 
         final Image icon = description.getIcon();
 
@@ -53,15 +37,19 @@ class OpenFileByEditorAction extends MenuItem {
         }
     }
 
-    /**
-     * Process of opening.
-     */
-    private void processOpen() {
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.EDIT_16;
+    }
 
-        final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
-        event.setFile(element.getFile());
-        event.setDescription(description);
+    @Override
+    protected void execute(@Nullable final ActionEvent event) {
+        super.execute(event);
 
-        FX_EVENT_MANAGER.notify(event);
+        final RequestedOpenFileEvent newEvent = new RequestedOpenFileEvent();
+        newEvent.setFile(getElement().getFile());
+        newEvent.setDescription(description);
+
+        FX_EVENT_MANAGER.notify(newEvent);
     }
 }

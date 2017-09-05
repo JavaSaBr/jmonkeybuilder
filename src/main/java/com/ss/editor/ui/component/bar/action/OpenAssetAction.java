@@ -5,6 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.ui.dialog.folder.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import javafx.scene.control.MenuItem;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * The action to open a new asset folder.
@@ -40,6 +42,20 @@ public class OpenAssetAction extends MenuItem {
      */
     private void process() {
 
+        final EditorConfig config = EditorConfig.getInstance();
+
+        if (config.isNativeFileChooser()) {
+            openAssetByNative();
+        } else {
+            openAsset();
+        }
+    }
+
+    /**
+     * Open asset folder using native file chooser.
+     */
+    private void openAssetByNative() {
+
         final DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle(Messages.EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER);
 
@@ -62,7 +78,33 @@ public class OpenAssetAction extends MenuItem {
 
         if (folder == null) return;
 
-        final Path newAsset = folder.toPath();
+        openAssetFolder(folder.toPath());
+    }
+
+    /**
+     * Open asset folder use custom file chooser.
+     */
+    private void openAsset() {
+
+        final OpenExternalFolderEditorDialog dialog = new OpenExternalFolderEditorDialog(this::openAssetFolder);
+        dialog.setTitleText(Messages.EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER);
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final Path currentAsset = config.getCurrentAsset();
+
+        if (currentAsset == null) {
+            dialog.setInitDirectory(Paths.get(System.getProperty("user.home")));
+        } else {
+            dialog.setInitDirectory(currentAsset);
+        }
+
+        dialog.show();
+    }
+
+    private void openAssetFolder(@NotNull final Path newAsset) {
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final Path currentAsset = config.getCurrentAsset();
         if (newAsset.equals(currentAsset)) return;
 
         config.addOpenedAsset(newAsset);

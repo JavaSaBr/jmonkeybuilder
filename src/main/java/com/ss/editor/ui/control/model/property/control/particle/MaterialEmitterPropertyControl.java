@@ -4,8 +4,7 @@ import static com.ss.editor.util.EditorUtil.getRealFile;
 import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.MaterialModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
+import com.ss.editor.ui.control.property.impl.MaterialPropertyControl;
 import com.ss.editor.ui.dialog.asset.ParticlesAssetEditorDialog;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.rlib.util.StringUtils;
@@ -19,21 +18,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * The implementation of the {@link ModelPropertyControl} to edit the {@link Material} of the {@link
+ * The implementation of the {@link MaterialPropertyControl} to edit the {@link Material} of the {@link
  * ParticleEmitterNode}*.
  *
  * @author JavaSaBr
  */
 public class MaterialEmitterPropertyControl extends
-        MaterialModelPropertyControl<ParticleEmitterNode, ParticlesMaterial> {
+        MaterialPropertyControl<ModelChangeConsumer, ParticleEmitterNode, ParticlesMaterial> {
 
-    /**
-     * Instantiates a new Material emitter property control.
-     *
-     * @param element             the element
-     * @param paramName           the param name
-     * @param modelChangeConsumer the model change consumer
-     */
     public MaterialEmitterPropertyControl(@NotNull final ParticlesMaterial element, @NotNull final String paramName,
                                           @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);

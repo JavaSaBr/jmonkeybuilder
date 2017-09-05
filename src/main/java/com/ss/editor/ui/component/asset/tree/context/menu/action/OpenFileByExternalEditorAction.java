@@ -1,38 +1,38 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
-
-import javafx.scene.control.MenuItem;
+import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The action to open a file in an external editor.
  *
  * @author JavaSaBr
  */
-public class OpenFileByExternalEditorAction extends MenuItem {
+public class OpenFileByExternalEditorAction extends FileAction {
 
-    /**
-     * The action element.
-     */
-    private final ResourceElement element;
-
-    /**
-     * Instantiates a new Open file by external editor action.
-     *
-     * @param element the element
-     */
-    public OpenFileByExternalEditorAction(final ResourceElement element) {
-        this.element = element;
-        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR);
-        setOnAction(event -> processOpen());
+    public OpenFileByExternalEditorAction(@NotNull final ResourceElement element) {
+        super(element);
     }
 
-    /**
-     * Process of opening.
-     */
-    private void processOpen() {
-        EditorUtil.openFileInExternalEditor(element.getFile());
+    @Override
+    protected @NotNull String getName() {
+        return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
+    }
+
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.EDIT_2_16;
+    }
+
+    @Override
+    protected void execute(@Nullable final ActionEvent event) {
+        super.execute(event);
+        EditorUtil.openFileInExternalEditor(getElement().getFile());
     }
 }

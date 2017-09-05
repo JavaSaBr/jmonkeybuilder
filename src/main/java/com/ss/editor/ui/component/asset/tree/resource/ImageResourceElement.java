@@ -24,8 +24,7 @@ public class ImageResourceElement extends FileResourceElement {
     }
 
     @Override
-    @Nullable
-    public Tooltip createToolTip() {
+    public @Nullable Tooltip createToolTip() {
         return new ImagePreview(getFile());
     }
 }

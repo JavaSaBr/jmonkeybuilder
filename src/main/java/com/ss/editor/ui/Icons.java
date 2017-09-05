@@ -71,6 +71,10 @@ public interface Icons {
      */
     Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/svg/molecule_2.svg", 16);
     /**
+     * The DEBUG_16 PARTICLES_16.
+     */
+    Image DEBUG_16 = ICON_MANAGER.getImage("/ui/icons/svg/debug.svg", 16);
+    /**
      * The constant GEOMETRY_16.
      */
     Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/svg/cube-divisions.svg");
@@ -78,6 +82,10 @@ public interface Icons {
      * The constant MESH_16.
      */
     Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/svg/grid.svg");
+    /**
+     * The constant MESH_16.
+     */
+    Image MATERIAL_16 = ICON_MANAGER.getImage("/ui/icons/svg/draws.svg");
     /**
      * The constant EDIT_16.
      */
@@ -118,6 +126,18 @@ public interface Icons {
      * The constant GEAR_16.
      */
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/svg/settings.svg", 16);
+    /**
+     * The constant EXPORT_16.
+     */
+    Image EXPORT_16 = ICON_MANAGER.getImage("/ui/icons/svg/scale-symbol.svg", 16);
+    /**
+     * The constant EXPORT_16.
+     */
+    Image EXPLORER_16 = ICON_MANAGER.getImage("/ui/icons/svg/inbox.svg", 16);
+    /**
+     * The constant EXPORT_16.
+     */
+    Image EDIT_2_16 = ICON_MANAGER.getImage("/ui/icons/svg/font-selection-editor.svg", 16);
     /**
      * The constant BONE_16.
      */

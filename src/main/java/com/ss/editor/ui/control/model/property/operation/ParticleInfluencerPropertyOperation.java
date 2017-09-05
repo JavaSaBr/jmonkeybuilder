@@ -58,15 +58,6 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
     @Nullable
     private BiConsumer<D, T> applyHandler;
 
-    /**
-     * Instantiates a new Particle influencer property operation.
-     *
-     * @param influencer   the influencer
-     * @param parent       the parent
-     * @param propertyName the property name
-     * @param newValue     the new value
-     * @param oldValue     the old value
-     */
     public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent,
                                                @NotNull final String propertyName, @Nullable final T newValue,
                                                @Nullable final T oldValue) {

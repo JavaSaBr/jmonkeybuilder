@@ -1,6 +1,7 @@
 package com.ss.editor.file.delete.handler;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -40,5 +41,6 @@ public interface FileDeleteHandler extends Cloneable {
     /**
      * @return the cloned instance.
      */
-    FileDeleteHandler clone();
+    @FromAnyThread
+    @NotNull FileDeleteHandler clone();
 }

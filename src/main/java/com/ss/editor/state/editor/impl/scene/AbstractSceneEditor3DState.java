@@ -39,11 +39,12 @@ import com.ss.editor.control.transform.*;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.EditorCamera;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
 import com.ss.editor.scene.*;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.geom.util.AngleUtils;
@@ -67,7 +68,7 @@ import tonegod.emitter.geometry.ParticleGeometry;
  * @author JavaSaBr
  */
 public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
-        extends AdvancedAbstractEditor3DState<T> implements EditorTransformSupport {
+        extends Advanced3DEditorState<T> implements EditorTransformSupport {
 
     /**
      * The constant LOADED_MODEL_KEY.
@@ -274,12 +275,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private Node collisionPlane;
 
     /**
-     * The node on which the camera is looking.
-     */
-    @Nullable
-    private Node cameraNode;
-
-    /**
      * Grid of the scene.
      */
     @Nullable
@@ -339,9 +334,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
-        final Node stateNode = getStateNode();
-        stateNode.attachChild(getCameraNode());
-
         modelNode.attachChild(lightNode);
         modelNode.attachChild(audioNode);
         modelNode.attachChild(presentableNode);
@@ -376,22 +368,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
     }
 
-    @NotNull
-    @Override
-    @FromAnyThread
-    protected Node getNodeForCamera() {
-        if (cameraNode == null) cameraNode = new Node("CameraNode");
-        return cameraNode;
-    }
-
-    /**
-     * @return the node on which the camera is looking.
-     */
-    @NotNull
-    @FromAnyThread
-    private Node getCameraNode() {
-        return notNull(cameraNode);
-    }
 
     @Override
     @FromAnyThread
@@ -404,9 +380,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the node for the placement of lights.
      */
-    @NotNull
     @FromAnyThread
-    protected Node getLightNode() {
+    protected @NotNull Node getLightNode() {
         return lightNode;
     }
 
@@ -415,9 +390,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the node for the placement of audio nodes.
      */
-    @NotNull
     @FromAnyThread
-    protected Node getAudioNode() {
+    protected @NotNull Node getAudioNode() {
         return audioNode;
     }
 
@@ -426,20 +400,9 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the node for the placement of presentable nodes.
      */
-    @NotNull
     @FromAnyThread
-    protected Node getPresentableNode() {
+    protected @NotNull Node getPresentableNode() {
         return presentableNode;
-    }
-
-    @Override
-    protected void redo() {
-        getFileEditor().redo();
-    }
-
-    @Override
-    protected void undo() {
-        getFileEditor().undo();
     }
 
     /**
@@ -478,9 +441,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         toolNode.attachChild(grid);
     }
 
-    @NotNull
     @FromAnyThread
-    private Node createGrid() {
+    private @NotNull Node createGrid() {
 
         final Node gridNode = new Node("GridNode");
 
@@ -603,9 +565,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Create the material for presentation of selected models.
      */
-    @NotNull
     @FromAnyThread
-    private Material createColorMaterial(@NotNull final ColorRGBA color) {
+    private @NotNull Material createColorMaterial(@NotNull final ColorRGBA color) {
         final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.getAdditionalRenderState().setWireframe(true);
         material.setColor("Color", color);
@@ -635,9 +596,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * @return the node for the placement of transform controls.
      */
-    @NotNull
     @FromAnyThread
-    private Node getTransformToolNode() {
+    private @NotNull Node getTransformToolNode() {
         return transformToolNode;
     }
 
@@ -646,9 +606,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the current type of transformation.
      */
-    @Nullable
     @FromAnyThread
-    public TransformType getTransformType() {
+    public @Nullable TransformType getTransformType() {
         return transformType;
     }
 
@@ -657,17 +616,15 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the current mode of transformation.
      */
-    @NotNull
     @Override
     @JMEThread
-    public TransformationMode getTransformationMode() {
+    public @NotNull TransformationMode getTransformationMode() {
         return transformMode;
     }
 
-    @Nullable
     @Override
     @JMEThread
-    public Transform getTransformCenter() {
+    public @Nullable Transform getTransformCenter() {
         return transformCenter;
     }
 
@@ -677,17 +634,15 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         this.pickedAxis = axis;
     }
 
-    @NotNull
     @Override
     @JMEThread
-    public PickedAxis getPickedAxis() {
+    public @NotNull PickedAxis getPickedAxis() {
         return notNull(pickedAxis);
     }
 
-    @Nullable
     @Override
     @JMEThread
-    public Node getCollisionPlane() {
+    public @Nullable Node getCollisionPlane() {
         if (collisionPlane == null) throw new RuntimeException("collisionPlane is null");
         return collisionPlane;
     }
@@ -729,9 +684,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @Nullable
     @JMEThread
-    public Spatial getToTransform() {
+    public @Nullable Spatial getToTransform() {
         return toTransform;
     }
 
@@ -740,45 +694,40 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the node for the placement of controls.
      */
-    @NotNull
     @FromAnyThread
-    protected Node getToolNode() {
+    protected @NotNull Node getToolNode() {
         return toolNode;
     }
 
     /**
      * @return grid of the scene.
      */
-    @NotNull
     @FromAnyThread
-    private Node getGrid() {
+    private @NotNull Node getGrid() {
         return notNull(grid);
     }
 
     /**
      * @return the nodes for the placement of model controls.
      */
-    @NotNull
     @FromAnyThread
-    private Node getMoveTool() {
+    private @NotNull Node getMoveTool() {
         return notNull(moveTool);
     }
 
     /**
      * @return the nodes for the placement of model controls.
      */
-    @NotNull
     @FromAnyThread
-    private Node getRotateTool() {
+    private @NotNull Node getRotateTool() {
         return notNull(rotateTool);
     }
 
     /**
      * @return the nodes for the placement of model controls.
      */
-    @NotNull
     @FromAnyThread
-    private Node getScaleTool() {
+    private @NotNull Node getScaleTool() {
         return notNull(scaleTool);
     }
 
@@ -815,9 +764,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
-    public void update(final float tpf) {
-        super.update(tpf);
+    protected void preCameraUpdate(final float tpf) {
+        super.preCameraUpdate(tpf);
 
         final Node transformToolNode = getTransformToolNode();
         final Transform selectionCenter = getTransformCenter();
@@ -839,9 +787,11 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
                 control.processTransform();
             }
         }
+    }
 
-        final EditorCamera editorCamera = getEditorCamera();
-        if (editorCamera != null) editorCamera.update(tpf);
+    @Override
+    protected void postCameraUpdate(final float tpf) {
+        super.postCameraUpdate(tpf);
 
         final Array<EditorLightNode> lightNodes = getLightNodes();
         lightNodes.forEach(EditorLightNode::updateModel);
@@ -935,9 +885,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         transformToolNode.setLocalRotation(transformationMode.getToolRotation(transform, getCamera()));
     }
 
-    @NotNull
     @JMEThread
-    private Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
+    private @NotNull Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
 
         final LocalObjects local = LocalObjects.get();
         final Camera camera = EDITOR.getCamera();
@@ -953,81 +902,72 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * @return material of selection.
      */
-    @Nullable
     @FromAnyThread
-    private Material getSelectionMaterial() {
+    private @Nullable Material getSelectionMaterial() {
         return selectionMaterial;
     }
 
     /**
      * @return the array of selected models.
      */
-    @NotNull
     @FromAnyThread
-    private Array<Spatial> getSelected() {
+    private @NotNull Array<Spatial> getSelected() {
         return selected;
     }
 
     /**
      * @return the selection models of selected models.
      */
-    @NotNull
     @FromAnyThread
-    private ObjectDictionary<Spatial, Spatial> getSelectionShape() {
+    private @NotNull ObjectDictionary<Spatial, Spatial> getSelectionShape() {
         return selectionShape;
     }
 
     /**
      * @return the array of light nodes.
      */
-    @NotNull
     @FromAnyThread
-    private Array<EditorLightNode> getLightNodes() {
+    private @NotNull Array<EditorLightNode> getLightNodes() {
         return lightNodes;
     }
 
     /**
      * @return the array of audio nodes.
      */
-    @NotNull
     @FromAnyThread
-    private Array<EditorAudioNode> getAudioNodes() {
+    private @NotNull Array<EditorAudioNode> getAudioNodes() {
         return audioNodes;
     }
 
     /**
      * @return the array of presentable nodes.
      */
-    @NotNull
     @FromAnyThread
-    private Array<EditorPresentableNode> getPresentableNodes() {
+    private @NotNull Array<EditorPresentableNode> getPresentableNodes() {
         return presentableNodes;
     }
 
     /**
      * @return the map with cached light nodes.
      */
-    @NotNull
     @FromAnyThread
-    private ObjectDictionary<Light, EditorLightNode> getCachedLights() {
+    private @NotNull ObjectDictionary<Light, EditorLightNode> getCachedLights() {
         return cachedLights;
     }
 
     /**
      * @return the map with cached audio nodes.
      */
-    @NotNull
     @FromAnyThread
-    private ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
+    private @NotNull ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
         return cachedAudioNodes;
     }
 
     /**
      * @return the map with cached presentable objects.
      */
-    @NotNull
     @FromAnyThread
-    private ObjectDictionary<ScenePresentable, EditorPresentableNode> getCachedPresentableObjects() {
+    private @NotNull ObjectDictionary<ScenePresentable, EditorPresentableNode> getCachedPresentableObjects() {
         return cachedPresentableObjects;
     }
 
@@ -1078,9 +1018,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * @return the original transformation.
      */
-    @Nullable
     @FromAnyThread
-    private Transform getOriginalTransform() {
+    private @Nullable Transform getOriginalTransform() {
         return originalTransform;
     }
 
@@ -1312,9 +1251,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param mouseButton the mouse button
      * @return the editing input
      */
-    @NotNull
     @FromAnyThread
-    protected EditingInput getEditingInput(final MouseButton mouseButton) {
+    protected @NotNull EditingInput getEditingInput(final MouseButton mouseButton) {
         switch (mouseButton) {
             case SECONDARY: {
 
@@ -1409,9 +1347,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param screenY the y position on screen.
      * @return the position on a scene.
      */
-    @Nullable
     @JMEThread
-    public Geometry getGeometryByScreenPos(final float screenX, final float screenY) {
+    public @Nullable Geometry getGeometryByScreenPos(final float screenX, final float screenY) {
         return GeomUtils.getGeometryFromScreenPos(notNull(getCurrentModel()), getCamera(), screenX, screenY);
     }
 
@@ -1427,9 +1364,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param screenY the y position on screen.
      * @return the position on a scene.
      */
-    @NotNull
     @JMEThread
-    public Vector3f getScenePosByScreenPos(final float screenX, final float screenY) {
+    public @NotNull Vector3f getScenePosByScreenPos(final float screenX, final float screenY) {
 
         final Camera camera = getCamera();
         final M currentModel = notNull(getCurrentModel());
@@ -1450,8 +1386,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the node for the placement of models.
      */
-    @NotNull
-    protected Node getModelNode() {
+    protected @NotNull Node getModelNode() {
         return modelNode;
     }
 
@@ -1506,8 +1441,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
-        final ModelPropertyOperation<Spatial, Transform> operation =
-                new ModelPropertyOperation<>(toTransform, "transform", newValue, oldValue);
+        final PropertyOperation<ChangeConsumer, Spatial, Transform> operation =
+                new PropertyOperation<>(toTransform, "transform", newValue, oldValue);
 
         operation.setApplyHandler(Spatial::setLocalTransform);
 
@@ -1709,9 +1644,9 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return current display model.
      */
-    @Nullable
+
     @FromAnyThread
-    public M getCurrentModel() {
+    public @Nullable M getCurrentModel() {
         return currentModel;
     }
 
@@ -1930,8 +1865,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         getPresentableNodes().add(node);
     }
 
-    @NotNull
-    protected Geometry createGeometry(@NotNull final ScenePresentable.PresentationType presentationType) {
+    protected @NotNull Geometry createGeometry(@NotNull final ScenePresentable.PresentationType presentationType) {
 
         final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", ColorRGBA.Yellow);
@@ -1988,9 +1922,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param light the light.
      * @return the light node or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorLightNode getLightNode(@NotNull final Light light) {
+    public @Nullable EditorLightNode getLightNode(@NotNull final Light light) {
         return getLightNodes().search(light, (node, toCheck) -> node.getLight() == toCheck);
     }
 
@@ -2000,9 +1933,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param model the model.
      * @return the light node or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorLightNode getLightNode(@NotNull final Spatial model) {
+    public @Nullable EditorLightNode getLightNode(@NotNull final Spatial model) {
         return getLightNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2012,9 +1944,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param audioNode the audio node.
      * @return the editor audio node or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorAudioNode getAudioNode(@NotNull final AudioNode audioNode) {
+    public @Nullable EditorAudioNode getAudioNode(@NotNull final AudioNode audioNode) {
         return getAudioNodes().search(audioNode, (node, toCheck) -> node.getAudioNode() == toCheck);
     }
 
@@ -2024,9 +1955,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param model the model.
      * @return the editor audio node or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorAudioNode getAudioNode(@NotNull final Spatial model) {
+    public @Nullable EditorAudioNode getAudioNode(@NotNull final Spatial model) {
         return getAudioNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2036,9 +1966,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param presentable the presentable object.
      * @return the editor presentable node or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorPresentableNode getPresentableNode(@NotNull final ScenePresentable presentable) {
+    public @Nullable EditorPresentableNode getPresentableNode(@NotNull final ScenePresentable presentable) {
         return getPresentableNodes().search(presentable, (node, toCheck) -> node.getObject() == toCheck);
     }
 
@@ -2048,9 +1977,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param model the model.
      * @return the editor presentable node or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorPresentableNode getPresentableNode(@NotNull final Spatial model) {
+    public @Nullable EditorPresentableNode getPresentableNode(@NotNull final Spatial model) {
         return getPresentableNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2118,9 +2046,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the cursor node.
      */
-    @NotNull
     @JMEThread
-    public Node getCursorNode() {
+    public @NotNull Node getCursorNode() {
         return cursorNode;
     }
 
@@ -2129,15 +2056,13 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the markers node.
      */
-    @NotNull
     @JMEThread
-    public Node getMarkersNode() {
+    public @NotNull Node getMarkersNode() {
         return markersNode;
     }
 
-    @NotNull
     @Override
-    public Camera getCamera() {
+    public @NotNull Camera getCamera() {
         return EDITOR.getCamera();
     }
 }

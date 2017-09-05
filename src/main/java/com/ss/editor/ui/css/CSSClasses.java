@@ -421,6 +421,11 @@ public interface CSSClasses {
     String FILE_CREATOR_DIALOG = "file-creator-dialog";
 
     /**
+     * The constant SAVE_AS_DIALOG.
+     */
+    String SAVE_AS_DIALOG = "save-as-dialog";
+
+    /**
      * The constant GENERATE_LOD_DIALOG.
      */
     String GENERATE_LOD_DIALOG = "generate-lod-dialog";
@@ -451,6 +456,11 @@ public interface CSSClasses {
      * The constant ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER.
      */
     String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "asset-editor-dialog-preview-container";
+
+    /**
+     * The constant OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG.
+     */
+    String OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG = "open-external-folder-editor-dialog";
 
     /**
      * The constant AUDIO_VIEW_EDITOR_CONTAINER.

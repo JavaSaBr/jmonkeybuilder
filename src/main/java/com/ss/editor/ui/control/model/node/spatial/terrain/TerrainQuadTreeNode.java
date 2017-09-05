@@ -17,31 +17,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TerrainQuadTreeNode extends NodeTreeNode<TerrainQuad> {
 
-    /**
-     * Instantiates a new Terrain quad model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public TerrainQuadTreeNode(@NotNull final TerrainQuad element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
-    @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 }

@@ -8,6 +8,7 @@ import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.rlib.plugin.PluginContainer;
@@ -90,6 +91,15 @@ public class EditorPlugin extends BasePlugin {
      */
     @FromAnyThread
     public void register(@NotNull final TreeNodeFactoryRegistry registry) {
+    }
+
+    /**
+     * Register this plugin's own property builders.
+     *
+     * @param registry the registry of property builders.
+     */
+    @FromAnyThread
+    public void register(@NotNull final PropertyBuilderRegistry registry) {
     }
 
     /**

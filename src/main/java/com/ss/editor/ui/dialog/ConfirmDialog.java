@@ -4,9 +4,11 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +30,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
      * The handler of an answer.
      */
     @NotNull
-    private final Consumer<Boolean> handler;
+    private final Consumer<@Nullable Boolean> handler;
 
     /**
      * The label.
@@ -42,7 +44,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
      * @param handler  the handler
      * @param question the question
      */
-    public ConfirmDialog(@NotNull final Consumer<Boolean> handler, @NotNull final String question) {
+    public ConfirmDialog(@NotNull final Consumer<@Nullable Boolean> handler, @NotNull final String question) {
         this.handler = handler;
         final Label questionLabel = getQuestionLabel();
         questionLabel.setText(question);
@@ -51,14 +53,12 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the label.
      */
-    @NotNull
-    private Label getQuestionLabel() {
+    private @NotNull Label getQuestionLabel() {
         return notNull(questionLabel);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return Messages.QUESTION_DIALOG_TITLE;
     }
 
@@ -73,16 +73,14 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(root, CSSClasses.CONFIRM_DIALOG);
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
-        return Messages.QUESTION_DIALOG_BUTTON_OK;
+    protected @NotNull String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_YES;
     }
 
-    @NotNull
     @Override
-    protected String getButtonCloseText() {
-        return Messages.QUESTION_DIALOG_BUTTON_CANCEL;
+    protected @NotNull String getButtonCloseText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_NO;
     }
 
     @Override
@@ -104,9 +102,27 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         handler.accept(Boolean.FALSE);
     }
 
-    @NotNull
+    /**
+     * Process cancel the dialog.
+     */
+    protected void processCancel() {
+        super.processClose();
+        handler.accept(null);
+    }
+
     @Override
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
+    }
+
+    @Override
+    protected void createAdditionalActions(@NotNull final HBox container) {
+        super.createAdditionalActions(container);
+
+        final Button closeButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
+        closeButton.setOnAction(event -> processCancel());
+
+        FXUtils.addClassTo(closeButton, CSSClasses.DIALOG_BUTTON);
+        FXUtils.addToPane(closeButton, container);
     }
 }

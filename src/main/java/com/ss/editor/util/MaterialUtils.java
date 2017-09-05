@@ -97,6 +97,8 @@ public class MaterialUtils {
             return TEXTURE_EMISSIVE;
         } else if (textureName.contains("METALLIC") || textureName.contains("metallic")) {
             return TEXTURE_METALIC;
+        } else if (textureName.contains("ROUGHNESS") || textureName.contains("roughness")) {
+            return TEXTURE_ROUGHNESS;
         } else if (textureName.contains("SPECULAR") || textureName.contains("specular")) {
             return TEXTURE_SPECULAR;
         } else if (textureName.contains("_SPC") || textureName.contains("_spc")) {

@@ -1,12 +1,13 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,6 +64,34 @@ public class FolderResourceElement extends ResourceElement {
 
     @Override
     public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
-        return true;
+        if (!Files.isDirectory(file)) return false;
+
+        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
+            for (final Path path : stream) {
+
+                final String fileName = path.getFileName().toString();
+
+                if (fileName.startsWith(".")) {
+                    continue;
+                } else if (Files.isDirectory(path)) {
+                    return true;
+                }
+
+                if (onlyFolders) continue;
+
+                final String extension = FileUtils.getExtension(path);
+
+                if (extensionFilter.isEmpty() || extensionFilter.contains(extension)) {
+                    return true;
+                }
+            }
+
+        } catch (final AccessDeniedException e) {
+            return false;
+        } catch (final IOException e) {
+            LOGGER.warning(this, e);
+        }
+
+        return false;
     }
 }

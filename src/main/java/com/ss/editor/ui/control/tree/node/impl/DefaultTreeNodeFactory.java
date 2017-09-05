@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree.node.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.audio.AudioNode;
+import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -52,6 +53,8 @@ public class DefaultTreeNodeFactory implements TreeNodeFactory {
             return unsafeCast(new AssetLinkNodeTreeNode((AssetLinkNode) element, objectId));
         } else if (element instanceof Node) {
             return unsafeCast(new NodeTreeNode<>((Node) element, objectId));
+        } else if (element instanceof Material) {
+            return unsafeCast(new MaterialTreeNode((Material) element, objectId));
         }
 
         return null;

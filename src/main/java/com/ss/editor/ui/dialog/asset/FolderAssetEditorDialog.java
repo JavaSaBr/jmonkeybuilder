@@ -14,27 +14,42 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class FolderAssetEditorDialog extends FileAssetEditorDialog {
+public class FolderAssetEditorDialog extends AssetEditorDialog<Path> {
 
-    /**
-     * Instantiates a new Folder asset editor dialog.
-     *
-     * @param consumer the consumer
-     */
     public FolderAssetEditorDialog(@NotNull final Consumer<Path> consumer) {
         super(consumer);
         setOnlyFolders(true);
     }
 
-    /**
-     * Instantiates a new Folder asset editor dialog.
-     *
-     * @param consumer  the consumer
-     * @param validator the validator
-     */
     public FolderAssetEditorDialog(@NotNull final Consumer<Path> consumer,
                                    @Nullable final Function<Path, String> validator) {
         super(consumer, validator);
         setOnlyFolders(true);
+    }
+
+    @Override
+    protected void processOpen(@NotNull final ResourceElement element) {
+        super.processOpen(element);
+        final Consumer<Path> consumer = getConsumer();
+        consumer.accept(element.getFile());
+    }
+
+    @Override
+    protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
+        super.validate(warningLabel, element);
+
+        if (element == null) {
+            LOGGER.warning(this, "The element is null.");
+            return;
+        }
+
+        final Function<Path, String> validator = getValidator();
+        String message = validator == null ? null : validator.apply(element.getFile());
+
+        if (message != null) {
+            warningLabel.setText(message);
+        }
+
+        warningLabel.setVisible(message != null);
     }
 }

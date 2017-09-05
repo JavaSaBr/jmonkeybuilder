@@ -451,7 +451,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param tpf the tpf
      */
-    protected void updateCamera(float tpf) {
+    public void updateCamera(float tpf) {
         if (!enabled) return;
 
         targetLocation.set(target.getWorldTranslation()).addLocal(lookAtOffset);
@@ -688,7 +688,6 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * update the camera control, should only be used internally
      */
     public void update(float tpf) {
-        updateCamera(tpf);
     }
 
     /**

@@ -164,27 +164,24 @@ public class EditorDialog {
     /**
      * @return the stage of this dialog.
      */
-    @NotNull
     @FromAnyThread
-    protected Stage getDialog() {
+    protected @NotNull Stage getDialog() {
         return dialog;
     }
 
     /**
      * @return the width property of this dialog.
      */
-    @NotNull
     @FXThread
-    protected ReadOnlyDoubleProperty widthProperty() {
+    protected @NotNull ReadOnlyDoubleProperty widthProperty() {
         return getContainer().widthProperty();
     }
 
     /**
      * @return the height property of this dialog.
      */
-    @NotNull
     @FXThread
-    protected ReadOnlyDoubleProperty heightProperty() {
+    protected @NotNull ReadOnlyDoubleProperty heightProperty() {
         return getContainer().heightProperty();
     }
 
@@ -196,6 +193,16 @@ public class EditorDialog {
     @FXThread
     protected void configureSize(@NotNull final VBox container) {
         configureSize(container, getSize());
+    }
+
+    /**
+     * Configure size of this dialog.
+     *
+     * @param size the size.
+     */
+    @FXThread
+    public void configureSize(@NotNull final Point size) {
+        configureSize(container, size);
     }
 
     /**
@@ -230,9 +237,8 @@ public class EditorDialog {
      *
      * @return The content container.
      */
-    @NotNull
     @FromAnyThread
-    protected VBox getContainer() {
+    protected @NotNull VBox getContainer() {
         return container;
     }
 
@@ -246,9 +252,8 @@ public class EditorDialog {
         configureSize(getContainer(), size);
     }
 
-    @NotNull
     @FromAnyThread
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DEFAULT_SIZE;
     }
 
@@ -319,8 +324,7 @@ public class EditorDialog {
      *
      * @return the dialog id
      */
-    @NotNull
-    protected String getDialogId() {
+    protected @NotNull String getDialogId() {
         return getClass().getSimpleName();
     }
 
@@ -394,9 +398,18 @@ public class EditorDialog {
      *
      * @return the title of this dialog.
      */
-    @NotNull
     @FromAnyThread
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return "Title";
+    }
+
+    /**
+     * Sets the new title.
+     *
+     * @param title the new title.
+     */
+    @FXThread
+    public void setTitleText(@NotNull final String title) {
+        dialog.setTitle(title);
     }
 }

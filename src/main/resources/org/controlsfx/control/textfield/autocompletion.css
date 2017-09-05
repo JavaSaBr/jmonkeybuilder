@@ -1,0 +1,46 @@
+.auto-complete-popup {
+    -fx-background-color: transparent;
+}
+
+.auto-complete-popup > .list-view {
+    -fx-background-color: -var-menu-background-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 3px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-effect: -fx-shadow-menu;
+    -fx-padding: 0px;
+}
+
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container {
+    -fx-padding: 0px;
+}
+
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-background: transparent;
+    -fx-padding: 0px 0px 0px 4px;
+    -fx-background-color: -fx-background;
+    -fx-cell-size: 26;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 13px;
+}
+
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-background: transparent;
+    -fx-text-fill: -var-font-color;
+}
+
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover,
+.auto-complete-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+    -fx-background: -var-menu-hover-color;
+    -fx-text-fill: -var-font-focused-hover-color;
+}
+
+.auto-complete-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: -var-font-color;
+}
+
+.auto-complete-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: derive(-fx-control-inner-background,-30%);
+}

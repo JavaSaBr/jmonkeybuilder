@@ -25,6 +25,7 @@ import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.log.LogView;
+import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
@@ -156,23 +157,19 @@ public class JFXApplication extends Application {
     }
 
     private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
+
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.onBeforeCreateJMEContext();
-        try {
 
-            application.start();
+        application.start();
 
-            final JmeContext context = application.getContext();
-            final Renderer renderer = context.getRenderer();
+        final JmeContext context = application.getContext();
+        final Renderer renderer = context.getRenderer();
 
-            if (renderer == null) {
-                final EditorConfig editorConfig = EditorConfig.getInstance();
-                editorConfig.setOpenGLVersion(OpenGLVersion.GL_20);
-                editorConfig.save();
-            }
-
-        } finally {
-            pluginManager.onBeforeCreateJMEContext();
+        if (renderer == null) {
+            final EditorConfig editorConfig = EditorConfig.getInstance();
+            editorConfig.setOpenGLVersion(OpenGLVersion.GL_20);
+            editorConfig.save();
         }
     }
 
@@ -355,6 +352,7 @@ public class JFXApplication extends Application {
             editorPlugin.register(FileConverterRegistry.getInstance());
             editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance());
             editorPlugin.register(TreeNodeFactoryRegistry.getInstance());
+            editorPlugin.register(PropertyBuilderRegistry.getInstance());
         });
 
         final EditorFXScene scene = getScene();
@@ -383,7 +381,7 @@ public class JFXApplication extends Application {
             final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
 
                 editorConfig.setAnalyticsQuestion(true);
-                editorConfig.setAnalytics(result);
+                editorConfig.setAnalytics(Boolean.TRUE.equals(result));
                 editorConfig.save();
 
             }, Messages.ANALYTICS_CONFIRM_DIALOG_MESSAGE);

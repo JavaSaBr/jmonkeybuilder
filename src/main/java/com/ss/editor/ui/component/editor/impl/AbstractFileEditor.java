@@ -47,11 +47,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.function.Consumer;
 
 /**
  * The base implementation of an editor.
@@ -62,31 +61,31 @@ import java.time.LocalTime;
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
-     * The constant LOGGER.
+     * The logger.
      */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executro manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The constant FX_EVENT_MANAGER.
+     * The event manager.
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * The constant JFX_APPLICATION.
+     * The javaFX application.
      */
     @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
-     * The constant EDITOR.
+     * The jme application.
      */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
@@ -114,6 +113,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @NotNull
     private volatile LocalTime showedTime;
+
+    /**
+     * The save callback.
+     */
+    @Nullable
+    private Consumer<@NotNull FileEditor> saveCallback;
 
     /**
      * The root element of this editor.
@@ -325,8 +330,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @return the button
      */
-    @NotNull
-    protected Button createSaveAction() {
+    protected @NotNull Button createSaveAction() {
 
         final Button action = new Button();
         action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
@@ -344,8 +348,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FXThread
-    public void save() {
+    public void save(@Nullable final Consumer<@NotNull FileEditor> callback) {
         if(isSaving()) return;
+
+        this.saveCallback = callback;
         notifyStartSaving();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
@@ -357,11 +363,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             final long stamp = EDITOR.asyncLock();
             try {
 
+                final Path editFile = getEditFile();
+
                 doSave(tempFile);
                 try {
-                    Files.move(tempFile, getEditFile(), REPLACE_EXISTING, ATOMIC_MOVE);
+                    Files.move(tempFile, editFile, REPLACE_EXISTING, ATOMIC_MOVE);
                 } catch (final AtomicMoveNotSupportedException e) {
-                    Files.move(tempFile, getEditFile(), REPLACE_EXISTING);
+                    Files.move(tempFile, editFile, REPLACE_EXISTING);
+                } catch (final AccessDeniedException e) {
+                    Files.copy(tempFile, editFile, StandardCopyOption.REPLACE_EXISTING);
+                    FileUtils.delete(tempFile);
                 }
 
             } catch (final IOException e) {
@@ -382,7 +393,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param toStore the file to store.
      */
     @BackgroundThread
-    protected void doSave(@NotNull final Path toStore) {
+    protected void doSave(@NotNull final Path toStore) throws IOException {
     }
 
     /**
@@ -390,6 +401,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FXThread
     protected void postSave() {
+        setDirty(false);
     }
 
     /**
@@ -407,9 +419,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @return the new root.
      */
-    @NotNull
     @FXThread
-    protected abstract R createRoot();
+    protected abstract @NotNull R createRoot();
 
     /**
      * Create content.
@@ -419,25 +430,22 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FXThread
     protected abstract void createContent(@NotNull final R root);
 
-    @NotNull
     @Override
     @FXThread
-    public Pane getPage() {
+    public @NotNull Pane getPage() {
         final R pane = notNull(root);
         return (Pane) pane.getParent().getParent();
     }
 
-    @NotNull
     @Override
     @FXThread
-    public Path getEditFile() {
+    public @NotNull Path getEditFile() {
         return notNull(file);
     }
 
-    @NotNull
     @Override
     @FXThread
-    public String getFileName() {
+    public @NotNull String getFileName() {
         final Path editFile = getEditFile();
         final Path fileName = editFile.getFileName();
         return fileName.toString();
@@ -459,10 +467,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         GAnalytics.sendPageView(description.getEditorId(), null, "/editing/" + description.getEditorId());
     }
 
-    @NotNull
     @Override
     @FXThread
-    public BooleanProperty dirtyProperty() {
+    public @NotNull BooleanProperty dirtyProperty() {
         return dirtyProperty;
     }
 
@@ -482,10 +489,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.dirtyProperty.setValue(dirty);
     }
 
-    @NotNull
     @Override
     @FXThread
-    public Array<Editor3DState> get3DStates() {
+    public @NotNull Array<Editor3DState> get3DStates() {
         return editorStates;
     }
 
@@ -613,9 +619,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * @return the file changes listener.
      */
-    @NotNull
     @FXThread
-    private EventHandler<Event> getFileChangedHandler() {
+    private @NotNull EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
     }
 
@@ -723,5 +728,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected void notifyFinishSaving() {
         setSaving(false);
         EditorUtil.decrementLoading();
+        if (saveCallback != null) {
+            saveCallback.accept(this);
+            saveCallback = null;
+        }
     }
 }

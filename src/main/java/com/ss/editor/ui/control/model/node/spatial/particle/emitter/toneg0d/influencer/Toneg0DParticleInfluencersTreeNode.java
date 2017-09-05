@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.inf
 import static com.ss.rlib.util.ClassUtils.getConstructor;
 import static com.ss.rlib.util.ClassUtils.newInstance;
 import com.ss.editor.Messages;
-import com.ss.editor.model.node.Toneg0dParticleInfluencers;
+import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer.*;

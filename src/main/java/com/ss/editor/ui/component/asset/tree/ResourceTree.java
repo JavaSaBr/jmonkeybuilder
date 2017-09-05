@@ -4,14 +4,18 @@ import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFact
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.editor.util.EditorUtil.hasFileInClipboard;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
+import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.IntObjectConsumer;
 import com.ss.rlib.util.StringUtils;
@@ -30,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -76,7 +81,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         return NAME_COMPARATOR.compare(firstElement, secondElement);
     };
-    public static final @NotNull AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY = AssetTreeContextMenuFillerRegistry.getInstance();
+
+    @NotNull
+    private static final AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY = AssetTreeContextMenuFillerRegistry.getInstance();
 
     private static int getLevel(@Nullable final ResourceElement element) {
         if (element instanceof FolderResourceElement) return 1;
@@ -143,20 +150,19 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private boolean onlyFolders;
 
     /**
-     * Instantiates a new Resource tree.
-     *
-     * @param readOnly the read only
+     * The flag of using lazy mode.
      */
+    private boolean lazyMode;
+
+    /**
+     * The flag of using cleanup resource tree.
+     */
+    private boolean needCleanup;
+
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_OPEN_FUNCTION, readOnly);
     }
 
-    /**
-     * Instantiates a new Resource tree.
-     *
-     * @param openFunction the open function
-     * @param readOnly     the read only
-     */
     public ResourceTree(@Nullable final Consumer<ResourceElement> openFunction, final boolean readOnly) {
         this.openFunction = openFunction;
         this.readOnly = readOnly;
@@ -168,6 +174,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         expandedItemCountProperty()
                 .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
 
+        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        setFixedCellSize(FXConstants.RESOURCE_TREE_CELL_HEIGHT);
         setCellFactory(param -> new ResourceTreeCell());
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
@@ -176,12 +184,111 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * @param lazyMode true if need to use lazy mode.
+     */
+    public void setLazyMode(final boolean lazyMode) {
+        this.lazyMode = lazyMode;
+    }
+
+    /**
+     * @return true if need to use lazy mode.
+     */
+    private boolean isLazyMode() {
+        return lazyMode;
+    }
+
+    /**
+     * @param needCleanup true of need to cleanup this tree.
+     */
+    public void setNeedCleanup(final boolean needCleanup) {
+        this.needCleanup = needCleanup;
+    }
+
+    /**
+     * @return true of need to cleanup this tree.
+     */
+    private boolean isNeedCleanup() {
+        return needCleanup;
+    }
+
+    /**
      * Handle changed count of expanded elements.
      */
     private void processChangedExpands(@NotNull final Number newValue) {
+
+        if (isLazyMode()) {
+            EXECUTOR_MANAGER.addFXTask(this::lazyLoadChildren);
+        }
+
         final IntObjectConsumer<ResourceTree> expandHandler = getExpandHandler();
         if (expandHandler == null) return;
         expandHandler.accept(newValue.intValue(), this);
+    }
+
+    /**
+     * Start the process of loading children of the tree item in the background.
+     */
+    @FXThread
+    private void lazyLoadChildren() {
+
+        final Array<TreeItem<ResourceElement>> expanded = ArrayFactory.newArray(TreeItem.class);
+        final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(getRoot());
+        allItems.stream().filter(TreeItem::isExpanded)
+                .filter(treeItem -> !treeItem.isLeaf())
+                .filter(item -> item.getChildren().size() == 1)
+                .filter(item -> item.getChildren().get(0).getValue() == LoadingResourceElement.getInstance())
+                .forEach(expanded::add);
+
+        for (final TreeItem<ResourceElement> treeItem : expanded) {
+            EXECUTOR_MANAGER.addBackgroundTask(() -> lazyLoadChildren(treeItem, null));
+        }
+    }
+
+    /**
+     * Load children of the tree item in the background.
+     *
+     * @param treeItem the tree item.
+     */
+    @BackgroundThread
+    private void lazyLoadChildren(@NotNull final TreeItem<ResourceElement> treeItem,
+                                  @Nullable final Consumer<@NotNull TreeItem<ResourceElement>> callback) {
+
+        final ResourceElement element = treeItem.getValue();
+        final Array<ResourceElement> children = element.getChildren(extensionFilter, isOnlyFolders());
+        children.sort(NAME_COMPARATOR);
+
+        EXECUTOR_MANAGER.addFXTask(() -> lazyLoadChildren(treeItem, children, callback));
+    }
+
+    /**
+     * Show loaded children in the tree.
+     *
+     * @param treeItem the tree item.
+     * @param children the loaded children.
+     * @param callback the loading callback.
+     */
+    @FXThread
+    private void lazyLoadChildren(@NotNull final TreeItem<ResourceElement> treeItem,
+                                  @NotNull final Array<ResourceElement> children,
+                                  @Nullable final Consumer<@NotNull TreeItem<ResourceElement>> callback) {
+
+        final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
+        if (items.size() != 1 || items.get(0).getValue() != LoadingResourceElement.getInstance()) {
+            return;
+        }
+
+        children.forEach(child -> items.add(new TreeItem<>(child)));
+
+        items.remove(0);
+        items.forEach(this::fill);
+
+        if (isNeedCleanup()) {
+            cleanup(treeItem);
+        }
+
+        if (callback != null) {
+            callback.accept(treeItem);
+        }
     }
 
     /**
@@ -205,8 +312,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the handler for listening expand items.
      */
-    @Nullable
-    private IntObjectConsumer<ResourceTree> getExpandHandler() {
+    private @Nullable IntObjectConsumer<ResourceTree> getExpandHandler() {
         return expandHandler;
     }
 
@@ -222,8 +328,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the list of filtered extensions.
      */
-    @NotNull
-    private Array<String> getExtensionFilter() {
+    private @NotNull Array<String> getExtensionFilter() {
         return extensionFilter;
     }
 
@@ -239,8 +344,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the post loading handler.
      */
-    @Nullable
-    private Consumer<Boolean> getOnLoadHandler() {
+    private @Nullable Consumer<Boolean> getOnLoadHandler() {
         return onLoadHandler;
     }
 
@@ -254,8 +358,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the action tester.
      */
-    @NotNull
-    private Predicate<Class<?>> getActionTester() {
+    private @NotNull Predicate<Class<?>> getActionTester() {
         return actionTester;
     }
 
@@ -265,7 +368,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param element the element
      * @return the context menu for the element.
      */
-    protected ContextMenu getContextMenu(@NotNull final ResourceElement element) {
+    protected @Nullable ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
         final ContextMenu contextMenu = new ContextMenu();
@@ -273,9 +376,32 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final Predicate<Class<?>> actionTester = getActionTester();
 
-        final Array<AssetTreeContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getFillers();
-        for (final AssetTreeContextMenuFiller filler : fillers) {
-            filler.fill(element, items, actionTester);
+        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+        final ObservableList<TreeItem<ResourceElement>> selectedItems = selectionModel.getSelectedItems();
+
+        if (selectedItems.size() == 1) {
+            final Array<AssetTreeSingleContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getSingleFillers();
+            for (final AssetTreeSingleContextMenuFiller filler : fillers) {
+                filler.fill(element, items, actionTester);
+            }
+        }
+
+        if (selectedItems.size() >= 1) {
+            updateSelectedElements();
+
+            final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
+
+            final long stamp = selectedElements.readLock();
+            try {
+
+                final Array<AssetTreeMultiContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getMultiFillers();
+                for (final AssetTreeMultiContextMenuFiller filler : fillers) {
+                    filler.fill(selectedElements, items, actionTester);
+                }
+
+            } finally {
+                selectedElements.readUnlock(stamp);
+            }
         }
 
         if (items.isEmpty()) return null;
@@ -304,16 +430,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the list of expanded elements.
      */
-    @NotNull
-    private ConcurrentArray<ResourceElement> getExpandedElements() {
+    private @NotNull ConcurrentArray<ResourceElement> getExpandedElements() {
         return expandedElements;
     }
 
     /**
      * @return the list of selected elements.
      */
-    @NotNull
-    private ConcurrentArray<ResourceElement> getSelectedElements() {
+    private @NotNull ConcurrentArray<ResourceElement> getSelectedElements() {
         return selectedElements;
     }
 
@@ -402,6 +526,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         fill(newRoot);
 
+        if (!isLazyMode() && isNeedCleanup()) {
+            cleanup(newRoot);
+        }
+
         EXECUTOR_MANAGER.addFXTask(() -> {
             setRoot(newRoot);
 
@@ -486,11 +614,16 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
 
-        final Array<ResourceElement> children = element.getChildren(extensionFilter, isOnlyFolders());
-        children.sort(NAME_COMPARATOR);
-        children.forEach(child -> items.add(new TreeItem<>(child)));
+        if (isLazyMode()) {
+            items.add(new TreeItem<>(LoadingResourceElement.getInstance()));
+        } else {
 
-        items.forEach(this::fill);
+            final Array<ResourceElement> children = element.getChildren(extensionFilter, isOnlyFolders());
+            children.sort(NAME_COMPARATOR);
+            children.forEach(child -> items.add(new TreeItem<>(child)));
+
+            items.forEach(this::fill);
+        }
     }
 
     /**
@@ -616,44 +749,66 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void processKey(@NotNull final KeyEvent event) {
         if (isReadOnly()) return;
 
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
-        final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
-        if (selectedItem == null) return;
-
-        final ResourceElement item = selectedItem.getValue();
-        if (item == null || item instanceof LoadingResourceElement) return;
-
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return;
+
+        updateSelectedElements();
+
+        final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
+        if (selectedElements.isEmpty()) return;
+
+        final ResourceElement firstElement = selectedElements.first();
+        if (firstElement instanceof LoadingResourceElement) return;
+
+        boolean onlyFiles = true;
+        boolean onlyFolders = true;
+        boolean selectedAsset = false;
+
+        for (final ResourceElement element : selectedElements.array()) {
+            if (element == null) break;
+
+            if (element instanceof FileResourceElement) {
+                onlyFolders = false;
+            } else if (element instanceof FolderResourceElement) {
+                onlyFiles = false;
+            }
+
+            if (Objects.equals(currentAsset, element.getFile())) {
+                selectedAsset = true;
+            }
+        }
 
         final Predicate<Class<?>> actionTester = getActionTester();
         final KeyCode keyCode = event.getCode();
         final boolean controlDown = event.isControlDown();
 
-        if (!currentAsset.equals(item.getFile())) {
-            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class)) {
+        if (!currentAsset.equals(firstElement.getFile())) {
+            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class) && !selectedAsset &&
+                    (onlyFiles || selectedElements.size() == 1)) {
 
-                final CopyFileAction action = new CopyFileAction(item);
+                final CopyFileAction action = new CopyFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
 
-            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class)) {
+            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class) && !selectedAsset &&
+                    (onlyFiles || selectedElements.size() == 1)) {
 
-                final CutFileAction action = new CutFileAction(item);
+                final CutFileAction action = new CutFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
 
-            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class)) {
+            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class) && !selectedAsset &&
+                    (onlyFiles || selectedElements.size() == 1)) {
 
-                final DeleteFileAction action = new DeleteFileAction(item);
+                final DeleteFileAction action = new DeleteFileAction(selectedElements);
                 final EventHandler<ActionEvent> onAction = action.getOnAction();
                 onAction.handle(null);
             }
         }
 
         if (controlDown && keyCode == KeyCode.V && hasFileInClipboard() && actionTester.test(PasteFileAction.class)) {
-            final PasteFileAction action = new PasteFileAction(item);
+            final PasteFileAction action = new PasteFileAction(firstElement);
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
         }
@@ -664,8 +819,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @return the open resource function.
      */
-    @Nullable
-    Consumer<ResourceElement> getOpenFunction() {
+    protected @Nullable Consumer<ResourceElement> getOpenFunction() {
         return openFunction;
     }
 
@@ -675,7 +829,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void cleanup(@NotNull final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
-        if (element instanceof FileResourceElement) return;
+        if (element instanceof FileResourceElement || element instanceof LoadingResourceElement) return;
 
         final ObservableList<TreeItem<ResourceElement>> children = treeItem.getChildren();
 
@@ -736,7 +890,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return true if need to show only folders.
      */
-    private boolean isOnlyFolders() {
+    public boolean isOnlyFolders() {
         return onlyFolders;
     }
 
@@ -746,7 +900,41 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param file       the file
      * @param needSelect the need select
      */
+    @FXThread
     public void expandTo(@NotNull final Path file, final boolean needSelect) {
+
+        if (isLazyMode()) {
+
+            final TreeItem<ResourceElement> targetItem = findItemForValue(getRoot(), file);
+
+            if (targetItem == null) {
+
+                TreeItem<ResourceElement> parentItem = null;
+                Path parent = file.getParent();
+
+                while (parent != null) {
+                    parentItem = findItemForValue(getRoot(), parent);
+                    if (parentItem != null) {
+                        break;
+                    }
+                    parent = parent.getParent();
+                }
+
+                if (parentItem == null) {
+                    return;
+                }
+
+                final TreeItem<ResourceElement> toLoad = parentItem;
+                EXECUTOR_MANAGER.addBackgroundTask(() -> lazyLoadChildren(toLoad, item -> expandTo(file, needSelect)));
+                return;
+            }
+
+            final ObservableList<TreeItem<ResourceElement>> children = targetItem.getChildren();
+            if (children.size() == 1 && children.get(0).getValue() == LoadingResourceElement.getInstance()) {
+                EXECUTOR_MANAGER.addBackgroundTask(() -> lazyLoadChildren(targetItem, item -> expandTo(file, needSelect)));
+                return;
+            }
+        }
 
         final ResourceElement element = createFor(file);
         final TreeItem<ResourceElement> treeItem = findItemForValue(getRoot(), element);
@@ -767,6 +955,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void scrollToAndSelect(@NotNull final TreeItem<ResourceElement> treeItem) {
         EXECUTOR_MANAGER.addFXTask(() -> {
             final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+            selectionModel.clearSelection();
             selectionModel.select(treeItem);
             scrollTo(getRow(treeItem));
         });

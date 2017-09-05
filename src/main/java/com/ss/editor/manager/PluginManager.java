@@ -1,6 +1,7 @@
 package com.ss.editor.manager;
 
 import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
+import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.JMEThread;
@@ -11,6 +12,7 @@ import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.plugin.ConfigurablePluginSystem;
 import com.ss.rlib.plugin.Plugin;
+import com.ss.rlib.plugin.PluginContainer;
 import com.ss.rlib.plugin.exception.PreloadPluginException;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.Utils;
@@ -18,6 +20,7 @@ import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -126,7 +129,16 @@ public class PluginManager {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onAfterCreateJMEContext(pluginSystem));
+                .forEach(editorPlugin -> {
+                    editorPlugin.onAfterCreateJMEContext(pluginSystem);
+
+                    final PluginContainer container = editorPlugin.getContainer();
+                    final URLClassLoader classLoader = container.getClassLoader();
+
+                    final Editor editor = Editor.getInstance();
+                    final AssetManager assetManager = editor.getAssetManager();
+                    assetManager.addClassLoader(classLoader);
+                });
     }
 
     /**

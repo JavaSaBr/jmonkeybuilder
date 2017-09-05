@@ -19,6 +19,7 @@ import java.util.function.BiConsumer;
 @SuppressWarnings("Duplicates")
 public class RenderStateOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -56,26 +57,20 @@ public class RenderStateOperation<T> extends AbstractEditorOperation<MaterialCha
     @Override
     protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
-
             final Material currentMaterial = editor.getCurrentMaterial();
             final RenderState renderState = currentMaterial.getAdditionalRenderState();
-
             applyHandler.accept(renderState, newValue);
-
-            EXECUTOR_MANAGER.addFXTask(editor::notifyChangedRenderState);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(renderState, "RenderState"));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
-
             final Material currentMaterial = editor.getCurrentMaterial();
             final RenderState renderState = currentMaterial.getAdditionalRenderState();
-
             applyHandler.accept(renderState, oldValue);
-
-            EXECUTOR_MANAGER.addFXTask(editor::notifyChangedRenderState);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(renderState, "RenderState"));
         });
     }
 }

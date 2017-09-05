@@ -66,9 +66,8 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
         super.show();
     }
 
-    @NotNull
     @Override
-    protected BorderPane createRoot() {
+    protected @NotNull BorderPane createRoot() {
         final BorderPane pane = new BorderPane();
         FXUtils.addClassesTo(pane, CSSClasses.IMAGE_PREVIEW);
         return pane;
@@ -77,9 +76,8 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     /**
      * @return the image view.
      */
-    @NotNull
     @FXThread
-    private ImageView getImageView() {
+    private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 

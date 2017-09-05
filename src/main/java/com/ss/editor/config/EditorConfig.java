@@ -72,6 +72,7 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_OTHER_ADDITIONAL_ENVS = OTHER_ALIAS + "." + "additionalEnvs";
     private static final String PREF_OTHER_THEME = OTHER_ALIAS + "." + "theme";
     private static final String PREF_OTHER_ANALYTICS = OTHER_ALIAS + "." + "analytics";
+    private static final String PREF_OTHER_NATIVE_FILE_CHOOSER = OTHER_ALIAS + "." + "nativeFileChooser";
     private static final String PREF_OTHER_ANALYTICS_QUESTION = OTHER_ALIAS + "." + "analyticsQuestion" + Config.STRING_VERSION;
 
     private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_WIDTH = OTHER_ALIAS + "." + "globalLeftToolWidth";
@@ -82,7 +83,6 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_EDITING_AUTO_TANGENT_GENERATING = EDITING_ALIAS + "." + "autoTangentGenerating";
     private static final String PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE = EDITING_ALIAS + "." + "defaultUseFlippedTexture";
     private static final String PREF_EDITING_CAMERA_LAMP_ENABLED = EDITING_ALIAS + "." + "defaultCameraLampEnabled";
-
 
     @Nullable
     private static volatile EditorConfig instance;
@@ -209,7 +209,12 @@ public final class EditorConfig implements AssetEventListener {
     private volatile boolean gammaCorrection;
 
     /**
-     * Flag is for enabling stoping render on lost focus.
+     * Flag of using native file choosers.
+     */
+    private volatile boolean nativeFileChooser;
+
+    /**
+     * Flag is for enabling stopping render on lost focus.
      */
     private volatile boolean stopRenderOnLostFocus;
 
@@ -563,6 +568,22 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return true if need to use native file choosers.
+     */
+    @FromAnyThread
+    public boolean isNativeFileChooser() {
+        return nativeFileChooser;
+    }
+
+    /**
+     * @param nativeFileChooser true if need to use native file choosers.
+     */
+    @FromAnyThread
+    public void setNativeFileChooser(final boolean nativeFileChooser) {
+        this.nativeFileChooser = nativeFileChooser;
+    }
+
+    /**
      * Gets global left tool width.
      *
      * @return the global left tool width.
@@ -875,6 +896,7 @@ public final class EditorConfig implements AssetEventListener {
         this.globalLeftToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED, false);
         this.globalBottomToolHeight = prefs.getInt(PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
         this.globalBottomToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
+        this.nativeFileChooser = prefs.getBoolean(PREF_OTHER_NATIVE_FILE_CHOOSER, true);
         this.analytics = prefs.getBoolean(PREF_OTHER_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
         this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
@@ -973,6 +995,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolHeight());
         prefs.putBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, isGlobalBottomToolCollapsed());
         prefs.putBoolean(PREF_OTHER_ANALYTICS, isAnalytics());
+        prefs.putBoolean(PREF_OTHER_NATIVE_FILE_CHOOSER, isNativeFileChooser());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
         prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
         prefs.putBoolean(PREF_EDITING_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());

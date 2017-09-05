@@ -11,7 +11,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -100,12 +100,6 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private ListView<Number> levelsList;
 
-    /**
-     * Instantiates a new Generate lod levels dialog.
-     *
-     * @param nodeTree the node tree
-     * @param geometry the geometry
-     */
     public GenerateLodLevelsDialog(@NotNull final NodeTree<?> nodeTree, final @NotNull Geometry geometry) {
         this.nodeTree = nodeTree;
         this.geometry = geometry;
@@ -116,8 +110,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the node tree component.
      */
-    @NotNull
-    private NodeTree<?> getNodeTree() {
+    private @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -126,16 +119,14 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the mesh.
      */
-    @NotNull
-    public Mesh getMesh() {
+    public @NotNull Mesh getMesh() {
         return mesh;
     }
 
     /**
      * @return the geometry.
      */
-    @NotNull
-    private Geometry getGeometry() {
+    private @NotNull Geometry getGeometry() {
         return geometry;
     }
 
@@ -144,8 +135,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the reduction method.
      */
-    @NotNull
-    public ReductionMethod getMethod() {
+    public @NotNull ReductionMethod getMethod() {
         final ComboBox<ReductionMethod> comboBox = getReductionMethodComboBox();
         final SingleSelectionModel<ReductionMethod> selectionModel = comboBox.getSelectionModel();
         return selectionModel.getSelectedItem();
@@ -154,14 +144,12 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list view with levels of LoD.
      */
-    @NotNull
-    private ListView<Number> getLevelsList() {
+    private @NotNull ListView<Number> getLevelsList() {
         return notNull(levelsList);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return Messages.GENERATE_LOD_DIALOG_TITLE;
     }
 
@@ -278,8 +266,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of reduction methods.
      */
-    @NotNull
-    private ComboBox<ReductionMethod> getReductionMethodComboBox() {
+    private @NotNull ComboBox<ReductionMethod> getReductionMethodComboBox() {
         return notNull(reductionMethodComboBox);
     }
 
@@ -326,8 +313,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
             final NodeTree<?> nodeTree = getNodeTree();
             final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
 
-            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation =
-                    new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
+            final PropertyOperation<ChangeConsumer, Geometry, VertexBuffer[]> operation =
+                    new PropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
 
             operation.setApplyHandler((geom, buffers) -> geom.getMesh().setLodLevels(buffers));
 
@@ -337,15 +324,13 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         });
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_GENERATE;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

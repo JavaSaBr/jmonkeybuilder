@@ -62,7 +62,6 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
     @FXThread
     void notifyChangedFilter(@NotNull SceneFilter sceneFilter);
 
-    @NotNull
     @Override
-    SceneNode getCurrentModel();
+    @NotNull SceneNode getCurrentModel();
 }

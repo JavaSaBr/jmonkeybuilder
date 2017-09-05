@@ -9,12 +9,14 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.property.operation.ModelPropertyCountOperation;
+import com.ss.editor.ui.control.property.operation.PropertyCountOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
@@ -69,30 +71,22 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
     @NotNull
     private static final String PROPERTY_DATA_TYPE = "dataType";
 
-    /**
-     * Instantiates a new Add user data action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public AddUserDataAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    protected @Nullable Image getIcon() {
         return Icons.ADD_12;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -143,8 +137,8 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final Spatial element = (Spatial) node.getElement();
 
-        final ModelPropertyCountOperation<Spatial, Object> operation =
-                new ModelPropertyCountOperation<>(element, "userData", value, null);
+        final PropertyCountOperation<ChangeConsumer, Spatial, Object> operation =
+                new PropertyCountOperation<>(element, "userData", value, null);
 
         operation.setApplyHandler((object, val) -> object.setUserData(name, val));
 

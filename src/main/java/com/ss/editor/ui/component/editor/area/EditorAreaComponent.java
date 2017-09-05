@@ -6,6 +6,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -26,6 +27,7 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -43,6 +45,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.Event;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -356,9 +359,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      *
      * @return the current editor.
      */
-    @Nullable
     @FXThread
-    public FileEditor getCurrentEditor() {
+    public @Nullable FileEditor getCurrentEditor() {
         final Tab selectedTab = getSelectionModel().getSelectedItem();
         if (selectedTab == null) return null;
         final ObservableMap<Object, Object> properties = selectedTab.getProperties();
@@ -489,6 +491,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Tab tab = new Tab(editor.getFileName());
         tab.setGraphic(new ImageView(ICON_MANAGER.getIcon(editFile, DEFAULT_FILE_ICON_SIZE)));
         tab.setContent(editor.getPage());
+        tab.setOnCloseRequest(event -> handleRequestToCloseEditor(editor, tab, event));
 
         final ObservableMap<Object, Object> properties = tab.getProperties();
         properties.put(KEY_EDITOR, editor);
@@ -520,9 +523,33 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
     }
 
+    @FXThread
+    private void handleRequestToCloseEditor(@NotNull final FileEditor editor, @NotNull final Tab tab,
+                                            @NotNull final Event event) {
+        if (!editor.isDirty()) {
+            return;
+        }
+
+        final String question = Messages.EDITOR_AREA_SAVE_FILE_QUESTION.replace("%file_name%", editor.getFileName());
+
+        final ConfirmDialog dialog = new ConfirmDialog(result -> {
+            if (result == null) return;
+
+            if (result) {
+                editor.save(fileEditor -> getTabs().remove(tab));
+            } else {
+                getTabs().remove(tab);
+            }
+
+        }, question);
+
+        dialog.show();
+        event.consume();
+    }
+
     @Override
     @FromAnyThread
-    public String getComponentId() {
+    public @Nullable String getComponentId() {
         return COMPONENT_ID;
     }
 

@@ -26,14 +26,14 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull
-    private final Class<C> type;
+    private final Class<? extends C> type;
 
     /**
      * Instantiates a new Abstract property builder.
      *
      * @param type the type
      */
-    protected AbstractPropertyBuilder(@NotNull final Class<C> type) {
+    protected AbstractPropertyBuilder(@NotNull final Class<? extends C> type) {
         this.type = type;
     }
 

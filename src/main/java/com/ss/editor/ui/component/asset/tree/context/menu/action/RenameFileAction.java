@@ -1,17 +1,17 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
+import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,49 +22,42 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class RenameFileAction extends MenuItem {
+public class RenameFileAction extends FileAction {
 
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The action element.
-     */
-    private final ResourceElement element;
-
-    /**
-     * Instantiates a new Rename file action.
-     *
-     * @param element the element
-     */
-    public RenameFileAction(final ResourceElement element) {
-        this.element = element;
-        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE);
-        setOnAction(event -> processRename());
-        setGraphic(new ImageView(Icons.EDIT_16));
+    public RenameFileAction(@NotNull final ResourceElement element) {
+        super(element);
     }
 
-    /**
-     * The process of this action.
-     */
-    private void processRename() {
+    @Override
+    protected @Nullable Image getIcon() {
+        return Icons.EDIT_16;
+    }
 
-        final Path file = element.getFile();
+    @Override
+    protected @NotNull String getName() {
+        return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
+    }
+
+    @Override
+    protected void execute(@Nullable final ActionEvent event) {
+        super.execute(event);
+
+        final Path file = getElement().getFile();
 
         final RenameDialog renameDialog = new RenameDialog();
         renameDialog.setValidator(this::checkName);
         renameDialog.setHandler(this::processRename);
         renameDialog.setInitName(FileUtils.getNameWithoutExtension(file));
-        renameDialog.show(JFX_APPLICATION.getLastWindow());
+        renameDialog.show();
     }
 
     /**
      * The checking of the new file name.
      */
-    private Boolean checkName(final String newFileName) {
+    private Boolean checkName(@NotNull final String newFileName) {
         if (!FileUtils.isValidName(newFileName)) return false;
 
-        final Path file = element.getFile();
+        final Path file = getElement().getFile();
         final String extension = FileUtils.getExtension(file);
 
         final Path parent = file.getParent();
@@ -76,9 +69,9 @@ public class RenameFileAction extends MenuItem {
     /**
      * The process of renaming.
      */
-    private void processRename(final String newFileName) {
+    private void processRename(@NotNull final String newFileName) {
 
-        final Path file = element.getFile();
+        final Path file = getElement().getFile();
 
         final String extension = FileUtils.getExtension(file);
         final String resultName = StringUtils.isEmpty(extension) ? newFileName : newFileName + "." + extension;

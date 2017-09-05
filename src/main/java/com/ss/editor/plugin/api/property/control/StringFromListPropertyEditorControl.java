@@ -3,12 +3,12 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
+import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,8 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
         if (options.size() > comboBox.getVisibleRowCount()) {
             setIgnoreListener(true);
             try {
-                AutoCompleteComboBoxListener.install(comboBox);
+                comboBox.setEditable(true);
+                TextFields.bindAutoCompletion(comboBox.getEditor(), comboBox.getItems());
                 FXUtils.addClassesTo(comboBox.getEditor(), CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
                 reload();
             } finally {

@@ -1,9 +1,10 @@
 package com.ss.editor.ui.component.asset.tree;
 
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetTreeContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetTreeSingleContextMenuFiller;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -24,31 +25,57 @@ public class AssetTreeContextMenuFillerRegistry {
     }
 
     @NotNull
-    private final Array<AssetTreeContextMenuFiller> fillers;
+    private final Array<AssetTreeSingleContextMenuFiller> singleFillers;
+
+    @NotNull
+    private final Array<AssetTreeMultiContextMenuFiller> multiFillers;
 
     private AssetTreeContextMenuFillerRegistry() {
-        this.fillers = ArrayFactory.newArray(AssetTreeContextMenuFiller.class);
-        register(new FileAssetTreeContextMenuFiller());
-        register(new ResourceAssetTreeContextMenuFiller());
+        this.singleFillers = ArrayFactory.newArray(AssetTreeSingleContextMenuFiller.class);
+        this.multiFillers = ArrayFactory.newArray(AssetTreeMultiContextMenuFiller.class);
+        registerSingle(new FileAssetTreeSingleContextMenuFiller());
+        registerSingle(new ResourceAssetTreeSingleContextMenuFiller());
+        registerMulti(new FileAssetTreeSingleContextMenuFiller());
+        registerMulti(new ResourceAssetTreeSingleContextMenuFiller());
     }
 
     /**
-     * Register a new context menu filler.
+     * Register a new single context menu filler.
      *
-     * @param assetTreeContextMenuFiller the context menu filler.
+     * @param filler the single context menu filler.
      */
     @FromAnyThread
-    public void register(@NotNull final AssetTreeContextMenuFiller assetTreeContextMenuFiller) {
-        this.fillers.add(assetTreeContextMenuFiller);
+    public void registerSingle(@NotNull final AssetTreeSingleContextMenuFiller filler) {
+        this.singleFillers.add(filler);
     }
 
     /**
-     * Gets the list of available context menu fillers.
+     * Register a new multiply context menu filler.
      *
-     * @return the list of context menu filler.
+     * @param filler the multiply context menu filler.
      */
-    @NotNull
-    public Array<AssetTreeContextMenuFiller> getFillers() {
-        return fillers;
+    @FromAnyThread
+    public void registerMulti(@NotNull final AssetTreeMultiContextMenuFiller filler) {
+        this.multiFillers.add(filler);
+    }
+
+    /**
+     * Gets the list of available single context menu singleFillers.
+     *
+     * @return the list of single context menu filler.
+     */
+    @FromAnyThread
+    public @NotNull Array<AssetTreeSingleContextMenuFiller> getSingleFillers() {
+        return singleFillers;
+    }
+
+    /**
+     * Gets the list of available multiply context menu singleFillers.
+     *
+     * @return the list of multiply context menu filler.
+     */
+    @FromAnyThread
+    public @NotNull Array<AssetTreeMultiContextMenuFiller> getMultiFillers() {
+        return multiFillers;
     }
 }

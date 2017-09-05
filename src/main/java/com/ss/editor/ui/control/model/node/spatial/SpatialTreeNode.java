@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.node.spatial;
 
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
+import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -9,6 +10,7 @@ import com.jme3.bullet.control.VehicleControl;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
@@ -67,16 +69,21 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
-        final Menu createMenu = createCreationMenu(nodeTree);
-        if (createMenu != null) items.add(createMenu);
+        final AssetLinkNode linkNode = findParent(getElement(), AssetLinkNode.class::isInstance);
 
-        final Menu toolMenu = createToolMenu(nodeTree);
-        if (toolMenu != null) items.add(toolMenu);
+        if (linkNode == null) {
+            final Menu createMenu = createCreationMenu(nodeTree);
+            if (createMenu != null) items.add(createMenu);
+            final Menu toolMenu = createToolMenu(nodeTree);
+            if (toolMenu != null) items.add(toolMenu);
+        }
 
         if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
         if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
 
-        items.add(new AddUserDataAction(nodeTree, this));
+        if (linkNode == null) {
+            items.add(new AddUserDataAction(nodeTree, this));
+        }
 
         super.fillContextMenu(nodeTree, items);
     }

@@ -16,6 +16,7 @@ import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,8 +58,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     /**
      * @return the list of used materials.
      */
-    @NotNull
-    private Array<String> getAssetKeys() {
+    private @NotNull Array<String> getAssetKeys() {
         return assetKeys;
     }
 
@@ -76,8 +76,8 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         confirmDialog.show();
     }
 
-    private void handle(@NotNull final Boolean result) {
-        if (!result) return;
+    private void handle(@Nullable final Boolean result) {
+        if (!Boolean.TRUE.equals(result)) return;
         getAssetKeys().stream().map(EditorUtil::getRealFile)
                 .filter(Files::exists)
                 .forEach(FileUtils::delete);

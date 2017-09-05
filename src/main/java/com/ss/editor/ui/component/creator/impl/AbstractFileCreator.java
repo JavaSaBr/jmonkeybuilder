@@ -135,9 +135,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * @return the resources tree.
      */
-    @NotNull
     @FromAnyThread
-    private ResourceTree getResourceTree() {
+    private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 
@@ -152,25 +151,22 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * @return the init file.
      */
-    @NotNull
     @FromAnyThread
-    private Path getInitFile() {
+    private @NotNull Path getInitFile() {
         return notNull(initFile);
     }
 
-    @NotNull
     @Override
     @FromAnyThread
-    protected String getButtonOkText() {
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_CREATE;
     }
 
     /**
      * @return the selected file in the resources tree.
      */
-    @NotNull
     @FromAnyThread
-    private Path getSelectedFile() {
+    private @NotNull Path getSelectedFile() {
 
         final ResourceTree resourceTree = getResourceTree();
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
@@ -186,9 +182,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @return the file to creating.
      */
-    @Nullable
     @FromAnyThread
-    protected Path getFileToCreate() {
+    protected @Nullable Path getFileToCreate() {
 
         final TextField fileNameField = getFileNameField();
         final String filename = fileNameField.getText();
@@ -208,9 +203,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @return the file extension.
      */
-    @NotNull
     @FromAnyThread
-    protected String getFileExtension() {
+    protected @NotNull String getFileExtension() {
         return StringUtils.EMPTY;
     }
 
@@ -236,7 +230,6 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
             try {
 
                 writeData(tempFile);
-
                 try {
                     Files.move(tempFile, fileToCreate, REPLACE_EXISTING, ATOMIC_MOVE);
                 } catch (final AtomicMoveNotSupportedException ex) {
@@ -260,23 +253,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @param resultFile the result file.
      */
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) {
-    }
-
-    /**
-     * Notify about the file created.
-     *
-     * @param createdFile the created file
-     * @param needSelect  the need select
-     */
-    @FromAnyThread
-    protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
-        if (!needSelect) return;
-
-        final RequestSelectFileEvent event = new RequestSelectFileEvent();
-        event.setFile(createdFile);
-
-        FX_EVENT_MANAGER.notify(event);
+    protected void writeData(@NotNull final Path resultFile) throws IOException {
     }
 
     @Override
@@ -334,6 +311,22 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     /**
+     * Notify about the file created.
+     *
+     * @param createdFile the created file
+     * @param needSelect  the need select
+     */
+    @FromAnyThread
+    protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
+        if (!needSelect) return;
+
+        final RequestSelectFileEvent event = new RequestSelectFileEvent();
+        event.setFile(createdFile);
+
+        FX_EVENT_MANAGER.notify(event);
+    }
+
+    /**
      * If return true the creator will create {@link #previewContainer}.
      *
      * @return true if need to create preview container.
@@ -346,9 +339,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * @return the preview container.
      */
-    @Nullable
     @FromAnyThread
-    protected BorderPane getPreviewContainer() {
+    protected @Nullable BorderPane getPreviewContainer() {
         return previewContainer;
     }
 
@@ -364,9 +356,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * @return the filed with new file name.
      */
-    @NotNull
     @FromAnyThread
-    protected TextField getFileNameField() {
+    protected @NotNull TextField getFileNameField() {
         return notNull(fileNameField);
     }
 
@@ -398,9 +389,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @return the label text "file name".
      */
-    @NotNull
     @FromAnyThread
-    protected String getFileNameLabelText() {
+    protected @NotNull String getFileNameLabelText() {
         return Messages.FILE_CREATOR_FILE_NAME_LABEL;
     }
 
@@ -423,10 +413,9 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         okButton.setDisable(false);
     }
 
-    @NotNull
     @Override
     @FromAnyThread
-    protected Point getSize() {
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

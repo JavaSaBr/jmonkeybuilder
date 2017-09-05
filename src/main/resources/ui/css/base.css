@@ -1306,6 +1306,8 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0px;
     -fx-indent: 1em;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 13px;
 }
 
 .tree-cell .label {

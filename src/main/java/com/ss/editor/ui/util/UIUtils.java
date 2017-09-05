@@ -4,13 +4,13 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ReflectionUtils.getStaticField;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
+import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
@@ -168,9 +168,8 @@ public class UIUtils {
      * @param type the type
      * @return the array
      */
-    @NotNull
     @FXThread
-    public static <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
+    public static @NotNull <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
         final Array<T> container = ArrayFactory.newArray(type);
         fillComponents(container, node, type);
         return container;
@@ -206,9 +205,8 @@ public class UIUtils {
      * @param menuBar the menu bar
      * @return the all items
      */
-    @NotNull
     @FXThread
-    public static Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
+    public static @NotNull Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
 
         final Array<MenuItem> container = ArrayFactory.newArray(MenuItem.class);
 
@@ -312,9 +310,8 @@ public class UIUtils {
      * @param objectId the object id.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItem(@NotNull final TreeView<T> treeView, final long objectId) {
+    public static @Nullable <T> TreeItem<T> findItem(@NotNull final TreeView<T> treeView, final long objectId) {
         return findItem(treeView.getRoot(), objectId);
     }
 
@@ -326,9 +323,8 @@ public class UIUtils {
      * @param objectId the object id.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItem(@NotNull final TreeItem<T> root, final long objectId) {
+    public static @Nullable <T> TreeItem<T> findItem(@NotNull final TreeItem<T> root, final long objectId) {
 
         final T value = root.getValue();
 
@@ -356,9 +352,8 @@ public class UIUtils {
      * @param object   the value.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
+    public static @Nullable <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
         return findItemForValue(treeView.getRoot(), object);
     }
 
@@ -370,9 +365,8 @@ public class UIUtils {
      * @param object the value.
      * @return the tree item or null.
      */
-    @Nullable
     @FXThread
-    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
+    public @Nullable static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
         if (object == null) return null;
 
         if (Objects.equals(root.getValue(), object)) {
@@ -398,9 +392,8 @@ public class UIUtils {
      * @param treeView the tree view.
      * @return the list of all items.
      */
-    @NotNull
     @FXThread
-    public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeView<T> treeView) {
+    public static @NotNull <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeView<T> treeView) {
 
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
 
@@ -453,9 +446,8 @@ public class UIUtils {
      * @param color the color
      * @return the jme color
      */
-    @Nullable
     @FXThread
-    public static ColorRGBA from(@Nullable final Color color) {
+    public static @Nullable ColorRGBA from(@Nullable final Color color) {
         if (color == null) return null;
         return new ColorRGBA((float) color.getRed(), (float) color.getGreen(),
                 (float) color.getBlue(), (float) color.getOpacity());
@@ -467,9 +459,8 @@ public class UIUtils {
      * @param color the color
      * @return the FX color
      */
-    @Nullable
     @FXThread
-    public static Color from(@Nullable final ColorRGBA color) {
+    public static @Nullable Color from(@Nullable final ColorRGBA color) {
         if (color == null) return null;
 
         final float red = min(color.getRed(), 1F);
@@ -545,34 +536,50 @@ public class UIUtils {
      * @param actionTester the action tester.
      */
     @FXThread
-    public static void openAssetDialog(@NotNull final Consumer<Path> handler, @NotNull final Array<String> extensions,
-                                       @Nullable final Predicate<Class<?>> actionTester) {
-
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
+    public static void openFileAssetDialog(@NotNull final Consumer<Path> handler,
+                                           @NotNull final Array<String> extensions,
+                                           @Nullable final Predicate<Class<?>> actionTester) {
 
         final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
         dialog.setExtensionFilter(extensions);
         dialog.setActionTester(actionTester);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**
      * Open an asset dialog.
      *
-     * @param owner        the owner.
      * @param handler      the result handler.
-     * @param extensions   the extensions list.
      * @param actionTester the action tester.
      */
     @FXThread
-    public static void openAssetDialog(@NotNull Node owner, @NotNull final Consumer<Path> handler,
-                                       @NotNull final Array<String> extensions,
-                                       @Nullable final Predicate<Class<?>> actionTester) {
-        final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
-        dialog.setExtensionFilter(extensions);
+    public static void openFolderAssetDialog(@NotNull final Consumer<Path> handler,
+                                             @Nullable final Predicate<Class<?>> actionTester) {
+
+        final AssetEditorDialog<Path> dialog = new FolderAssetEditorDialog(handler);
         dialog.setActionTester(actionTester);
-        dialog.show(owner);
+        dialog.show();
+    }
+
+    /**
+     * Open a save as dialog.
+     *
+     * @param handler      the result handler.
+     * @param extension    the file extension.
+     * @param actionTester the action tester.
+     */
+    @FXThread
+    public static void openSaveAsDialog(@NotNull final Consumer<@NotNull Path> handler, @NotNull final String extension,
+                                        @Nullable final Predicate<@NotNull Class<?>> actionTester) {
+
+        final SaveAsEditorDialog dialog = new SaveAsEditorDialog(handler);
+        dialog.setExtension(extension);
+
+        if (actionTester != null) {
+            dialog.setActionTester(actionTester);
+        }
+
+        dialog.show();
     }
 
     /**
@@ -592,7 +599,6 @@ public class UIUtils {
         dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();
     }
-
 
     /**
      * Accept a drag event if it has a file with required extension.

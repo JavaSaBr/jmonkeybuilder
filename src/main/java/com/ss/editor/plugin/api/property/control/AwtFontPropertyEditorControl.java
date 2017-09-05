@@ -3,10 +3,11 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
+import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
+import impl.org.controlsfx.autocompletion.SuggestionProvider;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.util.StringConverter;
@@ -66,8 +67,10 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
         comboBox.getItems().addAll(FONTS);
         comboBox.setVisibleRowCount(20);
         comboBox.setConverter(STRING_CONVERTER);
+        comboBox.setEditable(true);
 
-        AutoCompleteComboBoxListener.install(comboBox);
+        new AutoCompletionTextFieldBinding<>(comboBox.getEditor(),
+                SuggestionProvider.create(comboBox.getItems()), STRING_CONVERTER);
 
         FXUtils.addClassesTo(comboBox.getEditor(), CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
         FXUtils.addClassTo(comboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);

@@ -4,7 +4,7 @@ import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent
 import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.LABEL_PERCENT;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
-import com.ss.editor.ui.control.property.AbstractPropertyControl;
+import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -75,11 +75,11 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
         diffuseTextureControl = new NamedChooseTextureControl("Diffuse");
         diffuseTextureControl.setChangeHandler(this::updateDiffuse);
-        diffuseTextureControl.setControlWidthPercent(AbstractPropertyControl.CONTROL_WIDTH_PERCENT_2);
+        diffuseTextureControl.setControlWidthPercent(PropertyControl.CONTROL_WIDTH_PERCENT_2);
 
         normalTextureControl = new NamedChooseTextureControl("Normal");
         normalTextureControl.setChangeHandler(this::updateNormal);
-        normalTextureControl.setControlWidthPercent(AbstractPropertyControl.CONTROL_WIDTH_PERCENT_2);
+        normalTextureControl.setControlWidthPercent(PropertyControl.CONTROL_WIDTH_PERCENT_2);
 
         final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));

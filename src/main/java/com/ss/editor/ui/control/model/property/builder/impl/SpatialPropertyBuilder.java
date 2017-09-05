@@ -14,9 +14,10 @@ import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.*;
+import com.ss.editor.ui.control.model.property.control.LayerModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.editor.ui.control.property.impl.*;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -50,8 +51,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
      *
      * @return the instance
      */
-    @NotNull
-    public static PropertyBuilder getInstance() {
+    public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
 
@@ -79,20 +79,20 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
             FXUtils.addToPane(propertyControl, container);
         }
 
-        final EnumModelPropertyControl<Spatial, CullHint> cullHintControl =
-                new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, changeConsumer, CULL_HINTS);
+        final EnumPropertyControl<ModelChangeConsumer, Spatial, CullHint> cullHintControl =
+                new EnumPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, changeConsumer, CULL_HINTS);
         cullHintControl.setApplyHandler(Spatial::setCullHint);
         cullHintControl.setSyncHandler(Spatial::getLocalCullHint);
         cullHintControl.setEditObject(spatial);
 
-        final EnumModelPropertyControl<Spatial, ShadowMode> shadowModeControl =
-                new EnumModelPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, changeConsumer, SHADOW_MODES);
+        final EnumPropertyControl<ModelChangeConsumer, Spatial, ShadowMode> shadowModeControl =
+                new EnumPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, changeConsumer, SHADOW_MODES);
         shadowModeControl.setApplyHandler(Spatial::setShadowMode);
         shadowModeControl.setSyncHandler(Spatial::getLocalShadowMode);
         shadowModeControl.setEditObject(spatial);
 
-        final EnumModelPropertyControl<Spatial, Bucket> queueBucketControl =
-                new EnumModelPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, changeConsumer, BUCKETS);
+        final EnumPropertyControl<ModelChangeConsumer, Spatial, Bucket> queueBucketControl =
+                new EnumPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, changeConsumer, BUCKETS);
         queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
         queueBucketControl.setSyncHandler(Spatial::getLocalQueueBucket);
         queueBucketControl.setEditObject(spatial);
@@ -109,21 +109,21 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
             final Vector3f scale = spatial.getLocalScale().clone();
             final Quaternion rotation = spatial.getLocalRotation().clone();
 
-            final Vector3fModelPropertyControl<Spatial> locationControl =
-                    new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+            final Vector3FPropertyControl<ModelChangeConsumer, Spatial> locationControl =
+                    new Vector3FPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
             locationControl.setApplyHandler(Spatial::setLocalTranslation);
             locationControl.setSyncHandler(Spatial::getLocalTranslation);
 
             locationControl.setEditObject(spatial);
 
-            final Vector3fModelPropertyControl<Spatial> scaleControl =
-                    new Vector3fModelPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, changeConsumer);
+            final Vector3FPropertyControl<ModelChangeConsumer, Spatial> scaleControl =
+                    new Vector3FPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, changeConsumer);
             scaleControl.setApplyHandler(Spatial::setLocalScale);
             scaleControl.setSyncHandler(Spatial::getLocalScale);
             scaleControl.setEditObject(spatial);
 
-            final QuaternionModelPropertyControl<Spatial> rotationControl =
-                    new QuaternionModelPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
+            final QuaternionPropertyControl<ModelChangeConsumer, Spatial> rotationControl =
+                    new QuaternionPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
             rotationControl.setApplyHandler(Spatial::setLocalRotation);
             rotationControl.setSyncHandler(Spatial::getLocalRotation);
             rotationControl.setEditObject(spatial);
@@ -161,7 +161,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Float value = (Float) data;
 
-                final FloatModelPropertyControl<Spatial> control = new FloatModelPropertyControl<>(value, key, changeConsumer);
+                final FloatPropertyControl<ModelChangeConsumer, Spatial> control = new FloatPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -172,7 +172,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Integer value = (Integer) data;
 
-                final IntegerModelPropertyControl<Spatial> control = new IntegerModelPropertyControl<>(value, key, changeConsumer);
+                final IntegerPropertyControl<ModelChangeConsumer, Spatial> control = new IntegerPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -183,7 +183,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Boolean value = (Boolean) data;
 
-                final BooleanModelPropertyControl<Spatial> control = new BooleanModelPropertyControl<>(value, key, changeConsumer);
+                final BooleanPropertyControl<ModelChangeConsumer, Spatial> control = new BooleanPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -194,7 +194,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Vector3f value = (Vector3f) data;
 
-                final Vector3fModelPropertyControl<Spatial> control = new Vector3fModelPropertyControl<>(value, key, changeConsumer);
+                final Vector3FPropertyControl<ModelChangeConsumer, Spatial> control = new Vector3FPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -205,7 +205,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Vector2f value = (Vector2f) data;
 
-                final Vector2fModelPropertyControl<Spatial> control = new Vector2fModelPropertyControl<>(value, key, changeConsumer);
+                final Vector2FPropertyControl<ModelChangeConsumer, Spatial> control = new Vector2FPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -216,7 +216,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final ColorRGBA value = (ColorRGBA) data;
 
-                final ColorModelPropertyControl<Spatial> control = new ColorModelPropertyControl<>(value, key, changeConsumer);
+                final ColorPropertyControl<ModelChangeConsumer, Spatial> control = new ColorPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -227,7 +227,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final String value = (String) data;
 
-                final StringModelPropertyControl<Spatial> control = new StringModelPropertyControl<>(value, key, changeConsumer);
+                final StringPropertyControl<ModelChangeConsumer, Spatial> control = new StringPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -236,7 +236,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
             } else {
 
-                final DefaultModelSinglePropertyControl<Spatial, Object> control = new DefaultModelSinglePropertyControl<>(data, key, changeConsumer);
+                final DefaultSinglePropertyControl<ModelChangeConsumer, Spatial, Object> control = new DefaultSinglePropertyControl<>(data, key, changeConsumer);
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
 

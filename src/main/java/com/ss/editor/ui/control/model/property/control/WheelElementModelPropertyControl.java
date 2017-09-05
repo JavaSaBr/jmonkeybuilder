@@ -5,26 +5,18 @@ import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.filter.property.control.AbstractElementFilterPropertyControl;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link AbstractElementFilterPropertyControl} to edit wheel from a scene.
+ * The implementation of the {@link SpatialElementModelPropertyControl} to edit wheel from a scene.
  *
  * @author JavaSaBr
  */
 public class WheelElementModelPropertyControl extends SpatialElementModelPropertyControl<VehicleWheel> {
 
-    /**
-     * Instantiates a new Wheel element model property control.
-     *
-     * @param propertyValue  the property value
-     * @param propertyName   the property name
-     * @param changeConsumer the change consumer
-     */
     public WheelElementModelPropertyControl(@Nullable final Spatial propertyValue, @NotNull final String propertyName,
                                             @NotNull final ModelChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);

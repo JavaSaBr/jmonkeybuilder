@@ -2,9 +2,7 @@ package com.ss.editor.ui.component.creator.impl.material;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
@@ -17,7 +15,6 @@ import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -70,21 +67,18 @@ public class MaterialFileCreator extends GenericFileCreator {
         super();
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return Messages.MATERIAL_FILE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    protected @NotNull String getFileExtension() {
         return JME_MATERIAL;
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
 
@@ -108,10 +102,8 @@ public class MaterialFileCreator extends GenericFileCreator {
     /**
      * @return the list of available definitions.
      */
-    @NotNull
-
     @FromAnyThread
-    private Array<String> getDefinitions() {
+    private @NotNull Array<String> getDefinitions() {
         return notNull(definitions);
     }
 
@@ -130,7 +122,7 @@ public class MaterialFileCreator extends GenericFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) {
+    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -143,8 +135,6 @@ public class MaterialFileCreator extends GenericFileCreator {
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(materialContent);
-        } catch (final IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
         }
     }
 }

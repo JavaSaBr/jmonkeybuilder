@@ -9,9 +9,12 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.*;
+import com.ss.editor.ui.control.model.property.control.DirectionLightPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.editor.ui.control.property.impl.ColorPropertyControl;
+import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +35,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
      *
      * @return the instance
      */
-    @NotNull
-    public static PropertyBuilder getInstance() {
+    public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
 
@@ -75,19 +77,19 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
     }
 
     private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,
-                                    final @NotNull ModelChangeConsumer changeConsumer) {
+                                    @NotNull final ModelChangeConsumer changeConsumer) {
 
         final Vector3f position = light.getPosition().clone();
         final float radius = light.getRadius();
 
-        final Vector3fModelPropertyControl<PointLight> positionControl =
-                new Vector3fModelPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, PointLight> positionControl =
+                new Vector3FPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         positionControl.setApplyHandler(PointLight::setPosition);
         positionControl.setSyncHandler(PointLight::getPosition);
         positionControl.setEditObject(light);
 
-        final FloatLightPropertyControl<PointLight> radiusControl =
-                new FloatLightPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, PointLight> radiusControl =
+                new FloatPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
         radiusControl.setApplyHandler(PointLight::setRadius);
         radiusControl.setSyncHandler(PointLight::getRadius);
         radiusControl.setMinMax(0, Integer.MAX_VALUE);
@@ -114,29 +116,29 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         directionControl.setSyncHandler(SpotLight::getDirection);
         directionControl.setEditObject(light);
 
-        final Vector3fModelPropertyControl<SpotLight> positionControl =
-                new Vector3fModelPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final Vector3FPropertyControl<ModelChangeConsumer, SpotLight> positionControl =
+                new Vector3FPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         positionControl.setApplyHandler(SpotLight::setPosition);
         positionControl.setSyncHandler(SpotLight::getPosition);
         positionControl.setEditObject(light);
 
-        final FloatLightPropertyControl<SpotLight> rangeControl =
-                new FloatLightPropertyControl<>(range, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, SpotLight> rangeControl =
+                new FloatPropertyControl<>(range, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
         rangeControl.setApplyHandler(SpotLight::setSpotRange);
         rangeControl.setSyncHandler(SpotLight::getSpotRange);
         rangeControl.setMinMax(0, Integer.MAX_VALUE);
         rangeControl.setEditObject(light);
 
-        final FloatLightPropertyControl<SpotLight> innerAngleControl =
-                new FloatLightPropertyControl<>(innerAngle, Messages.MODEL_PROPERTY_INNER_ANGLE, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, SpotLight> innerAngleControl =
+                new FloatPropertyControl<>(innerAngle, Messages.MODEL_PROPERTY_INNER_ANGLE, changeConsumer);
         innerAngleControl.setApplyHandler(SpotLight::setSpotInnerAngle);
         innerAngleControl.setSyncHandler(SpotLight::getSpotInnerAngle);
         innerAngleControl.setMinMax(0F, FastMath.HALF_PI);
         innerAngleControl.setScrollPower(1F);
         innerAngleControl.setEditObject(light);
 
-        final FloatLightPropertyControl<SpotLight> outerAngleControl =
-                new FloatLightPropertyControl<>(outerAngle, Messages.MODEL_PROPERTY_OUTER_ANGLE, changeConsumer);
+        final FloatPropertyControl<ModelChangeConsumer, SpotLight> outerAngleControl =
+                new FloatPropertyControl<>(outerAngle, Messages.MODEL_PROPERTY_OUTER_ANGLE, changeConsumer);
         outerAngleControl.setApplyHandler(SpotLight::setSpotOuterAngle);
         outerAngleControl.setSyncHandler(SpotLight::getSpotOuterAngle);
         outerAngleControl.setMinMax(0F, FastMath.HALF_PI);
@@ -156,8 +158,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
 
         final ColorRGBA color = object.getColor();
 
-        final ColorModelPropertyControl<Light> radiusControl =
-                new ColorModelPropertyControl<>(color, Messages.MODEL_PROPERTY_COLOR, changeConsumer);
+        final ColorPropertyControl<ModelChangeConsumer, Light> radiusControl =
+                new ColorPropertyControl<>(color, Messages.MODEL_PROPERTY_COLOR, changeConsumer);
         radiusControl.setApplyHandler(Light::setColor);
         radiusControl.setSyncHandler(Light::getColor);
         radiusControl.setEditObject(object);

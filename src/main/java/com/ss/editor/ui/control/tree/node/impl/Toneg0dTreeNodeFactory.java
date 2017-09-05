@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.node.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.ss.editor.model.node.Toneg0dParticleInfluencers;
+import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.Toneg0DParticleEmitterNodeTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0DParticleInfluencerTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0DParticleInfluencersTreeNode;

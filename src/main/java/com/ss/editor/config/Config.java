@@ -36,7 +36,7 @@ public abstract class Config {
      * The constant APP_VERSION.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.0.1");
+    public static final Version APP_VERSION = new Version("1.1.0");
 
     /**
      * The constant STRING_VERSION.

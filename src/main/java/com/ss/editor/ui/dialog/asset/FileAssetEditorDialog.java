@@ -1,15 +1,15 @@
 package com.ss.editor.ui.dialog.asset;
 
+import com.ss.editor.Messages;
+import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-
+import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import javafx.scene.control.Label;
 
 /**
  * The implementation of the {@link AssetEditorDialog} for choosing the {@link Path} from asset.
@@ -18,21 +18,10 @@ import javafx.scene.control.Label;
  */
 public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
 
-    /**
-     * Instantiates a new File asset editor dialog.
-     *
-     * @param consumer the consumer
-     */
     public FileAssetEditorDialog(@NotNull final Consumer<Path> consumer) {
         super(consumer);
     }
 
-    /**
-     * Instantiates a new File asset editor dialog.
-     *
-     * @param consumer  the consumer
-     * @param validator the validator
-     */
     public FileAssetEditorDialog(@NotNull final Consumer<Path> consumer, @Nullable final Function<Path, String> validator) {
         super(consumer, validator);
     }
@@ -55,6 +44,10 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
 
         final Function<Path, String> validator = getValidator();
         String message = validator == null ? null : validator.apply(element.getFile());
+
+        if (message == null && element instanceof FolderResourceElement ) {
+            message = Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
+        }
 
         if (message != null) {
             warningLabel.setText(message);

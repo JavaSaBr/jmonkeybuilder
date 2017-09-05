@@ -17,6 +17,7 @@ import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -64,13 +65,12 @@ public class GenericFileCreator extends AbstractFileCreator {
     /**
      * @return the result vars of the creator.
      */
-    @NotNull
-    protected VarTable getVars() {
+    protected @NotNull VarTable getVars() {
         return notNull(vars);
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void validateFileName() {
         super.validateFileName();
 
@@ -96,7 +96,7 @@ public class GenericFileCreator extends AbstractFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) {
+    protected void writeData(@NotNull final Path resultFile) throws IOException {
         writeData(getVars(), resultFile);
     }
 
@@ -107,12 +107,11 @@ public class GenericFileCreator extends AbstractFileCreator {
      * @param resultFile the result file.
      */
     @BackgroundThread
-    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) {
+    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
     }
 
-    @NotNull
     @FromAnyThread
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return EMPTY_ARRAY;
     }
 }

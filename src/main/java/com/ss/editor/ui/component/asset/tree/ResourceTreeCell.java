@@ -3,11 +3,10 @@ package com.ss.editor.ui.component.asset.tree;
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
 import com.ss.editor.manager.FileIconManager;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
@@ -50,11 +49,8 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         setOnMouseClicked(this::processClick);
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
-
         this.icon = new ImageView();
         this.tooltip = new Tooltip();
-
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
     }
 
     /**
@@ -102,7 +98,8 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
             final ContextMenu contextMenu = treeView.getContextMenu(item);
             if (contextMenu == null) return;
             contextMenu.show(this, Side.BOTTOM, 0, 0);
-        } else if (!isFolder && event.getButton() == MouseButton.PRIMARY && event.getClickCount() > 1) {
+        } else if ((treeView.isOnlyFolders() || !isFolder) && event.getButton() == MouseButton.PRIMARY &&
+                event.getClickCount() > 1) {
             final Consumer<ResourceElement> openFunction = treeView.getOpenFunction();
             if (openFunction != null) openFunction.accept(item);
         }
@@ -119,8 +116,8 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
             setGraphic(null);
             return;
         } else if (item instanceof LoadingResourceElement) {
-            setText(StringUtils.EMPTY);
-            setGraphic(new ProgressIndicator());
+            setText("Loading...");
+            setGraphic(createIndicator());
             return;
         }
 
@@ -132,6 +129,13 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         setText(fileName.toString());
         setGraphic(icon);
         createToolTip();
+    }
+
+    private @NotNull ProgressIndicator createIndicator() {
+        final ProgressIndicator indicator = new ProgressIndicator();
+        indicator.setMaxHeight(FXConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
+        indicator.setMaxWidth(FXConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
+        return indicator;
     }
 
     private void removeToolTip() {

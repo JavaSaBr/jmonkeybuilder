@@ -124,7 +124,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) {
+    public void doSave(@NotNull final Path toStore) throws IOException {
         super.doSave(toStore);
 
         final TextArea textArea = getTextArea();
@@ -132,8 +132,6 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(newContent);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
         }
     }
 

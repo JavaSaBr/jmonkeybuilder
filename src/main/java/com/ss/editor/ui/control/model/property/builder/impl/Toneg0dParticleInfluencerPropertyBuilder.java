@@ -50,8 +50,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      *
      * @return the instance
      */
-    @NotNull
-    public static PropertyBuilder getInstance() {
+    public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
 

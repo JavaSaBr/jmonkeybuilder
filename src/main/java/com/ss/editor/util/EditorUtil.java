@@ -44,6 +44,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -480,6 +481,70 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Open the file in a system explorer.
+     *
+     * @param path the path
+     */
+    public static void openFileInSystemExplorer(@NotNull Path path) {
+
+        final Platform platform = JmeSystem.getPlatform();
+        final List<String> commands = new ArrayList<>();
+
+        if (platform == Platform.MacOSX64 || platform == Platform.MacOSX_PPC64) {
+            commands.add("open");
+            commands.add("-R");
+        } else if (platform == Platform.Windows32 || platform == Platform.Windows64) {
+            commands.add("explorer");
+            commands.add("/select,");
+        } else if (platform == Platform.Linux32 || platform == Platform.Linux64) {
+            if (isAppExists("nautilus -v")) {
+                commands.add("nautilus");
+            } else if (isAppExists("dolphin -v")) {
+                commands.add("dolphin");
+            } else {
+                commands.add("xdg-open");
+                if (!Files.isDirectory(path)) {
+                    path = path.getParent();
+                }
+            }
+        }
+
+        if (commands.isEmpty()) return;
+
+        final String url;
+        try {
+            url = path.toUri().toURL().toString();
+        } catch (final MalformedURLException e) {
+            handleException(LOGGER, null, e);
+            return;
+        }
+
+        commands.add(url);
+
+        final ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command(commands);
+        try {
+            processBuilder.start();
+        } catch (final IOException e) {
+            handleException(LOGGER, null, e);
+        }
+    }
+
+    private static boolean isAppExists(@NotNull final String command) {
+
+        final Runtime runtime = Runtime.getRuntime();
+        final int result;
+        try {
+            final Process exec = runtime.exec(command);
+            result = exec.waitFor();
+        } catch (final InterruptedException | IOException e) {
+            return false;
+        }
+
+        return result >= 0;
+    }
+
+    /**
      * Convert the object to byte array.
      *
      * @param object the object
@@ -511,10 +576,9 @@ public abstract class EditorUtil {
 
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
-        try (final ObjectInputStream in = new ObjectInputStream(bin)) {
+        try (final ObjectInputStream in = new SSObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
         } catch (final ClassNotFoundException | IOException e) {
-            LOGGER.warning(e);
             throw new RuntimeException(e);
         }
     }

@@ -71,6 +71,11 @@ public class Messages {
     public static final String EDITOR_TOOL_ASSET;
 
     /**
+     * The constant EDITOR_AREA_SAVE_FILE_QUESTION.
+     */
+    public static final String EDITOR_AREA_SAVE_FILE_QUESTION;
+
+    /**
      * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE.
      */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
@@ -103,6 +108,10 @@ public class Messages {
      */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION;
     /**
+     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION.
+     */
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION;
+    /**
      * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE.
      */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE;
@@ -110,6 +119,10 @@ public class Messages {
      * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR.
      */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
+    /**
+     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER.
+     */
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER;
     /**
      * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE.
      */
@@ -149,6 +162,14 @@ public class Messages {
      */
     public static final String SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT;
     /**
+     * The constant SCENE_FILE_EDITOR_ACTION_PHYSICS.
+     */
+    public static final String SCENE_FILE_EDITOR_ACTION_PHYSICS;
+    /**
+     * The constant SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS.
+     */
+    public static final String SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS;
+    /**
      * The constant SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS.
      */
     public static final String SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS;
@@ -178,6 +199,19 @@ public class Messages {
      * The constant ASSET_EDITOR_DIALOG_TITLE.
      */
     public static final String ASSET_EDITOR_DIALOG_TITLE;
+    /**
+     * The constant ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE.
+     */
+    public static final String ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
+
+    /**
+     * The constant SAVE_AS_EDITOR_DIALOG_TITLE.
+     */
+    public static final String SAVE_AS_EDITOR_DIALOG_TITLE;
+    /**
+     * The constant SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME.
+     */
+    public static final String SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
 
     /**
      * The constant PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL.
@@ -196,23 +230,6 @@ public class Messages {
      * The constant MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL.
      */
     public static final String MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL;
-
-    /**
-     * The constant MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE.
-     */
-    public static final String MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE;
 
     /**
      * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT.
@@ -237,6 +254,27 @@ public class Messages {
     public static final String COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
 
     /**
+     * The constant MATERIAL_SETTINGS_MAIN.
+     */
+    public static final String MATERIAL_SETTINGS_MAIN;
+    /**
+     * The constant MATERIAL_SETTINGS_TEXTURES.
+     */
+    public static final String MATERIAL_SETTINGS_TEXTURES;
+    /**
+     * The constant MATERIAL_SETTINGS_COLORS.
+     */
+    public static final String MATERIAL_SETTINGS_COLORS;
+    /**
+     * The constant MATERIAL_SETTINGS_RENDER.
+     */
+    public static final String MATERIAL_SETTINGS_RENDER;
+    /**
+     * The constant MATERIAL_SETTINGS_OTHER.
+     */
+    public static final String MATERIAL_SETTINGS_OTHER;
+
+    /**
      * The constant MATERIAL_RENDER_STATE_FACE_CULL_MODE.
      */
     public static final String MATERIAL_RENDER_STATE_FACE_CULL_MODE;
@@ -245,6 +283,14 @@ public class Messages {
      */
     public static final String MATERIAL_RENDER_STATE_BLEND_MODE;
     /**
+     * The constant MATERIAL_RENDER_STATE_BLEND_EQUATION.
+     */
+    public static final String MATERIAL_RENDER_STATE_BLEND_EQUATION;
+    /**
+     * The constant MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA.
+     */
+    public static final String MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA;
+    /**
      * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR.
      */
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR;
@@ -252,10 +298,6 @@ public class Messages {
      * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS.
      */
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS;
-    /**
-     * The constant MATERIAL_RENDER_STATE_POINT_SPRITE.
-     */
-    public static final String MATERIAL_RENDER_STATE_POINT_SPRITE;
     /**
      * The constant MATERIAL_RENDER_STATE_DEPTH_WRITE.
      */
@@ -342,6 +384,10 @@ public class Messages {
      */
     public static final String SETTINGS_DIALOG_FXAA;
     /**
+     * The constant SETTINGS_DIALOG_NATIVE_FILE_CHOOSER.
+     */
+    public static final String SETTINGS_DIALOG_NATIVE_FILE_CHOOSER;
+    /**
      * The constant SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS.
      */
     public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
@@ -414,9 +460,13 @@ public class Messages {
      */
     public static final String SETTINGS_DIALOG_OPEN_GL_LABEL;
     /**
-     * The constant SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE.
+     * The constant SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE.
      */
-    public static final String SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
+    public static final String SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE;
+    /**
+     * The constant SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE.
+     */
+    public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
     /**
      * The constant SETTINGS_DIALOG_ENVS_FOLDER_LABEL.
      */
@@ -475,6 +525,10 @@ public class Messages {
      * The constant MODEL_FILE_EDITOR_NODE_MESH.
      */
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_MATERIAL.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_MATERIAL;
     /**
      * The constant MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT.
      */
@@ -714,6 +768,14 @@ public class Messages {
      * The constant MODEL_NODE_TREE_ACTION_LOAD_MODEL.
      */
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_SAVE_AS.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_SAVE_AS;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED;
     /**
      * The constant MODEL_NODE_TREE_ACTION_LINK_MODEL.
      */
@@ -1636,14 +1698,40 @@ public class Messages {
      * The constant MODEL_PROPERTY_DATA_TYPE.
      */
     public static final String MODEL_PROPERTY_DATA_TYPE;
+
     /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
      */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
     /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS;
+    /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL.
      */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER;
+    /**
+     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER.
+     */
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER;
+
     /**
      * The constant ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT.
      */
@@ -1708,14 +1796,6 @@ public class Messages {
      * The constant QUESTION_DIALOG_TITLE.
      */
     public static final String QUESTION_DIALOG_TITLE;
-    /**
-     * The constant QUESTION_DIALOG_BUTTON_OK.
-     */
-    public static final String QUESTION_DIALOG_BUTTON_OK;
-    /**
-     * The constant QUESTION_DIALOG_BUTTON_CANCEL.
-     */
-    public static final String QUESTION_DIALOG_BUTTON_CANCEL;
 
     /**
      * The constant FOLDER_CREATOR_DESCRIPTION.
@@ -1847,6 +1927,10 @@ public class Messages {
      */
     public static final String SIMPLE_DIALOG_BUTTON_ADD;
     /**
+     * The constant SIMPLE_DIALOG_BUTTON_SAVE.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_SAVE;
+    /**
      * The constant SIMPLE_DIALOG_BUTTON_GENERATE.
      */
     public static final String SIMPLE_DIALOG_BUTTON_GENERATE;
@@ -1855,6 +1939,10 @@ public class Messages {
      */
     public static final String SIMPLE_DIALOG_BUTTON_CREATE;
     /**
+     * The constant SIMPLE_DIALOG_BUTTON_APPLY.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_APPLY;
+    /**
      * The constant SIMPLE_DIALOG_BUTTON_CANCEL.
      */
     public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
@@ -1862,6 +1950,14 @@ public class Messages {
      * The constant SIMPLE_DIALOG_BUTTON_CLOSE.
      */
     public static final String SIMPLE_DIALOG_BUTTON_CLOSE;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_YES.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_YES;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_NO.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_NO;
 
     /**
      * The constant EMPTY_MODEL_CREATOR_DESCRIPTION.
@@ -2340,6 +2436,8 @@ public class Messages {
 
         EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
+        EDITOR_AREA_SAVE_FILE_QUESTION = bundle.getString("EditorAreaSaveFileQuestion");
+        
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenWithFile");
@@ -2348,8 +2446,10 @@ public class Messages {
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuPasteFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFileQuestion");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFilesQuestion");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuConvertFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileByExternalEditor");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileBySystemExplorer");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle.getString("AssetComponentResourceTreeContextMenuRenameFile");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
@@ -2361,6 +2461,8 @@ public class Messages {
         SCENE_FILE_EDITOR_ACTION_SCALE_TOOL = bundle.getString("SceneFileEditorActionScaleTool");
         SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL = bundle.getString("SceneFileEditorActionRotationTool");
         SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT = bundle.getString("SceneFileEditorActionCameraLight");
+        SCENE_FILE_EDITOR_ACTION_PHYSICS = bundle.getString("SceneFileEditorActionPhysics");
+        SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS = bundle.getString("SceneFileEditorActionDebugPhysics");
         SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS = bundle.getString("SceneFileEditorActionShowLights");
         SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO = bundle.getString("SceneFileEditorActionShowAudio");
 
@@ -2370,14 +2472,12 @@ public class Messages {
         MATERIAL_FILE_EDITOR_ACTION_LIGHT = bundle.getString("MaterialFileEditorActionLight");
 
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
+        ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE = bundle.getString("AssetEditorDialogWarningSelectFile");
+        SAVE_AS_EDITOR_DIALOG_TITLE = bundle.getString("SaveAsEditorDialogTitle");
+        SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME = bundle.getString("SaveAsEditorDialogFieldFilename");
 
         PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureParamLabel");
         PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
-
-        MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialFileEditorTexturesComponentTitle");
-        MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorColorsComponentTitle");
-        MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE = bundle.getString("MaterialFileEditorOtherComponentTitle");
-        MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorRenderParamsComponentTitle");
 
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT = bundle.getString("Texture2DMaterialParamControlRepeat");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP = bundle.getString("Texture2DMaterialParamControlFlip");
@@ -2386,11 +2486,18 @@ public class Messages {
 
         COLOR_MATERIAL_PARAM_CONTROL_REMOVE = bundle.getString("ColorMaterialParamControlRemove");
 
+        MATERIAL_SETTINGS_MAIN = bundle.getString("MaterialSettingsMain");
+        MATERIAL_SETTINGS_TEXTURES = bundle.getString("MaterialSettingsTextures");
+        MATERIAL_SETTINGS_COLORS = bundle.getString("MaterialSettingsColors");
+        MATERIAL_SETTINGS_RENDER = bundle.getString("MaterialSettingsRender");
+        MATERIAL_SETTINGS_OTHER = bundle.getString("MaterialSettingsOther");
         MATERIAL_RENDER_STATE_FACE_CULL_MODE = bundle.getString("MaterialRenderStateFaceCullMode");
         MATERIAL_RENDER_STATE_BLEND_MODE = bundle.getString("MaterialRenderStateBlendMode");
+        MATERIAL_RENDER_STATE_BLEND_EQUATION = bundle.getString("MaterialRenderStateBlendEquation");
+        MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA = bundle.getString("MaterialRenderStateBlendEquationAlpha");
+
         MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR = bundle.getString("MaterialRenderStatePolyOffsetFactor");
         MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS = bundle.getString("MaterialRenderStatePolyOffsetUnits");
-        MATERIAL_RENDER_STATE_POINT_SPRITE = bundle.getString("MaterialRenderStatePointSprite");
         MATERIAL_RENDER_STATE_DEPTH_WRITE = bundle.getString("MaterialRenderStateDepthWrite");
         MATERIAL_RENDER_STATE_COLOR_WRITE = bundle.getString("MaterialRenderStateColorWrite");
         MATERIAL_RENDER_STATE_DEPTH_TEST = bundle.getString("MaterialRenderStateDepthTest");
@@ -2420,6 +2527,7 @@ public class Messages {
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
+        SETTINGS_DIALOG_NATIVE_FILE_CHOOSER = bundle.getString("SettingsDialogNativeFileChooser");
         SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsDialogStopRenderOnLostFocus");
         SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
@@ -2438,7 +2546,8 @@ public class Messages {
         SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL = bundle.getString("SettingsDialogUserClassesFolderLabel");
         SETTINGS_DIALOG_THEME_LABEL = bundle.getString("SettingsDialogThemeLabel");
         SETTINGS_DIALOG_OPEN_GL_LABEL = bundle.getString("SettingsDialogOpenGLLabel");
-        SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClasspathFolderChooserTitle");
+        SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClassesFolderChooserTitle");
+        SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogLibrariesFolderChooserTitle");
         SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
 
@@ -2455,6 +2564,7 @@ public class Messages {
         MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
         MODEL_FILE_EDITOR_TRANSFORM_MODE = bundle.getString("ModelFileEditorTransformMode");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
+        MODEL_FILE_EDITOR_NODE_MATERIAL = bundle.getString("ModelFileEditorNodeMaterial");
         MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT = bundle.getString("ModelFileEditorNodeAmbientLight");
         MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT = bundle.getString("ModelFileEditorNodeDirectionLight");
         MODEL_FILE_EDITOR_NODE_POINT_LIGHT = bundle.getString("ModelFileEditorNodePointLight");
@@ -2516,6 +2626,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE = bundle.getString("ModelNodeTreeActionCreatePrimitiveSphere");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
+        MODEL_NODE_TREE_ACTION_SAVE_AS = bundle.getString("ModelNodeTreeActionSaveAs");
+        MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED = bundle.getString("ModelNodeTreeActionMakeEmbedded");
         MODEL_NODE_TREE_ACTION_LINK_MODEL = bundle.getString("ModelNodeTreeActionLinkModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
         MODEL_NODE_TREE_ACTION_LOD_GENERATOR = bundle.getString("ModelNodeTreeActionLoDGenerator");
@@ -2749,7 +2861,14 @@ public class Messages {
         MODEL_PROPERTY_DATA_TYPE = bundle.getString("ModelPropertyDataType");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
+        MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS = bundle.getString("MaterialModelPropertyControlTextureSettings");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
+        MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y = bundle.getString("MaterialModelPropertyControlFlipY");
+        MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S = bundle.getString("MaterialModelPropertyControlWrapModeS");
+        MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T = bundle.getString("MaterialModelPropertyControlWrapModeT");
+        MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER = bundle.getString("MaterialModelPropertyControlMagFilter");
+        MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER = bundle.getString("MaterialModelPropertyControlMinFilter");
+
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
         LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");
         AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO = bundle.getString("AudioKeyPropertyControlNoAudio");
@@ -2769,8 +2888,6 @@ public class Messages {
         MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK = bundle.getString("ManualExtractAnimationDialogButtonOk");
 
         QUESTION_DIALOG_TITLE = bundle.getString("QuestionDialogTitle");
-        QUESTION_DIALOG_BUTTON_OK = bundle.getString("QuestionDialogButtonOk");
-        QUESTION_DIALOG_BUTTON_CANCEL = bundle.getString("QuestionDialogButtonCancel");
 
         FOLDER_CREATOR_DESCRIPTION = bundle.getString("FolderCreatorDescription");
         FOLDER_CREATOR_TITLE = bundle.getString("FolderCreatorTitle");
@@ -2808,10 +2925,14 @@ public class Messages {
         SIMPLE_DIALOG_BUTTON_OK = bundle.getString("SimpleDialogButtonOk");
         SIMPLE_DIALOG_BUTTON_SELECT = bundle.getString("SimpleDialogButtonSelect");
         SIMPLE_DIALOG_BUTTON_ADD = bundle.getString("SimpleDialogButtonAdd");
+        SIMPLE_DIALOG_BUTTON_SAVE = bundle.getString("SimpleDialogButtonSave");
         SIMPLE_DIALOG_BUTTON_GENERATE = bundle.getString("SimpleDialogButtonGenerate");
         SIMPLE_DIALOG_BUTTON_CREATE = bundle.getString("SimpleDialogButtonCreate");
+        SIMPLE_DIALOG_BUTTON_APPLY = bundle.getString("SimpleDialogButtonApply");
         SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");
         SIMPLE_DIALOG_BUTTON_CLOSE = bundle.getString("SimpleDialogButtonClose");
+        SIMPLE_DIALOG_BUTTON_YES = bundle.getString("SimpleDialogButtonYes");
+        SIMPLE_DIALOG_BUTTON_NO = bundle.getString("SimpleDialogButtonNo");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");

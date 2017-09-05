@@ -3,24 +3,18 @@ package com.ss.editor.ui.control.model.property.control.particle;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.math.Vector2f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector2FPropertyControl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link Vector2fModelPropertyControl} to edit images count of the {@link
+ * The implementation of the {@link Vector2FPropertyControl} to edit images count of the {@link
  * ParticleEmitter}*.
  *
  * @author JavaSaBr.
  */
-public class ParticleEmitterImagesModelPropertyControl extends Vector2fModelPropertyControl<ParticleEmitter> {
+public class ParticleEmitterImagesModelPropertyControl extends
+        Vector2FPropertyControl<ModelChangeConsumer, ParticleEmitter> {
 
-    /**
-     * Instantiates a new particles emitter images model property control.
-     *
-     * @param element             the element
-     * @param paramName           the param name
-     * @param modelChangeConsumer the model change consumer
-     */
     public ParticleEmitterImagesModelPropertyControl(@NotNull final Vector2f element,
                                                      @NotNull final String paramName,
                                                      @NotNull final ModelChangeConsumer modelChangeConsumer) {

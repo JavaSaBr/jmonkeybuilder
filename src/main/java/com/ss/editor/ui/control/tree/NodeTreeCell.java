@@ -37,7 +37,7 @@ import java.util.Set;
  * @param <M> the type parameter
  * @author JavaSaBr
  */
-public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<TreeNode<?>> {
+public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<TreeNode<?>> {
 
     @NotNull
     private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
@@ -169,11 +169,6 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      */
     private boolean ignoreUpdate;
 
-    /**
-     * Instantiates a new Abstract node tree cell.
-     *
-     * @param nodeTree the node tree
-     */
     public NodeTreeCell(@NotNull final M nodeTree) {
         this.nodeTree = nodeTree;
         this.icon = new ImageView();
@@ -279,8 +274,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     /**
      * @return the icon of node.
      */
-    @NotNull
-    private ImageView getIcon() {
+    private @NotNull ImageView getIcon() {
         return icon;
     }
 
@@ -334,8 +328,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      *
      * @return the tree.
      */
-    @NotNull
-    protected M getNodeTree() {
+    protected @NotNull M getNodeTree() {
         return nodeTree;
     }
 

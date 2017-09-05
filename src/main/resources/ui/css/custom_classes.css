@@ -1103,6 +1103,29 @@
 .file-creator-dialog > .hbox > .vbox > .border-pane {
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Save As Dialog                                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.save-as-dialog {
+}
+
+.save-as-dialog > .hbox {
+    -fx-alignment: center-left;
+}
+
+.save-as-dialog > .hbox > .vbox > .grid-pane,
+.save-as-dialog > .hbox > .grid-pane {
+    -fx-alignment: top-left;
+    -fx-vgap: 2px;
+    -fx-hgap: 2px;
+}
+
+.save-as-dialog > .hbox > .vbox > .border-pane {
+}
+
 
 /*******************************************************************************
  *                                                                             *
@@ -1186,6 +1209,20 @@
     -fx-min-height: 500px;
     -fx-min-width: 500px;
     -fx-border-color: -var-border-color;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Open External Folder Editor Dialog                                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.open-external-folder-editor-dialog {
+}
+
+.open-external-folder-editor-dialog > .tree-view {
+    -fx-min-height: 400px;
+    -fx-min-width: 700px;
 }
 
 /*******************************************************************************

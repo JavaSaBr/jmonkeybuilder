@@ -74,3 +74,9 @@ ui/icons/svg/picture.svg icon made by http://www.flaticon.com/authors/madebyoliv
 ui/icons/svg/document.svg icon made by http://www.flaticon.com/authors/madebyoliver from www.flaticon.com
 ui/icons/svg/plug-silhouette.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
 ui/icons/filetypes/cube.svg icon made by https://www.flaticon.com/authors/madebyoliver from www.flaticon.com
+ui/icons/filetypes/parquet.svg icon made by https://www.flaticon.com/authors/madebyoliver from www.flaticon.com
+ui/icons/svg/draws.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/svg/scale-symbol.svg icon made by https://www.flaticon.com/authors/popcic from www.flaticon.com
+ui/icons/svg/font-selection-editor.svg made by https://www.flaticon.com/authors/dave-gandy from www.flaticon.com
+ui/icons/svg/inbox.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/svg/debug.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
