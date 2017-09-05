@@ -123,15 +123,13 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
         return spansBuilder.create();
     }
 
-    @NotNull
     @Override
-    protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
+    protected @NotNull StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         return computeHighlighting(text);
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 }

@@ -5,8 +5,8 @@
     <property name="editor.version" value="1.2.0"/>
     <property environment="env"/>
 
-    <condition property="gradle.executable" value="${env.GRADLE_HOME}/bin/gradle.bat"
-               else="${env.GRADLE_HOME}/bin/gradle">
+    <condition property="gradle.executable" value="${basedir}/../gradlew.bat"
+               else="${basedir}/../gradlew">
         <os family="windows"/>
     </condition>
 
