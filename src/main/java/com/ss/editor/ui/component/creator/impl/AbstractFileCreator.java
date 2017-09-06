@@ -238,7 +238,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
                 notifyFileCreated(fileToCreate, true);
 
-            } catch (final IOException e) {
+            } catch (final Exception e) {
                 Utils.run(tempFile, Files::delete);
                 EditorUtil.handleException(LOGGER, this, e);
             }

@@ -73,9 +73,8 @@ public class JFXApplication extends Application {
      *
      * @return the instance
      */
-    @NotNull
     @FromAnyThread
-    public static JFXApplication getInstance() {
+    public static @NotNull JFXApplication getInstance() {
         return notNull(instance);
     }
 
@@ -84,9 +83,8 @@ public class JFXApplication extends Application {
      *
      * @return the current stage.
      */
-    @Nullable
     @FromAnyThread
-    private static Stage getStage() {
+    private static @Nullable Stage getStage() {
         final JFXApplication instance = JFXApplication.instance;
         return instance == null ? null : instance.stage;
     }
@@ -245,8 +243,7 @@ public class JFXApplication extends Application {
      *
      * @return the last opened window.
      */
-    @NotNull
-    public Window getLastWindow() {
+    public @NotNull Window getLastWindow() {
         return notNull(ArrayUtils.getInReadLock(openedWindows, Array::last));
     }
 
@@ -412,9 +409,8 @@ public class JFXApplication extends Application {
      *
      * @return the JavaFX scene.
      */
-    @NotNull
     @FromAnyThread
-    public EditorFXScene getScene() {
+    public @NotNull EditorFXScene getScene() {
         return notNull(scene, "Scene can't be null.");
     }
 
@@ -423,9 +419,8 @@ public class JFXApplication extends Application {
      *
      * @return the scene processor.
      */
-    @NotNull
     @FromAnyThread
-    public FrameTransferSceneProcessor getSceneProcessor() {
+    public @NotNull FrameTransferSceneProcessor getSceneProcessor() {
         return notNull(sceneProcessor, "Scene processor can't be null.");
     }
 }

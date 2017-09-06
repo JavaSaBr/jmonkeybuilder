@@ -86,8 +86,7 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     /**
      * @return the image view to show preview of texture.
      */
-    @NotNull
-    private ImageView getImageView() {
+    private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 
@@ -97,22 +96,19 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
         return true;
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    protected @NotNull String getTitleText() {
         return Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    protected @NotNull String getFileExtension() {
         return FileExtensions.IMAGE_PNG;
     }
 
-    @NotNull
     @Override
     @FromAnyThread
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return DEFINITIONS;
     }
 

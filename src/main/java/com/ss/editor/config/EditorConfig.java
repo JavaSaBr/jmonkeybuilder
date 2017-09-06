@@ -16,6 +16,7 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -846,6 +847,8 @@ public final class EditorConfig implements AssetEventListener {
      */
     @FromAnyThread
     public AppSettings getSettings() {
+
+        System.out.println("Classloader is from :" + Utils.getRootFolderFromClass(AppSettings.class));
 
         final GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         final GraphicsDevice device = graphicsEnvironment.getDefaultScreenDevice();
