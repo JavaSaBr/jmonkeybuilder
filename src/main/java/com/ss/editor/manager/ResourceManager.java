@@ -88,8 +88,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @return the instance
      */
-    @NotNull
-    public static ResourceManager getInstance() {
+    public static @NotNull ResourceManager getInstance() {
         if (instance == null) instance = new ResourceManager();
         return instance;
     }
@@ -242,16 +241,16 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @return the list.
      */
-    @NotNull
-    public Array<Path> getAdditionalEnvs() {
+    @FromAnyThread
+    public @NotNull Array<Path> getAdditionalEnvs() {
         return additionalEnvs;
     }
 
     /**
      * @return the table with last modify dates.
      */
-    @NotNull
-    private ObjectDictionary<String, Reference> getAssetCacheTable() {
+    @FromAnyThread
+    private @NotNull ObjectDictionary<String, Reference> getAssetCacheTable() {
         return assetCacheTable;
     }
 
@@ -300,22 +299,23 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * @return the list of material definitions in the classpath.
      */
-    @NotNull
-    private Array<String> getMaterialDefinitionsInClasspath() {
+    @FromAnyThread
+    private @NotNull Array<String> getMaterialDefinitionsInClasspath() {
         return materialDefinitionsInClasspath;
     }
 
     /**
      * @return the list of resources in the classpath.
      */
-    @NotNull
-    private Array<String> getResourcesInClasspath() {
+    @FromAnyThread
+    private @NotNull Array<String> getResourcesInClasspath() {
         return resourcesInClasspath;
     }
 
     /**
      * Prepare classpath resources.
      */
+    @FromAnyThread
     private void prepareClasspathResources() {
         final Array<String> materialDefinitionsInClasspath = getMaterialDefinitionsInClasspath();
         final Array<String> resourcesInClasspath = getResourcesInClasspath();
@@ -329,8 +329,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * @return the list of available material definitions in the classpath.
      */
-    @NotNull
-    private Array<String> getMaterialDefinitions() {
+    @FromAnyThread
+    private @NotNull Array<String> getMaterialDefinitions() {
         return materialDefinitions;
     }
 
@@ -339,8 +339,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @return the list of an additional classpath.
      */
-    @NotNull
-    public Array<URLClassLoader> getClassLoaders() {
+    @FromAnyThread
+    public @NotNull Array<URLClassLoader> getClassLoaders() {
         return classLoaders;
     }
 
@@ -349,9 +349,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @return the list of all available material definitions.
      */
-    @NotNull
     @FromAnyThread
-    public synchronized Array<String> getAvailableMaterialDefinitions() {
+    public synchronized @NotNull Array<String> getAvailableMaterialDefinitions() {
         final Array<String> result = ArrayFactory.newArray(String.class);
         addAvailableMaterialDefinitionsTo(result);
         return result;
@@ -420,6 +419,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         }
     }
 
+    @FromAnyThread
     private static void registerFiles(@NotNull final Array<WatchKey> watchKeys, @NotNull final Path file) {
         watchKeys.add(get(file, toRegister -> toRegister.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
     }
@@ -526,9 +526,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @param path the file.
      * @return the watch key or null.
      */
-    @Nullable
     @FromAnyThread
-    private synchronized WatchKey findWatchKey(@NotNull final Path path) {
+    private synchronized @Nullable WatchKey findWatchKey(@NotNull final Path path) {
         final Array<WatchKey> watchKeys = getWatchKeys();
         return watchKeys.search(path, (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
     }
@@ -562,6 +561,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Handle refreshing asset folder.
      */
+    @FromAnyThread
     private void processRefreshAsset() {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
     }
@@ -569,6 +569,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Handle changing asset folder.
      */
+    @FromAnyThread
     private void processChangeAsset() {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
     }
@@ -576,8 +577,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * @return the list of keys for watching to folders.
      */
-    @NotNull
-    private Array<WatchKey> getWatchKeys() {
+    @FromAnyThread
+    private @NotNull Array<WatchKey> getWatchKeys() {
         return watchKeys;
     }
 }

@@ -4,6 +4,7 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -19,12 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
-import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +91,8 @@ public class Workspace implements Serializable {
     /**
      * Notify about finished restoring this workspace.
      */
-    public void notifyRestored() {
+    @FromAnyThread
+    public synchronized void notifyRestored() {
 
         if (openedFiles == null) {
             openedFiles = new HashMap<>();
@@ -116,7 +115,8 @@ public class Workspace implements Serializable {
      *
      * @return the current edited file.
      */
-    public @Nullable String getCurrentEditedFile() {
+    @FromAnyThread
+    public synchronized @Nullable String getCurrentEditedFile() {
         return currentEditedFile;
     }
 
@@ -125,6 +125,7 @@ public class Workspace implements Serializable {
      *
      * @param file the current edited file.
      */
+    @FromAnyThread
     public synchronized void updateCurrentEditedFile(@Nullable final Path file) {
 
         if (file == null) {
@@ -139,14 +140,16 @@ public class Workspace implements Serializable {
     /**
      * @return the table with states of editors.
      */
-    private @NotNull Map<String, EditorState> getEditorStateMap() {
+    @FromAnyThread
+    private synchronized @NotNull Map<String, EditorState> getEditorStateMap() {
         return notNull(editorStateMap);
     }
 
     /**
      * @return the list of expanded folders.
      */
-    private @NotNull List<String> getExpandedFolders() {
+    @FromAnyThread
+    private synchronized @NotNull List<String> getExpandedFolders() {
         return notNull(expandedFolders);
     }
 
@@ -155,6 +158,7 @@ public class Workspace implements Serializable {
      *
      * @return the list of expanded absolute folders.
      */
+    @FromAnyThread
     public synchronized @NotNull Array<Path> getExpandedAbsoluteFolders() {
 
         final Array<Path> result = ArrayFactory.newArray(Path.class);
@@ -171,6 +175,7 @@ public class Workspace implements Serializable {
      *
      * @param folders the folders
      */
+    @FromAnyThread
     public synchronized void updateExpandedFolders(@NotNull final Array<Path> folders) {
 
         final List<String> expandedFolders = getExpandedFolders();
@@ -190,6 +195,7 @@ public class Workspace implements Serializable {
      * @param stateFactory the state factory.
      * @return the state of the editor.
      */
+    @FromAnyThread
     public synchronized <T extends EditorState> @NotNull T getEditorState(@NotNull final Path file,
                                                                           @NotNull final Supplier<EditorState> stateFactory) {
 
@@ -213,6 +219,7 @@ public class Workspace implements Serializable {
      *
      * @param file the file.
      */
+    @FromAnyThread
     public synchronized void removeEditorState(@NotNull final Path file) {
 
         final Path assetFile = getAssetFile(getAssetFolder(), file);
@@ -229,7 +236,8 @@ public class Workspace implements Serializable {
      *
      * @param assetFolder the asset folder of this workspace.
      */
-    public void setAssetFolder(@NotNull final Path assetFolder) {
+    @FromAnyThread
+    public synchronized void setAssetFolder(@NotNull final Path assetFolder) {
         this.assetFolder = assetFolder;
     }
 
@@ -238,7 +246,8 @@ public class Workspace implements Serializable {
      *
      * @return the table of opened files.
      */
-    public @NotNull Map<String, String> getOpenedFiles() {
+    @FromAnyThread
+    public synchronized @NotNull Map<String, String> getOpenedFiles() {
         return notNull(openedFiles);
     }
 
@@ -248,6 +257,7 @@ public class Workspace implements Serializable {
      * @param file       the opened file.
      * @param fileEditor the editor.
      */
+    @FromAnyThread
     public synchronized void addOpenedFile(@NotNull final Path file, @NotNull final FileEditor fileEditor) {
 
         final Path assetFile = getAssetFile(getAssetFolder(), file);
@@ -267,6 +277,7 @@ public class Workspace implements Serializable {
      *
      * @param file the removed file.
      */
+    @FromAnyThread
     public synchronized void removeOpenedFile(@NotNull final Path file) {
 
         final Path assetFile = getAssetFile(getAssetFolder(), file);
@@ -283,13 +294,15 @@ public class Workspace implements Serializable {
      *
      * @return the asset folder of this workspace.
      */
-    public @NotNull Path getAssetFolder() {
+    @FromAnyThread
+    public synchronized @NotNull Path getAssetFolder() {
         return notNull(assetFolder);
     }
 
     /**
      * Increase a counter of changes.
      */
+    @FromAnyThread
     private void incrementChanges() {
         changes.incrementAndGet();
     }
@@ -297,7 +310,8 @@ public class Workspace implements Serializable {
     /**
      * Clear this workspace.
      */
-    public void clear() {
+    @FromAnyThread
+    public synchronized void clear() {
         getOpenedFiles().clear();
     }
 
@@ -306,7 +320,8 @@ public class Workspace implements Serializable {
      *
      * @param force the force
      */
-    public void save(final boolean force) {
+    @FromAnyThread
+    public synchronized void save(final boolean force) {
         if (!force && changes.get() == 0) return;
 
         final Path assetFolder = getAssetFolder();
@@ -342,16 +357,8 @@ public class Workspace implements Serializable {
 
         changes.set(0);
 
-        final byte[] serialize = EditorUtil.serialize(this);
-
-        try (final SeekableByteChannel channel = Files.newByteChannel(workspaceFile, StandardOpenOption.WRITE)) {
-
-            final ByteBuffer buffer = ByteBuffer.wrap(serialize);
-            buffer.position(serialize.length);
-            buffer.flip();
-
-            channel.write(buffer);
-
+        try {
+            Files.write(workspaceFile, EditorUtil.serialize(this));
         } catch (final IOException e) {
             LOGGER.warning(e);
         }

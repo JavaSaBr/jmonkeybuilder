@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.asset;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.WorkspaceManager;
@@ -35,9 +37,15 @@ public class AssetComponent extends VBox implements ScreenComponent {
     @NotNull
     private static final String COMPONENT_ID = "AssetComponent";
 
+    /**
+     * The executor manager.
+     */
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The event manager.
+     */
     @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
@@ -83,14 +91,15 @@ public class AssetComponent extends VBox implements ScreenComponent {
      *
      * @return the list of waited files to select.
      */
-    @NotNull
-    private Array<Path> getWaitedFilesToSelect() {
+    @FromAnyThread
+    private @NotNull Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
 
     /**
      * Handle request for selection a file.
      */
+    @FXThread
     private void processEvent(@NotNull final RequestSelectFileEvent event) {
 
         final Path file = event.getFile();
@@ -110,6 +119,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle a created file.
      */
+    @FXThread
     private void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
@@ -127,6 +137,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle a deleted file.
      */
+    @FXThread
     private void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
@@ -143,19 +154,15 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle changing an asset folder.
      */
+    @FXThread
     private void processChangeAsset() {
-
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return;
-
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.fill(currentAsset);
+        loadAssetFolder();
     }
 
     /**
      * Handle refreshing.
      */
+    @FXThread
     private void processRefresh() {
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.refresh();
@@ -164,6 +171,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Create components.
      */
+    @FXThread
     private void createComponents() {
         setIgnoreExpanded(true);
 
@@ -184,6 +192,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle changing loading state of the tree.
      */
+    @FXThread
     private void handleTreeLoading(@NotNull final Boolean finished) {
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
@@ -206,6 +215,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      *
      * @return true if the expand listener is ignored.
      */
+    @FromAnyThread
     private boolean isIgnoreExpanded() {
         return ignoreExpanded;
     }
@@ -215,6 +225,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      *
      * @param ignoreExpanded the flag for ignoring expand changes.
      */
+    @FromAnyThread
     private void setIgnoreExpanded(final boolean ignoreExpanded) {
         this.ignoreExpanded = ignoreExpanded;
     }
@@ -222,6 +233,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle changes count of expanded folders.
      */
+    @FXThread
     private void updateExpanded(final int count, final ResourceTree tree) {
         if (isIgnoreExpanded()) return;
 
@@ -244,26 +256,33 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * @return the toolbar of this component.
      */
-    @NotNull
-    private AssetBarComponent getBarComponent() {
+    @FXThread
+    private @NotNull AssetBarComponent getBarComponent() {
         return notNull(barComponent);
     }
 
     /**
      * @return the resource tree.
      */
-    @NotNull
-    private ResourceTree getResourceTree() {
+    @FXThread
+    private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 
     @Override
+    @FromAnyThread
     public String getComponentId() {
         return COMPONENT_ID;
     }
 
     @Override
+    @FXThread
     public void notifyFinishBuild() {
+        loadAssetFolder();
+    }
+
+    @FXThread
+    private void loadAssetFolder() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
