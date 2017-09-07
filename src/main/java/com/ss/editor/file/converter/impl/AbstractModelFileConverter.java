@@ -84,7 +84,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final boolean isOverwrite = Files.exists(destination);
 
         final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
-        final ModelKey modelKey = new ModelKey(assetFile.toString());
+        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);

@@ -27,8 +27,6 @@ public class FolderAssetLocator implements AssetLocator {
     @Override
     public AssetInfo locate(final AssetManager manager, final AssetKey key) {
 
-        System.out.println("Locate " + key.getName() + " in the " + key.getFolder());
-
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return null;
