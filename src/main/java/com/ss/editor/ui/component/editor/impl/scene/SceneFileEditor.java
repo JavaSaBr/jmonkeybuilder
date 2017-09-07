@@ -44,6 +44,7 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -143,7 +144,7 @@ public class SceneFileEditor extends
 
     @Override
     @FXThread
-    protected void doOpenFile(@NotNull final Path file) {
+    protected void doOpenFile(@NotNull final Path file) throws IOException {
         super.doOpenFile(file);
 
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");

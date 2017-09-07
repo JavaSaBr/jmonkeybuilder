@@ -38,6 +38,7 @@ import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
@@ -150,7 +151,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     @Override
     @FXThread
-    protected void doOpenFile(@NotNull final Path file) {
+    protected void doOpenFile(@NotNull final Path file) throws IOException {
         super.doOpenFile(file);
 
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");

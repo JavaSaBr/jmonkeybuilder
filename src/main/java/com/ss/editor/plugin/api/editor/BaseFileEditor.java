@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
@@ -37,7 +38,13 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
-        doOpenFile(file);
+
+        try {
+            doOpenFile(file);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+
         EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
@@ -73,7 +80,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * @param file the file to open.
      */
     @FXThread
-    protected void doOpenFile(@NotNull final Path file) {
+    protected void doOpenFile(@NotNull final Path file) throws IOException {
     }
 
     /**
