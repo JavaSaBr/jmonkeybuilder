@@ -35,6 +35,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {

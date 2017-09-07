@@ -41,35 +41,31 @@ import java.util.function.Predicate;
  */
 public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
+    @NotNull
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    /**
-     * Instantiates a new Link model action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public LinkModelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.LINK_FILE_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_LINK_MODEL;
     }
 
@@ -85,6 +81,7 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
      *
      * @param file the file
      */
+    @FXThread
     protected void processOpen(@NotNull final Path file) {
 
         final NodeTree<?> nodeTree = getNodeTree();

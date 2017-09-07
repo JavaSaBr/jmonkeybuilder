@@ -19,30 +19,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Tangent generator action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public TangentGeneratorAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.MESH_16;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
         final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());

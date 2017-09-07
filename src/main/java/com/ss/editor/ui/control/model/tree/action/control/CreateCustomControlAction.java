@@ -32,12 +32,14 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.GEAR_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

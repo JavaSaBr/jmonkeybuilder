@@ -9,9 +9,9 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.layer.node.SceneLayerTreeNode;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.RemoveSceneLayerOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -24,30 +24,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsumer> {
 
-    /**
-     * Instantiates a new Remove scene layer action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public RemoveSceneLayerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.REMOVE_12;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 

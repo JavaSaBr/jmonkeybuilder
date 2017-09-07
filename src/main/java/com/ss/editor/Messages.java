@@ -821,6 +821,10 @@ public class Messages {
      */
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     /**
+     * The constant MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE;
+    /**
      * The constant MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION.
      */
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
@@ -2639,6 +2643,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
+        MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE = bundle.getString("ModelNodeTreeActionAnimationPause");
         MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");

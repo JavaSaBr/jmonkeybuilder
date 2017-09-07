@@ -5,6 +5,7 @@ import com.jme3.effect.shapes.EmitterMeshFaceShape;
 import com.jme3.effect.shapes.EmitterMeshVertexShape;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
@@ -18,26 +19,19 @@ import java.util.List;
  */
 public class CreateMeshFaceShapeEmitterAction extends CreateMeshVertexShapeEmitterAction {
 
-    /**
-     * Instantiates a new Create mesh face shape emitter action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
-    public CreateMeshFaceShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
-                                            @NotNull final TreeNode<?> node) {
+    public CreateMeshFaceShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected EmitterMeshVertexShape createEmitterShape(@NotNull final List<Mesh> meshes) {
+    @FXThread
+    protected @NotNull EmitterMeshVertexShape createEmitterShape(@NotNull final List<Mesh> meshes) {
         return new EmitterMeshFaceShape(meshes);
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_FACE_SHAPE;
     }
 }

@@ -7,6 +7,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -21,31 +22,25 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateMotionControlAction extends AbstractCreateControlAction {
 
-    /**
-     * Instantiates a new Create motion control action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateMotionControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.GEAR_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
     }
 
-    @NotNull
     @Override
-    protected Control createControl(@NotNull final Spatial parent) {
+    @FXThread
+    protected @NotNull Control createControl(@NotNull final Spatial parent) {
 
         final MotionPath motionPath = new MotionPath();
         motionPath.addWayPoint(Vector3f.ZERO.clone());

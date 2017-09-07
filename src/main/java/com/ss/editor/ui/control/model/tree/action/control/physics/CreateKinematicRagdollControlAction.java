@@ -4,6 +4,7 @@ import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -19,32 +20,25 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateKinematicRagdollControlAction extends AbstractCreateControlAction {
 
-    /**
-     * Instantiates a new Create kinematic ragdoll control action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
-    public CreateKinematicRagdollControlAction(@NotNull final NodeTree<?> nodeTree,
-                                               @NotNull final TreeNode<?> node) {
+    public CreateKinematicRagdollControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
+    @FXThread
     @Override
-    protected Image getIcon() {
+    protected @Nullable Image getIcon() {
         return Icons.ATOM_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL;
     }
 
-    @NotNull
     @Override
-    protected Control createControl(@NotNull final Spatial parent) {
+    @FXThread
+    protected @NotNull Control createControl(@NotNull final Spatial parent) {
         return new KinematicRagdollControl(0.5F);
     }
 }

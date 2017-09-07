@@ -49,11 +49,13 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
     }
 
     @Override
+    @FXThread
     protected @Nullable Image getIcon() {
         return Icons.SAVE_16;
     }
 
     @Override
+    @FXThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_SAVE_AS;
     }
@@ -70,6 +72,7 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
      *
      * @param file the file to save
      */
+    @FXThread
     private void processSave(@NotNull final Path file) {
 
         final TreeNode<?> node = getNode();

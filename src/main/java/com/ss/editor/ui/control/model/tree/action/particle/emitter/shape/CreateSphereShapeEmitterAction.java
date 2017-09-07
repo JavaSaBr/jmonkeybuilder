@@ -7,10 +7,11 @@ import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -31,47 +32,40 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     @NotNull
     private static final String PROPERTY_RADIUS = "radius";
 
-    /**
-     * Instantiates a new Create sphere shape emitter action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
-    public CreateSphereShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
-                                          @NotNull final TreeNode<?> node) {
+    public CreateSphereShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.SPHERE_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE;
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    @FXThread
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_CENTER, PROPERTY_CENTER, new Vector3f(1F, 1F, 1F)));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));
         return definitions;
     }
 
-    @NotNull
     @Override
-    protected String getDialogTitle() {
+    @FXThread
+    protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected EmitterShape createEmitterShape(@NotNull final VarTable vars) {
+    @FXThread
+    protected @NotNull EmitterShape createEmitterShape(@NotNull final VarTable vars) {
         final Vector3f center = vars.get(PROPERTY_CENTER);
         final float radius = vars.getFloat(PROPERTY_RADIUS);
         return new EmitterSphereShape(center, radius);

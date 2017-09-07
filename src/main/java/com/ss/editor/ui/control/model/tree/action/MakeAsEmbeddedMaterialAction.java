@@ -27,11 +27,13 @@ public class MakeAsEmbeddedMaterialAction extends AbstractNodeAction<ChangeConsu
     }
 
     @Override
+    @FXThread
     protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
     @Override
+    @FXThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED;
     }

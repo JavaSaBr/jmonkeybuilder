@@ -24,30 +24,24 @@ import javafx.scene.image.Image;
  */
 public class RemoveLightAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Remove light action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public RemoveLightAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.REMOVE_12;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 

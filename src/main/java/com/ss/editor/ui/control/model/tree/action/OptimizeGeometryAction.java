@@ -23,30 +23,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Optimize geometry action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public OptimizeGeometryAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 

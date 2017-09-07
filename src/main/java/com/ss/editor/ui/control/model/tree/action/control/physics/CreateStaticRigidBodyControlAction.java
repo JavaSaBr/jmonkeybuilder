@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.control.physics;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -17,32 +18,27 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateStaticRigidBodyControlAction extends CreateRigidBodyControlAction {
 
-    /**
-     * Instantiates a new Create static rigid body control action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateStaticRigidBodyControlAction(@NotNull final NodeTree<?> nodeTree,
                                               @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.STATIC_RIGID_BODY_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
     }
 
-    @NotNull
+
     @Override
-    protected RigidBodyControl createControl(@NotNull final Spatial parent) {
+    @FXThread
+    protected @NotNull RigidBodyControl createControl(@NotNull final Spatial parent) {
         final RigidBodyControl rigidBodyControl = super.createControl(parent);
         rigidBodyControl.setMass(0F);
         return rigidBodyControl;

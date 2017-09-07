@@ -3,12 +3,13 @@ package com.ss.editor.ui.control.model.tree.action.animation;
 import com.jme3.animation.*;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationTreeNode;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.image.Image;
@@ -22,30 +23,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer> implements AnimEventListener {
 
-    /**
-     * Instantiates a new Play animation action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public PlayAnimationAction(final NodeTree<?> nodeTree, final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.PLAY_16;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -81,6 +76,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
     }
 
     @Override
+    @JMEThread
     public void onAnimCycleDone(@NotNull final AnimControl control, @NotNull final AnimChannel channel,
                                 @NotNull final String animName) {
 
@@ -97,6 +93,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
     }
 
     @Override
+    @JMEThread
     public void onAnimChange(@NotNull final AnimControl control, @NotNull final AnimChannel channel,
                              @NotNull final String animName) {
     }

@@ -24,30 +24,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Create node action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_NODE;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 

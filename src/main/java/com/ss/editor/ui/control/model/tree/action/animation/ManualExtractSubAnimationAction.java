@@ -20,30 +20,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Manual extract sub animation action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public ManualExtractSubAnimationAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.EXTRACT_16;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
