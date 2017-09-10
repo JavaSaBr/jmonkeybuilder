@@ -78,6 +78,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * Do main activities to open the file.
      *
      * @param file the file to open.
+     * @throws IOException if was some problem with writing to the file.
      */
     @FXThread
     protected void doOpenFile(@NotNull final Path file) throws IOException {

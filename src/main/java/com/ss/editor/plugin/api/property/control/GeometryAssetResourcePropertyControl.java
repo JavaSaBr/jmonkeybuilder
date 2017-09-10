@@ -4,6 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.VarTable;
@@ -23,9 +24,9 @@ public class GeometryAssetResourcePropertyControl extends SpatialAssetResourcePr
         super(vars, definition, validationCallback);
     }
 
-    @Nullable
     @Override
-    protected Geometry findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
+    @FXThread
+    protected @Nullable Geometry findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
         final Spatial spatial = assetManager.loadModel(modelKey);
         return NodeUtils.findGeometry(spatial);
     }

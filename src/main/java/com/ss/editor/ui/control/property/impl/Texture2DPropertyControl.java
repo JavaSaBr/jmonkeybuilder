@@ -9,6 +9,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -92,25 +93,32 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     public Texture2DPropertyControl(@Nullable final Texture2D propertyValue, @NotNull final String propertyName,
                                     @NotNull final C changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);
-        setOnDragOver(this::dragOver);
-        setOnDragDropped(this::dragDropped);
+        setOnDragOver(this::handleDragOverEvent);
+        setOnDragDropped(this::handleDragDroppedEvent);
     }
 
     /**
-     * Handle dropped files to editor.
+     * Handle drag dropped events.
+     *
+     * @param dragEvent the drag dropped event.
      */
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
     }
 
     /**
-     * Handle drag over.
+     * Handle drag over events.
+     *
+     * @param dragEvent the drag over event.
      */
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -160,18 +168,34 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
+    /**
+     * @return the disable|remove condition.
+     */
+    @FXThread
     protected @NotNull BooleanBinding buildDisableRemoveCondition() {
         return getTexturePreview().imageProperty().isNull();
     }
 
+    /**
+     * @return the texture label.
+     */
+    @FXThread
     private @NotNull Label getTextureLabel() {
         return notNull(textureLabel);
     }
 
+    /**
+     * @return the texture preview.
+     */
+    @FXThread
     private @NotNull ImageView getTexturePreview() {
         return notNull(texturePreview);
     }
 
+    /**
+     * @return the image channels preview.
+     */
+    @FXThread
     private @NotNull ImageChannelPreview getTextureTooltip() {
         return notNull(textureTooltip);
     }
@@ -179,6 +203,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to remove the current texture.
      */
+    @FXThread
     protected void processRemove() {
         setTexture(null);
     }
@@ -186,6 +211,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to add a new texture.
      */
+    @FXThread
     protected void processAdd() {
         UIUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
@@ -193,6 +219,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to open texture's settings.
      */
+    @FXThread
     protected void openSettings() {
 
         final Texture2D texture = notNull(getPropertyValue());
@@ -223,6 +250,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param varTable the var table.
      */
+    @FXThread
     private void applyChanges(@NotNull final VarTable varTable) {
 
         final Texture2D texture = notNull(getPropertyValue());
@@ -265,6 +293,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param file the file to new texture.
      */
+    @FXThread
     protected void setTexture(@Nullable final Path file) {
 
         if (file == null) {
@@ -285,6 +314,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     @Override
+    @FXThread
     protected void reload() {
 
         final Texture2D texture2D = getPropertyValue();

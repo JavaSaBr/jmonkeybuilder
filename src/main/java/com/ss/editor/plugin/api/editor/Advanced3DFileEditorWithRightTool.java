@@ -78,8 +78,8 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     protected void createEditorAreaPane() {
 
         editorAreaPane = new StackPane();
-        editorAreaPane.setOnDragOver(this::dragOver);
-        editorAreaPane.setOnDragDropped(this::dragDropped);
+        editorAreaPane.setOnDragOver(this::handleDragOverEvent);
+        editorAreaPane.setOnDragDropped(this::handleDragDroppedEvent);
 
         editor3DArea = new BorderPane();
         editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
@@ -132,20 +132,24 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      * Create and add tool components to the container.
      *
      * @param container the tool container.
-     * @param container the root.
+     * @param root the root.
      */
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
     /**
-     * Handle drag objects.
+     * Handle drag over events.
+     *
+     * @param dragEvent the drag event.
      */
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
     }
 
     /**
-     * Handle dropped texture.
+     * Handle dropped events.
+     *
+     * @param dragEvent the drop event.
      */
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
     }
 }

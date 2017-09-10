@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.property.control;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import javafx.scene.control.Label;
@@ -27,6 +28,7 @@ public class NodeElementModelPropertyControl<D> extends ElementModelPropertyCont
         return new NodeSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
 
+    @FXThread
     @Override
     protected void reload() {
 

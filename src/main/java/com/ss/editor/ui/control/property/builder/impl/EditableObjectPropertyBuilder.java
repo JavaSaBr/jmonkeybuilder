@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Vector4f;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
@@ -80,7 +81,16 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             case COLOR: {
 
                 final EditableProperty<ColorRGBA, ?> property = cast(description);
-                final ColorRGBA color = property.getValue();
+                final Object undefine = description.getValue();
+                final ColorRGBA color;
+
+                // for some cases with materials
+                if (undefine instanceof Vector4f) {
+                    final Vector4f vector4f = (Vector4f) undefine;
+                    color = new ColorRGBA(vector4f.getX(), vector4f.getY(), vector4f.getZ(), vector4f.getW());
+                } else {
+                    color = (ColorRGBA) undefine;
+                }
 
                 final ColorPropertyControl<C, EditableProperty<ColorRGBA, ?>> propertyControl =
                         new ColorPropertyControl<>(color, property.getName(), changeConsumer);

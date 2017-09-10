@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -33,6 +35,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -45,11 +48,13 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     }
 
     @Override
+    @FXThread
     protected void setPropertyValue(@Nullable final ColorRGBA color) {
         super.setPropertyValue(color == null ? null : color.clone());
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
@@ -57,11 +62,13 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     /**
      * @return the color picker.
      */
+    @FXThread
     private @NotNull ColorPicker getColorPicker() {
         return notNull(colorPicker);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         final ColorPicker colorPicker = getColorPicker();
         colorPicker.setValue(UIUtils.from(getPropertyValue()));
@@ -70,6 +77,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     /**
      * Updating value.
      */
+    @FXThread
     private void updateValue() {
         if (isIgnoreListener()) return;
 

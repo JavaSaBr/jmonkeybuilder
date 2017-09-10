@@ -203,15 +203,15 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
-        super.dragDropped(dragEvent);
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
+        super.handleDragDroppedEvent(dragEvent);
         UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
                 dragEvent, this::applyTexture);
     }
 
     @Override
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
-        super.dragOver(dragEvent);
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
+        super.handleDragOverEvent(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
     }
 

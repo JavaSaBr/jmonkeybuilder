@@ -1041,8 +1041,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
-        super.dragDropped(dragEvent);
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
+        super.handleDragDroppedEvent(dragEvent);
 
         UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
                 dragEvent, AbstractSceneFileEditor::addNewModel);
@@ -1052,8 +1052,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
-        super.dragOver(dragEvent);
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
+        super.handleDragOverEvent(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
     }
 

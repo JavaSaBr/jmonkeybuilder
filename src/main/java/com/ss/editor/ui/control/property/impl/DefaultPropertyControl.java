@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -44,6 +46,7 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
      *
      * @param toStringFunction the string function.
      */
+    @FromAnyThread
     public void setToStringFunction(@Nullable final Function<T, String> toStringFunction) {
         this.toStringFunction = toStringFunction;
     }
@@ -51,6 +54,7 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     /**
      * @return the string function.
      */
+    @FromAnyThread
     private @Nullable Function<T, String> getToStringFunction() {
         return toStringFunction;
     }
@@ -63,6 +67,7 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -75,6 +80,7 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     }
 
     @Override
+    @FXThread
     public void reload() {
         super.reload();
 

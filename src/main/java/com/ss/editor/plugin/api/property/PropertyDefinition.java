@@ -1,5 +1,6 @@
 package com.ss.editor.plugin.api.property;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -68,8 +69,8 @@ public final class PropertyDefinition {
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                               @NotNull final String id, @Nullable final Object defaultValue,
-                               @NotNull final Array<?> options) {
+                              @NotNull final String id, @Nullable final Object defaultValue,
+                              @NotNull final Array<?> options) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -94,38 +95,39 @@ public final class PropertyDefinition {
     /**
      * @return the type of the property.
      */
-    @NotNull
-    public EditablePropertyType getPropertyType() {
+    @FromAnyThread
+    public @NotNull EditablePropertyType getPropertyType() {
         return propertyType;
     }
 
     /**
      * @return the name of the property.
      */
-    @Nullable
-    public Object getDefaultValue() {
+    @FromAnyThread
+    public @Nullable Object getDefaultValue() {
         return defaultValue;
     }
 
     /**
      * @return the id of the property.
      */
-    @NotNull
-    public String getId() {
+    @FromAnyThread
+    public @NotNull String getId() {
         return id;
     }
 
     /**
      * @return the default value of the property.
      */
-    @NotNull
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return name;
     }
 
     /**
      * @return the max value.
      */
+    @FromAnyThread
     public float getMax() {
         return max;
     }
@@ -133,6 +135,7 @@ public final class PropertyDefinition {
     /**
      * @return the min value.
      */
+    @FromAnyThread
     public float getMin() {
         return min;
     }
@@ -140,8 +143,8 @@ public final class PropertyDefinition {
     /**
      * @return the options.
      */
-    @NotNull
-    public Array<?> getOptions() {
+    @FromAnyThread
+    public @NotNull Array<?> getOptions() {
         return options;
     }
 

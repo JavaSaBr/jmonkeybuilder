@@ -505,6 +505,16 @@ public class UIUtils {
      */
     @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
+
+        if (event == null) {
+            return;
+        }
+
+        final KeyCode code = event.getCode();
+        if (code == KeyCode.ESCAPE || code == KeyCode.ENTER) {
+            return;
+        }
+
         if (isNotHotKey(event)) {
             event.consume();
         }

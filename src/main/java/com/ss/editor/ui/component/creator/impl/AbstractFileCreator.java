@@ -251,6 +251,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * Write created data to the created file.
      *
      * @param resultFile the result file.
+     * @throws IOException if was some problem with writing to the result file.
      */
     @BackgroundThread
     protected void writeData(@NotNull final Path resultFile) throws IOException {

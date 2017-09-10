@@ -88,6 +88,7 @@ public class GenericFileCreator extends AbstractFileCreator {
      * Validate variables.
      *
      * @param vars the variables.
+     * @return true if the all variables are valid.
      */
     @FXThread
     protected boolean validate(@NotNull final VarTable vars) {
@@ -105,6 +106,7 @@ public class GenericFileCreator extends AbstractFileCreator {
      *
      * @param vars       the available variables.
      * @param resultFile the result file.
+     * @throws IOException if was some problem with writing to the result file.
      */
     @BackgroundThread
     protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {

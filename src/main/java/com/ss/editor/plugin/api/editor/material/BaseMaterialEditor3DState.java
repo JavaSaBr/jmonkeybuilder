@@ -172,6 +172,8 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
 
     /**
      * Update the {@link Material} in the {@link EditorThread}.
+     *
+     * @param material the new material.
      */
     protected void updateMaterialImpl(@NotNull final Material material) {
 
@@ -206,6 +208,8 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
 
     /**
      * Change the {@link ModelType} in the {@link EditorThread}.
+     *
+     * @param modelType the new model type.
      */
     protected void changeModeImpl(@NotNull final ModelType modelType) {
 
@@ -241,6 +245,8 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
 
     /**
      * Change the {@link Bucket} in the {@link EditorThread}.
+     *
+     * @param bucket the new bucket.
      */
     protected void changeBucketTypeImpl(@NotNull final Bucket bucket) {
 
@@ -314,8 +320,10 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
 
     /**
      * Update the light in the scene in the {@link EditorThread}.
+     *
+     * @param enabled true if light should be enabled.
      */
-    protected void updateLightEnabledImpl(boolean enabled) {
+    protected void updateLightEnabledImpl(final boolean enabled) {
         if (enabled == isLightEnabled()) return;
 
         final DirectionalLight light = getLightForCamera();

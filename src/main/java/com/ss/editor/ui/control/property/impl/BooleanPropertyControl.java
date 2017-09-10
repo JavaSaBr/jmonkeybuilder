@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -40,6 +42,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -52,6 +55,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
@@ -59,11 +63,13 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
     /**
      * @return the {@link CheckBox} with current value.
      */
+    @FXThread
     private @NotNull CheckBox getCheckBox() {
         return notNull(checkBox);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         final Boolean value = getPropertyValue();
         final CheckBox checkBox = getCheckBox();
@@ -73,6 +79,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
     /**
      * Update the value.
      */
+    @FXThread
     private void updateValue() {
         if (isIgnoreListener()) return;
         final CheckBox checkBox = getCheckBox();

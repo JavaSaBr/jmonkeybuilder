@@ -96,7 +96,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     }
 
     protected void applyParam(@NotNull final MatParam param, @NotNull final Material object,
-                            @Nullable final Object newValue) {
+                              @Nullable final Object newValue) {
         if (newValue == null) {
             object.clearParam(param.getName());
         } else {
