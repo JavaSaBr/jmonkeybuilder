@@ -37,6 +37,12 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
 
     @Override
     @FXThread
+    protected @Nullable Path getObject(@NotNull final ResourceElement element) {
+        return element.getFile();
+    }
+
+    @Override
+    @FXThread
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
         super.validate(warningLabel, element);
 
