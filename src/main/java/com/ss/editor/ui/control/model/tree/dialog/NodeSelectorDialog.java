@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.tree.dialog;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
@@ -57,13 +59,6 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     @Nullable
     private T selected;
 
-    /**
-     * Instantiates a new Node selector dialog.
-     *
-     * @param model   the model
-     * @param type    the type
-     * @param handler the handler
-     */
     public NodeSelectorDialog(@NotNull final Spatial model, @NotNull final Class<T> type,
                               @NotNull final Consumer<T> handler) {
         this.model = model;
@@ -82,18 +77,19 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      *
      * @return the model tree component.
      */
-    @NotNull
-    protected ModelNodeTree getNodeTree() {
+    @FXThread
+    protected @NotNull ModelNodeTree getNodeTree() {
         return notNull(nodeTree);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.NODE_SELECTOR_DIALOG_TITLE;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -107,6 +103,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected boolean isGridStructure() {
         return true;
     }
@@ -116,8 +113,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      *
      * @return the loaded model.
      */
-    @NotNull
-    protected Spatial getModel() {
+    @FXThread
+    protected @NotNull Spatial getModel() {
         return model;
     }
 
@@ -126,14 +123,15 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      *
      * @return the type of selectable objects.
      */
-    @NotNull
-    protected Class<T> getType() {
+    @FXThread
+    protected @NotNull Class<T> getType() {
         return type;
     }
 
     /**
      * Handle a selected object.
      */
+    @FXThread
     private void processSelect(@Nullable final Object object) {
         final Object result = object instanceof TreeNode ? ((TreeNode) object).getElement() : object;
         final Class<T> type = getType();
@@ -143,20 +141,21 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         handler.accept(selected);
         super.processOk();
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_SELECT;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

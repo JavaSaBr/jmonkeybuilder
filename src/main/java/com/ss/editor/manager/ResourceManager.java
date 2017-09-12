@@ -3,7 +3,6 @@ package com.ss.editor.manager;
 import static com.ss.editor.FileExtensions.*;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ArrayUtils.contains;
-import static com.ss.rlib.util.ArrayUtils.move;
 import static com.ss.rlib.util.FileUtils.getFiles;
 import static com.ss.rlib.util.FileUtils.toUrl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -83,11 +82,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Nullable
     private static ResourceManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
+    @FromAnyThread
     public static @NotNull ResourceManager getInstance() {
         if (instance == null) instance = new ResourceManager();
         return instance;
@@ -98,6 +93,18 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @NotNull
     private final ObjectDictionary<String, Reference> assetCacheTable;
+
+    /**
+     * The table with interested resources.
+     */
+    @NotNull
+    private final ObjectDictionary<String, Array<String>> interestedResources;
+
+    /**
+     * The table with interested resources in the classpath.
+     */
+    @NotNull
+    private final ObjectDictionary<String, Array<String>> interestedResourcesInClasspath;
 
     /**
      * The list of additional ENVs.
@@ -118,18 +125,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private final Array<String> resourcesInClasspath;
 
     /**
-     * The list of material definitions in the classpath.
-     */
-    @NotNull
-    private final Array<String> materialDefinitionsInClasspath;
-
-    /**
-     * The list of available material definitions in the classpath.
-     */
-    @NotNull
-    private final Array<String> materialDefinitions;
-
-    /**
      * The list of keys for watching to folders.
      */
     @NotNull
@@ -148,13 +143,12 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         this.watchKeys = ArrayFactory.newArray(WatchKey.class);
         this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
         this.resourcesInClasspath = classpathManager.getAllResources();
-        this.materialDefinitionsInClasspath = ArrayFactory.newArray(String.class);
-        this.materialDefinitions = ArrayFactory.newArray(String.class);
-
-        prepareClasspathResources();
+        this.interestedResources = DictionaryFactory.newObjectDictionary();
+        this.interestedResourcesInClasspath = DictionaryFactory.newObjectDictionary();
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
         executorManager.addFXTask(() -> {
+            prepareClasspathResources();
             final FXEventManager fxEventManager = FXEventManager.getInstance();
             fxEventManager.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
             fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
@@ -168,8 +162,91 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             assetManager.addAssetEventListener(this);
         });
 
+        registerInterestedFileType(FileExtensions.JME_MATERIAL_DEFINITION);
+        registerInterestedFileType(FileExtensions.JME_SHADER_NODE);
         updateAdditionalEnvs();
         start();
+    }
+
+    /**
+     * Try to find a resource by the resource path.
+     *
+     * @param resourcePath the resource path.
+     * @return the URL or null.
+     */
+    @FromAnyThread
+    public @Nullable URL tryToFindResource(@NotNull final String resourcePath) {
+
+        final Array<@NotNull ClassLoader> classLoaders = ArrayFactory.newArray(ClassLoader.class);
+        classLoaders.add(getClass().getClassLoader());
+
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+        final URLClassLoader classesLoader = classpathManager.getClassesLoader();
+        final URLClassLoader librariesLoader = classpathManager.getLibrariesLoader();
+
+        if (classesLoader != null) {
+            classLoaders.add(classesLoader);
+        }
+
+        if (librariesLoader != null) {
+            classLoaders.add(librariesLoader);
+        }
+
+        final PluginManager pluginManager = PluginManager.getInstance();
+        pluginManager.handlePlugins(plugin -> classLoaders.add(plugin.getClassLoader()));
+
+        final String altResourcePath = "/" + resourcePath;
+
+        URL url = null;
+
+        for (final ClassLoader classLoader : classLoaders) {
+            url = classLoader.getResource(resourcePath);
+            if (url != null) break;
+            url = classLoader.getResource(altResourcePath);
+            if (url != null) break;
+        }
+
+        if (url == null) {
+            url = getClass().getResource("/" + resourcePath);
+        }
+
+        return url;
+    }
+
+    /**
+     * @return the table with interested resources.
+     */
+    @FromAnyThread
+    private @NotNull ObjectDictionary<String, Array<String>> getInterestedResources() {
+        return interestedResources;
+    }
+
+    /**
+     * @return the table with interested resources in the classpath.
+     */
+    @FromAnyThread
+    private @NotNull ObjectDictionary<String, Array<String>> getInterestedResourcesInClasspath() {
+        return interestedResourcesInClasspath;
+    }
+
+    /**
+     * Register the file type of interested resources.
+     *
+     * @param fileExtension the file type.
+     */
+    public synchronized void registerInterestedFileType(@NotNull final String fileExtension) {
+
+        ObjectDictionary<String, Array<String>> resources = getInterestedResources();
+
+        if(!resources.containsKey(fileExtension)) {
+            resources.put(fileExtension, ArrayFactory.newArray(String.class));
+        }
+
+        resources = getInterestedResourcesInClasspath();
+
+        if(!resources.containsKey(fileExtension)) {
+            resources.put(fileExtension, ArrayFactory.newArray(String.class));
+        }
     }
 
     @Override
@@ -264,13 +341,17 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
 
+        final ObjectDictionary<String, Array<String>> interestedResources = getInterestedResources();
+        final Array<String> resources = interestedResources.get(extension);
+
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-            final Array<String> materialDefinitions = getMaterialDefinitions();
-            materialDefinitions.fastRemove(assetPath);
-        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
+        if (resources != null) {
+            resources.fastRemove(assetPath);
+        }
+
+        if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
@@ -297,14 +378,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
-     * @return the list of material definitions in the classpath.
-     */
-    @FromAnyThread
-    private @NotNull Array<String> getMaterialDefinitionsInClasspath() {
-        return materialDefinitionsInClasspath;
-    }
-
-    /**
      * @return the list of resources in the classpath.
      */
     @FromAnyThread
@@ -317,21 +390,16 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @FromAnyThread
     private void prepareClasspathResources() {
-        final Array<String> materialDefinitionsInClasspath = getMaterialDefinitionsInClasspath();
+
+        final ObjectDictionary<String, Array<String>> resources = getInterestedResourcesInClasspath();
         final Array<String> resourcesInClasspath = getResourcesInClasspath();
         resourcesInClasspath.forEach(resource -> {
-            if (resource.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-                materialDefinitionsInClasspath.add(resource);
+            final String extension = FileUtils.getExtension(resource);
+            final Array<String> toStore = resources.get(extension);
+            if (toStore != null) {
+                toStore.add(resource);
             }
         });
-    }
-
-    /**
-     * @return the list of available material definitions in the classpath.
-     */
-    @FromAnyThread
-    private @NotNull Array<String> getMaterialDefinitions() {
-        return materialDefinitions;
     }
 
     /**
@@ -345,33 +413,43 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
-     * Gets available material definitions.
+     * Get available resources by the file extension.
      *
+     * @param extension the interested extension.
      * @return the list of all available material definitions.
      */
     @FromAnyThread
-    public synchronized @NotNull Array<String> getAvailableMaterialDefinitions() {
+    public synchronized @NotNull Array<String> getAvailableResources(@NotNull final String extension) {
         final Array<String> result = ArrayFactory.newArray(String.class);
-        addAvailableMaterialDefinitionsTo(result);
+        addAvailableResources(result, extension);
         return result;
     }
 
     /**
-     * Add available material definitions to the result array.
+     * Add available interested resources to the result array by the file extension.
      *
-     * @param result the result
+     * @param result    the array to store result.
+     * @param extension the interested extension.
      */
     @FromAnyThread
-    public synchronized void addAvailableMaterialDefinitionsTo(@NotNull final Array<String> result) {
+    public synchronized void addAvailableResources(@NotNull final Array<String> result,
+                                                   @NotNull final String extension) {
 
-        final Array<String> materialDefinitions = getMaterialDefinitions();
+        final ObjectDictionary<String, Array<String>> resourcesInClasspath = getInterestedResourcesInClasspath();
+        final ObjectDictionary<String, Array<String>> resources = getInterestedResources();
 
-        move(materialDefinitions, result, false);
+        final Array<String> inAsset = resources.get(extension);
+        final Array<String> inClassPath = resourcesInClasspath.get(extension);
 
-        final Array<String> materialDefinitionsInClasspath = getMaterialDefinitionsInClasspath();
-        materialDefinitionsInClasspath.forEach(result, (resource, container) -> {
-            if (!container.contains(resource)) container.add(resource);
-        });
+        if (inAsset != null) {
+            result.addAll(inAsset);
+        }
+
+        if (inClassPath != null) {
+            inClassPath.forEach(result,
+                    (resource, toStore) -> !toStore.contains(resource),
+                    (resource, toStore) -> toStore.add(resource));
+        }
 
         result.sort(STRING_ARRAY_COMPARATOR);
     }
@@ -398,8 +476,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         assetManager.clearCache();
 
-        final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.clear();
+        final ObjectDictionary<String, Array<String>> interestedResources = getInterestedResources();
+        interestedResources.forEach((extension, resources) -> resources.clear());
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -433,11 +511,15 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         final String extension = FileUtils.getExtension(file);
 
-        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+        final ObjectDictionary<String, Array<String>> interestedResources = getInterestedResources();
+        final Array<String> toStore = interestedResources.get(extension);
+
+        if (toStore != null) {
             final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
-            final Array<String> materialDefinitions = getMaterialDefinitions();
-            materialDefinitions.add(toAssetPath(assetFile));
-        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
+            toStore.add(toAssetPath(assetFile));
+        }
+
+        if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();

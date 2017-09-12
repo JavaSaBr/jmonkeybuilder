@@ -22,6 +22,8 @@ import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
@@ -263,12 +265,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private FloatTextField hillMaxRadiusField;
 
-    /**
-     * Instantiates a new Create terrain dialog.
-     *
-     * @param parentNode the parent node
-     * @param nodeTree   the node tree
-     */
     public CreateTerrainDialog(@NotNull final TreeNode<?> parentNode, @NotNull final NodeTree<?> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
@@ -289,6 +285,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -448,6 +445,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * Update a list of available path sizes.
      */
+    @FXThread
     private void updatePathSizeValues() {
 
         final ComboBox<Integer> pathSizeComboBox = getPatchSizeComboBox();
@@ -475,118 +473,119 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the total size combo box.
      */
-    @NotNull
-    private ComboBox<Integer> getTotalSizeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<Integer> getTotalSizeComboBox() {
         return notNull(totalSizeComboBox);
     }
 
     /**
      * @return the patch size combo box.
      */
-    @NotNull
-    private ComboBox<Integer> getPatchSizeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<Integer> getPatchSizeComboBox() {
         return notNull(patchSizeComboBox);
     }
 
     /**
      * @return the alpha blend texture size combo box.
      */
-    @NotNull
-    private ComboBox<Integer> getAlphaBlendTextureSizeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<Integer> getAlphaBlendTextureSizeComboBox() {
         return notNull(alphaBlendTextureSizeComboBox);
     }
 
     /**
      * @return the min radius field.
      */
-    @NotNull
-    private FloatTextField getHillMinRadiusField() {
+    @FXThread
+    private @NotNull FloatTextField getHillMinRadiusField() {
         return notNull(hillMinRadiusField);
     }
 
     /**
      * @return the max radius field.
      */
-    @NotNull
-    private FloatTextField getHillMaxRadiusField() {
+    @FXThread
+    private @NotNull FloatTextField getHillMaxRadiusField() {
         return notNull(hillMaxRadiusField);
     }
 
     /**
      * @return the settingsRoot.
      */
-    @NotNull
-    private VBox getSettingsRoot() {
+    @FXThread
+    private @NotNull VBox getSettingsRoot() {
         return notNull(settingsRoot);
     }
 
     /**
      * @return the base texture control.
      */
-    @NotNull
-    private ChooseTextureControl getBaseTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getBaseTextureControl() {
         return notNull(baseTextureControl);
     }
 
     /**
      * @return the base image control.
      */
-    @NotNull
-    private ChooseTextureControl getHeightMapImageControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getHeightMapImageControl() {
         return notNull(heightMapImageControl);
     }
 
     /**
      * @return the type of height map.
      */
-    @NotNull
-    private ComboBox<HeightMapType> getHeightMapTypeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<HeightMapType> getHeightMapTypeComboBox() {
         return notNull(heightMapTypeComboBox);
     }
 
     /**
      * @return the height map scale field.
      */
-    @NotNull
-    private FloatTextField getHeightMapScaleField() {
+    @FXThread
+    private @NotNull FloatTextField getHeightMapScaleField() {
         return notNull(heightMapScaleField);
     }
 
     /**
      * @return the height map smooth field.
      */
-    @NotNull
-    private FloatTextField getHeightMapSmoothField() {
+    @FXThread
+    private @NotNull FloatTextField getHeightMapSmoothField() {
         return notNull(heightMapSmoothField);
     }
 
     /**
      * @return the flattening field.
      */
-    @NotNull
-    private IntegerTextField getHillFlatteningField() {
+    @FXThread
+    private @NotNull IntegerTextField getHillFlatteningField() {
         return notNull(hillFlatteningField);
     }
 
     /**
      * @return the iterations field.
      */
-    @NotNull
-    private IntegerTextField getHillIterationsField() {
+    @FXThread
+    private @NotNull IntegerTextField getHillIterationsField() {
         return notNull(hillIterationsField);
     }
 
     /**
      * @return the alpha texture folder control.
      */
-    @NotNull
-    private ChooseFolderControl getAlphaTextureFolderControl() {
+    @FXThread
+    private @NotNull ChooseFolderControl getAlphaTextureFolderControl() {
         return notNull(alphaTextureFolderControl);
     }
 
     /**
      * Handle changing type of heightmap.
      */
+    @FXThread
     private void processChangeType(@NotNull final HeightMapType newValue) {
 
         final VBox root = getSettingsRoot();
@@ -615,6 +614,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate.
      */
+    @FXThread
     private void validate() {
 
         final FloatTextField hillMaxRadiusField = getHillMaxRadiusField();
@@ -647,6 +647,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         super.processOk();
         EditorUtil.incrementLoading();
@@ -813,31 +814,31 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         changeConsumer.execute(new AddChildOperation(terrainNode, parent));
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.CREATE_TERRAIN_DIALOG_TITLE;
     }
 
     /**
      * @return the node tree.
      */
-    @NotNull
-    private NodeTree<?> getNodeTree() {
+    @FXThread
+    private @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
     /**
      * @return the parent node.
      */
-    @NotNull
-    private TreeNode<?> getParentNode() {
+    @FXThread
+    private @NotNull TreeNode<?> getParentNode() {
         return parentNode;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

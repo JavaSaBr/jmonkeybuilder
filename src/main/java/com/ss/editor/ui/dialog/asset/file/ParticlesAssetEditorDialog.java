@@ -1,4 +1,4 @@
-package com.ss.editor.ui.dialog.asset;
+package com.ss.editor.ui.dialog.asset.file;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -10,6 +10,7 @@ import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -61,18 +62,12 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     @Nullable
     private CheckBox applyLightingTransformCheckBox;
 
-    /**
-     * Instantiates a new Particles asset editor dialog.
-     *
-     * @param consumer the consumer
-     */
     public ParticlesAssetEditorDialog(@NotNull final Consumer<ParticlesMaterial> consumer) {
         super(consumer);
     }
 
-    @NotNull
     @Override
-    protected Region buildSecondPart(@NotNull final HBox container) {
+    protected @NotNull Region buildSecondPart(@NotNull final HBox container) {
 
         textureParamNameLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL + ":");
         textureParamNameLabel.prefWidthProperty().bind(container.widthProperty().multiply(0.25));
@@ -117,20 +112,21 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     /**
      * @return the combo box with texture parameter name.
      */
-    @NotNull
-    private ComboBox<String> getTextureParamNameComboBox() {
+    @FXThread
+    private @NotNull ComboBox<String> getTextureParamNameComboBox() {
         return notNull(textureParamNameComboBox);
     }
 
     /**
      * @return the check box for applying the lighting transform.
      */
-    @NotNull
-    private CheckBox getApplyLightingTransformCheckBox() {
+    @FXThread
+    private @NotNull CheckBox getApplyLightingTransformCheckBox() {
         return notNull(applyLightingTransformCheckBox);
     }
 
     @Override
+    @FXThread
     protected void processOpen(@NotNull final ResourceElement element) {
         super.processOpen(element);
 
@@ -155,9 +151,9 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         consumer.accept(new ParticlesMaterial(material, textureParamName, transformBox.isSelected()));
     }
 
-    @NotNull
     @Override
-    protected BooleanBinding buildDisableCondition() {
+    @FXThread
+    protected @NotNull BooleanBinding buildDisableCondition() {
         final ComboBox<String> comboBox = getTextureParamNameComboBox();
         final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
         return super.buildDisableCondition().or(selectionModel.selectedItemProperty()
@@ -165,6 +161,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     }
 
     @Override
+    @FXThread
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
 
         final ComboBox<String> comboBox = getTextureParamNameComboBox();

@@ -2,6 +2,8 @@ package com.ss.editor.ui.dialog;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -38,12 +40,6 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private Label questionLabel;
 
-    /**
-     * Instantiates a new Confirm dialog.
-     *
-     * @param handler  the handler
-     * @param question the question
-     */
     public ConfirmDialog(@NotNull final Consumer<@Nullable Boolean> handler, @NotNull final String question) {
         this.handler = handler;
         final Label questionLabel = getQuestionLabel();
@@ -53,16 +49,19 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the label.
      */
+    @FromAnyThread
     private @NotNull Label getQuestionLabel() {
         return notNull(questionLabel);
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getTitleText() {
         return Messages.QUESTION_DIALOG_TITLE;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -74,16 +73,19 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_YES;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getButtonCloseText() {
         return Messages.SIMPLE_DIALOG_BUTTON_NO;
     }
 
     @Override
+    @FXThread
     protected void processKey(@NotNull final KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             processClose();
@@ -91,12 +93,14 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         super.processOk();
         handler.accept(Boolean.TRUE);
     }
 
     @Override
+    @FXThread
     protected void processClose() {
         super.processClose();
         handler.accept(Boolean.FALSE);
@@ -111,11 +115,13 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 
     @Override
+    @FXThread
     protected void createAdditionalActions(@NotNull final HBox container) {
         super.createAdditionalActions(container);
 

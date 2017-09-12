@@ -20,6 +20,10 @@ public interface FileExtensions {
      */
     String JME_MATERIAL_DEFINITION = "j3md";
     /**
+     * The constant JME_SHADER_NODE.
+     */
+    String JME_SHADER_NODE = "j3sn";
+    /**
      * The constant JME_OBJECT.
      */
     String JME_OBJECT = "j3o";

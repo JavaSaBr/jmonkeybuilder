@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.filler.impl;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.ConvertFileAction;
@@ -30,6 +31,7 @@ public class FileAssetTreeSingleContextMenuFiller implements AssetTreeSingleCont
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
 
     @Override
+    @FXThread
     public void fill(@NotNull final ResourceElement element, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
 
@@ -60,6 +62,7 @@ public class FileAssetTreeSingleContextMenuFiller implements AssetTreeSingleCont
     }
 
     @Override
+    @FXThread
     public void fill(@NotNull final Array<ResourceElement> elements, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
     }

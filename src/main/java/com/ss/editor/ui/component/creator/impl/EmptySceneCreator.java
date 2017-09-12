@@ -7,6 +7,8 @@ import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -35,15 +37,15 @@ public class EmptySceneCreator extends AbstractFileCreator {
         DESCRIPTION.setConstructor(EmptySceneCreator::new);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.EMPTY_SCENE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    @FromAnyThread
+    protected @NotNull String getFileExtension() {
         return FileExtensions.JME_SCENE;
     }
 
@@ -65,8 +67,8 @@ public class EmptySceneCreator extends AbstractFileCreator {
      *
      * @return the scene node
      */
-    @NotNull
-    protected SceneNode createScene() {
+    @FXThread
+    protected @NotNull SceneNode createScene() {
         final SceneNode newNode = new SceneNode();
         newNode.addLayer(new SceneLayer("Default", true));
         newNode.addLayer(new SceneLayer("TransparentFX", true));

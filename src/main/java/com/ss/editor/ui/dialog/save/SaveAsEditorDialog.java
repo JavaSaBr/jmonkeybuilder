@@ -117,6 +117,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the title of filename field.
      */
+    @FXThread
     protected @NotNull String getFileNameLabelText() {
         return SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
     }
@@ -126,6 +127,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param extension the target file extension.
      */
+    @FXThread
     public void setExtension(@NotNull final String extension) {
         this.extension = extension;
         getResourceTree().setExtensionFilter(ArrayFactory.asArray(extension));
@@ -136,6 +138,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the target file extension.
      */
+    @FXThread
     private @NotNull String getExtension() {
         return extension == null ? "" : extension;
     }
@@ -145,11 +148,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param actionTester the action tester.
      */
+    @FXThread
     public void setActionTester(@NotNull final Predicate<@NotNull Class<?>> actionTester) {
         getResourceTree().setActionTester(actionTester);
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -205,6 +210,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param newValue the new selected item.
      */
+    @FXThread
     protected void processSelection(@Nullable final TreeItem<ResourceElement> newValue) {
 
         if (newValue != null) {
@@ -284,11 +290,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the filename field.
      */
+    @FXThread
     protected @NotNull TextField getFileNameField() {
         return notNull(fileNameField);
     }
 
     @Override
+    @FXThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -317,6 +325,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle creating file event.
      */
+    @FXThread
     private void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
@@ -334,6 +343,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle deleting file event.
      */
+    @FXThread
     private void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
@@ -345,6 +355,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle selecting file event.
      */
+    @FXThread
     private void processEvent(@NotNull final RequestSelectFileEvent event) {
 
         final Path file = event.getFile();
@@ -364,11 +375,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of waited files to select.
      */
+    @FXThread
     private @NotNull Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
 
     @Override
+    @FXThread
     public void hide() {
         FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
         FX_EVENT_MANAGER.removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
@@ -381,6 +394,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the function for handling the choose.
      */
+    @FXThread
     protected @NotNull Consumer<@NotNull Path> getConsumer() {
         return consumer;
     }
@@ -388,21 +402,25 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the tree with all resources.
      */
+    @FXThread
     private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getTitleText() {
         return SAVE_AS_EDITOR_DIALOG_TITLE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_SAVE;
     }

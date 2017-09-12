@@ -38,6 +38,7 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.ImageView;
@@ -92,8 +93,8 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @return the instance
      */
-    @NotNull
-    public static JMEFilePreviewManager getInstance() {
+    @FromAnyThread
+    public static @NotNull JMEFilePreviewManager getInstance() {
         if (instance == null) {
             synchronized (JMEFilePreviewManager.class) {
                 if (instance == null) {
@@ -105,11 +106,12 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
-     * Is jme file boolean.
+     * Check the file.
      *
      * @param file the file
      * @return true is the file is a JME file.
      */
+    @FromAnyThread
     public static boolean isJmeFile(@Nullable final Path file) {
         if (file == null) return false;
         final String extension = getExtension(file);
@@ -117,14 +119,41 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
-     * Is audio file boolean.
+     * Check the file by the asset path.
      *
-     * @param file the file
+     * @param assetPath the asset path.
      * @return true is the file is a JME file.
      */
+    @FromAnyThread
+    public static boolean isJmeFile(@Nullable final String assetPath) {
+        if (StringUtils.isEmpty(assetPath)) return false;
+        final String extension = getExtension(assetPath);
+        return JME_FORMATS.contains(extension);
+    }
+
+    /**
+     * Check the file.
+     *
+     * @param file the file
+     * @return true is the file is an audio file.
+     */
+    @FromAnyThread
     public static boolean isAudioFile(@Nullable final Path file) {
         if (file == null) return false;
         final String extension = getExtension(file);
+        return AUDIO_FORMATS.contains(extension);
+    }
+
+    /**
+     * Check the asset path.
+     *
+     * @param assetPath the asset path
+     * @return true is the asset path is an audio file.
+     */
+    @FromAnyThread
+    public static boolean isAudioFile(@Nullable final String assetPath) {
+        if (assetPath == null) return false;
+        final String extension = getExtension(assetPath);
         return AUDIO_FORMATS.contains(extension);
     }
 
@@ -188,6 +217,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     @Override
+    @JMEThread
     protected void controlUpdate(final float tpf) {
 
         if (frame == 2) {
@@ -206,6 +236,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     @Override
+    @JMEThread
     protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 
@@ -223,8 +254,18 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         final Path assetFile = notNull(getAssetFile(file), "File can't be null.");
         final String path = toAssetPath(assetFile);
-        final String extension = getExtension(assetFile);
 
+        showPreview(path, getExtension(assetFile));
+    }
+
+    /**
+     * Show a preview of the file by the asset path.
+     *
+     * @param path      the asset path.
+     * @param extension the extension.
+     */
+    @FromAnyThread
+    private void showPreview(@NotNull final String path, @NotNull final String extension) {
         if (FileExtensions.JME_MATERIAL.equals(extension)) {
             EDITOR_THREAD_EXECUTOR.addToExecute(() -> showMaterial(path));
         } else if (FileExtensions.JME_OBJECT.equals(extension)) {
@@ -232,6 +273,20 @@ public class JMEFilePreviewManager extends AbstractControl {
         } else {
             EDITOR_THREAD_EXECUTOR.addToExecute(this::clear);
         }
+    }
+
+    /**
+     * Show a file.
+     *
+     * @param assetPath the asset path.
+     * @param fitWidth  the target width of preview.
+     * @param fitHeight the target height of preview.
+     */
+    @FromAnyThread
+    public void show(@NotNull final String assetPath, final int fitWidth, final int fitHeight) {
+        imageView.setFitHeight(fitHeight);
+        imageView.setFitWidth(fitWidth);
+        showPreview(assetPath, getExtension(assetPath));
     }
 
     /**

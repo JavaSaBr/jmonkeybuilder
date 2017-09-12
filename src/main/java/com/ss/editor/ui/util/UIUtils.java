@@ -7,9 +7,10 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.AssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.FileAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
@@ -408,6 +409,48 @@ public class UIUtils {
     }
 
     /**
+     * Visit all items.
+     *
+     * @param <T>     the type parameter.
+     * @param item    the tree item.
+     * @param visitor the visitor.
+     */
+    @FXThread
+    public static <T> void visit(@NotNull final TreeItem<T> item, @NotNull final Consumer<TreeItem<T>> visitor) {
+        visitor.accept(item);
+
+        final ObservableList<TreeItem<T>> children = item.getChildren();
+        if (children.isEmpty()) return;
+
+        for (final TreeItem<T> child : children) {
+            visit(child, visitor);
+        }
+    }
+
+    /**
+     * Visit all items.
+     *
+     * @param <T>     the type parameter.
+     * @param item    the tree item.
+     * @param visitor the visitor.
+     */
+    @FXThread
+    public static <T> boolean visitUntil(@NotNull final TreeItem<T> item,
+                                         @NotNull final Predicate<TreeItem<T>> visitor) {
+
+        if (!visitor.test(item)) return false;
+
+        final ObservableList<TreeItem<T>> children = item.getChildren();
+        if (children.isEmpty()) return true;
+
+        for (final TreeItem<T> child : children) {
+            if (!visitUntil(child, visitor)) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Collect all elements of tree items.
      *
      * @param <T>  the type parameter
@@ -536,6 +579,20 @@ public class UIUtils {
             hbox.setMinHeight(cell.getMinHeight());
         } else if (graphic instanceof Control) {
         }
+    }
+
+    /**
+     * Open an resource asset dialog.
+     *
+     * @param handler   the result handler.
+     * @param resources the resources.
+     */
+    @FXThread
+    public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
+                                               @NotNull final Array<String> resources) {
+
+        final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, resources);
+        dialog.show();
     }
 
     /**

@@ -255,7 +255,7 @@ public class MaterialFileEditor extends
             final ComboBox<String> materialDefinitionBox = getMaterialDefinitionBox();
             final ObservableList<String> items = materialDefinitionBox.getItems();
             items.clear();
-            items.addAll(RESOURCE_MANAGER.getAvailableMaterialDefinitions());
+            items.addAll(RESOURCE_MANAGER.getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION));
 
             final MaterialDef materialDef = material.getMaterialDef();
             materialDefinitionBox.getSelectionModel().select(materialDef.getAssetName());

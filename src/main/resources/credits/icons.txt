@@ -80,3 +80,4 @@ ui/icons/svg/scale-symbol.svg icon made by https://www.flaticon.com/authors/popc
 ui/icons/svg/font-selection-editor.svg made by https://www.flaticon.com/authors/dave-gandy from www.flaticon.com
 ui/icons/svg/inbox.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
 ui/icons/svg/debug.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/filetypes/vector.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com

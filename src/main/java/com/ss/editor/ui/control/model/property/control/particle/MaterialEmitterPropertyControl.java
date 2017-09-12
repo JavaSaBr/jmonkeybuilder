@@ -6,7 +6,7 @@ import com.jme3.material.Material;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.impl.MaterialPropertyControl;
-import com.ss.editor.ui.dialog.asset.ParticlesAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.ParticlesAssetEditorDialog;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Label;

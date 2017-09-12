@@ -2,6 +2,8 @@ package com.ss.editor.ui.dialog.converter;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -66,13 +68,6 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox overwriteMaterialsCheckBox;
 
-    /**
-     * Instantiates a new Model converter dialog.
-     *
-     * @param source      the source
-     * @param destination the destination
-     * @param callback    the callback
-     */
     public ModelConverterDialog(@NotNull final Path source, @NotNull final Path destination,
                                 @NotNull final Consumer<ModelConverterDialog> callback) {
         this.callback = callback;
@@ -81,6 +76,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -136,6 +132,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected boolean isGridStructure() {
         return true;
     }
@@ -143,6 +140,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate.
      */
+    @FXThread
     private void validate() {
 
         final Button okButton = getOkButton();
@@ -173,8 +171,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the export materials check box.
      */
-    @NotNull
-    private CheckBox getExportMaterialsCheckBox() {
+    @FXThread
+    private @NotNull CheckBox getExportMaterialsCheckBox() {
         return notNull(exportMaterialsCheckBox);
     }
 
@@ -183,6 +181,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      *
      * @return true if need to export materials.
      */
+    @FXThread
     public boolean isExportMaterials() {
         return getExportMaterialsCheckBox().isSelected();
     }
@@ -190,8 +189,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the overwrite materials check box.
      */
-    @NotNull
-    private CheckBox getOverwriteMaterialsCheckBox() {
+    @FXThread
+    private @NotNull CheckBox getOverwriteMaterialsCheckBox() {
         return notNull(overwriteMaterialsCheckBox);
     }
 
@@ -200,6 +199,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      *
      * @return true if we can overwrite materials.
      */
+    @FXThread
     public boolean isOverwriteMaterials() {
         return getOverwriteMaterialsCheckBox().isSelected();
     }
@@ -207,8 +207,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the destination folder control.
      */
-    @NotNull
-    private ChooseFolderControl getDestinationControl() {
+    @FXThread
+    private @NotNull ChooseFolderControl getDestinationControl() {
         return notNull(destinationControl);
     }
 
@@ -217,16 +217,16 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      *
      * @return the destination folder.
      */
-    @NotNull
-    public Path getDestinationFolder() {
+    @FXThread
+    public @NotNull Path getDestinationFolder() {
         return notNull(getDestinationControl().getFolder());
     }
 
     /**
      * @return the materials destination folder control.
      */
-    @NotNull
-    private ChooseFolderControl getMaterialsFolderControl() {
+    @FXThread
+    private @NotNull ChooseFolderControl getMaterialsFolderControl() {
         return notNull(materialsFolderControl);
     }
 
@@ -235,16 +235,16 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      *
      * @return the materials destination folder.
      */
-    @NotNull
-    public Path getMaterialsFolder() {
+    @FXThread
+    public @NotNull Path getMaterialsFolder() {
         return notNull(getMaterialsFolderControl().getFolder());
     }
 
     /**
      * @return the filename field.
      */
-    @NotNull
-    private TextField getFilenameField() {
+    @FXThread
+    private @NotNull TextField getFilenameField() {
         return notNull(filenameField);
     }
 
@@ -253,40 +253,41 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      *
      * @return the filename.
      */
-    @NotNull
-    public String getFilename() {
+    @FXThread
+    public @NotNull String getFilename() {
         return getFilenameField().getText();
     }
 
     /**
      * @return the callback.
      */
-    @NotNull
-    private Consumer<ModelConverterDialog> getCallback() {
+    @FXThread
+    private @NotNull Consumer<ModelConverterDialog> getCallback() {
         return callback;
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         super.processOk();
         getCallback().accept(this);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.MODEL_CONVERTER_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
         return Messages.MODEL_CONVERTER_DIALOG_BUTTON_OK;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

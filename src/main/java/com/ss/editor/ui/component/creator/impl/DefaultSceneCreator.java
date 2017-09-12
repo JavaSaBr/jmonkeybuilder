@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.creator.impl;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.impl.EditableLightingSceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.EditableSkySceneAppState;
@@ -29,14 +30,14 @@ public class DefaultSceneCreator extends EmptySceneCreator {
         DESCRIPTION.setConstructor(DefaultSceneCreator::new);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.DEFAULT_SCENE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
+    @NotNull
     protected SceneNode createScene() {
 
         final EditableLightingStateShadowFilter shadowFilter = new EditableLightingStateShadowFilter();

@@ -1,9 +1,12 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.ui.util.UIUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +36,12 @@ public class OpenFileInExplorerAction extends FileAction {
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);
-        EditorUtil.openFileInSystemExplorer(getElement().getFile());
+
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        final Array<String> shaderNodes = resourceManager.getAvailableResources(FileExtensions.JME_SHADER_NODE);
+
+        UIUtils.openResourceAssetDialog(s -> System.out.println(s), shaderNodes);
+
+        //EditorUtil.openFileInSystemExplorer(getElement().getFile());
     }
 }

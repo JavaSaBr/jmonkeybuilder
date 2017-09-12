@@ -1,4 +1,4 @@
-package com.ss.editor.ui.dialog.asset;
+package com.ss.editor.ui.dialog.asset.file;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
@@ -6,6 +6,8 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JMEFilePreviewManager;
@@ -61,7 +63,7 @@ import java.util.function.Predicate;
 public class AssetEditorDialog<C> extends EditorDialog {
 
     /**
-     * The constant DIALOG_SIZE.
+     * The dialog size.
      */
     @NotNull
     protected static final Point DIALOG_SIZE = new Point(-1, -1);
@@ -90,12 +92,21 @@ public class AssetEditorDialog<C> extends EditorDialog {
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
+    /**
+     * The handler created files events.
+     */
     @NotNull
     private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
 
+    /**
+     * The handler selected file events.
+     */
     @NotNull
     private final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
 
+    /**
+     * The handler deleted file events,
+     */
     @NotNull
     private final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
 
@@ -127,13 +138,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * The image preview.
      */
     @Nullable
-    ImageView imageView;
+    protected ImageView imageView;
 
     /**
      * The preview of text files.
      */
     @Nullable
-    TextArea textView;
+    protected TextArea textView;
 
     /**
      * The label with any warning.
@@ -147,21 +158,10 @@ public class AssetEditorDialog<C> extends EditorDialog {
     @Nullable
     protected Button okButton;
 
-    /**
-     * Instantiates a new Asset editor dialog.
-     *
-     * @param consumer the consumer
-     */
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
         this(consumer, null);
     }
 
-    /**
-     * Instantiates a new Asset editor dialog.
-     *
-     * @param consumer  the consumer
-     * @param validator the validator
-     */
     public AssetEditorDialog(@NotNull final Consumer<C> consumer, @Nullable final Function<C, String> validator) {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
         this.consumer = consumer;
@@ -173,6 +173,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @param extensionFilter the list of available extensions.
      */
+    @FromAnyThread
     public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
         getResourceTree().setExtensionFilter(extensionFilter);
     }
@@ -182,6 +183,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @param actionTester the action tester.
      */
+    @FromAnyThread
     public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
         getResourceTree().setActionTester(actionTester);
     }
@@ -191,11 +193,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @param onlyFolders true if need to show only folders.
      */
-    void setOnlyFolders(final boolean onlyFolders) {
+    @FromAnyThread
+    public void setOnlyFolders(final boolean onlyFolders) {
         getResourceTree().setOnlyFolders(onlyFolders);
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -227,6 +231,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @param container the container
      * @return the parent
      */
+    @FXThread
     protected @NotNull Region buildSecondPart(@NotNull final HBox container) {
 
         final StackPane previewContainer = new StackPane();
@@ -254,6 +259,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the ok button.
      */
+    @FXThread
     public @NotNull Button getOkButton() {
         return notNull(okButton);
     }
@@ -263,10 +269,12 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @param element the element
      */
+    @FXThread
     protected void processOpen(@NotNull final ResourceElement element) {
         hide();
     }
 
+    @FXThread
     private void processKeyEvent(@NotNull final KeyEvent event) {
         final Button okButton = getOkButton();
         if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
@@ -275,6 +283,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @Override
+    @FXThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -295,6 +304,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Handle creating file event.
      */
+    @FXThread
     private void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
@@ -312,6 +322,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Handle deleting file event.
      */
+    @FXThread
     private void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
@@ -323,6 +334,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Handle selecting file event.
      */
+    @FXThread
     private void processEvent(@NotNull final RequestSelectFileEvent event) {
 
         final Path file = event.getFile();
@@ -342,6 +354,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the list of waited files to select.
      */
+    @FromAnyThread
     private @NotNull Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
@@ -349,6 +362,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the image preview.
      */
+    @FXThread
     private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
@@ -356,6 +370,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the text preview.
      */
+    @FXThread
     private @NotNull TextArea getTextView() {
         return notNull(textView);
     }
@@ -365,6 +380,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the function for validating the choose.
      */
+    @FromAnyThread
     protected @Nullable Function<C, String> getValidator() {
         return validator;
     }
@@ -372,6 +388,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the label with any warning.
      */
+    @FXThread
     private @NotNull Label getWarningLabel() {
         return notNull(warningLabel);
     }
@@ -379,6 +396,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Handle selected element in the tree.
      */
+    @FXThread
     private void processSelected(@Nullable final TreeItem<ResourceElement> newValue) {
 
         final ResourceElement element = newValue == null ? null : newValue.getValue();
@@ -398,6 +416,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @param file the file for preview or null.
      */
+    @FXThread
     private void updatePreview(@Nullable final Path file) {
 
         final ImageView imageView = getImageView();
@@ -442,6 +461,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @Override
+    @FXThread
     public void hide() {
 
         FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
@@ -460,10 +480,12 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @param warningLabel the warning label
      * @param element      the element.
      */
+    @FXThread
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
     }
 
     @Override
+    @FXThread
     protected void createActions(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -495,6 +517,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the boolean binding
      */
+    @FXThread
     protected @NotNull BooleanBinding buildDisableCondition() {
 
         final ResourceTree resourceTree = getResourceTree();
@@ -510,6 +533,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @return the function for handling the choose.
      */
+    @FromAnyThread
     protected @NotNull Consumer<C> getConsumer() {
         return consumer;
     }
@@ -517,6 +541,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the tree with all resources.
      */
+    @FXThread
     private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
@@ -524,6 +549,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * The process of choosing the element.
      */
+    @FXThread
     private void processSelect() {
 
         final ResourceTree resourceTree = getResourceTree();
@@ -539,11 +565,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getTitleText() {
         return ASSET_EDITOR_DIALOG_TITLE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }

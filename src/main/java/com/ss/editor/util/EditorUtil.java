@@ -14,6 +14,7 @@ import com.jme3.system.Platform;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -189,8 +190,8 @@ public abstract class EditorUtil {
      * @param path the path to resource.
      * @return the input stream of the resource or null.
      */
-    @NotNull
-    public static InputStream getInputStream(@NotNull final String path) {
+    @FromAnyThread
+    public static @Nullable InputStream getInputStream(@NotNull final String path) {
         return JFXApplication.class.getResourceAsStream(path);
     }
 
@@ -201,8 +202,8 @@ public abstract class EditorUtil {
      * @param classLoader the class loader.
      * @return the input stream of the resource or null.
      */
-    @NotNull
-    public static InputStream getInputStream(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+    @FromAnyThread
+    public static @Nullable InputStream getInputStream(@NotNull final String path, @NotNull final ClassLoader classLoader) {
         return classLoader.getResourceAsStream(path);
     }
 
