@@ -222,6 +222,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
         getLightButton().setSelected(editorState.isLightEnable());
     }
 
+    @FXThread
     @Override
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;

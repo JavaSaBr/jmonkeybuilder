@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CSSClasses;
@@ -52,13 +53,14 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     @Nullable
     private TextArea textArea;
 
-    @NotNull
     @Override
-    protected VBox createRoot() {
+    @FXThread
+    protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
         textArea = new TextArea();
@@ -73,16 +75,19 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * Update dirty state.
      */
+    @FXThread
     private void updateDirty(final String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
     }
 
     @Override
+    @FXThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
+    @FXThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         FXUtils.addToPane(createSaveAction(), container);
@@ -91,17 +96,24 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the text area.
      */
-    @NotNull
-    private TextArea getTextArea() {
+    @FXThread
+    private @NotNull TextArea getTextArea() {
         return notNull(textArea);
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
         setOriginalContent(FileUtils.read(file));
+
+        /* TODO added to handle some exceptions
+        try {
+
+        } catch (final MalformedInputException e) {
+            throw new RuntimeException("This file isn't a text file.", e);
+        } */
 
         final TextArea textArea = getTextArea();
         textArea.setText(getOriginalContent());
@@ -110,14 +122,15 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
-    @NotNull
-    private String getOriginalContent() {
+    @FXThread
+    private @NotNull String getOriginalContent() {
         return notNull(originalContent);
     }
 
     /**
      * @param originalContent the original content of the opened file.
      */
+    @FXThread
     private void setOriginalContent(@NotNull final String originalContent) {
         this.originalContent = originalContent;
     }
@@ -135,8 +148,8 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         }
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void postSave() {
         super.postSave();
 
@@ -148,6 +161,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
+    @FXThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
@@ -161,9 +175,9 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         updateDirty(newContent);
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    @FromAnyThread
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 }

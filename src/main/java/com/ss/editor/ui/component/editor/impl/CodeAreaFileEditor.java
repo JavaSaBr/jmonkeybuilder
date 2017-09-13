@@ -40,11 +40,13 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     private CodeArea codeArea;
 
     @Override
+    @FXThread
     protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
         codeArea = new CodeArea();
@@ -64,6 +66,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
      * @param text the text
      * @return the style spans
      */
+    @FXThread
     protected @NotNull StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         throw new RuntimeException("unsupported");
     }
@@ -71,16 +74,19 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * Update dirty state.
      */
+    @FXThread
     private void updateDirty(final String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
     }
 
     @Override
+    @FXThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
+    @FXThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         FXUtils.addToPane(createSaveAction(), container);
@@ -89,6 +95,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the code area.
      */
+    @FXThread
     private @NotNull CodeArea getCodeArea() {
         return notNull(codeArea);
     }
@@ -113,6 +120,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
+    @FXThread
     private @NotNull String getOriginalContent() {
         return notNull(originalContent);
     }
@@ -120,6 +128,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @param originalContent the original content of the opened file.
      */
+    @FXThread
     private void setOriginalContent(@NotNull final String originalContent) {
         this.originalContent = originalContent;
     }
@@ -150,6 +159,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
+    @FXThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 

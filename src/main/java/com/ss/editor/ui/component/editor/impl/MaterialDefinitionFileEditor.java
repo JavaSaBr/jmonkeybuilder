@@ -3,6 +3,8 @@ package com.ss.editor.ui.component.editor.impl;
 import static java.util.Collections.singleton;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
@@ -134,15 +136,15 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
         return spansBuilder.create();
     }
 
-    @NotNull
     @Override
-    protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
+    @FXThread
+    protected @NotNull StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         return computeHighlighting(text);
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    @FromAnyThread
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 }

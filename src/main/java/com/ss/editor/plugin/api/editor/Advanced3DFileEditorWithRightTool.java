@@ -75,6 +75,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     /**
      * Create editor area pane.
      */
+    @FXThread
     protected void createEditorAreaPane() {
 
         editorAreaPane = new StackPane();
@@ -134,6 +135,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      * @param container the tool container.
      * @param root the root.
      */
+    @FXThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
@@ -142,6 +144,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      *
      * @param dragEvent the drag event.
      */
+    @FXThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
     }
 
@@ -150,6 +153,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      *
      * @param dragEvent the drop event.
      */
+    @FXThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
     }
 }

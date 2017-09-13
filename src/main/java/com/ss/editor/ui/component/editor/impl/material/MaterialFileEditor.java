@@ -203,6 +203,7 @@ public class MaterialFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
         UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
@@ -210,6 +211,7 @@ public class MaterialFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragOverEvent(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
@@ -233,6 +235,7 @@ public class MaterialFileEditor extends
         reload(material);
     }
 
+    @FXThread
     @Override
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;

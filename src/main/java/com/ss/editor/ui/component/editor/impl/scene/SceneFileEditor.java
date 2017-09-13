@@ -9,6 +9,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -138,6 +139,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorSceneEditorState::new;
     }
@@ -174,6 +176,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void refreshTree() {
         super.refreshTree();
 
@@ -189,6 +192,7 @@ public class SceneFileEditor extends
         layerNodeTree.fill(new LayersRoot(this));
     }
 
+    @FXThread
     private void updateVisibility(@NotNull final Spatial spatial) {
         final SceneLayer layer = SceneLayer.getLayer(spatial);
         if (layer != null) spatial.setVisible(layer.isShowed());
@@ -197,6 +201,7 @@ public class SceneFileEditor extends
     /**
      * @return the list with app states.
      */
+    @FXThread
     private @NotNull AppStateList getAppStateList() {
         return notNull(appStateList);
     }
@@ -204,6 +209,7 @@ public class SceneFileEditor extends
     /**
      * @return the list with filters.
      */
+    @FXThread
     private @NotNull FilterList getFilterList() {
         return notNull(filterList);
     }
@@ -211,6 +217,7 @@ public class SceneFileEditor extends
     /**
      * @return the tree with layers.
      */
+    @FXThread
     private @NotNull LayerNodeTree getLayerNodeTree() {
         return notNull(layerNodeTree);
     }
@@ -218,6 +225,7 @@ public class SceneFileEditor extends
     /**
      * @return the container of property editor in layers tool.
      */
+    @FXThread
     private @NotNull VBox getPropertyEditorLayersContainer() {
         return notNull(propertyEditorLayersContainer);
     }
@@ -225,6 +233,7 @@ public class SceneFileEditor extends
     /**
      * @return the container of property editor in filters tool.
      */
+    @FXThread
     private @NotNull VBox getPropertyEditorFiltersContainer() {
         return notNull(propertyEditorFiltersContainer);
     }
@@ -232,11 +241,13 @@ public class SceneFileEditor extends
     /**
      * @return the container of property editor in app states tool.
      */
+    @FXThread
     private @NotNull VBox getPropertyEditorAppStateContainer() {
         return notNull(propertyEditorAppStateContainer);
     }
 
     @Override
+    @FXThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
 
@@ -263,6 +274,7 @@ public class SceneFileEditor extends
     /**
      * Handle changing light models visibility.
      */
+    @FXThread
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
@@ -275,6 +287,7 @@ public class SceneFileEditor extends
     /**
      * Handle changing audio models visibility.
      */
+    @FXThread
     private void changeAudio(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
@@ -285,6 +298,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final StackPane root) {
 
         appStateList = new AppStateList(this::selectAppStateFromList, this);
@@ -302,6 +316,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
@@ -314,6 +329,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
         super.processChangeTool(oldValue, newValue);
 
@@ -347,6 +363,7 @@ public class SceneFileEditor extends
     /**
      * @return the light toggle.
      */
+    @FXThread
     private @NotNull ToggleButton getLightButton() {
         return notNull(lightButton);
     }
@@ -354,11 +371,13 @@ public class SceneFileEditor extends
     /**
      * @return the audio toggle.
      */
+    @FXThread
     private @NotNull ToggleButton getAudioButton() {
         return notNull(audioButton);
     }
 
     @Override
+    @FXThread
     protected void loadState() {
         super.loadState();
 
@@ -446,6 +465,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void selectNodeFromTree(@Nullable final Object object) {
         if (!isNeedSyncSelection()) return;
 
@@ -469,6 +489,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FromAnyThread
     public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
@@ -476,6 +497,7 @@ public class SceneFileEditor extends
     /**
      * @param needSyncSelection true if need sync selection.
      */
+    @FXThread
     private void setNeedSyncSelection(final boolean needSyncSelection) {
         this.needSyncSelection = needSyncSelection;
     }
@@ -483,11 +505,13 @@ public class SceneFileEditor extends
     /**
      * @return true if need sync selection.
      */
+    @FXThread
     private boolean isNeedSyncSelection() {
         return needSyncSelection;
     }
 
     @Override
+    @FXThread
     protected void updateSelection(@Nullable Spatial spatial) {
 
         if (spatial instanceof SceneNode || spatial instanceof SceneLayer) {
@@ -498,6 +522,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void handleAddedObject(@NotNull final Spatial model) {
         super.handleAddedObject(model);
 
@@ -517,6 +542,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     protected void handleRemovedObject(@NotNull final Spatial model) {
         super.handleRemovedObject(model);
 
@@ -536,6 +562,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
                                    final boolean needSelect) {
         super.notifyFXAddedChild(parent, added, index, needSelect);
@@ -552,6 +579,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         super.notifyFXRemovedChild(parent, removed);
 
@@ -567,6 +595,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyFXChangeProperty(@Nullable final Object parent, @NotNull final Object object,
                                        @NotNull final String propertyName) {
         super.notifyFXChangeProperty(parent, object, propertyName);
@@ -601,6 +630,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyAddedAppState(@NotNull final SceneAppState appState) {
 
         final SceneEditor3DState editor3DState = getEditor3DState();
@@ -614,6 +644,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
 
         final SceneEditor3DState editor3DState = getEditor3DState();
@@ -627,11 +658,13 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyChangedAppState(@NotNull final SceneAppState appState) {
         getAppStateList().fill(getCurrentModel());
     }
 
     @Override
+    @FXThread
     public void notifyAddedFilter(@NotNull final SceneFilter sceneFilter) {
 
         final SceneEditor3DState editor3DState = getEditor3DState();
@@ -645,6 +678,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyRemovedFilter(@NotNull final SceneFilter sceneFilter) {
 
         final SceneEditor3DState editor3DState = getEditor3DState();
@@ -658,6 +692,7 @@ public class SceneFileEditor extends
     }
 
     @Override
+    @FXThread
     public void notifyChangedFilter(@NotNull final SceneFilter sceneFilter) {
         getFilterList().fill(getCurrentModel());
     }

@@ -70,6 +70,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      *
      * @return the factory to make an editor state.
      */
+    @FXThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return null;
     }
