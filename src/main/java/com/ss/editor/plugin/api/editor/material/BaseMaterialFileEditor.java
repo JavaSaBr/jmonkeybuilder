@@ -243,6 +243,28 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     @Override
     @FXThread
     protected void createToolbar(@NotNull final HBox container) {
+        super.createToolbar(container);
+        createActions(container);
+
+        final Label bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
+
+        bucketComboBox = new ComboBox<>(BUCKETS);
+        bucketComboBox.getSelectionModel().select(Inherit);
+        bucketComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
+
+        FXUtils.addToPane(bucketLabel, container);
+        FXUtils.addToPane(bucketComboBox, container);
+    }
+
+    /**
+     * Create actions on toolbar.
+     *
+     * @param container the container.
+     */
+    @FXThread
+    protected void createActions(@NotNull final HBox container) {
 
         cubeButton = new ToggleButton();
         cubeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_CUBE + " (C)"));
@@ -268,24 +290,13 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
         lightButton.setSelected(DEFAULT_LIGHT_ENABLED);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
-        final Label bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
-
-        bucketComboBox = new ComboBox<>(BUCKETS);
-        bucketComboBox.getSelectionModel().select(Inherit);
-        bucketComboBox.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
-
         FXUtils.addToPane(createSaveAction(), container);
         FXUtils.addToPane(cubeButton, container);
         FXUtils.addToPane(sphereButton, container);
         FXUtils.addToPane(planeButton, container);
         FXUtils.addToPane(lightButton, container);
-        FXUtils.addToPane(bucketLabel, container);
-        FXUtils.addToPane(bucketComboBox, container);
 
         DynamicIconSupport.addSupport(cubeButton, sphereButton, planeButton, lightButton);
-
         FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 

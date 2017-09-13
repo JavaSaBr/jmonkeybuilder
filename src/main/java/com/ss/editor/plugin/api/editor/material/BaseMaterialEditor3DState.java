@@ -19,6 +19,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.EditorThread;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.plugin.api.editor.part3d.AdvancedPBRWithStudioSky3DEditorState;
@@ -95,11 +97,6 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      */
     private boolean lightEnabled;
 
-    /**
-     * Instantiates a new Material editor app state.
-     *
-     * @param fileEditor the file editor
-     */
     public BaseMaterialEditor3DState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
@@ -123,6 +120,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     @Override
+    @JMEThread
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
 
@@ -135,6 +133,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     @Override
+    @JMEThread
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         super.registerActionListener(inputManager);
         inputManager.addListener(actionListener, KEY_S, KEY_C, KEY_P, KEY_L);
@@ -143,6 +142,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @return the test box.
      */
+    @JMEThread
     protected @NotNull Geometry getTestBox() {
         return testBox;
     }
@@ -150,6 +150,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @return the test quad.
      */
+    @JMEThread
     protected @NotNull Geometry getTestQuad() {
         return testQuad;
     }
@@ -157,6 +158,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @return the test sphere.
      */
+    @JMEThread
     protected @NotNull Geometry getTestSphere() {
         return testSphere;
     }
@@ -166,6 +168,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param material the material
      */
+    @FromAnyThread
     public void updateMaterial(@NotNull final Material material) {
         EXECUTOR_MANAGER.addJMETask(() -> updateMaterialImpl(material));
     }
@@ -175,6 +178,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param material the new material.
      */
+    @JMEThread
     protected void updateMaterialImpl(@NotNull final Material material) {
 
         final Geometry testBox = getTestBox();
@@ -202,6 +206,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param modelType the model type
      */
+    @FromAnyThread
     public void changeMode(@NotNull final ModelType modelType) {
         EXECUTOR_MANAGER.addJMETask(() -> changeModeImpl(modelType));
     }
@@ -211,6 +216,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param modelType the new model type.
      */
+    @JMEThread
     protected void changeModeImpl(@NotNull final ModelType modelType) {
 
         final Node modelNode = getModelNode();
@@ -239,6 +245,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param bucket the bucket
      */
+    @FromAnyThread
     public void changeBucketType(@NotNull final Bucket bucket) {
         EXECUTOR_MANAGER.addJMETask(() -> changeBucketTypeImpl(bucket));
     }
@@ -248,6 +255,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param bucket the new bucket.
      */
+    @JMEThread
     protected void changeBucketTypeImpl(@NotNull final Bucket bucket) {
 
         final Geometry testQuad = getTestQuad();
@@ -261,22 +269,26 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     @Override
+    @JMEThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         changeModeImpl(getCurrentModelType());
     }
 
     @Override
+    @JMEThread
     protected boolean needMovableCamera() {
         return false;
     }
 
     @Override
+    @JMEThread
     protected boolean needEditorCamera() {
         return true;
     }
 
     @Override
+    @JMEThread
     protected boolean needLightForCamera() {
         return true;
     }
@@ -284,6 +296,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @return the current model mode.
      */
+    @JMEThread
     protected @NotNull ModelType getCurrentModelType() {
         return notNull(currentModelType);
     }
@@ -291,6 +304,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @param currentModelType the current model mode.
      */
+    @JMEThread
     protected void setCurrentModelType(@NotNull final ModelType currentModelType) {
         this.currentModelType = currentModelType;
     }
@@ -298,6 +312,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @return true if the light is enabled.
      */
+    @JMEThread
     protected boolean isLightEnabled() {
         return lightEnabled;
     }
@@ -305,6 +320,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     /**
      * @param lightEnabled true if the light is enabled.
      */
+    @JMEThread
     protected void setLightEnabled(final boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
     }
@@ -314,6 +330,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param enabled the enabled
      */
+    @FromAnyThread
     public void updateLightEnabled(final boolean enabled) {
         EXECUTOR_MANAGER.addJMETask(() -> updateLightEnabledImpl(enabled));
     }
@@ -323,6 +340,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      *
      * @param enabled true if light should be enabled.
      */
+    @JMEThread
     protected void updateLightEnabledImpl(final boolean enabled) {
         if (enabled == isLightEnabled()) return;
 
@@ -339,6 +357,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     @Override
+    @JMEThread
     protected boolean needUpdateCameraLight() {
         return false;
     }

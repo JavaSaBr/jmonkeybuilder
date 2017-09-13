@@ -7,6 +7,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource.Status;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.state.editor.impl.AbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
 import org.jetbrains.annotations.NotNull;
@@ -69,6 +70,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      * @param audioData the audio data.
      * @param audioKey  the audio key.
      */
+    @JMEThread
     private void loadImpl(@NotNull final AudioData audioData, @NotNull final AudioKey audioKey) {
         removeAudioNode();
         setAudioData(audioData);
@@ -86,6 +88,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * Remove the current audio node.
      */
+    @JMEThread
     private void removeAudioNode() {
 
         final AudioNode currentAudioNode = getAudioNode();
@@ -115,6 +118,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * Play the current audio.
      */
+    @JMEThread
     private void playImpl() {
 
         final AudioNode currentAudioNode = getAudioNode();
@@ -138,6 +142,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     @Override
+    @JMEThread
     public void cleanup() {
         stopImpl();
         super.cleanup();
@@ -154,6 +159,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * Pause the current audio.
      */
+    @JMEThread
     private void pauseImpl() {
         final AudioNode currentAudioNode = getAudioNode();
         if (currentAudioNode == null) return;
@@ -171,12 +177,14 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * Stop the current audio.
      */
+    @JMEThread
     private void stopImpl() {
         removeAudioNode();
         EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedStatus(Status.Stopped));
     }
 
     @Override
+    @JMEThread
     public void update(final float tpf) {
         super.update(tpf);
 
@@ -193,14 +201,15 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * @return the audio node.
      */
-    @Nullable
-    private AudioNode getAudioNode() {
+    @JMEThread
+    private @Nullable AudioNode getAudioNode() {
         return audioNode;
     }
 
     /**
      * @param audioNode the audio node.
      */
+    @JMEThread
     private void setAudioNode(@Nullable final AudioNode audioNode) {
         this.audioNode = audioNode;
     }
@@ -208,14 +217,15 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * @return the audio data.
      */
-    @NotNull
-    private AudioData getAudioData() {
+    @JMEThread
+    private @NotNull AudioData getAudioData() {
         return notNull(audioData);
     }
 
     /**
      * @param audioData the audio data.
      */
+    @JMEThread
     private void setAudioData(@NotNull final AudioData audioData) {
         this.audioData = audioData;
     }
@@ -223,14 +233,15 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     /**
      * @return the audio key.
      */
-    @NotNull
-    private AudioKey getAudioKey() {
+    @JMEThread
+    private @NotNull AudioKey getAudioKey() {
         return notNull(audioKey);
     }
 
     /**
      * @param audioKey the audio key.
      */
+    @JMEThread
     private void setAudioKey(@NotNull final AudioKey audioKey) {
         this.audioKey = audioKey;
     }
@@ -240,15 +251,15 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      *
      * @return the previous status.
      */
-    @Nullable
     @FromAnyThread
-    public Status getPrevStatus() {
+    public @Nullable Status getPrevStatus() {
         return prevStatus;
     }
 
     /**
      * @param prevStatus the previous status.
      */
+    @JMEThread
     private void setPrevStatus(@Nullable final Status prevStatus) {
         this.prevStatus = prevStatus;
     }
