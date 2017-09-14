@@ -8,7 +8,9 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
@@ -55,14 +57,32 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
         FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
+    @Override
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+
+        final CheckBox checkBox = getCheckBox();
+        final DoubleProperty widthProperty = checkBox.prefWidthProperty();
+
+        if (widthProperty.isBound()) {
+            super.changeControlWidthPercent(controlWidthPercent);
+            widthProperty.unbind();
+            widthProperty.bind(widthProperty().multiply(controlWidthPercent));
+        }
+    }
+
     /**
      * Disable the offset of checkbox control.
      */
     @FXThread
     public void disableCheckboxOffset() {
+
         final CheckBox checkBox = getCheckBox();
         checkBox.prefWidthProperty().unbind();
         checkBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+        final Label propertyNameLabel = getPropertyNameLabel();
+        propertyNameLabel.maxWidthProperty().unbind();
     }
 
     @Override

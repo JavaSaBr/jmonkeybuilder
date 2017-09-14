@@ -333,6 +333,16 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     }
 
     /**
+     * Get the property name label.
+     *
+     * @return the property name label.
+     */
+    @FXThread
+    protected @NotNull Label getPropertyNameLabel() {
+        return propertyNameLabel;
+    }
+
+    /**
      * Change control width percent.
      *
      * @param controlWidthPercent the control width percent.
@@ -344,6 +354,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             return;
         }
 
+        final Label propertyNameLabel = getPropertyNameLabel();
         propertyNameLabel.maxWidthProperty().unbind();
         propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1D - controlWidthPercent));
     }

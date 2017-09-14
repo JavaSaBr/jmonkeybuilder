@@ -90,6 +90,12 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     @Nullable
     private Label textureLabel;
 
+    /**
+     * The field container.
+     */
+    @Nullable
+    private HBox fieldContainer;
+
     public Texture2DPropertyControl(@Nullable final Texture2D propertyValue, @NotNull final String propertyName,
                                     @NotNull final C changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);
@@ -127,7 +133,12 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
-        textureLabel = new Label(NO_TEXTURE);
+        fieldContainer = new HBox();
+
+        if (!isSingleRow()) {
+            fieldContainer.prefWidthProperty().bind(container.widthProperty());
+        }
+
         textureTooltip = new ImageChannelPreview();
 
         final VBox previewContainer = new VBox();
@@ -152,23 +163,32 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         removeButton.setOnAction(event -> processRemove());
         removeButton.disableProperty().bind(buildDisableRemoveCondition());
 
-        textureLabel.prefWidthProperty().bind(widthProperty()
-                .subtract(removeButton.widthProperty())
-                .subtract(previewContainer.widthProperty())
-                .subtract(settingsButton.widthProperty())
-                .subtract(addButton.widthProperty()));
+        if (!isSingleRow()) {
 
-        FXUtils.addToPane(textureLabel, container);
-        FXUtils.addToPane(previewContainer, container);
-        FXUtils.addToPane(addButton, container);
-        FXUtils.addToPane(settingsButton, container);
-        FXUtils.addToPane(removeButton, container);
+            textureLabel = new Label(NO_TEXTURE);
+            textureLabel.prefWidthProperty().bind(widthProperty()
+                    .subtract(removeButton.widthProperty())
+                    .subtract(previewContainer.widthProperty())
+                    .subtract(settingsButton.widthProperty())
+                    .subtract(addButton.widthProperty()));
+
+            FXUtils.addToPane(textureLabel, fieldContainer);
+            FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER,
+                    CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+
+        } else {
+            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER_WITHOUT_PADDING);
+        }
+
+        FXUtils.addToPane(previewContainer, fieldContainer);
+        FXUtils.addToPane(addButton, fieldContainer);
+        FXUtils.addToPane(settingsButton, fieldContainer);
+        FXUtils.addToPane(removeButton, fieldContainer);
+        FXUtils.addToPane(fieldContainer, container);
         FXUtils.addToPane(texturePreview, previewContainer);
 
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassTo(previewContainer, CSSClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
-        FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
         FXUtils.addClassesTo(settingsButton, addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
@@ -187,6 +207,16 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     @FXThread
     private @NotNull Label getTextureLabel() {
         return notNull(textureLabel);
+    }
+
+    /**
+     * Get the field container.
+     *
+     * @return the field container.
+     */
+    @FXThread
+    protected @NotNull HBox getFieldContainer() {
+        return notNull(fieldContainer);
     }
 
     /**
@@ -325,8 +355,10 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         final Texture2D texture2D = getPropertyValue();
         final AssetKey key = texture2D == null ? null : texture2D.getKey();
 
-        final Label textureLabel = getTextureLabel();
-        textureLabel.setText(key == null ? NO_TEXTURE : key.getName());
+        if (!isSingleRow()) {
+            final Label textureLabel = getTextureLabel();
+            textureLabel.setText(key == null ? NO_TEXTURE : key.getName());
+        }
 
         final ImageChannelPreview textureTooltip = getTextureTooltip();
         final ImageView preview = getTexturePreview();

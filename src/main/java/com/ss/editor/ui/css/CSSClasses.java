@@ -80,6 +80,11 @@ public interface CSSClasses {
     String TEXT_INPUT_CONTAINER = "text-input-container";
 
     /**
+     * The constant TEXT_INPUT_CONTAINER_WITHOUT_PADDING.
+     */
+    String TEXT_INPUT_CONTAINER_WITHOUT_PADDING = "text-input-container-without-padding";
+
+    /**
      * The constant CHOOSE_TEXTURE_CONTROL.
      */
     String CHOOSE_TEXTURE_CONTROL = "choose-texture-control";
