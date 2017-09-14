@@ -34,6 +34,16 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
 
     @Override
     @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+        super.changeControlWidthPercent(controlWidthPercent);
+
+        final IntegerTextField valueField = getValueField();
+        valueField.prefWidthProperty().unbind();
+        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+    }
+
+    @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 

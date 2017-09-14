@@ -10,6 +10,7 @@ import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,16 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
 
         FXUtils.addToPane(checkBox, container);
         FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+    }
+
+    /**
+     * Disable the offset of checkbox control.
+     */
+    @FXThread
+    public void disableCheckboxOffset() {
+        final CheckBox checkBox = getCheckBox();
+        checkBox.prefWidthProperty().unbind();
+        checkBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
     }
 
     @Override

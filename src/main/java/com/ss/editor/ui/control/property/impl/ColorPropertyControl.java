@@ -49,6 +49,16 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
 
     @Override
     @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+        super.changeControlWidthPercent(controlWidthPercent);
+
+        final ColorPicker colorPicker = getColorPicker();
+        colorPicker.prefWidthProperty().unbind();
+        colorPicker.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+    }
+
+    @Override
+    @FXThread
     protected void setPropertyValue(@Nullable final ColorRGBA color) {
         super.setPropertyValue(color == null ? null : color.clone());
     }

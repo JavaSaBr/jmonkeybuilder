@@ -45,6 +45,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -590,8 +591,22 @@ public class UIUtils {
     @FXThread
     public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
                                                @NotNull final Array<String> resources) {
+        openResourceAssetDialog(handler, null, resources);
+    }
 
-        final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, resources);
+    /**
+     * Open an resource asset dialog.
+     *
+     * @param handler   the result handler.
+     * @param validator the validator.
+     * @param resources the resources.
+     */
+    @FXThread
+    public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
+                                               @Nullable final Function<String, String> validator,
+                                               @NotNull final Array<String> resources) {
+
+        final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, validator, resources);
         dialog.show();
     }
 

@@ -142,7 +142,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
      */
     @FXThread
     protected void processOpen(@NotNull final ResourceElement element) {
-        processOk();
+        hide();
     }
 
     @Override

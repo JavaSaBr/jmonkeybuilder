@@ -97,6 +97,11 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         setOnDragDropped(this::handleDragDroppedEvent);
     }
 
+    @Override
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+    }
+
     /**
      * Handle drag dropped events.
      *

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -17,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link PropertyControl} to edit {@link Vector2f} values.
+ * The implementation of the {@link PropertyControl} to edit {@link com.jme3.math.Vector3f} values.
  *
  * @param <C> the type parameter
  * @param <T> the type parameter
  * @author JavaSaBr.
  */
-public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector2f> {
+public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector3f> {
 
     /**
      * The field X.
@@ -38,13 +38,19 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     private FloatTextField yField;
 
     /**
+     * The field Z.
+     */
+    @Nullable
+    private FloatTextField zField;
+
+    /**
      * The field container.
      */
     @Nullable
     private HBox fieldContainer;
 
-    public Vector2FPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
-                                   @NotNull final C changeConsumer) {
+    public Vector3FSingleRowPropertyControl(@Nullable final Vector3f propertyValue, @NotNull final String propertyName,
+                                            @NotNull final C changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
@@ -64,31 +70,36 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
         super.createComponents(container);
 
         fieldContainer = new HBox();
-        fieldContainer.prefWidthProperty()
-                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        fieldContainer.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         xField = new FloatTextField();
         xField.setOnKeyReleased(this::updateVector);
         xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        xField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.5));
+        xField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.33));
         xField.setScrollPower(10F);
 
         yField = new FloatTextField();
         yField.setOnKeyReleased(this::updateVector);
         yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        yField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.5));
+        yField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.33));
         yField.setScrollPower(10F);
+
+        zField = new FloatTextField();
+        zField.setOnKeyReleased(this::updateVector);
+        zField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
+        zField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.33));
+        zField.setScrollPower(10F);
 
         FXUtils.addToPane(xField, fieldContainer);
         FXUtils.addToPane(yField, fieldContainer);
+        FXUtils.addToPane(zField, fieldContainer);
         FXUtils.addToPane(fieldContainer, container);
 
         FXUtils.addClassesTo(fieldContainer, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
                 CSSClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.TRANSPARENT_TEXT_FIELD);
 
-        FXUtils.addClassesTo(xField, yField, CSSClasses.TRANSPARENT_TEXT_FIELD);
-
-        UIUtils.addFocusBinding(fieldContainer, xField, yField);
+        UIUtils.addFocusBinding(fieldContainer, xField, yField, zField);
     }
 
     /**
@@ -101,7 +112,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
 
     @Override
     @FXThread
-    protected void setPropertyValue(@Nullable final Vector2f vector) {
+    protected void setPropertyValue(@Nullable final Vector3f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
 
@@ -112,33 +123,48 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Check result x value float.
+     * Check result x value.
      *
-     * @param x the x
-     * @param y the y
-     * @return the float
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
+     * @return the result x value.
      */
     @FXThread
-    protected float checkResultXValue(final float x, final float y) {
+    protected float checkResultXValue(final float x, final float y, final float z) {
         return x;
     }
 
     /**
-     * Check result y value float.
+     * Check result y value.
      *
-     * @param x the x
-     * @param y the y
-     * @return the float
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
+     * @return the result y value.
      */
     @FXThread
-    protected float checkResultYValue(final float x, final float y) {
+    protected float checkResultYValue(final float x, final float y, final float z) {
         return y;
     }
 
     /**
-     * Gets x field.
+     * Check result z value.
      *
-     * @return the field X.
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
+     * @return the result z value.
+     */
+    @FXThread
+    protected float checkResultZValue(final float x, final float y, final float z) {
+        return z;
+    }
+
+    /**
+     * Get the X field.
+     *
+     * @return the X field.
      */
     @FXThread
     protected @NotNull FloatTextField getXField() {
@@ -146,20 +172,30 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Gets y field.
+     * Get the Y field.
      *
-     * @return the field Y.
+     * @return the Y field.
      */
     @FXThread
     protected @NotNull FloatTextField getYField() {
         return notNull(yField);
     }
 
+    /**
+     * Get the Z field.
+     *
+     * @return the Z field.
+     */
+    @FXThread
+    protected @NotNull FloatTextField getZField() {
+        return notNull(zField);
+    }
+
     @Override
     @FXThread
     protected void reload() {
 
-        final Vector2f vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
+        final Vector3f vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
 
         final FloatTextField xField = getXField();
         xField.setValue(vector.getX());
@@ -168,12 +204,16 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
         final FloatTextField yField = getYField();
         yField.setValue(vector.getY());
         yField.positionCaret(yField.getText().length());
+
+        final FloatTextField zField = getZField();
+        zField.setValue(vector.getZ());
+        zField.positionCaret(zField.getText().length());
     }
 
     /**
-     * Update the vector.
+     * Update the current value.
      *
-     * @param event the event
+     * @param event the change event.
      */
     @FXThread
     private void updateVector(@Nullable final KeyEvent event) {
@@ -185,9 +225,12 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
         final FloatTextField yField = getYField();
         final float y = yField.getValue();
 
-        final Vector2f oldValue = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
-        final Vector2f newValue = new Vector2f();
-        newValue.set(checkResultXValue(x, y), checkResultYValue(x, y));
+        final FloatTextField zField = getZField();
+        final float z = zField.getValue();
+
+        final Vector3f oldValue = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
+        final Vector3f newValue = new Vector3f();
+        newValue.set(checkResultXValue(x, y, z), checkResultYValue(x, y, z), checkResultZValue(x, y, z));
 
         changed(newValue, oldValue.clone());
     }

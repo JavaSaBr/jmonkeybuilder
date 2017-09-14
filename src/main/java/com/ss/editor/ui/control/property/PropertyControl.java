@@ -333,6 +333,22 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     }
 
     /**
+     * Change control width percent.
+     *
+     * @param controlWidthPercent the control width percent.
+     */
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+
+        if (!isSingleRow()) {
+            return;
+        }
+
+        propertyNameLabel.maxWidthProperty().unbind();
+        propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1D - controlWidthPercent));
+    }
+
+    /**
      * Is single row boolean.
      *
      * @return true if this control is single row.
