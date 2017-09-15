@@ -125,6 +125,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     }
 
     @Override
+    @FXThread
     protected @NotNull GridPane createRoot() {
         final GridPane gridPane = new GridPane();
         FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.IMAGE_CHANNEL_PREVIEW);
@@ -200,6 +201,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param resourcePath the resource path.
      */
+    @FXThread
     private void setResourcePath(@Nullable final String resourcePath) {
         this.resourcePath = resourcePath;
     }
@@ -207,6 +209,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the resource path.
      */
+    @FXThread
     private @Nullable String getResourcePath() {
         return resourcePath;
     }
@@ -214,6 +217,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param file the file.
      */
+    @FXThread
     private void setFile(@Nullable final Path file) {
         this.file = file;
     }
@@ -221,6 +225,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the file.
      */
+    @FXThread
     private @Nullable Path getFile() {
         return file;
     }
@@ -228,6 +233,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param needToBuildFile true of need to build from the file.
      */
+    @FXThread
     private void setNeedToBuildFile(final boolean needToBuildFile) {
         this.needToBuildFile = needToBuildFile;
     }
@@ -235,6 +241,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return true of need to build from the file.
      */
+    @FXThread
     private boolean isNeedToBuildFile() {
         return needToBuildFile;
     }
@@ -242,6 +249,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param needToBuildResource true of need to build from the resource path.
      */
+    @FXThread
     private void setNeedToBuildResource(final boolean needToBuildResource) {
         this.needToBuildResource = needToBuildResource;
     }
@@ -249,11 +257,13 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return true of need to build from the resource path.
      */
+    @FXThread
     private boolean isNeedToBuildResource() {
         return needToBuildResource;
     }
 
     @Override
+    @FXThread
     protected void show() {
         super.show();
 
@@ -286,6 +296,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
         }
     }
 
+    @FXThread
     private void buildPreview(@Nullable final Image image) {
 
         if (image == null || image.getWidth() != 120) {

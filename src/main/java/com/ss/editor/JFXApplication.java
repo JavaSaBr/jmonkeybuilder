@@ -13,6 +13,7 @@ import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
@@ -69,9 +70,9 @@ public class JFXApplication extends Application {
     private static JFXApplication instance;
 
     /**
-     * Gets instance.
+     * Get the JavaFX part of this editor.
      *
-     * @return the instance
+     * @return the JavaFX part of this editor.
      */
     @FromAnyThread
     public static @NotNull JFXApplication getInstance() {
@@ -154,6 +155,12 @@ public class JFXApplication extends Application {
                 () -> startJMEApplication(application), "LWJGL Render").start();
     }
 
+    /**
+     * Start the new jME application.
+     *
+     * @param application the new jME application.
+     */
+    @JMEThread
     private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
 
         final PluginManager pluginManager = PluginManager.getInstance();
@@ -179,7 +186,8 @@ public class JFXApplication extends Application {
         launch();
     }
 
-    private static void printError(final Throwable throwable) {
+    @FromAnyThread
+    private static void printError(@NotNull final Throwable throwable) {
         throwable.printStackTrace();
 
         final String userHome = System.getProperty("user.home");
@@ -225,6 +233,7 @@ public class JFXApplication extends Application {
      *
      * @param window the new opened window.
      */
+    @FXThread
     public void addWindow(@NotNull final Window window) {
         ArrayUtils.runInWriteLock(openedWindows, window, Array::add);
     }
@@ -234,6 +243,7 @@ public class JFXApplication extends Application {
      *
      * @param window the opened window.
      */
+    @FXThread
     public void removeWindow(@NotNull final Window window) {
         ArrayUtils.runInWriteLock(openedWindows, window, Array::slowRemove);
     }
@@ -243,11 +253,13 @@ public class JFXApplication extends Application {
      *
      * @return the last opened window.
      */
+    @FXThread
     public @NotNull Window getLastWindow() {
         return notNull(ArrayUtils.getInReadLock(openedWindows, Array::last));
     }
 
     @Override
+    @FXThread
     public void start(final Stage stage) throws Exception {
         JFXApplication.instance = this;
         this.stage = stage;
@@ -307,6 +319,7 @@ public class JFXApplication extends Application {
     }
 
     @Override
+    @FXThread
     public void stop() throws Exception {
         super.stop();
         onExit();
@@ -387,6 +400,7 @@ public class JFXApplication extends Application {
         });
     }
 
+    @FXThread
     private void createSceneProcessor(@NotNull final EditorFXScene scene, @NotNull final Editor editor) {
 
         final FrameTransferSceneProcessor sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());

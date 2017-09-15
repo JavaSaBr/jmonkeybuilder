@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.tree.node;
 
+import com.ss.editor.annotation.FXThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,14 +20,15 @@ public interface TreeNodeFactory extends Comparable<TreeNodeFactory> {
      * @param objectId the object id.
      * @return the tree node.
      */
-    @Nullable
-    <T, V extends TreeNode<T>> V createFor(@Nullable final T element, final long objectId);
+    @FXThread
+    <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId);
 
     /**
      * Gets an order of this factory.
      *
      * @return the order.
      */
+    @FXThread
     default int getOrder() {
         return 0;
     }

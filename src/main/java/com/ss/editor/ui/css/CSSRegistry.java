@@ -15,8 +15,8 @@ public class CSSRegistry {
     @NotNull
     private static final CSSRegistry INSTANCE = new CSSRegistry();
 
-    @NotNull
-    public static CSSRegistry getInstance() {
+    @FromAnyThread
+    public static @NotNull CSSRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -45,8 +45,8 @@ public class CSSRegistry {
      *
      * @return the list of available css files.
      */
-    @NotNull
-    public Array<String> getAvailableCssFiles() {
+    @FromAnyThread
+    public @NotNull Array<String> getAvailableCssFiles() {
         return availableCssFiles;
     }
 }

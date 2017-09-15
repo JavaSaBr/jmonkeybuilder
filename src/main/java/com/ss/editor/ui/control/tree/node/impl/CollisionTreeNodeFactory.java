@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.tree.node.impl;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.bullet.collision.shapes.*;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactory;
@@ -16,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 public class CollisionTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @Nullable
-    public <T, V extends TreeNode<T>> V createFor(@Nullable final T element, final long objectId) {
+    @FXThread
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof ChildCollisionShape) {
             return unsafeCast(new ChildCollisionShapeTreeNode((ChildCollisionShape) element, objectId));
