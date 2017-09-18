@@ -1,9 +1,12 @@
 package com.ss.editor.ui.css;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
+
+import java.net.URL;
 
 /**
  * The registry of available css files.
@@ -33,11 +36,22 @@ public class CSSRegistry {
     /**
      * Add the CSS file to this registry.
      *
-     * @param cssFile the CSS file.
+     * @param cssFile the URL to the CSS file.
      */
     @FromAnyThread
-    public void register(@NotNull String cssFile) {
-        availableCssFiles.add(cssFile);
+    public void register(@NotNull final URL cssFile) {
+        availableCssFiles.add(cssFile.toExternalForm());
+    }
+
+    /**
+     * Add the CSS file to this registry.
+     *
+     * @param cssFile     the path to CSS file.
+     * @param classLoader the class loader which can load this path.
+     */
+    @FromAnyThread
+    public void register(@NotNull final String cssFile, @NotNull final ClassLoader classLoader) {
+        register(notNull(classLoader.getResource(cssFile)));
     }
 
     /**
