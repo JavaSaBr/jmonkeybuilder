@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public enum CssColorTheme {
-    LIGHT("/ui/css/light-color.css", "White", Color.BLACK),
+    LIGHT("/ui/css/light-color.css", "White", Color.web("#5d626e")),
     SHADOW("/ui/css/shadow-color.css", "Shadow", Color.web("#c8d2e1")),
     DARK("/ui/css/dark-color.css", "Dark", Color.web("#c8dae2")),;
 

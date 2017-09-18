@@ -281,7 +281,7 @@ public class Editor extends JmeToJFXApplication {
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
-        cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 10000);
+        cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, Integer.MAX_VALUE);
 
         defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
