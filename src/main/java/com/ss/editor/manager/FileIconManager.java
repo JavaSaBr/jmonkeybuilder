@@ -190,7 +190,7 @@ public class FileIconManager {
     public @NotNull Image getIcon(@NotNull final Path path, final boolean directory, final boolean tryToGetContentType,
                                   int size) {
 
-        final String extension = FileUtils.getExtension(path);
+        final String extension = directory ? "folder" : FileUtils.getExtension(path);
         final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
 
         if (!iconFinders.isEmpty()) {
@@ -203,8 +203,14 @@ public class FileIconManager {
                     continue;
                 }
 
-                return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
+                return getImage(url, classLoader, size);
             }
+        }
+
+        String url = extensionToUrl.get(extension);
+
+        if (url != null) {
+            return getImage(url, size);
         }
 
         String contentType;
@@ -233,38 +239,34 @@ public class FileIconManager {
             contentType = "none";
         }
 
-        String url = extensionToUrl.get(extension);
+        for (final Path mimeTypes : MIME_TYPES_FOLDERS) {
 
-        if (url == null) {
-            for (final Path mimeTypes : MIME_TYPES_FOLDERS) {
+            Path iconPath = mimeTypes.resolve(contentType + ".svg");
+            url = toAssetPath(iconPath);
 
-                Path iconPath = mimeTypes.resolve(contentType + ".svg");
+            if (!EditorUtil.checkExists(url)) {
+                contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
+                iconPath = mimeTypes.resolve(contentType + ".svg");
                 url = toAssetPath(iconPath);
-
-                if (!EditorUtil.checkExists(url)) {
-                    contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
-                    iconPath = mimeTypes.resolve(contentType + ".svg");
-                    url = toAssetPath(iconPath);
-                }
-
-                if (!EditorUtil.checkExists(url)) {
-                    contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
-                    iconPath = mimeTypes.resolve(contentType + ".png");
-                    url = toAssetPath(iconPath);
-                }
-
-                if (EditorUtil.checkExists(url)) {
-                    break;
-                }
             }
 
-            if (url == null || !EditorUtil.checkExists(url)) {
-                LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
-                url = "/ui/icons/svg/document.svg";
+            if (!EditorUtil.checkExists(url)) {
+                contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
+                iconPath = mimeTypes.resolve(contentType + ".png");
+                url = toAssetPath(iconPath);
             }
 
-            extensionToUrl.put(extension, url);
+            if (EditorUtil.checkExists(url)) {
+                break;
+            }
         }
+
+        if (url == null || !EditorUtil.checkExists(url)) {
+            LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
+            url = "/ui/icons/svg/document.svg";
+        }
+
+        extensionToUrl.put(extension, url);
 
         return getImage(url, size);
     }
