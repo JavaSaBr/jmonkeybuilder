@@ -41,7 +41,6 @@ junitPlatform {
     logManager 'org.apache.logging.log4j.jul.LogManager'
 }
 
-
 repositories {
     mavenCentral()
     jcenter()
@@ -129,7 +128,7 @@ dependencies {
     compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.6.0') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.3.4') {
+    compile ('com.github.JavaSaBr:tonegodemitter:develop-SNAPSHOT') {
         exclude group: 'org.jmonkeyengine'
     }
 
