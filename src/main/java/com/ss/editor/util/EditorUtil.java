@@ -364,7 +364,9 @@ public abstract class EditorUtil {
      */
     public static void handleException(@Nullable Logger logger, @Nullable final Object owner,
                                        @NotNull final Exception e, @Nullable final Runnable callback) {
-        if (logger == null) logger = LOGGER;
+        if (logger == null) {
+            logger = LOGGER;
+        }
 
         if (owner == null) {
             logger.warning(e);
@@ -377,26 +379,8 @@ public abstract class EditorUtil {
 
             GAnalytics.sendException(e, false);
 
-            StringWriter writer = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(writer);
-
-            e.printStackTrace(printWriter);
-
             final String localizedMessage = e.getLocalizedMessage();
-
-            String stackTrace = writer.toString();
-
-            int level = 0;
-
-            for (Throwable cause = e.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
-
-                writer = new StringWriter();
-                printWriter = new PrintWriter(writer);
-
-                cause.printStackTrace(printWriter);
-
-                stackTrace += "\n caused by " + writer.toString();
-            }
+            final String stackTrace = buildStackTrace(e);
 
             final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
@@ -405,6 +389,37 @@ public abstract class EditorUtil {
 
             if (callback != null) alert.setOnHidden(event -> callback.run());
         });
+    }
+
+    /**
+     * Build the stack trace of the exception.
+     *
+     * @param exception the exception.
+     * @return the built stack trace.
+     */
+    @FromAnyThread
+    public static String buildStackTrace(@NotNull final Exception exception) {
+
+        StringWriter writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+
+        exception.printStackTrace(printWriter);
+
+        String stackTrace = writer.toString();
+
+        int level = 0;
+
+        for (Throwable cause = exception.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
+
+            writer = new StringWriter();
+            printWriter = new PrintWriter(writer);
+
+            cause.printStackTrace(printWriter);
+
+            stackTrace += "\n caused by " + writer.toString();
+        }
+
+        return stackTrace;
     }
 
     /**

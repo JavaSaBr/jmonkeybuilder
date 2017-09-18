@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog.asset.virtual;
 
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
@@ -17,12 +18,13 @@ import java.util.function.Function;
  */
 public class StringVirtualAssetEditorDialog extends VirtualAssetEditorDialog<String> {
 
-    private static final Function<@NotNull String, @Nullable String> DEFAULT_VALIDATOR = s -> {
+    @NotNull
+    public static final Function<@NotNull String, @Nullable String> DEFAULT_VALIDATOR = resource -> {
 
-        final String extension = FileUtils.getExtension(s);
+        final String extension = FileUtils.getExtension(resource);
 
         if (StringUtils.isEmpty(extension)) {
-            return "You need to select a file";
+            return Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
         }
 
         return null;

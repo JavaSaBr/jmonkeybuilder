@@ -113,4 +113,9 @@ public abstract class VirtualResourceElement<T> implements Comparable<VirtualRes
     public int compareTo(@NotNull final VirtualResourceElement<?> o) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return object.toString();
+    }
 }

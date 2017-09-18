@@ -194,11 +194,21 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
         try {
             renderManager.preloadScene(testBox);
         } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            handleMaterialException(e);
             testBox.setMaterial(EDITOR.getDefaultMaterial());
             testQuad.setMaterial(EDITOR.getDefaultMaterial());
             testSphere.setMaterial(EDITOR.getDefaultMaterial());
         }
+    }
+
+    /**
+     * Handle the material exception.
+     *
+     * @param exception the exception.
+     */
+    @JMEThread
+    protected void handleMaterialException(@NotNull final RuntimeException exception) {
+        EditorUtil.handleException(LOGGER, this, exception);
     }
 
     /**

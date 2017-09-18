@@ -42,9 +42,9 @@ public class MaterialDefinitionCodeArea extends BaseCodeArea {
             "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400", "GLSL330",
             "GLSL410", "GLSL420", "GLSL430", "GLSL440", "GLSL450",
             // attributes
-            "Tangent", "Binormal", "InterleavedData", "Index", "BindPosePosition", "BindPoseNormal",
-            "BoneWeight", "BoneIndex", "BindPoseTangent", "HWBoneWeight", "HWBoneIndex", "InstanceData",
-            "Position", "Size", "Normal", "TexCoord", "Color",
+            "inTangent", "inBinormal", "inInterleavedData", "inIndex", "inBindPosePosition", "inBindPoseNormal",
+            "inBoneWeight", "inBoneIndex", "inBindPoseTangent", "inHWBoneWeight", "inHWBoneIndex", "inInstanceData",
+            "inPosition", "inSize", "Normal", "inTexCoord", "inColor",
             // uniforms
             "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix", "ViewMatrix", "CameraPosition",
             "WorldMatrix", "Resolution", "ViewProjectionMatrix", "ProjectionMatrix", "NormalMatrix", "WorldMatrixInverseTranspose",

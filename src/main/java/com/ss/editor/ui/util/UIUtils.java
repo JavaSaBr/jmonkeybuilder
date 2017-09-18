@@ -606,7 +606,6 @@ public class UIUtils {
     public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
                                                @Nullable final Function<String, String> validator,
                                                @NotNull final Array<String> resources) {
-
         final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, validator, resources);
         dialog.show();
     }
