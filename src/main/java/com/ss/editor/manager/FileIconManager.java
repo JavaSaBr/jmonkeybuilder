@@ -193,24 +193,25 @@ public class FileIconManager {
         final String extension = directory ? "folder" : FileUtils.getExtension(path);
         final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
 
-        if (!iconFinders.isEmpty()) {
-            for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
-
-                final String url = iconFinder.apply(path, extension);
-                final ClassLoader classLoader = iconFinder.getClass().getClassLoader();
-
-                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
-                    continue;
-                }
-
-                return getImage(url, classLoader, size);
-            }
-        }
-
         String url = extensionToUrl.get(extension);
 
         if (url != null) {
             return getImage(url, size);
+        }
+
+        if (!iconFinders.isEmpty()) {
+            for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
+                url = iconFinder.apply(path, extension);
+
+                final ClassLoader classLoader = iconFinder.getClass().getClassLoader();
+                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
+                    continue;
+                }
+
+                extensionToUrl.put(extension, url);
+
+                return getImage(url, classLoader, size);
+            }
         }
 
         String contentType;

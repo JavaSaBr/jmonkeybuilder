@@ -9,10 +9,10 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -236,8 +236,9 @@ public class NodeUtils {
 
         if (type.isInstance(spatial)) {
             consumer.accept(type.cast(spatial));
-            return;
-        } else if (!(spatial instanceof Node)) {
+        }
+
+        if (!(spatial instanceof Node)) {
             return;
         }
 
