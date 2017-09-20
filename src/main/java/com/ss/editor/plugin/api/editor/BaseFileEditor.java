@@ -4,6 +4,10 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.WorkspaceManager;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.EditorOperationControl;
+import com.ss.editor.model.undo.UndoableEditor;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
@@ -15,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 /**
@@ -22,7 +27,21 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public abstract class BaseFileEditor<S extends EditorState> extends AbstractFileEditor<StackPane> {
+public abstract class BaseFileEditor<S extends EditorState> extends AbstractFileEditor<StackPane> implements
+        UndoableEditor, ChangeConsumer {
+
+    /**
+     * The operation control.
+     */
+    @NotNull
+    private final EditorOperationControl operationControl;
+
+    /**
+     * The changes counter.
+     */
+    @NotNull
+    private final AtomicInteger changeCounter;
+
     /**
      * The state of this editor.
      */
@@ -33,6 +52,62 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
+
+    protected BaseFileEditor() {
+        this.operationControl = createOperationControl();
+        this.changeCounter = new AtomicInteger();
+    }
+
+    /**
+     * Create an editor operation control.
+     *
+     * @return the editor operation control.
+     */
+    protected @NotNull EditorOperationControl createOperationControl() {
+        return new EditorOperationControl(this);
+    }
+
+    @Override
+    @FromAnyThread
+    public void execute(@NotNull final EditorOperation operation) {
+        operationControl.execute(operation);
+    }
+
+    @Override
+    @FXThread
+    public void incrementChange() {
+        final int result = changeCounter.incrementAndGet();
+        setDirty(result != 0);
+    }
+
+    @Override
+    @FXThread
+    public void decrementChange() {
+        final int result = changeCounter.decrementAndGet();
+        setDirty(result != 0);
+    }
+
+    @Override
+    @FromAnyThread
+    public void redo() {
+        operationControl.redo();
+    }
+
+    @Override
+    @FromAnyThread
+    public void undo() {
+        operationControl.undo();
+    }
+
+    /**
+     * Get the editor operation control.
+     *
+     * @return the editor operation control.
+     */
+    @FromAnyThread
+    protected @NotNull EditorOperationControl getOperationControl() {
+        return operationControl;
+    }
 
     @Override
     @FXThread
