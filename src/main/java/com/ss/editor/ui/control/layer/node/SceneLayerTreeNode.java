@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.layer.node;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -36,6 +38,7 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         super.fillContextMenu(nodeTree, items);
 
@@ -48,6 +51,7 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
+    @FXThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
 
         final SceneLayer element = getElement();
@@ -57,11 +61,13 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 
     @Override
+    @FXThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final SceneLayer element = getElement();
@@ -81,12 +87,14 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
+    @FXThread
     public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
         final Object element = child.getElement();
         return element instanceof Spatial && SceneLayer.getLayer((Spatial) element) != getElement();
     }
 
     @Override
+    @FXThread
     public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
                        final boolean isCopy) {
 
@@ -109,27 +117,32 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
+    @FromAnyThread
     public @NotNull String getName() {
         final String name = getElement().getName();
         return name == null ? "name is null" : name;
     }
 
     @Override
+    @FXThread
     public boolean canEditName() {
         return !getElement().isBuiltIn();
     }
 
     @Override
+    @FXThread
     public boolean canMove() {
         return false;
     }
 
     @Override
+    @FXThread
     public boolean canCopy() {
         return false;
     }
 
     @Override
+    @FXThread
     public @Nullable Image getIcon() {
         return Icons.LAYERS_16;
     }
@@ -140,12 +153,14 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
+    @FXThread
     public void show(@NotNull final NodeTree<SceneChangeConsumer> nodeTree) {
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), true));
     }
 
     @Override
+    @FXThread
     public void hide(@NotNull final NodeTree<SceneChangeConsumer> nodeTree) {
         final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), false));

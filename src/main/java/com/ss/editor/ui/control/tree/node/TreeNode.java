@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.tree.node;
 
 import com.ss.editor.Editor;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -74,8 +76,8 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the element of the {@link com.jme3.scene.Spatial}.
      */
-    @NotNull
-    public T getElement() {
+    @FromAnyThread
+    public @NotNull T getElement() {
         return element;
     }
 
@@ -84,6 +86,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the name of this node.
      */
+    @FromAnyThread
     public @NotNull String getName() {
         return "unknown name";
     }
@@ -93,6 +96,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param name the name.
      */
+    @FXThread
     public void setName(@NotNull final String name) {
     }
 
@@ -101,6 +105,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return true if need to save name.
      */
+    @FromAnyThread
     public boolean isNeedToSaveName() {
         return false;
     }
@@ -111,6 +116,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param nodeTree the node tree
      * @return true of this node has any children.
      */
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return false;
     }
@@ -121,6 +127,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param nodeTree the node tree
      * @return the array of children of this node.
      */
+    @FXThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         return EMPTY_ARRAY;
     }
@@ -130,8 +137,8 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the parent of this node.
      */
-    @Nullable
-    public TreeNode<?> getParent() {
+    @FXThread
+    public @Nullable TreeNode<?> getParent() {
         return parent;
     }
 
@@ -140,7 +147,8 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param parent the parent.
      */
-    protected void setParent(final TreeNode<?> parent) {
+    @FXThread
+    protected void setParent(@Nullable final TreeNode<?> parent) {
         this.parent = parent;
     }
 
@@ -149,6 +157,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the icon of this node.
      */
+    @FXThread
     public @Nullable Image getIcon() {
         return null;
     }
@@ -159,6 +168,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param nodeTree the node tree
      * @param items    the items
      */
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
     }
 
@@ -167,6 +177,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param child the child
      */
+    @FXThread
     public void remove(@NotNull final TreeNode<?> child) {
     }
 
@@ -175,6 +186,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param child the child
      */
+    @FXThread
     public void add(@NotNull final TreeNode<?> child) {
     }
 
@@ -184,6 +196,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param nodeTree the node tree
      * @param newName  the new name
      */
+    @FXThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
     }
 
@@ -194,6 +207,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param isCopy true if need to copy the object.
      * @return true of this node can accept the child.
      */
+    @FXThread
     public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
         return false;
     }
@@ -205,6 +219,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param object         the object.
      * @param isCopy         true if need to copy the object.
      */
+    @FXThread
     public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
                        final boolean isCopy) {
     }
@@ -215,6 +230,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param dragboard the dragboard
      * @return true if this node can accept external resource.
      */
+    @FXThread
     public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
         return false;
     }
@@ -225,6 +241,7 @@ public abstract class TreeNode<T> implements UObject {
      * @param dragboard the dragboard
      * @param consumer  the consumer
      */
+    @FXThread
     public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
     }
 
@@ -233,6 +250,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return true if this node supports moving.
      */
+    @FXThread
     public boolean canMove() {
         return false;
     }
@@ -242,6 +260,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return true if this node supports copying.
      */
+    @FXThread
     public boolean canCopy() {
         return false;
     }
@@ -251,6 +270,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return true if this node supports name editing.
      */
+    @FXThread
     public boolean canEditName() {
         return false;
     }
@@ -260,6 +280,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return true if you can remove this node.
      */
+    @FXThread
     public boolean canRemove() {
         return true;
     }
@@ -269,12 +290,13 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @return the new copy of this node.
      */
-    @NotNull
-    public TreeNode<?> copy() {
+    @FXThread
+    public @NotNull TreeNode<?> copy() {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @FromAnyThread
     public long getObjectId() {
         return objectId;
     }
@@ -308,6 +330,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param treeNode the model node.
      */
+    @FXThread
     public void notifyChildAdded(@NotNull final TreeNode<?> treeNode) {
     }
 
@@ -316,6 +339,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param treeNode the model node.
      */
+    @FXThread
     public void notifyChildRemoved(@NotNull final TreeNode<?> treeNode) {
         treeNode.setParent(null);
     }
@@ -325,6 +349,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param treeNode the model node.
      */
+    @FXThread
     public void notifyChildPreAdd(@NotNull final TreeNode<?> treeNode) {
         treeNode.setParent(this);
     }
@@ -334,6 +359,7 @@ public abstract class TreeNode<T> implements UObject {
      *
      * @param treeNode the model node.
      */
+    @FXThread
     public void notifyChildPreRemove(@NotNull final TreeNode<?> treeNode) {
     }
 }

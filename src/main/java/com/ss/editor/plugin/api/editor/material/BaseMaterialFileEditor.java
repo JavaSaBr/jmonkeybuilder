@@ -104,6 +104,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @return the change consumer.
      */
+    @FromAnyThread
     protected C getChangeConsumer() {
         return unsafeCast(this);
     }
@@ -159,6 +160,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @return the settings tree tool name.
      */
+    @FromAnyThread
     protected @NotNull String getSettingsTreeToolName() {
         return Messages.MATERIAL_SETTINGS_MAIN;
     }
@@ -184,6 +186,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @param object the selected object.
      */
+    @FXThread
     private void selectedFromTree(@Nullable final Object object) {
 
         Object parent = null;
@@ -222,8 +225,8 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
         getLightButton().setSelected(editorState.isLightEnable());
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;
     }

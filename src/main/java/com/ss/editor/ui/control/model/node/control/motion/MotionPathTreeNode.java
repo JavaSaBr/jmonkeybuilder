@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.node.control.motion;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.cinematic.MotionPath;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.PositionTreeNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -21,31 +23,25 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class MotionPathTreeNode extends TreeNode<MotionPath> {
 
-    /**
-     * Instantiates a new Motion path model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public MotionPathTreeNode(@NotNull final MotionPath element, final long objectId) {
         super(element, objectId);
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_MOTION_PATH;
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.PATH_16;
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final MotionPath element = getElement();
         final int wayPoints = element.getNbWayPoints();
@@ -62,6 +58,7 @@ public class MotionPathTreeNode extends TreeNode<MotionPath> {
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }

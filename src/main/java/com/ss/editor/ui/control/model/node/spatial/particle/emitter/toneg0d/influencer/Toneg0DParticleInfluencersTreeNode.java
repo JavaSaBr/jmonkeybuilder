@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.inf
 import static com.ss.rlib.util.ClassUtils.getConstructor;
 import static com.ss.rlib.util.ClassUtils.newInstance;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -51,29 +53,24 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
         CONSTRUCTORS.put(SpriteInfluencer.class, getConstructor(CreateSpriteParticleInfluencerAction.class, NodeTree.class, TreeNode.class));
     }
 
-    /**
-     * Instantiates a new Particle influencers model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public Toneg0DParticleInfluencersTreeNode(@NotNull final Toneg0dParticleInfluencers element, final long objectId) {
         super(element, objectId);
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS;
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
         final Toneg0dParticleInfluencers element = getElement();
@@ -92,9 +89,10 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
         super.fillContextMenu(nodeTree, items);
     }
 
-    @NotNull
+
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final Toneg0dParticleInfluencers element = getElement();
         final List<ParticleInfluencer> influencers = element.getInfluencers();
@@ -103,6 +101,7 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }

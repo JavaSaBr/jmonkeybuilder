@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.node.control.physics.vehicle;
 
 import com.jme3.bullet.control.VehicleControl;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.physics.PhysicsObjectTreeNode;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.CreateVehicleWheelAction;
@@ -19,29 +21,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class VehicleControlTreeNode extends PhysicsObjectTreeNode<VehicleControl> {
 
-    /**
-     * Instantiates a new Vehicle control model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public VehicleControlTreeNode(@NotNull final VehicleControl element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.VEHICLE_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL;
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
