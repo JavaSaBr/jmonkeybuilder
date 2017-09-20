@@ -465,10 +465,17 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             editor.openFile(file);
         } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
+
+            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+            if (workspace != null) {
+                workspace.removeOpenedFile(file);
+            }
+
             EXECUTOR_MANAGER.addFXTask(() -> {
                 EditorUtil.decrementLoading();
                 resultEditor.notifyClosed();
             });
+
             return;
         } finally {
             EDITOR.asyncUnlock(stamp);
