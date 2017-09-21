@@ -459,7 +459,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
 
         final MA editor3DState = getEditor3DState();
         if (editor3DState.isCameraMoving()) {
@@ -508,7 +509,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     /**

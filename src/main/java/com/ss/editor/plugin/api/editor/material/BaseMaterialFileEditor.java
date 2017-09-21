@@ -112,15 +112,10 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     @Override
     @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
 
-        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
-            undo();
-            return true;
-        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
-            redo();
-            return true;
-        } else if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
+        if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton cubeButton = getCubeButton();
             cubeButton.setSelected(true);
             return true;
@@ -138,7 +133,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     @Override

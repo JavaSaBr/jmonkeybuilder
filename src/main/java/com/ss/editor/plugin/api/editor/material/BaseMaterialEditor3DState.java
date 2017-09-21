@@ -126,10 +126,17 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
 
         final T fileEditor = getFileEditor();
 
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_C, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_P, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.P, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_L, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.L, isPressed, isControlDown(), isButtonMiddleDown()));
+        actionHandlers.put(KEY_S, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_C, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_P, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.P, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_L, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.L, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
     }
 
     @Override

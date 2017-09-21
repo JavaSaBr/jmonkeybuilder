@@ -12,6 +12,7 @@ import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import javafx.event.Event;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +64,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      *
      * @return the editor operation control.
      */
+    @FXThread
     protected @NotNull EditorOperationControl createOperationControl() {
         return new EditorOperationControl(this);
     }
@@ -71,6 +73,26 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     @FromAnyThread
     public void execute(@NotNull final EditorOperation operation) {
         operationControl.execute(operation);
+    }
+
+    @FXThread
+    @Override
+    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
+
+        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
+            undo();
+            return true;
+        } else if (isPressed && isControlDown && isShiftDown && keyCode == KeyCode.Z) {
+            redo();
+            return true;
+        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
+            redo();
+            return true;
+        }
+
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     @Override
@@ -198,8 +220,8 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
         return editorState;
     }
 
-    @FXThread
     @Override
+    @FXThread
     public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
         return false;
     }
