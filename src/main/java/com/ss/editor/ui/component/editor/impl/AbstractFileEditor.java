@@ -266,7 +266,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final KeyCode code = event.getCode();
 
-        if (handleKeyActionImpl(code, true, event.isControlDown(), event.isShiftDown(), false)) {
+        if (handleKeyActionImpl(code, false, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }
