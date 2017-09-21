@@ -37,8 +37,8 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     }
 
     public SpatialAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                                  @NotNull final PropertyDefinition definition,
-                                                  @NotNull final Runnable validationCallback) {
+                                               @NotNull final PropertyDefinition definition,
+                                               @NotNull final Runnable validationCallback) {
         super(vars, definition, validationCallback);
     }
 

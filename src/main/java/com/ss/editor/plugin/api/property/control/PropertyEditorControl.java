@@ -32,6 +32,9 @@ public class PropertyEditorControl<T> extends HBox {
      */
     public static final double DEFAULT_FIELD_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_FIELD_W_PERCENT;
 
+    /**
+     * The editor.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 

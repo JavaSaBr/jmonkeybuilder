@@ -48,6 +48,12 @@ public final class PropertyDefinition {
     private final Array<?> options;
 
     /**
+     * The file extension to filter files/resources.
+     */
+    @Nullable
+    private final String extension;
+
+    /**
      * The min value.
      */
     private final float min;
@@ -66,6 +72,20 @@ public final class PropertyDefinition {
         this.max = Float.NaN;
         this.min = Float.NaN;
         this.options = EMPTY_OPTIONS;
+        this.extension = null;
+    }
+
+    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
+                              @NotNull final String id, @Nullable final Object defaultValue,
+                              @Nullable final String extension) {
+        this.propertyType = propertyType;
+        this.name = name;
+        this.id = id;
+        this.defaultValue = defaultValue;
+        this.max = Float.NaN;
+        this.min = Float.NaN;
+        this.options = EMPTY_OPTIONS;
+        this.extension = extension;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
@@ -78,6 +98,7 @@ public final class PropertyDefinition {
         this.options = options;
         this.max = Float.NaN;
         this.min = Float.NaN;
+        this.extension = null;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
@@ -90,6 +111,7 @@ public final class PropertyDefinition {
         this.min = min;
         this.max = max;
         this.options = EMPTY_OPTIONS;
+        this.extension = null;
     }
 
     /**
@@ -148,10 +170,20 @@ public final class PropertyDefinition {
         return options;
     }
 
+    /**
+     * Get the file extension to filter files/resources.
+     *
+     * @return the file extension to filter files/resources.
+     */
+    @FromAnyThread
+    public @Nullable String getExtension() {
+        return extension;
+    }
+
     @Override
     public String toString() {
         return "PropertyDefinition{" + "propertyType=" + propertyType + ", name='" + name + '\'' + ", id='" + id +
-                '\'' + ", defaultValue=" + defaultValue + ", options=" + options + ", min=" + min + ", max=" + max +
-                '}';
+                '\'' + ", defaultValue=" + defaultValue + ", options=" + options + ", extension='" + extension + '\'' +
+                ", min=" + min + ", max=" + max + '}';
     }
 }
