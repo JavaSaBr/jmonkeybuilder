@@ -26,7 +26,6 @@ import com.ss.editor.ui.control.model.node.light.LightTreeNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
-import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacterControlAction;
@@ -75,7 +74,6 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             if (toolMenu != null) items.add(toolMenu);
         }
 
-        if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
         if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
 
         if (linkNode == null) {
@@ -100,14 +98,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @Override
     @FXThread
     public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
-
         final Object element = child.getElement();
-
-        if (element instanceof AbstractControl) {
-            return true;
-        }
-
-        return super.canAccept(child, isCopy);
+        return element instanceof AbstractControl || super.canAccept(child, isCopy);
     }
 
     @Override
@@ -227,9 +219,9 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         consumer.execute(new RenameNodeOperation(spatial.getName(), newName, spatial));
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final Spatial element = getElement();

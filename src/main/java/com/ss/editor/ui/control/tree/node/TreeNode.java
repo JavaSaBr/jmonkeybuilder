@@ -5,6 +5,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -170,6 +171,7 @@ public abstract class TreeNode<T> implements UObject {
      */
     @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+        if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
     }
 
     /**
