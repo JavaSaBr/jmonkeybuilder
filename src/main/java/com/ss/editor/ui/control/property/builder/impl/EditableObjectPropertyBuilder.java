@@ -123,6 +123,17 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 addControl(container, property, propertyControl);
                 break;
             }
+            case READ_ONLY_STRING: {
+
+                final EditableProperty<Object, ?> property = cast(description);
+                final Object currentValue = property.getValue();
+
+                final DefaultSinglePropertyControl<C, EditableProperty<Object, ?>, Object> propertyControl =
+                        new DefaultSinglePropertyControl<>(currentValue, property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
             case VECTOR_2F: {
 
                 final EditableProperty<Vector2f, ?> property = cast(description);
