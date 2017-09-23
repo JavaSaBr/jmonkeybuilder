@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.filter.property.builder.impl;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -20,23 +22,21 @@ public class FilterPropertyBuilder extends EditableModelObjectPropertyBuilder {
     private static final FilterPropertyBuilder INSTANCE = new FilterPropertyBuilder();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance
      */
-    @NotNull
-    public static FilterPropertyBuilder getInstance() {
+    @FromAnyThread
+    public static @NotNull FilterPropertyBuilder getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Instantiates a new Filter property builder.
-     */
     protected FilterPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 
     @Override
+    @FXThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         if (!(object instanceof EditableSceneFilter)) return null;
         final EditableSceneFilter filter = (EditableSceneFilter) object;

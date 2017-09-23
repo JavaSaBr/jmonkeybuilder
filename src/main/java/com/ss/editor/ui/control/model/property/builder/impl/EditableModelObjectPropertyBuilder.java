@@ -4,6 +4,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -27,6 +28,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
     }
 
     @Override
+    @FXThread
     protected void buildFor(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                             @NotNull final EditableProperty<?, ?> description) {
         super.buildFor(container, changeConsumer, description);

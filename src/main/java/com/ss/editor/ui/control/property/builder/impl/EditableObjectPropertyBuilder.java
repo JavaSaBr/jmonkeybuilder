@@ -6,6 +6,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.texture.Texture2D;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -33,6 +34,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
     }
 
     @Override
+    @FXThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final C changeConsumer) {
 
@@ -44,6 +46,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
         }
     }
 
+    @FXThread
     protected void buildFor(@NotNull final VBox container, @NotNull final C changeConsumer,
                             @NotNull final EditableProperty<?, ?> description) {
 
@@ -165,6 +168,10 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 addControl(container, property, propertyControl);
                 break;
             }
+            case SEPARATOR: {
+                buildSplitLine(container);
+                break;
+            }
             default: {
                 break;
             }
@@ -179,6 +186,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @param property        the property
      * @param propertyControl the property control
      */
+    @FXThread
     protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
                                   @NotNull final PropertyControl<C, @NotNull EditableProperty<T, ?>, T> propertyControl) {
 
@@ -195,10 +203,12 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @param object the editable object.
      * @return the list of properties or null.
      */
+    @FXThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(final @NotNull Object object) {
         return null;
     }
 
+    @FXThread
     protected @NotNull <T> EditableProperty<T, ?> cast(@NotNull final EditableProperty<?, ?> property) {
         return ClassUtils.unsafeCast(property);
     }

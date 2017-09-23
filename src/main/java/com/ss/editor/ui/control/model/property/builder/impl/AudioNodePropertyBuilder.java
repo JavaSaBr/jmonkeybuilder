@@ -6,6 +6,8 @@ import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -45,10 +47,11 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     private static final PropertyBuilder INSTANCE = new AudioNodePropertyBuilder();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance.
      */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -58,8 +61,9 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     }
 
     @Override
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                                @NotNull final ModelChangeConsumer changeConsumer) {
+    @FXThread
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
+                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (!(object instanceof AudioNode)) return;
 

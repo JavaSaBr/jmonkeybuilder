@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
 import com.ss.editor.Editor;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.css.CSSClasses;
@@ -20,24 +21,23 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implements PropertyBuilder {
 
     /**
-     * The constant EDITOR.
+     * The jME part of the editor.
      */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
+    /**
+     * The type of change consumer,
+     */
     @NotNull
     private final Class<? extends C> type;
 
-    /**
-     * Instantiates a new Abstract property builder.
-     *
-     * @param type the type
-     */
     protected AbstractPropertyBuilder(@NotNull final Class<? extends C> type) {
         this.type = type;
     }
 
     @Override
+    @FXThread
     public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                          @NotNull final ChangeConsumer changeConsumer) {
 
@@ -47,15 +47,16 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
     }
 
     /**
-     * Build for.
+     * Build properties for the object.
      *
-     * @param object         the object
-     * @param parent         the parent
-     * @param container      the container
-     * @param changeConsumer the change consumer
+     * @param object         the object.
+     * @param parent         the parent.
+     * @param container      the container.
+     * @param changeConsumer the change consumer.
      */
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                                @NotNull final C changeConsumer) {
+    @FXThread
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
+                                @NotNull final VBox container, @NotNull final C changeConsumer) {
     }
 
     /**
@@ -63,6 +64,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
      *
      * @param pane the container of the line.
      */
+    @FXThread
     protected void buildSplitLine(@NotNull final Pane pane) {
         final HBox line = new HBox();
         final VBox container = new VBox(line);
