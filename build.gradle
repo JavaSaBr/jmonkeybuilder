@@ -125,7 +125,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.7.0') {
+    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.7.1') {
         exclude group: 'org.jmonkeyengine'
     }
     compile ('com.github.JavaSaBr:tonegodemitter:2.4.0') {
