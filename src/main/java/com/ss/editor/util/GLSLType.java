@@ -46,7 +46,7 @@ public enum GLSLType {
     static {
         for (final GLSLType glslType : VALUES) {
             RAW_TYPE_TO_ENUM.put(glslType.getRawType(), glslType);
-            UI_NAME_TO_ENUM.put(glslType.getUiName(), glslType);
+            UI_NAME_TO_ENUM.put(glslType.getUIName(), glslType);
         }
     }
 
@@ -105,7 +105,12 @@ public enum GLSLType {
      * @return the name for UI.
      */
     @FromAnyThread
-    public @NotNull String getUiName() {
+    public @NotNull String getUIName() {
         return uiName;
+    }
+
+    @Override
+    public String toString() {
+        return getUIName();
     }
 }
