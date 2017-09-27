@@ -252,6 +252,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public synchronized void assetLoaded(@NotNull final AssetKey key) {
+        if (key.getCacheType() == null) {
+            return;
+        }
 
         final String extension = key.getExtension();
         if (StringUtils.isEmpty(extension)) return;
@@ -264,6 +267,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public synchronized void assetRequested(@NotNull final AssetKey key) {
+        if (key.getCacheType() == null) {
+            return;
+        }
 
         final String extension = key.getExtension();
         if (StringUtils.isEmpty(extension)) return;
