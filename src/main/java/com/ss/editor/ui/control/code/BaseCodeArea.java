@@ -165,7 +165,12 @@ public class BaseCodeArea extends CodeArea {
 
         if (!StringUtils.equals(currentContent, content)) {
             if (content.isEmpty()) {
-                deleteText(0, currentContent.length());
+                try {
+                    clear();
+                } catch (final IllegalStateException e) {
+                    //FIXME it's a bug in the richfxeditor library
+                    e.printStackTrace();
+                }
             } else {
                 replaceText(0, currentContent.length(), content);
             }
