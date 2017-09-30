@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 1.1.0 #
+# jMonkeyEngine 3 SpaceShift Editor 1.2.0 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
