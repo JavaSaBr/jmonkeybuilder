@@ -125,7 +125,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.7.1') {
+    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.7.2') {
         exclude group: 'org.jmonkeyengine'
     }
     compile ('com.github.JavaSaBr:tonegodemitter:2.4.0') {
@@ -173,7 +173,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '4.2'
 }
 
 artifacts {
