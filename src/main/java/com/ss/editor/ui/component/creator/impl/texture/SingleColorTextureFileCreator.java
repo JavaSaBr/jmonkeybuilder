@@ -71,10 +71,6 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     @Nullable
     private ImageView imageView;
 
-    public SingleColorTextureFileCreator() {
-        super();
-    }
-
     @Override
     @FXThread
     protected void createPreview(@NotNull final BorderPane container) {
@@ -86,8 +82,8 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     /**
      * @return the image view to show preview of texture.
      */
-    @NotNull
-    private ImageView getImageView() {
+    @FXThread
+    private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 
@@ -97,22 +93,21 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
         return true;
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    @FromAnyThread
+    protected @NotNull String getFileExtension() {
         return FileExtensions.IMAGE_PNG;
     }
 
-    @NotNull
     @Override
     @FromAnyThread
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return DEFINITIONS;
     }
 

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,10 +22,12 @@ public final class VoidEditorState implements EditorState {
         throw new RuntimeException();
     }
 
+    @FXThread
     @Override
     public void setChangeHandler(@NotNull final Runnable handle) {
     }
 
+    @FXThread
     @Override
     public <T extends AdditionalEditorState> @NotNull T getOrCreateAdditionalState(@NotNull final Class<T> type,
                                                                                    @NotNull final Supplier<T> factory) {

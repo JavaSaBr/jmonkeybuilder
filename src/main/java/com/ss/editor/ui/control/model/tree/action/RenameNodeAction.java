@@ -7,11 +7,9 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to rename a model node.
@@ -20,30 +18,24 @@ import javafx.scene.image.Image;
  */
 public class RenameNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Rename node action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public RenameNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.EDIT_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_RENAME;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();

@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.property.impl;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.UIUtils;
@@ -28,11 +29,13 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
         super(element, paramName, changeConsumer);
     }
 
+    @FXThread
     @Override
     protected void processChange() {
         UIUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
+    @FXThread
     @Override
     protected void addMaterial(@NotNull final Path file) {
 
@@ -48,6 +51,7 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
         }
     }
 
+    @FXThread
     @Override
     protected void processEdit() {
 
@@ -67,6 +71,7 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
         FX_EVENT_MANAGER.notify(event);
     }
 
+    @FXThread
     @Override
     protected void reload() {
         final MaterialKey element = getPropertyValue();

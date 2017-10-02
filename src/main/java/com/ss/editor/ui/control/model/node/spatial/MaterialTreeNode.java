@@ -5,6 +5,8 @@ import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.MakeAsEmbeddedMaterialAction;
 import com.ss.editor.ui.control.model.tree.action.SaveAsMaterialAction;
@@ -29,16 +31,19 @@ public class MaterialTreeNode extends TreeNode<Material> {
     }
 
     @Override
+    @FXThread
     public @Nullable Image getIcon() {
         return Icons.MATERIAL_16;
     }
 
     @Override
+    @FromAnyThread
     public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_MATERIAL;
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         super.fillContextMenu(nodeTree, items);
 
@@ -58,11 +63,13 @@ public class MaterialTreeNode extends TreeNode<Material> {
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return false;
     }
 
     @Override
+    @FXThread
     public boolean canCopy() {
         return true;
     }

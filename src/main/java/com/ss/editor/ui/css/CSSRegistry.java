@@ -1,9 +1,12 @@
 package com.ss.editor.ui.css;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
+
+import java.net.URL;
 
 /**
  * The registry of available css files.
@@ -15,8 +18,8 @@ public class CSSRegistry {
     @NotNull
     private static final CSSRegistry INSTANCE = new CSSRegistry();
 
-    @NotNull
-    public static CSSRegistry getInstance() {
+    @FromAnyThread
+    public static @NotNull CSSRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -33,11 +36,22 @@ public class CSSRegistry {
     /**
      * Add the CSS file to this registry.
      *
-     * @param cssFile the CSS file.
+     * @param cssFile the URL to the CSS file.
      */
     @FromAnyThread
-    public void register(@NotNull String cssFile) {
-        availableCssFiles.add(cssFile);
+    public void register(@NotNull final URL cssFile) {
+        availableCssFiles.add(cssFile.toExternalForm());
+    }
+
+    /**
+     * Add the CSS file to this registry.
+     *
+     * @param cssFile     the path to CSS file.
+     * @param classLoader the class loader which can load this path.
+     */
+    @FromAnyThread
+    public void register(@NotNull final String cssFile, @NotNull final ClassLoader classLoader) {
+        register(notNull(classLoader.getResource(cssFile)));
     }
 
     /**
@@ -45,8 +59,8 @@ public class CSSRegistry {
      *
      * @return the list of available css files.
      */
-    @NotNull
-    public Array<String> getAvailableCssFiles() {
+    @FromAnyThread
+    public @NotNull Array<String> getAvailableCssFiles() {
         return availableCssFiles;
     }
 }

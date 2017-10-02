@@ -459,7 +459,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
 
         final MA editor3DState = getEditor3DState();
         if (editor3DState.isCameraMoving()) {
@@ -508,7 +509,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     /**
@@ -972,6 +973,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
+    @FXThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
@@ -1041,8 +1043,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
-        super.dragDropped(dragEvent);
+    @FXThread
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
+        super.handleDragDroppedEvent(dragEvent);
 
         UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
                 dragEvent, AbstractSceneFileEditor::addNewModel);
@@ -1052,8 +1055,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
-        super.dragOver(dragEvent);
+    @FXThread
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
+        super.handleDragOverEvent(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
     }
 

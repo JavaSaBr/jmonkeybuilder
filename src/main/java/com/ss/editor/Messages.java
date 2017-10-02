@@ -9,2399 +9,659 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * The localized messages.
+ *
+ * @author JavaSaBr
+ */
 public class Messages {
 
-    /**
-     * The constant BUNDLE_NAME.
-     */
     public static final String BUNDLE_NAME = "messages/messages";
 
-    /**
-     * The constant EDITOR_MENU_FILE.
-     */
     public static final String EDITOR_MENU_FILE;
-    /**
-     * The constant EDITOR_MENU_FILE_EXIT.
-     */
     public static final String EDITOR_MENU_FILE_EXIT;
-    /**
-     * The constant EDITOR_MENU_FILE_OPEN_ASSET.
-     */
     public static final String EDITOR_MENU_FILE_OPEN_ASSET;
-    /**
-     * The constant EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER.
-     */
     public static final String EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER;
-    /**
-     * The constant EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER.
-     */
     public static final String EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER;
-    /**
-     * The constant EDITOR_MENU_OTHER.
-     */
     public static final String EDITOR_MENU_OTHER;
-    /**
-     * The constant EDITOR_MENU_OTHER_CLEAR_ASSET_CACHE.
-     */
     public static final String EDITOR_MENU_OTHER_CLEAR_ASSET_CACHE;
-    /**
-     * The constant EDITOR_MENU_OTHER_UPDATE_CLASSPATH_AND_ASSET_CACHE.
-     */
     public static final String EDITOR_MENU_OTHER_UPDATE_CLASSPATH_AND_ASSET_CACHE;
-    /**
-     * The constant EDITOR_MENU_OTHER_SETTINGS.
-     */
     public static final String EDITOR_MENU_OTHER_SETTINGS;
-    /**
-     * The constant EDITOR_MENU_OTHER_PLUGINS.
-     */
     public static final String EDITOR_MENU_OTHER_PLUGINS;
-    /**
-     * The constant EDITOR_MENU_HELP.
-     */
     public static final String EDITOR_MENU_HELP;
-    /**
-     * The constant EDITOR_MENU_HELP_ABOUT.
-     */
     public static final String EDITOR_MENU_HELP_ABOUT;
 
-    /**
-     * The constant EDITOR_TOOL_ASSET.
-     */
     public static final String EDITOR_TOOL_ASSET;
 
-    /**
-     * The constant EDITOR_AREA_SAVE_FILE_QUESTION.
-     */
     public static final String EDITOR_AREA_SAVE_FILE_QUESTION;
 
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER;
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE.
-     */
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
 
-    /**
-     * The constant FILE_EDITOR_ACTION_SAVE.
-     */
     public static final String FILE_EDITOR_ACTION_SAVE;
 
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_SELECTION.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_SELECTION;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_GRID.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_GRID;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_STATISTICS.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_STATISTICS;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_MOVE_TOOL.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_MOVE_TOOL;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_SCALE_TOOL.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_SCALE_TOOL;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_PHYSICS.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_PHYSICS;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_DEBUG_PHYSICS;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS;
-    /**
-     * The constant SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO.
-     */
     public static final String SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO;
 
-    /**
-     * The constant MATERIAL_FILE_EDITOR_ACTION_CUBE.
-     */
     public static final String MATERIAL_FILE_EDITOR_ACTION_CUBE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_ACTION_SPHERE.
-     */
     public static final String MATERIAL_FILE_EDITOR_ACTION_SPHERE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_ACTION_PLANE.
-     */
     public static final String MATERIAL_FILE_EDITOR_ACTION_PLANE;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_ACTION_LIGHT.
-     */
     public static final String MATERIAL_FILE_EDITOR_ACTION_LIGHT;
 
-    /**
-     * The constant ASSET_EDITOR_DIALOG_TITLE.
-     */
     public static final String ASSET_EDITOR_DIALOG_TITLE;
-    /**
-     * The constant ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE.
-     */
     public static final String ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
 
-    /**
-     * The constant SAVE_AS_EDITOR_DIALOG_TITLE.
-     */
     public static final String SAVE_AS_EDITOR_DIALOG_TITLE;
-    /**
-     * The constant SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME.
-     */
     public static final String SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
 
-    /**
-     * The constant PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL.
-     */
     public static final String PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL;
-    /**
-     * The constant PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL.
-     */
     public static final String PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL;
 
-    /**
-     * The constant MATERIAL_EDITOR_MATERIAL_TYPE_LABEL.
-     */
     public static final String MATERIAL_EDITOR_MATERIAL_TYPE_LABEL;
-    /**
-     * The constant MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL.
-     */
     public static final String MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL;
 
-    /**
-     * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT.
-     */
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
-    /**
-     * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP.
-     */
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
-    /**
-     * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD.
-     */
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
-    /**
-     * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE.
-     */
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
 
-    /**
-     * The constant COLOR_MATERIAL_PARAM_CONTROL_REMOVE.
-     */
     public static final String COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
 
-    /**
-     * The constant MATERIAL_SETTINGS_MAIN.
-     */
     public static final String MATERIAL_SETTINGS_MAIN;
-    /**
-     * The constant MATERIAL_SETTINGS_TEXTURES.
-     */
     public static final String MATERIAL_SETTINGS_TEXTURES;
-    /**
-     * The constant MATERIAL_SETTINGS_COLORS.
-     */
     public static final String MATERIAL_SETTINGS_COLORS;
-    /**
-     * The constant MATERIAL_SETTINGS_RENDER.
-     */
     public static final String MATERIAL_SETTINGS_RENDER;
-    /**
-     * The constant MATERIAL_SETTINGS_OTHER.
-     */
     public static final String MATERIAL_SETTINGS_OTHER;
 
-    /**
-     * The constant MATERIAL_RENDER_STATE_FACE_CULL_MODE.
-     */
     public static final String MATERIAL_RENDER_STATE_FACE_CULL_MODE;
-    /**
-     * The constant MATERIAL_RENDER_STATE_BLEND_MODE.
-     */
     public static final String MATERIAL_RENDER_STATE_BLEND_MODE;
-    /**
-     * The constant MATERIAL_RENDER_STATE_BLEND_EQUATION.
-     */
     public static final String MATERIAL_RENDER_STATE_BLEND_EQUATION;
-    /**
-     * The constant MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA.
-     */
     public static final String MATERIAL_RENDER_STATE_BLEND_EQUATION_ALPHA;
-    /**
-     * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR.
-     */
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR;
-    /**
-     * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS.
-     */
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS;
-    /**
-     * The constant MATERIAL_RENDER_STATE_DEPTH_WRITE.
-     */
     public static final String MATERIAL_RENDER_STATE_DEPTH_WRITE;
-    /**
-     * The constant MATERIAL_RENDER_STATE_COLOR_WRITE.
-     */
     public static final String MATERIAL_RENDER_STATE_COLOR_WRITE;
-    /**
-     * The constant MATERIAL_RENDER_STATE_DEPTH_TEST.
-     */
     public static final String MATERIAL_RENDER_STATE_DEPTH_TEST;
-    /**
-     * The constant MATERIAL_RENDER_STATE_WIREFRAME.
-     */
     public static final String MATERIAL_RENDER_STATE_WIREFRAME;
 
-    /**
-     * The constant TEXT_FILE_EDITOR_NAME.
-     */
     public static final String TEXT_FILE_EDITOR_NAME;
-    /**
-     * The constant MATERIAL_EDITOR_NAME.
-     */
     public static final String MATERIAL_EDITOR_NAME;
 
-    /**
-     * The constant FILE_CREATOR_FILE_NAME_LABEL.
-     */
     public static final String FILE_CREATOR_FILE_NAME_LABEL;
 
-    /**
-     * The constant MATERIAL_FILE_CREATOR_TITLE.
-     */
     public static final String MATERIAL_FILE_CREATOR_TITLE;
-    /**
-     * The constant MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL.
-     */
     public static final String MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL;
-    /**
-     * The constant MATERIAL_FILE_CREATOR_FILE_DESCRIPTION.
-     */
     public static final String MATERIAL_FILE_CREATOR_FILE_DESCRIPTION;
-    /**
-     * The constant MATERIAL_DEFINITION_FILE_CREATOR_FILE_DESCRIPTION.
-     */
     public static final String MATERIAL_DEFINITION_FILE_CREATOR_FILE_DESCRIPTION;
-    /**
-     * The constant MATERIAL_DEFINITION_FILE_CREATOR_TITLE.
-     */
     public static final String MATERIAL_DEFINITION_FILE_CREATOR_TITLE;
-    /**
-     * The constant MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL.
-     */
     public static final String MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL;
 
-    /**
-     * The constant SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE.
-     */
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE;
-    /**
-     * The constant SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH.
-     */
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH;
-    /**
-     * The constant SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT.
-     */
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT;
-    /**
-     * The constant SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR.
-     */
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR;
-    /**
-     * The constant SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION.
-     */
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
 
-    /**
-     * The constant SETTINGS_DIALOG_TITLE.
-     */
     public static final String SETTINGS_DIALOG_TITLE;
-    /**
-     * The constant SETTINGS_DIALOG_FXAA.
-     */
     public static final String SETTINGS_DIALOG_FXAA;
-    /**
-     * The constant SETTINGS_DIALOG_NATIVE_FILE_CHOOSER.
-     */
     public static final String SETTINGS_DIALOG_NATIVE_FILE_CHOOSER;
-    /**
-     * The constant SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS.
-     */
     public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
-    /**
-     * The constant SETTINGS_DIALOG_FRAME_RATE.
-     */
     public static final String SETTINGS_DIALOG_FRAME_RATE;
-    /**
-     * The constant SETTINGS_DIALOG_GAMMA_CORRECTION.
-     */
     public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
-    /**
-     * The constant SETTINGS_DIALOG_TONEMAP_FILTER.
-     */
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
-    /**
-     * The constant SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT.
-     */
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
-    /**
-     * The constant SETTINGS_DIALOG_ANISOTROPY.
-     */
     public static final String SETTINGS_DIALOG_ANISOTROPY;
-    /**
-     * The constant SETTINGS_DIALOG_MESSAGE.
-     */
     public static final String SETTINGS_DIALOG_MESSAGE;
-    /**
-     * The constant SETTINGS_DIALOG_GOOGLE_ANALYTICS.
-     */
     public static final String SETTINGS_DIALOG_GOOGLE_ANALYTICS;
-    /**
-     * The constant SETTINGS_DIALOG_CAMERA_ANGLE.
-     */
     public static final String SETTINGS_DIALOG_CAMERA_ANGLE;
-    /**
-     * The constant SETTINGS_DIALOG_AUTO_TANGENT_GENERATING.
-     */
     public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
-    /**
-     * The constant SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE.
-     */
     public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
-    /**
-     * The constant SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED.
-     */
     public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
-    /**
-     * The constant SETTINGS_DIALOG_TAB_GRAPHICS.
-     */
     public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
-    /**
-     * The constant SETTINGS_DIALOG_TAB_OTHER.
-     */
     public static final String SETTINGS_DIALOG_TAB_OTHER;
-    /**
-     * The constant SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL.
-     */
     public static final String SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL;
-    /**
-     * The constant SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL.
-     */
     public static final String SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL;
-    /**
-     * The constant SETTINGS_DIALOG_THEME_LABEL.
-     */
     public static final String SETTINGS_DIALOG_THEME_LABEL;
-    /**
-     * The constant SETTINGS_DIALOG_OPEN_GL_LABEL.
-     */
     public static final String SETTINGS_DIALOG_OPEN_GL_LABEL;
-    /**
-     * The constant SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE.
-     */
     public static final String SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE;
-    /**
-     * The constant SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE.
-     */
     public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
-    /**
-     * The constant SETTINGS_DIALOG_ENVS_FOLDER_LABEL.
-     */
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
-    /**
-     * The constant SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE.
-     */
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
 
-    /**
-     * The constant BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
-    /**
-     * The constant GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
-    /**
-     * The constant FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
-    /**
-     * The constant OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION;
-    /**
-     * The constant XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
-    /**
-     * The constant SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION;
-    /**
-     * The constant MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION.
-     */
     public static final String MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
-    /**
-     * The constant MODEL_FILE_EDITOR_NAME.
-     */
     public static final String MODEL_FILE_EDITOR_NAME;
-    /**
-     * The constant MODEL_FILE_EDITOR_NO_SKY.
-     */
     public static final String MODEL_FILE_EDITOR_NO_SKY;
-    /**
-     * The constant MODEL_FILE_EDITOR_FAST_SKY.
-     */
     public static final String MODEL_FILE_EDITOR_FAST_SKY;
-    /**
-     * The constant MODEL_FILE_EDITOR_TRANSFORM_MODE.
-     */
     public static final String MODEL_FILE_EDITOR_TRANSFORM_MODE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_MESH.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_MATERIAL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_MATERIAL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_POINT_LIGHT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_POINT_LIGHT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_SPOT_LIGHT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_SPOT_LIGHT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_LIGHT_PROBE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_ANIM_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_RADIAL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_RADIAL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_BOX.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_BOX;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_SPHERE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_SPHERE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_POINT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_POINT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_VERTEX.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_VERTEX;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_FACE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_FACE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL;
 
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_CONE_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_CONE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_CYLINDER_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_CYLINDER_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_GIMPACT_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_GIMPACT_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_HEIGHT_FIELD_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_HEIGHT_FIELD_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_HULL_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_HULL_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_WHEEL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_WHEEL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_MOTION_CONTROL.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_CONTROL;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_MOTION_PATH.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_PATH;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_WAY_POINT.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_WAY_POINT;
-    /**
-     * The constant MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER.
-     */
     public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
 
-    /**
-     * The constant SCENE_FILE_EDITOR_NAME.
-     */
     public static final String SCENE_FILE_EDITOR_NAME;
-    /**
-     * The constant SCENE_FILE_EDITOR_TOOL_OBJECTS.
-     */
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
-    /**
-     * The constant SCENE_FILE_EDITOR_TOOL_EDITING.
-     */
     public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
-    /**
-     * The constant SCENE_FILE_EDITOR_TOOL_SCRIPTING.
-     */
     public static final String SCENE_FILE_EDITOR_TOOL_SCRIPTING;
-    /**
-     * The constant SCENE_FILE_EDITOR_TOOL_APP_STATES.
-     */
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
-    /**
-     * The constant SCENE_FILE_EDITOR_TOOL_FILTERS.
-     */
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
-    /**
-     * The constant SCENE_FILE_EDITOR_TOOL_LAYERS.
-     */
     public static final String SCENE_FILE_EDITOR_TOOL_LAYERS;
 
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_REMOVE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_RENAME.
-     */
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_TOOLS.
-     */
     public static final String MODEL_NODE_TREE_ACTION_TOOLS;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_NODE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_NODE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_SKY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SKY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_LOAD_MODEL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_SAVE_AS.
-     */
     public static final String MODEL_NODE_TREE_ACTION_SAVE_AS;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED.
-     */
     public static final String MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_LINK_MODEL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_LINK_MODEL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR.
-     */
     public static final String MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_LOD_GENERATOR.
-     */
     public static final String MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_LIGHT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_LIGHT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_POINT_LIGHT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_POINT_LIGHT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_SPOT_LIGHT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_SPOT_LIGHT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ANIMATION_PLAY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ANIMATION_STOP.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION.
-     */
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_AUDIO_PLAY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_AUDIO_STOP.
-     */
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS.
-     */
     public static final String MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_DEFAULT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_DEFAULT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_EMPTY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_EMPTY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_POINT_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_POINT_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_BOX_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_BOX_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_VERTEX_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_VERTEX_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_FACE_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_FACE_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_CONVEX_HULL_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_CONVEX_HULL_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CYLINDER_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CYLINDER_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_DOME_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_DOME_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_QUAD_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_QUAD_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TORUS_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TORUS_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE;
 
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_QUAD.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_QUAD;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_POINT.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_POINT;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_IMPOSTOR.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_IMPOSTOR;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_MODEL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_MODEL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_LAYER.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_LAYER;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_USER_DATA.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_REACTIVATE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_REACTIVATE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE.
-     */
     public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_WHEEL.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
-    /**
-     * The constant MODEL_NODE_TREE_ACTION_ADD_TERRAIN.
-     */
     public static final String MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
 
-    /**
-     * The constant MODEL_PROPERTY_CULL_HINT.
-     */
     public static final String MODEL_PROPERTY_CULL_HINT;
-    /**
-     * The constant MODEL_PROPERTY_SHADOW_MODE.
-     */
     public static final String MODEL_PROPERTY_SHADOW_MODE;
-    /**
-     * The constant MODEL_PROPERTY_QUEUE_BUCKET.
-     */
     public static final String MODEL_PROPERTY_QUEUE_BUCKET;
-    /**
-     * The constant MODEL_PROPERTY_LOCATION.
-     */
     public static final String MODEL_PROPERTY_LOCATION;
-    /**
-     * The constant MODEL_PROPERTY_SCALE.
-     */
     public static final String MODEL_PROPERTY_SCALE;
-    /**
-     * The constant MODEL_PROPERTY_ROTATION.
-     */
     public static final String MODEL_PROPERTY_ROTATION;
-    /**
-     * The constant MODEL_PROPERTY_MATERIAL.
-     */
     public static final String MODEL_PROPERTY_MATERIAL;
-    /**
-     * The constant MODEL_PROPERTY_DIRECTION.
-     */
     public static final String MODEL_PROPERTY_DIRECTION;
-    /**
-     * The constant MODEL_PROPERTY_RADIUS.
-     */
     public static final String MODEL_PROPERTY_RADIUS;
-    /**
-     * The constant MODEL_PROPERTY_COLOR.
-     */
     public static final String MODEL_PROPERTY_COLOR;
-    /**
-     * The constant MODEL_PROPERTY_INNER_ANGLE.
-     */
     public static final String MODEL_PROPERTY_INNER_ANGLE;
-    /**
-     * The constant MODEL_PROPERTY_OUTER_ANGLE.
-     */
     public static final String MODEL_PROPERTY_OUTER_ANGLE;
-    /**
-     * The constant MODEL_PROPERTY_MIN.
-     */
     public static final String MODEL_PROPERTY_MIN;
-    /**
-     * The constant MODEL_PROPERTY_MAX.
-     */
     public static final String MODEL_PROPERTY_MAX;
-    /**
-     * The constant MODEL_PROPERTY_IS_LOOPING.
-     */
     public static final String MODEL_PROPERTY_IS_LOOPING;
-    /**
-     * The constant MODEL_PROPERTY_IS_REVERB.
-     */
     public static final String MODEL_PROPERTY_IS_REVERB;
-    /**
-     * The constant MODEL_PROPERTY_IS_DIRECTIONAL.
-     */
     public static final String MODEL_PROPERTY_IS_DIRECTIONAL;
-    /**
-     * The constant MODEL_PROPERTY_IS_POSITIONAL.
-     */
     public static final String MODEL_PROPERTY_IS_POSITIONAL;
-    /**
-     * The constant MODEL_PROPERTY_AUDIO_PITCH.
-     */
     public static final String MODEL_PROPERTY_AUDIO_PITCH;
-    /**
-     * The constant MODEL_PROPERTY_AUDIO_VOLUME.
-     */
     public static final String MODEL_PROPERTY_AUDIO_VOLUME;
-    /**
-     * The constant MODEL_PROPERTY_TIME_OFFSET.
-     */
     public static final String MODEL_PROPERTY_TIME_OFFSET;
-    /**
-     * The constant MODEL_PROPERTY_MAX_DISTANCE.
-     */
     public static final String MODEL_PROPERTY_MAX_DISTANCE;
-    /**
-     * The constant MODEL_PROPERTY_REF_DISTANCE.
-     */
     public static final String MODEL_PROPERTY_REF_DISTANCE;
-    /**
-     * The constant MODEL_PROPERTY_AUDIO_DATA.
-     */
     public static final String MODEL_PROPERTY_AUDIO_DATA;
-    /**
-     * The constant MODEL_PROPERTY_VELOCITY.
-     */
     public static final String MODEL_PROPERTY_VELOCITY;
-    /**
-     * The constant MODEL_PROPERTY_LOD.
-     */
     public static final String MODEL_PROPERTY_LOD;
-    /**
-     * The constant MODEL_PROPERTY_TRIANGLE_COUNT.
-     */
     public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
-    /**
-     * The constant MODEL_PROPERTY_LEVEL.
-     */
     public static final String MODEL_PROPERTY_LEVEL;
-    /**
-     * The constant MODEL_PROPERTY_LAYER.
-     */
     public static final String MODEL_PROPERTY_LAYER;
-    /**
-     * The constant MODEL_PROPERTY_VALUE.
-     */
     public static final String MODEL_PROPERTY_VALUE;
-    /**
-     * The constant MODEL_PROPERTY_ID.
-     */
     public static final String MODEL_PROPERTY_ID;
-    /**
-     * The constant MODEL_PROPERTY_INSTANCE_COUNT.
-     */
     public static final String MODEL_PROPERTY_INSTANCE_COUNT;
-    /**
-     * The constant MODEL_PROPERTY_VERTEX_COUNT.
-     */
     public static final String MODEL_PROPERTY_VERTEX_COUNT;
-    /**
-     * The constant MODEL_PROPERTY_NUM_LOD_LEVELS.
-     */
     public static final String MODEL_PROPERTY_NUM_LOD_LEVELS;
-    /**
-     * The constant MODEL_PROPERTY_MODE.
-     */
     public static final String MODEL_PROPERTY_MODE;
-    /**
-     * The constant MODEL_PROPERTY_TYPE.
-     */
     public static final String MODEL_PROPERTY_TYPE;
-    /**
-     * The constant MODEL_PROPERTY_FORMAT.
-     */
     public static final String MODEL_PROPERTY_FORMAT;
-    /**
-     * The constant MODEL_PROPERTY_USAGE.
-     */
     public static final String MODEL_PROPERTY_USAGE;
-    /**
-     * The constant MODEL_PROPERTY_UNIQ_ID.
-     */
     public static final String MODEL_PROPERTY_UNIQ_ID;
-    /**
-     * The constant MODEL_PROPERTY_BASE_INSTANCE_COUNT.
-     */
     public static final String MODEL_PROPERTY_BASE_INSTANCE_COUNT;
-    /**
-     * The constant MODEL_PROPERTY_INSTANCE_SPAN.
-     */
     public static final String MODEL_PROPERTY_INSTANCE_SPAN;
-    /**
-     * The constant MODEL_PROPERTY_NUM_COMPONENTS.
-     */
     public static final String MODEL_PROPERTY_NUM_COMPONENTS;
-    /**
-     * The constant MODEL_PROPERTY_NUM_ELEMENTS.
-     */
     public static final String MODEL_PROPERTY_NUM_ELEMENTS;
-    /**
-     * The constant MODEL_PROPERTY_OFFSET.
-     */
     public static final String MODEL_PROPERTY_OFFSET;
-    /**
-     * The constant MODEL_PROPERTY_STRIDE.
-     */
     public static final String MODEL_PROPERTY_STRIDE;
-    /**
-     * The constant MODEL_PROPERTY_CAPACITY.
-     */
     public static final String MODEL_PROPERTY_CAPACITY;
-    /**
-     * The constant MODEL_PROPERTY_IS_ENABLED.
-     */
     public static final String MODEL_PROPERTY_IS_ENABLED;
-    /**
-     * The constant MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED.
-     */
     public static final String MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED;
-    /**
-     * The constant MODEL_PROPERTY_VIEW_DIRECTION.
-     */
     public static final String MODEL_PROPERTY_VIEW_DIRECTION;
-    /**
-     * The constant MODEL_PROPERTY_WALK_DIRECTION.
-     */
     public static final String MODEL_PROPERTY_WALK_DIRECTION;
-    /**
-     * The constant MODEL_PROPERTY_FALL_SPEED.
-     */
     public static final String MODEL_PROPERTY_FALL_SPEED;
-    /**
-     * The constant MODEL_PROPERTY_GRAVITY.
-     */
     public static final String MODEL_PROPERTY_GRAVITY;
-    /**
-     * The constant MODEL_PROPERTY_JUMP_SPEED.
-     */
     public static final String MODEL_PROPERTY_JUMP_SPEED;
-    /**
-     * The constant MODEL_PROPERTY_MAX_SLOPE.
-     */
     public static final String MODEL_PROPERTY_MAX_SLOPE;
-    /**
-     * The constant MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL.
-     */
     public static final String MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL;
-    /**
-     * The constant MODEL_PROPERTY_IS_USE_VIEW_DIRECTION.
-     */
     public static final String MODEL_PROPERTY_IS_USE_VIEW_DIRECTION;
-    /**
-     * The constant MODEL_PROPERTY_IS_KINEMATIC_SPATIAL.
-     */
     public static final String MODEL_PROPERTY_IS_KINEMATIC_SPATIAL;
-    /**
-     * The constant MODEL_PROPERTY_IS_KINEMATIC.
-     */
     public static final String MODEL_PROPERTY_IS_KINEMATIC;
-    /**
-     * The constant MODEL_PROPERTY_ANGULAR_VELOCITY.
-     */
     public static final String MODEL_PROPERTY_ANGULAR_VELOCITY;
-    /**
-     * The constant MODEL_PROPERTY_LINEAR_FACTOR.
-     */
     public static final String MODEL_PROPERTY_LINEAR_FACTOR;
-    /**
-     * The constant MODEL_PROPERTY_ANGULAR_DAMPING.
-     */
     public static final String MODEL_PROPERTY_ANGULAR_DAMPING;
-    /**
-     * The constant MODEL_PROPERTY_ANGULAR_FACTOR.
-     */
     public static final String MODEL_PROPERTY_ANGULAR_FACTOR;
-    /**
-     * The constant MODEL_PROPERTY_FRICTION.
-     */
     public static final String MODEL_PROPERTY_FRICTION;
-    /**
-     * The constant MODEL_PROPERTY_LINEAR_DAMPING.
-     */
     public static final String MODEL_PROPERTY_LINEAR_DAMPING;
-    /**
-     * The constant MODEL_PROPERTY_MASS.
-     */
     public static final String MODEL_PROPERTY_MASS;
-    /**
-     * The constant MODEL_PROPERTY_RESTITUTION.
-     */
     public static final String MODEL_PROPERTY_RESTITUTION;
-    /**
-     * The constant MODEL_PROPERTY_CURRENT_VALUE.
-     */
     public static final String MODEL_PROPERTY_CURRENT_VALUE;
-    /**
-     * The constant MODEL_PROPERTY_CURRENT_WAY_POINT.
-     */
     public static final String MODEL_PROPERTY_CURRENT_WAY_POINT;
-    /**
-     * The constant MODEL_PROPERTY_DIRECTION_TYPE.
-     */
     public static final String MODEL_PROPERTY_DIRECTION_TYPE;
-    /**
-     * The constant MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD.
-     */
     public static final String MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD;
-    /**
-     * The constant MODEL_PROPERTY_LOOP_MODE.
-     */
     public static final String MODEL_PROPERTY_LOOP_MODE;
-    /**
-     * The constant MODEL_PROPERTY_INITIAL_DURATION.
-     */
     public static final String MODEL_PROPERTY_INITIAL_DURATION;
-    /**
-     * The constant MODEL_PROPERTY_SPEED.
-     */
     public static final String MODEL_PROPERTY_SPEED;
-    /**
-     * The constant MODEL_PROPERTY_TIME.
-     */
     public static final String MODEL_PROPERTY_TIME;
-    /**
-     * The constant MODEL_PROPERTY_MARGIN.
-     */
     public static final String MODEL_PROPERTY_MARGIN;
-    /**
-     * The constant MODEL_PROPERTY_HALF_EXTENTS.
-     */
     public static final String MODEL_PROPERTY_HALF_EXTENTS;
-    /**
-     * The constant MODEL_PROPERTY_HEIGHT.
-     */
     public static final String MODEL_PROPERTY_HEIGHT;
-    /**
-     * The constant MODEL_PROPERTY_AXIS.
-     */
     public static final String MODEL_PROPERTY_AXIS;
-    /**
-     * The constant MODEL_PROPERTY_OBJECT_ID.
-     */
     public static final String MODEL_PROPERTY_OBJECT_ID;
-    /**
-     * The constant MODEL_PROPERTY_AXLE.
-     */
     public static final String MODEL_PROPERTY_AXLE;
-    /**
-     * The constant MODEL_PROPERTY_REST_LENGTH.
-     */
     public static final String MODEL_PROPERTY_REST_LENGTH;
-    /**
-     * The constant MODEL_PROPERTY_IS_FRONT.
-     */
     public static final String MODEL_PROPERTY_IS_FRONT;
-    /**
-     * The constant MODEL_PROPERTY_DAMPING_COMPRESSION.
-     */
     public static final String MODEL_PROPERTY_DAMPING_COMPRESSION;
-    /**
-     * The constant MODEL_PROPERTY_FRICTION_SLIP.
-     */
     public static final String MODEL_PROPERTY_FRICTION_SLIP;
-    /**
-     * The constant MODEL_PROPERTY_MAX_SUSPENSION_FORCE.
-     */
     public static final String MODEL_PROPERTY_MAX_SUSPENSION_FORCE;
-    /**
-     * The constant MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM.
-     */
     public static final String MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM;
-    /**
-     * The constant MODEL_PROPERTY_DAMPING_RELAXATION.
-     */
     public static final String MODEL_PROPERTY_DAMPING_RELAXATION;
-    /**
-     * The constant MODEL_PROPERTY_SUSPENSION_STIFFNESS.
-     */
     public static final String MODEL_PROPERTY_SUSPENSION_STIFFNESS;
-    /**
-     * The constant MODEL_PROPERTY_ROLL_INFLUENCE.
-     */
     public static final String MODEL_PROPERTY_ROLL_INFLUENCE;
-    /**
-     * The constant MODEL_PROPERTY_WHEEL_SPATIAL.
-     */
     public static final String MODEL_PROPERTY_WHEEL_SPATIAL;
-    /**
-     * The constant MODEL_PROPERTY_LENGTH.
-     */
     public static final String MODEL_PROPERTY_LENGTH;
-    /**
-     * The constant MODEL_PROPERTY_CURRENT_TIME.
-     */
     public static final String MODEL_PROPERTY_CURRENT_TIME;
-    /**
-     * The constant MODEL_PROPERTY_POINT.
-     */
     public static final String MODEL_PROPERTY_POINT;
-    /**
-     * The constant MODEL_PROPERTY_CENTER.
-     */
     public static final String MODEL_PROPERTY_CENTER;
-    /**
-     * The constant MODEL_PROPERTY_VELOCITY_VARIATION.
-     */
     public static final String MODEL_PROPERTY_VELOCITY_VARIATION;
-    /**
-     * The constant MODEL_PROPERTY_INITIAL_VELOCITY.
-     */
     public static final String MODEL_PROPERTY_INITIAL_VELOCITY;
-    /**
-     * The constant MODEL_PROPERTY_ORIGIN.
-     */
     public static final String MODEL_PROPERTY_ORIGIN;
-    /**
-     * The constant MODEL_PROPERTY_RADIAL_VELOCITY.
-     */
     public static final String MODEL_PROPERTY_RADIAL_VELOCITY;
-    /**
-     * The constant MODEL_PROPERTY_IS_HORIZONTAL.
-     */
     public static final String MODEL_PROPERTY_IS_HORIZONTAL;
-    /**
-     * The constant MODEL_PROPERTY_IS_TEST_MODE.
-     */
     public static final String MODEL_PROPERTY_IS_TEST_MODE;
-    /**
-     * The constant MODEL_PROPERTY_IS_FACING_VELOCITY.
-     */
     public static final String MODEL_PROPERTY_IS_FACING_VELOCITY;
-    /**
-     * The constant MODEL_PROPERTY_IS_IN_WORLD_SPACE.
-     */
     public static final String MODEL_PROPERTY_IS_IN_WORLD_SPACE;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_ANGLE.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_ANGLE;
-    /**
-     * The constant MODEL_PROPERTY_IS_SELECT_RANDOM_IMAGE.
-     */
     public static final String MODEL_PROPERTY_IS_SELECT_RANDOM_IMAGE;
-    /**
-     * The constant MODEL_PROPERTY_SIZE.
-     */
     public static final String MODEL_PROPERTY_SIZE;
-    /**
-     * The constant MODEL_PROPERTY_ROTATE_SPEED.
-     */
     public static final String MODEL_PROPERTY_ROTATE_SPEED;
-    /**
-     * The constant MODEL_PROPERTY_START_COLOR.
-     */
     public static final String MODEL_PROPERTY_START_COLOR;
-    /**
-     * The constant MODEL_PROPERTY_END_COLOR.
-     */
     public static final String MODEL_PROPERTY_END_COLOR;
-    /**
-     * The constant MODEL_PROPERTY_MESH_TYPE.
-     */
     public static final String MODEL_PROPERTY_MESH_TYPE;
-    /**
-     * The constant MODEL_PROPERTY_FACE_NORMAL.
-     */
     public static final String MODEL_PROPERTY_FACE_NORMAL;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_POINT.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_POINT;
-    /**
-     * The constant MODEL_PROPERTY_IS_SEQUENTIAL_FACE.
-     */
     public static final String MODEL_PROPERTY_IS_SEQUENTIAL_FACE;
-    /**
-     * The constant MODEL_PROPERTY_IS_SKIP_PATTERN.
-     */
     public static final String MODEL_PROPERTY_IS_SKIP_PATTERN;
-    /**
-     * The constant MODEL_PROPERTY_EMISSION_POINT.
-     */
     public static final String MODEL_PROPERTY_EMISSION_POINT;
-    /**
-     * The constant MODEL_PROPERTY_MAX_PARTICLES.
-     */
     public static final String MODEL_PROPERTY_MAX_PARTICLES;
-    /**
-     * The constant MODEL_PROPERTY_EMISSION_PER_SECOND.
-     */
     public static final String MODEL_PROPERTY_EMISSION_PER_SECOND;
-    /**
-     * The constant MODEL_PROPERTY_PARTICLES_PER_SECOND.
-     */
     public static final String MODEL_PROPERTY_PARTICLES_PER_SECOND;
-    /**
-     * The constant MODEL_PROPERTY_EMITTER_LIFE.
-     */
     public static final String MODEL_PROPERTY_EMITTER_LIFE;
-    /**
-     * The constant MODEL_PROPERTY_EMITTER_DELAY.
-     */
     public static final String MODEL_PROPERTY_EMITTER_DELAY;
-    /**
-     * The constant MODEL_PROPERTY_IS_TEST_PARTICLES.
-     */
     public static final String MODEL_PROPERTY_IS_TEST_PARTICLES;
-    /**
-     * The constant MODEL_PROPERTY_IS_FOLLOW_EMITTER.
-     */
     public static final String MODEL_PROPERTY_IS_FOLLOW_EMITTER;
-    /**
-     * The constant MODEL_PROPERTY_STRETCHING.
-     */
     public static final String MODEL_PROPERTY_STRETCHING;
-    /**
-     * The constant MODEL_PROPERTY_MAGNITUDE.
-     */
     public static final String MODEL_PROPERTY_MAGNITUDE;
-    /**
-     * The constant MODEL_PROPERTY_BILLBOARD.
-     */
     public static final String MODEL_PROPERTY_BILLBOARD;
-    /**
-     * The constant MODEL_PROPERTY_INITIAL_FORCE.
-     */
     public static final String MODEL_PROPERTY_INITIAL_FORCE;
-    /**
-     * The constant MODEL_PROPERTY_LIFE.
-     */
     public static final String MODEL_PROPERTY_LIFE;
-    /**
-     * The constant MODEL_PROPERTY_COLUMNS.
-     */
     public static final String MODEL_PROPERTY_COLUMNS;
-    /**
-     * The constant MODEL_PROPERTY_ROWS.
-     */
     public static final String MODEL_PROPERTY_ROWS;
-    /**
-     * The constant MODEL_PROPERTY_SPRITE_COUNT.
-     */
     public static final String MODEL_PROPERTY_SPRITE_COUNT;
-    /**
-     * The constant MODEL_PROPERTY_FIXED_DURATION.
-     */
     public static final String MODEL_PROPERTY_FIXED_DURATION;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_START_COLOR.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_START_COLOR;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_START_SIZE.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_START_SIZE;
-    /**
-     * The constant MODEL_PROPERTY_SIZE_VARIATION_FACTOR.
-     */
     public static final String MODEL_PROPERTY_SIZE_VARIATION_FACTOR;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_START_DESTINATION.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_START_DESTINATION;
-    /**
-     * The constant MODEL_PROPERTY_CHANCE.
-     */
     public static final String MODEL_PROPERTY_CHANCE;
-    /**
-     * The constant MODEL_PROPERTY_STRENGTH.
-     */
     public static final String MODEL_PROPERTY_STRENGTH;
-    /**
-     * The constant MODEL_PROPERTY_ALIGNMENT.
-     */
     public static final String MODEL_PROPERTY_ALIGNMENT;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_DIRECTION.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_DIRECTION;
-    /**
-     * The constant MODEL_PROPERTY_PULL_CENTER.
-     */
     public static final String MODEL_PROPERTY_PULL_CENTER;
-    /**
-     * The constant MODEL_PROPERTY_PULL_ALIGNMENT.
-     */
     public static final String MODEL_PROPERTY_PULL_ALIGNMENT;
-    /**
-     * The constant MODEL_PROPERTY_UP_ALIGNMENT.
-     */
     public static final String MODEL_PROPERTY_UP_ALIGNMENT;
-    /**
-     * The constant MODEL_PROPERTY_RADIAL_PULL.
-     */
     public static final String MODEL_PROPERTY_RADIAL_PULL;
-    /**
-     * The constant MODEL_PROPERTY_TANGENT_FORCE.
-     */
     public static final String MODEL_PROPERTY_TANGENT_FORCE;
-    /**
-     * The constant MODEL_PROPERTY_ALPHA_INTERPOLATION.
-     */
     public static final String MODEL_PROPERTY_ALPHA_INTERPOLATION;
-    /**
-     * The constant MODEL_PROPERTY_COLOR_INTERPOLATION.
-     */
     public static final String MODEL_PROPERTY_COLOR_INTERPOLATION;
-    /**
-     * The constant MODEL_PROPERTY_DESTINATION_INTERPOLATION.
-     */
     public static final String MODEL_PROPERTY_DESTINATION_INTERPOLATION;
-    /**
-     * The constant MODEL_PROPERTY_ROTATION_INTERPOLATION.
-     */
     public static final String MODEL_PROPERTY_ROTATION_INTERPOLATION;
-    /**
-     * The constant MODEL_PROPERTY_SIZE_INTERPOLATION.
-     */
     public static final String MODEL_PROPERTY_SIZE_INTERPOLATION;
-    /**
-     * The constant MODEL_PROPERTY_ALPHA.
-     */
     public static final String MODEL_PROPERTY_ALPHA;
-    /**
-     * The constant MODEL_PROPERTY_FRAME_SEQUENCE.
-     */
     public static final String MODEL_PROPERTY_FRAME_SEQUENCE;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_START_IMAGE.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_START_IMAGE;
-    /**
-     * The constant MODEL_PROPERTY_IS_ANIMATE.
-     */
     public static final String MODEL_PROPERTY_IS_ANIMATE;
-    /**
-     * The constant MODEL_PROPERTY_REACTION.
-     */
     public static final String MODEL_PROPERTY_REACTION;
-    /**
-     * The constant MODEL_PROPERTY_IS_RANDOM_SPEED.
-     */
     public static final String MODEL_PROPERTY_IS_RANDOM_SPEED;
-    /**
-     * The constant MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X.
-     */
     public static final String MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X;
-    /**
-     * The constant MODEL_PROPERTY_INTERPOLATION.
-     */
     public static final String MODEL_PROPERTY_INTERPOLATION;
-    /**
-     * The constant MODEL_PROPERTY_GEOMETRY_LIST.
-     */
     public static final String MODEL_PROPERTY_GEOMETRY_LIST;
-    /**
-     * The constant MODEL_PROPERTY_GEOMETRY.
-     */
     public static final String MODEL_PROPERTY_GEOMETRY;
-    /**
-     * The constant MODEL_PROPERTY_AXIS_SAMPLES.
-     */
     public static final String MODEL_PROPERTY_AXIS_SAMPLES;
-    /**
-     * The constant MODEL_PROPERTY_RADIAL_SAMPLES.
-     */
     public static final String MODEL_PROPERTY_RADIAL_SAMPLES;
-    /**
-     * The constant MODEL_PROPERTY_PLANES.
-     */
     public static final String MODEL_PROPERTY_PLANES;
-    /**
-     * The constant MODEL_PROPERTY_WIDTH.
-     */
     public static final String MODEL_PROPERTY_WIDTH;
-    /**
-     * The constant MODEL_PROPERTY_FLIP_COORDS.
-     */
     public static final String MODEL_PROPERTY_FLIP_COORDS;
-    /**
-     * The constant MODEL_PROPERTY_Z_SAMPLES.
-     */
     public static final String MODEL_PROPERTY_Z_SAMPLES;
-    /**
-     * The constant MODEL_PROPERTY_CIRCLE_SAMPLES.
-     */
     public static final String MODEL_PROPERTY_CIRCLE_SAMPLES;
-    /**
-     * The constant MODEL_PROPERTY_INNER_RADIUS.
-     */
     public static final String MODEL_PROPERTY_INNER_RADIUS;
-    /**
-     * The constant MODEL_PROPERTY_OUTER_RADIUS.
-     */
     public static final String MODEL_PROPERTY_OUTER_RADIUS;
-    /**
-     * The constant MODEL_PROPERTY_NAME.
-     */
     public static final String MODEL_PROPERTY_NAME;
-    /**
-     * The constant MODEL_PROPERTY_DATA_TYPE.
-     */
     public static final String MODEL_PROPERTY_DATA_TYPE;
 
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER;
-    /**
-     * The constant MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER.
-     */
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER;
 
-    /**
-     * The constant ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT.
-     */
     public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
-    /**
-     * The constant LAYER_PROPERTY_CONTROL_NO_LAYER.
-     */
     public static final String LAYER_PROPERTY_CONTROL_NO_LAYER;
-    /**
-     * The constant AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO.
-     */
     public static final String AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
-    /**
-     * The constant CHOOSE_FOLDER_CONTROL_NO_FOLDER.
-     */
     public static final String CHOOSE_FOLDER_CONTROL_NO_FOLDER;
 
-    /**
-     * The constant RENAME_DIALOG_TITLE.
-     */
     public static final String RENAME_DIALOG_TITLE;
-    /**
-     * The constant RENAME_DIALOG_NEW_NAME_LABEL.
-     */
     public static final String RENAME_DIALOG_NEW_NAME_LABEL;
-    /**
-     * The constant RENAME_DIALOG_BUTTON_OK.
-     */
     public static final String RENAME_DIALOG_BUTTON_OK;
 
-    /**
-     * The constant PLAY_ANIMATION_SETTINGS_DIALOG_TITLE.
-     */
     public static final String PLAY_ANIMATION_SETTINGS_DIALOG_TITLE;
 
-    /**
-     * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE.
-     */
     public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE;
-    /**
-     * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_NAME.
-     */
     public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_NAME;
-    /**
-     * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE.
-     */
     public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE;
-    /**
-     * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME.
-     */
     public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME;
-    /**
-     * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME.
-     */
     public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME;
-    /**
-     * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK.
-     */
     public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
 
-    /**
-     * The constant QUESTION_DIALOG_TITLE.
-     */
     public static final String QUESTION_DIALOG_TITLE;
 
-    /**
-     * The constant FOLDER_CREATOR_DESCRIPTION.
-     */
     public static final String FOLDER_CREATOR_DESCRIPTION;
-    /**
-     * The constant FOLDER_CREATOR_TITLE.
-     */
     public static final String FOLDER_CREATOR_TITLE;
-    /**
-     * The constant FOLDER_CREATOR_FILE_NAME_LABEL.
-     */
     public static final String FOLDER_CREATOR_FILE_NAME_LABEL;
 
-    /**
-     * The constant EMPTY_FILE_CREATOR_DESCRIPTION.
-     */
     public static final String EMPTY_FILE_CREATOR_DESCRIPTION;
-    /**
-     * The constant EMPTY_FILE_CREATOR_TITLE.
-     */
     public static final String EMPTY_FILE_CREATOR_TITLE;
 
-    /**
-     * The constant IMAGE_VIEWER_EDITOR_NAME.
-     */
     public static final String IMAGE_VIEWER_EDITOR_NAME;
 
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_NAME.
-     */
     public static final String AUDIO_VIEWER_EDITOR_NAME;
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_DURATION_LABEL.
-     */
     public static final String AUDIO_VIEWER_EDITOR_DURATION_LABEL;
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL.
-     */
     public static final String AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL;
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_CHANNELS_LABEL.
-     */
     public static final String AUDIO_VIEWER_EDITOR_CHANNELS_LABEL;
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL.
-     */
     public static final String AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL;
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL.
-     */
     public static final String AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL;
 
-    /**
-     * The constant CREATE_SKY_DIALOG_TITLE.
-     */
     public static final String CREATE_SKY_DIALOG_TITLE;
-    /**
-     * The constant CREATE_SKY_DIALOG_SKY_TYPE_SINGLE.
-     */
     public static final String CREATE_SKY_DIALOG_SKY_TYPE_SINGLE;
-    /**
-     * The constant CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE.
-     */
     public static final String CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE;
-    /**
-     * The constant CREATE_SKY_DIALOG_SKY_TYPE.
-     */
     public static final String CREATE_SKY_DIALOG_SKY_TYPE;
-    /**
-     * The constant CREATE_SKY_DIALOG_NORMAL_SCALE.
-     */
     public static final String CREATE_SKY_DIALOG_NORMAL_SCALE;
-    /**
-     * The constant CREATE_SKY_DIALOG_MATERIAL_FOLDER.
-     */
     public static final String CREATE_SKY_DIALOG_MATERIAL_FOLDER;
-    /**
-     * The constant CREATE_SKY_DIALOG_MATERIAL_NAME.
-     */
     public static final String CREATE_SKY_DIALOG_MATERIAL_NAME;
-    /**
-     * The constant CREATE_SKY_DIALOG_TEXTURE.
-     */
     public static final String CREATE_SKY_DIALOG_TEXTURE;
-    /**
-     * The constant CREATE_SKY_DIALOG_TEXTURE_TYPE.
-     */
     public static final String CREATE_SKY_DIALOG_TEXTURE_TYPE;
-    /**
-     * The constant CREATE_SKY_DIALOG_FLIP_Y.
-     */
     public static final String CREATE_SKY_DIALOG_FLIP_Y;
-    /**
-     * The constant CREATE_SKY_DIALOG_NORTH.
-     */
     public static final String CREATE_SKY_DIALOG_NORTH;
-    /**
-     * The constant CREATE_SKY_DIALOG_SOUTH.
-     */
     public static final String CREATE_SKY_DIALOG_SOUTH;
-    /**
-     * The constant CREATE_SKY_DIALOG_EAST.
-     */
     public static final String CREATE_SKY_DIALOG_EAST;
-    /**
-     * The constant CREATE_SKY_DIALOG_WEST.
-     */
     public static final String CREATE_SKY_DIALOG_WEST;
-    /**
-     * The constant CREATE_SKY_DIALOG_TOP.
-     */
     public static final String CREATE_SKY_DIALOG_TOP;
-    /**
-     * The constant CREATE_SKY_DIALOG_BOTTOM.
-     */
     public static final String CREATE_SKY_DIALOG_BOTTOM;
 
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_OK.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_OK;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_SELECT.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_SELECT;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_ADD.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_ADD;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_SAVE.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_SAVE;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_GENERATE.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_GENERATE;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_CREATE.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_CREATE;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_APPLY.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_APPLY;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_CANCEL.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_CLOSE.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_CLOSE;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_YES.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_YES;
-    /**
-     * The constant SIMPLE_DIALOG_BUTTON_NO.
-     */
     public static final String SIMPLE_DIALOG_BUTTON_NO;
 
-    /**
-     * The constant EMPTY_MODEL_CREATOR_DESCRIPTION.
-     */
     public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
-    /**
-     * The constant EMPTY_MODEL_CREATOR_TITLE.
-     */
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
-    /**
-     * The constant EMPTY_SCENE_CREATOR_DESCRIPTION.
-     */
     public static final String EMPTY_SCENE_CREATOR_DESCRIPTION;
-    /**
-     * The constant DEFAULT_SCENE_CREATOR_DESCRIPTION.
-     */
     public static final String DEFAULT_SCENE_CREATOR_DESCRIPTION;
-    /**
-     * The constant EMPTY_SCENE_CREATOR_TITLE.
-     */
     public static final String EMPTY_SCENE_CREATOR_TITLE;
-    /**
-     * The constant DEFAULT_SCENE_CREATOR_TITLE.
-     */
     public static final String DEFAULT_SCENE_CREATOR_TITLE;
 
-    /**
-     * The constant GLSL_FILE_EDITOR_NAME.
-     */
     public static final String GLSL_FILE_EDITOR_NAME;
-    /**
-     * The constant MATERIAL_DEFINITION_FILE_EDITOR_NAME.
-     */
     public static final String MATERIAL_DEFINITION_FILE_EDITOR_NAME;
 
-    /**
-     * The constant GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED.
-     */
     public static final String GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED;
-    /**
-     * The constant GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL.
-     */
     public static final String GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL;
-    /**
-     * The constant GENERATE_TANGENTS_DIALOG_TITLE.
-     */
     public static final String GENERATE_TANGENTS_DIALOG_TITLE;
 
-    /**
-     * The constant GENERATE_LOD_DIALOG_TITLE.
-     */
     public static final String GENERATE_LOD_DIALOG_TITLE;
-    /**
-     * The constant GENERATE_LOD_DIALOG_METHOD.
-     */
     public static final String GENERATE_LOD_DIALOG_METHOD;
 
-    /**
-     * The constant BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME.
-     */
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME;
-    /**
-     * The constant BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE.
-     */
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
-    /**
-     * The constant BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS.
-     */
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
-    /**
-     * The constant BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX.
-     */
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
 
-    /**
-     * The constant NODE_SELECTOR_DIALOG_TITLE.
-     */
     public static final String NODE_SELECTOR_DIALOG_TITLE;
 
-    /**
-     * The constant GEOMETRY_SELECTOR_DIALOG_TITLE.
-     */
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
-    /**
-     * The constant LIGHT_SELECTOR_DIALOG_TITLE.
-     */
     public static final String LIGHT_SELECTOR_DIALOG_TITLE;
 
-    /**
-     * The constant LOG_VIEW_TITLE.
-     */
     public static final String LOG_VIEW_TITLE;
 
-    /**
-     * The constant CREATE_SCENE_APP_STATE_DIALOG_TITLE.
-     */
     public static final String CREATE_SCENE_APP_STATE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN.
-     */
     public static final String CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN;
-    /**
-     * The constant CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX.
-     */
     public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX;
-    /**
-     * The constant CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD.
-     */
     public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD;
 
-    /**
-     * The constant CREATE_SCENE_FILTER_DIALOG_TITLE.
-     */
     public static final String CREATE_SCENE_FILTER_DIALOG_TITLE;
-    /**
-     * The constant CREATE_SCENE_FILTER_DIALOG_BUILT_IN.
-     */
     public static final String CREATE_SCENE_FILTER_DIALOG_BUILT_IN;
-    /**
-     * The constant CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX.
-     */
     public static final String CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX;
-    /**
-     * The constant CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD.
-     */
     public static final String CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD;
 
-    /**
-     * The constant ADD_USER_DATA_DIALOG_TITLE.
-     */
     public static final String ADD_USER_DATA_DIALOG_TITLE;
 
-    /**
-     * The constant CREATE_CUSTOM_CONTROL_DIALOG_TITLE.
-     */
     public static final String CREATE_CUSTOM_CONTROL_DIALOG_TITLE;
-    /**
-     * The constant CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN.
-     */
     public static final String CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN;
-    /**
-     * The constant CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX.
-     */
     public static final String CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX;
-    /**
-     * The constant CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD.
-     */
     public static final String CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD;
 
-    /**
-     * The constant ANALYTICS_CONFIRM_DIALOG_MESSAGE.
-     */
     public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
 
-    /**
-     * The constant CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
 
-    /**
-     * The constant ADD_VEHICLE_WHEEL_DIALOG_TITLE.
-     */
     public static final String ADD_VEHICLE_WHEEL_DIALOG_TITLE;
 
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_TITLE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_TITLE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_BASE_TEXTURE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_BASE_TEXTURE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_FOLDER_ALPHA_TEXTURE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_FOLDER_ALPHA_TEXTURE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_TOTAL_SIZE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_TOTAL_SIZE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_PATCH_SIZE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_PATCH_SIZE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_ALPHA_BLEND_TEXTURE_SIZE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_ALPHA_BLEND_TEXTURE_SIZE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_TERRAIN_TYPE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT.
-     */
     public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED.
-     */
     public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL.
-     */
     public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_HEIGHT_SMOOTH.
-     */
     public static final String CREATE_TERRAIN_DIALOG_HEIGHT_SMOOTH;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_HEIGHT_SCALE.
-     */
     public static final String CREATE_TERRAIN_DIALOG_HEIGHT_SCALE;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_ITERATIONS.
-     */
     public static final String CREATE_TERRAIN_DIALOG_ITERATIONS;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_FLATTENING.
-     */
     public static final String CREATE_TERRAIN_DIALOG_FLATTENING;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_MIN_RADIUS.
-     */
     public static final String CREATE_TERRAIN_DIALOG_MIN_RADIUS;
-    /**
-     * The constant CREATE_TERRAIN_DIALOG_MAX_RADIUS.
-     */
     public static final String CREATE_TERRAIN_DIALOG_MAX_RADIUS;
 
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_CYLINDER_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_CYLINDER_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_DOME_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_DOME_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE.
-     */
     public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
-    /**
-     * The constant EDITING_COMPONENT_BRUSH_SIZE.
-     */
     public static final String EDITING_COMPONENT_BRUSH_SIZE;
-    /**
-     * The constant EDITING_COMPONENT_BRUSH_POWER.
-     */
     public static final String EDITING_COMPONENT_BRUSH_POWER;
-    /**
-     * The constant EDITING_COMPONENT_SMOOTHLY.
-     */
     public static final String EDITING_COMPONENT_SMOOTHLY;
-    /**
-     * The constant EDITING_COMPONENT_LIMITED.
-     */
     public static final String EDITING_COMPONENT_LIMITED;
-    /**
-     * The constant EDITING_COMPONENT_USE_MARKER.
-     */
     public static final String EDITING_COMPONENT_USE_MARKER;
-    /**
-     * The constant EDITING_COMPONENT_LEVEL.
-     */
     public static final String EDITING_COMPONENT_LEVEL;
-    /**
-     * The constant EDITING_COMPONENT_ROUGHNESS.
-     */
     public static final String EDITING_COMPONENT_ROUGHNESS;
-    /**
-     * The constant EDITING_COMPONENT_FREQUENCY.
-     */
     public static final String EDITING_COMPONENT_FREQUENCY;
-    /**
-     * The constant EDITING_COMPONENT_LACUNARITY.
-     */
     public static final String EDITING_COMPONENT_LACUNARITY;
-    /**
-     * The constant EDITING_COMPONENT_OCTAVES.
-     */
     public static final String EDITING_COMPONENT_OCTAVES;
-    /**
-     * The constant EDITING_COMPONENT_SCALE.
-     */
     public static final String EDITING_COMPONENT_SCALE;
-    /**
-     * The constant EDITING_COMPONENT_TRI_PLANAR.
-     */
     public static final String EDITING_COMPONENT_TRI_PLANAR;
-    /**
-     * The constant EDITING_COMPONENT_SHININESS.
-     */
     public static final String EDITING_COMPONENT_SHININESS;
-    /**
-     * The constant EDITING_COMPONENT_LAYER.
-     */
     public static final String EDITING_COMPONENT_LAYER;
 
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_TITLE.
-     */
     public static final String MODEL_CONVERTER_DIALOG_TITLE;
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_RESULT_NAME.
-     */
     public static final String MODEL_CONVERTER_DIALOG_RESULT_NAME;
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_DESTINATION_FOLDER.
-     */
     public static final String MODEL_CONVERTER_DIALOG_DESTINATION_FOLDER;
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS.
-     */
     public static final String MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS;
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER.
-     */
     public static final String MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER;
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS.
-     */
     public static final String MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS;
-    /**
-     * The constant MODEL_CONVERTER_DIALOG_BUTTON_OK.
-     */
     public static final String MODEL_CONVERTER_DIALOG_BUTTON_OK;
 
-    /**
-     * The constant FILE_DELETE_HANDLER_DELETE_MATERIALS.
-     */
     public static final String FILE_DELETE_HANDLER_DELETE_MATERIALS;
 
-    /**
-     * The constant CHECK_NEW_VERSION_DIALOG_TITLE.
-     */
     public static final String CHECK_NEW_VERSION_DIALOG_TITLE;
-    /**
-     * The constant CHECK_NEW_VERSION_DIALOG_HYPERLINK.
-     */
     public static final String CHECK_NEW_VERSION_DIALOG_HYPERLINK;
-    /**
-     * The constant CHECK_NEW_VERSION_DIALOG_HEADER_TEXT.
-     */
     public static final String CHECK_NEW_VERSION_DIALOG_HEADER_TEXT;
 
-    /**
-     * The constant EDITOR_SCRIPTING_COMPONENT_HEADERS.
-     */
     public static final String EDITOR_SCRIPTING_COMPONENT_HEADERS;
-    /**
-     * The constant EDITOR_SCRIPTING_COMPONENT_BODY.
-     */
     public static final String EDITOR_SCRIPTING_COMPONENT_BODY;
-    /**
-     * The constant EDITOR_SCRIPTING_COMPONENT_RUN.
-     */
     public static final String EDITOR_SCRIPTING_COMPONENT_RUN;
 
-    /**
-     * The constant ABOUT_DIALOG_TITLE.
-     */
     public static final String ABOUT_DIALOG_TITLE;
-    /**
-     * The constant ABOUT_DIALOG_VERSION.
-     */
     public static final String ABOUT_DIALOG_VERSION;
-    /**
-     * The constant ABOUT_DIALOG_PROJECT_HOME.
-     */
     public static final String ABOUT_DIALOG_PROJECT_HOME;
-    /**
-     * The constant ABOUT_DIALOG_FORUM_THREAD.
-     */
     public static final String ABOUT_DIALOG_FORUM_THREAD;
-    /**
-     * The constant ABOUT_DIALOG_USED_LIBRARIES.
-     */
     public static final String ABOUT_DIALOG_USED_LIBRARIES;
-    /**
-     * The constant ABOUT_DIALOG_USED_ICONS.
-     */
     public static final String ABOUT_DIALOG_USED_ICONS;
 
-    /**
-     * The constant RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED.
-     */
     public static final String RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED;
 
-    /**
-     * The constant PLUGINS_DIALOG_TITLE.
-     */
     public static final String PLUGINS_DIALOG_TITLE;
-    /**
-     * The constant PLUGINS_DIALOG_FILE_CHOOSER_TITLE.
-     */
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_TITLE;
-    /**
-     * The constant PLUGINS_DIALOG_FILE_CHOOSER_FILTER.
-     */
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_FILTER;
-    /**
-     * The constant PLUGINS_DIALOG_QUESTION.
-     */
     public static final String PLUGINS_DIALOG_QUESTION;
 
     static {
@@ -2639,6 +899,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
+        MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE = bundle.getString("ModelNodeTreeActionAnimationPause");
         MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");

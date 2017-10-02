@@ -33,12 +33,14 @@ public class RemoveVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
         super(nodeTree, node);
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {

@@ -10,6 +10,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -35,18 +37,19 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     }
 
     public SpatialAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                                  @NotNull final PropertyDefinition definition,
-                                                  @NotNull final Runnable validationCallback) {
+                                               @NotNull final PropertyDefinition definition,
+                                               @NotNull final Runnable validationCallback) {
         super(vars, definition, validationCallback);
     }
 
-    @NotNull
     @Override
-    protected Array<String> getExtensions() {
+    @FromAnyThread
+    protected @NotNull Array<String> getExtensions() {
         return EXTENSIONS;
     }
 
     @Override
+    @FXThread
     protected void processSelect(@NotNull final Path file) {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -67,12 +70,13 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
      * @param modelKey     the model key.
      * @return the target resource.
      */
-    @Nullable
-    protected T findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
+    @FXThread
+    protected @Nullable T findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
         return unsafeCast(assetManager.loadModel(modelKey));
     }
 
     @Override
+    @FXThread
     protected void reload() {
 
         final T model = getPropertyValue();

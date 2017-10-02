@@ -5,6 +5,8 @@ import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.control.EditableControl;
 import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
 import com.ss.editor.manager.ClasspathManager;
@@ -99,49 +101,44 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final Spatial spatial;
 
-    /**
-     * Instantiates a new Create custom control dialog.
-     *
-     * @param changeConsumer the change consumer
-     * @param spatial        the spatial
-     */
     public CreateCustomControlDialog(@NotNull final ModelChangeConsumer changeConsumer,
                                      @NotNull final Spatial spatial) {
         this.changeConsumer = changeConsumer;
         this.spatial = spatial;
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.CREATE_CUSTOM_CONTROL_DIALOG_TITLE;
     }
 
     /**
      * @return the check box to chose an option of creating control.
      */
-    @NotNull
-    private CheckBox getCustomCheckBox() {
+    @FXThread
+    private @NotNull CheckBox getCustomCheckBox() {
         return notNull(customCheckBox);
     }
 
     /**
      * @return the list of built in controls.
      */
-    @NotNull
-    private ComboBox<String> getBuiltInBox() {
+    @FXThread
+    private @NotNull ComboBox<String> getBuiltInBox() {
         return notNull(builtInBox);
     }
 
     /**
      * @return the list of available custom controls..
      */
-    @NotNull
-    private ComboBox<Class<? extends Control>> getCustomComboBox() {
+    @FXThread
+    private @NotNull ComboBox<Class<? extends Control>> getCustomComboBox() {
         return notNull(customComboBox);
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -189,11 +186,13 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected boolean isGridStructure() {
         return true;
     }
 
     @Override
+    @FXThread
     protected void processOk() {
 
         final CheckBox customCheckBox = getCustomCheckBox();
@@ -221,9 +220,9 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         super.processOk();
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

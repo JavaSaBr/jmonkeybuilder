@@ -2,13 +2,13 @@ package com.ss.editor.ui.control.model.node.light;
 
 import com.jme3.light.PointLight;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
-
+import com.ss.rlib.util.StringUtils;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
-import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of {@link LightTreeNode} to present point lights.
@@ -17,25 +17,19 @@ import com.ss.rlib.util.StringUtils;
  */
 public class PointLightTreeNode extends LightTreeNode<PointLight> {
 
-    /**
-     * Instantiates a new Point light model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public PointLightTreeNode(@NotNull final PointLight element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.POINT_LIGHT_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         final PointLight element = getElement();
         final String name = element.getName();
         return StringUtils.isEmpty(name) ? Messages.MODEL_FILE_EDITOR_NODE_POINT_LIGHT : name;

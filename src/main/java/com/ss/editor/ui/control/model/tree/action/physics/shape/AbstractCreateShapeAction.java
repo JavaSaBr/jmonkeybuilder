@@ -9,9 +9,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -26,24 +26,18 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractCreateShapeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Abstract create shape action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     AbstractCreateShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.GEOMETRY_16;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -60,14 +54,15 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      *
      * @return the dialog title.
      */
-    @NotNull
-    protected abstract String getDialogTitle();
+    @FXThread
+    protected abstract @NotNull String getDialogTitle();
 
     /**
      * Handle the result from the dialog.
      *
      * @param vars the table with variables.
      */
+    @FXThread
     private void handleResult(@NotNull final VarTable vars) {
 
         final TreeNode<?> treeNode = getNode();
@@ -85,8 +80,8 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      *
      * @return the list of definitions.
      */
-    @NotNull
-    protected abstract Array<PropertyDefinition> getPropertyDefinitions();
+    @FXThread
+    protected abstract @NotNull Array<PropertyDefinition> getPropertyDefinitions();
 
     /**
      * Create a collision shape.
@@ -94,6 +89,6 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      * @param vars the table with variables.
      * @return the collision shape
      */
-    @NotNull
-    protected abstract CollisionShape createShape(@NotNull final VarTable vars);
+    @FXThread
+    protected abstract @NotNull CollisionShape createShape(@NotNull final VarTable vars);
 }

@@ -1,8 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
@@ -47,7 +46,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.function.Consumer;
@@ -265,7 +266,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final KeyCode code = event.getCode();
 
-        if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+        if (handleKeyActionImpl(code, false, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }
@@ -276,12 +277,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
      * @param isControlDown      true if control is down.
+     * @param isShiftDown        true if shift is down.
      * @param isButtonMiddleDown true if mouse middle button is pressed.
      */
     @FromAnyThread
     public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown,
-                                final boolean isButtonMiddleDown) {
-        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown));
+                                final boolean isShiftDown, final boolean isButtonMiddleDown) {
+        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
     }
 
     /**
@@ -290,12 +292,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
      * @param isControlDown      true if control is down.
+     * @param isShiftDown        true if shift is down.
      * @param isButtonMiddleDown true if mouse middle button is pressed.
-     * @return true if can consume an event.
+     * @return true if need to consume an event.
      */
     @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
         return false;
     }
 
@@ -311,7 +315,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
             save();
-        } else if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+        } else if (handleKeyActionImpl(code, true, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }
@@ -366,17 +370,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
                 final Path editFile = getEditFile();
 
                 doSave(tempFile);
-                try {
-                    Files.move(tempFile, editFile, REPLACE_EXISTING, ATOMIC_MOVE);
-                } catch (final AtomicMoveNotSupportedException e) {
-                    Files.move(tempFile, editFile, REPLACE_EXISTING);
-                } catch (final AccessDeniedException e) {
-                    Files.copy(tempFile, editFile, StandardCopyOption.REPLACE_EXISTING);
+                try (final OutputStream out = Files.newOutputStream(editFile, TRUNCATE_EXISTING)) {
+                    Files.copy(tempFile, out);
+                } finally {
                     FileUtils.delete(tempFile);
                 }
 
             } catch (final IOException e) {
-                FileUtils.delete(tempFile);
                 LOGGER.warning(this, e);
                 EXECUTOR_MANAGER.addFXTask(this::notifyFinishSaving);
             } finally {
@@ -391,6 +391,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * Save new changes.
      *
      * @param toStore the file to store.
+     * @throws IOException if was some problem with writing to the to store file.
      */
     @BackgroundThread
     protected void doSave(@NotNull final Path toStore) throws IOException {

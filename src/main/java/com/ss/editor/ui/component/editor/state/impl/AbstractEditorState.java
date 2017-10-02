@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.rlib.util.ArrayUtils;
@@ -46,14 +47,12 @@ public abstract class AbstractEditorState implements EditorState {
     @NotNull
     private volatile AdditionalEditorState[] additionalStates;
 
-    /**
-     * Instantiates a new Abstract editor state.
-     */
     public AbstractEditorState() {
         this.additionalStates = EMPTY_ADDITIONAL_STATES;
     }
 
     @Override
+    @FXThread
     public void setChangeHandler(@NotNull final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         for (final AdditionalEditorState additionalState : additionalStates) {
@@ -61,10 +60,10 @@ public abstract class AbstractEditorState implements EditorState {
         }
     }
 
-    @NotNull
     @Override
-    public <T extends AdditionalEditorState> T getOrCreateAdditionalState(@NotNull final Class<T> type,
-                                                                          @NotNull final Supplier<T> factory) {
+    @FXThread
+    public <T extends AdditionalEditorState> @NotNull T getOrCreateAdditionalState(@NotNull final Class<T> type,
+                                                                                   @NotNull final Supplier<T> factory) {
 
         for (final AdditionalEditorState additionalState : additionalStates) {
             if (type.isInstance(additionalState)) {
@@ -72,7 +71,7 @@ public abstract class AbstractEditorState implements EditorState {
             }
         }
 
-        final AdditionalEditorState newAdditionalState = (AdditionalEditorState) factory.get();
+        final AdditionalEditorState newAdditionalState = factory.get();
         newAdditionalState.setChangeHandler(notNull(changeHandler));
 
         this.additionalStates = ArrayUtils.addToArray(additionalStates, newAdditionalState, AdditionalEditorState.class);
@@ -85,11 +84,12 @@ public abstract class AbstractEditorState implements EditorState {
      *
      * @return the change handler.
      */
-    @Nullable
-    protected Runnable getChangeHandler() {
+    @FXThread
+    protected @Nullable Runnable getChangeHandler() {
         return changeHandler;
     }
 
+    @FXThread
     protected void notifyChange() {
         if (changeHandler != null) {
             changeHandler.run();

@@ -47,6 +47,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
@@ -63,6 +64,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         super(nodeTree, node);
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

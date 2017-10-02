@@ -80,6 +80,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the name of this action.
      */
+    @FXThread
     protected abstract @NotNull String getName();
 
     /**
@@ -95,6 +96,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return he icon or null.
      */
+    @FXThread
     protected @Nullable Image getIcon() {
         return null;
     }
@@ -104,6 +106,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the component of the model three.
      */
+    @FXThread
     protected @NotNull NodeTree<C> getNodeTree() {
         return nodeTree;
     }
@@ -113,6 +116,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the node of the model.
      */
+    @FXThread
     protected @NotNull TreeNode<?> getNode() {
         return node;
     }

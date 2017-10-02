@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
@@ -27,6 +28,9 @@ import java.util.function.Consumer;
  */
 public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
+    /**
+     * The file icon manager.
+     */
     @NotNull
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
@@ -46,25 +50,31 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      * Instantiates a new Resource tree cell.
      */
     protected ResourceTreeCell() {
-        setOnMouseClicked(this::processClick);
-        setOnDragDetected(this::startDrag);
-        setOnDragDone(this::stopDrag);
+        setOnMouseClicked(this::handleMouseClickedEvent);
+        setOnDragDetected(this::handleStartDragEvent);
+        setOnDragDone(this::handleStopDragEvent);
         this.icon = new ImageView();
         this.tooltip = new Tooltip();
     }
 
     /**
-     * Handle stopping dragging.
+     * Handle stop drag events.
+     *
+     * @param event the stop drag event.
      */
-    private void stopDrag(@NotNull final DragEvent event) {
+    @FXThread
+    private void handleStopDragEvent(@NotNull final DragEvent event) {
         setCursor(Cursor.DEFAULT);
         event.consume();
     }
 
     /**
-     * Handle starting dragging.
+     * Handle start drag events.
+     *
+     * @param mouseEvent the mouse event.
      */
-    private void startDrag(@NotNull final MouseEvent mouseEvent) {
+    @FXThread
+    private void handleStartDragEvent(@NotNull final MouseEvent mouseEvent) {
         startFullDrag();
 
         final ResourceElement item = getItem();
@@ -84,9 +94,12 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     /**
-     * Handle a click.
+     * Handle mouse clicked events.
+     *
+     * @param event the mouse clicked event.
      */
-    private void processClick(@NotNull final MouseEvent event) {
+    @FXThread
+    private void handleMouseClickedEvent(@NotNull final MouseEvent event) {
 
         final ResourceElement item = getItem();
         if (item == null) return;
@@ -106,6 +119,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     @Override
+    @FXThread
     protected void updateItem(@Nullable final ResourceElement item, boolean empty) {
         super.updateItem(item, empty);
 
@@ -123,14 +137,16 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         final Path file = item.getFile();
         final Path fileName = file.getFileName();
+        final boolean folder = item instanceof FolderResourceElement;
 
-        icon.setImage(ICON_MANAGER.getIcon(file, DEFAULT_FILE_ICON_SIZE));
+        icon.setImage(ICON_MANAGER.getIcon(file, folder, true, DEFAULT_FILE_ICON_SIZE));
 
         setText(fileName.toString());
         setGraphic(icon);
         createToolTip();
     }
 
+    @FXThread
     private @NotNull ProgressIndicator createIndicator() {
         final ProgressIndicator indicator = new ProgressIndicator();
         indicator.setMaxHeight(FXConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
@@ -138,12 +154,14 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         return indicator;
     }
 
+    @FXThread
     private void removeToolTip() {
         if (tooltip == null) return;
         Tooltip.uninstall(this, tooltip);
         tooltip = null;
     }
 
+    @FXThread
     private void createToolTip() {
         tooltip = getItem().createToolTip();
         if (tooltip == null) return;

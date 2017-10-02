@@ -42,8 +42,7 @@ public class WorkspaceManager {
      *
      * @return the instance
      */
-    @NotNull
-    public static WorkspaceManager getInstance() {
+    public static @NotNull WorkspaceManager getInstance() {
         if (instance == null) instance = new WorkspaceManager();
         return instance;
     }
@@ -62,8 +61,7 @@ public class WorkspaceManager {
     /**
      * @return the table of workspaces.
      */
-    @NotNull
-    private ObjectDictionary<Path, Workspace> getWorkspaces() {
+    private @NotNull ObjectDictionary<Path, Workspace> getWorkspaces() {
         return workspaces;
     }
 
@@ -72,9 +70,8 @@ public class WorkspaceManager {
      *
      * @return the current workspace or null.
      */
-    @Nullable
     @FromAnyThread
-    public Workspace getCurrentWorkspace() {
+    public @Nullable Workspace getCurrentWorkspace() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -88,9 +85,8 @@ public class WorkspaceManager {
      *
      * @return the workspace.
      */
-    @NotNull
     @FromAnyThread
-    private synchronized Workspace getWorkspace(@NotNull final Path assetFolder) {
+    private synchronized @NotNull Workspace getWorkspace(@NotNull final Path assetFolder) {
 
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         final Workspace exists = workspaces.get(assetFolder);

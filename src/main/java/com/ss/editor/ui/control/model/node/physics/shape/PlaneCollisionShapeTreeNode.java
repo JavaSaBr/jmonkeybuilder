@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.PlaneCollisionShape;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -14,25 +16,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PlaneCollisionShapeTreeNode extends CollisionShapeTreeNode<PlaneCollisionShape> {
 
-    /**
-     * Instantiates a new Plane collision shape model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public PlaneCollisionShapeTreeNode(@NotNull final PlaneCollisionShape element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.PLANE_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE;
     }
 }

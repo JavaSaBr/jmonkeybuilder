@@ -70,12 +70,14 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
         super(nodeTree, node);
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_WHEEL;
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {

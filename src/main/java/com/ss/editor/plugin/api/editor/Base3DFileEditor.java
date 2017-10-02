@@ -3,10 +3,6 @@ package com.ss.editor.plugin.api.editor;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.model.undo.EditorOperation;
-import com.ss.editor.model.undo.EditorOperationControl;
-import com.ss.editor.model.undo.UndoableEditor;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.state.editor.impl.AbstractEditor3DState;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
 import javafx.event.Event;
@@ -17,7 +13,6 @@ import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The base implementation of {@link com.ss.editor.ui.component.editor.FileEditor} with 3D scene.
@@ -25,13 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author JavaSaBr
  */
 public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extends Editor3DEditorState> extends
-        BaseFileEditor<S> implements UndoableEditor, ChangeConsumer {
-
-    /**
-     * The operation control.
-     */
-    @NotNull
-    private final EditorOperationControl operationControl;
+        BaseFileEditor<S> {
 
     /**
      * The 3D part of this editor.
@@ -39,16 +28,9 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
     @NotNull
     private final T editor3DState;
 
-    /**
-     * The changes counter.
-     */
-    @NotNull
-    private final AtomicInteger changeCounter;
 
     public Base3DFileEditor() {
         this.editor3DState = create3DEditorState();
-        this.operationControl = createOperationControl();
-        this.changeCounter = new AtomicInteger();
         addEditorState(editor3DState);
     }
 
@@ -56,15 +38,6 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
     @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
-    }
-
-    /**
-     * Create an editor operation control.
-     *
-     * @return the editor operation control.
-     */
-    protected @NotNull EditorOperationControl createOperationControl() {
-        return new EditorOperationControl(this);
     }
 
     @Override
@@ -79,48 +52,6 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
      */
     @FXThread
     protected abstract @NotNull T create3DEditorState();
-
-    @Override
-    @FromAnyThread
-    public void execute(@NotNull final EditorOperation operation) {
-        operationControl.execute(operation);
-    }
-
-    @Override
-    @FXThread
-    public void incrementChange() {
-        final int result = changeCounter.incrementAndGet();
-        setDirty(result != 0);
-    }
-
-    @Override
-    @FXThread
-    public void decrementChange() {
-        final int result = changeCounter.decrementAndGet();
-        setDirty(result != 0);
-    }
-
-    @Override
-    @FromAnyThread
-    public void redo() {
-        operationControl.redo();
-    }
-
-    @Override
-    @FromAnyThread
-    public void undo() {
-        operationControl.undo();
-    }
-
-    /**
-     * Get the editor operation control.
-     *
-     * @return the editor operation control.
-     */
-    @FromAnyThread
-    protected @NotNull EditorOperationControl getOperationControl() {
-        return operationControl;
-    }
 
     /**
      * Get the 3D part of this editor.

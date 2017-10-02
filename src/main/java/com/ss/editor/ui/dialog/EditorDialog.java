@@ -125,6 +125,7 @@ public class EditorDialog {
     /**
      * @return true if this dialog should be resizable.
      */
+    @FromAnyThread
     protected boolean isResizable() {
         return true;
     }
@@ -324,6 +325,7 @@ public class EditorDialog {
      *
      * @return the dialog id
      */
+    @FromAnyThread
     protected @NotNull String getDialogId() {
         return getClass().getSimpleName();
     }

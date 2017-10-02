@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer;
 
 import com.jme3.effect.influencers.ParticleInfluencer;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
@@ -14,25 +16,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ParticleInfluencerTreeNode extends TreeNode<ParticleInfluencer> {
 
-    /**
-     * Instantiates a new Particle influencer model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public ParticleInfluencerTreeNode(@NotNull final ParticleInfluencer element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         final ParticleInfluencer element = getElement();
         return element.getClass().getSimpleName();
     }

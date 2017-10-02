@@ -30,6 +30,8 @@ import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
@@ -77,12 +79,12 @@ public class Editor extends JmeToJFXApplication {
     private static final Editor EDITOR = new Editor();
 
     /**
-     * Gets instance.
+     * Gets the jME part of this editor.
      *
-     * @return the instance
+     * @return the jME part.
      */
-    @NotNull
-    public static Editor getInstance() {
+    @FromAnyThread
+    public static @NotNull Editor getInstance() {
         return EDITOR;
     }
 
@@ -91,8 +93,8 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the editor
      */
-    @NotNull
-    static Editor prepareToStart() {
+    @JMEThread
+    static @NotNull Editor prepareToStart() {
 
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
@@ -117,6 +119,7 @@ public class Editor extends JmeToJFXApplication {
         return EDITOR;
     }
 
+    @JMEThread
     private static void configureLogger() {
 
         // disable the standard logger
@@ -223,6 +226,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the long
      */
+    @FromAnyThread
     public final long asyncLock() {
         return lock.readLock();
     }
@@ -232,11 +236,13 @@ public class Editor extends JmeToJFXApplication {
      *
      * @param stamp the stamp
      */
+    @FromAnyThread
     public final void asyncUnlock(final long stamp) {
         lock.unlockRead(stamp);
     }
 
     @Override
+    @JMEThread
     public void destroy() {
         super.destroy();
 
@@ -247,12 +253,13 @@ public class Editor extends JmeToJFXApplication {
     }
 
     @Override
-    @NotNull
-    public Camera getCamera() {
+    @FromAnyThread
+    public @NotNull Camera getCamera() {
         return super.getCamera();
     }
 
     @Override
+    @JMEThread
     public void simpleInitApp() {
         super.simpleInitApp();
 
@@ -274,7 +281,7 @@ public class Editor extends JmeToJFXApplication {
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
-        cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 10000);
+        cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, Integer.MAX_VALUE);
 
         defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
@@ -333,14 +340,20 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Lock the render thread for doing actions with game scene.
+     *
+     * @return the lock stamp.
      */
+    @FromAnyThread
     public long syncLock() {
         return lock.writeLock();
     }
 
     /**
      * Unlock the render thread.
+     *
+     * @param stamp the stamp of the lock.
      */
+    @FromAnyThread
     public void syncUnlock(final long stamp) {
         lock.unlockWrite(stamp);
     }
@@ -350,11 +363,13 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the long
      */
+    @FromAnyThread
     public long trySyncLock() {
         return lock.tryWriteLock();
     }
 
     @Override
+    @JMEThread
     public void loseFocus() {
         super.loseFocus();
 
@@ -366,6 +381,7 @@ public class Editor extends JmeToJFXApplication {
     }
 
     @Override
+    @JMEThread
     public void gainFocus() {
         super.gainFocus();
 
@@ -377,6 +393,7 @@ public class Editor extends JmeToJFXApplication {
     }
 
     @Override
+    @JMEThread
     public void simpleUpdate(final float tpf) {
         super.simpleUpdate(tpf);
 
@@ -385,6 +402,7 @@ public class Editor extends JmeToJFXApplication {
     }
 
     @Override
+    @JMEThread
     public void update() {
         final long stamp = syncLock();
         try {
@@ -409,6 +427,7 @@ public class Editor extends JmeToJFXApplication {
         listener.setRotation(cam.getRotation());
     }
 
+    @JMEThread
     private void finishWorkOnError(@NotNull final Throwable e) {
 
         GAnalytics.sendException(e, true);
@@ -425,14 +444,15 @@ public class Editor extends JmeToJFXApplication {
      *
      * @return the processor of post effects.
      */
-    @NotNull
-    public FilterPostProcessor getPostProcessor() {
+    @JMEThread
+    public @NotNull FilterPostProcessor getPostProcessor() {
         return notNull(postProcessor);
     }
 
     /**
      * Create the light probes for the PBR render.
      */
+    @JMEThread
     private void createLightProbes() {
 
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
@@ -466,6 +486,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @param progressAdapter the progress adapter
      */
+    @JMEThread
     public void updateLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
         final LightProbe lightProbe = getLightProbe();
@@ -482,6 +503,7 @@ public class Editor extends JmeToJFXApplication {
     /**
      * Disable PBR Light probe.
      */
+    @JMEThread
     public void disableLightProbe() {
 
         final LightProbe lightProbe = getLightProbe();
@@ -494,6 +516,7 @@ public class Editor extends JmeToJFXApplication {
     /**
      * Enable PBR Light probe.
      */
+    @JMEThread
     public void enableLightProbe() {
 
         final LightProbe lightProbe = getLightProbe();
@@ -518,6 +541,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @param progressAdapter the progress adapter
      */
+    @JMEThread
     public void updatePreviewLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
         final LightProbe lightProbe = getPreviewLightProbe();
@@ -532,83 +556,101 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Get the light probe.
+     *
      * @return the light probe.
      */
+    @JMEThread
     private @Nullable LightProbe getLightProbe() {
         return lightProbe;
     }
 
     /**
-     * Gets preview view port.
+     * Get the preview view port.
      *
      * @return The preview view port.
      */
+    @JMEThread
     public @NotNull ViewPort getPreviewViewPort() {
         return notNull(previewViewPort);
     }
 
     /**
+     * Get the preview light probe.
+     *
      * @return the preview light probe.
      */
+    @JMEThread
     private @Nullable LightProbe getPreviewLightProbe() {
         return previewLightProbe;
     }
 
     /**
+     * Get the environment camera.
+     *
      * @return the environment camera.
      */
+    @JMEThread
     private @Nullable EnvironmentCamera getEnvironmentCamera() {
         return environmentCamera;
     }
 
     /**
-     * Gets preview camera.
+     * Get the preview camera.
      *
-     * @return the camera for preview.
+     * @return the preview camera.
      */
+    @JMEThread
     public @NotNull Camera getPreviewCamera() {
         return notNull(previewCamera);
     }
 
     /**
+     * Get the preview environment camera.
+     *
      * @return the preview environment camera.
      */
+    @JMEThread
     private @Nullable EnvironmentCamera getPreviewEnvironmentCamera() {
         return previewEnvironmentCamera;
     }
 
     /**
-     * Gets preview node.
+     * Get the preview node.
      *
-     * @return the node for preview.
+     * @return the preview node.
      */
+    @JMEThread
     public @NotNull Node getPreviewNode() {
         return notNull(previewNode);
     }
 
     /**
-     * Gets tone map filter.
+     * Get the tone map filter.
      *
-     * @return the filter of color correction.
+     * @return the tone map filter.
      */
+    @JMEThread
     public @NotNull ToneMapFilter getToneMapFilter() {
         return notNull(toneMapFilter);
     }
 
     /**
-     * Gets fxaa filter.
+     * Get the FXAA filter.
      *
-     * @return The FXAA filter.
+     * @return the FXAA filter.
      */
+    @JMEThread
     public @NotNull FXAAFilter getFXAAFilter() {
         return notNull(fxaaFilter);
     }
 
     /**
-     * Gets translucent bucket filter.
+     * Get the translucent bucket filter.
      *
      * @return the translucent bucket filter.
      */
+    @JMEThread
     public @NotNull TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
         return notNull(translucentBucketFilter);
     }
@@ -618,24 +660,27 @@ public class Editor extends JmeToJFXApplication {
      *
      * @param paused true if this app is paused.
      */
+    @JMEThread
     void setPaused(final boolean paused) {
         this.paused = paused;
     }
 
     /**
-     * Gets gui font.
+     * Get the gui font.
      *
      * @return the gui font.
      */
+    @JMEThread
     public @Nullable BitmapFont getGuiFont() {
         return notNull(guiFont);
     }
 
     /**
-     * Gets a default material.
+     * Get the default material.
      *
      * @return the default material.
      */
+    @JMEThread
     public @NotNull Material getDefaultMaterial() {
         return notNull(defaultMaterial);
     }

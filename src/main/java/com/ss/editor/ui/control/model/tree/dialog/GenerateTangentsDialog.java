@@ -5,6 +5,8 @@ import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
@@ -80,12 +82,6 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox splitMirroredCheckBox;
 
-    /**
-     * Instantiates a new Generate tangents dialog.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public GenerateTangentsDialog(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
@@ -96,8 +92,8 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the node tree component.
      */
-    @NotNull
-    protected NodeTree<?> getNodeTree() {
+    @FXThread
+    protected @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -106,18 +102,19 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the generated node.
      */
-    @NotNull
-    protected TreeNode<?> getNode() {
+    @FXThread
+    protected @NotNull TreeNode<?> getNode() {
         return node;
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.GENERATE_TANGENTS_DIALOG_TITLE;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -147,6 +144,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected boolean isGridStructure() {
         return true;
     }
@@ -154,20 +152,21 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the check box about spliting mirrored.
      */
-    @NotNull
-    private CheckBox getSplitMirroredCheckBox() {
+    @FXThread
+    private @NotNull CheckBox getSplitMirroredCheckBox() {
         return notNull(splitMirroredCheckBox);
     }
 
     /**
      * @return the list of types.
      */
-    @NotNull
-    private ComboBox<AlgorithmType> getAlgorithmTypeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<AlgorithmType> getAlgorithmTypeComboBox() {
         return notNull(algorithmTypeComboBox);
     }
 
     @Override
+    @FXThread
     protected void processOk() {
 
         final NodeTree<?> nodeTree = getNodeTree();
@@ -193,15 +192,15 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         super.processOk();
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_GENERATE;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

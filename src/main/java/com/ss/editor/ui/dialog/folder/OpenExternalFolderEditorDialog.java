@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -72,6 +73,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
         resourceTree = new ResourceTree(this::processOpen, false);
@@ -111,6 +113,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -136,6 +139,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle selected element in the tree.
      */
+    @FXThread
     private void processSelected(@Nullable final TreeItem<ResourceElement> newValue) {
         final ResourceElement element = newValue == null ? null : newValue.getValue();
         final Path file = element == null ? null : element.getFile();
@@ -148,6 +152,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the function for handling the choose.
      */
+    @FXThread
     protected @NotNull Consumer<@NotNull Path> getConsumer() {
         return consumer;
     }
@@ -157,6 +162,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param initDirectory the init directory.
      */
+    @FXThread
     public void setInitDirectory(@Nullable final Path initDirectory) {
         this.initDirectory = initDirectory;
     }
@@ -166,6 +172,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the init directory.
      */
+    @FXThread
     public @Nullable Path getInitDirectory() {
         return initDirectory;
     }
@@ -173,16 +180,19 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the tree with all resources.
      */
+    @FXThread
     private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_SELECT;
     }

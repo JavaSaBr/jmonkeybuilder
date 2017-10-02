@@ -38,12 +38,14 @@ public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<Model
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.EMITTER_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

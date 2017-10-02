@@ -3,6 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -53,6 +54,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     }
 
     @Override
+    @FXThread
     protected void createComponents() {
         super.createComponents();
 
@@ -62,9 +64,10 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processSelect());
 
-        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
-
         final HBox container = new HBox(resourceLabel, changeButton);
+        container.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+
+        resourceLabel.prefWidthProperty().bind(container.widthProperty());
 
         FXUtils.addToPane(container, this);
 
@@ -78,6 +81,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * Process select a resource.
      */
+    @FXThread
     protected void processSelect() {
 
     }
@@ -85,12 +89,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * Handle grad exiting.
      */
+    @FXThread
     private void dragExited(@NotNull final DragEvent dragEvent) {
     }
 
     /**
      * Handle dropped files to editor.
      */
+    @FXThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -111,12 +117,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      *
      * @param file the dropped file.
      */
+    @FXThread
     protected void handleFile(@NotNull final File file) {
     }
 
     /**
      * Handle drag over.
      */
+    @FXThread
     private void dragOver(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -136,6 +144,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         dragEvent.consume();
     }
 
+    @FXThread
     protected boolean canAccept(@NotNull final File file) {
         return false;
     }
@@ -143,8 +152,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * @return the label with name of the resource.
      */
-    @NotNull
-    protected Label getResourceLabel() {
+    @FXThread
+    protected @NotNull Label getResourceLabel() {
         return notNull(resourceLabel);
     }
 }

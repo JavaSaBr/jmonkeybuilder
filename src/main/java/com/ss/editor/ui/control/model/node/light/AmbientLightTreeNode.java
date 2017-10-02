@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.node.light;
 
 import com.jme3.light.AmbientLight;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,25 +19,19 @@ import com.ss.rlib.util.StringUtils;
  */
 public class AmbientLightTreeNode extends LightTreeNode<AmbientLight> {
 
-    /**
-     * Instantiates a new Ambient light model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public AmbientLightTreeNode(@NotNull final AmbientLight element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.AMBIENT_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         final AmbientLight element = getElement();
         final String name = element.getName();
         return StringUtils.isEmpty(name) ? Messages.MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT : name;

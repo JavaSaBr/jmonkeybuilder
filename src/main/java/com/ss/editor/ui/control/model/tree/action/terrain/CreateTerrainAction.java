@@ -29,12 +29,14 @@ public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer>
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

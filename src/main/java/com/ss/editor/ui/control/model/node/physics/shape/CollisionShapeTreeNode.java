@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
@@ -15,25 +17,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CollisionShapeTreeNode<T extends CollisionShape> extends TreeNode<T> {
 
-    /**
-     * Instantiates a new Collision shape model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public CollisionShapeTreeNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.GEOMETRY_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         final T element = getElement();
         return element.getClass().getSimpleName();
     }

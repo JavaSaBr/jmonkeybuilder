@@ -2,6 +2,7 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -36,6 +37,7 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
     }
 
     @Override
+    @FXThread
     protected void createComponents() {
         super.createComponents();
 
@@ -51,12 +53,13 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
     /**
      * @return the list of available options of the {@link Enum} value.
      */
-    @NotNull
-    private ComboBox<T> getEnumComboBox() {
+    @FXThread
+    private @NotNull ComboBox<T> getEnumComboBox() {
         return notNull(enumComboBox);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         super.reload();
         final T value = getPropertyValue();
@@ -65,6 +68,7 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
     }
 
     @Override
+    @FXThread
     protected void changeImpl() {
         final ComboBox<T> enumComboBox = getEnumComboBox();
         final SingleSelectionModel<T> selectionModel = enumComboBox.getSelectionModel();

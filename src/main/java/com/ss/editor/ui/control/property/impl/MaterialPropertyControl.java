@@ -6,6 +6,7 @@ import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -60,22 +61,28 @@ public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends Pro
     public MaterialPropertyControl(@Nullable final V element, @NotNull final String paramName,
                                    @NotNull final C changeConsumer) {
         super(element, paramName, changeConsumer);
-        setOnDragOver(this::dragOver);
-        setOnDragDropped(this::dragDropped);
-        setOnDragExited(this::dragExited);
+        setOnDragOver(this::handleDragOverEvent);
+        setOnDragDropped(this::handleDragDroppedEvent);
+        setOnDragExited(this::handleDragExitedEvent);
     }
 
     /**
-     * Handle grad exiting.
+     * Handle grad exited events.
+     *
+     * @param dragEvent the drag exited event.
      */
-    private void dragExited(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    private void handleDragExitedEvent(@NotNull final DragEvent dragEvent) {
 
     }
 
     /**
-     * Handle dropped files to editor.
+     * Handle dropped events.
+     *
+     * @param dragEvent the dropped event.
      */
-    private void dragDropped(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    private void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -94,9 +101,12 @@ public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends Pro
     }
 
     /**
-     * Handle drag over.
+     * Handle drag over events.
+     *
+     * @param dragEvent the drag over event.
      */
-    private void dragOver(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    private void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -123,10 +133,12 @@ public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends Pro
      *
      * @param file the file
      */
+    @FXThread
     protected void addMaterial(@NotNull final Path file) {
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -161,12 +173,14 @@ public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends Pro
     /**
      * Show dialog for choosing another material.
      */
+    @FXThread
     protected void processChange() {
     }
 
     /**
      * Open this material in the material editor.
      */
+    @FXThread
     protected void processEdit() {
     }
 
@@ -175,8 +189,8 @@ public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends Pro
      *
      * @return the label with name of the material.
      */
-    @NotNull
-    protected Label getMaterialLabel() {
+    @FXThread
+    protected @NotNull Label getMaterialLabel() {
         return notNull(materialLabel);
     }
 }

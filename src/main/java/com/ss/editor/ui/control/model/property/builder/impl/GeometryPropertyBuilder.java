@@ -10,6 +10,8 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -83,10 +85,11 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     private static final PropertyBuilder INSTANCE = new GeometryPropertyBuilder();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance
      */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -96,8 +99,9 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     }
 
     @Override
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                                @NotNull final ModelChangeConsumer changeConsumer) {
+    @FXThread
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
+                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (!(object instanceof Geometry)) return;
 
@@ -144,10 +148,11 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     /**
      * Can edit material boolean.
      *
-     * @param geometry the geometry
-     * @return the boolean
+     * @param geometry the geometry.
+     * @return true if we can editor the material.
      */
-    private boolean canEditMaterial(final Geometry geometry) {
+    @FXThread
+    private boolean canEditMaterial(@NotNull final Geometry geometry) {
         return !(geometry instanceof ParticleGeometry);
     }
 }

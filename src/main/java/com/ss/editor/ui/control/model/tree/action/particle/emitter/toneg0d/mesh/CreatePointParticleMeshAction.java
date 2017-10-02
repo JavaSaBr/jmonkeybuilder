@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -30,12 +31,14 @@ public class CreatePointParticleMeshAction extends AbstractCreateParticleMeshAct
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.POINTS_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

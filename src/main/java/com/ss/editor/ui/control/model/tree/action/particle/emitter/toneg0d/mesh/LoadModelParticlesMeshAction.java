@@ -61,12 +61,14 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.OPEN_FILE_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

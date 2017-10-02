@@ -15,26 +15,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CreateEditableSkyAction extends CreateSkyAction {
 
-    /**
-     * Instantiates a new Create sky action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateEditableSkyAction(final @NotNull NodeTree<?> nodeTree, final @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY;
     }
 
-    @NotNull
     @Override
     @FXThread
-    protected CreateSkyDialog createDialog() {
+    protected @NotNull CreateSkyDialog createDialog() {
         return new CreateEditableSkyDialog(getNode(), getNodeTree());
     }
 }

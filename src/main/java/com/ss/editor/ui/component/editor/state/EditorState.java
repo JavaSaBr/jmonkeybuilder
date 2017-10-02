@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.state;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +19,7 @@ public interface EditorState extends Serializable {
      *
      * @param handle the change handler.
      */
+    @FXThread
     void setChangeHandler(@NotNull Runnable handle);
 
     /**
@@ -28,6 +30,7 @@ public interface EditorState extends Serializable {
      * @param <T>     the type of the state.
      * @return the additional editor state.
      */
+    @FXThread
     <T extends AdditionalEditorState> @NotNull T getOrCreateAdditionalState(@NotNull Class<T> type,
                                                                             @NotNull Supplier<T> factory);
 }

@@ -7,6 +7,8 @@ import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.property.SimpleProperty;
@@ -54,13 +56,21 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
         COLOR_TYPES.add(VarType.Vector4);
     }
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new MaterialSettingsPropertyBuilder();
 
+    /**
+     * Get the single instance.
+     *
+     * @return the single instance.
+     */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
 
     @Override
+    @FXThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
 
         if (!(object instanceof MaterialSettings) || object instanceof RootMaterialSettings) {
@@ -120,6 +130,14 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Filter material parameters for the presented object.
+     *
+     * @param param  the material parameter.
+     * @param object the presented object.
+     * @return true of we can show the parameter.
+     */
+    @FXThread
     private boolean filter(@NotNull final MatParam param, @NotNull final Object object) {
 
         if (object instanceof TexturesSettings) {
@@ -131,6 +149,15 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
         return !TEXTURE_TYPES.contains(param.getVarType()) && !COLOR_TYPES.contains(param.getVarType());
     }
 
+    /**
+     * Convert the material parameter to an editable property.
+     *
+     * @param param    the material parameter.
+     * @param material the material.
+     * @param settings the settings.
+     * @return the editable property or null.
+     */
+    @FXThread
     private @Nullable EditableProperty<?, ?> convert(@NotNull final MatParam param, @NotNull final Material material,
                                                      @NotNull final MaterialSettings settings) {
 

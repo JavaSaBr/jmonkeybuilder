@@ -5,10 +5,11 @@ import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.ConeCollisionShape;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -38,38 +39,31 @@ public class CreateConeCollisionShapeAction extends AbstractCreateShapeAction {
     @NotNull
     private static final String PROPERTY_AXIS = "axis";
 
-    /**
-     * Instantiates a new Create cone collision shape action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
-    public CreateConeCollisionShapeAction(@NotNull final NodeTree<?> nodeTree,
-                                          @NotNull final TreeNode<?> node) {
+    public CreateConeCollisionShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.CONE_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE;
     }
 
-    @NotNull
     @Override
-    protected String getDialogTitle() {
+    @FXThread
+    protected @NotNull String getDialogTitle() {
         return Messages.CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    @FXThread
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_HEIGHT, PROPERTY_HEIGHT, 1F));
@@ -77,9 +71,9 @@ public class CreateConeCollisionShapeAction extends AbstractCreateShapeAction {
         return definitions;
     }
 
-    @NotNull
     @Override
-    protected CollisionShape createShape(@NotNull final VarTable vars) {
+    @FXThread
+    protected @NotNull CollisionShape createShape(@NotNull final VarTable vars) {
 
         final float height = vars.getFloat(PROPERTY_HEIGHT);
         final float radius = vars.getFloat(PROPERTY_RADIUS);

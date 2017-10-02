@@ -119,6 +119,7 @@ public abstract class AbstractFileConverter implements FileConverter {
      * @param source      the source file.
      * @param destination the target file.
      * @param overwrite   is need to overwrite.
+     * @throws IOException if was problem with writing to the destination or reading from the source file.
      */
     protected void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite)
             throws IOException {

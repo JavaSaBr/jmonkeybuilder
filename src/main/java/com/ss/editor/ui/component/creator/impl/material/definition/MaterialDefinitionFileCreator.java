@@ -11,6 +11,8 @@ import com.jme3.renderer.Caps;
 import com.jme3.renderer.Renderer;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
@@ -86,23 +88,20 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         VERT_TEMPLATE = FileUtils.read(vertResource);
     }
 
-    public MaterialDefinitionFileCreator() {
-        super();
-    }
-
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.MATERIAL_DEFINITION_FILE_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    @FromAnyThread
+    protected @NotNull String getFileExtension() {
         return JME_MATERIAL_DEFINITION;
     }
 
     @Override
+    @FXThread
     protected boolean validate(@NotNull final VarTable vars) {
 
         final String glslVersion = vars.get(PROP_GLSL_VERSION, String.class, StringUtils.EMPTY);
@@ -114,9 +113,9 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         return super.validate(vars);
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    @FromAnyThread
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         final Array<PropertyDefinition> result = ArrayFactory.newArray(PropertyDefinition.class);
         result.add(new PropertyDefinition(EditablePropertyType.STRING_FROM_LIST,
@@ -126,6 +125,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         super.hide();
 

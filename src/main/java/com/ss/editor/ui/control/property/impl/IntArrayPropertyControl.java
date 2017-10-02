@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -44,6 +46,17 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     @Override
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+        super.changeControlWidthPercent(controlWidthPercent);
+
+        final TextField valueField = getValueField();
+        valueField.prefWidthProperty().unbind();
+        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+    }
+
+    @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -57,6 +70,7 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
@@ -64,11 +78,13 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
     /**
      * @return the filed with current value.
      */
+    @FXThread
     private @NotNull TextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
+    @FXThread
     protected void reload() {
 
         final int[] element = getPropertyValue();
@@ -88,6 +104,7 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
     /**
      * Update the value.
      */
+    @FXThread
     private void updateValue(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

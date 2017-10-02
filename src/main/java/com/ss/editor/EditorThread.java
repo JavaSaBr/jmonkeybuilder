@@ -1,6 +1,8 @@
 package com.ss.editor;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.LocalObjects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The implementation of the {@link Thread} for this application.
@@ -48,7 +50,8 @@ public class EditorThread extends Thread {
      *
      * @return the container of thread local objects.
      */
-    public LocalObjects getLocal() {
+    @FromAnyThread
+    public @NotNull LocalObjects getLocal() {
         return localObjects;
     }
 }

@@ -22,30 +22,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Generate lo d action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public GenerateLoDAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.MESH_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         final GeometryTreeNode<Geometry> modelNode = ClassUtils.unsafeCast(getNode());
         final Geometry geometry = modelNode.getElement();

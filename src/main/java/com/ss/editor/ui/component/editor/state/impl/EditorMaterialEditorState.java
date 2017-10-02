@@ -1,7 +1,8 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
 import com.jme3.renderer.queue.RenderQueue;
-import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,11 +37,8 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      */
     private volatile boolean lightEnable;
 
-    /**
-     * Instantiates a new Material file editor state.
-     */
     public EditorMaterialEditorState() {
-        modelType = MaterialEditor3DState.ModelType.BOX.ordinal();
+        modelType = BaseMaterialEditor3DState.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
         lightEnable = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
     }
@@ -50,7 +48,8 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return the bucket type.
      */
-    public RenderQueue.Bucket getBucketType() {
+    @FXThread
+    public @NotNull RenderQueue.Bucket getBucketType() {
         return BUCKETS[bucketTypeId];
     }
 
@@ -59,6 +58,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param bucketType the bucket type.
      */
+    @FXThread
     public void setBucketType(@NotNull final RenderQueue.Bucket bucketType) {
         final boolean changed = getBucketTypeId() != bucketType.ordinal();
         this.bucketTypeId = bucketType.ordinal();
@@ -73,6 +73,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return the bucket type ordinal.
      */
+    @FXThread
     public int getBucketTypeId() {
         return bucketTypeId;
     }
@@ -82,6 +83,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return the model type.
      */
+    @FXThread
     public int getModelType() {
         return modelType;
     }
@@ -91,7 +93,8 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param modelType the model type.
      */
-    public void setModelType(@NotNull final MaterialEditor3DState.ModelType modelType) {
+    @FXThread
+    public void setModelType(@NotNull final BaseMaterialEditor3DState.ModelType modelType) {
         final boolean changed = getModelType() != modelType.ordinal();
         this.modelType = modelType.ordinal();
         final Runnable changeHandler = getChangeHandler();
@@ -105,6 +108,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return true if the light is enabled.
      */
+    @FXThread
     public boolean isLightEnable() {
         return lightEnable;
     }
@@ -114,6 +118,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param lightEnable true if the light is enabled.
      */
+    @FXThread
     public void setLightEnable(final boolean lightEnable) {
         final boolean changed = isLightEnable() != lightEnable;
         this.lightEnable = lightEnable;

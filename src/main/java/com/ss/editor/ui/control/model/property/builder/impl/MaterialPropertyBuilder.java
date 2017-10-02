@@ -5,6 +5,8 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.property.SimpleProperty;
@@ -55,10 +57,11 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     };
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance
      */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -68,6 +71,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     }
 
     @Override
+    @FXThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(final @NotNull Object object) {
         if(!(object instanceof Material)) return null;
 
@@ -82,6 +86,14 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
                 .collect(toList());
     }
 
+    /**
+     * Convert the material parameter to editable property.
+     *
+     * @param param    the material parameter.
+     * @param material the material.
+     * @return the editable property or null.
+     */
+    @FXThread
     private @Nullable EditableProperty<?, Material> convert(@NotNull final MatParam param,
                                                             @NotNull final Material material) {
 
@@ -95,28 +107,57 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
                 (object, newValue) -> applyParam(param, object, newValue));
     }
 
-    protected void applyParam(@NotNull final MatParam param, @NotNull final Material object,
-                            @Nullable final Object newValue) {
+    /**
+     * Apply changes for the material parameter.
+     *
+     * @param param    the parameter.
+     * @param material the material.
+     * @param newValue the new value.
+     */
+    @FXThread
+    protected void applyParam(@NotNull final MatParam param, @NotNull final Material material,
+                              @Nullable final Object newValue) {
+
         if (newValue == null) {
-            object.clearParam(param.getName());
+            material.clearParam(param.getName());
         } else {
-            object.setParam(param.getName(), param.getVarType(), newValue);
+            material.setParam(param.getName(), param.getVarType(), newValue);
         }
     }
 
+    /**
+     * Get relevant value of the material parameter.
+     *
+     * @param param    the material parameter.
+     * @param material the material.
+     * @return the relevant value.
+     */
+    @FXThread
     protected @Nullable Object getParamValue(@NotNull final MatParam param, @NotNull final Material material) {
         final MatParam currentParam = material.getParam(param.getName());
         return currentParam == null ? null : currentParam.getValue();
     }
 
+    /**
+     * Convert material parameter type to editable property type.
+     *
+     * @param varType the material parameter type.
+     * @return the editable property type or null.
+     */
+    @FXThread
     protected @Nullable EditablePropertyType convert(@NotNull final VarType varType) {
 
         switch (varType) {
-            case Boolean: return EditablePropertyType.BOOLEAN;
-            case Float: return EditablePropertyType.FLOAT;
-            case Int: return EditablePropertyType.INTEGER;
-            case Vector4: return EditablePropertyType.COLOR;
-            case Texture2D: return EditablePropertyType.TEXTURE_2D;
+            case Boolean:
+                return EditablePropertyType.BOOLEAN;
+            case Float:
+                return EditablePropertyType.FLOAT;
+            case Int:
+                return EditablePropertyType.INTEGER;
+            case Vector4:
+                return EditablePropertyType.COLOR;
+            case Texture2D:
+                return EditablePropertyType.TEXTURE_2D;
         }
 
         return null;

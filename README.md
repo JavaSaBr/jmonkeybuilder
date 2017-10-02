@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 1.1.0 #
+# jMonkeyEngine 3 SpaceShift Editor 1.2.0 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -10,6 +10,14 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
+
+## ver. 1.2.0 ##
+* -Fixed the far view plane distance of the editor camera.
+* -Updated tonegod.emitter library.
+* -Added the new plugin Shader Node Tools.
+* -Updated jME libraries.
+* -Updated Tree Generator plugin.
+* -Fixed some bugs.
 
 ## ver. 1.1.0 ##
 * -Added the new plugin to generate trees.

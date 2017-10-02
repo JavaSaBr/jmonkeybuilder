@@ -75,11 +75,13 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
         super(nodeTree, node);
     }
 
+    @FXThread
     @Override
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
     }
 
+    @FXThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.ADD_12;

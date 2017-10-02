@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.filler.impl;
 
 import static com.ss.editor.util.EditorUtil.hasFileInClipboard;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
@@ -26,6 +27,7 @@ public class ResourceAssetTreeSingleContextMenuFiller implements AssetTreeSingle
         AssetTreeMultiContextMenuFiller {
 
     @Override
+    @FXThread
     public void fill(@NotNull final ResourceElement element, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
 
@@ -57,6 +59,7 @@ public class ResourceAssetTreeSingleContextMenuFiller implements AssetTreeSingle
     }
 
     @Override
+    @FXThread
     public void fill(@NotNull final Array<ResourceElement> elements, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
 

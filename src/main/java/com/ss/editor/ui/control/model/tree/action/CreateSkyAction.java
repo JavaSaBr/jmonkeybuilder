@@ -19,30 +19,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Create sky action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateSkyAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.SKY_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_SKY;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -50,9 +44,8 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
         dialog.show();
     }
 
-    @NotNull
     @FXThread
-    protected CreateSkyDialog createDialog() {
+    protected @NotNull CreateSkyDialog createDialog() {
         return new CreateSkyDialog(getNode(), getNodeTree());
     }
 }

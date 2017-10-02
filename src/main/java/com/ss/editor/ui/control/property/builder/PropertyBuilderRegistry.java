@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.property.builder;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.builder.impl.AppStatePropertyBuilder;
 import com.ss.editor.ui.control.filter.property.builder.impl.FilterPropertyBuilder;
@@ -21,15 +23,26 @@ public class PropertyBuilderRegistry {
     @NotNull
     private static final PropertyBuilderRegistry INSTANCE = new PropertyBuilderRegistry();
 
+    @FromAnyThread
     public static @NotNull PropertyBuilderRegistry getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * The list of property builders.
+     */
     @NotNull
     private final Array<PropertyBuilder> builders;
 
+    /**
+     * THe list of filters.
+     */
+    @NotNull
+    private final Array<PropertyBuilderFilter> filters;
+
     private PropertyBuilderRegistry() {
         builders = ArrayFactory.newArray(PropertyBuilder.class);
+        filters = ArrayFactory.newArray(PropertyBuilderFilter.class);
         builders.add(AudioNodePropertyBuilder.getInstance());
         builders.add(ParticleEmitterPropertyBuilder.getInstance());
         builders.add(GeometryPropertyBuilder.getInstance());
@@ -48,13 +61,25 @@ public class PropertyBuilderRegistry {
         builders.add(Toneg0dParticleInfluencerPropertyBuilder.getInstance());
         builders.add(MaterialSettingsPropertyBuilder.getInstance());
     }
+
     /**
      * Register a new property builder.
      *
      * @param builder the property builder.
      */
+    @FromAnyThread
     public void register(@NotNull final PropertyBuilder builder) {
         builders.add(builder);
+    }
+
+    /**
+     * Register a new property builder filter.
+     *
+     * @param filter the property builder filter.
+     */
+    @FromAnyThread
+    public void register(@NotNull final PropertyBuilderFilter filter) {
+        filters.add(filter);
     }
 
     /**
@@ -65,10 +90,25 @@ public class PropertyBuilderRegistry {
      * @param container      the container for containing these controls.
      * @param changeConsumer the consumer to work between controls and editor.
      */
+    @FXThread
     public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                          @NotNull final ChangeConsumer changeConsumer) {
 
         for (final PropertyBuilder builder : builders) {
+
+            boolean needSkip = false;
+
+            for (final PropertyBuilderFilter filter : filters) {
+                if (filter.skip(builder, object, parent)) {
+                    needSkip = true;
+                    break;
+                }
+            }
+
+            if (needSkip) {
+                continue;
+            }
+
             builder.buildFor(object, parent, container, changeConsumer);
         }
     }

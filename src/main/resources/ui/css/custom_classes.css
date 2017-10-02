@@ -147,6 +147,29 @@
     -fx-opacity: -var-disabled-opacity;
 }
 
+.text-input-container-without-padding {
+    -fx-background: -var-button-background-color;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 2px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 1px 1px 1px 1px;
+    -fx-min-height: -var-default-field-height;
+}
+
+.text-input-container-without-padding:focused {
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+.text-input-container-without-padding:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Transparent Text Area                                                       *

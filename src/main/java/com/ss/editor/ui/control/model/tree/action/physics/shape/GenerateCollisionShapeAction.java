@@ -17,11 +17,11 @@ import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -39,24 +39,18 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
     @NotNull
     private static final Array<PropertyDefinition> EMPTY_DEFINITIONS = ArrayFactory.asArray();
 
-    /**
-     * Instantiates a new Generate collision shape action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public GenerateCollisionShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -97,27 +91,27 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
         changeConsumer.execute(new ChangeCollisionShapeOperation(shape, object.getCollisionShape(), object));
     }
 
-    @NotNull
     @Override
-    protected String getDialogTitle() {
+    @FXThread
+    protected @NotNull String getDialogTitle() {
         throw new RuntimeException();
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    @FXThread
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return EMPTY_DEFINITIONS;
     }
 
-    @NotNull
     @Override
-    protected CollisionShape createShape(@NotNull final VarTable vars) {
+    @FXThread
+    protected @NotNull CollisionShape createShape(@NotNull final VarTable vars) {
         throw new RuntimeException();
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
     }
 }

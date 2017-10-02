@@ -5,11 +5,11 @@ import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.rlib.plugin.annotation.PluginDescription;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,7 +32,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
-    @PluginDescription
+    @NotNull
     private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
     private static final int IMAGE_SIZE = 512;
@@ -50,13 +50,14 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     @Nullable
     private ImageView imageView;
 
-    @NotNull
     @Override
-    protected VBox createRoot() {
+    @FXThread
+    protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
         imageView = new ImageView();
@@ -68,34 +69,36 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the image view.
      */
-    @NotNull
-    private ImageView getImageView() {
+    @FXThread
+    private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 
     @Override
+    @FXThread
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         final Path file = event.getFile();
         if (!getEditFile().equals(file)) return;
         EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> showImage(file)), 1000);
     }
 
+    @FXThread
     private void showImage(@NotNull final Path file) {
         final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(file, IMAGE_SIZE, IMAGE_SIZE);
         final ImageView imageView = getImageView();
         imageView.setImage(preview);
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
         showImage(file);
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    @FromAnyThread
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 }

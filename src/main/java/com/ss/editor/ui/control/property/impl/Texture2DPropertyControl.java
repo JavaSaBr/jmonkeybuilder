@@ -9,6 +9,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -89,32 +90,55 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     @Nullable
     private Label textureLabel;
 
+    /**
+     * The field container.
+     */
+    @Nullable
+    private HBox fieldContainer;
+
     public Texture2DPropertyControl(@Nullable final Texture2D propertyValue, @NotNull final String propertyName,
                                     @NotNull final C changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);
-        setOnDragOver(this::dragOver);
-        setOnDragDropped(this::dragDropped);
+        setOnDragOver(this::handleDragOverEvent);
+        setOnDragDropped(this::handleDragDroppedEvent);
+    }
+
+    @Override
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
     }
 
     /**
-     * Handle dropped files to editor.
+     * Handle drag dropped events.
+     *
+     * @param dragEvent the drag dropped event.
      */
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
     }
 
     /**
-     * Handle drag over.
+     * Handle drag over events.
+     *
+     * @param dragEvent the drag over event.
      */
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
-        textureLabel = new Label(NO_TEXTURE);
+        fieldContainer = new HBox();
+
+        if (!isSingleRow()) {
+            fieldContainer.prefWidthProperty().bind(container.widthProperty());
+        }
+
         textureTooltip = new ImageChannelPreview();
 
         final VBox previewContainer = new VBox();
@@ -139,39 +163,74 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         removeButton.setOnAction(event -> processRemove());
         removeButton.disableProperty().bind(buildDisableRemoveCondition());
 
-        textureLabel.prefWidthProperty().bind(widthProperty()
-                .subtract(removeButton.widthProperty())
-                .subtract(previewContainer.widthProperty())
-                .subtract(settingsButton.widthProperty())
-                .subtract(addButton.widthProperty()));
+        if (!isSingleRow()) {
 
-        FXUtils.addToPane(textureLabel, container);
-        FXUtils.addToPane(previewContainer, container);
-        FXUtils.addToPane(addButton, container);
-        FXUtils.addToPane(settingsButton, container);
-        FXUtils.addToPane(removeButton, container);
+            textureLabel = new Label(NO_TEXTURE);
+            textureLabel.prefWidthProperty().bind(widthProperty()
+                    .subtract(removeButton.widthProperty())
+                    .subtract(previewContainer.widthProperty())
+                    .subtract(settingsButton.widthProperty())
+                    .subtract(addButton.widthProperty()));
+
+            FXUtils.addToPane(textureLabel, fieldContainer);
+            FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER,
+                    CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+
+        } else {
+            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER_WITHOUT_PADDING);
+        }
+
+        FXUtils.addToPane(previewContainer, fieldContainer);
+        FXUtils.addToPane(addButton, fieldContainer);
+        FXUtils.addToPane(settingsButton, fieldContainer);
+        FXUtils.addToPane(removeButton, fieldContainer);
+        FXUtils.addToPane(fieldContainer, container);
         FXUtils.addToPane(texturePreview, previewContainer);
 
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassTo(previewContainer, CSSClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
-        FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
         FXUtils.addClassesTo(settingsButton, addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
+    /**
+     * @return the disable|remove condition.
+     */
+    @FXThread
     protected @NotNull BooleanBinding buildDisableRemoveCondition() {
         return getTexturePreview().imageProperty().isNull();
     }
 
+    /**
+     * @return the texture label.
+     */
+    @FXThread
     private @NotNull Label getTextureLabel() {
         return notNull(textureLabel);
     }
 
+    /**
+     * Get the field container.
+     *
+     * @return the field container.
+     */
+    @FXThread
+    protected @NotNull HBox getFieldContainer() {
+        return notNull(fieldContainer);
+    }
+
+    /**
+     * @return the texture preview.
+     */
+    @FXThread
     private @NotNull ImageView getTexturePreview() {
         return notNull(texturePreview);
     }
 
+    /**
+     * @return the image channels preview.
+     */
+    @FXThread
     private @NotNull ImageChannelPreview getTextureTooltip() {
         return notNull(textureTooltip);
     }
@@ -179,6 +238,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to remove the current texture.
      */
+    @FXThread
     protected void processRemove() {
         setTexture(null);
     }
@@ -186,6 +246,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to add a new texture.
      */
+    @FXThread
     protected void processAdd() {
         UIUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
@@ -193,6 +254,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to open texture's settings.
      */
+    @FXThread
     protected void openSettings() {
 
         final Texture2D texture = notNull(getPropertyValue());
@@ -223,6 +285,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param varTable the var table.
      */
+    @FXThread
     private void applyChanges(@NotNull final VarTable varTable) {
 
         final Texture2D texture = notNull(getPropertyValue());
@@ -265,6 +328,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param file the file to new texture.
      */
+    @FXThread
     protected void setTexture(@Nullable final Path file) {
 
         if (file == null) {
@@ -285,13 +349,16 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     @Override
+    @FXThread
     protected void reload() {
 
         final Texture2D texture2D = getPropertyValue();
         final AssetKey key = texture2D == null ? null : texture2D.getKey();
 
-        final Label textureLabel = getTextureLabel();
-        textureLabel.setText(key == null ? NO_TEXTURE : key.getName());
+        if (!isSingleRow()) {
+            final Label textureLabel = getTextureLabel();
+            textureLabel.setText(key == null ? NO_TEXTURE : key.getName());
+        }
 
         final ImageChannelPreview textureTooltip = getTextureTooltip();
         final ImageView preview = getTexturePreview();

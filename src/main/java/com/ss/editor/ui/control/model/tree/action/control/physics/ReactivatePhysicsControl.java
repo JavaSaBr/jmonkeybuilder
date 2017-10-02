@@ -29,12 +29,14 @@ public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeCons
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.REPLAY_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

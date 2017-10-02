@@ -264,6 +264,8 @@ public class ClasspathManager {
     /**
      * Find all implementations of the interface class.
      *
+     * @param <T> the type of an interface.
+     * @param interfaceClass the interface class.
      * @return the list of all available implementations.
      */
     public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass) {

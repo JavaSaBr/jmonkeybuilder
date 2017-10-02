@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -35,49 +37,76 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @Nullable
     private FloatTextField yField;
 
+    /**
+     * The field container.
+     */
+    @Nullable
+    private HBox fieldContainer;
+
     public Vector2FPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
                                    @NotNull final C changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
     @Override
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+        super.changeControlWidthPercent(controlWidthPercent);
+
+        final HBox valueField = getFieldContainer();
+        valueField.prefWidthProperty().unbind();
+        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+    }
+
+    @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
-        final HBox field = new HBox();
-        field.prefWidthProperty()
+        fieldContainer = new HBox();
+        fieldContainer.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         xField = new FloatTextField();
         xField.setOnKeyReleased(this::updateVector);
         xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        xField.prefWidthProperty().bind(field.widthProperty().multiply(0.5));
+        xField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.5));
         xField.setScrollPower(10F);
 
         yField = new FloatTextField();
         yField.setOnKeyReleased(this::updateVector);
         yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        yField.prefWidthProperty().bind(field.widthProperty().multiply(0.5));
+        yField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.5));
         yField.setScrollPower(10F);
 
-        FXUtils.addToPane(xField, field);
-        FXUtils.addToPane(yField, field);
-        FXUtils.addToPane(field, container);
+        FXUtils.addToPane(xField, fieldContainer);
+        FXUtils.addToPane(yField, fieldContainer);
+        FXUtils.addToPane(fieldContainer, container);
 
-        FXUtils.addClassesTo(field, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+        FXUtils.addClassesTo(fieldContainer, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
                 CSSClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
 
         FXUtils.addClassesTo(xField, yField, CSSClasses.TRANSPARENT_TEXT_FIELD);
 
-        UIUtils.addFocusBinding(field, xField, yField);
+        UIUtils.addFocusBinding(fieldContainer, xField, yField);
+    }
+
+    /**
+     * @return the field container.
+     */
+    @FXThread
+    private @NotNull HBox getFieldContainer() {
+        return notNull(fieldContainer);
     }
 
     @Override
+    @FXThread
     protected void setPropertyValue(@Nullable final Vector2f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
@@ -89,6 +118,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      * @param y the y
      * @return the float
      */
+    @FXThread
     protected float checkResultXValue(final float x, final float y) {
         return x;
     }
@@ -100,6 +130,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      * @param y the y
      * @return the float
      */
+    @FXThread
     protected float checkResultYValue(final float x, final float y) {
         return y;
     }
@@ -109,6 +140,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field X.
      */
+    @FXThread
     protected @NotNull FloatTextField getXField() {
         return notNull(xField);
     }
@@ -118,11 +150,13 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field Y.
      */
+    @FXThread
     protected @NotNull FloatTextField getYField() {
         return notNull(yField);
     }
 
     @Override
+    @FXThread
     protected void reload() {
 
         final Vector2f vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
@@ -133,7 +167,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
 
         final FloatTextField yField = getYField();
         yField.setValue(vector.getY());
-        yField.positionCaret(xField.getText().length());
+        yField.positionCaret(yField.getText().length());
     }
 
     /**
@@ -141,6 +175,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @param event the event
      */
+    @FXThread
     private void updateVector(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

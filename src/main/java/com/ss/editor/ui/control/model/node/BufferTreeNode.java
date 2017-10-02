@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.node;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
@@ -15,25 +16,18 @@ import java.nio.Buffer;
  */
 public class BufferTreeNode extends TreeNode<Buffer> {
 
-    /**
-     * Instantiates a new Buffer model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public BufferTreeNode(@NotNull final Buffer element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return Icons.DATA_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return getElement().getClass().getSimpleName();
     }
 }

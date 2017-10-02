@@ -2,6 +2,7 @@ package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.util.EditorUtil;
@@ -97,6 +98,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     @Override
+    @FXThread
     protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
         final Button okButton = getOkButton();
@@ -106,6 +108,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
     }
@@ -115,6 +118,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the ok button.
      */
+    @FXThread
     protected @Nullable Button getOkButton() {
         return okButton;
     }
@@ -124,19 +128,19 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the close button.
      */
+    @FXThread
     protected @Nullable Button getCloseButton() {
         return closeButton;
     }
 
     @Override
+    @FXThread
     protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
-        HBox container = null;
+        final HBox container = new HBox();
 
-        if (needCloseButton() || needOkButton()) {
-            container = new HBox();
-        }
+        createBeforeActions(container);
 
         if (needOkButton()) {
             okButton = new Button(getButtonOkText());
@@ -160,12 +164,18 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
         createAdditionalActions(container);
 
-        if (container != null) {
+        if (!container.getChildren().isEmpty()) {
             FXUtils.addToPane(container, root);
             FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         }
     }
 
+    @FXThread
+    protected void createBeforeActions(@NotNull final HBox container) {
+
+    }
+
+    @FXThread
     protected void createAdditionalActions(@NotNull final HBox container) {
 
     }
@@ -173,6 +183,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * @return true if need to add an ok button here.
      */
+    @FromAnyThread
     protected boolean needOkButton() {
         return true;
     }
@@ -180,10 +191,12 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * @return true if need to add a close button here.
      */
+    @FromAnyThread
     protected boolean needCloseButton() {
         return true;
     }
 
+    @FXThread
     private void safeProcessOk() {
         try {
             processOk();
@@ -197,6 +210,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the the button's close text.
      */
+    @FromAnyThread
     protected @NotNull String getButtonCloseText() {
         return Messages.SIMPLE_DIALOG_BUTTON_CLOSE;
     }
@@ -206,6 +220,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the button's ok text.
      */
+    @FromAnyThread
     protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_OK;
     }

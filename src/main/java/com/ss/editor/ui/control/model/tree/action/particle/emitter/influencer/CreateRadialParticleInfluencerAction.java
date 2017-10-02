@@ -4,6 +4,7 @@ import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
@@ -15,26 +16,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CreateRadialParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    /**
-     * Instantiates a new Create radial particle influencer action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
-    public CreateRadialParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree,
-                                                @NotNull final TreeNode<?> node) {
+    public CreateRadialParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @NotNull
     @Override
-    protected ParticleInfluencer createInfluencer() {
+    @FXThread
+    protected @NotNull ParticleInfluencer createInfluencer() {
         return new RadialParticleInfluencer();
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL;
     }
 }

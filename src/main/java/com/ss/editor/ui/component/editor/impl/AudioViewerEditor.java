@@ -103,14 +103,14 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         addEditorState(editorAppState);
     }
 
-    @NotNull
     @Override
-    protected VBox createRoot() {
+    @FXThread
+    protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
-
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
         final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
@@ -174,6 +174,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * Stop of plying.
      */
+    @FXThread
     private void processStop() {
         getEditorAppState().stop();
     }
@@ -181,6 +182,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * Play the audio.
      */
+    @FXThread
     private void processPlay() {
         final AudioViewer3DState appState = getEditorAppState();
         if (appState.getPrevStatus() == Playing) {
@@ -190,8 +192,8 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         }
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
@@ -218,18 +220,17 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         getBitsPerSampleField().setText(String.valueOf(bitsPerSample));
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    @FromAnyThread
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 
     /**
      * @return the editor app state.
      */
-    @NotNull
     @FromAnyThread
-    private AudioViewer3DState getEditorAppState() {
+    private @NotNull AudioViewer3DState getEditorAppState() {
         return editorAppState;
     }
 
@@ -268,56 +269,56 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the play button.
      */
-    @NotNull
-    private Button getPlayButton() {
+    @FXThread
+    private @NotNull Button getPlayButton() {
         return notNull(playButton);
     }
 
     /**
      * @return the stop button.
      */
-    @NotNull
-    private Button getStopButton() {
+    @FXThread
+    private @NotNull Button getStopButton() {
         return notNull(stopButton);
     }
 
     /**
      * @return the channels field.
      */
-    @NotNull
-    private TextField getChannelsField() {
+    @FXThread
+    private @NotNull TextField getChannelsField() {
         return notNull(channelsField);
     }
 
     /**
      * @return the duration field.
      */
-    @NotNull
-    private TextField getDurationField() {
+    @FXThread
+    private @NotNull TextField getDurationField() {
         return notNull(durationField);
     }
 
     /**
      * @return the data type field.
      */
-    @NotNull
-    private TextField getDataTypeField() {
+    @FXThread
+    private @NotNull TextField getDataTypeField() {
         return notNull(dataTypeField);
     }
 
     /**
      * @return the sample rate field.
      */
-    @NotNull
-    private TextField getSampleRateField() {
+    @FXThread
+    private @NotNull TextField getSampleRateField() {
         return notNull(sampleRateField);
     }
 
     /**
      * @return the bits per sample field.
      */
-    @NotNull
-    private TextField getBitsPerSampleField() {
+    @FXThread
+    private @NotNull TextField getBitsPerSampleField() {
         return notNull(bitsPerSampleField);
     }
 

@@ -24,9 +24,15 @@ public class AssetTreeContextMenuFillerRegistry {
         return INSTANCE;
     }
 
+    /**
+     * The list of single fillers.
+     */
     @NotNull
     private final Array<AssetTreeSingleContextMenuFiller> singleFillers;
 
+    /**
+     * The list of multi fillers.
+     */
     @NotNull
     private final Array<AssetTreeMultiContextMenuFiller> multiFillers;
 
