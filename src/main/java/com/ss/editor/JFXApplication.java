@@ -143,6 +143,7 @@ public class JFXApplication extends Application {
             return;
         }
 
+        InitializeManager.register(InitializationManager.class);
         InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
@@ -163,8 +164,8 @@ public class JFXApplication extends Application {
     @JMEThread
     private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
 
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onBeforeCreateJMEContext();
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onBeforeCreateJMEContext();
 
         application.start();
 
@@ -270,8 +271,10 @@ public class JFXApplication extends Application {
             final ResourceManager resourceManager = ResourceManager.getInstance();
             resourceManager.reload();
 
+            final InitializationManager initializationManager = InitializationManager.getInstance();
+            initializationManager.onBeforeCreateJavaFXContext();
+
             final PluginManager pluginManager = PluginManager.getInstance();
-            pluginManager.onBeforeCreateJavaFXContext();
             pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CSSRegistry.getInstance()));
 
             LogView.getInstance();
@@ -353,8 +356,10 @@ public class JFXApplication extends Application {
     private void buildScene() {
         this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onAfterCreateJMEContext();
+
         final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onAfterCreateJavaFXContext();
         pluginManager.handlePlugins(editorPlugin -> {
             editorPlugin.register(FileCreatorRegistry.getInstance());
             editorPlugin.register(EditorRegistry.getInstance());
