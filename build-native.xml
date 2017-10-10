@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="jME SpaceShift Editor" default="do-deploy" basedir="native-build"
+<project name="jMonkey Builder" default="do-deploy" basedir="native-build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="1.2.0"/>
+    <property name="editor.version" value="1.3.0"/>
     <property environment="env"/>
 
     <condition property="gradle.executable" value="${basedir}/../gradlew.bat"
@@ -149,7 +149,7 @@
         </copy>
 
         <fx:resources id="appRes" >
-            <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
+            <fx:fileset dir="dist" includes="jmonkey-builder.jar"/>
             <fx:fileset dir="dist" includes="licenses/*"/>
             <fx:fileset dir="dist" includes="licenses/libraries-licenses/*"/>
             <fx:fileset dir="dist" includes="libs/*"/>
@@ -159,21 +159,21 @@
         </fx:resources>
 
         <fx:application id="fxApplication"
-                        name="jME3-SpaceShift-Editor"
+                        name="jMonkey Builder"
                         mainClass="com.ss.editor.JFXApplication"
                         toolkit="fx"
                         version="${editor.version}"/>
 
         <mkdir dir="build/classes/META-INF"/>
 
-        <fx:jar destfile="dist/jme3-spaceshift-editor.jar">
+        <fx:jar destfile="dist/jmonkey-builder.jar">
             <fx:application refid="fxApplication"/>
             <fileset dir="build/classes"/>
             <fx:resources refid="appRes"/>
 
             <manifest>
-                <attribute name="Implementation-Vendor" value="spaceshift.ru"/>
-                <attribute name="Implementation-Title" value="jME3 SpaceShift Editor"/>
+                <attribute name="Implementation-Vendor" value="bitbucket.org/JavaSabr"/>
+                <attribute name="Implementation-Title" value="jMonkey Builder"/>
                 <attribute name="Implementation-Version" value="${editor.version}"/>
             </manifest>
         </fx:jar>
@@ -188,22 +188,19 @@
                 includeDT="false"
                 offlineAllowed="true"
                 outdir="${basedir}/deploy"
-                outfile="jME3 SpaceShift Editor" nativeBundles="all"
+                outfile="jMonkey Builder" nativeBundles="all"
                 updatemode="background" verbose="true">
 
             <fx:platform>
-                <fx:jvmarg value="-XX:+AggressiveOpts"/>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
-                <fx:jvmarg value="-XX:+UseTLAB"/>
-                <fx:jvmarg value="-Djavafx.animation.fullspeed=true"/>
                 <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
             </fx:platform>
 
             <preferences shortcut="true" menu="true" install="false"/>
 
-            <info category="graphics" copyright="spaceshift.ru"
-                  description="Editor for jMonkeyEngine 3 by SpaceShift Team"
-                  email="javasabr@gmail.com" license="Freeware" title="jME3 SpaceShift Editor" vendor="spaceshift.ru"/>
+            <info category="graphics"
+                  description="The 3D Editor for jMonkeyEngine 3.2 by JavaSaBr"
+                  email="javasabr@gmail.com" license="Freeware" title="jMonkey Builder" vendor="bitbucket.org/JavaSabr"/>
 
             <application refId="fxApplication"/>
             <resources refid="appRes"/>

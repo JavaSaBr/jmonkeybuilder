@@ -30,19 +30,19 @@ public final class Config {
      * The name of editor's folder in user home folder.
      */
     @NotNull
-    private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
+    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkey-builder";
 
     /**
      * The editor's title.
      */
     @NotNull
-    public static final String TITLE = "jME3 SpaceShift Editor";
+    public static final String TITLE = "jMonkey Builder";
 
     /**
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.2.0");
+    public static final Version APP_VERSION = new Version("1.3.0");
 
     /**
      * The string version.
