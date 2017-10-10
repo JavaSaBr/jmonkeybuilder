@@ -459,6 +459,11 @@ public class Messages {
     public static final String MODEL_PROPERTY_OUTER_RADIUS;
     public static final String MODEL_PROPERTY_NAME;
     public static final String MODEL_PROPERTY_DATA_TYPE;
+    public static final String MODEL_PROPERTY_DEFAULT_VALUE;
+    public static final String MODEL_PROPERTY_LIGHT_MODE;
+    public static final String MODEL_PROPERTY_COLOR_SPACE;
+    public static final String MODEL_PROPERTY_LANGUAGE;
+    public static final String MODEL_PROPERTY_TEXTURE;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS;
@@ -1120,6 +1125,11 @@ public class Messages {
         MODEL_PROPERTY_OUTER_RADIUS = bundle.getString("ModelPropertyOuterRadius");
         MODEL_PROPERTY_NAME = bundle.getString("ModelPropertyName");
         MODEL_PROPERTY_DATA_TYPE = bundle.getString("ModelPropertyDataType");
+        MODEL_PROPERTY_DEFAULT_VALUE = bundle.getString("ModelPropertyDefaultValue");
+        MODEL_PROPERTY_LIGHT_MODE = bundle.getString("ModelPropertyLightMode");
+        MODEL_PROPERTY_COLOR_SPACE = bundle.getString("ModelPropertyColorSpace");
+        MODEL_PROPERTY_LANGUAGE = bundle.getString("ModelPropertyLanguage");
+        MODEL_PROPERTY_TEXTURE = bundle.getString("ModelPropertyTexture");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS = bundle.getString("MaterialModelPropertyControlTextureSettings");

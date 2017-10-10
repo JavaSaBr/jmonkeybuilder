@@ -54,6 +54,8 @@ public class PropertyEditorControlFactory {
                 return new StringFromListPropertyEditorControl(vars, definition, validation, definition.getOptions());
             case AWT_FONT:
                 return new AwtFontPropertyEditorControl(vars, definition, validation);
+            case RESOURCE_FROM_CLASSPATH:
+                return new ClasspathResourcePropertyControl(vars, definition, validation);
             default:
                 throw new IllegalArgumentException("Unknown the type " + definition.getPropertyType());
         }
