@@ -166,6 +166,29 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     }
 
     /**
+     * Expand this tree to the level.
+     *
+     * @param level the level.
+     */
+    @FXThread
+    public void expandToLevel(final int level) {
+        expandToLevel(getTreeView().getRoot(), 0, level);
+    }
+
+    /**
+     * Expand this tree to the level.
+     *
+     * @param item         the current item.
+     * @param currentLevel the current level.
+     * @param level        the level.
+     */
+    @FXThread
+    private void expandToLevel(final TreeItem<TreeNode<?>> item, final int currentLevel, final int level) {
+        item.setExpanded(currentLevel <= level);
+        item.getChildren().forEach(child -> expandToLevel(child, currentLevel + 1, level));
+    }
+
+    /**
      * Refresh the object in this tree.
      *
      * @param object the object.
