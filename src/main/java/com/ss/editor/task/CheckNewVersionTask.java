@@ -37,11 +37,11 @@ public class CheckNewVersionTask implements Runnable {
 
     @NotNull
     private static final String APP_VERSION_URL = "https://api.bitbucket.org/1.0/repositories/javasabr/" +
-            "jme3-spaceshift-editor/raw/master/app.version";
+            "jmonkey-builder/raw/master/app.version";
 
     @NotNull
     private static final String DOWNLOAD_APP_PATH_URL = "https://api.bitbucket.org/1.0/repositories/javasabr/" +
-            "jme3-spaceshift-editor/raw/master/download.app.path";
+            "jmonkey-builder/raw/master/download.app.path";
 
     @Override
     public void run() {

@@ -20,7 +20,9 @@ public class VirtualResourceElementFactory {
     /**
      * Build the root virtual resource elements for the resources.
      *
-     * @param resources the resources.
+     * @param resources    the resources.
+     * @param resourceTree the resources tree.
+     * @param <T> the type of resources.
      * @return the root element.
      */
     @FromAnyThread

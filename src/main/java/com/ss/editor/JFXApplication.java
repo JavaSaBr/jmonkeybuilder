@@ -192,7 +192,7 @@ public class JFXApplication extends Application {
         throwable.printStackTrace();
 
         final String userHome = System.getProperty("user.home");
-        final String fileName = "jme3-spaceshift-editor-error.log";
+        final String fileName = "jmonkey-builder-error.log";
 
         try (final PrintStream out = new PrintStream(newOutputStream(Paths.get(userHome, fileName)))) {
             throwable.printStackTrace(out);
