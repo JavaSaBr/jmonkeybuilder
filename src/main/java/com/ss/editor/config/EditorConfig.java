@@ -19,10 +19,7 @@ import com.ss.rlib.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.nio.file.Files;
@@ -856,21 +853,6 @@ public final class EditorConfig implements AssetEventListener {
         settings.setGammaCorrection(isGammaCorrection());
         settings.setResizable(true);
         // settings.putBoolean("GraphicsDebug", true);
-
-        try {
-
-            final BufferedImage[] icons = new BufferedImage[5];
-            icons[0] = ImageIO.read(EditorUtil.getInputStream("/ui/icons/app/SSEd256.png"));
-            icons[1] = ImageIO.read(EditorUtil.getInputStream("/ui/icons/app/SSEd128.png"));
-            icons[2] = ImageIO.read(EditorUtil.getInputStream("/ui/icons/app/SSEd64.png"));
-            icons[3] = ImageIO.read(EditorUtil.getInputStream("/ui/icons/app/SSEd32.png"));
-            icons[4] = ImageIO.read(EditorUtil.getInputStream("/ui/icons/app/SSEd16.png"));
-
-            settings.setIcons(icons);
-
-        } catch (final IOException e) {
-            LOGGER.warning(e);
-        }
 
         JmeToJFXIntegrator.prepareSettings(settings, getFrameRate());
 

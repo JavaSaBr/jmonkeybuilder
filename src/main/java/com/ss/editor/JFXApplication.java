@@ -283,11 +283,14 @@ public class JFXApplication extends Application {
             ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
 
             final ObservableList<Image> icons = stage.getIcons();
-            icons.add(new Image("/ui/icons/app/SSEd256.png"));
-            icons.add(new Image("/ui/icons/app/SSEd128.png"));
-            icons.add(new Image("/ui/icons/app/SSEd64.png"));
-            icons.add(new Image("/ui/icons/app/SSEd32.png"));
-            icons.add(new Image("/ui/icons/app/SSEd16.png"));
+            icons.add(new Image("/ui/icons/app/256x256.png"));
+            icons.add(new Image("/ui/icons/app/128x128.png"));
+            icons.add(new Image("/ui/icons/app/96x96.png"));
+            icons.add(new Image("/ui/icons/app/64x64.png"));
+            icons.add(new Image("/ui/icons/app/48x48.png"));
+            icons.add(new Image("/ui/icons/app/32x32.png"));
+            icons.add(new Image("/ui/icons/app/24x24.png"));
+            icons.add(new Image("/ui/icons/app/16x16.png"));
 
             final EditorConfig config = EditorConfig.getInstance();
 
