@@ -6,7 +6,7 @@
 * [Wiki](https://bitbucket.org/JavaSabr/jmonkeybuilder/wiki/Home)
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
 * [Gitter](https://gitter.im/jME3-SpaceShift-Editor/Lobby?source=orgpage)
-* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jmonkeybuilder/35179)
+* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/editor-jmonkeybuilder/35179)
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
