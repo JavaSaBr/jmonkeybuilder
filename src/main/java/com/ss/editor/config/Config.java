@@ -30,13 +30,13 @@ public final class Config {
      * The name of editor's folder in user home folder.
      */
     @NotNull
-    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkey-builder";
+    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkeybuilder";
 
     /**
      * The editor's title.
      */
     @NotNull
-    public static final String TITLE = "jMonkey Builder";
+    public static final String TITLE = "jMonkeyBuilder";
 
     /**
      * The editor's version.

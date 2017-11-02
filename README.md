@@ -1,12 +1,12 @@
-# jMonkey Builder 1.3.0 #
+# jMonkeyBuilder 1.3.0 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-* [Wiki](https://bitbucket.org/JavaSabr/jmonkey-builder/wiki/Home)
+* [Wiki](https://bitbucket.org/JavaSabr/jmonkeybuilder/wiki/Home)
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
 * [Gitter](https://gitter.im/jME3-SpaceShift-Editor/Lobby?source=orgpage)
-* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jmonkey-builder/35179)
+* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jmonkeybuilder/35179)
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##

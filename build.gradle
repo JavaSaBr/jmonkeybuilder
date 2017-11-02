@@ -187,7 +187,7 @@ defaultTasks 'clean', 'install'
 install {
     repositories.mavenInstaller {
         pom.version = version
-        pom.artifactId = 'jmonkey-builder'
+        pom.artifactId = 'jmonkeybuilder'
         pom.project {
             licenses {
                 license {
