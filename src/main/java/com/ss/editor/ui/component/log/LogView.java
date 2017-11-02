@@ -166,7 +166,7 @@ public class LogView extends CodeArea {
             final String text = getText();
             replaceText(0, text.length(), newLog);
             try {
-                setEstimatedScrollY(getTotalHeightEstimate());
+                scrollYBy(getEstimatedScrollY());
             } catch (final NullPointerException e) {
             }
         });

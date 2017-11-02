@@ -3,13 +3,11 @@ package com.ss.editor.executor.impl;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
-import com.sun.javafx.application.PlatformImpl;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.ss.rlib.concurrent.util.ConcurrentUtils;
 import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.util.array.Array;
+import javafx.application.Platform;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The executor to execute tasks in the FX UI Thread.
@@ -26,13 +24,9 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     @NotNull
     private final Runnable fxTask = () -> doExecute(execute, executed);
 
-    /**
-     * Instantiates a new Fx editor task executor.
-     */
     public FXEditorTaskExecutor() {
         setName(FXEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
-        PlatformImpl.startup(this::start);
     }
 
     @Override
@@ -60,8 +54,9 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 LOGGER.warning(e);
             }
         }
-    }
 
+        ConcurrentUtils.notifyAll(this);
+    }
 
     @Override
     public void run() {
@@ -108,7 +103,10 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     private void executeInFXUIThread() {
         while (true) {
             try {
-                PlatformImpl.runAndWait(fxTask);
+                synchronized (this) {
+                    Platform.runLater(fxTask);
+                    ConcurrentUtils.waitInSynchronize(this);
+                }
                 break;
             } catch (final IllegalStateException e) {
                 LOGGER.warning(this, e);

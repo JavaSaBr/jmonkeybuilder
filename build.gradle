@@ -15,12 +15,33 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 group = 'com.spaceshift'
 version = '1.2.0'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+compileJava {
+    options.encoding = "UTF-8"
+    options.incremental = true
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED"
+    ])
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED"
+    ])
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"
+    ])
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED"
+    ])
+}
+
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
 
 compileTestJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.9
+    targetCompatibility = 1.9
     options.compilerArgs += '-parameters'
 }
 
@@ -54,7 +75,7 @@ javadoc {
 dependencies {
 
     // base
-    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.8.1'
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'

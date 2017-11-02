@@ -1,12 +1,10 @@
 package com.ss.editor;
 
 import static java.util.ResourceBundle.getBundle;
-import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import com.ss.rlib.util.PropertyLoader;
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -674,6 +672,8 @@ public class Messages {
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
+        /*
+        //FIXME
         final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 locale, classLoader, PropertyLoader.getInstance());
 
@@ -683,6 +683,7 @@ public class Messages {
         final Map<String, String> override = getUnsafeFieldValue(overrideBundle, "lookup");
         final Map<String, String> original = getUnsafeFieldValue(controlBundle, "lookup");
         original.putAll(override);
+        */
 
         final ResourceBundle bundle = getBundle(BUNDLE_NAME, PropertyLoader.getInstance());
 
