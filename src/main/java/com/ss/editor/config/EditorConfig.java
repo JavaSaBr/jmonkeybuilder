@@ -89,8 +89,7 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return the instance
      */
-    @NotNull
-    public static EditorConfig getInstance() {
+    public static @NotNull EditorConfig getInstance() {
 
         if (instance == null) {
 
@@ -262,9 +261,8 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return The list of last opened asset folders.
      */
-    @NotNull
     @FromAnyThread
-    public synchronized List<String> getLastOpenedAssets() {
+    public synchronized @NotNull List<String> getLastOpenedAssets() {
         return lastOpenedAssets;
     }
 
@@ -301,7 +299,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets anisotropy.
+     * Set the anisotropy level.
      *
      * @param anisotropy the new level of the anisotropy.
      */
@@ -311,7 +309,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets anisotropy.
+     * Get the anisotropy level.
      *
      * @return the current level of the anisotropy.
      */
@@ -321,9 +319,9 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets fxaa.
+     * Set the enabling of FXAA.
      *
-     * @param fxaa flag is for enabling the FXAA.
+     * @param fxaa true if need to enable FXAA.
      */
     @FromAnyThread
     public void setFXAA(final boolean fxaa) {
@@ -331,9 +329,9 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Is fxaa boolean.
+     * Get the flag of enabling FXAA.
      *
-     * @return flag is for enabling the FXAA.
+     * @return true if FXAA is enabled.
      */
     @FromAnyThread
     public boolean isFXAA() {
@@ -341,20 +339,19 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets current asset.
+     * Get the current asset folder.
      *
      * @return the current asset folder.
      */
-    @Nullable
     @FromAnyThread
-    public Path getCurrentAsset() {
+    public @Nullable Path getCurrentAsset() {
         return currentAsset;
     }
 
     /**
-     * Sets current asset.
+     * Set the current asset folder.
      *
-     * @param currentAsset the new current asset folder.
+     * @param currentAsset the current asset folder.
      */
     @FromAnyThread
     public void setCurrentAsset(@Nullable final Path currentAsset) {
@@ -366,9 +363,8 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return the path to the folder with libraries.
      */
-    @Nullable
     @FromAnyThread
-    public Path getLibrariesPath() {
+    public @Nullable Path getLibrariesPath() {
         return librariesPath;
     }
 
@@ -387,9 +383,8 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return the path to the folder with compiled classes.
      */
-    @Nullable
     @FromAnyThread
-    public Path getClassesPath() {
+    public @Nullable Path getClassesPath() {
         return classesPath;
     }
 
@@ -403,18 +398,17 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets additional envs.
+     * Get the additional envs folder.
      *
      * @return the path to the folder with additional envs.
      */
-    @Nullable
     @FromAnyThread
-    public Path getAdditionalEnvs() {
+    public @Nullable Path getAdditionalEnvs() {
         return additionalEnvs;
     }
 
     /**
-     * Sets additional envs.
+     * Set the additional envs folder.
      *
      * @param additionalEnvs the path to the folder with additional envs.
      */
@@ -488,9 +482,8 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return the current white point for the tone map filter.
      */
-    @NotNull
     @FromAnyThread
-    public Vector3f getToneMapFilterWhitePoint() {
+    public @NotNull Vector3f getToneMapFilterWhitePoint() {
         return notNull(toneMapFilterWhitePoint);
     }
 
@@ -799,9 +792,8 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return the current theme.
      */
-    @NotNull
     @FromAnyThread
-    public CssColorTheme getTheme() {
+    public @NotNull CssColorTheme getTheme() {
         return CssColorTheme.valueOf(theme);
     }
 
@@ -820,9 +812,8 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @return the current open GL version.
      */
-    @NotNull
     @FromAnyThread
-    public OpenGLVersion getOpenGLVersion() {
+    public @NotNull OpenGLVersion getOpenGLVersion() {
         return notNull(openGLVersion);
     }
 
@@ -886,7 +877,7 @@ public final class EditorConfig implements AssetEventListener {
         this.defaultUseFlippedTexture = prefs.getBoolean(PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE, true);
         this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_EDITING_CAMERA_LAMP_ENABLED, true);
         this.analyticsQuestion = prefs.getBoolean(PREF_OTHER_ANALYTICS_QUESTION, false);
-        this.theme = prefs.getInt(PREF_OTHER_THEME, CssColorTheme.SHADOW.ordinal());
+        this.theme = prefs.getInt(PREF_OTHER_THEME, CssColorTheme.DARK.ordinal());
         this.openGLVersion = OpenGLVersion.valueOf(prefs.getInt(PREF_GRAPHIC_OPEN_GL, GL_32.ordinal()));
 
         final String currentAssetURI = prefs.get(PREF_ASSET_CURRENT_ASSET, null);
