@@ -34,7 +34,7 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
     private static final String PROJECT_HOME = "https://bitbucket.org/JavaSabr/jmonkeybuilder";
 
     @NotNull
-    private static final String FORUM_THREAD = "https://hub.jmonkeyengine.org/t/jmonkeybuilder/35179";
+    private static final String FORUM_THREAD = "https://hub.jmonkeyengine.org/t/editor-jmonkeybuilder";
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(600, -1);
