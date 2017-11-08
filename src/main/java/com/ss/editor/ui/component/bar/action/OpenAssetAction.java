@@ -82,7 +82,7 @@ public class OpenAssetAction extends MenuItem {
     }
 
     /**
-     * Open asset folder use custom file chooser.
+     * Open an asset folder using custom file chooser.
      */
     private void openAsset() {
 

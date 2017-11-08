@@ -27,43 +27,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The action to add a new user data.
+ * The action to add new user data.
  *
  * @author JavaSaBr
  */
 public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
 
     private enum DataType {
-        /**
-         * Float data type.
-         */
         FLOAT,
-        /**
-         * Integer data type.
-         */
         INTEGER,
-        /**
-         * Vector 3 f data type.
-         */
         VECTOR3F,
-        /**
-         * Vector 2 f data type.
-         */
         VECTOR2F,
-        /**
-         * Color data type.
-         */
         COLOR,
-        /**
-         * Boolean data type.
-         */
         BOOLEAN,
-        /**
-         * String data type.
-         */
-        STRING,
+        STRING
     }
-
 
     @NotNull
     private static final String PROPERTY_NAME = "name";
@@ -96,14 +74,37 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
         definitions.add(new PropertyDefinition(STRING, Messages.MODEL_PROPERTY_NAME, PROPERTY_NAME, ""));
         definitions.add(new PropertyDefinition(ENUM, Messages.MODEL_PROPERTY_DATA_TYPE, PROPERTY_DATA_TYPE, DataType.STRING));
 
-        final GenericFactoryDialog dialog = new GenericFactoryDialog(definitions, this::addUserData,
-                vars -> !StringUtils.isEmpty(vars.getString(PROPERTY_NAME)));
+        final GenericFactoryDialog dialog = new GenericFactoryDialog(definitions, this::addUserData, this::validate);
 
         dialog.setTitle(Messages.ADD_USER_DATA_DIALOG_TITLE);
         dialog.setButtonOkText(Messages.SIMPLE_DIALOG_BUTTON_ADD);
         dialog.show();
     }
 
+    /**
+     * Validate the input paramaters.
+     *
+     * @param vars the input paramaters.
+     * @return true if all is ok.
+     */
+    @FXThread
+    private boolean validate(@NotNull final VarTable vars) {
+        if(!vars.has(PROPERTY_NAME)) return false;
+
+        final String name = vars.getString(PROPERTY_NAME);
+
+        final TreeNode<?> node = getNode();
+        final Spatial element = (Spatial) node.getElement();
+
+        return !StringUtils.isEmpty(name) && element.getUserData(name) == null;
+    }
+
+    /**
+     * Add new user date.
+     *
+     * @param vars the input paramaters.
+     */
+    @FXThread
     private void addUserData(@NotNull final VarTable vars) {
 
         final String name = vars.get(PROPERTY_NAME);
