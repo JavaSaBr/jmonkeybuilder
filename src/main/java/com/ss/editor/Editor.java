@@ -13,6 +13,7 @@ import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.environment.util.EnvMapUtils;
 import com.jme3.font.BitmapFont;
 import com.jme3.light.LightList;
 import com.jme3.light.LightProbe;
@@ -468,8 +469,8 @@ public class Editor extends JmeToJFXApplication {
             return;
         }
 
-        lightProbe = makeProbe(environmentCamera, rootNode, EMPTY_JOB_ADAPTER);
-        previewLightProbe = makeProbe(previewEnvironmentCamera, previewNode, EMPTY_JOB_ADAPTER);
+        lightProbe = makeProbe(environmentCamera, rootNode, EnvMapUtils.GenerationType.Fast, EMPTY_JOB_ADAPTER);
+        previewLightProbe = makeProbe(previewEnvironmentCamera, previewNode, EnvMapUtils.GenerationType.Fast, EMPTY_JOB_ADAPTER);
 
         BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
         bounds.setRadius(100);
@@ -497,7 +498,7 @@ public class Editor extends JmeToJFXApplication {
             return;
         }
 
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, progressAdapter);
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, EnvMapUtils.GenerationType.Fast, progressAdapter);
     }
 
     /**
@@ -552,7 +553,7 @@ public class Editor extends JmeToJFXApplication {
             return;
         }
 
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, previewNode, progressAdapter);
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, previewNode, EnvMapUtils.GenerationType.Fast, progressAdapter);
     }
 
     /**
