@@ -57,7 +57,7 @@ public class GenericFileCreator extends AbstractFileCreator {
 
     @Override
     @FXThread
-    public void show(final @NotNull Window owner) {
+    public void show(@NotNull final Window owner) {
         super.show(owner);
         validateFileName();
     }

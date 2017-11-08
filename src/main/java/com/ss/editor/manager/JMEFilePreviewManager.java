@@ -72,6 +72,9 @@ public class JMEFilePreviewManager extends AbstractControl {
     private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
 
     @NotNull
+    private static final Array<String> MODELS_FORMATS = ArrayFactory.newArray(String.class);
+
+    @NotNull
     private static final Array<String> AUDIO_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
@@ -80,6 +83,9 @@ public class JMEFilePreviewManager extends AbstractControl {
         AUDIO_FORMATS.add(FileExtensions.AUDIO_OGG);
         AUDIO_FORMATS.add(FileExtensions.AUDIO_MP3);
         AUDIO_FORMATS.add(FileExtensions.AUDIO_WAV);
+        MODELS_FORMATS.add(FileExtensions.JME_OBJECT);
+        MODELS_FORMATS.add(FileExtensions.MODEL_BLENDER);
+        MODELS_FORMATS.add(FileExtensions.MODEL_GLTF);
     }
 
     @NotNull
@@ -103,6 +109,32 @@ public class JMEFilePreviewManager extends AbstractControl {
             }
         }
         return notNull(instance);
+    }
+
+    /**
+     * Check the file.
+     *
+     * @param file the file
+     * @return true is the file is a file of a model.
+     */
+    @FromAnyThread
+    public static boolean isModelFile(@Nullable final Path file) {
+        if (file == null) return false;
+        final String extension = getExtension(file);
+        return MODELS_FORMATS.contains(extension);
+    }
+
+    /**
+     * Check the file by the asset path.
+     *
+     * @param assetPath the asset path.
+     * @return true is the file is a file of a model.
+     */
+    @FromAnyThread
+    public static boolean isModelFile(@Nullable final String assetPath) {
+        if (StringUtils.isEmpty(assetPath)) return false;
+        final String extension = getExtension(assetPath);
+        return MODELS_FORMATS.contains(extension);
     }
 
     /**
@@ -241,7 +273,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
-     * Show a file.
+     * Show the file.
      *
      * @param file      the file.
      * @param fitWidth  the target width of preview.
@@ -259,6 +291,20 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
+     * Show the external file.
+     *
+     * @param file      the file.
+     * @param fitWidth  the target width of preview.
+     * @param fitHeight the target height of preview.
+     */
+    @FromAnyThread
+    public void showExternal(@NotNull final Path file, final int fitWidth, final int fitHeight) {
+        imageView.setFitHeight(fitHeight);
+        imageView.setFitWidth(fitWidth);
+        showPreview(file.toString(), getExtension(file));
+    }
+
+    /**
      * Show a preview of the file by the asset path.
      *
      * @param path      the asset path.
@@ -268,7 +314,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     private void showPreview(@NotNull final String path, @NotNull final String extension) {
         if (FileExtensions.JME_MATERIAL.equals(extension)) {
             EDITOR_THREAD_EXECUTOR.addToExecute(() -> showMaterial(path));
-        } else if (FileExtensions.JME_OBJECT.equals(extension)) {
+        } else if (isModelFile(path)) {
             EDITOR_THREAD_EXECUTOR.addToExecute(() -> showObject(path));
         } else {
             EDITOR_THREAD_EXECUTOR.addToExecute(this::clear);
@@ -384,9 +430,8 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @return the image view with a preview.
      */
-    @NotNull
     @FXThread
-    public ImageView getImageView() {
+    public @NotNull ImageView getImageView() {
         return imageView;
     }
 
@@ -395,8 +440,8 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @return the transfer processor.
      */
-    @NotNull
-    private FrameTransferSceneProcessor prepareScene() {
+    @JMEThread
+    private @NotNull FrameTransferSceneProcessor prepareScene() {
 
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();

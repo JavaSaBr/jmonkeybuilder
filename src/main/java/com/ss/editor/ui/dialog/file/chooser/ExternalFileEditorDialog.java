@@ -1,4 +1,4 @@
-package com.ss.editor.ui.dialog.folder;
+package com.ss.editor.ui.dialog.file.chooser;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
@@ -26,11 +26,11 @@ import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 /**
- * The implementation of the {@link EditorDialog} to choose a folder on machine.
+ * The implementation of the {@link EditorDialog} to choose an external file on machine.
  *
  * @author JavaSaBr
  */
-public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
+public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
 
     /**
      * The constant DIALOG_SIZE.
@@ -60,15 +60,15 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
      * The tree with all resources.
      */
     @Nullable
-    private ResourceTree resourceTree;
+    protected ResourceTree resourceTree;
 
     /**
      * Init directory.
      */
     @Nullable
-    private Path initDirectory;
+    protected Path initDirectory;
 
-    public OpenExternalFolderEditorDialog(@NotNull final Consumer<@NotNull Path> consumer) {
+    public ExternalFileEditorDialog(@NotNull final Consumer<@NotNull Path> consumer) {
         this.consumer = consumer;
     }
 
@@ -81,7 +81,6 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
         resourceTree.prefWidthProperty().bind(widthProperty());
         resourceTree.setActionTester(type -> false);
         resourceTree.setLazyMode(true);
-        resourceTree.setOnlyFolders(true);
         resourceTree.setShowRoot(false);
         resourceTree.getSelectionModel()
                 .selectedItemProperty()
@@ -93,8 +92,12 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
 
     @FXThread
     private void processOpen(@NotNull final ResourceElement element) {
+
         final Button okButton = getOkButton();
-        if (okButton.isDisabled()) return;
+        if (okButton == null || okButton.isDisabled()) {
+            return;
+        }
+
         hide();
         consumer.accept(element.getFile());
     }
@@ -181,7 +184,7 @@ public class OpenExternalFolderEditorDialog extends AbstractSimpleEditorDialog {
      * @return the tree with all resources.
      */
     @FXThread
-    private @NotNull ResourceTree getResourceTree() {
+    protected @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 

@@ -18,7 +18,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
-import com.ss.editor.ui.dialog.folder.OpenExternalFolderEditorDialog;
+import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.OpenGLVersion;

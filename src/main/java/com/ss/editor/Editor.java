@@ -33,6 +33,8 @@ import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.asset.locator.FileSystemAssetLocator;
+import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
@@ -276,6 +278,7 @@ public class Editor extends JmeToJFXApplication {
 
         final AssetManager assetManager = getAssetManager();
         assetManager.registerLocator("", FolderAssetLocator.class);
+        assetManager.registerLocator("", FileSystemAssetLocator.class);
         assetManager.addAssetEventListener(EditorConfig.getInstance());
 
         final AudioRenderer audioRenderer = getAudioRenderer();

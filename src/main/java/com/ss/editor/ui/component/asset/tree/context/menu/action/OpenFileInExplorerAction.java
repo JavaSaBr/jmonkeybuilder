@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
@@ -20,16 +21,19 @@ public class OpenFileInExplorerAction extends FileAction {
         super(element);
     }
 
+    @FXThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.EXPLORER_16;
     }
 
+    @FXThread
     @Override
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER;
     }
 
+    @FXThread
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);

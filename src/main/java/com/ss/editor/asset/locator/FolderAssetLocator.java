@@ -1,4 +1,4 @@
-package com.ss.editor;
+package com.ss.editor.asset.locator;
 
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 /**
@@ -28,7 +29,10 @@ public class FolderAssetLocator implements AssetLocator {
 
     @Override
     @JMEThread
-    public AssetInfo locate(final AssetManager manager, final AssetKey key) {
+    public AssetInfo locate(@NotNull final AssetManager manager, @NotNull final AssetKey key) {
+
+        final Path absoluteFile = Paths.get(key.getName());
+        if (Files.exists(absoluteFile)) return null;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -41,13 +45,13 @@ public class FolderAssetLocator implements AssetLocator {
         return new PathAssetInfo(manager, key, resolve);
     }
 
-    private class PathAssetInfo extends AssetInfo {
+    public static class PathAssetInfo extends AssetInfo {
 
         @NotNull
         private final Path path;
 
-        private PathAssetInfo(@NotNull final AssetManager manager, @NotNull final AssetKey key,
-                              @NotNull final Path path) {
+        public PathAssetInfo(@NotNull final AssetManager manager, @NotNull final AssetKey key,
+                             @NotNull final Path path) {
             super(manager, key);
             this.path = path;
         }
