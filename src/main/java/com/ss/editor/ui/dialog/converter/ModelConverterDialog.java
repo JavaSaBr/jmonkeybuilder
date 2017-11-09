@@ -144,6 +144,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     private void validate() {
 
         final Button okButton = getOkButton();
+        if (okButton == null) return;
+
         okButton.setDisable(true);
 
         final TextField filenameField = getFilenameField();

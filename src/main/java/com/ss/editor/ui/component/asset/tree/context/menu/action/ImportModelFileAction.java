@@ -1,10 +1,12 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.imports.model.ModelImportDialog;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,9 +36,15 @@ public class ImportModelFileAction extends FileAction {
         }
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected @NotNull String getName() {
-        return super.getName();
+        return "Import model";
+    }
+
+    @Override
+    @FXThread
+    protected @Nullable Image getIcon() {
+        return Icons.IMPORT_16;
     }
 }

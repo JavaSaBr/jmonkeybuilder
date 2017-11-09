@@ -22,6 +22,18 @@ import java.nio.file.StandardOpenOption;
  */
 public class FolderAssetLocator implements AssetLocator {
 
+    @NotNull
+    private static final ThreadLocal<Boolean> IGNORE_LOCAL = ThreadLocal.withInitial(() -> false);
+
+    /**
+     * Set the flag of ignoring this locator.
+     *
+     * @param ignore true if need to ignore this locator.
+     */
+    public static void setIgnore(final boolean ignore) {
+        IGNORE_LOCAL.set(false);
+    }
+
     @Override
     @JMEThread
     public void setRootPath(@NotNull final String rootPath) {
@@ -30,6 +42,7 @@ public class FolderAssetLocator implements AssetLocator {
     @Override
     @JMEThread
     public AssetInfo locate(@NotNull final AssetManager manager, @NotNull final AssetKey key) {
+        if (IGNORE_LOCAL.get() == Boolean.TRUE) return null;
 
         final Path absoluteFile = Paths.get(key.getName());
         if (Files.exists(absoluteFile)) return null;

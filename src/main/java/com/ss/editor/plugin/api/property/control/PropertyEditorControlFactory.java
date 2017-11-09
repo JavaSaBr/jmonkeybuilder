@@ -58,6 +58,8 @@ public class PropertyEditorControlFactory {
                 return new ClasspathResourcePropertyControl(vars, definition, validation);
             case EXTERNAL_FILE:
                 return new ExternalFileResourcePropertyControl(vars, definition, validation);
+            case FOLDER_FROM_ASSET_FOLDER:
+                return new FolderAssetResourcePropertyControl(vars, definition, validation);
             default:
                 throw new IllegalArgumentException("Unknown the type " + definition.getPropertyType());
         }

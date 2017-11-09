@@ -31,6 +31,8 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.asset.locator.FolderAssetLocator;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -76,6 +78,9 @@ public class JMEFilePreviewManager extends AbstractControl {
 
     @NotNull
     private static final Array<String> AUDIO_FORMATS = ArrayFactory.newArray(String.class);
+
+    @NotNull
+    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     static {
         JME_FORMATS.add(FileExtensions.JME_MATERIAL);
@@ -287,7 +292,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         final Path assetFile = notNull(getAssetFile(file), "File can't be null.");
         final String path = toAssetPath(assetFile);
 
-        showPreview(path, getExtension(assetFile));
+        showPreview(path, getExtension(assetFile), false);
     }
 
     /**
@@ -301,7 +306,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     public void showExternal(@NotNull final Path file, final int fitWidth, final int fitHeight) {
         imageView.setFitHeight(fitHeight);
         imageView.setFitWidth(fitWidth);
-        showPreview(file.toString(), getExtension(file));
+        showPreview(file.toString(), getExtension(file), true);
     }
 
     /**
@@ -309,13 +314,14 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param path      the asset path.
      * @param extension the extension.
+     * @param external  true if the path is external path.
      */
     @FromAnyThread
-    private void showPreview(@NotNull final String path, @NotNull final String extension) {
+    private void showPreview(@NotNull final String path, @NotNull final String extension, final boolean external) {
         if (FileExtensions.JME_MATERIAL.equals(extension)) {
             EDITOR_THREAD_EXECUTOR.addToExecute(() -> showMaterial(path));
         } else if (isModelFile(path)) {
-            EDITOR_THREAD_EXECUTOR.addToExecute(() -> showObject(path));
+            EDITOR_THREAD_EXECUTOR.addToExecute(() -> showObject(path, external));
         } else {
             EDITOR_THREAD_EXECUTOR.addToExecute(this::clear);
         }
@@ -332,17 +338,70 @@ public class JMEFilePreviewManager extends AbstractControl {
     public void show(@NotNull final String assetPath, final int fitWidth, final int fitHeight) {
         imageView.setFitHeight(fitHeight);
         imageView.setFitWidth(fitWidth);
-        showPreview(assetPath, getExtension(assetPath));
+        showPreview(assetPath, getExtension(assetPath), false);
     }
 
     /**
      * Show a j3o object.
      *
-     * @param path the path to object.
+     * @param path     the path to object.
+     * @param external true if the object is external object.
      */
     @JMEThread
-    private void showObject(@NotNull final String path) {
-        if (processor != null) processor.setEnabled(true);
+    private void showObject(@NotNull final String path, final boolean external) {
+        prepareProcessor();
+
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
+        final Spatial model;
+
+        FolderAssetLocator.setIgnore(external);
+        try {
+            model = assetManager.loadModel(path);
+
+            if (external && EDITOR_CONFIG.isAutoTangentGenerating()) {
+                TangentGenerator.useMikktspaceGenerator(model);
+            }
+
+        } finally {
+            FolderAssetLocator.setIgnore(false);
+        }
+
+        tryToLoad(model);
+
+        final Node rootNode = editor.getPreviewNode();
+        rootNode.detachChild(modelNode);
+    }
+
+    /**
+     * Try to load and show the model.
+     *
+     * @param model the model.
+     */
+    @JMEThread
+    private void tryToLoad(@NotNull final Spatial model) {
+        try {
+
+            final Editor editor = Editor.getInstance();
+            final RenderManager renderManager = editor.getRenderManager();
+            renderManager.preloadScene(model);
+
+            modelNode.attachChild(model);
+
+        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
+            EditorUtil.handleException(LOGGER, this, e);
+        }
+    }
+
+    /**
+     * Prepare the processor to render the a preview object.
+     */
+    @JMEThread
+    private void prepareProcessor() {
+
+        if (processor != null) {
+            processor.setEnabled(true);
+        }
 
         frame = 0;
 
@@ -352,22 +411,6 @@ public class JMEFilePreviewManager extends AbstractControl {
         camera.setRotation(CAMERA_ROTATION);
 
         modelNode.detachAllChildren();
-
-        final AssetManager assetManager = editor.getAssetManager();
-        final Spatial model = assetManager.loadModel(path);
-        try {
-
-            final RenderManager renderManager = editor.getRenderManager();
-            renderManager.preloadScene(model);
-
-            modelNode.attachChild(model);
-
-        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-            EditorUtil.handleException(LOGGER, this, e);
-        }
-
-        final Node rootNode = editor.getPreviewNode();
-        rootNode.detachChild(modelNode);
     }
 
     /**
@@ -377,31 +420,14 @@ public class JMEFilePreviewManager extends AbstractControl {
      */
     @JMEThread
     private void showMaterial(@NotNull final String path) {
-        if (processor != null) processor.setEnabled(true);
-
-        frame = 0;
+        prepareProcessor();
 
         final Editor editor = Editor.getInstance();
-        final Camera camera = editor.getPreviewCamera();
-        camera.setLocation(CAMERA_LOCATION);
-        camera.setRotation(CAMERA_ROTATION);
-
         final AssetManager assetManager = editor.getAssetManager();
         final Material material = assetManager.loadMaterial(path);
 
-        modelNode.detachAllChildren();
-
         testBox.setMaterial(material);
-        try {
-
-            final RenderManager renderManager = editor.getRenderManager();
-            renderManager.preloadScene(testBox);
-
-            modelNode.attachChild(testBox);
-
-        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-            EditorUtil.handleException(LOGGER, this, e);
-        }
+        tryToLoad(testBox);
 
         final Node rootNode = editor.getPreviewNode();
         rootNode.detachChild(modelNode);
@@ -422,7 +448,9 @@ public class JMEFilePreviewManager extends AbstractControl {
         final Node rootNode = editor.getPreviewNode();
         rootNode.detachChild(modelNode);
 
-        if (processor != null) processor.setEnabled(false);
+        if (processor != null) {
+            processor.setEnabled(false);
+        }
     }
 
     /**

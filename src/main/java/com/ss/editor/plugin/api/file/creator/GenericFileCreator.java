@@ -31,6 +31,12 @@ public class GenericFileCreator extends AbstractFileCreator {
     private static final Array<PropertyDefinition> EMPTY_ARRAY = ArrayFactory.asArray();
 
     /**
+     * The list of created controls.
+     */
+    @Nullable
+    private Array<PropertyEditorControl<?>> controls;
+
+    /**
      * The result vars of the creator.
      */
     @Nullable
@@ -44,6 +50,7 @@ public class GenericFileCreator extends AbstractFileCreator {
         super.createSettings(root);
 
         this.vars = VarTable.newInstance();
+        this.controls = ArrayFactory.newArray(PropertyEditorControl.class);
 
         int rowIndex = 1;
 
@@ -52,6 +59,7 @@ public class GenericFileCreator extends AbstractFileCreator {
             final PropertyEditorControl<?> control = build(vars, definition, this::validateFileName);
             control.prefWidthProperty().bind(widthProperty());
             root.add(control, 0, rowIndex++, 2, 1);
+            controls.add(control);
         }
     }
 
@@ -69,10 +77,25 @@ public class GenericFileCreator extends AbstractFileCreator {
         return notNull(vars);
     }
 
+    /**
+     * Get the list of created controls.
+     *
+     * @return the list of created controls.
+     */
+    @FXThread
+    private @Nullable Array<PropertyEditorControl<?>> getControls() {
+        return controls;
+    }
+
     @Override
     @FXThread
     protected void validateFileName() {
         super.validateFileName();
+
+        final Array<PropertyEditorControl<?>> controls = getControls();
+        if (controls != null) {
+            controls.forEach(PropertyEditorControl::checkDependency);
+        }
 
         final Button okButton = getOkButton();
         if (okButton == null) return;
