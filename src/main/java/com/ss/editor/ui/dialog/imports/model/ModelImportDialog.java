@@ -85,14 +85,24 @@ public class ModelImportDialog extends GenericFileCreator {
     @Nullable
     private Path renderedFile;
 
+    public ModelImportDialog() {
+        setTitleText(Messages.IMPORT_MODEL_DIALOG_TITLE);
+    }
+
+    @Override
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_IMPORT;
+    }
+
     @Override
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         final Array<PropertyDefinition> result = ArrayFactory.newArray(PropertyDefinition.class);
-        result.add(new PropertyDefinition(EXTERNAL_FILE, "External file", PROP_FILE, null));
-        result.add(new PropertyDefinition(FOLDER_FROM_ASSET_FOLDER, "Textures folder", PROP_TEXTURES_FOLDER, null));
-        result.add(new PropertyDefinition(BOOLEAN, "Overwrite textures", PROP_OVERWRITE_TEXTURES, true));
+        result.add(new PropertyDefinition(EXTERNAL_FILE, Messages.IMPORT_MODEL_DIALOG_EXTERNAL_FILE, PROP_FILE, null));
+        result.add(new PropertyDefinition(FOLDER_FROM_ASSET_FOLDER, Messages.IMPORT_MODEL_DIALOG_TEXTURES_FOLDER, PROP_TEXTURES_FOLDER, null));
+        result.add(new PropertyDefinition(BOOLEAN, Messages.IMPORT_MODEL_DIALOG_OVERWRITE_TEXTURES, PROP_OVERWRITE_TEXTURES, true));
         result.add(new PropertyDefinition(BOOLEAN, Messages.MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS, PROP_NEED_MATERIALS_EXPORT, false));
         result.add(new PropertyDefinition(FOLDER_FROM_ASSET_FOLDER, MATERIAL_EXPORT_DEPS, Messages.MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER, PROP_MATERIALS_FOLDER, null));
         result.add(new PropertyDefinition(BOOLEAN, MATERIAL_EXPORT_DEPS, Messages.MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS, PROP_OVERWRITE_MATERIALS, false));
@@ -105,8 +115,8 @@ public class ModelImportDialog extends GenericFileCreator {
     protected void createPreview(@NotNull final BorderPane container) {
         super.createPreview(container);
         imageView = new ImageView();
-        imageView.fitHeightProperty().bind(container.heightProperty().subtract(6));
-        imageView.fitWidthProperty().bind(container.widthProperty().subtract(6));
+        imageView.fitHeightProperty().bind(container.heightProperty().subtract(4));
+        imageView.fitWidthProperty().bind(container.widthProperty().subtract(4));
         container.setCenter(imageView);
     }
 

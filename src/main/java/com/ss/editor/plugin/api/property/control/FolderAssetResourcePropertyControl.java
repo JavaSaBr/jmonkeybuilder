@@ -40,7 +40,6 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
     @Override
     @FXThread
     protected void processSelect() {
-        super.processSelect();
         UIUtils.openFolderAssetDialog(this::processSelect, getActionTester());
     }
 

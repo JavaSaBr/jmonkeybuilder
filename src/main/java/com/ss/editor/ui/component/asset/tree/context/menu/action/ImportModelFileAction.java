@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
@@ -39,7 +40,7 @@ public class ImportModelFileAction extends FileAction {
     @Override
     @FXThread
     protected @NotNull String getName() {
-        return "Import model";
+        return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_IMPORT_MODEL;
     }
 
     @Override

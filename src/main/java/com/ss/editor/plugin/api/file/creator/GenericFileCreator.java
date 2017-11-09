@@ -31,10 +31,10 @@ public class GenericFileCreator extends AbstractFileCreator {
     private static final Array<PropertyDefinition> EMPTY_ARRAY = ArrayFactory.asArray();
 
     /**
-     * The list of created controls.
+     * The settings container.
      */
     @Nullable
-    private Array<PropertyEditorControl<?>> controls;
+    private GridPane settingsContainer;
 
     /**
      * The result vars of the creator.
@@ -49,8 +49,8 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void createSettings(@NotNull final GridPane root) {
         super.createSettings(root);
 
+        this.settingsContainer = root;
         this.vars = VarTable.newInstance();
-        this.controls = ArrayFactory.newArray(PropertyEditorControl.class);
 
         int rowIndex = 1;
 
@@ -59,7 +59,6 @@ public class GenericFileCreator extends AbstractFileCreator {
             final PropertyEditorControl<?> control = build(vars, definition, this::validateFileName);
             control.prefWidthProperty().bind(widthProperty());
             root.add(control, 0, rowIndex++, 2, 1);
-            controls.add(control);
         }
     }
 
@@ -73,18 +72,19 @@ public class GenericFileCreator extends AbstractFileCreator {
     /**
      * @return the result vars of the creator.
      */
+    @FXThread
     protected @NotNull VarTable getVars() {
         return notNull(vars);
     }
 
     /**
-     * Get the list of created controls.
+     * Get the settings container.
      *
-     * @return the list of created controls.
+     * @return the settings container.
      */
     @FXThread
-    private @Nullable Array<PropertyEditorControl<?>> getControls() {
-        return controls;
+    private @NotNull GridPane getSettingsContainer() {
+        return notNull(settingsContainer);
     }
 
     @Override
@@ -92,10 +92,11 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void validateFileName() {
         super.validateFileName();
 
-        final Array<PropertyEditorControl<?>> controls = getControls();
-        if (controls != null) {
-            controls.forEach(PropertyEditorControl::checkDependency);
-        }
+        final GridPane settingsContainer = getSettingsContainer();
+        settingsContainer.getChildren().stream()
+                .filter(PropertyEditorControl.class::isInstance)
+                .map(PropertyEditorControl.class::cast)
+                .forEach(PropertyEditorControl::checkDependency);
 
         final Button okButton = getOkButton();
         if (okButton == null) return;
