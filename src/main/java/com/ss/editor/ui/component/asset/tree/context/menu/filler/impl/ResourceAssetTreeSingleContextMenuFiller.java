@@ -47,6 +47,10 @@ public class ResourceAssetTreeSingleContextMenuFiller implements AssetTreeSingle
             items.add(new PasteFileAction(element));
         }
 
+        if (actionTester.test(ImportModelFileAction.class)) {
+            items.add(new ImportModelFileAction(element));
+        }
+
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         final Path file = element.getFile();

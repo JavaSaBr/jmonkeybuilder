@@ -48,6 +48,7 @@ public class Messages {
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_IMPORT_MODEL;
 
     public static final String FILE_EDITOR_ACTION_SAVE;
 
@@ -532,6 +533,8 @@ public class Messages {
     public static final String SIMPLE_DIALOG_BUTTON_ADD;
     public static final String SIMPLE_DIALOG_BUTTON_SAVE;
     public static final String SIMPLE_DIALOG_BUTTON_GENERATE;
+    public static final String SIMPLE_DIALOG_BUTTON_CONVERT;
+    public static final String SIMPLE_DIALOG_BUTTON_IMPORT;
     public static final String SIMPLE_DIALOG_BUTTON_CREATE;
     public static final String SIMPLE_DIALOG_BUTTON_APPLY;
     public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
@@ -622,6 +625,7 @@ public class Messages {
     public static final String CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
+
     public static final String EDITING_COMPONENT_BRUSH_SIZE;
     public static final String EDITING_COMPONENT_BRUSH_POWER;
     public static final String EDITING_COMPONENT_SMOOTHLY;
@@ -643,7 +647,11 @@ public class Messages {
     public static final String MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS;
     public static final String MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER;
     public static final String MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS;
-    public static final String MODEL_CONVERTER_DIALOG_BUTTON_OK;
+
+    public static final String IMPORT_MODEL_DIALOG_TITLE;
+    public static final String IMPORT_MODEL_DIALOG_EXTERNAL_FILE;
+    public static final String IMPORT_MODEL_DIALOG_TEXTURES_FOLDER;
+    public static final String IMPORT_MODEL_DIALOG_OVERWRITE_TEXTURES;
 
     public static final String FILE_DELETE_HANDLER_DELETE_MATERIALS;
 
@@ -716,6 +724,7 @@ public class Messages {
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileByExternalEditor");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileBySystemExplorer");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle.getString("AssetComponentResourceTreeContextMenuRenameFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_IMPORT_MODEL = bundle.getString("AssetComponentResourceTreeContextMenuImportModel");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
 
@@ -1204,6 +1213,8 @@ public class Messages {
         SIMPLE_DIALOG_BUTTON_CLOSE = bundle.getString("SimpleDialogButtonClose");
         SIMPLE_DIALOG_BUTTON_YES = bundle.getString("SimpleDialogButtonYes");
         SIMPLE_DIALOG_BUTTON_NO = bundle.getString("SimpleDialogButtonNo");
+        SIMPLE_DIALOG_BUTTON_CONVERT = bundle.getString("SimpleDialogConvert");
+        SIMPLE_DIALOG_BUTTON_IMPORT = bundle.getString("SimpleDialogImport");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
@@ -1310,7 +1321,11 @@ public class Messages {
         MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS = bundle.getString("ModelConverterDialogExportMaterials");
         MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER = bundle.getString("ModelConverterDialogMaterialsFolder");
         MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS = bundle.getString("ModelConverterDialogOverwriteMaterials");
-        MODEL_CONVERTER_DIALOG_BUTTON_OK = bundle.getString("ModelConverterDialogButtonOk");
+
+        IMPORT_MODEL_DIALOG_TITLE = bundle.getString("ImportModelDialogTitle");
+        IMPORT_MODEL_DIALOG_EXTERNAL_FILE = bundle.getString("ImportModelDialogExternalFile");
+        IMPORT_MODEL_DIALOG_TEXTURES_FOLDER = bundle.getString("ImportModelDialogTexturesFolder");
+        IMPORT_MODEL_DIALOG_OVERWRITE_TEXTURES = bundle.getString("ImportModelDialogOverwriteTextures");
 
         FILE_DELETE_HANDLER_DELETE_MATERIALS = bundle.getString("FileDeleteHandlerDeleteMaterials");
 

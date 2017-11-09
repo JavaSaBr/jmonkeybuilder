@@ -42,6 +42,7 @@ import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -55,6 +56,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 /**
  * The starter of the JavaFX application.
@@ -180,6 +182,36 @@ public class JFXApplication extends Application {
     }
 
     /**
+     * Create a new focus listener.
+     *
+     * @return the new focus listener.
+     */
+    @FXThread
+    private static @NotNull ChangeListener<Boolean> makeFocusedListener() {
+        return (observable, oldValue, newValue) -> {
+
+            final Editor editor = Editor.getInstance();
+            final Stage stage = notNull(JFXApplication.getStage());
+
+            if (newValue || stage.isFocused()) {
+                editor.setPaused(false);
+                return;
+            }
+
+            final EditorConfig editorConfig = EditorConfig.getInstance();
+            if (!editorConfig.isStopRenderOnLostFocus()) {
+                editor.setPaused(false);
+                return;
+            }
+
+            final JFXApplication application = JFXApplication.getInstance();
+            final Window window = ArrayUtils.getInReadLock(application.openedWindows, windows -> windows.search(Window::isFocused));
+
+            editor.setPaused(window == null);
+        };
+    }
+
+    /**
      * Start.
      */
     @FromAnyThread
@@ -236,7 +268,8 @@ public class JFXApplication extends Application {
      */
     @FXThread
     public void addWindow(@NotNull final Window window) {
-        ArrayUtils.runInWriteLock(openedWindows, window, Array::add);
+        window.focusedProperty().addListener(makeFocusedListener());
+        ArrayUtils.runInWriteLock(openedWindows, window, Collection::add);
     }
 
     /**
@@ -418,10 +451,7 @@ public class JFXApplication extends Application {
         this.sceneProcessor = sceneProcessor;
 
         final Stage stage = notNull(getStage());
-        stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            final EditorConfig editorConfig = EditorConfig.getInstance();
-            editor.setPaused(editorConfig.isStopRenderOnLostFocus() && !newValue);
-        });
+        stage.focusedProperty().addListener(makeFocusedListener());
 
         Platform.runLater(scene::notifyFinishBuild);
     }
