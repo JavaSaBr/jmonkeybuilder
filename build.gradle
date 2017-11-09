@@ -24,7 +24,7 @@ compileTestJava {
     options.compilerArgs += '-parameters'
 }
 
-ext.jmeVersion = "3.2_branch-SNAPSHOT"
+ext.jmeVersion = "3.2_advanced_shaders-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.2"
 ext.junitPlatformVersion = "1.0.0"
