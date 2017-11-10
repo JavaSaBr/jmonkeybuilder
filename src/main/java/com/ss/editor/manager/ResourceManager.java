@@ -146,8 +146,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         this.interestedResources = DictionaryFactory.newObjectDictionary();
         this.interestedResourcesInClasspath = DictionaryFactory.newObjectDictionary();
 
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> {
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.addOnFinishLoading(() -> {
             prepareClasspathResources();
             final FXEventManager fxEventManager = FXEventManager.getInstance();
             fxEventManager.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
@@ -156,14 +156,13 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
         });
 
-        executorManager.addJMETask(() -> {
+        initializationManager.addOnAfterCreateJMEContext(() -> {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
             assetManager.addAssetEventListener(this);
         });
 
         registerInterestedFileType(FileExtensions.JME_MATERIAL_DEFINITION);
-        registerInterestedFileType(FileExtensions.JME_SHADER_NODE);
         updateAdditionalEnvs();
         start();
     }

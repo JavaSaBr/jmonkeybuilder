@@ -65,7 +65,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
-        final AssetLinkNode linkNode = findParent(getElement(), AssetLinkNode.class::isInstance);
+        final T element = getElement();
+        final AssetLinkNode linkNode = findParent(element, AssetLinkNode.class::isInstance);
 
         if (linkNode == null) {
             final Menu createMenu = createCreationMenu(nodeTree);
@@ -74,10 +75,12 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             if (toolMenu != null) items.add(toolMenu);
         }
 
-        if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
-
-        if (linkNode == null) {
+        if (linkNode == null || element == linkNode) {
             items.add(new AddUserDataAction(nodeTree, this));
+        }
+
+        if (canRemove()) {
+            items.add(new RemoveNodeAction(nodeTree, this));
         }
 
         super.fillContextMenu(nodeTree, items);

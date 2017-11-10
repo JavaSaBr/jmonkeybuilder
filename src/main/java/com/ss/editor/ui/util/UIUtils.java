@@ -435,6 +435,7 @@ public class UIUtils {
      * @param <T>     the type parameter.
      * @param item    the tree item.
      * @param visitor the visitor.
+     * @return true of we can visit child elements.
      */
     @FXThread
     public static <T> boolean visitUntil(@NotNull final TreeItem<T> item,

@@ -105,7 +105,7 @@ public interface Icons {
     @NotNull Image TERRAIN_SMOOTH_32 = ICON_MANAGER.getImage("/ui/icons/svg/smooth_terrain.svg", 32);
     @NotNull Image TERRAIN_UP_32 = ICON_MANAGER.getImage("/ui/icons/svg/raise_terrain.svg", 32);
 
-    @NotNull Image APPLICATION_64 = ICON_MANAGER.getImage("/ui/icons/app/SSEd64.png", 64);
+    @NotNull Image APPLICATION_64 = ICON_MANAGER.getImage("/ui/icons/app/64x64.png", 64);
 
     @NotNull Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/svg/play-button.svg", 128);
     @NotNull Image PAUSE_128 = ICON_MANAGER.getImage("/ui/icons/svg/pause.svg", 128);

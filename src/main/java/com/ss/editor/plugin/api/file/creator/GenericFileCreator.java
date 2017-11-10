@@ -31,6 +31,12 @@ public class GenericFileCreator extends AbstractFileCreator {
     private static final Array<PropertyDefinition> EMPTY_ARRAY = ArrayFactory.asArray();
 
     /**
+     * The settings container.
+     */
+    @Nullable
+    private GridPane settingsContainer;
+
+    /**
      * The result vars of the creator.
      */
     @Nullable
@@ -43,6 +49,7 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void createSettings(@NotNull final GridPane root) {
         super.createSettings(root);
 
+        this.settingsContainer = root;
         this.vars = VarTable.newInstance();
 
         int rowIndex = 1;
@@ -57,7 +64,7 @@ public class GenericFileCreator extends AbstractFileCreator {
 
     @Override
     @FXThread
-    public void show(final @NotNull Window owner) {
+    public void show(@NotNull final Window owner) {
         super.show(owner);
         validateFileName();
     }
@@ -65,14 +72,31 @@ public class GenericFileCreator extends AbstractFileCreator {
     /**
      * @return the result vars of the creator.
      */
+    @FXThread
     protected @NotNull VarTable getVars() {
         return notNull(vars);
+    }
+
+    /**
+     * Get the settings container.
+     *
+     * @return the settings container.
+     */
+    @FXThread
+    private @NotNull GridPane getSettingsContainer() {
+        return notNull(settingsContainer);
     }
 
     @Override
     @FXThread
     protected void validateFileName() {
         super.validateFileName();
+
+        final GridPane settingsContainer = getSettingsContainer();
+        settingsContainer.getChildren().stream()
+                .filter(PropertyEditorControl.class::isInstance)
+                .map(PropertyEditorControl.class::cast)
+                .forEach(PropertyEditorControl::checkDependency);
 
         final Button okButton = getOkButton();
         if (okButton == null) return;

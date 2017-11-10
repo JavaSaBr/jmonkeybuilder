@@ -5,7 +5,7 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3x.jfx.injfx.input.JFXMouseInput;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.PluginManager;
+import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
@@ -268,7 +268,7 @@ public class EditorFXScene extends Scene {
         fillComponents(components, getContainer());
         components.forEach(ScreenComponent::notifyFinishBuild);
 
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onFinishLoading();
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onFinishLoading();
     }
 }

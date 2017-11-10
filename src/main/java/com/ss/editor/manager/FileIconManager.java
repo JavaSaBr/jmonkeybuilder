@@ -76,7 +76,7 @@ public class FileIconManager {
 
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_OBJECT, "jme3");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SHADER_NODE, "vector");
-        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "sse");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "j3s");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "parquet");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "text");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_GLTF, "cube");
