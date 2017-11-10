@@ -6,4 +6,4 @@ Priority: optional
 Architecture: amd64
 Provides: jmonkeybuilder
 Homepage: https://bitbucket.org/JavaSabr/jmonkeybuilder
-Description: 3D Editor for jMonkeyEngine 3.2 by JavaSaBr
+Description: 3D Editor for jMonkeyEngine 3.2
