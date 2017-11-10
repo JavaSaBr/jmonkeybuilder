@@ -1,9 +1,9 @@
-Package: jmonkey-builder
+Package: jmonkeybuilder
 Version: @version@
 Section: graphics
 Maintainer: Java Developer <javasabr@gmail.com>
 Priority: optional
 Architecture: amd64
-Provides: jmonkey-builder
-Homepage: https://bitbucket.org/JavaSabr/jmonkey-builder
+Provides: jmonkeybuilder
+Homepage: https://bitbucket.org/JavaSabr/jmonkeybuilder
 Description: 3D Editor for jMonkeyEngine 3.2 by JavaSaBr
