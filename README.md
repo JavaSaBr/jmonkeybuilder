@@ -11,6 +11,12 @@
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
 
+## ver. 1.3.0 ##
+* -Updated static light probes.
+* -Implemented the import model action.
+* -Updated jME libraries.
+* -Fixed some bugs.
+
 ## ver. 1.2.0 ##
 * -Fixed the far view plane distance of the editor camera.
 * -Updated tonegod.emitter library.

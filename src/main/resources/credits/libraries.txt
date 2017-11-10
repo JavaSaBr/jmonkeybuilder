@@ -25,7 +25,7 @@ commons-codec-1.9 commons-logging-1.2 httpclient-4.5.2 httpcore-4.4.4
 
 ## extensions
 
-jme3-spaceshift-extension-1.8.0 groovy-all-2.5.0-beta-1 annotations-15.0
+jme3-spaceshift-extension-1.9.3 groovy-all-2.5.0-beta-1 annotations-15.0
 
 ## extensions ## xbuf
 
