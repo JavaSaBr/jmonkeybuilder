@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.model.node.control;
 
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.Named;
 import com.ss.editor.extension.scene.control.EditableControl;
 import com.ss.editor.ui.Icons;
@@ -21,41 +23,38 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ControlTreeNode<T extends Control> extends TreeNode<T> {
 
-    /**
-     * Instantiates a new Control model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public ControlTreeNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveControlAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.GEAR_16;
     }
 
     @Override
+    @FXThread
     public boolean canCopy() {
         return true;
     }
 
     @Override
+    @FXThread
     public boolean canMove() {
         return true;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
 
         final T element = getElement();
 

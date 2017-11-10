@@ -262,7 +262,7 @@ public class GeomUtils {
      * Get a geometry on spatial from screen position.
      *
      * @param spatial the spatial.
-     * @param spatial the camera.
+     * @param camera the camera.
      * @param screenX the screen X coord.
      * @param screenY the screen Y coord.
      * @return the geometry or null.

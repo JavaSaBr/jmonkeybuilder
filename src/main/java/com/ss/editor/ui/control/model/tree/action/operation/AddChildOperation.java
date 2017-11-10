@@ -33,22 +33,10 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
      */
     private final boolean needSelect;
 
-    /**
-     * Instantiates a new Add child operation.
-     *
-     * @param newChild the new child
-     * @param parent   the parent
-     */
     public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent) {
         this(newChild, parent, true);
     }
 
-    /**
-     * Instantiates a new Add child operation.
-     *
-     * @param newChild the new child
-     * @param parent   the parent
-     */
     public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent, boolean needSelect) {
         this.newChild = newChild;
         this.parent = parent;

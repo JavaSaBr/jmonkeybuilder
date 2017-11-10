@@ -18,28 +18,34 @@ import java.nio.file.Paths;
  *
  * @author JavaSaBr
  */
-public abstract class Config {
+public final class Config {
 
+    /**
+     * The path to config file in classpath.
+     */
     @NotNull
     private static final String CONFIG_RESOURCE_PATH = "/app-config.xml";
 
-    @NotNull
-    private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
-
     /**
-     * The constant TITLE.
+     * The name of editor's folder in user home folder.
      */
     @NotNull
-    public static final String TITLE = "jME3 SpaceShift Editor";
+    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkeybuilder";
 
     /**
-     * The constant APP_VERSION.
+     * The editor's title.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.1.0");
+    public static final String TITLE = "jMonkeyBuilder";
 
     /**
-     * The constant STRING_VERSION.
+     * The editor's version.
+     */
+    @NotNull
+    public static final Version APP_VERSION = new Version("1.3.0");
+
+    /**
+     * The string version.
      */
     @NotNull
     public static final String STRING_VERSION = APP_VERSION.toString();
@@ -63,31 +69,37 @@ public abstract class Config {
     public static final OperatingSystem OPERATING_SYSTEM;
 
     /**
-     * Flag is for showing debug.
+     * The flat to enable debug mode.
      */
     public static final boolean DEV_DEBUG;
+
     /**
-     * The flag to enable debug of camera moving.
+     * The flat to enable camera debug mode.
      */
     public static final boolean DEV_CAMERA_DEBUG;
+
     /**
-     * The flag to enable debug of transforms controls.
+     * The flat to enable transformations debug mode.
      */
     public static final boolean DEV_TRANSFORMS_DEBUG;
+
     /**
-     * Flag is for showing debug of the JavaFX.
+     * The flat to enable JavaFX debug mode.
      */
     public static final boolean DEV_DEBUG_JFX;
+
     /**
-     * The flag to enable debug of mouse input from javaFX to jME.
+     * The flat to enable JavaFX mouse input debug mode.
      */
     public static final boolean DEV_DEBUG_JFX_MOUSE_INPUT;
+
     /**
-     * The flag to enable debug of key input from javaFX to jME.
+     * The flat to enable javaFX key input debug mode.
      */
     public static final boolean DEV_DEBUG_JFX_KEY_INPUT;
+
     /**
-     * Flag is for activating the PBR.
+     * The flat to enable PBR render.
      */
     public static final boolean ENABLE_PBR;
 
@@ -117,8 +129,7 @@ public abstract class Config {
      *
      * @return the path to the folder for writing log files.
      */
-    @NotNull
-    public static Path getFolderForLog() {
+    public static @NotNull Path getFolderForLog() {
         return getAppFolderInUserHome().resolve("log");
     }
 
@@ -127,8 +138,7 @@ public abstract class Config {
      *
      * @return the app folder in user home
      */
-    @NotNull
-    public static Path getAppFolderInUserHome() {
+    public static @NotNull Path getAppFolderInUserHome() {
         final String userHome = System.getProperty("user.home");
         return Paths.get(userHome, SS_FOLDER_IN_USER_HOME);
     }

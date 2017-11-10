@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.util.EditorUtil.getAvailableValues;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -53,13 +55,14 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         enumComboBox = new ComboBox<>();
         enumComboBox.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> updateCullHint());
+                .addListener((observable, oldValue, newValue) -> change());
         enumComboBox.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
@@ -70,6 +73,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     /**
      * @return the list of available options of the {@link Enum} value.
      */
+    @FXThread
     private @NotNull ComboBox<E> getEnumComboBox() {
         return notNull(enumComboBox);
     }
@@ -77,7 +81,8 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     /**
      * Update selected {@link Enum} value.
      */
-    private void updateCullHint() {
+    @FXThread
+    private void change() {
         if (isIgnoreListener()) return;
 
         final ComboBox<E> enumComboBox = getEnumComboBox();
@@ -88,6 +93,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
+    @FXThread
     protected void reload() {
 
         final E element = getPropertyValue();
@@ -98,6 +104,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }

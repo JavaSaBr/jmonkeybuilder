@@ -13,6 +13,7 @@ import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
@@ -41,6 +42,7 @@ import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -54,6 +56,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 /**
  * The starter of the JavaFX application.
@@ -69,13 +72,12 @@ public class JFXApplication extends Application {
     private static JFXApplication instance;
 
     /**
-     * Gets instance.
+     * Get the JavaFX part of this editor.
      *
-     * @return the instance
+     * @return the JavaFX part of this editor.
      */
-    @NotNull
     @FromAnyThread
-    public static JFXApplication getInstance() {
+    public static @NotNull JFXApplication getInstance() {
         return notNull(instance);
     }
 
@@ -84,9 +86,8 @@ public class JFXApplication extends Application {
      *
      * @return the current stage.
      */
-    @Nullable
     @FromAnyThread
-    private static Stage getStage() {
+    private static @Nullable Stage getStage() {
         final JFXApplication instance = JFXApplication.instance;
         return instance == null ? null : instance.stage;
     }
@@ -144,6 +145,7 @@ public class JFXApplication extends Application {
             return;
         }
 
+        InitializeManager.register(InitializationManager.class);
         InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
@@ -156,10 +158,16 @@ public class JFXApplication extends Application {
                 () -> startJMEApplication(application), "LWJGL Render").start();
     }
 
+    /**
+     * Start the new jME application.
+     *
+     * @param application the new jME application.
+     */
+    @JMEThread
     private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
 
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onBeforeCreateJMEContext();
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onBeforeCreateJMEContext();
 
         application.start();
 
@@ -174,6 +182,36 @@ public class JFXApplication extends Application {
     }
 
     /**
+     * Create a new focus listener.
+     *
+     * @return the new focus listener.
+     */
+    @FXThread
+    private static @NotNull ChangeListener<Boolean> makeFocusedListener() {
+        return (observable, oldValue, newValue) -> {
+
+            final Editor editor = Editor.getInstance();
+            final Stage stage = notNull(JFXApplication.getStage());
+
+            if (newValue || stage.isFocused()) {
+                editor.setPaused(false);
+                return;
+            }
+
+            final EditorConfig editorConfig = EditorConfig.getInstance();
+            if (!editorConfig.isStopRenderOnLostFocus()) {
+                editor.setPaused(false);
+                return;
+            }
+
+            final JFXApplication application = JFXApplication.getInstance();
+            final Window window = ArrayUtils.getInReadLock(application.openedWindows, windows -> windows.search(Window::isFocused));
+
+            editor.setPaused(window == null);
+        };
+    }
+
+    /**
      * Start.
      */
     @FromAnyThread
@@ -181,11 +219,12 @@ public class JFXApplication extends Application {
         launch();
     }
 
-    private static void printError(final Throwable throwable) {
+    @FromAnyThread
+    private static void printError(@NotNull final Throwable throwable) {
         throwable.printStackTrace();
 
         final String userHome = System.getProperty("user.home");
-        final String fileName = "jme3-spaceshift-editor-error.log";
+        final String fileName = "jmonkeybuilder-error.log";
 
         try (final PrintStream out = new PrintStream(newOutputStream(Paths.get(userHome, fileName)))) {
             throwable.printStackTrace(out);
@@ -227,8 +266,10 @@ public class JFXApplication extends Application {
      *
      * @param window the new opened window.
      */
+    @FXThread
     public void addWindow(@NotNull final Window window) {
-        ArrayUtils.runInWriteLock(openedWindows, window, Array::add);
+        window.focusedProperty().addListener(makeFocusedListener());
+        ArrayUtils.runInWriteLock(openedWindows, window, Collection::add);
     }
 
     /**
@@ -236,6 +277,7 @@ public class JFXApplication extends Application {
      *
      * @param window the opened window.
      */
+    @FXThread
     public void removeWindow(@NotNull final Window window) {
         ArrayUtils.runInWriteLock(openedWindows, window, Array::slowRemove);
     }
@@ -245,12 +287,13 @@ public class JFXApplication extends Application {
      *
      * @return the last opened window.
      */
-    @NotNull
-    public Window getLastWindow() {
+    @FXThread
+    public @NotNull Window getLastWindow() {
         return notNull(ArrayUtils.getInReadLock(openedWindows, Array::last));
     }
 
     @Override
+    @FXThread
     public void start(final Stage stage) throws Exception {
         JFXApplication.instance = this;
         this.stage = stage;
@@ -261,8 +304,10 @@ public class JFXApplication extends Application {
             final ResourceManager resourceManager = ResourceManager.getInstance();
             resourceManager.reload();
 
+            final InitializationManager initializationManager = InitializationManager.getInstance();
+            initializationManager.onBeforeCreateJavaFXContext();
+
             final PluginManager pluginManager = PluginManager.getInstance();
-            pluginManager.onBeforeCreateJavaFXContext();
             pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CSSRegistry.getInstance()));
 
             LogView.getInstance();
@@ -271,11 +316,14 @@ public class JFXApplication extends Application {
             ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
 
             final ObservableList<Image> icons = stage.getIcons();
-            icons.add(new Image("/ui/icons/app/SSEd256.png"));
-            icons.add(new Image("/ui/icons/app/SSEd128.png"));
-            icons.add(new Image("/ui/icons/app/SSEd64.png"));
-            icons.add(new Image("/ui/icons/app/SSEd32.png"));
-            icons.add(new Image("/ui/icons/app/SSEd16.png"));
+            icons.add(new Image("/ui/icons/app/256x256.png"));
+            icons.add(new Image("/ui/icons/app/128x128.png"));
+            icons.add(new Image("/ui/icons/app/96x96.png"));
+            icons.add(new Image("/ui/icons/app/64x64.png"));
+            icons.add(new Image("/ui/icons/app/48x48.png"));
+            icons.add(new Image("/ui/icons/app/32x32.png"));
+            icons.add(new Image("/ui/icons/app/24x24.png"));
+            icons.add(new Image("/ui/icons/app/16x16.png"));
 
             final EditorConfig config = EditorConfig.getInstance();
 
@@ -310,6 +358,7 @@ public class JFXApplication extends Application {
     }
 
     @Override
+    @FXThread
     public void stop() throws Exception {
         super.stop();
         onExit();
@@ -343,8 +392,10 @@ public class JFXApplication extends Application {
     private void buildScene() {
         this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onAfterCreateJMEContext();
+
         final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onAfterCreateJavaFXContext();
         pluginManager.handlePlugins(editorPlugin -> {
             editorPlugin.register(FileCreatorRegistry.getInstance());
             editorPlugin.register(EditorRegistry.getInstance());
@@ -390,6 +441,7 @@ public class JFXApplication extends Application {
         });
     }
 
+    @FXThread
     private void createSceneProcessor(@NotNull final EditorFXScene scene, @NotNull final Editor editor) {
 
         final FrameTransferSceneProcessor sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
@@ -399,10 +451,7 @@ public class JFXApplication extends Application {
         this.sceneProcessor = sceneProcessor;
 
         final Stage stage = notNull(getStage());
-        stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            final EditorConfig editorConfig = EditorConfig.getInstance();
-            editor.setPaused(editorConfig.isStopRenderOnLostFocus() && !newValue);
-        });
+        stage.focusedProperty().addListener(makeFocusedListener());
 
         Platform.runLater(scene::notifyFinishBuild);
     }
@@ -412,9 +461,8 @@ public class JFXApplication extends Application {
      *
      * @return the JavaFX scene.
      */
-    @NotNull
     @FromAnyThread
-    public EditorFXScene getScene() {
+    public @NotNull EditorFXScene getScene() {
         return notNull(scene, "Scene can't be null.");
     }
 
@@ -423,9 +471,8 @@ public class JFXApplication extends Application {
      *
      * @return the scene processor.
      */
-    @NotNull
     @FromAnyThread
-    public FrameTransferSceneProcessor getSceneProcessor() {
+    public @NotNull FrameTransferSceneProcessor getSceneProcessor() {
         return notNull(sceneProcessor, "Scene processor can't be null.");
     }
 }

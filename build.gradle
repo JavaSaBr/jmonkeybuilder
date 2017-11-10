@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC2'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
 
@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '1.1.0'
+version = '1.3.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -24,11 +24,11 @@ compileTestJava {
     options.compilerArgs += '-parameters'
 }
 
-ext.jmeVersion = "3.2_branch-SNAPSHOT"
+ext.jmeVersion = "3.2-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.2"
-ext.junitPlatformVersion = "1.0.0-M5"
-ext.junitJupiterVersion = "5.0.0-M5"
+ext.junitPlatformVersion = "1.0.0"
+ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
 
 junitPlatform {
@@ -40,7 +40,6 @@ junitPlatform {
     }
     logManager 'org.apache.logging.log4j.jul.LogManager'
 }
-
 
 repositories {
     mavenCentral()
@@ -59,7 +58,7 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.3.6'
+    compile 'com.github.JavaSaBr:RLib:6.4.1'
     compile 'com.github.JavaSaBr:JME3-JFX:1.6.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
@@ -126,10 +125,10 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.6.0') {
+    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.3') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.3.4') {
+    compile ('com.github.JavaSaBr:tonegodemitter:2.4.0') {
         exclude group: 'org.jmonkeyengine'
     }
 
@@ -174,7 +173,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '4.3'
 }
 
 artifacts {
@@ -188,11 +187,10 @@ defaultTasks 'clean', 'install'
 install {
     repositories.mavenInstaller {
         pom.version = version
-        pom.artifactId = 'jme3-spaceshift-editor'
+        pom.artifactId = 'jmonkeybuilder'
         pom.project {
             licenses {
                 license {
-                    name 'The Apache Software License, Version 2.0'
                     url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     distribution 'repo'
                 }

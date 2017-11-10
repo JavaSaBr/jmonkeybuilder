@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.geometry;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -19,31 +20,25 @@ import javafx.scene.image.Image;
  */
 public class CreateQuadAction extends AbstractCreateGeometryAction {
 
-    /**
-     * Instantiates a new Create quad action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateQuadAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.PLANE_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
     }
 
-    @NotNull
     @Override
-    protected Geometry createGeometry() {
+    @FXThread
+    protected @NotNull Geometry createGeometry() {
         return new Geometry("Quad", new Quad(2, 2));
     }
 }

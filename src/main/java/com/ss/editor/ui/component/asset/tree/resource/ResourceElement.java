@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.array.Array;
@@ -17,7 +19,7 @@ import java.nio.file.Path;
 public abstract class ResourceElement implements Comparable<ResourceElement> {
 
     /**
-     * The constant LOGGER.
+     * The logger.
      */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(ResourceElement.class);
@@ -28,11 +30,6 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     @NotNull
     protected final Path file;
 
-    /**
-     * Instantiates a new Resource element.
-     *
-     * @param file the file
-     */
     public ResourceElement(@NotNull final Path file) {
         this.file = file;
     }
@@ -42,8 +39,8 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
      *
      * @return the tooltip.
      */
-    @Nullable
-    public Tooltip createToolTip() {
+    @FXThread
+    public @Nullable Tooltip createToolTip() {
         return null;
     }
 
@@ -52,8 +49,8 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
      *
      * @return the reference to the file.
      */
-    @NotNull
-    public Path getFile() {
+    @FromAnyThread
+    public @NotNull Path getFile() {
         return file;
     }
 
@@ -64,7 +61,8 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
      * @param onlyFolders     the only folders
      * @return list of children resource elements.
      */
-    public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
+    @FromAnyThread
+    public @Nullable Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
         return null;
     }
 
@@ -75,6 +73,7 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
      * @param onlyFolders     the only folders
      * @return true if this element has children.
      */
+    @FromAnyThread
     public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
         return false;
     }

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.tooltip;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Scene;
@@ -24,7 +25,7 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     /**
      * Instantiates a new Custom tooltip.
      */
-    CustomTooltip() {
+    public CustomTooltip() {
         this.root = createRoot();
         this.root.setStyle("-fx-background-color: -var-menu-background-color;");
 
@@ -37,28 +38,29 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     }
 
     /**
-     * Gets root.
+     * Get the root container.
      *
      * @return the root container.
      */
-    @NotNull
-    protected R getRoot() {
+    @FXThread
+    protected @NotNull R getRoot() {
         return root;
     }
 
     /**
-     * Create root r.
+     * Create the root container.
      *
-     * @return the r
+     * @return the root container.
      */
-    @NotNull
-    protected abstract R createRoot();
+    @FXThread
+    protected abstract @NotNull R createRoot();
 
     /**
      * Create content of this tooltip.
      *
-     * @param root the root
+     * @param root the root container.
      */
+    @FXThread
     protected void createContent(@NotNull final R root) {
     }
 }

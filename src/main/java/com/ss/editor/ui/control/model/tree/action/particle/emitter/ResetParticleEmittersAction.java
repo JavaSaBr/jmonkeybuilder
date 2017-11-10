@@ -32,12 +32,14 @@ public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeC
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.REPLAY_16;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

@@ -1,12 +1,15 @@
 package com.ss.editor.plugin.api.property.control;
 
 import com.ss.editor.Editor;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -30,6 +33,9 @@ public class PropertyEditorControl<T> extends HBox {
      */
     public static final double DEFAULT_FIELD_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_FIELD_W_PERCENT;
 
+    /**
+     * The editor.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
@@ -58,6 +64,12 @@ public class PropertyEditorControl<T> extends HBox {
     private final String name;
 
     /**
+     * The dependencies.
+     */
+    @NotNull
+    private final Array<String> dependencies;
+
+    /**
      * The property name label.
      */
     @Nullable
@@ -74,6 +86,7 @@ public class PropertyEditorControl<T> extends HBox {
         this.id = definition.getId();
         this.name = definition.getName();
         this.validationCallback = validationCallback;
+        this.dependencies = definition.getDependencies();
 
         final Object defaultValue = definition.getDefaultValue();
 
@@ -94,18 +107,62 @@ public class PropertyEditorControl<T> extends HBox {
         FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_EDITOR_CONTROL);
     }
 
+    /**
+     * Check dependency of this control.
+     */
+    @FXThread
+    public void checkDependency() {
+
+        final Array<String> dependencies = getDependencies();
+        if (dependencies.isEmpty()) return;
+
+        setDisable(false);
+
+        for (final String dependency : dependencies) {
+
+            if (!vars.has(dependency)) {
+                setDisable(true);
+                return;
+            }
+
+            final Object value = vars.get(dependency);
+
+            if (value instanceof Boolean) {
+                setDisable(!(Boolean) value);
+            }
+
+            if (isDisable()) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * Get the dependencies.
+     *
+     * @return the dependencies.
+     */
+    @FXThread
+    protected @NotNull Array<String> getDependencies() {
+        return dependencies;
+    }
+
+    @FXThread
     protected void reload() {
     }
 
+    @FXThread
     protected void change() {
         if (isIgnoreListener()) return;
         changeImpl();
     }
 
+    @FXThread
     protected void changeImpl() {
         validationCallback.run();
     }
 
+    @FXThread
     protected void createComponents() {
         setAlignment(Pos.CENTER_RIGHT);
 
@@ -121,8 +178,8 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return the name of the property.
      */
-    @NotNull
-    protected String getName() {
+    @FromAnyThread
+    protected @NotNull String getName() {
         return name;
     }
 
@@ -131,8 +188,8 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return the current property value.
      */
-    @Nullable
-    protected T getPropertyValue() {
+    @FromAnyThread
+    protected @Nullable T getPropertyValue() {
         if (!vars.has(id)) return null;
         return vars.get(id);
     }
@@ -142,7 +199,7 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @param propertyValue the new current property value.
      */
-    @Nullable
+    @FXThread
     protected void setPropertyValue(@Nullable final T propertyValue) {
         if (propertyValue == null) {
             vars.clear(id);
@@ -156,6 +213,7 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @param ignoreListener the flag for ignoring listeners.
      */
+    @FXThread
     protected void setIgnoreListener(final boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
@@ -165,6 +223,7 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return true if need to ignore listeners.
      */
+    @FXThread
     protected boolean isIgnoreListener() {
         return ignoreListener;
     }

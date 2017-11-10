@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -33,6 +35,7 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -45,6 +48,7 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
@@ -52,11 +56,13 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     /**
      * @return the filed with current value.
      */
+    @FXThread
     private @NotNull TextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         final String value = getPropertyValue();
         final TextField valueField = getValueField();
@@ -68,6 +74,7 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     /**
      * Update the value.
      */
+    @FXThread
     private void updateValue(@NotNull final KeyEvent event) {
         if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) return;
 

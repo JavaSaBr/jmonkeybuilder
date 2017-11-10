@@ -19,6 +19,8 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.util.SSSkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -248,18 +250,19 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of sky types.
      */
-    @NotNull
-    private ComboBox<SkyType> getSkyTypeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<SkyType> getSkyTypeComboBox() {
         return notNull(skyTypeComboBox);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.CREATE_SKY_DIALOG_TITLE;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -343,6 +346,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * Create multiple textures settings.
      */
+    @FXThread
     private void createMultipleTextureSettings() {
 
         multipleTextureSettings = new GridPane();
@@ -409,6 +413,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return true id need to use SS factory.
      */
+    @FXThread
     protected boolean isEditableSky() {
         return false;
     }
@@ -416,6 +421,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * Create single texture settings.
      */
+    @FXThread
     private void createSingleTextureSettings() {
 
         singleTextureSettings = new GridPane();
@@ -456,30 +462,31 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the settings root.
      */
-    @NotNull
-    private VBox getSettingsRoot() {
+    @FXThread
+    private @NotNull VBox getSettingsRoot() {
         return notNull(settingsRoot);
     }
 
     /**
      * @return the container of single texture settings.
      */
-    @NotNull
-    private GridPane getSingleTextureSettings() {
+    @FXThread
+    private @NotNull GridPane getSingleTextureSettings() {
         return notNull(singleTextureSettings);
     }
 
     /**
      * @return the container of multiply texture settings.
      */
-    @NotNull
-    private GridPane getMultipleTextureSettings() {
+    @FXThread
+    private @NotNull GridPane getMultipleTextureSettings() {
         return notNull(multipleTextureSettings);
     }
 
     /**
      * Handle changing sky type.
      */
+    @FXThread
     private void processChange(@NotNull final SkyType newValue) {
 
         final VBox settingsRoot = getSettingsRoot();
@@ -506,86 +513,87 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the single texture control.
      */
-    @NotNull
-    private ChooseTextureControl getSingleTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getSingleTextureControl() {
         return notNull(singleTextureControl);
     }
 
     /**
      * @return the list of env types.
      */
-    @NotNull
-    private ComboBox<EnvMapType> getEnvMapTypeComboBox() {
+    @FXThread
+    private @NotNull ComboBox<EnvMapType> getEnvMapTypeComboBox() {
         return notNull(envMapTypeComboBox);
     }
 
     /**
      * @return the material folder control.
      */
-    @NotNull
-    private ChooseFolderControl getMaterialFolderControl() {
+    @FXThread
+    private @NotNull ChooseFolderControl getMaterialFolderControl() {
         return notNull(materialFolderControl);
     }
 
     /**
      * @return the material name field.
      */
-    @NotNull
-    private TextField getMaterialNameField() {
+    @FXThread
+    private @NotNull TextField getMaterialNameField() {
         return notNull(materialNameField);
     }
 
     /**
      * @return the top texture control.
      */
-    @NotNull
-    private ChooseTextureControl getTopTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getTopTextureControl() {
         return notNull(topTextureControl);
     }
 
     /**
      * @return the bottom texture control.
      */
-    @NotNull
-    private ChooseTextureControl getBottomTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getBottomTextureControl() {
         return notNull(bottomTextureControl);
     }
 
     /**
      * @return the north texture control.
      */
-    @NotNull
-    private ChooseTextureControl getNorthTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getNorthTextureControl() {
         return notNull(northTextureControl);
     }
 
     /**
      * @return the south texture control.
      */
-    @NotNull
-    private ChooseTextureControl getSouthTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getSouthTextureControl() {
         return notNull(southTextureControl);
     }
 
     /**
      * @return the east texture control.
      */
-    @NotNull
-    private ChooseTextureControl getEastTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getEastTextureControl() {
         return notNull(eastTextureControl);
     }
 
     /**
      * @return the west texture control.
      */
-    @NotNull
-    private ChooseTextureControl getWestTextureControl() {
+    @FXThread
+    private @NotNull ChooseTextureControl getWestTextureControl() {
         return notNull(westTextureControl);
     }
 
     /**
      * Validate the dialog.
      */
+    @FXThread
     private void validate() {
         if (!isReady()) return;
 
@@ -655,52 +663,53 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the check box for flipping.
      */
-    @NotNull
-    private CheckBox getFlipYCheckBox() {
+    @FXThread
+    private @NotNull CheckBox getFlipYCheckBox() {
         return notNull(flipYCheckBox);
     }
 
     /**
      * @return the scale control for X.
      */
-    @NotNull
-    private FloatTextField getNormalScaleXField() {
+    @FXThread
+    private @NotNull FloatTextField getNormalScaleXField() {
         return notNull(normalScaleXField);
     }
 
     /**
      * @return the scale control for Y.
      */
-    @NotNull
-    private FloatTextField getNormalScaleYField() {
+    @FXThread
+    private @NotNull FloatTextField getNormalScaleYField() {
         return notNull(normalScaleYField);
     }
 
     /**
      * @return the scale control for Z.
      */
-    @NotNull
-    private FloatTextField getNormalScaleZField() {
+    @FXThread
+    private @NotNull FloatTextField getNormalScaleZField() {
         return notNull(normalScaleZField);
     }
 
     /**
      * @return the node tree.
      */
-    @NotNull
-    private NodeTree<?> getNodeTree() {
+    @FXThread
+    private @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
     /**
      * @return the parent node.
      */
-    @NotNull
-    private TreeNode<?> getParentNode() {
+    @FXThread
+    private @NotNull TreeNode<?> getParentNode() {
         return parentNode;
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         EditorUtil.incrementLoading();
 
@@ -721,6 +730,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * The process of creating a new sky.
      */
+    @FXThread
     private void createSkyInBackground() {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -751,6 +761,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * Create a new sky using multiply textures.
      */
+    @FXThread
     private void createMultipleTexture(@NotNull final AssetManager assetManager,
                                        @NotNull final ChangeConsumer changeConsumer, @NotNull final Vector3f scale) {
 
@@ -805,6 +816,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * Create a new sky using a single texture.
      */
+    @FXThread
     private void createSingleTexture(@NotNull final AssetManager assetManager,
                                      @NotNull final ChangeConsumer changeConsumer, @NotNull final Vector3f scale) {
 
@@ -844,7 +856,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * @param geometry the sky geometry.
      */
     @BackgroundThread
-    private Material createMaterialFileIfNeed(@NotNull final Geometry geometry) {
+    private @NotNull Material createMaterialFileIfNeed(@NotNull final Geometry geometry) {
 
         final TextField materialNameField = getMaterialNameField();
         final ChooseFolderControl materialFolderControl = getMaterialFolderControl();
@@ -868,9 +880,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         return assetManager.loadMaterial(assetPath);
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

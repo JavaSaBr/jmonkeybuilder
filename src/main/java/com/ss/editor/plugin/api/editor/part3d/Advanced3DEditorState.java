@@ -41,7 +41,7 @@ public abstract class Advanced3DEditorState<T extends Advanced3DFileEditor> exte
      * @return the node on which the camera is looking.
      */
     @FromAnyThread
-    protected  @NotNull Node getCameraNode() {
+    protected @NotNull Node getCameraNode() {
         return notNull(cameraNode);
     }
 
@@ -60,6 +60,7 @@ public abstract class Advanced3DEditorState<T extends Advanced3DFileEditor> exte
     }
 
     @Override
+    @JMEThread
     protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation, final float vRotation,
                                                final float targetDistance, final float cameraSpeed) {
         super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);

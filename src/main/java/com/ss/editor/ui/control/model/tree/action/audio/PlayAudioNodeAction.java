@@ -8,16 +8,14 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.model.node.spatial.AudioTreeNode;
+import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.util.AudioNodeUtils;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to play an audio node.
@@ -26,30 +24,24 @@ import javafx.scene.image.Image;
  */
 public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Play audio node action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public PlayAudioNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.PLAY_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 

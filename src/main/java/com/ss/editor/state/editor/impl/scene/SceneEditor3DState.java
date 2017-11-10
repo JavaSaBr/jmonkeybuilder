@@ -7,6 +7,7 @@ import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
@@ -32,11 +33,6 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     private boolean audioShowed;
 
-    /**
-     * Instantiates a new Scene editor app state.
-     *
-     * @param fileEditor the file editor
-     */
     public SceneEditor3DState(@NotNull final SceneFileEditor fileEditor) {
         super(fileEditor);
 
@@ -49,19 +45,23 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     }
 
     @Override
+    @JMEThread
     protected int getGridSize() {
         return 1000;
     }
 
     @Override
+    @JMEThread
     protected void attachModel(@NotNull final SceneNode model, @NotNull final Node modelNode) {
     }
 
     @Override
+    @JMEThread
     protected void detachPrevModel(@NotNull final Node modelNode, @Nullable final SceneNode currentModel) {
     }
 
     @Override
+    @JMEThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
 
@@ -79,6 +79,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     }
 
     @Override
+    @JMEThread
     public void cleanup() {
         super.cleanup();
 
@@ -107,6 +108,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
         EXECUTOR_MANAGER.addJMETask(() -> addAppStateImpl(appState));
     }
 
+    @JMEThread
     private void addAppStateImpl(@NotNull final SceneAppState appState) {
         final AppStateManager stateManager = EDITOR.getStateManager();
         stateManager.attach(appState);
@@ -122,6 +124,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
         EXECUTOR_MANAGER.addJMETask(() -> removeAppStateImpl(appState));
     }
 
+    @JMEThread
     private void removeAppStateImpl(@NotNull final SceneAppState appState) {
         final AppStateManager stateManager = EDITOR.getStateManager();
         stateManager.detach(appState);
@@ -137,6 +140,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
         EXECUTOR_MANAGER.addJMETask(() -> addFilterImpl(sceneFilter));
     }
 
+    @JMEThread
     private void addFilterImpl(@NotNull final SceneFilter sceneFilter) {
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         postProcessor.addFilter(sceneFilter.get());
@@ -152,6 +156,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
         EXECUTOR_MANAGER.addJMETask(() -> removeFilterImpl(sceneFilter));
     }
 
+    @JMEThread
     private void removeFilterImpl(@NotNull final SceneFilter sceneFilter) {
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         postProcessor.removeFilter(sceneFilter.get());
@@ -160,6 +165,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     /**
      * @return true if need to show light models.
      */
+    @JMEThread
     private boolean isLightShowed() {
         return lightShowed;
     }
@@ -167,6 +173,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     /**
      * @param lightShowed true if need to show light models.
      */
+    @JMEThread
     private void setLightShowed(final boolean lightShowed) {
         this.lightShowed = lightShowed;
     }
@@ -174,6 +181,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     /**
      * @return true if need to show audio models.
      */
+    @JMEThread
     private boolean isAudioShowed() {
         return audioShowed;
     }
@@ -181,6 +189,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     /**
      * @param audioShowed true if need to show audio models.
      */
+    @JMEThread
     private void setAudioShowed(final boolean audioShowed) {
         this.audioShowed = audioShowed;
     }
@@ -190,6 +199,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      *
      * @param showed the showed
      */
+    @FromAnyThread
     public void updateLightShowed(final boolean showed) {
         EXECUTOR_MANAGER.addJMETask(() -> updateLightShowedImpl(showed));
     }
@@ -197,6 +207,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     /**
      * The process to change light showing.
      */
+    @JMEThread
     private void updateLightShowedImpl(final boolean showed) {
         if (showed == isLightShowed()) return;
 
@@ -217,6 +228,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      *
      * @param showed the showed
      */
+    @FromAnyThread
     public void updateAudioShowed(final boolean showed) {
         EXECUTOR_MANAGER.addJMETask(() -> updateAudioShowedImpl(showed));
     }
@@ -224,6 +236,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     /**
      * The process to change audio showing.
      */
+    @JMEThread
     private void updateAudioShowedImpl(final boolean showed) {
         if (showed == isAudioShowed()) return;
 

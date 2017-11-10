@@ -20,18 +20,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateLightAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Abstract create light action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public AbstractCreateLightAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -50,6 +44,6 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
      *
      * @return the light
      */
-    @NotNull
-    protected abstract Light createLight();
+    @FXThread
+    protected abstract @NotNull Light createLight();
 }

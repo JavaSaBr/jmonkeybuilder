@@ -1,6 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -28,6 +29,7 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
     }
 
     @Override
+    @FXThread
     protected void createComponents() {
         super.createComponents();
 
@@ -39,8 +41,11 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
         FXUtils.addToPane(valueField, this);
     }
 
-    @NotNull
-    private FloatTextField getValueField() {
+    /**
+     * @return the value field.
+     */
+    @FXThread
+    private @NotNull FloatTextField getValueField() {
         return notNull(valueField);
     }
 
@@ -50,12 +55,14 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
      * @param min the min value.
      * @param max the max value.
      */
+    @FXThread
     public void setMinMax(final float min, final float max) {
         if (Float.isNaN(min) || Float.isNaN(max)) return;
         getValueField().setMinMax(min, max);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         super.reload();
         final Float value = getPropertyValue();
@@ -63,6 +70,7 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
     }
 
     @Override
+    @FXThread
     protected void changeImpl() {
         setPropertyValue(getValueField().getValue());
         super.changeImpl();

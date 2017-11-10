@@ -16,6 +16,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.WheelElementModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -43,10 +44,11 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
     private static final LoopMode[] LOOP_MODES = LoopMode.values();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance
      */
+    @FXThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -56,6 +58,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
     }
 
     @Override
+    @FXThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -90,6 +93,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         }
     }
 
+    @FXThread
     private void build(@NotNull final AbstractCinematicEvent control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -133,6 +137,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(timeControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final AbstractControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -148,6 +153,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(enabledControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final MotionEvent control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -185,6 +191,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(rotationControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final CharacterControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -277,6 +284,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(walkDirectionControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final SkeletonControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -292,6 +300,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(hardwareSkinningPreferredControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final Animation animation, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -307,9 +316,9 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(lengthControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final RigidBodyControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
-
 
         final boolean kinematicSpatial = control.isKinematicSpatial();
         final boolean enabled = control.isEnabled();
@@ -332,6 +341,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(kinematicSpatialControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final VehicleControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -356,6 +366,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(applyPhysicsLocalControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final VehicleWheel control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -510,6 +521,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(axleControl, container);
     }
 
+    @FXThread
     private void build(@NotNull final PhysicsRigidBody control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 

@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -21,19 +23,13 @@ import java.util.List;
  */
 public class ComputedCollisionShapeTreeNode extends CollisionShapeTreeNode<CompoundCollisionShape> {
 
-    /**
-     * Instantiates a new Computed collision shape model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public ComputedCollisionShapeTreeNode(@NotNull final CompoundCollisionShape element, final long objectId) {
         super(element, objectId);
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final CompoundCollisionShape element = getElement();
         final List<ChildCollisionShape> children = element.getChildren();
@@ -44,19 +40,20 @@ public class ComputedCollisionShapeTreeNode extends CollisionShapeTreeNode<Compo
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.ATOM_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE;
     }
 }

@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.creator.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
@@ -30,29 +31,26 @@ public class FolderCreator extends AbstractFileCreator {
         DESCRIPTION.setConstructor(FolderCreator::new);
     }
 
-    private FolderCreator() {
-    }
-
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.FOLDER_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    @FromAnyThread
+    protected @NotNull String getFileExtension() {
         return StringUtils.EMPTY;
     }
 
-    @NotNull
     @Override
     @FromAnyThread
-    protected String getFileNameLabelText() {
+    protected @NotNull String getFileNameLabelText() {
         return Messages.FOLDER_CREATOR_FILE_NAME_LABEL;
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         super.hide();
 

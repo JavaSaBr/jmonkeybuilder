@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 
 /**
@@ -24,9 +25,6 @@ public class EditorSceneEditorState extends BaseEditorSceneEditorState {
      */
     private volatile boolean showedAudio;
 
-    /**
-     * Instantiates a new Scene file editor state.
-     */
     public EditorSceneEditorState() {
         this.showedAudio = true;
         this.showedLight = true;
@@ -37,6 +35,7 @@ public class EditorSceneEditorState extends BaseEditorSceneEditorState {
      *
      * @param showedLight true if the light is showed.
      */
+    @FXThread
     public void setShowedLight(final boolean showedLight) {
         final boolean changed = isShowedLight() != showedLight;
         this.showedLight = showedLight;
@@ -48,6 +47,7 @@ public class EditorSceneEditorState extends BaseEditorSceneEditorState {
      *
      * @return true if the light is showed.
      */
+    @FXThread
     public boolean isShowedLight() {
         return showedLight;
     }
@@ -57,6 +57,7 @@ public class EditorSceneEditorState extends BaseEditorSceneEditorState {
      *
      * @param showedAudio true if the audio is showed.
      */
+    @FXThread
     public void setShowedAudio(final boolean showedAudio) {
         final boolean changed = isShowedAudio() != showedAudio;
         this.showedAudio = showedAudio;
@@ -68,6 +69,7 @@ public class EditorSceneEditorState extends BaseEditorSceneEditorState {
      *
      * @return true if the audio is showed.
      */
+    @FXThread
     public boolean isShowedAudio() {
         return showedAudio;
     }

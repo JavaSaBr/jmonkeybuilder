@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -32,6 +33,17 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
+    @FXThread
+    public void changeControlWidthPercent(final double controlWidthPercent) {
+        super.changeControlWidthPercent(controlWidthPercent);
+
+        final IntegerTextField valueField = getValueField();
+        valueField.prefWidthProperty().unbind();
+        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+    }
+
+    @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -44,6 +56,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
@@ -51,6 +64,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     /**
      * @return the filed with current value.
      */
+    @FXThread
     private @NotNull IntegerTextField getValueField() {
         return notNull(valueField);
     }
@@ -87,6 +101,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
+    @FXThread
     protected void reload() {
         final Integer element = getPropertyValue();
         final IntegerTextField valueField = getValueField();
@@ -98,6 +113,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     /**
      * Update the value.
      */
+    @FXThread
     private void updateValue() {
         if (isIgnoreListener()) return;
 

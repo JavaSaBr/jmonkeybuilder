@@ -5,6 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
@@ -63,24 +64,23 @@ public class MaterialFileCreator extends GenericFileCreator {
     @Nullable
     private Array<String> definitions;
 
-    private MaterialFileCreator() {
-        super();
-    }
-
     @Override
+    @FromAnyThread
     protected @NotNull String getTitleText() {
         return Messages.MATERIAL_FILE_CREATOR_TITLE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getFileExtension() {
         return JME_MATERIAL;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
+        definitions = RESOURCE_MANAGER.getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION);
 
         final String def;
 

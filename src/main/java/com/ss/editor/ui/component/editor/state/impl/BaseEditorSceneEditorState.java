@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
@@ -41,9 +42,6 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      */
     private volatile boolean showStatistics;
 
-    /**
-     * Instantiates a new Abstract model file editor state.
-     */
     public BaseEditorSceneEditorState() {
         this.enableGrid = true;
         this.enableSelection = true;
@@ -56,6 +54,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @param enableGrid true is the grid is enabled.
      */
+    @FXThread
     public void setEnableGrid(final boolean enableGrid) {
         final boolean changed = isEnableGrid() != enableGrid;
         this.enableGrid = enableGrid;
@@ -67,6 +66,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @return true is the grid is enabled.
      */
+    @FXThread
     public boolean isEnableGrid() {
         return enableGrid;
     }
@@ -76,6 +76,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @param enableSelection true if the selection is enabled.
      */
+    @FXThread
     public void setEnableSelection(final boolean enableSelection) {
         final boolean changed = isEnableSelection() != enableSelection;
         this.enableSelection = enableSelection;
@@ -87,6 +88,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @return true if the selection is enabled.
      */
+    @FXThread
     public boolean isEnableSelection() {
         return enableSelection;
     }
@@ -96,6 +98,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @return the transformation type.
      */
+    @FXThread
     public int getTransformationType() {
         return transformationType;
     }
@@ -105,6 +108,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @param transformationType the transformation type.
      */
+    @FXThread
     public void setTransformationType(final int transformationType) {
         final boolean changed = getTransformationType() != transformationType;
         this.transformationType = transformationType;
@@ -116,6 +120,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @return the transformation mode.
      */
+    @FXThread
     public int getTransformationMode() {
         return transformationMode;
     }
@@ -125,6 +130,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @param transformationMode the transformation mode.
      */
+    @FXThread
     public void setTransformationMode(final int transformationMode) {
         final boolean changed = getTransformationMode() != transformationMode;
         this.transformationMode = transformationMode;
@@ -136,6 +142,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @param showStatistics true if the statistics is need to show.
      */
+    @FXThread
     public void setShowStatistics(final boolean showStatistics) {
         final boolean changed = isShowStatistics() != showStatistics;
         this.showStatistics = showStatistics;
@@ -147,6 +154,7 @@ public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolE
      *
      * @return true if the statistics is need to show.
      */
+    @FXThread
     public boolean isShowStatistics() {
         return showStatistics;
     }

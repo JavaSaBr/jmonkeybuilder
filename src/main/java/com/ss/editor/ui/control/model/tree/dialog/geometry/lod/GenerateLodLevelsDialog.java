@@ -7,6 +7,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
@@ -110,6 +112,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the node tree component.
      */
+    @FXThread
     private @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
@@ -119,6 +122,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the mesh.
      */
+    @FXThread
     public @NotNull Mesh getMesh() {
         return mesh;
     }
@@ -126,6 +130,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the geometry.
      */
+    @FXThread
     private @NotNull Geometry getGeometry() {
         return geometry;
     }
@@ -135,6 +140,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the reduction method.
      */
+    @FXThread
     public @NotNull ReductionMethod getMethod() {
         final ComboBox<ReductionMethod> comboBox = getReductionMethodComboBox();
         final SingleSelectionModel<ReductionMethod> selectionModel = comboBox.getSelectionModel();
@@ -144,16 +150,19 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list view with levels of LoD.
      */
+    @FXThread
     private @NotNull ListView<Number> getLevelsList() {
         return notNull(levelsList);
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getTitleText() {
         return Messages.GENERATE_LOD_DIALOG_TITLE;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -213,6 +222,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Update disabling of OK button.
      */
+    @FXThread
     private void updateButtonOk() {
 
         final ListView<Number> levelsList = getLevelsList();
@@ -225,6 +235,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Clear added levels.
      */
+    @FXThread
     private void clearLevels() {
         final ListView<Number> levelsList = getLevelsList();
         final ObservableList<Number> items = levelsList.getItems();
@@ -234,6 +245,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Remove a selected level.
      */
+    @FXThread
     private void processRemove() {
 
         final ListView<Number> levelsList = getLevelsList();
@@ -246,6 +258,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Add a new level.
      */
+    @FXThread
     private void processAdd() {
 
         final ListView<Number> levelsList = getLevelsList();
@@ -260,17 +273,20 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void processKey(@NotNull final KeyEvent event) {
     }
 
     /**
      * @return the list of reduction methods.
      */
+    @FXThread
     private @NotNull ComboBox<ReductionMethod> getReductionMethodComboBox() {
         return notNull(reductionMethodComboBox);
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processGenerate);
@@ -280,6 +296,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Process of generating.
      */
+    @FXThread
     private void processGenerate() {
 
         final Geometry geometry = getGeometry();
@@ -325,11 +342,13 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_GENERATE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }

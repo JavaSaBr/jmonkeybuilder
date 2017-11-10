@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
@@ -63,6 +64,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * @return The container of controls.
      */
+    @FXThread
     private @NotNull VBox getContainer() {
         return notNull(container);
     }
@@ -70,6 +72,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * Create components.
      */
+    @FXThread
     private void createComponents() {
         this.container = new VBox();
         this.container.prefWidthProperty()
@@ -89,6 +92,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      *
      * @param object the object
      */
+    @FXThread
     public void syncFor(@Nullable final Object object) {
         if (!isNeedUpdate(object)) return;
 
@@ -106,6 +110,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * Sync all properties with controls.
      */
+    @FXThread
     public void refresh() {
 
         final Object object = getCurrentObject();
@@ -128,6 +133,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      * @param object the object
      * @param parent the parent
      */
+    @FXThread
     public void buildFor(@Nullable final Object object, @Nullable final Object parent) {
         if (getCurrentObject() == object) return;
 
@@ -152,6 +158,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      * @param parent the parent.
      * @return true if we can edit properties of the object.
      */
+    @FXThread
     protected boolean canEdit(@NotNull final Object object, @Nullable final Object parent) {
         return true;
     }
@@ -162,6 +169,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      * @param object the object
      * @param parent the parent
      */
+    @FXThread
     public void rebuildFor(@Nullable final Object object, @Nullable final Object parent) {
         if (getCurrentObject() != object) return;
 
@@ -177,6 +185,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * Rebuild this editor.
      */
+    @FXThread
     public void rebuild() {
         rebuildFor(getCurrentObject(), null);
     }
@@ -187,6 +196,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      * @param object the object
      * @return the boolean
      */
+    @FXThread
     protected boolean isNeedUpdate(@Nullable final Object object) {
         final Object currentObject = getCurrentObject();
         if (object instanceof EditableProperty) {
@@ -198,6 +208,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * @param currentObject the current editable object.
      */
+    @FXThread
     private void setCurrentObject(@Nullable final Object currentObject) {
         this.currentObject = currentObject;
     }
@@ -207,6 +218,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      *
      * @return the current editable object.
      */
+    @FXThread
     protected @Nullable Object getCurrentObject() {
         return currentObject;
     }
@@ -216,6 +228,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      *
      * @param currentParent the current parent.
      */
+    @FXThread
     protected void setCurrentParent(@Nullable final Object currentParent) {
         this.currentParent = currentParent;
     }
@@ -225,6 +238,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      *
      * @return the current parent.
      */
+    @FXThread
     protected @Nullable Object getCurrentParent() {
         return currentParent;
     }

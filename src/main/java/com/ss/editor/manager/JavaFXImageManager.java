@@ -1,5 +1,6 @@
 package com.ss.editor.manager;
 
+import static com.ss.rlib.util.FileUtils.getExtension;
 import static com.ss.rlib.util.array.ArrayFactory.asArray;
 import static java.awt.Image.SCALE_DEFAULT;
 import static java.nio.file.StandardOpenOption.*;
@@ -41,7 +42,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
@@ -94,30 +94,43 @@ public class JavaFXImageManager {
     }
 
     /**
-     * Is image boolean.
+     * Check the file.
      *
      * @param file the file
      * @return true if the file is image.
      */
+    @FromAnyThread
     public static boolean isImage(@Nullable final Path file) {
         if (file == null) return false;
-        final String extension = FileUtils.getExtension(file);
+        final String extension = getExtension(file);
+        return IMAGE_FORMATS.contains(extension);
+    }
+
+    /**
+     * Check the file by the asset path.
+     *
+     * @param assetPath the asset path
+     * @return true if the file is image.
+     */
+    @FromAnyThread
+    public static boolean isImage(@Nullable final String assetPath) {
+        if (assetPath == null) return false;
+        final String extension = getExtension(assetPath);
         return IMAGE_FORMATS.contains(extension);
     }
 
     @Nullable
     private static JavaFXImageManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
+    @FromAnyThread
     public static @NotNull JavaFXImageManager getInstance() {
         if (instance == null) instance = new JavaFXImageManager();
         return instance;
     }
 
+    /**
+     * The cache of small images.
+     */
     @NotNull
     private IntegerDictionary<IntegerDictionary<ObjectDictionary<String, Image>>> smallImageCache;
 
@@ -238,41 +251,18 @@ public class JavaFXImageManager {
             if (image != null) return image;
         }
 
-        final Array<@NotNull ClassLoader> classLoaders = ArrayFactory.newArray(ClassLoader.class);
-        classLoaders.add(getClass().getClassLoader());
-
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        final URLClassLoader classesLoader = classpathManager.getClassesLoader();
-        final URLClassLoader librariesLoader = classpathManager.getLibrariesLoader();
-
-        if (classesLoader != null) {
-            classLoaders.add(classesLoader);
-        }
-
-        if (librariesLoader != null) {
-            classLoaders.add(librariesLoader);
-        }
-
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.handlePlugins(plugin -> classLoaders.add(plugin.getClassLoader()));
-
-        final String altResourcePath = "/" + resourcePath;
-
-        URL url = null;
-
-        for (final ClassLoader classLoader : classLoaders) {
-            url = classLoader.getResource(resourcePath);
-            if (url != null) break;
-            url = classLoader.getResource(altResourcePath);
-            if (url != null) break;
-        }
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        URL url = resourceManager.tryToFindResource(resourcePath);
 
         if (url == null) {
-            url = getClass().getResource("/" + resourcePath);
-        }
 
-        if (url == null) {
-            return Icons.IMAGE_512;
+            final Path realFile = EditorUtil.getRealFile(resourcePath);
+
+            if (realFile == null || !Files.exists(realFile)) {
+                return Icons.IMAGE_512;
+            }
+
+            url = FileUtils.toUrl(realFile);
         }
 
         final Image image = getImagePreview(url, null, width, height);
@@ -307,7 +297,7 @@ public class JavaFXImageManager {
 
         Utils.run(cacheFile, first -> Files.createDirectories(first.getParent()));
 
-        final String extension = FileUtils.getExtension(externalForm);
+        final String extension = getExtension(externalForm);
 
         if (FX_FORMATS.contains(extension)) {
             return readFXImage(width, height, externalForm, cacheFile);

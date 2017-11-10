@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.creator.impl;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.rlib.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -23,15 +24,16 @@ public class EmptyFileCreator extends AbstractFileCreator {
         DESCRIPTION.setConstructor(EmptyFileCreator::new);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.EMPTY_FILE_CREATOR_TITLE;
     }
 
-    @NotNull
+
     @Override
-    protected String getFileExtension() {
+    @FromAnyThread
+    protected @NotNull String getFileExtension() {
         return StringUtils.EMPTY;
     }
 }

@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,19 +12,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BoxCollisionShapeTreeNode extends CollisionShapeTreeNode<BoxCollisionShape> {
 
-    /**
-     * Instantiates a new Box collision shape model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public BoxCollisionShapeTreeNode(@NotNull final BoxCollisionShape element, final long objectId) {
         super(element, objectId);
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE;
     }
 }

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,13 +15,13 @@ import java.nio.file.Path;
 public class ResourceElementFactory {
 
     /**
-     * Create for resource element.
+     * Create a resource element for the file.
      *
-     * @param file the file
-     * @return the resource element
+     * @param file the file.
+     * @return the created resource element.
      */
-    @NotNull
-    public static ResourceElement createFor(@NotNull final Path file) {
+    @FromAnyThread
+    public static @NotNull ResourceElement createFor(@NotNull final Path file) {
         if (Files.isDirectory(file)) {
             return new FolderResourceElement(file);
         } else if (JavaFXImageManager.isImage(file)) {

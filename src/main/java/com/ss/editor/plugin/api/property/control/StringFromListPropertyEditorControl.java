@@ -1,6 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -8,7 +9,6 @@ import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
-import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,10 +35,17 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
         if (options.size() > comboBox.getVisibleRowCount()) {
             setIgnoreListener(true);
             try {
-                comboBox.setEditable(true);
-                TextFields.bindAutoCompletion(comboBox.getEditor(), comboBox.getItems());
-                FXUtils.addClassesTo(comboBox.getEditor(), CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
-                reload();
+
+                //FIXME need to find more userfriendly control
+                //comboBox.setEditable(true);
+
+                //final TextField editor = comboBox.getEditor();
+                //final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
+                //final AutoCompletionBinding<String> binding = TextFields.bindAutoCompletion(editor, comboBox.getItems());
+                //binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
+
+                //FXUtils.addClassesTo(editor, CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
+                //reload();
             } finally {
                 setIgnoreListener(false);
             }
@@ -46,6 +53,7 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     }
 
     @Override
+    @FXThread
     protected void createComponents() {
         super.createComponents();
 
@@ -61,12 +69,13 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     /**
      * @return The list of available options of the string value.
      */
-    @NotNull
-    private ComboBox<String> getComboBox() {
+    @FXThread
+    private @NotNull ComboBox<String> getComboBox() {
         return notNull(comboBox);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         super.reload();
         final String value = getPropertyValue();
@@ -75,6 +84,7 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     }
 
     @Override
+    @FXThread
     protected void changeImpl() {
         final ComboBox<String> comboBox = getComboBox();
         final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();

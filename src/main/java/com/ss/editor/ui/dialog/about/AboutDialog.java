@@ -2,6 +2,8 @@ package com.ss.editor.ui.dialog.about;
 
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.creator.FileCreator;
@@ -29,10 +31,10 @@ import java.io.InputStream;
 public class AboutDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final String PROJECT_HOME = "https://bitbucket.org/JavaSabr/jme3-spaceshift-editor";
+    private static final String PROJECT_HOME = "https://bitbucket.org/JavaSabr/jmonkeybuilder";
 
     @NotNull
-    private static final String FORUM_THREAD = "https://hub.jmonkeyengine.org/t/jme3-spaceshift-editor/35179/";
+    private static final String FORUM_THREAD = "https://hub.jmonkeyengine.org/t/editor-jmonkeybuilder";
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(600, -1);
@@ -43,7 +45,6 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final String LIBRARIES;
 
-
     static {
         final InputStream iconsResource = FileCreator.class.getResourceAsStream("/credits/icons.txt");
         final InputStream librariesResource = FileCreator.class.getResourceAsStream("/credits/libraries.txt");
@@ -52,6 +53,7 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -116,21 +118,21 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(applicationLabel, CSSClasses.ABOUT_DIALOG_TITLE_LABEL);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.ABOUT_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_OK;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

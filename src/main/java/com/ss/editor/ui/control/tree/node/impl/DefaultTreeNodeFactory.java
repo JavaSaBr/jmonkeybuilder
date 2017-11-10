@@ -9,6 +9,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.ui.control.layer.LayersRoot;
@@ -30,8 +31,8 @@ import org.jetbrains.annotations.Nullable;
 public class DefaultTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @Nullable
-    public <T, V extends TreeNode<T>> V createFor(@Nullable final T element, final long objectId) {
+    @FXThread
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof LayersRoot) {
             return unsafeCast(new LayersRootTreeNode((LayersRoot) element, objectId));

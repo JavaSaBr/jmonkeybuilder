@@ -8,6 +8,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,15 +35,15 @@ public class EmptyModelCreator extends AbstractFileCreator {
         DESCRIPTION.setConstructor(EmptyModelCreator::new);
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.EMPTY_MODEL_CREATOR_TITLE;
     }
 
-    @NotNull
     @Override
-    protected String getFileExtension() {
+    @FromAnyThread
+    protected @NotNull String getFileExtension() {
         return FileExtensions.JME_OBJECT;
     }
 

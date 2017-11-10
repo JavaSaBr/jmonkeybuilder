@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.rlib.logging.Logger;
@@ -64,6 +65,7 @@ public class FileAction extends MenuItem {
      *
      * @return the file element.
      */
+    @FXThread
     protected @NotNull ResourceElement getElement() {
         return notNull(element);
     }
@@ -73,6 +75,7 @@ public class FileAction extends MenuItem {
      *
      * @return the file elements.
      */
+    @FXThread
     protected @NotNull Array<ResourceElement> getElements() {
         return notNull(elements);
     }
@@ -82,6 +85,7 @@ public class FileAction extends MenuItem {
      *
      * @return the icon or null.
      */
+    @FXThread
     protected @Nullable Image getIcon() {
         return null;
     }
@@ -91,6 +95,7 @@ public class FileAction extends MenuItem {
      *
      * @param event the event.
      */
+    @FXThread
     protected void execute(@Nullable final ActionEvent event) {
     }
 
@@ -99,6 +104,7 @@ public class FileAction extends MenuItem {
      *
      * @return the name.
      */
+    @FXThread
     protected @NotNull String getName() {
         return "Unknown";
     }

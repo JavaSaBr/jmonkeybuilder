@@ -5,6 +5,9 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationTreeNode;
@@ -67,14 +70,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private IntegerTextField endFrameField;
 
-    /**
-     * Instantiates a new Extract sub animation dialog.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
-    public ExtractSubAnimationDialog(@NotNull final NodeTree<?> nodeTree,
-                                     @NotNull final AnimationTreeNode node) {
+    public ExtractSubAnimationDialog(@NotNull final NodeTree<?> nodeTree, @NotNull final AnimationTreeNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
@@ -99,8 +95,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      *
      * @return the node tree component.
      */
-    @NotNull
-    protected NodeTree<?> getNodeTree() {
+    @FXThread
+    protected @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -109,18 +105,19 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      *
      * @return the animation node.
      */
-    @NotNull
-    protected AnimationTreeNode getNode() {
+    @FXThread
+    protected @NotNull AnimationTreeNode getNode() {
         return node;
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -154,6 +151,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected boolean isGridStructure() {
         return true;
     }
@@ -161,28 +159,29 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the field with a value of new animation name.
      */
-    @NotNull
-    private TextField getNameField() {
+    @FXThread
+    private @NotNull TextField getNameField() {
         return notNull(nameField);
     }
 
     /**
      * @return the field with a value of start frame.
      */
-    @NotNull
-    private IntegerTextField getStartFrameField() {
+    @FXThread
+    private @NotNull IntegerTextField getStartFrameField() {
         return notNull(startFrameField);
     }
 
     /**
      * @return the field with a value of end frame.
      */
-    @NotNull
-    private IntegerTextField getEndFrameField() {
+    @FXThread
+    private @NotNull IntegerTextField getEndFrameField() {
         return notNull(endFrameField);
     }
 
     @Override
+    @FXThread
     protected void processOk() {
         EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processExtract);
@@ -192,6 +191,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * Process of extraction a sub animation.
      */
+    @BackgroundThread
     private void processExtract() {
 
         final AnimationTreeNode node = getNode();
@@ -218,15 +218,15 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
         return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

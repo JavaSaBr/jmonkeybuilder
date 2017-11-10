@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -63,6 +65,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         setSyncHandler(this::getLayer);
     }
 
+    @FromAnyThread
     @Override
     public @NotNull SixObjectConsumer<ModelChangeConsumer, Spatial, String, SceneLayer, SceneLayer, BiConsumer<Spatial, SceneLayer>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
@@ -84,11 +87,13 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         return sceneLayer == null ? SceneLayer.NO_LAYER : sceneLayer;
     }
 
+    @FromAnyThread
     @Override
     protected boolean isSingleRow() {
         return true;
     }
 
+    @FXThread
     @Override
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
@@ -119,6 +124,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         return notNull(layerComboBox);
     }
 
+    @FXThread
     @Override
     protected void reload() {
 

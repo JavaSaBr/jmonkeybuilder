@@ -2,6 +2,8 @@ package com.ss.editor.ui.dialog;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -45,6 +47,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     private TextField nameField;
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -63,19 +66,21 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected boolean isGridStructure() {
         return true;
     }
 
     @Override
+    @FXThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
         EXECUTOR_MANAGER.addFXTask(() -> getNameField().requestFocus());
     }
 
-    @NotNull
     @Override
-    protected String getTitleText() {
+    @FromAnyThread
+    protected @NotNull String getTitleText() {
         return Messages.RENAME_DIALOG_TITLE;
     }
 
@@ -84,6 +89,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param initName the initial name.
      */
+    @FXThread
     public void setInitName(@NotNull final String initName) {
         final TextField nameField = getNameField();
         nameField.setText(initName);
@@ -92,16 +98,16 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the text field.
      */
-    @NotNull
-    private TextField getNameField() {
+    @FXThread
+    private @NotNull TextField getNameField() {
         return notNull(nameField);
     }
 
     /**
      * @return the function for validation name.
      */
-    @Nullable
-    private Function<String, Boolean> getValidator() {
+    @FXThread
+    private @Nullable Function<String, Boolean> getValidator() {
         return validator;
     }
 
@@ -110,6 +116,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param validator the function for validation name.
      */
+    @FXThread
     public void setValidator(@Nullable final Function<String, Boolean> validator) {
         this.validator = validator;
     }
@@ -117,8 +124,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the function for handling a new name.
      */
-    @Nullable
-    private Consumer<String> getHandler() {
+    @FXThread
+    private @Nullable Consumer<String> getHandler() {
         return handler;
     }
 
@@ -127,6 +134,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param handler the function for handling a new name.
      */
+    @FXThread
     public void setHandler(@Nullable final Consumer<String> handler) {
         this.handler = handler;
     }
@@ -134,21 +142,22 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate a new name.
      */
+    @FXThread
     private void validateName(@NotNull final String name) {
         final Function<String, Boolean> validator = getValidator();
         final Button okButton = getOkButton();
         okButton.setDisable(!(validator == null || validator.apply(name)));
     }
 
-    @NotNull
     @Override
-    protected String getButtonCloseText() {
+    @FromAnyThread
+    protected @NotNull String getButtonCloseText() {
         return Messages.SIMPLE_DIALOG_BUTTON_CANCEL;
     }
 
-    @NotNull
     @Override
-    protected String getButtonOkText() {
+    @FromAnyThread
+    protected @NotNull String getButtonOkText() {
         return Messages.RENAME_DIALOG_BUTTON_OK;
     }
 
@@ -156,6 +165,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      * Finish this dialog.
      */
     @Override
+    @FXThread
     protected void processOk() {
         super.processOk();
 
@@ -166,9 +176,9 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
         handler.accept(nameField.getText());
     }
 
-    @NotNull
     @Override
-    protected Point getSize() {
+    @FromAnyThread
+    protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }
 }

@@ -10,6 +10,8 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -47,10 +49,11 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     private static final PropertyBuilder INSTANCE = new SpatialPropertyBuilder();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance.
      */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -60,6 +63,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     }
 
     @Override
+    @FXThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -245,12 +249,14 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         }
     }
 
+    @FXThread
     private boolean isNeedSkip(@NotNull final String key) {
         if (SceneLayer.KEY.equals(key)) return true;
         if (LOADED_MODEL_KEY.equals(key)) return true;
         return false;
     }
 
+    @FXThread
     private boolean canEditTransformation(@NotNull final Spatial spatial) {
         return !(spatial instanceof SceneNode || spatial instanceof SceneLayer);
     }

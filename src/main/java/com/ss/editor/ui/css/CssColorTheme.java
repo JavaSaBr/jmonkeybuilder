@@ -1,5 +1,6 @@
 package com.ss.editor.ui.css;
 
+import com.ss.editor.annotation.FromAnyThread;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public enum CssColorTheme {
-    LIGHT("/ui/css/light-color.css", "White", Color.BLACK),
+    LIGHT("/ui/css/light-color.css", "White", Color.web("#5d626e")),
     SHADOW("/ui/css/shadow-color.css", "Shadow", Color.web("#c8d2e1")),
     DARK("/ui/css/dark-color.css", "Dark", Color.web("#c8dae2")),;
 
@@ -48,30 +49,31 @@ public enum CssColorTheme {
     /**
      * @return the name of this theme.
      */
-    @NotNull
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return name;
     }
 
     /**
      * @return the css file.
      */
-    @NotNull
-    public String getCssFile() {
+    @FromAnyThread
+    public @NotNull String getCssFile() {
         return cssFile;
     }
 
     /**
      * @return the icon color.
      */
-    @NotNull
-    public Color getIconColor() {
+    @FromAnyThread
+    public @NotNull Color getIconColor() {
         return iconColor;
     }
 
     /**
      * @return true if this theme is dark.
      */
+    @FromAnyThread
     public boolean needRepaintIcons() {
         return true;
     }

@@ -1,6 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import com.jme3.math.Vector3f;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
@@ -42,6 +43,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     }
 
     @Override
+    @FXThread
     protected void createComponents() {
         super.createComponents();
 
@@ -75,28 +77,29 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     /**
      * @return the field X.
      */
-    @NotNull
-    private FloatTextField getXField() {
+    @FXThread
+    private @NotNull FloatTextField getXField() {
         return xField;
     }
 
     /**
      * @return the field Y.
      */
-    @NotNull
-    private FloatTextField getYField() {
+    @FXThread
+    private @NotNull FloatTextField getYField() {
         return yField;
     }
 
     /**
      * @return the field Z.
      */
-    @NotNull
-    private FloatTextField getZField() {
+    @FXThread
+    private @NotNull FloatTextField getZField() {
         return zField;
     }
 
     @Override
+    @FXThread
     protected void reload() {
         super.reload();
 
@@ -113,6 +116,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     }
 
     @Override
+    @FXThread
     protected void changeImpl() {
         final FloatTextField xField = getXField();
         final FloatTextField yField = getYField();

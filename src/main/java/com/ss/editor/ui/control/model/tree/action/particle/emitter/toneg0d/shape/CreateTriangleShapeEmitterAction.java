@@ -3,10 +3,11 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.shap
 import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -26,31 +27,25 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     @NotNull
     private static final String PROPERTY_SIZE = "size";
 
-    /**
-     * Instantiates a new Create triangle shape emitter action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateTriangleShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.TRIANGLE_16;
     }
 
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
     }
 
-    @NotNull
     @Override
-    protected Array<PropertyDefinition> getPropertyDefinitions() {
+    @FXThread
+    protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_SIZE, PROPERTY_SIZE, 1F));
@@ -58,15 +53,15 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
         return definitions;
     }
 
-    @NotNull
     @Override
-    protected String getDialogTitle() {
+    @FXThread
+    protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
     }
 
-    @NotNull
     @Override
-    protected Mesh createMesh(@NotNull final VarTable vars) {
+    @FXThread
+    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
         final float size = vars.getFloat(PROPERTY_SIZE);
         return new TriangleEmitterShape(size);
     }

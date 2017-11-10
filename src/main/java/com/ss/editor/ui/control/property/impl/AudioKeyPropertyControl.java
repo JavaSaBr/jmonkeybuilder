@@ -7,6 +7,7 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -47,33 +48,40 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     public AudioKeyPropertyControl(@Nullable final AudioKey element, @NotNull final String paramName,
                                    @NotNull final C changeConsumer) {
         super(element, paramName, changeConsumer);
-        setOnDragOver(this::dragOver);
-        setOnDragDropped(this::dragDropped);
-        setOnDragExited(this::dragExited);
+        setOnDragOver(this::handleDragOverEvent);
+        setOnDragDropped(this::handleDragDroppedEvent);
+        setOnDragExited(this::handleDragExitedEvent);
     }
 
     /**
-     * Handle grad exiting.
+     * Handle grad exited events.
+     *
+     * @param dragEvent the drag exited event.
      */
-    private void dragExited(@NotNull final DragEvent dragEvent) {
+    private void handleDragExitedEvent(@NotNull final DragEvent dragEvent) {
 
     }
 
     /**
-     * Handle dropped files to editor.
+     * Handle dropped event.
+     *
+     * @param dragEvent the dropped event.
      */
-    private void dragDropped(@NotNull final DragEvent dragEvent) {
+    private void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         UIUtils.handleDroppedFile(dragEvent, AUDIO_EXTENSIONS, this, AudioKeyPropertyControl::addAudioData);
     }
 
     /**
-     * Handle drag over.
+     * Handle drag over events.
+     *
+     * @param dragEvent the drag over events.
      */
-    private void dragOver(@NotNull final DragEvent dragEvent) {
+    private void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         UIUtils.acceptIfHasFile(dragEvent, AUDIO_EXTENSIONS);
     }
 
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -108,10 +116,17 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     /**
      * Show dialog for choosing another audio key.
      */
+    @FXThread
     protected void processChange() {
         UIUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
+    /**
+     * Add the new audio data.
+     *
+     * @param file the audio file.
+     */
+    @FXThread
     private void addAudioData(@NotNull final Path file) {
 
         final Path assetFile = notNull(getAssetFile(file));
@@ -129,6 +144,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     /**
      * Open this audio data in the audio viewer.
      */
+    @FXThread
     protected void processOpen() {
 
         final AudioKey element = getPropertyValue();
@@ -152,12 +168,13 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @return the label with name of the audio key.
      */
-    @NotNull
-    private Label getAudioKeyLabel() {
+    @FXThread
+    private @NotNull Label getAudioKeyLabel() {
         return notNull(audioKeyLabel);
     }
 
     @Override
+    @FXThread
     protected void reload() {
         final AudioKey element = getPropertyValue();
         final Label audioKeyLabel = getAudioKeyLabel();

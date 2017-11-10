@@ -5,6 +5,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,12 +43,14 @@ public abstract class AdvancedPBR3DEditorState<T extends Advanced3DFileEditor> e
     }
 
     @Override
+    @JMEThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         frame = 0;
     }
 
     @Override
+    @JMEThread
     public void cleanup() {
         super.cleanup();
 
@@ -61,6 +64,7 @@ public abstract class AdvancedPBR3DEditorState<T extends Advanced3DFileEditor> e
     /**
      * Attach model node to state node.
      */
+    @JMEThread
     private void attachModelNode() {
         final Node stateNode = getStateNode();
         stateNode.attachChild(modelNode);
@@ -69,11 +73,13 @@ public abstract class AdvancedPBR3DEditorState<T extends Advanced3DFileEditor> e
     /**
      * @return the model node.
      */
+    @JMEThread
     protected @NotNull Node getModelNode() {
         return modelNode;
     }
 
     @Override
+    @JMEThread
     public void update(final float tpf) {
         super.update(tpf);
 

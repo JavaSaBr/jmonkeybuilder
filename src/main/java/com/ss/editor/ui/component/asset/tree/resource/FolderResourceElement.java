@@ -1,10 +1,12 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -19,17 +21,13 @@ import java.nio.file.Path;
  */
 public class FolderResourceElement extends ResourceElement {
 
-    /**
-     * Instantiates a new Folder element.
-     *
-     * @param file the file
-     */
-    FolderResourceElement(@NotNull final Path file) {
+    public FolderResourceElement(@NotNull final Path file) {
         super(file);
     }
 
     @Override
-    public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
+    @FromAnyThread
+    public @Nullable Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
         if (!Files.isDirectory(file)) return null;
 
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
@@ -63,6 +61,7 @@ public class FolderResourceElement extends ResourceElement {
     }
 
     @Override
+    @FromAnyThread
     public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
         if (!Files.isDirectory(file)) return false;
 

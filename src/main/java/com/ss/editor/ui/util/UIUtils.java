@@ -7,9 +7,10 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.AssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.FileAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
@@ -44,6 +45,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -62,6 +64,7 @@ public class UIUtils {
      * @param pane   the pane.
      * @param controls  the controls.
      */
+    @FXThread
     public static void addFocusBinding(@NotNull final Pane pane, @NotNull final Control... controls) {
 
         final BooleanProperty focused = new BooleanPropertyBase(false) {
@@ -408,6 +411,49 @@ public class UIUtils {
     }
 
     /**
+     * Visit all items.
+     *
+     * @param <T>     the type parameter.
+     * @param item    the tree item.
+     * @param visitor the visitor.
+     */
+    @FXThread
+    public static <T> void visit(@NotNull final TreeItem<T> item, @NotNull final Consumer<TreeItem<T>> visitor) {
+        visitor.accept(item);
+
+        final ObservableList<TreeItem<T>> children = item.getChildren();
+        if (children.isEmpty()) return;
+
+        for (final TreeItem<T> child : children) {
+            visit(child, visitor);
+        }
+    }
+
+    /**
+     * Visit all items.
+     *
+     * @param <T>     the type parameter.
+     * @param item    the tree item.
+     * @param visitor the visitor.
+     * @return true of we can visit child elements.
+     */
+    @FXThread
+    public static <T> boolean visitUntil(@NotNull final TreeItem<T> item,
+                                         @NotNull final Predicate<TreeItem<T>> visitor) {
+
+        if (!visitor.test(item)) return false;
+
+        final ObservableList<TreeItem<T>> children = item.getChildren();
+        if (children.isEmpty()) return true;
+
+        for (final TreeItem<T> child : children) {
+            if (!visitUntil(child, visitor)) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Collect all elements of tree items.
      *
      * @param <T>  the type parameter
@@ -505,6 +551,16 @@ public class UIUtils {
      */
     @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
+
+        if (event == null) {
+            return;
+        }
+
+        final KeyCode code = event.getCode();
+        if (code == KeyCode.ESCAPE || code == KeyCode.ENTER) {
+            return;
+        }
+
         if (isNotHotKey(event)) {
             event.consume();
         }
@@ -526,6 +582,33 @@ public class UIUtils {
             hbox.setMinHeight(cell.getMinHeight());
         } else if (graphic instanceof Control) {
         }
+    }
+
+    /**
+     * Open an resource asset dialog.
+     *
+     * @param handler   the result handler.
+     * @param resources the resources.
+     */
+    @FXThread
+    public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
+                                               @NotNull final Array<String> resources) {
+        openResourceAssetDialog(handler, null, resources);
+    }
+
+    /**
+     * Open an resource asset dialog.
+     *
+     * @param handler   the result handler.
+     * @param validator the validator.
+     * @param resources the resources.
+     */
+    @FXThread
+    public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
+                                               @Nullable final Function<String, String> validator,
+                                               @NotNull final Array<String> resources) {
+        final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, validator, resources);
+        dialog.show();
     }
 
     /**
@@ -588,6 +671,7 @@ public class UIUtils {
      * @param dragEvent  the drag event.
      * @param extensions the extensions.
      */
+    @FXThread
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -606,6 +690,7 @@ public class UIUtils {
      * @param dragEvent       the drag event.
      * @param targetExtension the extension.
      */
+    @FXThread
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final String targetExtension) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -626,6 +711,7 @@ public class UIUtils {
      * @param extensions the extensions.
      * @return true if there are required file.
      */
+    @FXThread
     public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final Array<String> extensions) {
 
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -647,6 +733,7 @@ public class UIUtils {
      * @param targetExtension the target extension.
      * @return true if there are required file.
      */
+    @FXThread
     public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final String targetExtension) {
 
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -668,6 +755,7 @@ public class UIUtils {
      * @param extensions the extensions.
      * @param handler    the handler.
      */
+    @FXThread
     public static void handleDroppedFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions,
                                          @NotNull final Consumer<Path> handler) {
 
@@ -697,6 +785,7 @@ public class UIUtils {
      * @param firstArg   the first argument.
      * @param handler    the handler.
      */
+    @FXThread
     public static <F> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                              @NotNull final Array<String> extensions, @NotNull final F firstArg,
                                              @NotNull final BiConsumer<F, Path> handler) {
@@ -729,6 +818,7 @@ public class UIUtils {
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
+    @FXThread
     public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                                 @NotNull final String targetExtension, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,
@@ -748,6 +838,7 @@ public class UIUtils {
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
+    @FXThread
     public static <F, S> void handleDroppedFile(@NotNull final Dragboard dragboard,
                                                 @NotNull final String targetExtension, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,
@@ -780,6 +871,7 @@ public class UIUtils {
      * @param secondArg  the second argument.
      * @param handler    the handler.
      */
+    @FXThread
     public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                                 @NotNull final Array<String> extensions, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,

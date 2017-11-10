@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.dialog.folder.OpenExternalFolderEditorDialog;
+import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import javafx.scene.control.MenuItem;
@@ -82,7 +82,7 @@ public class OpenAssetAction extends MenuItem {
     }
 
     /**
-     * Open asset folder use custom file chooser.
+     * Open an asset folder using custom file chooser.
      */
     private void openAsset() {
 

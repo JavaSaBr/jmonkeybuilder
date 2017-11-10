@@ -4,6 +4,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,11 +26,13 @@ public class MinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial> 
     }
 
     @Override
+    @FXThread
     protected float checkResultXValue(final float x, final float y) {
         return min(x, y);
     }
 
     @Override
+    @FXThread
     protected float checkResultYValue(final float x, final float y) {
         return max(x, y);
     }

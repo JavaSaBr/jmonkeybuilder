@@ -3,14 +3,13 @@ package com.ss.editor.ui.component.editor.impl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.ui.control.code.BaseCodeArea;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.model.StyleSpans;
-import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 
 /**
  * The implementation of editor to edit files with code.
@@ -37,19 +35,19 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
      * The code area.
      */
     @Nullable
-    private CodeArea codeArea;
+    private BaseCodeArea codeArea;
 
     @Override
+    @FXThread
     protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
 
-        codeArea = new CodeArea();
-        codeArea.richChanges().filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
-                .subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
+        codeArea = createCodeArea();
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
         codeArea.prefHeightProperty().bind(root.heightProperty());
         codeArea.prefWidthProperty().bind(root.widthProperty());
@@ -59,28 +57,31 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * Gets style spans.
+     * Create the code area.
      *
-     * @param text the text
-     * @return the style spans
+     * @return the code area.
      */
-    protected @NotNull StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
-        throw new RuntimeException("unsupported");
+    @FXThread
+    protected @NotNull BaseCodeArea createCodeArea() {
+        throw new RuntimeException();
     }
 
     /**
      * Update dirty state.
      */
+    @FXThread
     private void updateDirty(final String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
     }
 
     @Override
+    @FXThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
+    @FXThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         FXUtils.addToPane(createSaveAction(), container);
@@ -89,7 +90,8 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the code area.
      */
-    private @NotNull CodeArea getCodeArea() {
+    @FXThread
+    private @NotNull BaseCodeArea getCodeArea() {
         return notNull(codeArea);
     }
 
@@ -100,11 +102,8 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
 
         setOriginalContent(FileUtils.read(file));
 
-        final CodeArea codeArea = getCodeArea();
-        codeArea.appendText(getOriginalContent());
-
-        final UndoManager undoManager = codeArea.getUndoManager();
-        undoManager.forgetHistory();
+        final BaseCodeArea codeArea = getCodeArea();
+        codeArea.loadContent(getOriginalContent());
 
         setOriginalContent(codeArea.getText());
         updateDirty(getOriginalContent());
@@ -113,6 +112,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
+    @FXThread
     private @NotNull String getOriginalContent() {
         return notNull(originalContent);
     }
@@ -120,6 +120,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @param originalContent the original content of the opened file.
      */
+    @FXThread
     private void setOriginalContent(@NotNull final String originalContent) {
         this.originalContent = originalContent;
     }
@@ -150,14 +151,15 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
+    @FXThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
         final String newContent = FileUtils.read(getEditFile());
 
-        final CodeArea codeArea = getCodeArea();
+        final BaseCodeArea codeArea = getCodeArea();
         final String currentContent = codeArea.getText();
-        codeArea.replaceText(0, currentContent.length(), newContent);
+        codeArea.reloadContent(newContent);
 
         setOriginalContent(currentContent);
         updateDirty(newContent);

@@ -9,6 +9,8 @@ import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
@@ -16,7 +18,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
-import com.ss.editor.ui.dialog.folder.OpenExternalFolderEditorDialog;
+import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.OpenGLVersion;
@@ -241,6 +243,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     @Override
+    @FXThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
         setIgnoreListeners(true);
@@ -255,6 +258,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @param ignoreListeners the flag of ignoring listeners.
      */
+    @FXThread
     private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
@@ -262,11 +266,13 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return true of the listeners are ignored.
      */
+    @FXThread
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -322,6 +328,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the libraries folder control.
      */
+    @FXThread
     private void createLibrariesFolderControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -360,6 +367,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the classes folder control.
      */
+    @FXThread
     private void createClassesFolderControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -398,6 +406,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the additional envs control.
      */
+    @FXThread
     private void createAdditionalEnvsControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -436,6 +445,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Process of removing the additional classpath.
      */
+    @FXThread
     private void processRemoveLibrariesFolder() {
         setLibrariesFolder(null);
 
@@ -446,6 +456,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Process of removing the additional classpath.
      */
+    @FXThread
     private void processRemoveClassesFolder() {
         setClassesFolder(null);
 
@@ -456,6 +467,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Process of removing the additional envs.
      */
+    @FXThread
     private void processRemoveEF() {
         setAdditionalEnvsFolder(null);
 
@@ -466,30 +478,31 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the libraries folder field.
      */
-    @NotNull
-    private TextField getLibrariesFolderField() {
+    @FXThread
+    private @NotNull TextField getLibrariesFolderField() {
         return notNull(librariesFolderField);
     }
 
     /**
      * @return the classes folder field.
      */
-    @NotNull
-    private TextField getClassesFolderField() {
+    @FXThread
+    private @NotNull TextField getClassesFolderField() {
         return notNull(classesFolderField);
     }
 
     /**
      * @return the additional envs field.
      */
-    @NotNull
-    private TextField getAdditionalEnvsField() {
+    @FXThread
+    private @NotNull TextField getAdditionalEnvsField() {
         return notNull(additionalEnvsField);
     }
 
     /**
      * Add a new libraries folder.
      */
+    @FXThread
     private void processAddLibrariesFolder() {
 
         final CheckBox checkBox = getNativeFileChooserCheckBox();
@@ -525,6 +538,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Add a new classes folder.
      */
+    @FXThread
     private void processAddClassesFolder() {
 
         final CheckBox checkBox = getNativeFileChooserCheckBox();
@@ -560,6 +574,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Process of adding the additional envs.
      */
+    @FXThread
     private void processAddEF() {
 
         final CheckBox checkBox = getNativeFileChooserCheckBox();
@@ -595,6 +610,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create gamma correction control.
      */
+    @FXThread
     private void createGammaCorrectionControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -616,6 +632,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create tonemap filter control.
      */
+    @FXThread
     private void createToneMapFilterControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -637,6 +654,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create white point control.
      */
+    @FXThread
     private void createToneMapFilterWhitePointControl(@NotNull final VBox root) {
 
         final CheckBox filterCheckBox = getToneMapFilterCheckBox();
@@ -708,6 +726,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * The process of scrolling.
      */
+    @FXThread
     private void processScroll(@NotNull final Spinner<Double> spinner, @NotNull final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
@@ -723,6 +742,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create FXAA control.
      */
+    @FXThread
     private void createFXAAControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -744,6 +764,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create native file chooser control.
      */
+    @FXThread
     private void createNativeFileChooserControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -765,6 +786,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create stop render control.
      */
+    @FXThread
     private void createStopRenderControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -786,6 +808,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the checkbox for configuring enabling google analytics.
      */
+    @FXThread
     private void createGoogleAnalyticsControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -807,6 +830,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the checkbox for configuring auto tangent generating.
      */
+    @FXThread
     private void createAutoTangentGeneratingControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -828,6 +852,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the checkbox for configuring using flip textures by default.
      */
+    @FXThread
     private void createUseFlippedTextureDefaultControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -849,6 +874,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the checkbox for configuring enabling camera lamp by default.
      */
+    @FXThread
     private void createDefaultCameraLampEnabledControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -870,6 +896,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the anisotropy control
      */
+    @FXThread
     private void createAnisotropyControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -897,6 +924,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the theme control
      */
+    @FXThread
     private void createThemeControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -924,6 +952,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the open GL control
      */
+    @FXThread
     private void createOpenGLControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -951,6 +980,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the frame rate control.
      */
+    @FXThread
     private void createFrameRateControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -974,6 +1004,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the camera angle control.
      */
+    @FXThread
     private void createCameraAngleControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -997,6 +1028,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the gamma correction checkbox.
      */
+    @FXThread
     private @NotNull CheckBox getGammaCorrectionCheckBox() {
         return notNull(gammaCorrectionCheckBox);
     }
@@ -1004,6 +1036,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the tone map filter checkbox.
      */
+    @FXThread
     private @NotNull CheckBox getToneMapFilterCheckBox() {
         return notNull(toneMapFilterCheckBox);
     }
@@ -1011,6 +1044,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the white point X.
      */
+    @FXThread
     private @NotNull Spinner<Double> getToneMapFilterWhitePointX() {
         return notNull(toneMapFilterWhitePointX);
     }
@@ -1018,6 +1052,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the white point Y.
      */
+    @FXThread
     private @NotNull Spinner<Double> getToneMapFilterWhitePointY() {
         return notNull(toneMapFilterWhitePointY);
     }
@@ -1025,6 +1060,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the white point Z.
      */
+    @FXThread
     private @NotNull Spinner<Double> getToneMapFilterWhitePointZ() {
         return notNull(toneMapFilterWhitePointZ);
     }
@@ -1032,6 +1068,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the FXAA checkbox.
      */
+    @FXThread
     private @NotNull CheckBox getFXAAFilterCheckBox() {
         return notNull(fxaaFilterCheckBox);
     }
@@ -1039,6 +1076,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the checkbox to enable using native file choosers.
      */
+    @FXThread
     private @NotNull CheckBox getNativeFileChooserCheckBox() {
         return notNull(nativeFileChooserCheckBox);
     }
@@ -1046,6 +1084,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the Stop Render On Lost Focus checkbox.
      */
+    @FXThread
     private @NotNull CheckBox getStopRenderOnLostFocusCheckBox() {
         return notNull(stopRenderOnLostFocusCheckBox);
     }
@@ -1053,6 +1092,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the list with anisotropy levels.
      */
+    @FXThread
     private @NotNull ComboBox<Integer> getAnisotropyComboBox() {
         return notNull(anisotropyComboBox);
     }
@@ -1060,6 +1100,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return The frame rate field.
      */
+    @FXThread
     private @NotNull IntegerTextField getFrameRateField() {
         return notNull(frameRateField);
     }
@@ -1067,6 +1108,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the camera angle field.
      */
+    @FXThread
     private @NotNull IntegerTextField getCameraAngleField() {
         return notNull(cameraAngleField);
     }
@@ -1074,6 +1116,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the checkbox for enabling auto tangent generating.
      */
+    @FXThread
     private @NotNull CheckBox getAutoTangentGeneratingCheckBox() {
         return notNull(autoTangentGeneratingCheckBox);
     }
@@ -1081,6 +1124,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the checkbox for enabling camera lamp by default.
      */
+    @FXThread
     private @NotNull CheckBox getDefaultCameraLampEnabledCheckBox() {
         return notNull(defaultCameraLampEnabledCheckBox);
     }
@@ -1088,6 +1132,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the checkbox for enabling use flip texture by default.
      */
+    @FXThread
     private @NotNull CheckBox getDefaultUseFlippedTextureCheckBox() {
         return notNull(defaultUseFlippedTextureCheckBox);
     }
@@ -1095,6 +1140,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the checkbox for enabling google analytics.
      */
+    @FXThread
     private @NotNull CheckBox getGoogleAnalyticsCheckBox() {
         return notNull(googleAnalyticsCheckBox);
     }
@@ -1102,6 +1148,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the message label.
      */
+    @FXThread
     private @NotNull Label getMessageLabel() {
         return notNull(messageLabel);
     }
@@ -1109,6 +1156,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Validate changes.
      */
+    @FXThread
     private void validate() {
         if (isIgnoreListeners()) return;
 
@@ -1154,6 +1202,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Load current settings.
      */
+    @FXThread
     private void load() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -1242,6 +1291,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the list with themes.
      */
+    @FXThread
     private @NotNull ComboBox<CssColorTheme> getThemeComboBox() {
         return notNull(themeComboBox);
     }
@@ -1249,6 +1299,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the list with open GL versions.
      */
+    @FXThread
     private @NotNull ComboBox<OpenGLVersion> getOpenGLVersionComboBox() {
         return notNull(openGLVersionComboBox);
     }
@@ -1256,6 +1307,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the libraries folder.
      */
+    @FXThread
     private @Nullable Path getLibrariesFolder() {
         return librariesFolder;
     }
@@ -1263,6 +1315,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the classes folder.
      */
+    @FXThread
     private @Nullable Path getClassesFolder() {
         return classesFolder;
     }
@@ -1270,6 +1323,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @param librariesFolder the libraries folder.
      */
+    @FXThread
     private void setLibrariesFolder(@Nullable final Path librariesFolder) {
         this.librariesFolder = librariesFolder;
     }
@@ -1277,6 +1331,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @param classesFolder the classes folder.
      */
+    @FXThread
     private void setClassesFolder(@Nullable final Path classesFolder) {
         this.classesFolder = classesFolder;
     }
@@ -1284,6 +1339,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @param additionalEnvsFolder the additional envs folder.
      */
+    @FXThread
     private void setAdditionalEnvsFolder(@Nullable final Path additionalEnvsFolder) {
         this.additionalEnvsFolder = additionalEnvsFolder;
     }
@@ -1291,11 +1347,13 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the additional envs folder.
      */
+    @FXThread
     private @Nullable Path getAdditionalEnvsFolder() {
         return additionalEnvsFolder;
     }
 
     @Override
+    @FXThread
     protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
@@ -1318,6 +1376,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Save new settings.
      */
+    @FXThread
     private void processOk() {
 
         int needRestart = 0;
@@ -1458,11 +1517,13 @@ public class SettingsDialog extends EditorDialog {
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getTitleText() {
         return Messages.SETTINGS_DIALOG_TITLE;
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull Point getSize() {
         return DIALOG_SIZE;
     }

@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.tree.node.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.Toneg0DParticleEmitterNodeTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0DParticleInfluencerTreeNode;
@@ -19,8 +20,8 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 public class Toneg0dTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @Nullable
-    public <T, V extends TreeNode<T>> V createFor(@Nullable final T element, final long objectId) {
+    @FXThread
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new Toneg0DParticleEmitterNodeTreeNode((ParticleEmitterNode) element, objectId));
@@ -34,6 +35,7 @@ public class Toneg0dTreeNodeFactory implements TreeNodeFactory {
     }
 
     @Override
+    @FXThread
     public int getOrder() {
         return 1;
     }

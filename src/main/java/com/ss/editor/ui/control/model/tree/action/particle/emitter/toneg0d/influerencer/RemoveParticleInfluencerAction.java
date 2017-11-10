@@ -37,12 +37,14 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
         super(nodeTree, node);
     }
 
+    @FXThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.REMOVE_12;
     }
 
+    @FXThread
     @NotNull
     @Override
     protected String getName() {

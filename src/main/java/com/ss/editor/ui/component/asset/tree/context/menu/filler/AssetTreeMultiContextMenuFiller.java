@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.filler;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.control.MenuItem;
@@ -23,6 +24,7 @@ public interface AssetTreeMultiContextMenuFiller {
      * @param items        the container of items of a context menu.
      * @param actionTester the action tester.
      */
+    @FXThread
     void fill(@NotNull final Array<ResourceElement> elements, @NotNull final List<MenuItem> items,
               @NotNull final Predicate<Class<?>> actionTester);
 }

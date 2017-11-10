@@ -51,15 +51,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     @Override
     @FXThread
     protected void createContent(@NotNull final StackPane root) {
-
-        editorAreaPane = new StackPane();
-        editorAreaPane.setOnDragOver(this::dragOver);
-        editorAreaPane.setOnDragDropped(this::dragDropped);
-
-        editor3DArea = new BorderPane();
-        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
-        editor3DArea.setOnKeyReleased(Event::consume);
-        editor3DArea.setOnKeyPressed(Event::consume);
+        createEditorAreaPane();
 
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
 
@@ -74,11 +66,28 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
             if (editorState != null) editorState.setOpenedTool(newValue.intValue());
         });
 
-        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
+        mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
 
         FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+    }
+
+    /**
+     * Create editor area pane.
+     */
+    @FXThread
+    protected void createEditorAreaPane() {
+
+        editorAreaPane = new StackPane();
+        editorAreaPane.setOnDragOver(this::handleDragOverEvent);
+        editorAreaPane.setOnDragDropped(this::handleDragDroppedEvent);
+
+        editor3DArea = new BorderPane();
+        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
+        editor3DArea.setOnKeyReleased(Event::consume);
+        editor3DArea.setOnKeyPressed(Event::consume);
+
+        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
     }
 
@@ -124,20 +133,27 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      * Create and add tool components to the container.
      *
      * @param container the tool container.
-     * @param container the root.
+     * @param root the root.
      */
+    @FXThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
     /**
-     * Handle drag objects.
+     * Handle drag over events.
+     *
+     * @param dragEvent the drag event.
      */
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
     }
 
     /**
-     * Handle dropped texture.
+     * Handle dropped events.
+     *
+     * @param dragEvent the drop event.
      */
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+    @FXThread
+    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
     }
 }
