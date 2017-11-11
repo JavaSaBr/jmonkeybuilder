@@ -172,13 +172,14 @@
             <fx:resources refid="appRes"/>
 
             <manifest>
-                <attribute name="Implementation-Vendor" value="bitbucket.org/JavaSabr"/>
+                <attribute name="Implementation-Vendor" value="javasabr@gmail.com"/>
                 <attribute name="Implementation-Title" value="jMonkeyBuilder"/>
                 <attribute name="Implementation-Version" value="${editor.version}"/>
             </manifest>
         </fx:jar>
 
         <replace file="package/linux/control" token="@version@" value="${editor.version}"/>
+        <replace file="package/windows/jMonkeyBuilder.wxs" token="@version@" value="${editor.version}"/>
 
         <mkdir dir="deploy"/>
         <!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
@@ -199,13 +200,14 @@
             <preferences shortcut="true" menu="true" install="false"/>
 
             <info category="graphics"
-                  description="The 3D Editor for jMonkeyEngine 3.2 by JavaSaBr"
-                  email="javasabr@gmail.com" license="Freeware" title="jMonkeyBuilder" vendor="bitbucket.org/JavaSabr"/>
+                  description="The 3D Editor for jMonkeyEngine 3.2"
+                  email="javasabr@gmail.com" license="Freeware" title="jMonkeyBuilder" vendor="javasabr@gmail.com"/>
 
             <application refId="fxApplication"/>
             <resources refid="appRes"/>
         </fx:deploy>
 
         <replace file="package/linux/control" token="${editor.version}" value="@version@"/>
+        <replace file="package/windows/jMonkeyBuilder.wxs" token="${editor.version}" value="@version@"/>
     </target>
 </project>
