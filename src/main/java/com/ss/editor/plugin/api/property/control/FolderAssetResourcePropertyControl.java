@@ -8,6 +8,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
@@ -55,9 +56,10 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
     protected void reload() {
 
         final Path file = getPropertyValue();
+        final String assetPath = file == null ? NOT_SELECTED : toAssetPath(file);
 
         final Label resourceLabel = getResourceLabel();
-        resourceLabel.setText(file == null ? NOT_SELECTED : toAssetPath(file));
+        resourceLabel.setText(StringUtils.isEmpty(assetPath) ? "/" : assetPath);
 
         super.reload();
     }

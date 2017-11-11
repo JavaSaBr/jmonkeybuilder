@@ -2,6 +2,7 @@ package com.ss.editor.file.converter.impl;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.getRealFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -71,7 +72,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         }
 
         final String resultName = FileUtils.getNameWithoutExtension(source);
-        final Path assetDestination = EditorUtil.getAssetFile(destination);
+        final Path assetDestination = getAssetFile(destination.getParent());
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(STRING, Messages.MODEL_CONVERTER_DIALOG_RESULT_NAME, PROP_RESULT_NAME, resultName));
@@ -135,7 +136,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     private void convertImpl(@NotNull final Path source, @NotNull final VarTable vars) throws IOException {
 
         final String filename = vars.getString(PROP_RESULT_NAME);
-        final Path destinationFolder = vars.get(PROP_DESTINATION);
+        final Path destinationFolder = notNull(getRealFile(vars.get(PROP_DESTINATION, Path.class)));
         final Path destination = destinationFolder.resolve(filename + "." + FileExtensions.JME_OBJECT);
         final boolean isOverwrite = Files.exists(destination);
 
