@@ -126,10 +126,17 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
 
         final T fileEditor = getFileEditor();
 
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_C, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_P, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.P, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_L, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.L, isPressed, isControlDown(), isButtonMiddleDown()));
+        actionHandlers.put(KEY_S, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_C, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_P, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.P, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_L, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.L, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
     }
 
     @Override
@@ -194,11 +201,21 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
         try {
             renderManager.preloadScene(testBox);
         } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            handleMaterialException(e);
             testBox.setMaterial(EDITOR.getDefaultMaterial());
             testQuad.setMaterial(EDITOR.getDefaultMaterial());
             testSphere.setMaterial(EDITOR.getDefaultMaterial());
         }
+    }
+
+    /**
+     * Handle the material exception.
+     *
+     * @param exception the exception.
+     */
+    @JMEThread
+    protected void handleMaterialException(@NotNull final RuntimeException exception) {
+        EditorUtil.handleException(LOGGER, this, exception);
     }
 
     /**

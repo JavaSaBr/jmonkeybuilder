@@ -83,6 +83,7 @@ public abstract class EditorUtil {
      * @param paths   the list of files.
      * @param content the content to store.
      */
+    @FXThread
     public static void addCopiedFile(@NotNull final Array<Path> paths, @NotNull final ClipboardContent content) {
 
         final List<File> files = paths.stream()
@@ -121,22 +122,22 @@ public abstract class EditorUtil {
      * @param path the path to resource.
      * @return true if the resource is exists.
      */
+    @FromAnyThread
     public static boolean checkExists(@NotNull final String path) {
         final Class<EditorUtil> cs = EditorUtil.class;
-        return cs.getResourceAsStream(path) != null ||
-                cs.getResourceAsStream("/" + path) != null;
+        return cs.getResource(path) != null || cs.getResource("/" + path) != null;
     }
 
     /**
      * Check exists boolean.
      *
-     * @param path the path to resource.
+     * @param path        the path to resource.
      * @param classLoader the class loader.
      * @return true if the resource is exists.
      */
+    @FromAnyThread
     public static boolean checkExists(@NotNull final String path, @NotNull final ClassLoader classLoader) {
-        return classLoader.getResourceAsStream(path) != null ||
-                classLoader.getResourceAsStream("/" + path) != null;
+        return classLoader.getResource(path) != null || classLoader.getResource("/" + path) != null;
     }
 
     /**
@@ -146,8 +147,8 @@ public abstract class EditorUtil {
      * @param classLoader the class loader.
      * @return the external form or null.
      */
-    @Nullable
-    public static String toExternal(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+    @FromAnyThread
+    public static @Nullable String toExternal(@NotNull final String path, @NotNull final ClassLoader classLoader) {
         if (!checkExists(path, classLoader)) return null;
         URL resource = classLoader.getResource(path);
         if (resource == null) resource = classLoader.getResource("/" + path);
@@ -162,6 +163,7 @@ public abstract class EditorUtil {
      * @param second the second point.
      * @return the angle between these points.
      */
+    @FromAnyThread
     public static float getAngle(@NotNull final Vector2f center, @NotNull final Vector2f first,
                                  @NotNull final Vector2f second) {
 
@@ -212,8 +214,8 @@ public abstract class EditorUtil {
      *
      * @return the user name.
      */
-    @NotNull
-    public static String getUserName() {
+    @FromAnyThread
+    public static @NotNull String getUserName() {
         return System.getProperty("user.name");
     }
 
@@ -224,6 +226,7 @@ public abstract class EditorUtil {
      * @param camera   the camera of the screen.
      * @return true of we can see the position on the screen.
      */
+    @FromAnyThread
     public static boolean isVisibleOnScreen(@NotNull final Vector3f position, @NotNull final Camera camera) {
 
         final int maxHeight = camera.getHeight();
@@ -245,8 +248,9 @@ public abstract class EditorUtil {
      * @param store  the container of the result.
      * @param length the distance.
      */
+    @FromAnyThread
     public static void movePoint(@NotNull final Vector3f first, @NotNull final Vector3f second,
-                                 final @NotNull Vector3f store, final int length) {
+                                 @NotNull final Vector3f store, final int length) {
         store.x = first.x + (second.x - first.x) * length;
         store.y = first.y + (second.y - first.y) * length;
         store.z = first.z + (second.z - first.z) * length;
@@ -258,8 +262,8 @@ public abstract class EditorUtil {
      * @param time the unix time.
      * @return the string presentation.
      */
-    @NotNull
-    public static String timeFormat(final long time) {
+    @FromAnyThread
+    public static @NotNull String timeFormat(final long time) {
         final SimpleDateFormat format = LOCATE_DATE_FORMAT.get();
         return format.format(new Date(time));
     }
@@ -271,8 +275,8 @@ public abstract class EditorUtil {
      * @param file        the file.
      * @return the relative path.
      */
-    @NotNull
-    public static Path getAssetFile(@NotNull final Path assetFolder, @NotNull final Path file) {
+    @FromAnyThread
+    public static @NotNull Path getAssetFile(@NotNull final Path assetFolder, @NotNull final Path file) {
         return assetFolder.relativize(file);
     }
 
@@ -282,8 +286,8 @@ public abstract class EditorUtil {
      * @param file the file.
      * @return the relative path.
      */
-    @Nullable
-    public static Path getAssetFile(@NotNull final Path file) {
+    @FromAnyThread
+    public static @Nullable Path getAssetFile(@NotNull final Path file) {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return null;
@@ -296,8 +300,8 @@ public abstract class EditorUtil {
      * @param assetFile the file.
      * @return the absolute path to the file.
      */
-    @Nullable
-    public static Path getRealFile(@NotNull final Path assetFile) {
+    @FromAnyThread
+    public static @Nullable Path getRealFile(@NotNull final Path assetFile) {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return null;
@@ -310,8 +314,8 @@ public abstract class EditorUtil {
      * @param assetFile the asset path to file.
      * @return the absolute path to the file.
      */
-    @Nullable
-    public static Path getRealFile(@NotNull final String assetFile) {
+    @FromAnyThread
+    public static @Nullable Path getRealFile(@NotNull final String assetFile) {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return null;
@@ -323,6 +327,7 @@ public abstract class EditorUtil {
      *
      * @return true if you have a file in your system clipboard.
      */
+    @FXThread
     public static boolean hasFileInClipboard() {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         if (clipboard == null) return false;
@@ -336,8 +341,8 @@ public abstract class EditorUtil {
      * @param path the path
      * @return the valid asset path for the file.
      */
-    @NotNull
-    public static String toAssetPath(@NotNull final Path path) {
+    @FromAnyThread
+    public static @NotNull String toAssetPath(@NotNull final Path path) {
         if (File.separatorChar == '/') return path.toString();
         return path.toString().replace("\\", "/");
     }
@@ -349,6 +354,7 @@ public abstract class EditorUtil {
      * @param owner  the owner
      * @param e      the e
      */
+    @FromAnyThread
     public static void handleException(@Nullable final Logger logger, @Nullable final Object owner,
                                        @NotNull final Exception e) {
         handleException(logger, owner, e, null);
@@ -362,9 +368,12 @@ public abstract class EditorUtil {
      * @param e        the e
      * @param callback the callback
      */
+    @FromAnyThread
     public static void handleException(@Nullable Logger logger, @Nullable final Object owner,
                                        @NotNull final Exception e, @Nullable final Runnable callback) {
-        if (logger == null) logger = LOGGER;
+        if (logger == null) {
+            logger = LOGGER;
+        }
 
         if (owner == null) {
             logger.warning(e);
@@ -377,26 +386,8 @@ public abstract class EditorUtil {
 
             GAnalytics.sendException(e, false);
 
-            StringWriter writer = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(writer);
-
-            e.printStackTrace(printWriter);
-
             final String localizedMessage = e.getLocalizedMessage();
-
-            String stackTrace = writer.toString();
-
-            int level = 0;
-
-            for (Throwable cause = e.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
-
-                writer = new StringWriter();
-                printWriter = new PrintWriter(writer);
-
-                cause.printStackTrace(printWriter);
-
-                stackTrace += "\n caused by " + writer.toString();
-            }
+            final String stackTrace = buildStackTrace(e);
 
             final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
@@ -408,10 +399,41 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Build the stack trace of the exception.
+     *
+     * @param exception the exception.
+     * @return the built stack trace.
+     */
+    @FromAnyThread
+    public static String buildStackTrace(@NotNull final Exception exception) {
+
+        StringWriter writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+
+        exception.printStackTrace(printWriter);
+
+        String stackTrace = writer.toString();
+
+        int level = 0;
+
+        for (Throwable cause = exception.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
+
+            writer = new StringWriter();
+            printWriter = new PrintWriter(writer);
+
+            cause.printStackTrace(printWriter);
+
+            stackTrace += "\n caused by " + writer.toString();
+        }
+
+        return stackTrace;
+    }
+
+    /**
      * Create a dialog for showing the exception.
      */
-    @NotNull
-    private static Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
+    @FXThread
+    private static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
                                           @Nullable final String stackTrace) {
 
         final TextArea textArea = new TextArea(stackTrace);
@@ -444,6 +466,7 @@ public abstract class EditorUtil {
      *
      * @param path the path
      */
+    @FromAnyThread
     public static void openFileInExternalEditor(@NotNull final Path path) {
 
         final Platform platform = JmeSystem.getPlatform();
@@ -486,6 +509,7 @@ public abstract class EditorUtil {
      *
      * @param path the path
      */
+    @FromAnyThread
     public static void openFileInSystemExplorer(@NotNull Path path) {
 
         final Platform platform = JmeSystem.getPlatform();
@@ -531,6 +555,7 @@ public abstract class EditorUtil {
         }
     }
 
+    @FromAnyThread
     private static boolean isAppExists(@NotNull final String command) {
 
         final Runtime runtime = Runtime.getRuntime();
@@ -549,10 +574,10 @@ public abstract class EditorUtil {
      * Convert the object to byte array.
      *
      * @param object the object
-     * @return the byte [ ]
+     * @return the byte array.
      */
-    @NotNull
-    public static byte[] serialize(@NotNull final Serializable object) {
+    @FromAnyThread
+    public static @NotNull byte[] serialize(@NotNull final Serializable object) {
 
         final ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
@@ -569,11 +594,11 @@ public abstract class EditorUtil {
      * Convert the byte array to object.
      *
      * @param <T>   the type parameter
-     * @param bytes the bytes
-     * @return the t
+     * @param bytes the byte array.
+     * @return the result object.
      */
-    @NotNull
-    public static <T> T deserialize(@NotNull final byte[] bytes) {
+    @FromAnyThread
+    public static <T> @NotNull T deserialize(@NotNull final byte[] bytes) {
 
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
@@ -591,6 +616,7 @@ public abstract class EditorUtil {
      * @param mod   the mod
      * @return the float
      */
+    @FromAnyThread
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
     }
@@ -622,8 +648,8 @@ public abstract class EditorUtil {
      * @param value the enum value.
      * @return the array of enum values.
      */
-    @NotNull
-    public static <E extends Enum<?>> E[] getAvailableValues(@NotNull final E value) {
+    @FromAnyThread
+    public static <E extends Enum<?>> @NotNull E[] getAvailableValues(@NotNull final E value) {
         final Class<? extends Enum> valueClass = value.getClass();
         if (!valueClass.isEnum()) throw new RuntimeException("The class " + valueClass + " isn't enum.");
         final Enum<?>[] enumConstants = valueClass.getEnumConstants();
@@ -639,9 +665,9 @@ public abstract class EditorUtil {
      * @param resultType the result type.
      * @return the new instance or null.
      */
-    @Nullable
-    public static <T> T tryToCreateUserObject(@NotNull final Object owner, @NotNull final String className,
-                                              @NotNull final Class<T> resultType) {
+    @FromAnyThread
+    public static <T> @Nullable T tryToCreateUserObject(@NotNull final Object owner, @NotNull final String className,
+                                                        @NotNull final Class<T> resultType) {
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
@@ -682,8 +708,8 @@ public abstract class EditorUtil {
      * @param consumer the change consumer.
      * @return the default layer or null.
      */
-    @Nullable
-    public static SceneLayer getDefaultLayer(@NotNull final ChangeConsumer consumer) {
+    @FromAnyThread
+    public static @Nullable SceneLayer getDefaultLayer(@NotNull final ChangeConsumer consumer) {
 
         if (!(consumer instanceof SceneChangeConsumer)) {
             return null;

@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.node.control.anim;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Track;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,12 +28,6 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
     @Nullable
     private String cachedName;
 
-    /**
-     * Instantiates a new Animation track model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public AnimationTrackTreeNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
@@ -41,6 +37,7 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
      *
      * @param control the animation control.
      */
+    @FXThread
     public void setControl(@Nullable final AnimControl control) {
         this.control = control;
         this.cachedName = computeName();
@@ -51,12 +48,12 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
      *
      * @return the string
      */
-    @NotNull
-    protected abstract String computeName();
+    @FXThread
+    protected abstract @NotNull String computeName();
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return cachedName;
     }
 
@@ -65,8 +62,8 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
      *
      * @return the animation control.
      */
-    @Nullable
-    protected AnimControl getControl() {
+    @FXThread
+    protected @Nullable AnimControl getControl() {
         return control;
     }
 }

@@ -4,6 +4,8 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.Track;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -52,18 +54,13 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      */
     private int channel;
 
-    /**
-     * Instantiates a new Animation model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public AnimationTreeNode(@NotNull final Animation element, final long objectId) {
         super(element, objectId);
         this.channel = -1;
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
@@ -93,6 +90,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Animation element = getElement();
@@ -101,9 +99,9 @@ public class AnimationTreeNode extends TreeNode<Animation> {
         return tracks != null && tracks.length > 0 && nodeTree instanceof ModelNodeTree;
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Animation element = getElement();
         final Track[] tracks = element.getTracks();
@@ -115,11 +113,13 @@ public class AnimationTreeNode extends TreeNode<Animation> {
     }
 
     @Override
+    @FXThread
     public boolean canEditName() {
         return true;
     }
 
     @Override
+    @FXThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         if (StringUtils.equals(getName(), newName)) return;
 
@@ -138,8 +138,8 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @return the node of an animation control.
      */
-    @Nullable
-    public AnimationControlTreeNode getControlModelNode() {
+    @FXThread
+    public @Nullable AnimationControlTreeNode getControlModelNode() {
         return controlModelNode;
     }
 
@@ -148,6 +148,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @param controlModelNode the node of an animation control.
      */
+    @FXThread
     public void setControlModelNode(@Nullable final AnimationControlTreeNode controlModelNode) {
         this.controlModelNode = controlModelNode;
     }
@@ -157,8 +158,8 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @return the animation control.
      */
-    @Nullable
-    public AnimControl getControl() {
+    @FXThread
+    public @Nullable AnimControl getControl() {
         return control;
     }
 
@@ -167,13 +168,14 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @param control the animation control.
      */
+    @FXThread
     public void setControl(@Nullable final AnimControl control) {
         this.control = control;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return getElement().getName();
     }
 
@@ -182,6 +184,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @return the index of playing animation.
      */
+    @FXThread
     public int getChannel() {
         return channel;
     }
@@ -191,6 +194,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @param channel the index of playing animation.
      */
+    @FXThread
     public void setChannel(final int channel) {
         this.channel = channel;
     }
@@ -200,6 +204,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @return the speed
      */
+    @FXThread
     public float getSpeed() {
         return speed;
     }
@@ -209,18 +214,20 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      *
      * @param speed the speed
      */
+    @FXThread
     public void setSpeed(final float speed) {
         this.speed = speed;
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         if (getChannel() < 0) return Icons.PLAY_16;
         return getSpeed() < 0.0001F ? Icons.PAUSE_16 : Icons.STOP_16;
     }
 
     @Override
+    @FXThread
     public void notifyChildPreAdd(@NotNull final TreeNode<?> treeNode) {
         final AnimationTrackTreeNode<?> animationTrackModelNode = (AnimationTrackTreeNode<?>) treeNode;
         animationTrackModelNode.setControl(getControl());

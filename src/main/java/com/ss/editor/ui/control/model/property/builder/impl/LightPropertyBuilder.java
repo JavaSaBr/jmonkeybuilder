@@ -8,6 +8,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.DirectionLightPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -31,10 +33,11 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
     private static final PropertyBuilder INSTANCE = new LightPropertyBuilder();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance.
      */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -44,6 +47,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
     }
 
     @Override
+    @FXThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -60,6 +64,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         }
     }
 
+    @FXThread
     private void buildForDirectionLight(@NotNull final DirectionalLight light, @NotNull final VBox container,
                                         @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -76,6 +81,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         buildSplitLine(container);
     }
 
+    @FXThread
     private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,
                                     @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -100,6 +106,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         FXUtils.addToPane(radiusControl, container);
     }
 
+    @FXThread
     private void buildForSpotLight(@NotNull final SpotLight light, @NotNull final VBox container,
                                    @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -153,6 +160,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         FXUtils.addToPane(outerAngleControl, container);
     }
 
+    @FXThread
     private void buildForLight(@NotNull final Light object, @NotNull final VBox container,
                                @NotNull final ModelChangeConsumer changeConsumer) {
 

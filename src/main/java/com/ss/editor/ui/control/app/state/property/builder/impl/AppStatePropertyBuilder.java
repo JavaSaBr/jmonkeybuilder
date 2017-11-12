@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.app.state.property.builder.impl;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
@@ -20,23 +22,21 @@ public class AppStatePropertyBuilder extends EditableModelObjectPropertyBuilder 
     private static final AppStatePropertyBuilder INSTANCE = new AppStatePropertyBuilder();
 
     /**
-     * Gets instance.
+     * Get the single instance.
      *
-     * @return the instance
+     * @return the single instance.
      */
-    @NotNull
-    public static AppStatePropertyBuilder getInstance() {
+    @FromAnyThread
+    public static @NotNull AppStatePropertyBuilder getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Instantiates a new App state property builder.
-     */
     protected AppStatePropertyBuilder() {
         super(SceneChangeConsumer.class);
     }
 
     @Override
+    @FXThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         if (!(object instanceof EditableSceneAppState)) return null;
         final EditableSceneAppState state = (EditableSceneAppState) object;

@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.node.control.anim;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -37,12 +39,6 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
      */
     private float speed;
 
-    /**
-     * Instantiates a new Animation control model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public AnimationControlTreeNode(@NotNull final AnimControl element, final long objectId) {
         super(element, objectId);
         this.loopMode = LoopMode.Loop;
@@ -50,6 +46,7 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         items.add(new PlaySettingsAction(nodeTree, this));
@@ -62,6 +59,7 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
      * @param loopMode the loop mode.
      * @param speed    the animation speed.
      */
+    @FXThread
     public void updateSettings(@NotNull LoopMode loopMode, final float speed) {
         this.loopMode = loopMode;
         this.speed = speed;
@@ -72,6 +70,7 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
      *
      * @return the animation speed.
      */
+    @FXThread
     public float getSpeed() {
         return speed;
     }
@@ -81,31 +80,31 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
      *
      * @return the loop mode.
      */
-    @NotNull
-    public LoopMode getLoopMode() {
+    @FXThread
+    public @NotNull LoopMode getLoopMode() {
         return loopMode;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return Icons.ANIMATION_16;
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
 
@@ -119,6 +118,7 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
     }
 
     @Override
+    @FXThread
     public void notifyChildPreAdd(@NotNull final TreeNode<?> treeNode) {
 
         final AnimationTreeNode animationModelNode = (AnimationTreeNode) treeNode;

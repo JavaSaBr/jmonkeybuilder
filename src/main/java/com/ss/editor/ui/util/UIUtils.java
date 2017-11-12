@@ -64,6 +64,7 @@ public class UIUtils {
      * @param pane   the pane.
      * @param controls  the controls.
      */
+    @FXThread
     public static void addFocusBinding(@NotNull final Pane pane, @NotNull final Control... controls) {
 
         final BooleanProperty focused = new BooleanPropertyBase(false) {
@@ -434,6 +435,7 @@ public class UIUtils {
      * @param <T>     the type parameter.
      * @param item    the tree item.
      * @param visitor the visitor.
+     * @return true of we can visit child elements.
      */
     @FXThread
     public static <T> boolean visitUntil(@NotNull final TreeItem<T> item,
@@ -605,7 +607,6 @@ public class UIUtils {
     public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
                                                @Nullable final Function<String, String> validator,
                                                @NotNull final Array<String> resources) {
-
         final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, validator, resources);
         dialog.show();
     }
@@ -670,6 +671,7 @@ public class UIUtils {
      * @param dragEvent  the drag event.
      * @param extensions the extensions.
      */
+    @FXThread
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -688,6 +690,7 @@ public class UIUtils {
      * @param dragEvent       the drag event.
      * @param targetExtension the extension.
      */
+    @FXThread
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final String targetExtension) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -708,6 +711,7 @@ public class UIUtils {
      * @param extensions the extensions.
      * @return true if there are required file.
      */
+    @FXThread
     public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final Array<String> extensions) {
 
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -729,6 +733,7 @@ public class UIUtils {
      * @param targetExtension the target extension.
      * @return true if there are required file.
      */
+    @FXThread
     public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final String targetExtension) {
 
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -750,6 +755,7 @@ public class UIUtils {
      * @param extensions the extensions.
      * @param handler    the handler.
      */
+    @FXThread
     public static void handleDroppedFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions,
                                          @NotNull final Consumer<Path> handler) {
 
@@ -779,6 +785,7 @@ public class UIUtils {
      * @param firstArg   the first argument.
      * @param handler    the handler.
      */
+    @FXThread
     public static <F> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                              @NotNull final Array<String> extensions, @NotNull final F firstArg,
                                              @NotNull final BiConsumer<F, Path> handler) {
@@ -811,6 +818,7 @@ public class UIUtils {
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
+    @FXThread
     public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                                 @NotNull final String targetExtension, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,
@@ -830,6 +838,7 @@ public class UIUtils {
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
+    @FXThread
     public static <F, S> void handleDroppedFile(@NotNull final Dragboard dragboard,
                                                 @NotNull final String targetExtension, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,
@@ -862,6 +871,7 @@ public class UIUtils {
      * @param secondArg  the second argument.
      * @param handler    the handler.
      */
+    @FXThread
     public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                                 @NotNull final Array<String> extensions, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,

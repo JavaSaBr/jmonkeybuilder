@@ -159,6 +159,8 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
 
     /**
      * Handle selected element in the tree.
+     *
+     * @param newValue the new selected item.
      */
     @FXThread
     protected void processSelected(@Nullable final TreeItem<T> newValue) {

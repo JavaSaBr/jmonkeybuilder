@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 public class GeometryAssetResourcePropertyControl extends SpatialAssetResourcePropertyControl<Geometry> {
 
     public GeometryAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                                   @NotNull final PropertyDefinition definition,
-                                                   @NotNull final Runnable validationCallback) {
+                                                @NotNull final PropertyDefinition definition,
+                                                @NotNull final Runnable validationCallback) {
         super(vars, definition, validationCallback);
     }
 

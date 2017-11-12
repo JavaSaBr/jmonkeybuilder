@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.material.tree.node;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.node.material.ColorsSettings;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,7 @@ public class ColorsSettingsTreeNode extends MaterialSettingsTreeNode<ColorsSetti
     }
 
     @Override
+    @FromAnyThread
     public @NotNull String getName() {
         return Messages.MATERIAL_SETTINGS_COLORS;
     }

@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.shape;
 
 import com.jme3.effect.shapes.EmitterShape;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
@@ -14,25 +16,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EmitterShapeTreeNode extends TreeNode<EmitterShape> {
 
-    /**
-     * Instantiates a new Emitter shape model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public EmitterShapeTreeNode(@NotNull final EmitterShape element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.GEOMETRY_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         final EmitterShape element = getElement();
         return element.getClass().getSimpleName();
     }

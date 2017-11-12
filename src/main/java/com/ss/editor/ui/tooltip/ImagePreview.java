@@ -40,6 +40,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final BorderPane root) {
         super.createContent(root);
 
@@ -51,11 +52,13 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     }
 
     @Override
+    @FXThread
     public void show(final Window owner) {
         super.show(owner);
     }
 
     @Override
+    @FXThread
     protected void show() {
 
         final ImageView imageView = getImageView();
@@ -67,6 +70,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     }
 
     @Override
+    @FXThread
     protected @NotNull BorderPane createRoot() {
         final BorderPane pane = new BorderPane();
         FXUtils.addClassesTo(pane, CSSClasses.IMAGE_PREVIEW);

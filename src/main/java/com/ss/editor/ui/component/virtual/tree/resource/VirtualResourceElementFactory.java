@@ -20,7 +20,9 @@ public class VirtualResourceElementFactory {
     /**
      * Build the root virtual resource elements for the resources.
      *
-     * @param resources the resources.
+     * @param resources    the resources.
+     * @param resourceTree the resources tree.
+     * @param <T> the type of resources.
      * @return the root element.
      */
     @FromAnyThread
@@ -46,13 +48,23 @@ public class VirtualResourceElementFactory {
                 path = parent;
                 parent = FileUtils.getParent(path, '/');
             }
+
+            final Array<String> children = parentToChildren.get("/", () -> ArrayFactory.newArray(String.class));
+            if (!children.contains(path)) {
+                children.add(path);
+            }
         });
 
         final ObjectDictionary<String, VirtualResourceElement<?>> pathToResult = DictionaryFactory.newObjectDictionary();
 
         parentToChildren.forEach((path, children) -> {
-            if (!pathToResource.containsKey(path)) {
+
+            final T resource = pathToResource.get(path);
+
+            if (resource == null) {
                 pathToResult.put(path, new FolderVirtualResourceElement(resourceTree, path));
+            } else {
+                pathToResult.put(path, new ObjectVirtualResourceElement<>(resourceTree, resource));
             }
         });
 
@@ -62,23 +74,37 @@ public class VirtualResourceElementFactory {
             if (parent == null) return;
 
             for (final String child : children) {
+
                 final T resource = pathToResource.get(child);
-                final VirtualResourceElement<?> element = pathToResult.get(child);
-                if (resource != null) {
-                    parent.addChild(new ObjectVirtualResourceElement<>(resourceTree, resource));
-                } else if (element != null) {
+                VirtualResourceElement<?> element = pathToResult.get(child);
+
+                if (element == null && resource != null) {
+                    element = new ObjectVirtualResourceElement<>(resourceTree, resource);
+                    pathToResult.put(child, element);
+                }
+
+                if (element != null) {
                     parent.addChild(element);
                 }
             }
         });
 
         final RootVirtualResourceElement root = new RootVirtualResourceElement(resourceTree);
+        final Array<String> rootPaths = parentToChildren.get("/");
 
-        pathToResult.forEach((path, element) -> {
-            final String parent = FileUtils.getParent(path, '/');
-            if(StringUtils.equals(parent, path)) {
-                root.addChild(element);
+        if (rootPaths == null) {
+            return root;
+        }
+
+        rootPaths.forEach(path -> {
+
+            final VirtualResourceElement<?> element = pathToResult.get(path);
+
+            if (element == null) {
+                return;
             }
+
+            root.addChild(element);
         });
 
         return root;

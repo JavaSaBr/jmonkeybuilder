@@ -26,7 +26,7 @@ public class WorkspaceManager {
      * The constant FOLDER_EDITOR.
      */
     @NotNull
-    public static final String FOLDER_EDITOR = ".jme3-spaceshift-editor";
+    public static final String FOLDER_EDITOR = ".jmonkeybuilder";
 
     /**
      * The constant FILE_WORKSPACE.

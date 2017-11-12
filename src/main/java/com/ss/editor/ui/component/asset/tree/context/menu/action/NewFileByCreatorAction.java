@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -37,6 +38,7 @@ class NewFileByCreatorAction extends FileAction {
         setGraphic(new ImageView(icon == null ? Icons.NEW_FILE_16 : icon));
     }
 
+    @FXThread
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);

@@ -56,6 +56,7 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     }
 
     /**
+     * @param pathFunction the path function.
      * @see VirtualResourceTree#setPathFunction(Function)
      */
     @FromAnyThread

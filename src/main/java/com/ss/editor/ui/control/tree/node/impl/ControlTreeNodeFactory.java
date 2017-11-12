@@ -8,6 +8,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.SkeletonControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.motion.MotionEventTreeNode;
@@ -27,8 +28,8 @@ import org.jetbrains.annotations.Nullable;
 public class ControlTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @Nullable
-    public <T, V extends TreeNode<T>> V createFor(@Nullable final T element, final long objectId) {
+    @FXThread
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof MotionEvent) {
             return unsafeCast(new MotionEventTreeNode((MotionEvent) element, objectId));

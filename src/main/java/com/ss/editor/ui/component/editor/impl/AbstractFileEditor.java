@@ -266,7 +266,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final KeyCode code = event.getCode();
 
-        if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+        if (handleKeyActionImpl(code, false, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }
@@ -277,12 +277,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
      * @param isControlDown      true if control is down.
+     * @param isShiftDown        true if shift is down.
      * @param isButtonMiddleDown true if mouse middle button is pressed.
      */
     @FromAnyThread
     public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown,
-                                final boolean isButtonMiddleDown) {
-        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown));
+                                final boolean isShiftDown, final boolean isButtonMiddleDown) {
+        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
     }
 
     /**
@@ -291,12 +292,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
      * @param isControlDown      true if control is down.
+     * @param isShiftDown        true if shift is down.
      * @param isButtonMiddleDown true if mouse middle button is pressed.
-     * @return true if can consume an event.
+     * @return true if need to consume an event.
      */
     @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
         return false;
     }
 
@@ -312,7 +315,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
             save();
-        } else if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+        } else if (handleKeyActionImpl(code, true, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }

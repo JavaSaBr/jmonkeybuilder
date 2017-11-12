@@ -355,10 +355,17 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final T fileEditor = getFileEditor();
 
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_G, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.G, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_R, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.R, isPressed, isControlDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_DEL, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.DELETE, isPressed, isControlDown(), isButtonMiddleDown()));
+        actionHandlers.put(KEY_S, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_G, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.G, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_R, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.R, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
+
+        actionHandlers.put(KEY_DEL, (isPressed, tpf) ->
+                fileEditor.handleKeyAction(KeyCode.DELETE, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
     }
 
     @Override

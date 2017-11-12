@@ -46,22 +46,14 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
         super.validate(warningLabel, element);
 
-        if (element == null) {
-            LOGGER.warning(this, "The element is null.");
-            return;
+        final Function<@NotNull Path, @Nullable String> validator = getValidator();
+        final boolean visible = warningLabel.isVisible();
+
+        if (!visible && element instanceof FolderResourceElement) {
+            warningLabel.setText(Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE);
+            warningLabel.setVisible(true);
+        } else if (validator == null) {
+            warningLabel.setVisible(false);
         }
-
-        final Function<Path, String> validator = getValidator();
-        String message = validator == null ? null : validator.apply(element.getFile());
-
-        if (message == null && element instanceof FolderResourceElement ) {
-            message = Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
-        }
-
-        if (message != null) {
-            warningLabel.setText(message);
-        }
-
-        warningLabel.setVisible(message != null);
     }
 }

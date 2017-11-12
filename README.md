@@ -1,15 +1,29 @@
-# jMonkeyEngine 3 SpaceShift Editor 1.1.0 #
+# jMonkeyBuilder 1.3.0 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-* [Wiki](https://bitbucket.org/JavaSabr/jme3-spaceshift-editor/wiki/Home)
+* [Wiki](https://bitbucket.org/JavaSabr/jmonkeybuilder/wiki/Home)
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
 * [Gitter](https://gitter.im/jME3-SpaceShift-Editor/Lobby?source=orgpage)
-* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jme3-spaceshift-editor/35179)
+* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/editor-jmonkeybuilder/35179)
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
+
+## ver. 1.3.0 ##
+* -Updated static light probes.
+* -Implemented the import model action.
+* -Updated jME libraries.
+* -Fixed some bugs.
+
+## ver. 1.2.0 ##
+* -Fixed the far view plane distance of the editor camera.
+* -Updated tonegod.emitter library.
+* -Added the new plugin Shader Node Tools.
+* -Updated jME libraries.
+* -Updated Tree Generator plugin.
+* -Fixed some bugs.
 
 ## ver. 1.1.0 ##
 * -Added the new plugin to generate trees.
@@ -27,13 +41,13 @@ an option to the Settings Dialog to enable/disable native Folder Chooser.
 
 ## ver. 1.0.1 ##
 * -Implemented D&D of controls in a model tree.
-* -Implemented to load compiled classes from any IDE to improve integration with IDE's.
+* -Implemented a setting to load compiled classes from any IDE to improve integration with IDE's.
 * -Updated toneg0d.emitter library.
-* -Added glTF loader.
-* -Implemented auto-finding all available controls to create it in model tree.
-* -Added to show custom objects from user data of Spatial.
+* -Added glTF converter.
+* -Implemented auto-finding all available controls for the action to create a custom control.
+* -Added to show custom objects from user data of Spatial on the property panel.
 * -Included jME font creator plugin.
-* -Added to create editable sky nodes.
+* -Added an action to create editable sky nodes in Model Editor.
 * -Added image preview tooltips to Asset tree.
 * -Improved usability and fixed a lot of little bugs with UI.
 

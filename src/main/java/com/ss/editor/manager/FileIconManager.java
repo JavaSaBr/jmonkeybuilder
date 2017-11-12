@@ -76,7 +76,7 @@ public class FileIconManager {
 
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_OBJECT, "jme3");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SHADER_NODE, "vector");
-        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "sse");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "j3s");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "parquet");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "text");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_GLTF, "cube");
@@ -190,20 +190,27 @@ public class FileIconManager {
     public @NotNull Image getIcon(@NotNull final Path path, final boolean directory, final boolean tryToGetContentType,
                                   int size) {
 
-        final String extension = FileUtils.getExtension(path);
+        final String extension = directory ? "folder" : FileUtils.getExtension(path);
         final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
+
+        String url = extensionToUrl.get(extension);
+
+        if (url != null) {
+            return getImage(url, size);
+        }
 
         if (!iconFinders.isEmpty()) {
             for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
+                url = iconFinder.apply(path, extension);
 
-                final String url = iconFinder.apply(path, extension);
                 final ClassLoader classLoader = iconFinder.getClass().getClassLoader();
-
                 if (url == null || !EditorUtil.checkExists(url, classLoader)) {
                     continue;
                 }
 
-                return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
+                extensionToUrl.put(extension, url);
+
+                return getImage(url, classLoader, size);
             }
         }
 
@@ -233,38 +240,34 @@ public class FileIconManager {
             contentType = "none";
         }
 
-        String url = extensionToUrl.get(extension);
+        for (final Path mimeTypes : MIME_TYPES_FOLDERS) {
 
-        if (url == null) {
-            for (final Path mimeTypes : MIME_TYPES_FOLDERS) {
+            Path iconPath = mimeTypes.resolve(contentType + ".svg");
+            url = toAssetPath(iconPath);
 
-                Path iconPath = mimeTypes.resolve(contentType + ".svg");
+            if (!EditorUtil.checkExists(url)) {
+                contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
+                iconPath = mimeTypes.resolve(contentType + ".svg");
                 url = toAssetPath(iconPath);
-
-                if (!EditorUtil.checkExists(url)) {
-                    contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
-                    iconPath = mimeTypes.resolve(contentType + ".svg");
-                    url = toAssetPath(iconPath);
-                }
-
-                if (!EditorUtil.checkExists(url)) {
-                    contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
-                    iconPath = mimeTypes.resolve(contentType + ".png");
-                    url = toAssetPath(iconPath);
-                }
-
-                if (EditorUtil.checkExists(url)) {
-                    break;
-                }
             }
 
-            if (url == null || !EditorUtil.checkExists(url)) {
-                LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
-                url = "/ui/icons/svg/document.svg";
+            if (!EditorUtil.checkExists(url)) {
+                contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
+                iconPath = mimeTypes.resolve(contentType + ".png");
+                url = toAssetPath(iconPath);
             }
 
-            extensionToUrl.put(extension, url);
+            if (EditorUtil.checkExists(url)) {
+                break;
+            }
         }
+
+        if (url == null || !EditorUtil.checkExists(url)) {
+            LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
+            url = "/ui/icons/svg/document.svg";
+        }
+
+        extensionToUrl.put(extension, url);
 
         return getImage(url, size);
     }

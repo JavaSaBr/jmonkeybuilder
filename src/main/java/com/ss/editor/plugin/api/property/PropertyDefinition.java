@@ -17,6 +17,9 @@ public final class PropertyDefinition {
     @NotNull
     private static final Array<Object> EMPTY_OPTIONS = ArrayFactory.asArray();
 
+    @NotNull
+    private static final Array<String> EMPTY_DEPENDENCIES = ArrayFactory.newArray(String.class);
+
     /**
      * The type of the property.
      */
@@ -48,6 +51,18 @@ public final class PropertyDefinition {
     private final Array<?> options;
 
     /**
+     * The dependencies.
+     */
+    @NotNull
+    private final Array<String> dependencies;
+
+    /**
+     * The file extension to filter files/resources.
+     */
+    @Nullable
+    private final String extension;
+
+    /**
      * The min value.
      */
     private final float min;
@@ -59,6 +74,12 @@ public final class PropertyDefinition {
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
                               @NotNull final String id, @Nullable final Object defaultValue) {
+        this(propertyType, null, name, id, defaultValue);
+    }
+
+    public PropertyDefinition(@NotNull final EditablePropertyType propertyType,
+                              @Nullable final Array<String> dependencies, @NotNull final String name,
+                              @NotNull final String id, @Nullable final Object defaultValue) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -66,6 +87,29 @@ public final class PropertyDefinition {
         this.max = Float.NaN;
         this.min = Float.NaN;
         this.options = EMPTY_OPTIONS;
+        this.extension = null;
+        this.dependencies = dependencies == null ? EMPTY_DEPENDENCIES : dependencies;
+    }
+
+    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
+                              @NotNull final String id, @Nullable final Object defaultValue,
+                              @Nullable final String extension) {
+        this(propertyType, null, name, id, defaultValue, extension);
+    }
+
+    public PropertyDefinition(@NotNull final EditablePropertyType propertyType,
+                              @Nullable final Array<String> dependencies, @NotNull final String name,
+                              @NotNull final String id, @Nullable final Object defaultValue,
+                              @Nullable final String extension) {
+        this.propertyType = propertyType;
+        this.name = name;
+        this.id = id;
+        this.defaultValue = defaultValue;
+        this.max = Float.NaN;
+        this.min = Float.NaN;
+        this.options = EMPTY_OPTIONS;
+        this.extension = extension;
+        this.dependencies = dependencies == null ? EMPTY_DEPENDENCIES : dependencies;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
@@ -78,6 +122,8 @@ public final class PropertyDefinition {
         this.options = options;
         this.max = Float.NaN;
         this.min = Float.NaN;
+        this.extension = null;
+        this.dependencies = null;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
@@ -90,6 +136,8 @@ public final class PropertyDefinition {
         this.min = min;
         this.max = max;
         this.options = EMPTY_OPTIONS;
+        this.extension = null;
+        this.dependencies = null;
     }
 
     /**
@@ -106,6 +154,16 @@ public final class PropertyDefinition {
     @FromAnyThread
     public @Nullable Object getDefaultValue() {
         return defaultValue;
+    }
+
+    /**
+     * Get the dependencies.
+     *
+     * @return the dependencies.
+     */
+    @FromAnyThread
+    public @NotNull Array<String> getDependencies() {
+        return dependencies;
     }
 
     /**
@@ -148,10 +206,20 @@ public final class PropertyDefinition {
         return options;
     }
 
+    /**
+     * Get the file extension to filter files/resources.
+     *
+     * @return the file extension to filter files/resources.
+     */
+    @FromAnyThread
+    public @Nullable String getExtension() {
+        return extension;
+    }
+
     @Override
     public String toString() {
         return "PropertyDefinition{" + "propertyType=" + propertyType + ", name='" + name + '\'' + ", id='" + id +
-                '\'' + ", defaultValue=" + defaultValue + ", options=" + options + ", min=" + min + ", max=" + max +
-                '}';
+                '\'' + ", defaultValue=" + defaultValue + ", options=" + options + ", extension='" + extension + '\'' +
+                ", min=" + min + ", max=" + max + '}';
     }
 }

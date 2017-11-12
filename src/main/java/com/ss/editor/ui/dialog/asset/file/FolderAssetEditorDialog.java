@@ -2,7 +2,6 @@ package com.ss.editor.ui.dialog.asset.file;
 
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,25 +39,5 @@ public class FolderAssetEditorDialog extends AssetEditorDialog<Path> {
     @FXThread
     protected @Nullable Path getObject(@NotNull final ResourceElement element) {
         return element.getFile();
-    }
-
-    @Override
-    @FXThread
-    protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
-        super.validate(warningLabel, element);
-
-        if (element == null) {
-            LOGGER.warning(this, "The element is null.");
-            return;
-        }
-
-        final Function<Path, String> validator = getValidator();
-        String message = validator == null ? null : validator.apply(element.getFile());
-
-        if (message != null) {
-            warningLabel.setText(message);
-        }
-
-        warningLabel.setVisible(message != null);
     }
 }

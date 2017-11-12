@@ -104,6 +104,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @return the change consumer.
      */
+    @FromAnyThread
     protected C getChangeConsumer() {
         return unsafeCast(this);
     }
@@ -111,15 +112,10 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     @Override
     @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
+                                          final boolean isControlDown, final boolean isShiftDown,
+                                          final boolean isButtonMiddleDown) {
 
-        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
-            undo();
-            return true;
-        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
-            redo();
-            return true;
-        } else if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
+        if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton cubeButton = getCubeButton();
             cubeButton.setSelected(true);
             return true;
@@ -137,7 +133,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     @Override
@@ -159,6 +155,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @return the settings tree tool name.
      */
+    @FromAnyThread
     protected @NotNull String getSettingsTreeToolName() {
         return Messages.MATERIAL_SETTINGS_MAIN;
     }
@@ -184,6 +181,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @param object the selected object.
      */
+    @FXThread
     private void selectedFromTree(@Nullable final Object object) {
 
         Object parent = null;
@@ -222,8 +220,8 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
         getLightButton().setSelected(editorState.isLightEnable());
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;
     }

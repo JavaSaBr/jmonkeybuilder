@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.node.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.physics.ReactivatePhysicsControl;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -18,19 +20,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RigidBodyControlTreeNode extends PhysicsObjectTreeNode<RigidBodyControl> {
 
-    /**
-     * Instantiates a new Rigid body control model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public RigidBodyControlTreeNode(@NotNull final RigidBodyControl element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
 
         final RigidBodyControl element = getElement();
 
@@ -41,9 +37,9 @@ public class RigidBodyControlTreeNode extends PhysicsObjectTreeNode<RigidBodyCon
         return Icons.RIGID_BODY_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
 
         final RigidBodyControl element = getElement();
 
@@ -55,6 +51,7 @@ public class RigidBodyControlTreeNode extends PhysicsObjectTreeNode<RigidBodyCon
     }
 
     @Override
+    @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 

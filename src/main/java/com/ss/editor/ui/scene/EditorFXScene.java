@@ -5,7 +5,7 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3x.jfx.injfx.input.JFXMouseInput;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.PluginManager;
+import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
@@ -84,11 +84,6 @@ public class EditorFXScene extends Scene {
     @Nullable
     private Node focused;
 
-    /**
-     * Instantiates a new Editor fx scene.
-     *
-     * @param root the root
-     */
     public EditorFXScene(@NotNull final Group root) {
         super(root);
 
@@ -131,9 +126,8 @@ public class EditorFXScene extends Scene {
      *
      * @return the view for drawing JME.
      */
-    @NotNull
     @FXThread
-    public ImageView getCanvas() {
+    public @NotNull ImageView getCanvas() {
         return canvas;
     }
 
@@ -156,9 +150,8 @@ public class EditorFXScene extends Scene {
      * @param id  the component id.
      * @return the component or null.
      */
-    @Nullable
     @FXThread
-    public <T extends ScreenComponent> T findComponent(@NotNull final String id) {
+    public <T extends ScreenComponent> @Nullable T findComponent(@NotNull final String id) {
         final Array<ScreenComponent> components = getComponents();
         return unsafeCast(components.search(id, (component, toCheck) ->
                 StringUtils.equals(toCheck, component.getComponentId())));
@@ -169,9 +162,8 @@ public class EditorFXScene extends Scene {
      *
      * @return the list of components.
      */
-    @NotNull
     @FXThread
-    public Array<ScreenComponent> getComponents() {
+    public @NotNull Array<ScreenComponent> getComponents() {
         return components;
     }
 
@@ -180,18 +172,16 @@ public class EditorFXScene extends Scene {
      *
      * @return the container of this scene.
      */
-    @NotNull
     @FXThread
-    public StackPane getContainer() {
+    public @NotNull StackPane getContainer() {
         return container;
     }
 
     /**
      * @return the loading layer.
      */
-    @NotNull
     @FXThread
-    private VBox getLoadingLayer() {
+    private @NotNull VBox getLoadingLayer() {
         return loadingLayer;
     }
 
@@ -200,9 +190,8 @@ public class EditorFXScene extends Scene {
      *
      * @return the hide layer.
      */
-    @NotNull
     @FXThread
-    public StackPane getHideLayer() {
+    public @NotNull StackPane getHideLayer() {
         return hideLayer;
     }
 
@@ -279,7 +268,7 @@ public class EditorFXScene extends Scene {
         fillComponents(components, getContainer());
         components.forEach(ScreenComponent::notifyFinishBuild);
 
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onFinishLoading();
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onFinishLoading();
     }
 }

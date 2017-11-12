@@ -3,14 +3,16 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link TreeNode} to show a {@link ChildCollisionShape} in the tree.
@@ -19,19 +21,13 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class ChildCollisionShapeTreeNode extends TreeNode<ChildCollisionShape> {
 
-    /**
-     * Instantiates a new Child collision shape model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public ChildCollisionShapeTreeNode(@NotNull final ChildCollisionShape element, final long objectId) {
         super(element, objectId);
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    @FXThread
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final ChildCollisionShape element = getElement();
         final CollisionShape shape = element.shape;
@@ -43,19 +39,21 @@ public class ChildCollisionShapeTreeNode extends TreeNode<ChildCollisionShape> {
     }
 
     @Override
+    @FXThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 
-    @Nullable
+
     @Override
-    public Image getIcon() {
+    @FXThread
+    public @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
-    @NotNull
     @Override
-    public String getName() {
+    @FromAnyThread
+    public @NotNull String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE;
     }
 }

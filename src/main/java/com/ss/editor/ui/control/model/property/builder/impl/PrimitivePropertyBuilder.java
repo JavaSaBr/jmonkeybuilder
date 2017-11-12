@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.property.builder.impl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -26,10 +27,11 @@ public class PrimitivePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     private static final PropertyBuilder INSTANCE = new PrimitivePropertyBuilder();
 
     /**
-     * Gets instance.
+     * Gets the instance.
      *
-     * @return the instance
+     * @return the single instance.
      */
+    @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }

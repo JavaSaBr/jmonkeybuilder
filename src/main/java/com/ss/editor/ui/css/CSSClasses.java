@@ -1,5 +1,7 @@
 package com.ss.editor.ui.css;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The list of custom css classes.
  *
@@ -7,508 +9,160 @@ package com.ss.editor.ui.css;
  */
 public interface CSSClasses {
 
-    /**
-     * The constant SPECIAL_FONT_13.
-     */
-    String SPECIAL_FONT_13 = "special-font-13";
-    /**
-     * The constant SPECIAL_FONT_14.
-     */
-    String SPECIAL_FONT_14 = "special-font-14";
-    /**
-     * The constant SPECIAL_FONT_16.
-     */
-    String SPECIAL_FONT_16 = "special-font-16";
-    /**
-     * The constant MAIN_SPLIT_PANEL.
-     */
-    String MAIN_SPLIT_PANEL = "main-split-pane";
+    @NotNull String SPECIAL_FONT_13 = "special-font-13";
+    @NotNull String SPECIAL_FONT_14 = "special-font-14";
+    @NotNull String SPECIAL_FONT_16 = "special-font-16";
+    @NotNull String MAIN_SPLIT_PANEL = "main-split-pane";
 
-    /**
-     * The constant DEF_HBOX.
-     */
-    String DEF_HBOX = "hbox";
-    /**
-     * The constant DEF_VBOX.
-     */
-    String DEF_VBOX = "vbox";
-    /**
-     * The constant DEF_GRID_PANE.
-     */
-    String DEF_GRID_PANE = "grid-pane";
-    /**
-     * The constant DEF_STACK_PANE.
-     */
-    String DEF_STACK_PANE = "stack-pane";
-    /**
-     * The constant DEF_BORDER_PANE.
-     */
-    String DEF_BORDER_PANE = "border-pane";
+    @NotNull String DEF_HBOX = "hbox";
+    @NotNull String DEF_VBOX = "vbox";
+    @NotNull String DEF_GRID_PANE = "grid-pane";
+    @NotNull String DEF_STACK_PANE = "stack-pane";
+    @NotNull String DEF_BORDER_PANE = "border-pane";
 
-    /**
-     * The constant DIALOG_ROOT.
-     */
-    String DIALOG_ROOT = "dialog-root";
-    /**
-     * The constant DIALOG_ACTIONS_ROOT.
-     */
-    String DIALOG_ACTIONS_ROOT = "dialog-actions-root";
-    /**
-     * The constant DIALOG_CONTENT_ROOT.
-     */
-    String DIALOG_CONTENT_ROOT = "dialog-content-root";
-    /**
-     * The constant DIALOG_BUTTON.
-     */
-    String DIALOG_BUTTON = "dialog-button";
-    /**
-     * The constant DIALOG_LABEL_WARNING.
-     */
-    String DIALOG_LABEL_WARNING = "dialog-label-warning";
-    /**
-     * The constant DIALOG_DYNAMIC_LABEL.
-     */
-    String DIALOG_DYNAMIC_LABEL = "dialog-dynamic-label";
-    /**
-     * The constant DIALOG_FIELD.
-     */
-    String DIALOG_FIELD = "dialog-field";
+    @NotNull String DIALOG_ROOT = "dialog-root";
+    @NotNull String DIALOG_ACTIONS_ROOT = "dialog-actions-root";
+    @NotNull String DIALOG_CONTENT_ROOT = "dialog-content-root";
+    @NotNull String DIALOG_BUTTON = "dialog-button";
+    @NotNull String DIALOG_LABEL_WARNING = "dialog-label-warning";
+    @NotNull String DIALOG_DYNAMIC_LABEL = "dialog-dynamic-label";
+    @NotNull String DIALOG_FIELD = "dialog-field";
 
-    /**
-     * The constant TEXT_INPUT_CONTAINER.
-     */
-    String TEXT_INPUT_CONTAINER = "text-input-container";
+    @NotNull String TEXT_INPUT_CONTAINER = "text-input-container";
 
-    /**
-     * The constant TEXT_INPUT_CONTAINER_WITHOUT_PADDING.
-     */
-    String TEXT_INPUT_CONTAINER_WITHOUT_PADDING = "text-input-container-without-padding";
+    @NotNull String TEXT_INPUT_CONTAINER_WITHOUT_PADDING = "text-input-container-without-padding";
 
-    /**
-     * The constant CHOOSE_TEXTURE_CONTROL.
-     */
-    String CHOOSE_TEXTURE_CONTROL = "choose-texture-control";
-    /**
-     * The constant CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL.
-     */
-    String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "choose-texture-control-texture-label";
-    /**
-     * The constant CHOOSE_TEXTURE_CONTROL_PREVIEW.
-     */
-    String CHOOSE_TEXTURE_CONTROL_PREVIEW = "choose-texture-control-preview";
+    @NotNull String CHOOSE_TEXTURE_CONTROL = "choose-texture-control";
+    @NotNull String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "choose-texture-control-texture-label";
+    @NotNull String CHOOSE_TEXTURE_CONTROL_PREVIEW = "choose-texture-control-preview";
 
-    /**
-     * The constant CHOOSE_RESOURCE_CONTROL.
-     */
-    String CHOOSE_RESOURCE_CONTROL = "choose-resource-control";
+    @NotNull String CHOOSE_RESOURCE_CONTROL = "choose-resource-control";
 
-    /**
-     * The constant TEXT_FIELD_IN_COMBO_BOX.
-     */
-    String TEXT_FIELD_IN_COMBO_BOX = "text-field-in-combo-box";
-    /**
-     * The constant TRANSPARENT_SPINNER.
-     */
-    String TRANSPARENT_SPINNER = "transparent-spinner";
-    /**
-     * The constant TRANSPARENT_TEXT_FIELD.
-     */
-    String TRANSPARENT_TEXT_FIELD = "transparent-text-field";
-    /**
-     * The constant TRANSPARENT_TREE_VIEW.
-     */
-    String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
-    /**
-     * The constant TRANSPARENT_LIST_VIEW.
-     */
-    String TRANSPARENT_LIST_VIEW = "transparent-list-view";
-    /**
-     * The constant TRANSPARENT_LIST_CELL.
-     */
-    String TRANSPARENT_LIST_CELL = "transparent-list-cell";
-    /**
-     * The constant TRANSPARENT_COMBO_BOX.
-     */
-    String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
-    /**
-     * The constant TRANSPARENT_TEXT_AREA.
-     */
-    String TRANSPARENT_TEXT_AREA = "transparent-text-area";
+    @NotNull String TEXT_FIELD_IN_COMBO_BOX = "text-field-in-combo-box";
+    @NotNull String TRANSPARENT_SPINNER = "transparent-spinner";
+    @NotNull String TRANSPARENT_TEXT_FIELD = "transparent-text-field";
+    @NotNull String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
+    @NotNull String TRANSPARENT_LIST_VIEW = "transparent-list-view";
+    @NotNull String TRANSPARENT_LIST_CELL = "transparent-list-cell";
+    @NotNull String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
+    @NotNull String TRANSPARENT_TEXT_AREA = "transparent-text-area";
 
-    /**
-     * The constant BUTTON_WITHOUT_LEFT_BORDER.
-     */
-    String BUTTON_WITHOUT_LEFT_BORDER = "button-without-left-border";
-    /**
-     * The constant BUTTON_WITHOUT_LEFT_RIGHT_BORDER.
-     */
-    String BUTTON_WITHOUT_LEFT_RIGHT_BORDER = "button-without-left-right-border";
-    /**
-     * The constant BUTTON_WITHOUT_RIGHT_BORDER.
-     */
-    String BUTTON_WITHOUT_RIGHT_BORDER = "button-without-right-border";
+    @NotNull String BUTTON_WITHOUT_LEFT_BORDER = "button-without-left-border";
+    @NotNull String BUTTON_WITHOUT_LEFT_RIGHT_BORDER = "button-without-left-right-border";
+    @NotNull String BUTTON_WITHOUT_RIGHT_BORDER = "button-without-right-border";
 
-    /**
-     * The constant PROCESSING_COMPONENT_CONTAINER.
-     */
-    String PROCESSING_COMPONENT_CONTAINER = "processing-component-container";
-    /**
-     * The constant PROCESSING_COMPONENT_TERRAIN_EDITOR.
-     */
-    String PROCESSING_COMPONENT_TERRAIN_EDITOR = "processing-component-terrain-editor";
-    /**
-     * The constant PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER.
-     */
-    String PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER = "processing-component-terrain-layer";
-    /**
-     * The constant TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS.
-     */
-    String PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS = "processing-component-terrain-texture-layers-settings-buttons";
+    @NotNull String PROCESSING_COMPONENT_CONTAINER = "processing-component-container";
+    @NotNull String PROCESSING_COMPONENT_TERRAIN_EDITOR = "processing-component-terrain-editor";
+    @NotNull String PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER = "processing-component-terrain-layer";
+    @NotNull String PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS = "processing-component-terrain-texture-layers-settings-buttons";
 
-    /**
-     * The constant LIST_VIEW_WITHOUT_SCROLL.
-     */
-    String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
+    @NotNull String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
 
-    /**
-     * The constant FLAT_BUTTON.
-     */
-    String FLAT_BUTTON = "flat-button";
-    /**
-     * The constant INPUT_CONTROL_TOOLBAR_BUTTON.
-     */
-    String INPUT_CONTROL_TOOLBAR_BUTTON = "input-control-toolbar-button";
-    /**
-     * The constant FILE_EDITOR_TOOLBAR_BUTTON.
-     */
-    String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
-    /**
-     * The constant FILE_EDITOR_TOOLBAR_LABEL.
-     */
-    String FILE_EDITOR_TOOLBAR_LABEL = "file-editor-toolbar-label";
-    /**
-     * The constant FILE_EDITOR_TOOLBAR_FIELD.
-     */
-    String FILE_EDITOR_TOOLBAR_FIELD = "file-editor-toolbar-field";
+    @NotNull String FLAT_BUTTON = "flat-button";
+    @NotNull String INPUT_CONTROL_TOOLBAR_BUTTON = "input-control-toolbar-button";
+    @NotNull String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
+    @NotNull String FILE_EDITOR_TOOLBAR_LABEL = "file-editor-toolbar-label";
+    @NotNull String FILE_EDITOR_TOOLBAR_FIELD = "file-editor-toolbar-field";
 
-    /**
-     * The constant FILE_EDITOR_TOOLBAR.
-     */
-    String FILE_EDITOR_TOOLBAR = "file-editor-toolbar";
-    /**
-     * The constant FILE_EDITOR_EDITOR_AREA.
-     */
-    String FILE_EDITOR_EDITOR_AREA = "file-editor-editor-area";
-    /**
-     * The constant FILE_EDITOR_MAIN_SPLIT_PANE.
-     */
-    String FILE_EDITOR_MAIN_SPLIT_PANE = "file-editor-main-split-pane";
-    /**
-     * The constant FILE_EDITOR_TOOL_SPLIT_PANE.
-     */
-    String FILE_EDITOR_TOOL_SPLIT_PANE = "file-editor-tool-split-pane";
-    /**
-     * The constant FILE_EDITOR_TOOL_COMPONENT.
-     */
-    String FILE_EDITOR_TOOL_COMPONENT = "file-editor-tool-component";
+    @NotNull String FILE_EDITOR_TOOLBAR = "file-editor-toolbar";
+    @NotNull String FILE_EDITOR_EDITOR_AREA = "file-editor-editor-area";
+    @NotNull String FILE_EDITOR_MAIN_SPLIT_PANE = "file-editor-main-split-pane";
+    @NotNull String FILE_EDITOR_TOOL_SPLIT_PANE = "file-editor-tool-split-pane";
+    @NotNull String FILE_EDITOR_TOOL_COMPONENT = "file-editor-tool-component";
 
-    /**
-     * The constant MEDIUM_TOGGLE_BUTTON.
-     */
-    String MEDIUM_TOGGLE_BUTTON = "medium-toggle-button";
+    @NotNull String MEDIUM_TOGGLE_BUTTON = "medium-toggle-button";
 
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT.
-     */
-    String MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT = "material-file-editor-properties-component";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL = "material-file-editor-param-control";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME = "material-file-editor-param-control-name";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW = "material-file-editor-param-control-texture-preview";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON = "material-file-editor-param-control-button";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER = "material-file-editor-param-control-color-picker";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_CHECKBOX.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_CHECKBOX = "material-file-editor-param-control-checkbox";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_SPINNER.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX.
-     */
-    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX = "material-file-editor-param-control-combo-box";
+    @NotNull String MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT = "material-file-editor-properties-component";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL = "material-file-editor-param-control";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME = "material-file-editor-param-control-name";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW = "material-file-editor-param-control-texture-preview";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON = "material-file-editor-param-control-button";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER = "material-file-editor-param-control-color-picker";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_CHECKBOX = "material-file-editor-param-control-checkbox";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
+    @NotNull String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX = "material-file-editor-param-control-combo-box";
 
-    /**
-     * The constant SCENE_EDITOR_STATS_CONTAINER.
-     */
-    String SCENE_EDITOR_STATS_CONTAINER = "scene-editor-stats-container";
+    @NotNull String SCENE_EDITOR_STATS_CONTAINER = "scene-editor-stats-container";
 
-    /**
-     * The constant ABSTRACT_NODE_TREE_CONTAINER.
-     */
-    String ABSTRACT_NODE_TREE_CONTAINER = "abstract-node-tree-container";
-    /**
-     * The constant ABSTRACT_NODE_TREE_CELL.
-     */
-    String ABSTRACT_NODE_TREE_CELL = "abstract-node-tree-cell";
+    @NotNull String ABSTRACT_NODE_TREE_CONTAINER = "abstract-node-tree-container";
+    @NotNull String ABSTRACT_NODE_TREE_CELL = "abstract-node-tree-cell";
 
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_CONTAINER = "abstract-param-control-container";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE.
-     */
-    String ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE = "abstract-param-control-container-split-line";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL.
-     */
-    String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
-    /**
-     * The constant ABSTRACT_PARAM_EDITOR_CONTROL.
-     */
-    String ABSTRACT_PARAM_EDITOR_CONTROL = "abstract-param-editor-control";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW.
-     */
-    String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME.
-     */
-    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "abstract-param-control-param-name";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL.
-     */
-    String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "abstract-param-control-element-label";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER = "abstract-param-control-preview-container";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER = "abstract-param-control-input-container";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER = "abstract-param-control-short-input-container";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_CHECK_BOX.
-     */
-    String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "abstract-param-control-checkbox";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_COLOR_PICKER.
-     */
-    String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "abstract-param-control-param-color-picker";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_COMBO_BOX.
-     */
-    String ABSTRACT_PARAM_CONTROL_COMBO_BOX = "abstract-param-control-combobox";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD.
-     */
-    String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "abstract-param-control-vector2f-field";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD.
-     */
-    String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "abstract-param-control-vector3f-field";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_LABEL_VALUE.
-     */
-    String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "abstract-param-control-label-value";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL.
-     */
-    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER.
-     */
-    String ABSTRACT_PARAM_CONTROL_INFLUENCER = "abstract-param-control-influencer";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT.
-     */
-    String ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT = "abstract-param-control-influencer-element";
-    /**
-     * The constant ABSTRACT_RESOURCE_PROPERTY_CONTROL.
-     */
-    String ABSTRACT_RESOURCE_PROPERTY_CONTROL = "abstract-resource-property-control";
+    @NotNull String ABSTRACT_PARAM_CONTROL_CONTAINER = "abstract-param-control-container";
+    @NotNull String ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE = "abstract-param-control-container-split-line";
+    @NotNull String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
+    @NotNull String ABSTRACT_PARAM_EDITOR_CONTROL = "abstract-param-editor-control";
+    @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
+    @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "abstract-param-control-param-name";
+    @NotNull String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "abstract-param-control-element-label";
+    @NotNull String ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER = "abstract-param-control-preview-container";
+    @NotNull String ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER = "abstract-param-control-input-container";
+    @NotNull String ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER = "abstract-param-control-short-input-container";
+    @NotNull String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "abstract-param-control-checkbox";
+    @NotNull String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "abstract-param-control-param-color-picker";
+    @NotNull String ABSTRACT_PARAM_CONTROL_COMBO_BOX = "abstract-param-control-combobox";
+    @NotNull String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "abstract-param-control-vector2f-field";
+    @NotNull String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "abstract-param-control-vector3f-field";
+    @NotNull String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "abstract-param-control-label-value";
+    @NotNull String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
+    @NotNull String ABSTRACT_PARAM_CONTROL_INFLUENCER = "abstract-param-control-influencer";
+    @NotNull String ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT = "abstract-param-control-influencer-element";
+    @NotNull String ABSTRACT_RESOURCE_PROPERTY_CONTROL = "abstract-resource-property-control";
 
-    /**
-     * The constant EDITOR_SCRIPTING_COMPONENT.
-     */
-    String EDITOR_SCRIPTING_COMPONENT = "editor-scripting-component";
-    /**
-     * The constant GROOVY_EDITOR_COMPONENT.
-     */
-    String GROOVY_EDITOR_COMPONENT = "groovy-editor-component";
+    @NotNull String EDITOR_SCRIPTING_COMPONENT = "editor-scripting-component";
+    @NotNull String GROOVY_EDITOR_COMPONENT = "groovy-editor-component";
 
-    /**
-     * The constant SCENE_APP_STATE_CONTAINER.
-     */
-    String SCENE_APP_STATE_CONTAINER = "scene-app-state-container";
-    /**
-     * The constant SCENE_APP_STATE_LIST_CELL.
-     */
-    String SCENE_APP_STATE_LIST_CELL = "scene-app-state-list-cell";
+    @NotNull String SCENE_APP_STATE_CONTAINER = "scene-app-state-container";
+    @NotNull String SCENE_APP_STATE_LIST_CELL = "scene-app-state-list-cell";
 
-    /**
-     * The constant SCENE_FILTER_CONTAINER.
-     */
-    String SCENE_FILTER_CONTAINER = "scene-filter-container";
-    /**
-     * The constant SCENE_FILTER_LIST_CELL.
-     */
-    String SCENE_FILTER_LIST_CELL = "scene-filter-list-cell";
+    @NotNull String SCENE_FILTER_CONTAINER = "scene-filter-container";
+    @NotNull String SCENE_FILTER_LIST_CELL = "scene-filter-list-cell";
 
-    /**
-     * The constant SETTINGS_DIALOG.
-     */
-    String SETTINGS_DIALOG = "settings-dialog";
-    /**
-     * The constant SETTINGS_DIALOG_LABEL.
-     */
-    String SETTINGS_DIALOG_LABEL = "settings-dialog-label";
-    /**
-     * The constant SETTINGS_DIALOG_FIELD.
-     */
-    String SETTINGS_DIALOG_FIELD = "settings-dialog-field";
-    /**
-     * The constant SETTINGS_DIALOG_SHORT_LABEL.
-     */
-    String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
-    /**
-     * The constant SETTINGS_DIALOG_MESSAGE_LABEL.
-     */
-    String SETTINGS_DIALOG_MESSAGE_LABEL = "settings-dialog-message-label";
+    @NotNull String SETTINGS_DIALOG = "settings-dialog";
+    @NotNull String SETTINGS_DIALOG_LABEL = "settings-dialog-label";
+    @NotNull String SETTINGS_DIALOG_FIELD = "settings-dialog-field";
+    @NotNull String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
+    @NotNull String SETTINGS_DIALOG_MESSAGE_LABEL = "settings-dialog-message-label";
 
-    /**
-     * The constant CONFIRM_DIALOG.
-     */
-    String CONFIRM_DIALOG = "confirm-dialog";
+    @NotNull String CONFIRM_DIALOG = "confirm-dialog";
 
-    /**
-     * The constant CREATE_SKY_DIALOG.
-     */
-    String CREATE_SKY_DIALOG = "create-sky-dialog";
+    @NotNull String CREATE_SKY_DIALOG = "create-sky-dialog";
 
-    /**
-     * The constant ABOUT_DIALOG.
-     */
-    String ABOUT_DIALOG = "about-dialog";
-    /**
-     * The constant ABOUT_DIALOG_LONG_LABEL.
-     */
-    String ABOUT_DIALOG_LONG_LABEL = "about-dialog-long-label";
-    /**
-     * The constant ABOUT_DIALOG_TITLE_LABEL.
-     */
-    String ABOUT_DIALOG_TITLE_LABEL = "about-dialog-title-label";
+    @NotNull String ABOUT_DIALOG = "about-dialog";
+    @NotNull String ABOUT_DIALOG_LONG_LABEL = "about-dialog-long-label";
+    @NotNull String ABOUT_DIALOG_TITLE_LABEL = "about-dialog-title-label";
 
-    /**
-     * The constant FILE_CREATOR_DIALOG.
-     */
-    String FILE_CREATOR_DIALOG = "file-creator-dialog";
+    @NotNull String FILE_CREATOR_DIALOG = "file-creator-dialog";
 
-    /**
-     * The constant SAVE_AS_DIALOG.
-     */
-    String SAVE_AS_DIALOG = "save-as-dialog";
+    @NotNull String SAVE_AS_DIALOG = "save-as-dialog";
 
-    /**
-     * The constant GENERATE_LOD_DIALOG.
-     */
-    String GENERATE_LOD_DIALOG = "generate-lod-dialog";
-    /**
-     * The constant PLUGINS_DIALOG.
-     */
-    String PLUGINS_DIALOG = "plugins-dialog";
+    @NotNull String GENERATE_LOD_DIALOG = "generate-lod-dialog";
+    @NotNull String PLUGINS_DIALOG = "plugins-dialog";
 
-    /**
-     * The constant CREATE_TERRAIN_DIALOG.
-     */
-    String CREATE_TERRAIN_DIALOG = "create-terrain-dialog";
+    @NotNull String CREATE_TERRAIN_DIALOG = "create-terrain-dialog";
 
-    /**
-     * The constant NODE_SELECTOR_DIALOG.
-     */
-    String NODE_SELECTOR_DIALOG = "node-selector-dialog";
+    @NotNull String NODE_SELECTOR_DIALOG = "node-selector-dialog";
 
-    /**
-     * The constant ASSET_EDITOR_DIALOG.
-     */
-    String ASSET_EDITOR_DIALOG = "asset-editor-dialog";
-    /**
-     * The constant ASSET_EDITOR_DIALOG_ACTIONS.
-     */
-    String ASSET_EDITOR_DIALOG_ACTIONS = "asset-editor-dialog-actions";
-    /**
-     * The constant ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER.
-     */
-    String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "asset-editor-dialog-preview-container";
+    @NotNull String ASSET_EDITOR_DIALOG = "asset-editor-dialog";
+    @NotNull String ASSET_EDITOR_DIALOG_ACTIONS = "asset-editor-dialog-actions";
+    @NotNull String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "asset-editor-dialog-preview-container";
 
-    /**
-     * The constant OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG.
-     */
-    String OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG = "open-external-folder-editor-dialog";
+    @NotNull String OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG = "open-external-folder-editor-dialog";
 
-    /**
-     * The constant AUDIO_VIEW_EDITOR_CONTAINER.
-     */
-    String AUDIO_VIEW_EDITOR_CONTAINER = "audio-view-editor-container";
+    @NotNull String AUDIO_VIEW_EDITOR_CONTAINER = "audio-view-editor-container";
 
-    /**
-     * The constant TEXT_EDITOR_TEXT_AREA.
-     */
-    String TEXT_EDITOR_TEXT_AREA = "text-editor-text-area";
+    @NotNull String TEXT_EDITOR_TEXT_AREA = "text-editor-text-area";
 
-    /**
-     * The constant IMAGE_VIEW_EDITOR_CONTAINER.
-     */
-    String IMAGE_VIEW_EDITOR_CONTAINER = "image-view-editor-container";
+    @NotNull String IMAGE_VIEW_EDITOR_CONTAINER = "image-view-editor-container";
 
-    /**
-     * The constant PHYSICS_NODE_LIST_CONTROL.
-     */
-    String PHYSICS_NODE_LIST_CONTROL = "physics-node-list-control";
+    @NotNull String PHYSICS_NODE_LIST_CONTROL = "physics-node-list-control";
 
-    /**
-     * The constant CUSTOM_TOOLTIP.
-     */
-    String CUSTOM_TOOLTIP = "custom-tooltip";
+    @NotNull String CUSTOM_TOOLTIP = "custom-tooltip";
 
-    /**
-     * The constant IMAGE_CHANNEL_PREVIEW.
-     */
-    String IMAGE_CHANNEL_PREVIEW = "image-channel-preview";
+    @NotNull String IMAGE_CHANNEL_PREVIEW = "image-channel-preview";
 
-    /**
-     * The constant IMAGE_PREVIEW.
-     */
-    String IMAGE_PREVIEW = "image-preview";
+    @NotNull String IMAGE_PREVIEW = "image-preview";
 
-    /**
-     * The constant PLUGIN_LIST_CELL.
-     */
-    String PLUGIN_LIST_CELL = "plugin-list-cell";
+    @NotNull String PLUGIN_LIST_CELL = "plugin-list-cell";
 
-    /**
-     * The constant STATS_3D_STATE.
-     */
-    String STATS_3D_STATE = "stats-3dstate";
+    @NotNull String STATS_3D_STATE = "stats-3dstate";
 }
