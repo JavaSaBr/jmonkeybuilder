@@ -1,8 +1,12 @@
 /bin/
 *.so
+*.dll
 *.log
 /build/
 /native-build/
 /.gradle/
 /.idea/
 /out/
+.classpath
+.project
+/.settings/
