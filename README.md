@@ -1,4 +1,4 @@
-# jMonkeyBuilder 1.3.0 #
+# jMonkeyBuilder 1.3.1 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -10,6 +10,9 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
+
+## ver. 1.3.1 ##
+* -Fixed some bugs.
 
 ## ver. 1.3.0 ##
 * -Updated static light probes.
