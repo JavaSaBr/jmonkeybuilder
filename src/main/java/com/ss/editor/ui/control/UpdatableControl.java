@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control;
 
 /**
- * The interface Updatable control.
+ * The interface to implement an updatable control.
  *
  * @author JavaSaBr
  */
