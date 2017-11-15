@@ -28,32 +28,24 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Create toneg 0 d emitter action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateToneg0dParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FXThread
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.EMITTER_16;
     }
 
-    @FXThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -87,8 +79,8 @@ public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<Model
      *
      * @return the particle emitter node
      */
-    @NotNull
-    protected ParticleEmitterNode createEmitterNode() {
+    @FXThread
+    protected @NotNull ParticleEmitterNode createEmitterNode() {
         return new ParticleEmitterNode(EDITOR.getAssetManager());
     }
 }
