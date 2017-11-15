@@ -4,6 +4,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.util.GLSLType;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class GLSLCodeArea extends BaseCodeArea {
     /**
      * The available fields.
      */
-    @NotNull
+    @Nullable
     private final List<String> fields;
 
     /**
@@ -65,7 +66,7 @@ public class GLSLCodeArea extends BaseCodeArea {
      * @return available fields.
      */
     @FXThread
-    private @NotNull List<String> getFields() {
+    private @Nullable List<String> getFields() {
         return fields;
     }
 
@@ -81,7 +82,7 @@ public class GLSLCodeArea extends BaseCodeArea {
                 "|(?<" + CLASS_VALUE_TYPE + ">" + VALUE_TYPE_PATTERN + ")";
 
         final List<String> fields = getFields();
-        if (!fields.isEmpty()) {
+        if (fields != null && !fields.isEmpty()) {
             result += "|(?<" + CLASS_VALUE_VALUE + ">" + "\\b(" + String.join("|", fields) + ")\\b";
         }
 
