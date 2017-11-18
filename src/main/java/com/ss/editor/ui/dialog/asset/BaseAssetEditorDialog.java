@@ -5,25 +5,20 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.JMEFilePreviewManager;
-import com.ss.editor.manager.JavaFXImageManager;
-import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.editor.ui.preview.FilePreview;
+import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.array.Array;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -33,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -52,16 +46,17 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     protected static final Point DIALOG_SIZE = new Point(-1, -1);
 
     /**
-     * The image manager.
+     * The registry of available file previews.
      */
     @NotNull
-    protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    protected static final FilePreviewFactoryRegistry FILE_PREVIEW_FACTORY_REGISTRY = FilePreviewFactoryRegistry.getInstance();
 
     /**
      * The editor.
      */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
+
 
     /**
      * The function to handle the choose.
@@ -76,16 +71,10 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     private final Function<@NotNull C, @Nullable String> validator;
 
     /**
-     * The image preview.
+     * The list of available previews.
      */
     @Nullable
-    private ImageView imageView;
-
-    /**
-     * The preview of text files.
-     */
-    @Nullable
-    private TextArea textView;
+    protected Array<FilePreview> previews;
 
     /**
      * The label with any warning.
@@ -215,44 +204,16 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     @FXThread
     private void updatePreview(@NotNull final Path file) {
 
-        final ImageView imageView = getImageView();
-        imageView.setVisible(false);
+        final Array<FilePreview> previews = getPreviews();
+        final FilePreview preview = previews.search(file, FilePreview::isSupport);
+        previews.forEach(preview, (filePreview, toCheck) -> filePreview != toCheck,
+                (filePreview, tooCheck) -> filePreview.hide());
 
-        final TextArea textView = getTextView();
-        textView.setVisible(false);
-
-        final int width = (int) imageView.getFitWidth();
-        final int height = (int) imageView.getFitHeight();
-
-        if (JMEFilePreviewManager.isJmeFile(file)) {
-
-            final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
-            previewManager.show(file, width, height);
-
-            final ImageView sourceView = previewManager.getImageView();
-            final ObjectProperty<Image> imageProperty = imageView.imageProperty();
-            imageProperty.bind(sourceView.imageProperty());
-
-            imageView.setVisible(true);
-
-        } else if (JavaFXImageManager.isImage(file)) {
-
-            final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(file, width, height);
-            imageView.setImage(preview);
-            imageView.setVisible(true);
-
-        } else if (!StringUtils.isEmpty(FileUtils.getExtension(file))) {
-
-            imageView.imageProperty().unbind();
-            imageView.setImage(null);
-
-            textView.setText(FileUtils.read(file));
-            textView.setVisible(true);
-
-        } else {
-            imageView.imageProperty().unbind();
-            imageView.setImage(null);
+        if (preview == null) {
+            return;
         }
+
+        preview.show(file);
     }
 
     /**
@@ -263,56 +224,22 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     @FXThread
     private void updatePreview(@Nullable final String assetPath) {
 
-        final ImageView imageView = getImageView();
-        imageView.setVisible(false);
+        final Array<FilePreview> previews = getPreviews();
 
-        final TextArea textView = getTextView();
-        textView.setVisible(false);
-
-        final int width = (int) imageView.getFitWidth();
-        final int height = (int) imageView.getFitHeight();
-
-        if (JMEFilePreviewManager.isJmeFile(assetPath)) {
-
-            final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
-            previewManager.show(assetPath, width, height);
-
-            final ImageView sourceView = previewManager.getImageView();
-            final ObjectProperty<Image> imageProperty = imageView.imageProperty();
-            imageProperty.bind(sourceView.imageProperty());
-
-            imageView.setVisible(true);
-
-        } else if (JavaFXImageManager.isImage(assetPath)) {
-
-            final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(assetPath, width, height);
-            imageView.setImage(preview);
-            imageView.setVisible(true);
-
-        } else if (assetPath != null && !StringUtils.isEmpty(FileUtils.getExtension(assetPath))) {
-
-            final ResourceManager resourceManager = ResourceManager.getInstance();
-            final URL url = resourceManager.tryToFindResource(assetPath);
-
-            String content;
-
-            if (url != null) {
-                content = Utils.get(url, first -> FileUtils.read(first.openStream()));
-            } else {
-                final Path realFile = EditorUtil.getRealFile(assetPath);
-                content = realFile == null ? "" : FileUtils.read(realFile);
-            }
-
-            imageView.imageProperty().unbind();
-            imageView.setImage(null);
-
-            textView.setText(content);
-            textView.setVisible(true);
-
-        } else {
-            imageView.imageProperty().unbind();
-            imageView.setImage(null);
+        if (assetPath == null) {
+            previews.forEach(FilePreview::hide);
+            return;
         }
+
+        final FilePreview preview = previews.search(assetPath, FilePreview::isSupport);
+        previews.forEach(preview, (filePreview, toCheck) -> filePreview != toCheck,
+                (filePreview, tooCheck) -> filePreview.hide());
+
+        if (preview == null) {
+            return;
+        }
+
+        preview.show(assetPath);
     }
 
     /**
@@ -350,38 +277,14 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
 
         final StackPane previewContainer = new StackPane();
 
-        imageView = new ImageView();
-        imageView.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
-        imageView.fitWidthProperty().bind(previewContainer.widthProperty().subtract(2));
-
-        textView = new TextArea();
-        textView.setEditable(false);
-        textView.prefWidthProperty().bind(previewContainer.widthProperty().subtract(2));
-        textView.prefHeightProperty().bind(previewContainer.heightProperty().subtract(2));
-
-        FXUtils.addToPane(imageView, previewContainer);
-        FXUtils.addToPane(textView, previewContainer);
+        final Array<FilePreview> availablePreviews = FILE_PREVIEW_FACTORY_REGISTRY.createAvailablePreviews();
+        availablePreviews.forEach(previewContainer, FilePreview::initialize);
 
         FXUtils.addClassTo(previewContainer, CSSClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
-        FXUtils.addClassTo(textView, CSSClasses.TRANSPARENT_TEXT_AREA);
+
+        this.previews = availablePreviews;
 
         return previewContainer;
-    }
-
-    /**
-     * @return the image preview.
-     */
-    @FXThread
-    protected @NotNull ImageView getImageView() {
-        return notNull(imageView);
-    }
-
-    /**
-     * @return the text preview.
-     */
-    @FXThread
-    protected @NotNull TextArea getTextView() {
-        return notNull(textView);
     }
 
     /**
@@ -402,13 +305,20 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         return notNull(warningLabel);
     }
 
+    /**
+     * Get the list of available file previews.
+     *
+     * @return the list of available file previews.
+     */
+    @FXThread
+    protected @NotNull Array<FilePreview> getPreviews() {
+        return notNull(previews);
+    }
+
     @Override
     @FXThread
     public void hide() {
-
-        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
-        previewManager.clear();
-
+        getPreviews().forEach(FilePreview::release);
         super.hide();
     }
 
