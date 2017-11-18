@@ -30,6 +30,7 @@ import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
+import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.svg.SvgImageLoaderFactory;
@@ -205,7 +206,8 @@ public class JFXApplication extends Application {
             }
 
             final JFXApplication application = JFXApplication.getInstance();
-            final Window window = ArrayUtils.getInReadLock(application.openedWindows, windows -> windows.search(Window::isFocused));
+            final Window window = ArrayUtils.getInReadLock(application.openedWindows,
+                    windows -> windows.search(Window::isFocused));
 
             editor.setPaused(window == null);
         };
@@ -404,6 +406,7 @@ public class JFXApplication extends Application {
             editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance());
             editorPlugin.register(TreeNodeFactoryRegistry.getInstance());
             editorPlugin.register(PropertyBuilderRegistry.getInstance());
+            editorPlugin.register(FilePreviewFactoryRegistry.getInstance());
         });
 
         final EditorFXScene scene = getScene();

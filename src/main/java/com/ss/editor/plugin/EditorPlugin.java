@@ -11,10 +11,14 @@ import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
+import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.rlib.plugin.PluginContainer;
 import com.ss.rlib.plugin.PluginSystem;
 import com.ss.rlib.plugin.impl.BasePlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.net.URL;
 
 /**
  * The base implementation of a plugin for this editor.
@@ -103,6 +107,15 @@ public class EditorPlugin extends BasePlugin {
     }
 
     /**
+     * Register this plugin's own file preview factories.
+     *
+     * @param registry the registry of file preview factories.
+     */
+    @FromAnyThread
+    public void register(@NotNull final FilePreviewFactoryRegistry registry) {
+    }
+
+    /**
      * Do some things before when JME context will be created.
      *
      * @param pluginSystem the plugin system.
@@ -147,9 +160,19 @@ public class EditorPlugin extends BasePlugin {
     public void onFinishLoading(@NotNull final PluginSystem pluginSystem) {
     }
 
-    @NotNull
     @Override
-    public PluginContainer getContainer() {
+    @FromAnyThread
+    public @NotNull PluginContainer getContainer() {
         return super.getContainer();
+    }
+
+    /**
+     * Get the URL to a home page of this plugin.
+     *
+     * @return the URL of a home page of this plugin or null.
+     */
+    @FromAnyThread
+    public @Nullable URL getHomePageUrl() {
+        return null;
     }
 }
