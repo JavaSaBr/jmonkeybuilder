@@ -27,6 +27,7 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.CreateLightControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacterControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBodyControlAction;
@@ -169,6 +170,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         if (element.getControl(MotionEvent.class) == null) {
             items.add(new CreateMotionControlAction(nodeTree, this));
         }
+
+        items.add(new CreateLightControlAction(nodeTree, this));
 
         //final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
         //if (skeletonControl != null) {

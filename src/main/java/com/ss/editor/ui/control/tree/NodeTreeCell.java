@@ -58,8 +58,8 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     private final StringConverter<TreeNode<?>> stringConverter = new StringConverter<TreeNode<?>>() {
 
         @Override
-        public String toString(@NotNull final TreeNode<?> object) {
-            return object.getName();
+        public String toString(@Nullable final TreeNode<?> object) {
+            return object == null ? "" : object.getName();
         }
 
         @Override

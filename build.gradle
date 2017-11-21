@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '1.3.1'
+version = '1.3.2'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -58,7 +58,7 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.4.1'
+    compile 'com.github.JavaSaBr:RLib:6.5.1'
     compile 'com.github.JavaSaBr:JME3-JFX:1.6.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
@@ -125,10 +125,10 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.3') {
+    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.4') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.4.0') {
+    compile ('com.github.JavaSaBr:tonegodemitter:2.4.1') {
         exclude group: 'org.jmonkeyengine'
     }
 

@@ -123,7 +123,7 @@ public final class PropertyDefinition {
         this.max = Float.NaN;
         this.min = Float.NaN;
         this.extension = null;
-        this.dependencies = null;
+        this.dependencies = EMPTY_DEPENDENCIES;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
@@ -137,7 +137,7 @@ public final class PropertyDefinition {
         this.max = max;
         this.options = EMPTY_OPTIONS;
         this.extension = null;
-        this.dependencies = null;
+        this.dependencies = EMPTY_DEPENDENCIES;
     }
 
     /**

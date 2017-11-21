@@ -34,6 +34,7 @@ import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
@@ -479,11 +480,23 @@ public class JMEFilePreviewManager extends AbstractControl {
         final DirectionalLight light = new DirectionalLight();
         light.setDirection(LIGHT_DIRECTION);
 
+        final Node cameraNode = new Node("Camera node");
         final Node rootNode = editor.getPreviewNode();
         rootNode.addControl(this);
         rootNode.attachChild(sky);
         rootNode.addLight(light);
+        rootNode.attachChild(cameraNode);
         rootNode.attachChild(modelNode);
+
+        final Camera camera = editor.getPreviewCamera();
+        final EditorCamera editorCamera = new EditorCamera(camera, cameraNode);
+        editorCamera.setMaxDistance(10000);
+        editorCamera.setMinDistance(0.01F);
+        editorCamera.setSmoothMotion(false);
+        editorCamera.setRotationSensitivity(1);
+        editorCamera.setZoomSensitivity(0.2F);
+
+        //TODO added supporting moving the camera
 
         processor = bind(editor, imageView, imageView, editor.getPreviewViewPort(), false);
         processor.setTransferMode(ON_CHANGES);

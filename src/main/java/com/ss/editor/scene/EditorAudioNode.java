@@ -7,6 +7,8 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,9 +26,10 @@ public class EditorAudioNode extends Node {
             super(name);
         }
 
-        @NotNull
+
         @Override
-        public Object getWrappedObject() {
+        @FromAnyThread
+        public @NotNull Object getWrappedObject() {
             return notNull(getAudioNode());
         }
     }
@@ -55,11 +58,6 @@ public class EditorAudioNode extends Node {
     @Nullable
     private Node model;
 
-    /**
-     * Instantiates a new Editor audio node.
-     *
-     * @param camera the camera.
-     */
     public EditorAudioNode(@NotNull final Camera camera) {
         this.camera = camera;
         this.editedNode = new EditedNode("EditedNode");
@@ -71,6 +69,7 @@ public class EditorAudioNode extends Node {
      *
      * @param audioNode the audio node.
      */
+    @JMEThread
     public void setAudioNode(@Nullable final AudioNode audioNode) {
         this.audioNode = audioNode;
     }
@@ -80,8 +79,8 @@ public class EditorAudioNode extends Node {
      *
      * @return the audio node.
      */
-    @Nullable
-    public AudioNode getAudioNode() {
+    @JMEThread
+    public @Nullable AudioNode getAudioNode() {
         return audioNode;
     }
 
@@ -90,8 +89,8 @@ public class EditorAudioNode extends Node {
      *
      * @return the model.
      */
-    @Nullable
-    public Node getModel() {
+    @JMEThread
+    public @Nullable Node getModel() {
         return model;
     }
 
@@ -100,6 +99,7 @@ public class EditorAudioNode extends Node {
      *
      * @param model the model.
      */
+    @JMEThread
     public void setModel(@Nullable final Node model) {
         this.model = model;
     }
@@ -109,12 +109,13 @@ public class EditorAudioNode extends Node {
      *
      * @return the edited node.
      */
-    @NotNull
-    public Node getEditedNode() {
+    @JMEThread
+    public @NotNull Node getEditedNode() {
         return editedNode;
     }
 
     @Override
+    @JMEThread
     public void updateGeometricState() {
 
         final AudioNode audioNode = getAudioNode();
@@ -132,6 +133,7 @@ public class EditorAudioNode extends Node {
     /**
      * Synchronize this node with audio node.
      */
+    @JMEThread
     public void sync() {
 
         final AudioNode audioNode = getAudioNode();
@@ -149,6 +151,7 @@ public class EditorAudioNode extends Node {
     /**
      * Update position and rotation of a model.
      */
+    @JMEThread
     public void updateModel() {
 
         final AudioNode audioNode = getAudioNode();

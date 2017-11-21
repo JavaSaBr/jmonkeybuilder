@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import com.ss.editor.util.NodeUtils;
@@ -15,15 +16,16 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class WheelElementModelPropertyControl extends SpatialElementModelPropertyControl<VehicleWheel> {
+public class WheelElementModelPropertyControl extends SpatialElementModelPropertyControl<Spatial, VehicleWheel> {
 
     public WheelElementModelPropertyControl(@Nullable final Spatial propertyValue, @NotNull final String propertyName,
                                             @NotNull final ModelChangeConsumer changeConsumer) {
-        super(propertyValue, propertyName, changeConsumer);
+        super(Spatial.class, propertyValue, propertyName, changeConsumer);
     }
 
-    @NotNull
-    protected NodeSelectorDialog<Spatial> createNodeSelectorDialog() {
+    @Override
+    @FXThread
+    protected @NotNull NodeSelectorDialog<Spatial> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         final Spatial currentModel = changeConsumer.getCurrentModel();
         final Spatial root = NodeUtils.findSpatial(currentModel, this::checkSpatial);

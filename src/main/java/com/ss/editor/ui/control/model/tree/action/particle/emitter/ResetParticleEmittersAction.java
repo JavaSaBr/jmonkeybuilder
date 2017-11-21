@@ -22,32 +22,24 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Reset toneg 0 d particle emitters action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public ResetParticleEmittersAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FXThread
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.REPLAY_16;
     }
 
-    @FXThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 

@@ -174,7 +174,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param camera the application camera
      * @param target the spatial to follow
      */
-    public EditorCamera(final Camera camera, final Spatial target) {
+    public EditorCamera(@NotNull final Camera camera, @NotNull final Spatial target) {
         this(camera);
         target.addControl(this);
     }
@@ -185,7 +185,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param camera the application camera
      */
-    public EditorCamera(final Camera camera) {
+    public EditorCamera(@NotNull final Camera camera) {
         this.camera = camera;
         this.initialUpVec = Vector3f.UNIT_Y;
         this.targetDir = new Vector3f();

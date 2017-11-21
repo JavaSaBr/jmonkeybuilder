@@ -203,6 +203,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_PATH;
     public static final String MODEL_FILE_EDITOR_NODE_WAY_POINT;
     public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
+    public static final String MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -275,7 +276,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
-    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
@@ -417,6 +419,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_BILLBOARD;
     public static final String MODEL_PROPERTY_INITIAL_FORCE;
     public static final String MODEL_PROPERTY_LIFE;
+    public static final String MODEL_PROPERTY_LIGHT;
     public static final String MODEL_PROPERTY_COLUMNS;
     public static final String MODEL_PROPERTY_ROWS;
     public static final String MODEL_PROPERTY_SPRITE_COUNT;
@@ -878,6 +881,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_MOTION_PATH = bundle.getString("ModelFileEditorNodeMotionPath");
         MODEL_FILE_EDITOR_NODE_WAY_POINT = bundle.getString("ModelFileEditorNodeWayPoint");
         MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER = bundle.getString("ModelFileEditorNodeVertexBuffer");
+        MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL = bundle.getString("ModelFileEditorNodeLightControl");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -949,7 +953,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlStaticRigidBody");
-        MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT = bundle.getString("ModelNodeTreeActionAddControlLight");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE = bundle.getString("ModelNodeTreeActionAddControlVehicle");
@@ -1081,6 +1086,7 @@ public class Messages {
         MODEL_PROPERTY_BILLBOARD = bundle.getString("ModelPropertyBillboard");
         MODEL_PROPERTY_INITIAL_FORCE = bundle.getString("ModelPropertyInitialForce");
         MODEL_PROPERTY_LIFE = bundle.getString("ModelPropertyLife");
+        MODEL_PROPERTY_LIGHT = bundle.getString("ModelPropertyLight");
         MODEL_PROPERTY_COLUMNS = bundle.getString("ModelPropertyColumns");
         MODEL_PROPERTY_ROWS = bundle.getString("ModelPropertyRows");
         MODEL_PROPERTY_SPRITE_COUNT = bundle.getString("ModelPropertySpriteCount");
