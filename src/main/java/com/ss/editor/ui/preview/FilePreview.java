@@ -37,7 +37,7 @@ public interface FilePreview extends Reusable {
      * @return true if this preview supports the resource.
      */
     @FXThread
-    default boolean isSupport(@NotNull String resource) {
+    default boolean isSupport(@NotNull final String resource) {
         return !StringUtils.isEmpty(FileUtils.getExtension(resource));
     }
 
@@ -48,7 +48,7 @@ public interface FilePreview extends Reusable {
      * @return true if this preview supports the file.
      */
     @FXThread
-    default boolean isSupport(@NotNull Path file) {
+    default boolean isSupport(@NotNull final Path file) {
         return !StringUtils.isEmpty(FileUtils.getExtension(file));
     }
 
