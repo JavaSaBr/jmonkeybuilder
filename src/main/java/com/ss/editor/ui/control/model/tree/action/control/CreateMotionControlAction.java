@@ -35,7 +35,7 @@ public class CreateMotionControlAction extends AbstractCreateControlAction {
     @Override
     @FXThread
     protected @NotNull String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
+        return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION;
     }
 
     @Override

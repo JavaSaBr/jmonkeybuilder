@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.LightSelectorDialog;
@@ -10,30 +10,31 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link ElementModelPropertyControl} to edit direction light from a scene.
+ * The implementation of the {@link ElementModelPropertyControl} to edit light from a scene.
  *
  * @param <D> the type parameter
  * @author JavaSaBr
  */
-public class DirectionLightElementModelPropertyControl<D> extends ElementModelPropertyControl<D, DirectionalLight> {
+public class LightElementModelPropertyControl<L extends Light, D> extends ElementModelPropertyControl<D, L> {
 
-    public DirectionLightElementModelPropertyControl(@Nullable final DirectionalLight propertyValue,
-                                                     @NotNull final String propertyName,
-                                                     @NotNull final ModelChangeConsumer changeConsumer) {
-        super(DirectionalLight.class, propertyValue, propertyName, changeConsumer);
+    public LightElementModelPropertyControl(@NotNull final Class<L> type, @Nullable final L propertyValue,
+                                            @NotNull final String propertyName,
+                                            @NotNull final ModelChangeConsumer changeConsumer) {
+        super(type, propertyValue, propertyName, changeConsumer);
     }
 
-    @NotNull
-    protected NodeSelectorDialog<DirectionalLight> createNodeSelectorDialog() {
+    @Override
+    @FXThread
+    protected @NotNull NodeSelectorDialog<L> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         return new LightSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void reload() {
 
-        final DirectionalLight light = getPropertyValue();
+        final L light = getPropertyValue();
         final Label elementLabel = getElementLabel();
 
         String name = light == null ? null : light.getName();

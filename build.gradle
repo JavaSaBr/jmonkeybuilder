@@ -125,7 +125,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.3') {
+    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.4') {
         exclude group: 'org.jmonkeyengine'
     }
     compile ('com.github.JavaSaBr:tonegodemitter:2.4.1') {

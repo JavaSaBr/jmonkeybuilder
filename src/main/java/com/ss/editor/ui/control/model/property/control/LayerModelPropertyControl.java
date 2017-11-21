@@ -5,6 +5,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -53,12 +54,6 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
     @Nullable
     private ComboBox<SceneLayer> layerComboBox;
 
-    /**
-     * Instantiates a new Layer model property control.
-     *
-     * @param layer          the layer
-     * @param changeConsumer the change consumer
-     */
     public LayerModelPropertyControl(@Nullable final SceneLayer layer, @NotNull final SceneChangeConsumer changeConsumer) {
         super(layer == null ? SceneLayer.NO_LAYER : layer, Messages.MODEL_PROPERTY_LAYER, changeConsumer);
         setApplyHandler(this::setLayer);
@@ -78,23 +73,25 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         };
     }
 
+    @JMEThread
     private void setLayer(@NotNull final Spatial spatial, @NotNull final SceneLayer newLayer) {
         SceneLayer.setLayer(newLayer, spatial);
     }
 
+    @JMEThread
     private SceneLayer getLayer(@NotNull final Spatial spatial) {
         final SceneLayer sceneLayer = SceneLayer.getLayer(spatial);
         return sceneLayer == null ? SceneLayer.NO_LAYER : sceneLayer;
     }
 
-    @FromAnyThread
     @Override
+    @FromAnyThread
     protected boolean isSingleRow() {
         return true;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -110,6 +107,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         FXUtils.addClassTo(layerComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
+    @FXThread
     private void updateLevel(@Nullable final SceneLayer layer) {
         if (isIgnoreListener()) return;
         changed(layer, getPropertyValue());
@@ -120,12 +118,13 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
      *
      * @return the layers combo box.
      */
+    @FXThread
     protected @NotNull ComboBox<SceneLayer> getLayerComboBox() {
         return notNull(layerComboBox);
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void reload() {
 
         final SceneChangeConsumer changeConsumer = (SceneChangeConsumer) getChangeConsumer();
