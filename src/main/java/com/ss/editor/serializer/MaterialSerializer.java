@@ -6,6 +6,7 @@ import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.shader.VarType;
@@ -94,6 +95,10 @@ public class MaterialSerializer {
                 }
 
                 break;
+            }
+            case Vector2: {
+                final Vector2f vector2f = (Vector2f) value;
+                return vector2f.getX() + " " + vector2f.getY();
             }
             case Vector3: {
                 final Vector3f vector3f = (Vector3f) value;

@@ -156,6 +156,10 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
                 return EditablePropertyType.INTEGER;
             case Vector4:
                 return EditablePropertyType.COLOR;
+            case Vector3:
+                return EditablePropertyType.VECTOR_3F;
+            case Vector2:
+                return EditablePropertyType.VECTOR_2F;
             case Texture2D:
                 return EditablePropertyType.TEXTURE_2D;
         }
