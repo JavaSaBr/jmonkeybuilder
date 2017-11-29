@@ -58,7 +58,7 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.5.1'
+    compile 'com.github.JavaSaBr:RLib:6.5.2'
     compile 'com.github.JavaSaBr:JME3-JFX:1.6.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
