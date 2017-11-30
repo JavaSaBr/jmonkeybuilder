@@ -274,7 +274,7 @@ public class Editor extends JmeToJFXApplication {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OperatingSystem system = new OperatingSystem();
 
-        LOGGER.info(this, "OS: " + system.getDistribution());
+        LOGGER.debug(this, "OS: " + system.getDistribution());
 
         final AssetManager assetManager = getAssetManager();
         assetManager.registerLocator("", FolderAssetLocator.class);

@@ -69,39 +69,39 @@ public final class Config {
     public static final OperatingSystem OPERATING_SYSTEM;
 
     /**
-     * The flat to enable debug mode.
+     * The flag to enable debug mode.
      */
-    public static final boolean DEV_DEBUG;
+    public static boolean DEV_DEBUG;
 
     /**
-     * The flat to enable camera debug mode.
+     * The flag to enable camera debug mode.
      */
-    public static final boolean DEV_CAMERA_DEBUG;
+    public static boolean DEV_CAMERA_DEBUG;
 
     /**
-     * The flat to enable transformations debug mode.
+     * The flag to enable transformations debug mode.
      */
-    public static final boolean DEV_TRANSFORMS_DEBUG;
+    public static boolean DEV_TRANSFORMS_DEBUG;
 
     /**
-     * The flat to enable JavaFX debug mode.
+     * The flag to enable JavaFX debug mode.
      */
-    public static final boolean DEV_DEBUG_JFX;
+    public static boolean DEV_DEBUG_JFX;
 
     /**
-     * The flat to enable JavaFX mouse input debug mode.
+     * The flag to enable JavaFX mouse input debug mode.
      */
-    public static final boolean DEV_DEBUG_JFX_MOUSE_INPUT;
+    public static boolean DEV_DEBUG_JFX_MOUSE_INPUT;
 
     /**
-     * The flat to enable javaFX key input debug mode.
+     * The flag to enable javaFX key input debug mode.
      */
-    public static final boolean DEV_DEBUG_JFX_KEY_INPUT;
+    public static boolean DEV_DEBUG_JFX_KEY_INPUT;
 
     /**
-     * The flat to enable PBR render.
+     * The flag to enable PBR render.
      */
-    public static final boolean ENABLE_PBR;
+    public static boolean ENABLE_PBR;
 
     static {
 

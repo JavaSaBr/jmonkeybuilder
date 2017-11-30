@@ -88,7 +88,7 @@ public class ExecutorManager {
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
 
-        LOGGER.info("initialized.");
+        LOGGER.debug("initialized.");
     }
 
     /**
@@ -137,32 +137,32 @@ public class ExecutorManager {
     /**
      * @return the list of background tasks executors.
      */
-    @NotNull
-    private EditorTaskExecutor[] getBackgroundTaskExecutors() {
+    @FromAnyThread
+    private @NotNull EditorTaskExecutor[] getBackgroundTaskExecutors() {
         return backgroundTaskExecutors;
     }
 
     /**
      * @return the executor of javaFX tasks.
      */
-    @NotNull
-    private EditorTaskExecutor getFxTaskExecutor() {
+    @FromAnyThread
+    private @NotNull EditorTaskExecutor getFxTaskExecutor() {
         return fxEditorTaskExecutor;
     }
 
     /**
      * @return the index of a next background executor.
      */
-    @NotNull
-    private AtomicInteger getNextBackgroundTaskExecutor() {
+    @FromAnyThread
+    private @NotNull AtomicInteger getNextBackgroundTaskExecutor() {
         return nextBackgroundTaskExecutor;
     }
 
     /**
      * @return the executor of editor tasks.
      */
-    @NotNull
-    private JMEThreadExecutor getJmeTasksExecutor() {
+    @FromAnyThread
+    private @NotNull JMEThreadExecutor getJmeTasksExecutor() {
         return jmeTasksExecutor;
     }
 
