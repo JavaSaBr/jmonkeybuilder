@@ -79,10 +79,13 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
 
         final CheckBox checkBox = getCheckBox();
         checkBox.prefWidthProperty().unbind();
-        checkBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
 
         final Label propertyNameLabel = getPropertyNameLabel();
         propertyNameLabel.maxWidthProperty().unbind();
+        propertyNameLabel.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        propertyNameLabel.prefWidthProperty().bind(widthProperty());
+        propertyNameLabel.minWidthProperty().unbind();
+        propertyNameLabel.setMinWidth(Region.USE_COMPUTED_SIZE);
     }
 
     @Override

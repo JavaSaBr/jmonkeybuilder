@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MaterialSettingsTreeNodeFactory implements TreeNodeFactory {
 
-    @FXThread
     @Override
+    @FXThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof RootMaterialSettings) {

@@ -1,10 +1,9 @@
 package com.ss.editor.file.converter.impl;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.getRealFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
+import static com.ss.rlib.util.FileUtils.normalizeName;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
@@ -187,7 +186,14 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     private void storeMaterials(@NotNull final Path materialsFolder, final boolean canOverwrite,
                                 @NotNull final String materialName, @NotNull final Geometry geometry) {
 
-        final Path resultFile = materialsFolder.resolve(materialName + "." + FileExtensions.JME_MATERIAL);
+        final Path resultFile = materialsFolder.resolve(normalizeName(materialName) + "." + FileExtensions.JME_MATERIAL);
+        final Path assetFile = getAssetFile(resultFile);
+
+        if (assetFile == null) {
+            LOGGER.warning("Can't get asset file for the file " + resultFile);
+            return;
+        }
+
         final Material currentMaterial = geometry.getMaterial();
 
         if (!Files.exists(resultFile) || canOverwrite) {
@@ -198,7 +204,6 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
             }
         }
 
-        final Path assetFile = notNull(getAssetFile(resultFile));
         final String assetPath = toAssetPath(assetFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
