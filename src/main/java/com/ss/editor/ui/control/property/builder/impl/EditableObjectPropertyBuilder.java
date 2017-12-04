@@ -38,7 +38,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final C changeConsumer) {
 
-        final List<EditableProperty<?, ?>> properties = getProperties(object);
+        final List<EditableProperty<?, ?>> properties = getProperties(object, parent, changeConsumer);
         if (properties == null || properties.isEmpty()) return;
 
         for (final EditableProperty<?, ?> description : properties) {
@@ -211,11 +211,26 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
     /**
      * Get the list of editable properties of the object.
      *
+     * @param object         the editable object.
+     * @param parent         the parent.
+     * @param changeConsumer the change consumer.
+     * @return the list of properties or null.
+     */
+    @FXThread
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object,
+                                                                   @Nullable final Object parent,
+                                                                   @NotNull final C changeConsumer) {
+        return getProperties(object);
+    }
+
+    /**
+     * Get the list of editable properties of the object.
+     *
      * @param object the editable object.
      * @return the list of properties or null.
      */
     @FXThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(final @NotNull Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         return null;
     }
 
