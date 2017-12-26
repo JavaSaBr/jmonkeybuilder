@@ -24,7 +24,7 @@ compileTestJava {
     options.compilerArgs += '-parameters'
 }
 
-ext.jmeVersion = "3.2_branch-SNAPSHOT"
+ext.jmeVersion = "upgrade_lwjgl3-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.5"
 ext.junitPlatformVersion = "1.0.0"
@@ -54,7 +54,7 @@ javadoc {
 dependencies {
 
     // base
-    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.8.1'
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
