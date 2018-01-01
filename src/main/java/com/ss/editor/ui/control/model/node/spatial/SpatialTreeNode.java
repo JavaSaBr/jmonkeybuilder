@@ -24,8 +24,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
 import com.ss.editor.ui.control.model.node.light.LightTreeNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
-import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
+import com.ss.editor.ui.control.model.tree.action.*;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateLightControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
@@ -83,6 +82,15 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         if (canRemove()) {
             items.add(new RemoveNodeAction(nodeTree, this));
         }
+
+        if(canCopy()){
+            items.add(new CopyNodeAction(nodeTree,this));
+        }
+
+        if(DataCopy.getCopySpatial() != null || DataCopy.getCopyGeom() != null){
+            items.add(new PasteNodeAction(nodeTree,this));
+        }
+
 
         super.fillContextMenu(nodeTree, items);
     }
@@ -182,6 +190,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         return menu;
     }
+
 
     /**
      * Create tool menu menu.
