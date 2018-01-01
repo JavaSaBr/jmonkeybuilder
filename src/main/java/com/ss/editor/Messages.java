@@ -215,6 +215,8 @@ public class Messages {
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
+    public static final String MODEL_NODE_TREE_ACTION_COPY;
+    public static final String MODEL_NODE_TREE_ACTION_PASTE;
     public static final String MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
     public static final String MODEL_NODE_TREE_ACTION_TOOLS;
     public static final String MODEL_NODE_TREE_ACTION_CREATE;
@@ -893,6 +895,8 @@ public class Messages {
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
+        MODEL_NODE_TREE_ACTION_COPY = bundle.getString("ModelNodeTreeActionCopy");
+        MODEL_NODE_TREE_ACTION_PASTE = bundle.getString("ModelNodeTreeActionPaste");
         MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY = bundle.getString("ModelNodeTreeActionOptimizeGeometry");
         MODEL_NODE_TREE_ACTION_TOOLS = bundle.getString("ModelNodeTreeActionTools");
         MODEL_NODE_TREE_ACTION_CREATE = bundle.getString("ModelNodeTreeActionCreate");
