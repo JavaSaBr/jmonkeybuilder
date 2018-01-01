@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.node.light;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -16,8 +17,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static com.ss.rlib.util.ObjectUtils.notNull;
 
 /**
  * The base implementation of {@link TreeNode} to present lights.
@@ -43,8 +42,6 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
     @FXThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         final T element = getElement();
-        element.setName(newName);
-
         final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new RenameLightOperation(element.getName(), newName, element));
     }

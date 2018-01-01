@@ -1,12 +1,15 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-
 import com.jme3.light.Light;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The operation to rename light.
+ */
 public class RenameLightOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+
     /**
      * The constant PROPERTY_NAME.
      */
@@ -30,13 +33,6 @@ public class RenameLightOperation extends AbstractEditorOperation<ModelChangeCon
     @NotNull
     private final Light light;
 
-    /**
-     * Instantiates a new Rename node operation.
-     *
-     * @param oldName the old name
-     * @param newName the new name
-     * @param light the light
-     */
     public RenameLightOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Light light) {
         this.oldName = oldName;
         this.newName = newName;

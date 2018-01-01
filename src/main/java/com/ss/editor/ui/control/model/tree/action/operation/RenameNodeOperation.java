@@ -36,13 +36,6 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
     @NotNull
     private final Spatial spatial;
 
-    /**
-     * Instantiates a new Rename node operation.
-     *
-     * @param oldName the old name
-     * @param newName the new name
-     * @param spatial the spatial
-     */
     public RenameNodeOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Spatial spatial) {
         this.oldName = oldName;
         this.newName = newName;
