@@ -3,9 +3,11 @@ package com.ss.editor.ui.control.model.node.light;
 import com.jme3.light.Light;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.RemoveLightAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
+import com.ss.editor.ui.control.model.tree.action.operation.RenameLightOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
@@ -14,6 +16,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static com.ss.rlib.util.ObjectUtils.notNull;
 
 /**
  * The base implementation of {@link TreeNode} to present lights.
@@ -40,6 +44,9 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         final T element = getElement();
         element.setName(newName);
+
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
+        consumer.execute(new RenameLightOperation(element.getName(), newName, element));
     }
 
     @Override
