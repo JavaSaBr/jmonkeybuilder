@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
@@ -33,10 +34,16 @@ public class PasteNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
     protected void process() {
         super.process();
 
-        if(DataCopy.copySpatial != null){
+        if(DataCopy.getCopySpatial() != null){
             final ChangeConsumer consumer = notNull(this.getNodeTree().getChangeConsumer());
-            consumer.execute(new AddChildOperation(((Spatial)DataCopy.copySpatial.getElement()).clone(),(Node)this.getNode().getElement()));
+            consumer.execute(new AddChildOperation(((Spatial)DataCopy.getCopySpatial().getElement()).clone(),(Node)this.getNode().getElement()));
         }
+        else{
+            final ChangeConsumer consumer = notNull(this.getNodeTree().getChangeConsumer());
+            consumer.execute(new AddChildOperation(((Geometry)DataCopy.getCopyGeom().getElement()).clone(),(Node)this.getNode().getElement()));
+        }
+
+
 
     }
 }

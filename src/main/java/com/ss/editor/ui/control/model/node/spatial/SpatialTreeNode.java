@@ -87,7 +87,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             items.add(new CopyNodeAction(nodeTree,this));
         }
 
-        if(DataCopy.copySpatial != null){
+        if(DataCopy.getCopySpatial() != null || DataCopy.getCopyGeom() != null){
             items.add(new PasteNodeAction(nodeTree,this));
         }
 
