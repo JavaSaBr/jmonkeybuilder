@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '1.4.0'
+version = '1.5.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -23,7 +23,9 @@ compileTestJava {
     targetCompatibility = 1.8
     options.compilerArgs += '-parameters'
 }
-
+ext.applicationMainClass = "com.ss.editor.JFXApplication"
+ext.applicationVendor = "javasabr@gmail.com"
+ext.applicationTitle = "jMonkeyBuilder"
 ext.jmeVersion = "upgrade_lwjgl3-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.5"
@@ -151,16 +153,27 @@ dependencies {
     testCompile "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 }
 
-task copyToLib(type: Copy) {
+ant.importBuild('build-native.xml')
+ant.basedir = new File(buildDir.getParentFile(), "native-build")
+ant.properties.javaSourceVersion = sourceCompatibility
+ant.properties.javaTargetVersion = targetCompatibility
+ant.properties.applicationJarName = name + ".jar"
+ant.properties.applicationMainClass = ext.applicationMainClass
+ant.properties.applicationVendor = ext.applicationVendor
+ant.properties.applicationTitle = ext.applicationTitle
+ant.properties.applicationVersion = version
+
+task prepareDependencies(type: Copy) {
 
     doFirst {
-        println("delete " + "$buildDir/dependences")
-        GFileUtils.deleteDirectory(new File("$buildDir/dependences"))
+        println("delete " + "$buildDir/dependencies")
+        GFileUtils.deleteDirectory(new File("$buildDir/dependencies"))
     }
 
-    into "$buildDir/dependences"
+    into "$buildDir/dependencies"
     from configurations.runtime
 }
+
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'

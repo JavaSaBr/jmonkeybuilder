@@ -42,13 +42,19 @@ public final class Config {
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.4.0");
+    public static final Version APP_VERSION = new Version("1.5.0");
 
     /**
      * The string version.
      */
     @NotNull
     public static final String STRING_VERSION = APP_VERSION.toString();
+
+    /**
+     * The server API version.
+     */
+    @NotNull
+    public static final int SERVER_API_VERSION = 1;
 
     /**
      * The path to application folder.
