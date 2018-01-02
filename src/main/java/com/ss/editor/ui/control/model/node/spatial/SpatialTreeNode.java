@@ -101,9 +101,9 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
     @Override
     @FXThread
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
-        final Object element = child.getElement();
-        return element instanceof AbstractControl || super.canAccept(child, isCopy);
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+        final Object element = treeNode.getElement();
+        return element instanceof AbstractControl || super.canAccept(treeNode, isCopy);
     }
 
     @Override
