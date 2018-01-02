@@ -40,6 +40,9 @@ import java.util.Set;
 public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<TreeNode<?>> {
 
     @NotNull
+    public static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
+
+    @NotNull
     private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
 
     @NotNull
@@ -50,9 +53,6 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
-    private static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
 
     @NotNull
     private final StringConverter<TreeNode<?>> stringConverter = new StringConverter<TreeNode<?>>() {

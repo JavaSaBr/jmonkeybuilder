@@ -78,9 +78,9 @@ public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
     }
 
     @Override
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
-        final Object element = child.getElement();
-        return (element instanceof Material && isCopy) || super.canAccept(child, isCopy);
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+        final Object element = treeNode.getElement();
+        return (element instanceof Material && isCopy) || super.canAccept(treeNode, isCopy);
     }
 
     @Override
