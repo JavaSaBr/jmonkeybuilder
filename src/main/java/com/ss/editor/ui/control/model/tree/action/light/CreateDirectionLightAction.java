@@ -39,6 +39,8 @@ public class CreateDirectionLightAction extends AbstractCreateLightAction {
     @Override
     @FXThread
     protected @NotNull Light createLight() {
-        return new DirectionalLight();
+        DirectionalLight directionalLight = new DirectionalLight();
+        directionalLight.setName(Messages.MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT);
+        return directionalLight;
     }
 }

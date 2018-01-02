@@ -44,6 +44,7 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
         final T element = getElement();
         final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new RenameLightOperation(element.getName(), newName, element));
+
     }
 
     @Override
