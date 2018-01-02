@@ -240,10 +240,12 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE;
-    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
+    public static final String MODEL_NODE_TREE_ACTION_COPY;
+    public static final String MODEL_NODE_TREE_ACTION_PASTE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
@@ -918,10 +920,12 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
         MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE = bundle.getString("ModelNodeTreeActionAnimationPause");
-        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
+        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
+        MODEL_NODE_TREE_ACTION_COPY = bundle.getString("ModelNodeTreeActionCopy");
+        MODEL_NODE_TREE_ACTION_PASTE = bundle.getString("ModelNodeTreeActionPaste");
         MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");

@@ -27,7 +27,7 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
     @Override
     @FXThread
     protected @NotNull String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
+        return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION;
     }
 
     @Override

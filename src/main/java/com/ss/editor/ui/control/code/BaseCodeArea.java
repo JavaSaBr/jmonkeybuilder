@@ -8,6 +8,7 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -70,6 +71,16 @@ public class BaseCodeArea extends CodeArea {
         this.availableClasses = createAvailableClasses();
         richChanges().filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
                 .subscribe(change -> setStyleSpans(0, calculateStyleSpans(getText())));
+    }
+
+    @Override
+    public void replaceSelection(@Nullable String replacement) {
+
+        if ("\t".equals(replacement)) {
+            replacement = "    ";
+        }
+
+        replaceText(getSelection(), replacement);
     }
 
     /**

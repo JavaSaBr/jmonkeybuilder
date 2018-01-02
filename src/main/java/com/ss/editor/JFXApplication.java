@@ -99,7 +99,7 @@ public class JFXApplication extends Application {
      * @param args the args
      * @throws IOException the io exception
      */
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
 
         // need to disable to work on macos
         Configuration.GLFW_CHECK_THREAD0.set(false);
