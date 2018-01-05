@@ -23,10 +23,11 @@ compileTestJava {
     targetCompatibility = 1.8
     options.compilerArgs += '-parameters'
 }
+
 ext.applicationMainClass = "com.ss.editor.JFXApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
-ext.jmeVersion = "upgrade_lwjgl3-SNAPSHOT"
+ext.jmeVersion = "3.3_branch-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.5"
 ext.junitPlatformVersion = "1.0.0"
@@ -60,8 +61,8 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.6.0'
-    compile 'com.github.JavaSaBr:JME3-JFX:1.7.0'
+    compile 'com.github.JavaSaBr:RLib:6.7.0'
+    compile 'com.github.JavaSaBr:JME3-JFX:1.7.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'

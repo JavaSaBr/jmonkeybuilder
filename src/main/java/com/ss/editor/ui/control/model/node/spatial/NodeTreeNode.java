@@ -146,16 +146,16 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
-        if (child == this) return false;
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+        if (treeNode == this) return false;
 
-        final Object element = child.getElement();
+        final Object element = treeNode.getElement();
 
         if (element instanceof Spatial) {
             return GeomUtils.canAttach(getElement(), (Spatial) element, isCopy);
         }
 
-        return super.canAccept(child, isCopy);
+        return super.canAccept(treeNode, isCopy);
     }
 
     @Override
