@@ -75,6 +75,11 @@ public final class Config {
     public static final OperatingSystem OPERATING_SYSTEM;
 
     /**
+     * The remote control port.
+     */
+    public static int REMOTE_CONTROL_PORT = -1;
+
+    /**
      * The flag to enable debug mode.
      */
     public static boolean DEV_DEBUG;
