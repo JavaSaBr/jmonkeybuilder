@@ -36,45 +36,50 @@ public class RequestedOpenFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String NEED_SHOW = "need_show";
 
-    /**
-     * Instantiates a new Requested open file event.
-     */
     public RequestedOpenFileEvent() {
         super(EVENT_TYPE);
         setNeedShow(true);
     }
 
+    public RequestedOpenFileEvent(@NotNull final Path file) {
+        super(EVENT_TYPE);
+        setNeedShow(true);
+        setFile(file);
+    }
+
     /**
-     * Gets description.
+     * Get the description.
      *
      * @return the editor descriptor.
      */
-    @Nullable
-    public EditorDescription getDescription() {
+    public @Nullable EditorDescription getDescription() {
         return get(EDITOR);
     }
 
     /**
-     * Sets description.
+     * Set the description.
      *
      * @param description the editor descriptor.
      */
-    public void setDescription(final EditorDescription description) {
-        set(EDITOR, description);
+    public void setDescription(@Nullable final EditorDescription description) {
+        if (description == null) {
+            remove(EDITOR);
+        } else {
+            set(EDITOR, description);
+        }
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file to open.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE));
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file to open.
      */
@@ -92,7 +97,7 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
-     * Sets need show.
+     * Set the need show.
      *
      * @param needShow true if need to show the editor.
      */

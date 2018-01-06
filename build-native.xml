@@ -180,7 +180,7 @@
 
             <fx:platform>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
-                <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
+                <fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=127.0.0.1:6005,suspend=y"/>
             </fx:platform>
 
             <preferences shortcut="true" menu="true" install="false"/>

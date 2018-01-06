@@ -41,12 +41,13 @@ public class CommandLineConfig {
                 Config.DEV_DEBUG_JFX = Boolean.parseBoolean(value);
             } else if ("Graphics.enablePBR".equals(name)) {
                 Config.ENABLE_PBR = Boolean.parseBoolean(value);
+            } else if ("Server.api.port".equals(name)) {
+                Config.REMOTE_CONTROL_PORT = Integer.parseInt(value);
             }
         }
 
-        System.out.println(System.getenv());
-
         final Map<String, String> env = System.getenv();
+
         if (env.containsKey("Server.api.version")) {
             final int version = Integer.parseInt(env.get("Server.api.version"));
             if (version == Config.SERVER_API_VERSION) {
@@ -54,6 +55,10 @@ public class CommandLineConfig {
             } else {
                 System.exit(-1);
             }
+        }
+
+        if (env.containsKey("Server.api.port")) {
+            Config.REMOTE_CONTROL_PORT = Integer.parseInt(env.get("Server.api.port"));
         }
     }
 }

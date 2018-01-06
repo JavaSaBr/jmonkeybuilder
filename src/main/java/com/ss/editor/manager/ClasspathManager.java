@@ -23,6 +23,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * The class to manage classpath.
@@ -30,6 +32,18 @@ import java.nio.file.Paths;
  * @author JavaSaBr
  */
 public class ClasspathManager {
+
+    public enum Scope {
+        CORE,
+        CUSTOM,
+        PLUGINS,;
+
+        @NotNull
+        public static final Set<Scope> ONLY_CORE = EnumSet.of(CORE);
+
+        @NotNull
+        public static final Set<Scope> ALL = EnumSet.allOf(Scope.class);
+    }
 
     @NotNull
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
@@ -40,7 +54,7 @@ public class ClasspathManager {
     @NotNull
     public static final Array<String> CORE_LIBRARIES_NAMES = ArrayFactory.asArray(
             "jme3-core", "jme3-terrain", "jme3-effects",
-            "jme3-testdata", "jme3-plugins", "tonegod"
+            "jme3-testdata", "jme3-plugins", "tonegod", "jmonkeybuilder"
     );
 
     @Nullable
@@ -88,7 +102,9 @@ public class ClasspathManager {
         coreScanner.setUseSystemClasspath(true);
         coreScanner.scan(path -> {
 
-            if (CORE_LIBRARIES_NAMES.search(path, (pattern, pth) -> pth.contains(pattern)) == null) {
+            if (Files.isDirectory(Paths.get(path))) {
+                return true;
+            } else if (CORE_LIBRARIES_NAMES.search(path, (pattern, pth) -> pth.contains(pattern)) == null) {
                 return false;
             } else if (path.contains("natives")) {
                 return false;
@@ -260,7 +276,6 @@ public class ClasspathManager {
     public @Nullable URLClassLoader getClassesLoader() {
         return classesLoader;
     }
-
     /**
      * Find all implementations of the interface class.
      *
@@ -269,17 +284,47 @@ public class ClasspathManager {
      * @return the list of all available implementations.
      */
     public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass) {
+        return findImplements(interfaceClass, Scope.ONLY_CORE);
+    }
+
+    /**
+     * Get the custom scanner.
+     *
+     * @return the custom scanner.
+     */
+    private @Nullable ClassPathScanner getCustomScanner() {
+        return customScanner;
+    }
+
+    /**
+     * Find all implementations of the interface class.
+     *
+     * @param <T>            the type of an interface.
+     * @param interfaceClass the interface class.
+     * @param scope          the scope.
+     * @return the list of all available implementations.
+     */
+    public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass,
+                                                       @NotNull final Set<Scope> scope) {
 
         final Array<Class<T>> result = ArrayFactory.newArray(Class.class);
 
-        coreScanner.findImplements(result, interfaceClass);
-        customScanner.findImplements(result, interfaceClass);
+        if (scope.contains(Scope.CORE)) {
+            coreScanner.findImplements(result, interfaceClass);
+        }
 
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.handlePlugins(plugin -> {
-            final PluginContainer container = plugin.getContainer();
-            container.getScanner().findImplements(result, interfaceClass);
-        });
+        final ClassPathScanner customScanner = getCustomScanner();
+        if (customScanner != null && scope.contains(Scope.CUSTOM)) {
+            customScanner.findImplements(result, interfaceClass);
+        }
+
+        if (scope.contains(Scope.PLUGINS)) {
+            final PluginManager pluginManager = PluginManager.getInstance();
+            pluginManager.handlePlugins(plugin -> {
+                final PluginContainer container = plugin.getContainer();
+                container.getScanner().findImplements(result, interfaceClass);
+            });
+        }
 
         return result;
     }
