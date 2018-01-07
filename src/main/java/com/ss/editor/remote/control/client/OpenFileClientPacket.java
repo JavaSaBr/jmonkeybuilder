@@ -35,7 +35,6 @@ public class OpenFileClientPacket extends ClientPacket {
 
         final Path assetPath = Paths.get(readString(buffer));
         final Path fileToOpen = Paths.get(readString(buffer));
-        final Path assetFile = assetPath.relativize(fileToOpen);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -51,7 +50,7 @@ public class OpenFileClientPacket extends ClientPacket {
                     @Override
                     public void handle(final Event event) {
                         FX_EVENT_MANAGER.removeEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, this);
-                        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(assetFile));
+                        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
                     }
                 };
 
@@ -59,7 +58,7 @@ public class OpenFileClientPacket extends ClientPacket {
             });
 
         } else {
-            FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(assetFile));
+            FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
         }
     }
 }

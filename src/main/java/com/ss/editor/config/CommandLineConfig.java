@@ -1,5 +1,6 @@
 package com.ss.editor.config;
 
+import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -13,6 +14,9 @@ public class CommandLineConfig {
      * @param args the args
      */
     public static void args(final String[] args) {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+
         for (final String arg : args) {
 
             if (!arg.contains("=")) {
@@ -59,6 +63,9 @@ public class CommandLineConfig {
 
         if (env.containsKey("Server.api.port")) {
             Config.REMOTE_CONTROL_PORT = Integer.parseInt(env.get("Server.api.port"));
+        }
+        if (env.containsKey("Editor.assetFolder")) {
+            editorConfig.setCurrentAsset(Paths.get(env.get("Editor.assetFolder")));
         }
     }
 }

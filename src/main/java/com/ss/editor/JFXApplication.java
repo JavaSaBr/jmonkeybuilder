@@ -34,6 +34,7 @@ import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.svg.SvgImageLoaderFactory;
+import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
@@ -100,7 +101,7 @@ public class JFXApplication extends Application {
      * @throws IOException the io exception
      */
     public static void main(final String[] args) {
-
+        
         // need to disable to work on macos
         Configuration.GLFW_CHECK_THREAD0.set(false);
         // use jemalloc

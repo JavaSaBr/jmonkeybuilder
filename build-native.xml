@@ -85,7 +85,7 @@
 
         <javac includeantruntime="false" source="${javaSourceVersion}" target="${javaTargetVersion}"
                srcdir="${basedir}/build/src" destdir="${basedir}/build/classes"
-               encoding="UTF-8">
+               encoding="UTF-8" debug="true">
             <classpath>
                 <fileset dir="${basedir}/build/libs">
                     <include name="*"/>
@@ -180,7 +180,7 @@
 
             <fx:platform>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
-                <fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=127.0.0.1:6005,suspend=y"/>
+                <fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=javasabr-NB:6005,suspend=y"/>
             </fx:platform>
 
             <preferences shortcut="true" menu="true" install="false"/>
