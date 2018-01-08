@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 
 /**
- * The base implementation of a client packet.
+ * The base implementation of a command.
  *
  * @author JavaSaBr
  */

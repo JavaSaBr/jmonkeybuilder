@@ -1,8 +1,7 @@
 package com.ss.editor.manager;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.network.NetworkFactory;
 import com.ss.rlib.network.packet.ReadablePacket;
 import com.ss.rlib.network.packet.ReadablePacketRegistry;
@@ -20,9 +19,6 @@ import java.net.InetSocketAddress;
  */
 public class RemoteControlManager {
 
-    @NotNull
-    private static final Logger LOGGER = LoggerManager.getLogger(RemoteControlManager.class);
-
     @Nullable
     private static RemoteControlManager instance;
 
@@ -31,19 +27,35 @@ public class RemoteControlManager {
         return instance;
     }
 
+    @NotNull
+    private final ReadablePacketRegistry packetRegistry;
+
     @Nullable
-    private ServerNetwork serverNetwork;
+    private volatile ServerNetwork serverNetwork;
 
     private RemoteControlManager() {
-        if(Config.REMOTE_CONTROL_PORT == -1) {
-            return;
-        }
 
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
         final Class<ReadablePacket>[] packets = classpathManager.findImplements(ReadablePacket.class, ClasspathManager.Scope.ONLY_CORE)
                 .toArray(Class.class);
 
-        serverNetwork = NetworkFactory.newDefaultAsyncServerNetwork(ReadablePacketRegistry.of(packets));
+        this.packetRegistry = ReadablePacketRegistry.of(packets);
+
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.addOnAfterCreateJMEContext(this::start);
+    }
+
+    /**
+     * Start the remote control if need.
+     */
+    @FromAnyThread
+    private synchronized void start() {
+
+        if (Config.REMOTE_CONTROL_PORT == -1) {
+            return;
+        }
+
+        serverNetwork = NetworkFactory.newDefaultAsyncServerNetwork(packetRegistry);
         try {
             serverNetwork.bind(new InetSocketAddress(Config.REMOTE_CONTROL_PORT));
         } catch (final IOException e) {

@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * The packet with request top open a file.
+ * The command to open a file.
  *
  * @author JavaSaBr
  */
