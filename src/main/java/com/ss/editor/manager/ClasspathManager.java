@@ -95,6 +95,18 @@ public class ClasspathManager {
     @Nullable
     private volatile URLClassLoader classesLoader;
 
+    /**
+     * The local libraries class loader.
+     */
+    @Nullable
+    private volatile URLClassLoader localLibrariesLoader;
+
+    /**
+     * The local classes class loader.
+     */
+    @Nullable
+    private volatile URLClassLoader localClassesLoader;
+
     private ClasspathManager() {
         InitializeManager.valid(getClass());
 
@@ -276,6 +288,43 @@ public class ClasspathManager {
     public @Nullable URLClassLoader getClassesLoader() {
         return classesLoader;
     }
+
+    /**
+     * Get the local libraries class loader.
+     *
+     * @return the local libraries class loader.
+     */
+    private @Nullable URLClassLoader getLocalLibrariesLoader() {
+        return localLibrariesLoader;
+    }
+
+    /**
+     * Set the local libraries class loader.
+     *
+     * @param localLibrariesLoader the local libraries class loader.
+     */
+    private void setLocalLibrariesLoader(@Nullable final URLClassLoader localLibrariesLoader) {
+        this.localLibrariesLoader = localLibrariesLoader;
+    }
+
+    /**
+     * Get the local classes class loader.
+     *
+     * @return the local classes class loader.
+     */
+    private @Nullable URLClassLoader getLocalClassesLoader() {
+        return localClassesLoader;
+    }
+
+    /**
+     * Set the local classes class loader.
+     *
+     * @param localClassesLoader the local classes class loader.
+     */
+    private void setLocalClassesLoader(@Nullable final URLClassLoader localClassesLoader) {
+        this.localClassesLoader = localClassesLoader;
+    }
+
     /**
      * Find all implementations of the interface class.
      *

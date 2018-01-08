@@ -1,5 +1,7 @@
 package com.ss.editor.remote.control.client;
 
+import com.ss.editor.JFXApplication;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
@@ -22,7 +24,7 @@ import java.nio.file.Paths;
  * @author JavaSaBr
  */
 @PacketDescription(id = 1)
-public class OpenFileClientPacket extends ClientPacket {
+public class OpenFileClientCommand extends ClientCommand {
 
     @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -31,6 +33,7 @@ public class OpenFileClientPacket extends ClientPacket {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @Override
+    @BackgroundThread
     protected void readImpl(@NotNull final ConnectionOwner owner, @NotNull final ByteBuffer buffer) {
 
         final Path assetPath = Paths.get(readString(buffer));
@@ -39,7 +42,9 @@ public class OpenFileClientPacket extends ClientPacket {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        if (currentAsset == null || !assetPath.equals(currentAsset)) {
+        if (currentAsset != null && assetPath.equals(currentAsset)) {
+            EXECUTOR_MANAGER.addFXTask(() -> openFile(fileToOpen));
+        } else {
             EXECUTOR_MANAGER.addFXTask(() -> {
 
                 final OpenAssetAction action = new OpenAssetAction();
@@ -50,15 +55,23 @@ public class OpenFileClientPacket extends ClientPacket {
                     @Override
                     public void handle(final Event event) {
                         FX_EVENT_MANAGER.removeEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, this);
-                        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
+                        openFile(fileToOpen);
                     }
                 };
 
                 FX_EVENT_MANAGER.addEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, eventHandler);
             });
 
-        } else {
-            FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
         }
+    }
+
+    /**
+     * Open the file.
+     *
+     * @param fileToOpen the file.
+     */
+    private void openFile(@NotNull final Path fileToOpen) {
+        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
+        JFXApplication.getInstance().requestFocus();
     }
 }
