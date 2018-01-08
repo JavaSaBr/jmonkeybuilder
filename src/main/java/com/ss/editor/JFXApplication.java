@@ -153,6 +153,7 @@ public class JFXApplication extends Application {
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
         InitializeManager.register(PluginManager.class);
+        InitializeManager.register(RemoteControlManager.class);
         InitializeManager.initialize();
 
         new EditorThread(new ThreadGroup("LWJGL"),
@@ -261,6 +262,13 @@ public class JFXApplication extends Application {
 
     public JFXApplication() {
         this.openedWindows = ArrayFactory.newConcurrentStampedLockArray(Window.class);
+    }
+
+    /**
+     * Request focus of this window.
+     */
+    public void requestFocus() {
+        notNull(stage).requestFocus();
     }
 
     /**

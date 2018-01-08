@@ -28,7 +28,7 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     private static final String FILE = "file";
-    private static final String IS_DIRECTORY = "isDirectory";
+    private static final String IS_DIRECTORY = "is_directory";
 
     /**
      * Instantiates a new Deleted file event.
@@ -38,12 +38,11 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE), "Can't find a file");
     }
 
@@ -57,7 +56,7 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file.
      */
@@ -66,7 +65,7 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
-     * Sets directory.
+     * Set the directory.
      *
      * @param directory the directory.
      */

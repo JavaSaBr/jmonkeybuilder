@@ -23,6 +23,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * The class to manage classpath.
@@ -30,6 +32,23 @@ import java.nio.file.Paths;
  * @author JavaSaBr
  */
 public class ClasspathManager {
+
+    public enum Scope {
+        CORE,
+        CUSTOM,
+        PLUGINS,
+        LOCAL_LIBRARIES,
+        LOCAL_CLASSES;
+
+        @NotNull
+        public static final Set<Scope> ONLY_CORE = EnumSet.of(CORE);
+
+        @NotNull
+        public static final Set<Scope> CORE_AND_CUSTOM_AND_LOCAL = EnumSet.of(CORE, CUSTOM, LOCAL_CLASSES, LOCAL_LIBRARIES);
+
+        @NotNull
+        public static final Set<Scope> ALL = EnumSet.allOf(Scope.class);
+    }
 
     @NotNull
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
@@ -40,7 +59,7 @@ public class ClasspathManager {
     @NotNull
     public static final Array<String> CORE_LIBRARIES_NAMES = ArrayFactory.asArray(
             "jme3-core", "jme3-terrain", "jme3-effects",
-            "jme3-testdata", "jme3-plugins", "tonegod"
+            "jme3-testdata", "jme3-plugins", "tonegod", "jmonkeybuilder"
     );
 
     @Nullable
@@ -70,6 +89,18 @@ public class ClasspathManager {
     private volatile ClassPathScanner customScanner;
 
     /**
+     * The local libraries scanner.
+     */
+    @Nullable
+    private volatile ClassPathScanner localLibrariesScanner;
+
+    /**
+     * The local classes scanner.
+     */
+    @Nullable
+    private volatile ClassPathScanner localClassesScanner;
+
+    /**
      * The libraries class loader.
      */
     @Nullable
@@ -81,6 +112,18 @@ public class ClasspathManager {
     @Nullable
     private volatile URLClassLoader classesLoader;
 
+    /**
+     * The local libraries class loader.
+     */
+    @Nullable
+    private volatile URLClassLoader localLibrariesLoader;
+
+    /**
+     * The local classes class loader.
+     */
+    @Nullable
+    private volatile URLClassLoader localClassesLoader;
+
     private ClasspathManager() {
         InitializeManager.valid(getClass());
 
@@ -88,7 +131,9 @@ public class ClasspathManager {
         coreScanner.setUseSystemClasspath(true);
         coreScanner.scan(path -> {
 
-            if (CORE_LIBRARIES_NAMES.search(path, (pattern, pth) -> pth.contains(pattern)) == null) {
+            if (Files.isDirectory(Paths.get(path))) {
+                return true;
+            } else if (CORE_LIBRARIES_NAMES.search(path, (pattern, pth) -> pth.contains(pattern)) == null) {
                 return false;
             } else if (path.contains("natives")) {
                 return false;
@@ -123,15 +168,15 @@ public class ClasspathManager {
 
         final URLClassLoader librariesLoader = getLibrariesLoader();
         final URLClassLoader classesLoader = getClassesLoader();
-        final ClassLoader classLoader = classesLoader == null ? librariesLoader : classesLoader;
-
-        final ClassPathScanner scanner = classesLoader == null ? ClassPathScannerFactory.newDefaultScanner() :
-                ClassPathScannerFactory.newDefaultScanner(classLoader);
 
         if (librariesLoader == null && classesLoader == null) {
-            this.customScanner = scanner;
+            this.customScanner = null;
             return;
         }
+
+        final ClassLoader classLoader = classesLoader == null ? librariesLoader : classesLoader;
+        final ClassPathScanner scanner = classesLoader == null ? ClassPathScannerFactory.newDefaultScanner() :
+                ClassPathScannerFactory.newDefaultScanner(classLoader);
 
         final Array<URL> urls = ArrayFactory.newArray(URL.class);
 
@@ -150,7 +195,7 @@ public class ClasspathManager {
 
         scanner.addAdditionalPaths(paths);
         scanner.setUseSystemClasspath(false);
-        scanner.scan(path -> true);
+        scanner.scan();
 
         this.customScanner = scanner;
     }
@@ -174,13 +219,13 @@ public class ClasspathManager {
         if (path == null) return;
 
         final Array<Path> jars = FileUtils.getFiles(path, false, JAR_EXTENSIONS);
-        final URL[] urls = jars.stream().map(FileUtils::toUrl)
+        final URL[] urls = jars.stream()
+                .map(FileUtils::toUrl)
                 .toArray(URL[]::new);
 
         final URLClassLoader classLoader = new URLClassLoader(urls, getClass().getClassLoader());
 
         assetManager.addClassLoader(classLoader);
-
         setLibrariesLoader(classLoader);
     }
 
@@ -196,7 +241,7 @@ public class ClasspathManager {
 
         if (currentClassLoader != null) {
             assetManager.removeClassLoader(currentClassLoader);
-            setLibrariesLoader(null);
+            setClassesLoader(null);
         }
 
         final Path path = EDITOR_CONFIG.getClassesPath();
@@ -213,7 +258,8 @@ public class ClasspathManager {
             });
         });
 
-        final URL[] urls = folders.stream().map(FileUtils::toUrl)
+        final URL[] urls = folders.stream()
+                .map(FileUtils::toUrl)
                 .toArray(URL[]::new);
 
         final ClassLoader librariesLoader = getLibrariesLoader();
@@ -221,8 +267,106 @@ public class ClasspathManager {
         final URLClassLoader classLoader = new URLClassLoader(urls, parent);
 
         assetManager.addClassLoader(classLoader);
-
         setClassesLoader(classLoader);
+    }
+
+    /**
+     * Load local libraries.
+     */
+    @FromAnyThread
+    public synchronized void loadLocalLibraries(@NotNull final Array<Path> libraries) {
+
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
+        final URLClassLoader currentClassLoader = getLocalLibrariesLoader();
+
+        if (currentClassLoader != null) {
+            assetManager.removeClassLoader(currentClassLoader);
+            setLocalLibrariesLoader(null);
+        }
+
+        if (libraries.isEmpty()) {
+            this.localLibrariesScanner = null;
+            return;
+        }
+
+        final URL[] urlArray = libraries.stream()
+                .map(FileUtils::toUrl)
+                .toArray(URL[]::new);
+
+        final URLClassLoader classLoader = new URLClassLoader(urlArray, getClass().getClassLoader());
+
+        assetManager.addClassLoader(classLoader);
+        setLocalLibrariesLoader(classLoader);
+
+        final ClassPathScanner scanner = ClassPathScannerFactory.newDefaultScanner(classLoader);
+        final Array<URL> urls = ArrayFactory.asArray(classLoader.getURLs());
+        final String[] paths = urls.stream().map(url -> Utils.get(url, URL::toURI))
+                .map(Paths::get)
+                .map(Path::toString)
+                .toArray(String[]::new);
+
+        scanner.addAdditionalPaths(paths);
+        scanner.setUseSystemClasspath(false);
+        scanner.scan();
+
+        this.localLibrariesScanner = scanner;
+    }
+
+    /**
+     * Load local classes.
+     */
+    @FromAnyThread
+    public synchronized void loadLocalClasses(@Nullable final Path output) {
+
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
+        final URLClassLoader currentClassLoader = getLocalClassesLoader();
+
+        if (currentClassLoader != null) {
+            assetManager.removeClassLoader(currentClassLoader);
+            setLocalClassesLoader(null);
+        }
+
+        if (output == null || !Files.exists(output)) {
+            this.localClassesScanner = null;
+            return;
+        }
+
+        final Array<Path> folders = ArrayFactory.newArray(Path.class);
+
+        Utils.run(output, folders, (dir, toStore) -> {
+            final DirectoryStream<Path> stream = Files.newDirectoryStream(dir);
+            stream.forEach(subFile -> {
+                if (Files.isDirectory(subFile)) {
+                    toStore.add(subFile);
+                }
+            });
+        });
+
+        final URL[] urlArray = folders.stream()
+                .map(FileUtils::toUrl)
+                .toArray(URL[]::new);
+
+        final ClassLoader librariesLoader = getLocalLibrariesLoader();
+        final ClassLoader parent = librariesLoader == null? getClass().getClassLoader() : librariesLoader;
+        final URLClassLoader classLoader = new URLClassLoader(urlArray, parent);
+
+        assetManager.addClassLoader(classLoader);
+        setLocalClassesLoader(classLoader);
+
+        final ClassPathScanner scanner = ClassPathScannerFactory.newDefaultScanner(classLoader);
+        final Array<URL> urls = ArrayFactory.asArray(classLoader.getURLs());
+        final String[] paths = urls.stream().map(url -> Utils.get(url, URL::toURI))
+                .map(Paths::get)
+                .map(Path::toString)
+                .toArray(String[]::new);
+
+        scanner.addAdditionalPaths(paths);
+        scanner.setUseSystemClasspath(false);
+        scanner.scan();
+
+        this.localClassesScanner = scanner;
     }
 
     /**
@@ -262,6 +406,42 @@ public class ClasspathManager {
     }
 
     /**
+     * Get the local libraries class loader.
+     *
+     * @return the local libraries class loader.
+     */
+    private @Nullable URLClassLoader getLocalLibrariesLoader() {
+        return localLibrariesLoader;
+    }
+
+    /**
+     * Set the local libraries class loader.
+     *
+     * @param localLibrariesLoader the local libraries class loader.
+     */
+    private void setLocalLibrariesLoader(@Nullable final URLClassLoader localLibrariesLoader) {
+        this.localLibrariesLoader = localLibrariesLoader;
+    }
+
+    /**
+     * Get the local classes class loader.
+     *
+     * @return the local classes class loader.
+     */
+    private @Nullable URLClassLoader getLocalClassesLoader() {
+        return localClassesLoader;
+    }
+
+    /**
+     * Set the local classes class loader.
+     *
+     * @param localClassesLoader the local classes class loader.
+     */
+    private void setLocalClassesLoader(@Nullable final URLClassLoader localClassesLoader) {
+        this.localClassesLoader = localClassesLoader;
+    }
+
+    /**
      * Find all implementations of the interface class.
      *
      * @param <T> the type of an interface.
@@ -269,17 +449,75 @@ public class ClasspathManager {
      * @return the list of all available implementations.
      */
     public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass) {
+        return findImplements(interfaceClass, Scope.ONLY_CORE);
+    }
+
+    /**
+     * Get the custom scanner.
+     *
+     * @return the custom scanner.
+     */
+    private @Nullable ClassPathScanner getCustomScanner() {
+        return customScanner;
+    }
+
+    /**
+     * Get the local libraries scanner.
+     *
+     * @return the local libraries scanner.
+     */
+    private @Nullable ClassPathScanner getLocalLibrariesScanner() {
+        return localLibrariesScanner;
+    }
+
+    /**
+     * Get the local classes scanner.
+     *
+     * @return the local classes scanner.
+     */
+    private @Nullable ClassPathScanner getLocalClassesScanner() {
+        return localClassesScanner;
+    }
+
+    /**
+     * Find all implementations of the interface class.
+     *
+     * @param <T>            the type of an interface.
+     * @param interfaceClass the interface class.
+     * @param scope          the scope.
+     * @return the list of all available implementations.
+     */
+    public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass,
+                                                       @NotNull final Set<Scope> scope) {
 
         final Array<Class<T>> result = ArrayFactory.newArray(Class.class);
 
-        coreScanner.findImplements(result, interfaceClass);
-        customScanner.findImplements(result, interfaceClass);
+        if (scope.contains(Scope.CORE)) {
+            coreScanner.findImplements(result, interfaceClass);
+        }
 
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.handlePlugins(plugin -> {
-            final PluginContainer container = plugin.getContainer();
-            container.getScanner().findImplements(result, interfaceClass);
-        });
+        final ClassPathScanner customScanner = getCustomScanner();
+        if (customScanner != null && scope.contains(Scope.CUSTOM)) {
+            customScanner.findImplements(result, interfaceClass);
+        }
+
+        final ClassPathScanner localLibrariesScanner = getLocalLibrariesScanner();
+        if (localLibrariesScanner != null && scope.contains(Scope.LOCAL_LIBRARIES)) {
+            localLibrariesScanner.findImplements(result, interfaceClass);
+        }
+
+        final ClassPathScanner localClassesScanner = getLocalClassesScanner();
+        if (localClassesScanner != null && scope.contains(Scope.LOCAL_CLASSES)) {
+            localClassesScanner.findImplements(result, interfaceClass);
+        }
+
+        if (scope.contains(Scope.PLUGINS)) {
+            final PluginManager pluginManager = PluginManager.getInstance();
+            pluginManager.handlePlugins(plugin -> {
+                final PluginContainer container = plugin.getContainer();
+                container.getScanner().findImplements(result, interfaceClass);
+            });
+        }
 
         return result;
     }

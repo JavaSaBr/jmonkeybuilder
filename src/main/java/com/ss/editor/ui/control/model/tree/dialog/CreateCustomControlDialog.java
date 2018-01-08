@@ -10,6 +10,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.control.EditableControl;
 import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
 import com.ss.editor.manager.ClasspathManager;
+import com.ss.editor.manager.ClasspathManager.Scope;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -168,9 +169,10 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
         final ObservableList<Class<? extends Control>> items = customComboBox.getItems();
 
-        final Array<Class<Control>> implementations = CLASSPATH_MANAGER.findImplements(Control.class);
-        implementations.forEach(items, (cs, classes) -> ClassUtils.hasConstructor(cs),
-                (controlClass, classes) -> classes.add(controlClass));
+        CLASSPATH_MANAGER.findImplements(Control.class, Scope.CORE_AND_CUSTOM_AND_LOCAL)
+                .stream().filter(ClassUtils::hasConstructor)
+                .sorted((f, s) -> StringUtils.compareIgnoreCase(f.getSimpleName(), s.getSimpleName()))
+                .distinct().forEach(items::add);
 
         final GridPane settingsContainer = new GridPane();
         root.add(builtInLabel, 0, 0);

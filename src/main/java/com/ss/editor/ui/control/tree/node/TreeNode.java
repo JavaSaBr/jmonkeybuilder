@@ -181,8 +181,13 @@ public abstract class TreeNode<T> implements UObject {
         if (canCopy()) items.add(new CopyNodeAction(nodeTree, this));
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
-        final Long objectId = (Long) clipboard.getContent(DATA_FORMAT);
-        final TreeItem<?> treeItem = objectId == null ? null : UIUtils.findItem(nodeTree.getTreeView(), objectId);
+        final Object content = clipboard.getContent(DATA_FORMAT);
+        if (!(content instanceof Long)) {
+            return;
+        }
+
+        final Long objectId = (Long) content;
+        final TreeItem<?> treeItem = UIUtils.findItem(nodeTree.getTreeView(), objectId);
         final TreeNode<?> treeNode = treeItem == null ? null : (TreeNode<?>) treeItem.getValue();
 
         if (treeNode != null && canAccept(treeNode, true)) {
