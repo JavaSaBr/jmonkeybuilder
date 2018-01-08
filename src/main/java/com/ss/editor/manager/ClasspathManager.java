@@ -44,6 +44,9 @@ public class ClasspathManager {
         public static final Set<Scope> ONLY_CORE = EnumSet.of(CORE);
 
         @NotNull
+        public static final Set<Scope> CORE_AND_CUSTOM_AND_LOCAL = EnumSet.of(CORE, CUSTOM, LOCAL_CLASSES, LOCAL_LIBRARIES);
+
+        @NotNull
         public static final Set<Scope> ALL = EnumSet.allOf(Scope.class);
     }
 
