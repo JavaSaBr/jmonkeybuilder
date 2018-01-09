@@ -29,17 +29,14 @@ public class CreatedFileEvent extends SceneEvent {
 
     private static final String FILE = "file";
     private static final String NEED_SELECT = "need_select";
-    private static final String IS_DIRECTORY = "isDirectory";
+    private static final String IS_DIRECTORY = "is_directory";
 
-    /**
-     * Instantiates a new Created file event.
-     */
     public CreatedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Sets need select.
+     * Set the need select.
      *
      * @param needSelect true if need to select a file.
      */
@@ -70,8 +67,7 @@ public class CreatedFileEvent extends SceneEvent {
      *
      * @return the new file.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE), "Can't find a file");
     }
 

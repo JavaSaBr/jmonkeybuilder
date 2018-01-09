@@ -285,8 +285,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             return;
         }
 
-        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
-            LOGGER.debug("Toggle camera " + keyPressed);
+        if (Config.DEV_CAMERA_DEBUG) {
+            LOGGER.debug(this, keyPressed, flag -> "Toggle camera " + flag);
         }
 
         if (keyPressed) {

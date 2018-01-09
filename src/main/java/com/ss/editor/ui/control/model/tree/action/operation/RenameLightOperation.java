@@ -1,17 +1,14 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import com.jme3.scene.Spatial;
+import com.jme3.light.Light;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The operation to rename a node.
- *
- * @author JavaSaBr
+ * The operation to rename light.
  */
-public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+public class RenameLightOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
      * The constant PROPERTY_NAME.
@@ -34,27 +31,27 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
      * The node.
      */
     @NotNull
-    private final Spatial spatial;
+    private final Light light;
 
-    public RenameNodeOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Spatial spatial) {
+    public RenameLightOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Light light) {
         this.oldName = oldName;
         this.newName = newName;
-        this.spatial = spatial;
+        this.light = light;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
-            spatial.setName(newName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(spatial, PROPERTY_NAME));
+            light.setName(newName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(light, PROPERTY_NAME));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
-            spatial.setName(oldName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(spatial, PROPERTY_NAME));
+            light.setName(oldName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(light, PROPERTY_NAME));
         });
     }
 }

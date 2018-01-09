@@ -23,9 +23,6 @@ public class WindowChangeFocusEvent extends SceneEvent {
 
     private static final String FOCUS = "focus";
 
-    /**
-     * Instantiates a new Window change focus event.
-     */
     public WindowChangeFocusEvent() {
         super(EVENT_TYPE);
     }
@@ -40,7 +37,7 @@ public class WindowChangeFocusEvent extends SceneEvent {
     }
 
     /**
-     * Sets focused.
+     * Set the focused.
      *
      * @param focused true if a window has focus.
      */

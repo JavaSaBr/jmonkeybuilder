@@ -42,13 +42,19 @@ public final class Config {
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.4.0");
+    public static final Version APP_VERSION = new Version("1.5.0");
 
     /**
      * The string version.
      */
     @NotNull
     public static final String STRING_VERSION = APP_VERSION.toString();
+
+    /**
+     * The server API version.
+     */
+    @NotNull
+    public static final int SERVER_API_VERSION = 1;
 
     /**
      * The path to application folder.
@@ -67,6 +73,11 @@ public final class Config {
      */
     @NotNull
     public static final OperatingSystem OPERATING_SYSTEM;
+
+    /**
+     * The remote control port.
+     */
+    public static int REMOTE_CONTROL_PORT = -1;
 
     /**
      * The flag to enable debug mode.

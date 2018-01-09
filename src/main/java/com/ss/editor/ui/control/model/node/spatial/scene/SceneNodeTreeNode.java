@@ -55,7 +55,7 @@ public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
     }
 
     @Override
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
         return false;
     }
 

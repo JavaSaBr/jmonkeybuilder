@@ -88,8 +88,8 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
 
     @Override
     @FXThread
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
-        final Object element = child.getElement();
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+        final Object element = treeNode.getElement();
         return element instanceof Spatial && SceneLayer.getLayer((Spatial) element) != getElement();
     }
 

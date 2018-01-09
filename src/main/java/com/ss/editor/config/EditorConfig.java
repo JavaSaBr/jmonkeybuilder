@@ -934,7 +934,7 @@ public final class EditorConfig implements AssetEventListener {
             for (Iterator<String> iterator = lastOpenedAssets.iterator(); iterator.hasNext(); ) {
 
                 final String assetUrl = iterator.next();
-                final Path assetPath = get(assetUrl, uri -> Paths.get(new URI(uri)));
+                final Path assetPath = get(assetUrl, uri -> Paths.get(uri));
 
                 if (!Files.exists(assetPath)) {
                     iterator.remove();

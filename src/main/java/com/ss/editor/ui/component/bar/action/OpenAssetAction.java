@@ -76,7 +76,9 @@ public class OpenAssetAction extends MenuItem {
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, "AssetChooseDialog");
 
-        if (folder == null) return;
+        if (folder == null) {
+            return;
+        }
 
         openAssetFolder(folder.toPath());
     }
@@ -101,7 +103,12 @@ public class OpenAssetAction extends MenuItem {
         dialog.show();
     }
 
-    private void openAssetFolder(@NotNull final Path newAsset) {
+    /**
+     * Open the asset folder.
+     *
+     * @param newAsset the asset folder.
+     */
+    public void openAssetFolder(@NotNull final Path newAsset) {
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAsset = config.getCurrentAsset();
@@ -111,9 +118,6 @@ public class OpenAssetAction extends MenuItem {
         config.setCurrentAsset(newAsset);
         config.save();
 
-        final ChangedCurrentAssetFolderEvent event = new ChangedCurrentAssetFolderEvent();
-        event.setNewAssetFolder(newAsset);
-
-        FX_EVENT_MANAGER.notify(event);
+        FX_EVENT_MANAGER.notify(new ChangedCurrentAssetFolderEvent(newAsset));
     }
 }
