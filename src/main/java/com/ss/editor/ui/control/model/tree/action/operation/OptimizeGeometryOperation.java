@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.tree.action.operation;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -31,13 +33,6 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final Node parent;
 
-    /**
-     * Instantiates a new Optimize geometry operation.
-     *
-     * @param newSpatial the new spatial
-     * @param oldSpatial the old spatial
-     * @param parent     the parent
-     */
     public OptimizeGeometryOperation(@NotNull final Spatial newSpatial, @NotNull final Spatial oldSpatial,
                                      @NotNull final Node parent) {
         this.newSpatial = newSpatial;
@@ -46,11 +41,13 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     }
 
     @Override
+    @FXThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> apply(editor, oldSpatial, newSpatial));
     }
 
     @Override
+    @FXThread
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> apply(editor, newSpatial, oldSpatial));
     }
@@ -62,6 +59,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
      * @param newSpatial the new spatial.
      * @param oldSpatial the new old spatial.
      */
+    @JMEThread
     private void apply(@NotNull final ModelChangeConsumer consumer, @NotNull final Spatial newSpatial,
                        @NotNull final Spatial oldSpatial) {
 

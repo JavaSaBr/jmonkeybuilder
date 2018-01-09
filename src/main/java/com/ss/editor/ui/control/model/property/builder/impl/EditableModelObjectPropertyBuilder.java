@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -8,9 +9,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.DirectionLightElementModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.NodeElementModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.PointLightElementModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.LightElementModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.SpatialElementModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.EditableObjectPropertyBuilder;
 import javafx.scene.layout.VBox;
@@ -41,8 +40,8 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
                 final EditableProperty<DirectionalLight, ?> property = cast(description);
                 final DirectionalLight value = property.getValue();
 
-                final DirectionLightElementModelPropertyControl<EditableProperty<DirectionalLight, ?>> propertyControl =
-                        new DirectionLightElementModelPropertyControl<>(value, property.getName(), changeConsumer);
+                final LightElementModelPropertyControl<DirectionalLight, EditableProperty<DirectionalLight, ?>> propertyControl =
+                        new LightElementModelPropertyControl<>(DirectionalLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -52,8 +51,19 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
                 final EditableProperty<PointLight, ?> property = cast(description);
                 final PointLight value = property.getValue();
 
-                final PointLightElementModelPropertyControl<EditableProperty<PointLight, ?>> propertyControl =
-                        new PointLightElementModelPropertyControl<>(value, property.getName(), changeConsumer);
+                final LightElementModelPropertyControl<PointLight, EditableProperty<PointLight, ?>> propertyControl =
+                        new LightElementModelPropertyControl<>(PointLight.class, value, property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+            case LIGHT_FROM_SCENE: {
+
+                final EditableProperty<Light, ?> property = cast(description);
+                final Light value = property.getValue();
+
+                final LightElementModelPropertyControl<Light, EditableProperty<Light, ?>> propertyControl =
+                        new LightElementModelPropertyControl<>(Light.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -63,8 +73,8 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
                 final EditableProperty<Spatial, ?> property = cast(description);
                 final Spatial value = property.getValue();
 
-                final SpatialElementModelPropertyControl<EditableProperty<Spatial, ?>> propertyControl =
-                        new SpatialElementModelPropertyControl<>(value, property.getName(), changeConsumer);
+                final SpatialElementModelPropertyControl<Spatial, EditableProperty<Spatial, ?>> propertyControl =
+                        new SpatialElementModelPropertyControl<>(Spatial.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -74,8 +84,8 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
                 final EditableProperty<Node, ?> property = cast(description);
                 final Node value = property.getValue();
 
-                final NodeElementModelPropertyControl<EditableProperty<Node, ?>> propertyControl =
-                        new NodeElementModelPropertyControl<>(value, property.getName(), changeConsumer);
+                final SpatialElementModelPropertyControl<Node, EditableProperty<Node, ?>> propertyControl =
+                        new SpatialElementModelPropertyControl<>(Node.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;

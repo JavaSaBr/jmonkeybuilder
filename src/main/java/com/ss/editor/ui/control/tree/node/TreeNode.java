@@ -1,17 +1,23 @@
 package com.ss.editor.ui.control.tree.node;
 
+import static com.ss.editor.ui.control.tree.NodeTreeCell.DATA_FORMAT;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.control.model.tree.action.CopyNodeAction;
+import com.ss.editor.ui.control.model.tree.action.PasteNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -172,6 +178,21 @@ public abstract class TreeNode<T> implements UObject {
     @FXThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
+        if (canCopy()) items.add(new CopyNodeAction(nodeTree, this));
+
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final Object content = clipboard.getContent(DATA_FORMAT);
+        if (!(content instanceof Long)) {
+            return;
+        }
+
+        final Long objectId = (Long) content;
+        final TreeItem<?> treeItem = UIUtils.findItem(nodeTree.getTreeView(), objectId);
+        final TreeNode<?> treeNode = treeItem == null ? null : (TreeNode<?>) treeItem.getValue();
+
+        if (treeNode != null && canAccept(treeNode, true)) {
+            items.add(new PasteNodeAction(nodeTree, this, treeNode));
+        }
     }
 
     /**
@@ -203,14 +224,14 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     /**
-     * Can accept boolean.
+     * Check of possibility to accept the tree node as a new child.
      *
-     * @param child  the child
-     * @param isCopy true if need to copy the object.
-     * @return true of this node can accept the child.
+     * @param treeNode the node.
+     * @param isCopy   true if need to copy the node.
+     * @return true if this node can be accept.
      */
     @FXThread
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
         return false;
     }
 

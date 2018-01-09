@@ -6,8 +6,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
@@ -40,13 +40,13 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * The list of all definitions.
      */
     @NotNull
-    private final Array<PropertyDefinition> definitions;
+    private final Array<@NotNull PropertyDefinition> definitions;
 
     /**
      * The handler to handle result properties.
      */
     @NotNull
-    private final Consumer<VarTable> handler;
+    private final Consumer<@NotNull VarTable> handler;
 
     /**
      * THe callback to call re-validating.
@@ -58,7 +58,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * The validator of all properties.
      */
     @NotNull
-    private Predicate<VarTable> validator;
+    private Predicate<@NotNull VarTable> validator;
 
     /**
      * The root content container.
@@ -66,14 +66,14 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private VBox root;
 
-    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
-                                @NotNull final Consumer<VarTable> handler) {
+    public GenericFactoryDialog(@NotNull final Array<@NotNull PropertyDefinition> definitions,
+                                @NotNull final Consumer<@NotNull VarTable> handler) {
         this(definitions, handler, varTable -> true);
     }
 
-    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
-                                @NotNull final Consumer<VarTable> handler,
-                                @NotNull final Predicate<VarTable> validator) {
+    public GenericFactoryDialog(@NotNull final Array<@NotNull PropertyDefinition> definitions,
+                                @NotNull final Consumer<@NotNull VarTable> handler,
+                                @NotNull final Predicate<@NotNull VarTable> validator) {
         this.definitions = definitions;
         this.handler = handler;
         this.validator = validator;
@@ -100,7 +100,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      */
     @FXThread
     public void setButtonOkText(@NotNull final String text) {
-        getOkButton().setText(text);
+        notNull(getOkButton()).setText(text);
     }
 
     /**
@@ -110,7 +110,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      */
     @FXThread
     public void setButtonCloseText(@NotNull final String text) {
-        getCloseButton().setText(text);
+        notNull(getCloseButton()).setText(text);
     }
 
     @Override
@@ -171,7 +171,13 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      */
     @FXThread
     protected void validate() {
-        getOkButton().setDisable(!validator.test(vars));
+
+        getRoot().getChildren().stream()
+                .filter(PropertyEditorControl.class::isInstance)
+                .map(PropertyEditorControl.class::cast)
+                .forEach(PropertyEditorControl::checkDependency);
+
+        notNull(getOkButton()).setDisable(!validator.test(vars));
     }
 
     @Override

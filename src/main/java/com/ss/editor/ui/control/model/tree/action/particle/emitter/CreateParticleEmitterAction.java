@@ -34,22 +34,20 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         super(nodeTree, node);
     }
 
-    @FXThread
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FXThread
+    protected @Nullable Image getIcon() {
         return Icons.EMITTER_16;
     }
 
-    @FXThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void process() {
         super.process();
 
@@ -87,8 +85,8 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         changeConsumer.execute(new AddChildOperation(emitter, parent));
     }
 
-    @NotNull
-    protected ParticleEmitter createParticleEmitter() {
+    @FXThread
+    protected @NotNull ParticleEmitter createParticleEmitter() {
         return new ParticleEmitter("Default Emitter", ParticleMesh.Type.Triangle, 30);
     }
 }

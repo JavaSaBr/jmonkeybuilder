@@ -518,6 +518,19 @@ public class UIUtils {
     }
 
     /**
+     * Consume an event if the condition returns true.
+     *
+     * @param event     the event.
+     * @param condition the condition.
+     */
+    @FXThread
+    public static void consumeIf(@NotNull final KeyEvent event, @NotNull final Predicate<KeyEvent> condition) {
+        if (condition.test(event)) {
+            event.consume();
+        }
+    }
+
+    /**
      * Consume an event if the event is not hotkey.
      *
      * @param event the event.

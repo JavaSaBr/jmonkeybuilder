@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="jMonkey Builder" default="do-deploy" basedir="native-build"
+<project name="NativeBuild" default="buildNativeBundle" basedir="native-build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="1.3.0"/>
-    <property environment="env"/>
-
-    <condition property="gradle.executable" value="${basedir}/../gradlew.bat"
-               else="${basedir}/../gradlew">
-        <os family="windows"/>
-    </condition>
-
-    <target name="prepare-dependences">
-        <exec executable="${gradle.executable}" dir="../">
-            <arg value="copyToLib"/>
-        </exec>
-    </target>
-
-    <target name="init-fx-tasks">
+    <target name="initFXAntTasks">
         <path id="fxant">
             <filelist>
                 <file name="${java.home}/../lib/ant-javafx.jar"/>
@@ -30,157 +16,158 @@
                  classpathref="fxant"/>
     </target>
 
-    <target name="setup-staging-area" depends="prepare-dependences">
-        <delete dir="externalLibs"/>
-        <delete dir="project"/>
-        <delete dir="licenses"/>
-        <delete dir="projectRefs"/>
-        <delete dir="deploy"/>
-        <delete dir="dist"/>
-        <delete dir="embedded-plugins"/>
+    <target name="prepareNativeBuild" depends="prepareDependencies">
+        <delete dir="${basedir}/externalLibs"/>
+        <delete dir="${basedir}/project"/>
+        <delete dir="${basedir}/licenses"/>
+        <delete dir="${basedir}/projectRefs"/>
+        <delete dir="${basedir}/deploy"/>
+        <delete dir="${basedir}/dist"/>
+        <delete dir="${basedir}/embedded-plugins"/>
 
-        <mkdir dir="externalLibs"/>
+        <mkdir dir="${basedir}/externalLibs"/>
 
-        <copy todir="externalLibs">
-            <fileset dir="../build/dependences" />
+        <copy todir="${basedir}/externalLibs">
+            <fileset dir="${basedir}/../build/dependencies" />
         </copy>
 
-        <mkdir dir="project"/>
-        <copy todir="project">
-            <fileset dir="../src/main/">
+        <mkdir dir="${basedir}/project"/>
+        <copy todir="${basedir}/project">
+            <fileset dir="${basedir}/../src/main/">
                 <include name="java/**"/>
                 <include name="resources/**"/>
             </fileset>
         </copy>
 
-        <mkdir dir="licenses"/>
-        <mkdir dir="licenses/libraries-licenses"/>
-        <copy todir="licenses">
-            <fileset dir="../">
+        <mkdir dir="${basedir}/licenses"/>
+        <mkdir dir="${basedir}/licenses/libraries-licenses"/>
+        <copy todir="${basedir}/licenses">
+            <fileset dir="${basedir}/../">
                 <include name="LICENSE"/>
             </fileset>
         </copy>
-        <copy todir="licenses/libraries-licenses">
-            <fileset dir="../libraries-licenses">
+        <copy todir="${basedir}/licenses/libraries-licenses">
+            <fileset dir="${basedir}/../libraries-licenses">
                 <include name="*"/>
             </fileset>
         </copy>
 
-        <mkdir dir="embedded-plugins"/>
-        <copy todir="embedded-plugins">
-            <fileset dir="../embedded-plugins" />
+        <mkdir dir="${basedir}/embedded-plugins"/>
+        <copy todir="${basedir}/embedded-plugins">
+            <fileset dir="${basedir}/../embedded-plugins" />
         </copy>
 
-        <mkdir dir="projectRefs"/>
+        <mkdir dir="${basedir}/projectRefs"/>
     </target>
 
-    <target name='do-compile'>
-        <delete dir="build"/>
-        <mkdir dir="build/src"/>
-        <mkdir dir="build/libs"/>
-        <mkdir dir="build/classes"/>
+    <target name="compileClassesForNativeBuild">
+        <delete dir="${basedir}/build"/>
+        <mkdir dir="${basedir}/build/src"/>
+        <mkdir dir="${basedir}/build/libs"/>
+        <mkdir dir="${basedir}/build/classes"/>
 
         <!-- Copy project-libs references -->
-        <copy todir="build/libs">
-            <fileset dir="externalLibs"/>
+        <copy todir="${basedir}/build/libs">
+            <fileset dir="${basedir}/externalLibs"/>
         </copy>
 
         <!-- Copy project references -->
 
         <!-- Copy project sources itself -->
-        <copy todir="build/src">
-            <fileset dir="project/java">
+        <copy todir="${basedir}/build/src">
+            <fileset dir="${basedir}/project/java">
                 <include name="**/*"/>
             </fileset>
-            <fileset dir="project/resources">
+            <fileset dir="${basedir}/project/resources">
                 <include name="**/*"/>
             </fileset>
         </copy>
 
-        <javac includeantruntime="false" source="1.8" target="1.8" srcdir="build/src" destdir="build/classes"
-               encoding="UTF-8">
+        <javac includeantruntime="false" source="${javaSourceVersion}" target="${javaTargetVersion}"
+               srcdir="${basedir}/build/src" destdir="${basedir}/build/classes"
+               encoding="UTF-8" debug="true">
             <classpath>
-                <fileset dir="build/libs">
+                <fileset dir="${basedir}/build/libs">
                     <include name="*"/>
                 </fileset>
             </classpath>
         </javac>
 
         <!-- Copy over none Java-Files -->
-        <copy todir="build/classes">
-            <fileset dir="project/java">
+        <copy todir="${basedir}/build/classes">
+            <fileset dir="${basedir}/project/java">
                 <exclude name="**/*.java"/>
             </fileset>
-            <fileset dir="project/resources">
+            <fileset dir="${basedir}/project/resources">
                 <include name="**/*"/>
             </fileset>
         </copy>
     </target>
 
-    <target name="do-deploy" depends="setup-staging-area, do-compile, init-fx-tasks">
-        <delete file="dist"/>
-        <delete file="deploy"/>
+    <target name="buildNativeBundle" depends="prepareNativeBuild, compileClassesForNativeBuild, initFXAntTasks">
+        <delete file="${basedir}/dist"/>
+        <delete file="${basedir}/deploy"/>
 
-        <mkdir dir="dist"/>
-        <mkdir dir="dist/libs"/>
-        <mkdir dir="dist/licenses"/>
-        <mkdir dir="dist/embedded-plugins"/>
+        <mkdir dir="${basedir}/dist"/>
+        <mkdir dir="${basedir}/dist/libs"/>
+        <mkdir dir="${basedir}/dist/licenses"/>
+        <mkdir dir="${basedir}/dist/embedded-plugins"/>
 
-        <copy todir="dist/licenses">
-            <fileset dir="licenses">
+        <copy todir="${basedir}/dist/licenses">
+            <fileset dir="${basedir}/licenses">
                 <include name="*"/>
             </fileset>
         </copy>
 
-        <copy todir="dist/licenses/libraries-licenses">
-            <fileset dir="licenses/libraries-licenses">
+        <copy todir="${basedir}/dist/licenses/libraries-licenses">
+            <fileset dir="${basedir}/licenses/libraries-licenses">
                 <include name="*"/>
             </fileset>
         </copy>
 
-        <copy todir="dist/embedded-plugins">
-            <fileset dir="embedded-plugins" />
+        <copy todir="${basedir}/dist/embedded-plugins">
+            <fileset dir="${basedir}/embedded-plugins" />
         </copy>
 
-        <copy todir="dist/libs">
-            <fileset dir="externalLibs">
+        <copy todir="${basedir}/dist/libs">
+            <fileset dir="${basedir}/externalLibs">
                 <include name="*"/>
             </fileset>
         </copy>
 
         <fx:resources id="appRes" >
-            <fx:fileset dir="dist" includes="jmonkey-builder.jar"/>
-            <fx:fileset dir="dist" includes="licenses/*"/>
-            <fx:fileset dir="dist" includes="licenses/libraries-licenses/*"/>
-            <fx:fileset dir="dist" includes="libs/*"/>
-            <fx:fileset dir="dist" includes="embedded-plugins/*/*"/>
-            <fx:fileset dir="dist" includes="embedded-plugins/*/*/*"/>
-            <fx:fileset dir="package"/>
+            <fx:fileset dir="${basedir}/dist" includes="jmonkeybuilder.jar"/>
+            <fx:fileset dir="${basedir}/dist" includes="licenses/*"/>
+            <fx:fileset dir="${basedir}/dist" includes="licenses/libraries-licenses/*"/>
+            <fx:fileset dir="${basedir}/dist" includes="libs/*"/>
+            <fx:fileset dir="${basedir}/dist" includes="embedded-plugins/*/*"/>
+            <fx:fileset dir="${basedir}/dist" includes="embedded-plugins/*/*/*"/>
+            <fx:fileset dir="${basedir}/package"/>
         </fx:resources>
 
         <fx:application id="fxApplication"
-                        name="jMonkey Builder"
-                        mainClass="com.ss.editor.JFXApplication"
+                        name="${applicationTitle}"
+                        mainClass="${applicationMainClass}"
                         toolkit="fx"
-                        version="${editor.version}"/>
+                        version="${applicationVersion}"/>
 
-        <mkdir dir="build/classes/META-INF"/>
+        <mkdir dir="${basedir}/build/classes/META-INF"/>
 
-        <fx:jar destfile="dist/jmonkey-builder.jar">
+        <fx:jar destfile="${basedir}/dist/jmonkeybuilder.jar">
             <fx:application refid="fxApplication"/>
-            <fileset dir="build/classes"/>
+            <fileset dir="${basedir}/build/classes"/>
             <fx:resources refid="appRes"/>
-
             <manifest>
-                <attribute name="Implementation-Vendor" value="bitbucket.org/JavaSabr"/>
-                <attribute name="Implementation-Title" value="jMonkey Builder"/>
-                <attribute name="Implementation-Version" value="${editor.version}"/>
+                <attribute name="Implementation-Vendor" value="${applicationVendor}"/>
+                <attribute name="Implementation-Title" value="${applicationTitle}"/>
+                <attribute name="Implementation-Version" value="${applicationVersion}"/>
             </manifest>
         </fx:jar>
 
-        <replace file="package/linux/control" token="@version@" value="${editor.version}"/>
+        <replace file="${basedir}/package/linux/control" token="@version@" value="${applicationVersion}"/>
+        <replace file="${basedir}/package/windows/jMonkeyBuilder.wxs" token="@version@" value="${applicationVersion}"/>
 
-        <mkdir dir="deploy"/>
+        <mkdir dir="${basedir}/deploy"/>
         <!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
         <fx:deploy
                 embedJNLP="false"
@@ -188,24 +175,25 @@
                 includeDT="false"
                 offlineAllowed="true"
                 outdir="${basedir}/deploy"
-                outfile="jMonkey Builder" nativeBundles="all"
+                outfile="${applicationTitle}" nativeBundles="all"
                 updatemode="background" verbose="true">
 
             <fx:platform>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
-                <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
+                <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=javasabr-NB:6005,suspend=y"/>-->
             </fx:platform>
 
             <preferences shortcut="true" menu="true" install="false"/>
 
             <info category="graphics"
-                  description="The 3D Editor for jMonkeyEngine 3.2 by JavaSaBr"
-                  email="javasabr@gmail.com" license="Freeware" title="jMonkey Builder" vendor="bitbucket.org/JavaSabr"/>
+                  description="The 3D Editor for jMonkeyEngine 3.2"
+                  email="javasabr@gmail.com" license="Freeware" title="${applicationTitle}" vendor="${applicationVendor}"/>
 
             <application refId="fxApplication"/>
             <resources refid="appRes"/>
         </fx:deploy>
 
-        <replace file="package/linux/control" token="${editor.version}" value="@version@"/>
+        <replace file="${basedir}/package/linux/control" token="${applicationVersion}" value="@version@"/>
+        <replace file="${basedir}/package/windows/jMonkeyBuilder.wxs" token="${applicationVersion}" value="@version@"/>
     </target>
 </project>

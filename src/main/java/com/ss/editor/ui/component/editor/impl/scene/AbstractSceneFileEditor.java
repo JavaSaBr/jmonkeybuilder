@@ -615,8 +615,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         }
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
                                  @Nullable final Object newChild, final boolean needExpand,
                                  final boolean needDeepExpand) {
@@ -625,8 +625,18 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Spatial currentModel = getCurrentModel();
 
         if (currentModel == oldChild && newChild != null) {
-            setCurrentModel(unsafeCast(newChild));
+            handleRemovedObject(currentModel);
             editor3DState.openModel(unsafeCast(newChild));
+            handleAddedObject((Spatial) newChild);
+        } else {
+
+            if (oldChild instanceof Spatial) {
+                handleRemovedObject((Spatial) oldChild);
+            }
+
+            if (newChild instanceof Spatial) {
+                handleAddedObject((Spatial) newChild);
+            }
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();

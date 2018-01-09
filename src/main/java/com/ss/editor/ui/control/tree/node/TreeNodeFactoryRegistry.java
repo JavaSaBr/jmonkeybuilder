@@ -65,8 +65,7 @@ public class TreeNodeFactoryRegistry {
      *
      * @return the list of available tree node factories.
      */
-    @NotNull
-    private Array<TreeNodeFactory> getFactories() {
+    private @NotNull Array<TreeNodeFactory> getFactories() {
         return factories;
     }
 
@@ -78,8 +77,7 @@ public class TreeNodeFactoryRegistry {
      * @param element the element
      * @return the tree node.
      */
-    @Nullable
-    public <T, V extends TreeNode<T>> V createFor(@Nullable final T element) {
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element) {
 
         if (element instanceof TreeNode) {
             return unsafeCast(element);

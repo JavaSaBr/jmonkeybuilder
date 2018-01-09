@@ -3,10 +3,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.filler.impl;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.ConvertFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileByExternalEditorAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
@@ -44,6 +41,7 @@ public class FileAssetTreeSingleContextMenuFiller implements AssetTreeSingleCont
             if (actionTester.test(OpenWithFileAction.class)) {
                 items.add(new OpenWithFileAction(element));
             }
+
 
             if (actionTester.test(ConvertFileAction.class)) {
 

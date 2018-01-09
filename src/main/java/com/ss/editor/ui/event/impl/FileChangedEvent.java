@@ -29,25 +29,21 @@ public class FileChangedEvent extends SceneEvent {
 
     private static final String FILE = "file";
 
-    /**
-     * Instantiates a new File changed event.
-     */
     public FileChangedEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE), "Can't find a file");
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file.
      */

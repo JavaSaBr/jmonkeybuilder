@@ -1,11 +1,14 @@
 package com.ss.editor.ui.control.model.node.light;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.RemoveLightAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
+import com.ss.editor.ui.control.model.tree.action.operation.RenameLightOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
@@ -39,7 +42,9 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
     @FXThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         final T element = getElement();
-        element.setName(newName);
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
+        final String currentName = element.getName();
+        consumer.execute(new RenameLightOperation(currentName == null ? "" : currentName, newName, element));
     }
 
     @Override

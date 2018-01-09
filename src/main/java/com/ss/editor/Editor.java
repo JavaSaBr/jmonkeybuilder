@@ -13,6 +13,7 @@ import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.environment.util.EnvMapUtils;
 import com.jme3.font.BitmapFont;
 import com.jme3.light.LightList;
 import com.jme3.light.LightProbe;
@@ -32,12 +33,13 @@ import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.asset.locator.FileSystemAssetLocator;
+import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
@@ -271,10 +273,11 @@ public class Editor extends JmeToJFXApplication {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OperatingSystem system = new OperatingSystem();
 
-        LOGGER.info(this, "OS: " + system.getDistribution());
+        LOGGER.debug(this, "OS: " + system.getDistribution());
 
         final AssetManager assetManager = getAssetManager();
         assetManager.registerLocator("", FolderAssetLocator.class);
+        assetManager.registerLocator("", FileSystemAssetLocator.class);
         assetManager.addAssetEventListener(EditorConfig.getInstance());
 
         final AudioRenderer audioRenderer = getAudioRenderer();
@@ -331,9 +334,6 @@ public class Editor extends JmeToJFXApplication {
 
         createLightProbes();
         stateManager.detach(stateManager.getState(DebugKeysAppState.class));
-
-        final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.onAfterCreateJMEContext();
 
         new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
     }
@@ -468,8 +468,8 @@ public class Editor extends JmeToJFXApplication {
             return;
         }
 
-        lightProbe = makeProbe(environmentCamera, rootNode, EMPTY_JOB_ADAPTER);
-        previewLightProbe = makeProbe(previewEnvironmentCamera, previewNode, EMPTY_JOB_ADAPTER);
+        lightProbe = makeProbe(environmentCamera, rootNode, EnvMapUtils.GenerationType.Fast, EMPTY_JOB_ADAPTER);
+        previewLightProbe = makeProbe(previewEnvironmentCamera, previewNode, EnvMapUtils.GenerationType.Fast, EMPTY_JOB_ADAPTER);
 
         BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
         bounds.setRadius(100);
@@ -497,7 +497,7 @@ public class Editor extends JmeToJFXApplication {
             return;
         }
 
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, progressAdapter);
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, EnvMapUtils.GenerationType.Fast, progressAdapter);
     }
 
     /**
@@ -552,7 +552,7 @@ public class Editor extends JmeToJFXApplication {
             return;
         }
 
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, previewNode, progressAdapter);
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, previewNode, EnvMapUtils.GenerationType.Fast, progressAdapter);
     }
 
     /**

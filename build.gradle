@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC2'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
 
@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '1.2.0'
+version = '1.5.0'
 
 compileJava {
     options.encoding = "UTF-8"
@@ -45,11 +45,14 @@ compileTestJava {
     options.compilerArgs += '-parameters'
 }
 
-ext.jmeVersion = "3.2_branch-SNAPSHOT"
+ext.applicationMainClass = "com.ss.editor.JFXApplication"
+ext.applicationVendor = "javasabr@gmail.com"
+ext.applicationTitle = "jMonkeyBuilder"
+ext.jmeVersion = "3.3_branch-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
-ext.lwjglVersion = "3.1.2"
-ext.junitPlatformVersion = "1.0.0-M5"
-ext.junitJupiterVersion = "5.0.0-M5"
+ext.lwjglVersion = "3.1.5"
+ext.junitPlatformVersion = "1.0.0"
+ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
 
 junitPlatform {
@@ -79,8 +82,8 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.4.1'
-    compile 'com.github.JavaSaBr:JME3-JFX:1.6.1'
+    compile 'com.github.JavaSaBr:RLib:6.7.1'
+    compile 'com.github.JavaSaBr:JME3-JFX:1.7.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
@@ -146,10 +149,10 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jmonkey-builder-extension:1.8.0') {
+    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.4') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.4.0') {
+    compile ('com.github.JavaSaBr:tonegodemitter:2.4.1') {
         exclude group: 'org.jmonkeyengine'
     }
 
@@ -172,16 +175,27 @@ dependencies {
     testCompile "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 }
 
-task copyToLib(type: Copy) {
+ant.importBuild('build-native.xml')
+ant.basedir = new File(buildDir.getParentFile(), "native-build")
+ant.properties.javaSourceVersion = sourceCompatibility
+ant.properties.javaTargetVersion = targetCompatibility
+ant.properties.applicationJarName = name + ".jar"
+ant.properties.applicationMainClass = ext.applicationMainClass
+ant.properties.applicationVendor = ext.applicationVendor
+ant.properties.applicationTitle = ext.applicationTitle
+ant.properties.applicationVersion = version
+
+task prepareDependencies(type: Copy) {
 
     doFirst {
-        println("delete " + "$buildDir/dependences")
-        GFileUtils.deleteDirectory(new File("$buildDir/dependences"))
+        println("delete " + "$buildDir/dependencies")
+        GFileUtils.deleteDirectory(new File("$buildDir/dependencies"))
     }
 
-    into "$buildDir/dependences"
+    into "$buildDir/dependencies"
     from configurations.runtime
 }
+
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -194,7 +208,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.3'
+    gradleVersion = '4.4'
 }
 
 artifacts {
@@ -208,7 +222,7 @@ defaultTasks 'clean', 'install'
 install {
     repositories.mavenInstaller {
         pom.version = version
-        pom.artifactId = 'jmonkey-builder'
+        pom.artifactId = 'jmonkeybuilder'
         pom.project {
             licenses {
                 license {

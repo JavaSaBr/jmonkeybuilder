@@ -288,10 +288,20 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @Nullable Path getAssetFile(@NotNull final Path file) {
+
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return null;
-        return currentAsset.relativize(file);
+        if (currentAsset == null) {
+            return null;
+        }
+
+        try {
+            return currentAsset.relativize(file);
+        } catch (final IllegalArgumentException e) {
+            LOGGER.warning("Can't create asset file of the " + file + " for asset folder " + currentAsset);
+            LOGGER.warning(e);
+            return null;
+        }
     }
 
     /**

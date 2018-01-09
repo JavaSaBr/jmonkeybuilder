@@ -21,6 +21,7 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.function.FloatFloatConsumer;
+import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -540,7 +541,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     @JMEThread
     private void startCameraMoving(final int key) {
 
-        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
+        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
             LOGGER.debug(this, "start camera moving[" + cameraMoving + "] for key " + key);
         }
 
@@ -570,7 +571,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
 
         final boolean[] cameraKeysState = getCameraKeysState();
 
-        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
+        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
             LOGGER.debug(this, "finish camera moving[" + cameraMoving + "] for key " + key + ", force = " + force);
         }
 

@@ -17,25 +17,19 @@ import tonegod.emitter.SoftParticleEmitterNode;
  */
 public class CreateToneg0dSoftParticleEmitterAction extends CreateToneg0dParticleEmitterAction {
 
-    /**
-     * Instantiates a new Create toneg 0 d soft emitter action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateToneg0dSoftParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FXThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FXThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     }
 
-    @NotNull
-    protected ParticleEmitterNode createEmitterNode() {
+    @Override
+    @FXThread
+    protected @NotNull ParticleEmitterNode createEmitterNode() {
         return new SoftParticleEmitterNode(EDITOR.getAssetManager());
     }
 }

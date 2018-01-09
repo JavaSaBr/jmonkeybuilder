@@ -46,7 +46,7 @@ public class GLSLCodeArea extends BaseCodeArea {
     /**
      * The available fields.
      */
-    @NotNull
+    @Nullable
     private final List<String> fields;
 
     /**

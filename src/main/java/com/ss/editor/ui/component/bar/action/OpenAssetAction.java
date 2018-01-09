@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.dialog.folder.OpenExternalFolderEditorDialog;
+import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import javafx.scene.control.MenuItem;
@@ -76,13 +76,15 @@ public class OpenAssetAction extends MenuItem {
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, "AssetChooseDialog");
 
-        if (folder == null) return;
+        if (folder == null) {
+            return;
+        }
 
         openAssetFolder(folder.toPath());
     }
 
     /**
-     * Open asset folder use custom file chooser.
+     * Open an asset folder using custom file chooser.
      */
     private void openAsset() {
 
@@ -101,7 +103,12 @@ public class OpenAssetAction extends MenuItem {
         dialog.show();
     }
 
-    private void openAssetFolder(@NotNull final Path newAsset) {
+    /**
+     * Open the asset folder.
+     *
+     * @param newAsset the asset folder.
+     */
+    public void openAssetFolder(@NotNull final Path newAsset) {
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAsset = config.getCurrentAsset();
@@ -111,9 +118,6 @@ public class OpenAssetAction extends MenuItem {
         config.setCurrentAsset(newAsset);
         config.save();
 
-        final ChangedCurrentAssetFolderEvent event = new ChangedCurrentAssetFolderEvent();
-        event.setNewAssetFolder(newAsset);
-
-        FX_EVENT_MANAGER.notify(event);
+        FX_EVENT_MANAGER.notify(new ChangedCurrentAssetFolderEvent(newAsset));
     }
 }

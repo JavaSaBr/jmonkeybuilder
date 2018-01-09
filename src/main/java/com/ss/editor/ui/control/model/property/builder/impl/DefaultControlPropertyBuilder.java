@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
+import static com.ss.editor.extension.property.EditablePropertyType.ENUM;
+import static com.ss.editor.extension.property.EditablePropertyType.LIGHT_FROM_SCENE;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
@@ -15,24 +17,29 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import com.jme3.scene.control.LightControl;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.WheelElementModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.editor.ui.control.property.impl.*;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for default controls.
  *
  * @author JavaSaBr
  */
-public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
     @NotNull
     private static final PropertyBuilder INSTANCE = new DefaultControlPropertyBuilder();
@@ -76,6 +83,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
             build((AbstractControl) object, container, changeConsumer);
         }
 
+        super.buildForImpl(object, parent, container, changeConsumer);
+
         if (object instanceof SkeletonControl) {
             build((SkeletonControl) object, container, changeConsumer);
         } else if (object instanceof CharacterControl) {
@@ -91,6 +100,27 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         if (object instanceof PhysicsRigidBody) {
             build((PhysicsRigidBody) object, container, changeConsumer);
         }
+    }
+
+
+    @Override
+    @FXThread
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+
+        if (object instanceof LightControl) {
+
+            final LightControl control = (LightControl) object;
+
+            final List<EditableProperty<?, ?>> result = new ArrayList<>(2);
+            result.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_DIRECTION_TYPE, control,
+                    LightControl::getControlDir, LightControl::setControlDir));
+            result.add(new SimpleProperty<>(LIGHT_FROM_SCENE, Messages.MODEL_PROPERTY_LIGHT, control,
+                    LightControl::getLight, LightControl::setLight));
+
+            return result;
+        }
+
+        return super.getProperties(object);
     }
 
     @FXThread

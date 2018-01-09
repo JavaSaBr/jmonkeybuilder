@@ -30,25 +30,31 @@ public final class Config {
      * The name of editor's folder in user home folder.
      */
     @NotNull
-    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkey-builder";
+    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkeybuilder";
 
     /**
      * The editor's title.
      */
     @NotNull
-    public static final String TITLE = "jMonkey Builder";
+    public static final String TITLE = "jMonkeyBuilder";
 
     /**
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.3.0");
+    public static final Version APP_VERSION = new Version("1.5.0");
 
     /**
      * The string version.
      */
     @NotNull
     public static final String STRING_VERSION = APP_VERSION.toString();
+
+    /**
+     * The server API version.
+     */
+    @NotNull
+    public static final int SERVER_API_VERSION = 1;
 
     /**
      * The path to application folder.
@@ -69,39 +75,44 @@ public final class Config {
     public static final OperatingSystem OPERATING_SYSTEM;
 
     /**
-     * The flat to enable debug mode.
+     * The remote control port.
      */
-    public static final boolean DEV_DEBUG;
+    public static int REMOTE_CONTROL_PORT = -1;
 
     /**
-     * The flat to enable camera debug mode.
+     * The flag to enable debug mode.
      */
-    public static final boolean DEV_CAMERA_DEBUG;
+    public static boolean DEV_DEBUG;
 
     /**
-     * The flat to enable transformations debug mode.
+     * The flag to enable camera debug mode.
      */
-    public static final boolean DEV_TRANSFORMS_DEBUG;
+    public static boolean DEV_CAMERA_DEBUG;
 
     /**
-     * The flat to enable JavaFX debug mode.
+     * The flag to enable transformations debug mode.
      */
-    public static final boolean DEV_DEBUG_JFX;
+    public static boolean DEV_TRANSFORMS_DEBUG;
 
     /**
-     * The flat to enable JavaFX mouse input debug mode.
+     * The flag to enable JavaFX debug mode.
      */
-    public static final boolean DEV_DEBUG_JFX_MOUSE_INPUT;
+    public static boolean DEV_DEBUG_JFX;
 
     /**
-     * The flat to enable javaFX key input debug mode.
+     * The flag to enable JavaFX mouse input debug mode.
      */
-    public static final boolean DEV_DEBUG_JFX_KEY_INPUT;
+    public static boolean DEV_DEBUG_JFX_MOUSE_INPUT;
 
     /**
-     * The flat to enable PBR render.
+     * The flag to enable javaFX key input debug mode.
      */
-    public static final boolean ENABLE_PBR;
+    public static boolean DEV_DEBUG_JFX_KEY_INPUT;
+
+    /**
+     * The flag to enable PBR render.
+     */
+    public static boolean ENABLE_PBR;
 
     static {
 

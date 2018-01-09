@@ -27,6 +27,7 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.CreateLightControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacterControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBodyControlAction;
@@ -65,7 +66,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
-        final AssetLinkNode linkNode = findParent(getElement(), AssetLinkNode.class::isInstance);
+        final T element = getElement();
+        final AssetLinkNode linkNode = findParent(element, AssetLinkNode.class::isInstance);
 
         if (linkNode == null) {
             final Menu createMenu = createCreationMenu(nodeTree);
@@ -74,10 +76,12 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             if (toolMenu != null) items.add(toolMenu);
         }
 
-        if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
-
-        if (linkNode == null) {
+        if (linkNode == null || element == linkNode) {
             items.add(new AddUserDataAction(nodeTree, this));
+        }
+
+        if (canRemove()) {
+            items.add(new RemoveNodeAction(nodeTree, this));
         }
 
         super.fillContextMenu(nodeTree, items);
@@ -97,9 +101,9 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
     @Override
     @FXThread
-    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
-        final Object element = child.getElement();
-        return element instanceof AbstractControl || super.canAccept(child, isCopy);
+    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+        final Object element = treeNode.getElement();
+        return element instanceof AbstractControl || super.canAccept(treeNode, isCopy);
     }
 
     @Override
@@ -166,6 +170,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         if (element.getControl(MotionEvent.class) == null) {
             items.add(new CreateMotionControlAction(nodeTree, this));
         }
+
+        items.add(new CreateLightControlAction(nodeTree, this));
 
         //final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
         //if (skeletonControl != null) {

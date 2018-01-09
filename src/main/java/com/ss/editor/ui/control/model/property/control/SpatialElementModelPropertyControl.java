@@ -15,21 +15,23 @@ import org.jetbrains.annotations.Nullable;
  * @param <D> the type parameter
  * @author JavaSaBr
  */
-public class SpatialElementModelPropertyControl<D> extends ElementModelPropertyControl<D, Spatial> {
+public class SpatialElementModelPropertyControl<S extends Spatial, D> extends ElementModelPropertyControl<D, S> {
 
-    public SpatialElementModelPropertyControl(@Nullable final Spatial propertyValue, @NotNull final String propertyName,
+    public SpatialElementModelPropertyControl(@NotNull Class<S> type, @Nullable final S propertyValue,
+                                              @NotNull final String propertyName,
                                               @NotNull final ModelChangeConsumer changeConsumer) {
-        super(Spatial.class, propertyValue, propertyName, changeConsumer);
+        super(type, propertyValue, propertyName, changeConsumer);
     }
 
-    @NotNull
-    protected NodeSelectorDialog<Spatial> createNodeSelectorDialog() {
+    @Override
+    @FXThread
+    protected @NotNull NodeSelectorDialog<S> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         return new SpatialSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void reload() {
 
         final Spatial spatial = getPropertyValue();

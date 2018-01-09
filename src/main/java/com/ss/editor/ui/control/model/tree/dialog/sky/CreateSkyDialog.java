@@ -21,7 +21,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.extension.util.SSSkyFactory;
+import com.ss.editor.extension.util.JmbSkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -800,7 +800,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final Geometry sky;
 
         if (isEditableSky()) {
-            sky = (Geometry) SSSkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture,
+            sky = (Geometry) JmbSkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture,
                     topTexture, bottomTexture, scale);
         } else {
             sky = (Geometry) SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture,
@@ -838,7 +838,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final Geometry sky;
 
         if (isEditableSky()) {
-            sky = (Geometry) SSSkyFactory.createSky(assetManager, texture, scale, envMapType);
+            sky = (Geometry) JmbSkyFactory.createSky(assetManager, texture, scale, envMapType);
             sky.setMaterial(createMaterialFileIfNeed(sky));
         } else {
             sky = (Geometry) SkyFactory.createSky(assetManager, texture, scale, envMapType);

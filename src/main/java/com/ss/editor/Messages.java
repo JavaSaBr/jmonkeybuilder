@@ -46,6 +46,7 @@ public class Messages {
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_IMPORT_MODEL;
 
     public static final String FILE_EDITOR_ACTION_SAVE;
 
@@ -200,6 +201,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_PATH;
     public static final String MODEL_FILE_EDITOR_NODE_WAY_POINT;
     public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
+    public static final String MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -236,10 +238,12 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE;
-    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
+    public static final String MODEL_NODE_TREE_ACTION_COPY;
+    public static final String MODEL_NODE_TREE_ACTION_PASTE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
@@ -272,7 +276,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
-    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
@@ -414,6 +419,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_BILLBOARD;
     public static final String MODEL_PROPERTY_INITIAL_FORCE;
     public static final String MODEL_PROPERTY_LIFE;
+    public static final String MODEL_PROPERTY_LIGHT;
     public static final String MODEL_PROPERTY_COLUMNS;
     public static final String MODEL_PROPERTY_ROWS;
     public static final String MODEL_PROPERTY_SPRITE_COUNT;
@@ -530,6 +536,8 @@ public class Messages {
     public static final String SIMPLE_DIALOG_BUTTON_ADD;
     public static final String SIMPLE_DIALOG_BUTTON_SAVE;
     public static final String SIMPLE_DIALOG_BUTTON_GENERATE;
+    public static final String SIMPLE_DIALOG_BUTTON_CONVERT;
+    public static final String SIMPLE_DIALOG_BUTTON_IMPORT;
     public static final String SIMPLE_DIALOG_BUTTON_CREATE;
     public static final String SIMPLE_DIALOG_BUTTON_APPLY;
     public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
@@ -620,6 +628,7 @@ public class Messages {
     public static final String CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
+
     public static final String EDITING_COMPONENT_BRUSH_SIZE;
     public static final String EDITING_COMPONENT_BRUSH_POWER;
     public static final String EDITING_COMPONENT_SMOOTHLY;
@@ -641,7 +650,11 @@ public class Messages {
     public static final String MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS;
     public static final String MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER;
     public static final String MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS;
-    public static final String MODEL_CONVERTER_DIALOG_BUTTON_OK;
+
+    public static final String IMPORT_MODEL_DIALOG_TITLE;
+    public static final String IMPORT_MODEL_DIALOG_EXTERNAL_FILE;
+    public static final String IMPORT_MODEL_DIALOG_TEXTURES_FOLDER;
+    public static final String IMPORT_MODEL_DIALOG_OVERWRITE_TEXTURES;
 
     public static final String FILE_DELETE_HANDLER_DELETE_MATERIALS;
 
@@ -717,6 +730,7 @@ public class Messages {
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileByExternalEditor");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_SYSTEM_EXPLORER = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileBySystemExplorer");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle.getString("AssetComponentResourceTreeContextMenuRenameFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_IMPORT_MODEL = bundle.getString("AssetComponentResourceTreeContextMenuImportModel");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
 
@@ -870,6 +884,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_MOTION_PATH = bundle.getString("ModelFileEditorNodeMotionPath");
         MODEL_FILE_EDITOR_NODE_WAY_POINT = bundle.getString("ModelFileEditorNodeWayPoint");
         MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER = bundle.getString("ModelFileEditorNodeVertexBuffer");
+        MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL = bundle.getString("ModelFileEditorNodeLightControl");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -906,10 +921,12 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
         MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE = bundle.getString("ModelNodeTreeActionAnimationPause");
-        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
+        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
+        MODEL_NODE_TREE_ACTION_COPY = bundle.getString("ModelNodeTreeActionCopy");
+        MODEL_NODE_TREE_ACTION_PASTE = bundle.getString("ModelNodeTreeActionPaste");
         MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");
@@ -941,7 +958,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlStaticRigidBody");
-        MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT = bundle.getString("ModelNodeTreeActionAddControlLight");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE = bundle.getString("ModelNodeTreeActionAddControlVehicle");
@@ -1073,6 +1091,7 @@ public class Messages {
         MODEL_PROPERTY_BILLBOARD = bundle.getString("ModelPropertyBillboard");
         MODEL_PROPERTY_INITIAL_FORCE = bundle.getString("ModelPropertyInitialForce");
         MODEL_PROPERTY_LIFE = bundle.getString("ModelPropertyLife");
+        MODEL_PROPERTY_LIGHT = bundle.getString("ModelPropertyLight");
         MODEL_PROPERTY_COLUMNS = bundle.getString("ModelPropertyColumns");
         MODEL_PROPERTY_ROWS = bundle.getString("ModelPropertyRows");
         MODEL_PROPERTY_SPRITE_COUNT = bundle.getString("ModelPropertySpriteCount");
@@ -1205,6 +1224,8 @@ public class Messages {
         SIMPLE_DIALOG_BUTTON_CLOSE = bundle.getString("SimpleDialogButtonClose");
         SIMPLE_DIALOG_BUTTON_YES = bundle.getString("SimpleDialogButtonYes");
         SIMPLE_DIALOG_BUTTON_NO = bundle.getString("SimpleDialogButtonNo");
+        SIMPLE_DIALOG_BUTTON_CONVERT = bundle.getString("SimpleDialogConvert");
+        SIMPLE_DIALOG_BUTTON_IMPORT = bundle.getString("SimpleDialogImport");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
@@ -1311,7 +1332,11 @@ public class Messages {
         MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS = bundle.getString("ModelConverterDialogExportMaterials");
         MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER = bundle.getString("ModelConverterDialogMaterialsFolder");
         MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS = bundle.getString("ModelConverterDialogOverwriteMaterials");
-        MODEL_CONVERTER_DIALOG_BUTTON_OK = bundle.getString("ModelConverterDialogButtonOk");
+
+        IMPORT_MODEL_DIALOG_TITLE = bundle.getString("ImportModelDialogTitle");
+        IMPORT_MODEL_DIALOG_EXTERNAL_FILE = bundle.getString("ImportModelDialogExternalFile");
+        IMPORT_MODEL_DIALOG_TEXTURES_FOLDER = bundle.getString("ImportModelDialogTexturesFolder");
+        IMPORT_MODEL_DIALOG_OVERWRITE_TEXTURES = bundle.getString("ImportModelDialogOverwriteTextures");
 
         FILE_DELETE_HANDLER_DELETE_MATERIALS = bundle.getString("FileDeleteHandlerDeleteMaterials");
 

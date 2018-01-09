@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.delete.handler.FileDeleteHandler;
 import com.ss.editor.file.delete.handler.FileDeleteHandlerFactory;
@@ -27,16 +28,19 @@ public class DeleteFileAction extends FileAction {
         super(elements);
     }
 
+    @FXThread
     @Override
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
     }
 
+    @FXThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.REMOVE_12;
     }
 
+    @FXThread
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);

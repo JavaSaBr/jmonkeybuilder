@@ -8,8 +8,10 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.scene.control.Control;
+import com.jme3.scene.control.LightControl;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
+import com.ss.editor.ui.control.model.node.control.LightControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.SkeletonControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.motion.MotionEventTreeNode;
 import com.ss.editor.ui.control.model.node.control.physics.CharacterControlTreeNode;
@@ -43,6 +45,8 @@ public class ControlTreeNodeFactory implements TreeNodeFactory {
             return unsafeCast(new CharacterControlTreeNode((CharacterControl) element, objectId));
         } else if (element instanceof RigidBodyControl) {
             return unsafeCast(new RigidBodyControlTreeNode((RigidBodyControl) element, objectId));
+        }  else if (element instanceof LightControl) {
+            return unsafeCast(new LightControlTreeNode((LightControl) element, objectId));
         } else if (element instanceof Control) {
             return unsafeCast(new ControlTreeNode<>((Control) element, objectId));
         }

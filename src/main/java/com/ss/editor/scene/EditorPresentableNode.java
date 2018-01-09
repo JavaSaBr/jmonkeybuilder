@@ -3,6 +3,8 @@ package com.ss.editor.scene;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.extension.scene.ScenePresentable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,13 +22,15 @@ public class EditorPresentableNode extends Node {
             super(name);
         }
 
-        @NotNull
+
         @Override
-        public Object getWrappedObject() {
+        @FromAnyThread
+        public @NotNull Object getWrappedObject() {
             return notNull(getObject());
         }
 
         @Override
+        @JMEThread
         public void setCullHint(final CullHint hint) {
             super.setCullHint(hint);
             notNull(getModel()).setCullHint(hint);
@@ -51,9 +55,6 @@ public class EditorPresentableNode extends Node {
     @Nullable
     private Geometry model;
 
-    /**
-     * Instantiates a new Editor audio node.
-     */
     public EditorPresentableNode() {
         this.editedNode = new EditedNode("EditedNode");
         attachChild(editedNode);
@@ -64,6 +65,7 @@ public class EditorPresentableNode extends Node {
      *
      * @param object the object.
      */
+    @JMEThread
     public void setObject(@Nullable final ScenePresentable object) {
         this.object = object;
     }
@@ -73,8 +75,8 @@ public class EditorPresentableNode extends Node {
      *
      * @return the edited node.
      */
-    @NotNull
-    public Node getEditedNode() {
+    @JMEThread
+    public @NotNull Node getEditedNode() {
         return editedNode;
     }
 
@@ -83,8 +85,8 @@ public class EditorPresentableNode extends Node {
      *
      * @return the object.
      */
-    @Nullable
-    public ScenePresentable getObject() {
+    @JMEThread
+    public @Nullable ScenePresentable getObject() {
         return object;
     }
 
@@ -93,8 +95,8 @@ public class EditorPresentableNode extends Node {
      *
      * @return the model.
      */
-    @Nullable
-    public Geometry getModel() {
+    @JMEThread
+    public @Nullable Geometry getModel() {
         return model;
     }
 
@@ -103,11 +105,13 @@ public class EditorPresentableNode extends Node {
      *
      * @param model the model.
      */
+    @JMEThread
     public void setModel(@Nullable final Geometry model) {
         this.model = model;
     }
 
     @Override
+    @JMEThread
     public void updateGeometricState() {
 
         final ScenePresentable object = getObject();
@@ -125,6 +129,7 @@ public class EditorPresentableNode extends Node {
     /**
      * Synchronize this node with presented object.
      */
+    @JMEThread
     public void sync() {
 
         final ScenePresentable object = getObject();
@@ -138,6 +143,7 @@ public class EditorPresentableNode extends Node {
     /**
      * Update position and rotation of a model.
      */
+    @JMEThread
     public void updateModel() {
 
         final ScenePresentable object = getObject();
