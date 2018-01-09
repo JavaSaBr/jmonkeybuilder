@@ -32,8 +32,7 @@ public class NodeUtils {
      * @param condition the condition
      * @return the t
      */
-    @Nullable
-    public static <T> T findParent(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
+    public static <T> @Nullable T findParent(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
         if (condition.test(spatial)) return unsafeCast(spatial);
         final Node parent = spatial.getParent();
         if (parent == null) return null;
@@ -47,8 +46,7 @@ public class NodeUtils {
      * @param count   the count
      * @return the spatial
      */
-    @Nullable
-    public static Spatial findParent(@NotNull final Spatial spatial, int count) {
+    public static @Nullable Spatial findParent(@NotNull final Spatial spatial, int count) {
 
         Spatial parent = spatial;
 
@@ -65,8 +63,7 @@ public class NodeUtils {
      * @param spatial the spatial
      * @return the geometry
      */
-    @Nullable
-    public static Geometry findGeometry(@NotNull final Spatial spatial) {
+    public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial) {
         if (!(spatial instanceof Node)) return null;
 
         final Node node = (Node) spatial;
@@ -87,8 +84,7 @@ public class NodeUtils {
      * @param name    the name
      * @return the geometry
      */
-    @Nullable
-    public static Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
+    public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
         if (!(spatial instanceof Node)) return null;
 
         final Node node = (Node) spatial;
@@ -111,8 +107,7 @@ public class NodeUtils {
      * @param name    the name
      * @return the spatial
      */
-    @Nullable
-    public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
+    public static @Nullable Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
         if (!(spatial instanceof Node)) return null;
         return ((Node) spatial).getChild(name);
     }
@@ -124,8 +119,7 @@ public class NodeUtils {
      * @param condition the condition
      * @return the spatial
      */
-    @Nullable
-    public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
+    public static @Nullable Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
         if (condition.test(spatial)) return spatial;
         if (!(spatial instanceof Node)) return null;
 
