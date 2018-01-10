@@ -57,9 +57,6 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     @NotNull
     private final Lock lock;
 
-    /**
-     * Instantiates a new Abstract editor task executor.
-     */
     public AbstractEditorTaskExecutor() {
         this.execute = createExecuteArray();
         this.executed = createExecuteArray();
@@ -77,18 +74,19 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     public void execute(@NotNull final Runnable task) {
         lock();
         try {
-
             waitTasks.add(task);
-            if (!wait.get()) return;
-
-            synchronized (wait) {
-                if (wait.compareAndSet(true, false)) {
-                    ConcurrentUtils.notifyAllInSynchronize(wait);
-                }
-            }
-
         } finally {
             unlock();
+        }
+
+        if (!wait.get()) {
+            return;
+        }
+
+        synchronized (wait) {
+            if (wait.compareAndSet(true, false)) {
+                ConcurrentUtils.notifyAllInSynchronize(wait);
+            }
         }
     }
 

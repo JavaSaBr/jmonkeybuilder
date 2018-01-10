@@ -2,7 +2,6 @@ package com.ss.editor;
 
 import static java.util.ResourceBundle.getBundle;
 import com.ss.rlib.util.PropertyLoader;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -683,8 +682,6 @@ public class Messages {
     static {
 
         final Locale locale = Locale.getDefault();
-        final ClassLoader classLoader = ControlResources.class.getClassLoader();
-
         /*
         //FIXME
         final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",

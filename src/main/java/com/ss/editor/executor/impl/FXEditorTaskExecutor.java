@@ -27,6 +27,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     public FXEditorTaskExecutor() {
         setName(FXEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
+        start();
     }
 
     @Override
