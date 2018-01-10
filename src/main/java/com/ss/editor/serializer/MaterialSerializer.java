@@ -13,6 +13,7 @@ import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.TextureCubeMap;
+import com.ss.rlib.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -30,7 +31,7 @@ public class MaterialSerializer {
      * @param material the material
      * @return the string
      */
-    public static String serializeToString(@NotNull final Material material) {
+    public static @NotNull String serializeToString(@NotNull final Material material) {
 
         final MaterialDef materialDef = material.getMaterialDef();
         final Collection<MatParam> params = material.getParams();
@@ -38,12 +39,7 @@ public class MaterialSerializer {
         final StringBuilder builder = new StringBuilder();
         builder.append("Material MyMaterial : ").append(materialDef.getAssetName()).append(" {\n");
         builder.append("    MaterialParameters {\n");
-
-        params.forEach(matParam -> {
-            final String value = toString(matParam.getVarType(), matParam.getValue());
-            builder.append("        ").append(matParam.getName()).append(" : ").append(value).append('\n');
-        });
-
+        params.forEach(matParam -> addMaterialParameter(builder, matParam));
         builder.append("    }\n");
         builder.append("    AdditionalRenderState {\n");
 
@@ -68,7 +64,11 @@ public class MaterialSerializer {
         final float polyOffsetUnits = renderState.getPolyOffsetUnits();
 
         if (polyOffsetFactor != 0 || polyOffsetUnits != 0) {
-            builder.append("      PolyOffset ").append(polyOffsetFactor).append(' ').append(polyOffsetUnits).append('\n');
+            builder.append("      PolyOffset ")
+                    .append(polyOffsetFactor)
+                    .append(' ')
+                    .append(polyOffsetUnits)
+                    .append('\n');
         }
 
         builder.append("    }\n");
@@ -77,7 +77,27 @@ public class MaterialSerializer {
         return builder.toString();
     }
 
-    private static String toString(@NotNull final VarType varType, @NotNull final Object value) {
+    /**
+     * Add the material parameter to the builder.
+     *
+     * @param builder  the builder.
+     * @param matParam the material parameter.
+     */
+    private static void addMaterialParameter(@NotNull final StringBuilder builder, @NotNull final MatParam matParam) {
+
+        final String value = toString(matParam.getVarType(), matParam.getValue());
+        if (StringUtils.isEmpty(value)) {
+            return;
+        }
+
+        builder.append("        ")
+                .append(matParam.getName())
+                .append(" : ")
+                .append(value)
+                .append('\n');
+    }
+
+    private static @NotNull String toString(@NotNull final VarType varType, @NotNull final Object value) {
 
         switch (varType) {
             case Int:
@@ -108,9 +128,14 @@ public class MaterialSerializer {
 
                 final Texture2D texture2D = (Texture2D) value;
                 final TextureKey textureKey = (TextureKey) texture2D.getKey();
+                if (textureKey == null) {
+                    return "";
+                }
 
                 final StringBuilder builder = new StringBuilder();
-                if (textureKey.isFlipY()) builder.append("Flip ");
+                if (textureKey.isFlipY()) {
+                    builder.append("Flip ");
+                }
 
                 builder.append("Wrap").append(texture2D.getWrap(Texture.WrapAxis.T)).append("_T").append(' ');
                 builder.append("Wrap").append(texture2D.getWrap(Texture.WrapAxis.S)).append("_S").append(' ');
@@ -124,9 +149,14 @@ public class MaterialSerializer {
 
                 final TextureCubeMap textureCubeMap = (TextureCubeMap) value;
                 final TextureKey textureKey = (TextureKey) textureCubeMap.getKey();
+                if (textureKey == null) {
+                    return "";
+                }
 
                 final StringBuilder builder = new StringBuilder();
-                if (textureKey.isFlipY()) builder.append("Flip ");
+                if (textureKey.isFlipY()) {
+                    builder.append("Flip ");
+                }
 
                 builder.append("Wrap").append(textureCubeMap.getWrap(Texture.WrapAxis.T)).append("_T").append(' ');
                 builder.append("Wrap").append(textureCubeMap.getWrap(Texture.WrapAxis.S)).append("_S").append(' ');

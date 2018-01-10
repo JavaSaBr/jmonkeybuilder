@@ -346,7 +346,9 @@ public class JFXApplication extends Application {
             stage.setTitle(Config.TITLE);
             stage.show();
 
-            if (!stage.isMaximized()) stage.centerOnScreen();
+            if (!stage.isMaximized()) {
+                stage.centerOnScreen();
+            }
 
             stage.widthProperty().addListener((observable, oldValue, newValue) -> {
                 if (stage.isMaximized()) return;
