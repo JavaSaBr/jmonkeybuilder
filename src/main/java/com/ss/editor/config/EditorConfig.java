@@ -859,7 +859,7 @@ public final class EditorConfig implements AssetEventListener {
 
         this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
         this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
-        this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, false);
+        this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, true);
         this.stopRenderOnLostFocus = prefs.getBoolean(PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS, true);
         this.toneMapFilter = prefs.getBoolean(PREF_GRAPHIC_TONEMAP_FILTER, false);
         this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);

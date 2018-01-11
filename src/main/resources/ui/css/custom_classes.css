@@ -1364,3 +1364,16 @@
 .stats-3dstate > .text-field {
     -fx-text-fill: white;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Generic Text Area                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.webview-text-area {
+    -fx-background-color: -var-background-color, -var-font-color, -fx-focus-color;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0px;
+}

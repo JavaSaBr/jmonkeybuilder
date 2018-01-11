@@ -175,4 +175,24 @@ public class EditorPlugin extends BasePlugin {
     public @Nullable URL getHomePageUrl() {
         return null;
     }
+
+    /**
+     * Get the HTML presentation of plugin's dependencies as gradle dependencies.
+     *
+     * @return the HTML presentation of plugin's dependencies as gradle dependencies.
+     */
+    @FromAnyThread
+    public @Nullable String getUsedGradleDependencies() {
+        return null;
+    }
+
+    /**
+     * Get the HTML presentation of plugin's dependencies as maven dependencies.
+     *
+     * @return the HTML presentation of plugin's dependencies as maven dependencies.
+     */
+    @FromAnyThread
+    public @Nullable String getUsedMavenDependencies() {
+        return null;
+    }
 }

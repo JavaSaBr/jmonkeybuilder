@@ -165,4 +165,6 @@ public interface CSSClasses {
     @NotNull String PLUGIN_LIST_CELL = "plugin-list-cell";
 
     @NotNull String STATS_3D_STATE = "stats-3dstate";
+
+    @NotNull String WEBVIEW_TEXT_AREA = "webview-text-area";
 }

@@ -37,6 +37,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -733,5 +734,18 @@ public abstract class EditorUtil {
         }
 
         return layers.get(0);
+    }
+
+    /**
+     * Convert the color to hex presentation to use in web.
+     *
+     * @param color the color.
+     * @return the web presentation.
+     */
+    public static @NotNull String toWeb(@NotNull final Color color) {
+        final int red = (int) (color.getRed() * 255);
+        final int green = (int) (color.getGreen() * 255);
+        final int blue = (int) (color.getBlue() * 255);
+        return "#" + Integer.toHexString(red) + Integer.toHexString(green) + Integer.toHexString(blue);
     }
 }
