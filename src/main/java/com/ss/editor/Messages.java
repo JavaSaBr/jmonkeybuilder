@@ -681,6 +681,9 @@ public class Messages {
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_TITLE;
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_FILTER;
     public static final String PLUGINS_DIALOG_QUESTION;
+    public static final String PLUGINS_DIALOG_VERSION;
+    public static final String PLUGINS_DIALOG_HOME_PAGE;
+    public static final String PLUGINS_DIALOG_USED_DEPENDENCIES;
 
     static {
 
@@ -1360,5 +1363,8 @@ public class Messages {
         PLUGINS_DIALOG_FILE_CHOOSER_TITLE = bundle.getString("PluginsDialogFileChooserTitle");
         PLUGINS_DIALOG_FILE_CHOOSER_FILTER = bundle.getString("PluginsDialogFileChooserFilter");
         PLUGINS_DIALOG_QUESTION = bundle.getString("PluginsDialogQuestion");
+        PLUGINS_DIALOG_VERSION = bundle.getString("PluginsDialogVersion");
+        PLUGINS_DIALOG_HOME_PAGE = bundle.getString("PluginsDialogHomePage");
+        PLUGINS_DIALOG_USED_DEPENDENCIES= bundle.getString("PluginsDialogUsedDependencies");
     }
 }

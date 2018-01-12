@@ -302,6 +302,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
             result.append("h3{color:").append(toWeb(fontColor)).append(";}");
             result.append("h4{color:").append(toWeb(fontColor)).append(";}");
             result.append("p{color:").append(toWeb(fontColor)).append(";}");
+            result.append("pre{color:").append(toWeb(fontColor)).append(";}");
             result.append("a{color:").append(toWeb(linkColor)).append(";}");
             result.append("</style>");
             result.append("</head>");
@@ -309,21 +310,23 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
 
         result.append("<body>");
         result.append("<h2>").append(name).append("</h2>");
-        result.append("<h3>").append("Version: ").append(version).append("</h3>");
+        result.append("<h3>").append(Messages.PLUGINS_DIALOG_VERSION).append(": ").append(version).append("</h3>");
         result.append("<p>").append(description).append("</p>");
 
         if (homePageUrl != null) {
             result.append("<p><a href=\"").append(homePageUrl.toExternalForm())
-                    .append("\">").append("Home page").append("</a></p>");
+                    .append("\">").append(Messages.PLUGINS_DIALOG_HOME_PAGE).append("</a></p>");
         }
 
         if (StringUtils.isNotEmpty(usedGradleDependencies) || StringUtils.isNotEmpty(usedMavenDependencies)) {
-            result.append("<h4>").append("Used dependencies:").append("</h4>");
+            result.append("<h4>").append(Messages.PLUGINS_DIALOG_USED_DEPENDENCIES).append(":").append("</h4>");
 
             if (StringUtils.isNotEmpty(usedGradleDependencies)) {
                 result.append("<h4>").append("Gradle:").append("</h4>");
                 result.append(usedGradleDependencies);
-            } else if (StringUtils.isNotEmpty(usedMavenDependencies)) {
+            }
+
+            if (StringUtils.isNotEmpty(usedMavenDependencies)) {
                 result.append("<h4>").append("Maven:").append("</h4>");
                 result.append(usedMavenDependencies);
             }
