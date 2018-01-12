@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.dialog;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -77,7 +77,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      *
      * @return the model tree component.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ModelNodeTree getNodeTree() {
         return notNull(nodeTree);
     }
@@ -89,7 +89,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -113,7 +113,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      *
      * @return the loaded model.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Spatial getModel() {
         return model;
     }
@@ -123,7 +123,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      *
      * @return the type of selectable objects.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Class<T> getType() {
         return type;
     }
@@ -131,7 +131,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     /**
      * Handle a selected object.
      */
-    @FXThread
+    @FxThread
     private void processSelect(@Nullable final Object object) {
         final Object result = object instanceof TreeNode ? ((TreeNode) object).getElement() : object;
         final Class<T> type = getType();
@@ -141,7 +141,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         handler.accept(selected);
         super.processOk();

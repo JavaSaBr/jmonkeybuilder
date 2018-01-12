@@ -11,7 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -58,18 +58,18 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.LINK_FILE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_LINK_MODEL;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         super.process();
@@ -81,7 +81,7 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
      *
      * @param file the file
      */
-    @FXThread
+    @FxThread
     protected void processOpen(@NotNull final Path file) {
 
         final NodeTree<?> nodeTree = getNodeTree();

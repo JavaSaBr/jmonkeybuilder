@@ -15,7 +15,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.extension.scene.InvisibleObject;
@@ -61,7 +61,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
@@ -88,26 +88,26 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canMove() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canCopy() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
         final Object element = treeNode.getElement();
         return element instanceof AbstractControl || super.canAccept(treeNode, isCopy);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
                        final boolean isCopy) {
 
@@ -131,7 +131,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canRemove() {
         final Node parent = getElement().getParent();
         return parent != null && parent.getUserData(EditorTransformSupport.class.getName()) != Boolean.TRUE;
@@ -143,7 +143,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * @param nodeTree the node tree
      * @return the menu
      */
-    @FXThread
+    @FxThread
     protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final T element = getElement();
@@ -189,7 +189,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * @param nodeTree the node tree
      * @return the menu
      */
-    @FXThread
+    @FxThread
     protected @Nullable Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
         return null;
     }
@@ -202,19 +202,19 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canEditName() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         if (StringUtils.equals(getName(), newName)) return;
 
@@ -226,7 +226,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
@@ -250,7 +250,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void add(@NotNull final TreeNode<?> child) {
         super.add(child);
 
@@ -266,7 +266,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void remove(@NotNull final TreeNode<?> child) {
         super.remove(child);
 

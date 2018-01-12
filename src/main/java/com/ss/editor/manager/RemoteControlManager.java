@@ -2,6 +2,7 @@ package com.ss.editor.manager;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.manager.ClasspathManager.Scope;
 import com.ss.rlib.network.NetworkFactory;
 import com.ss.rlib.network.packet.ReadablePacket;
 import com.ss.rlib.network.packet.ReadablePacketRegistry;
@@ -36,7 +37,7 @@ public class RemoteControlManager {
     private RemoteControlManager() {
 
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        final Class<ReadablePacket>[] packets = classpathManager.findImplements(ReadablePacket.class, ClasspathManager.Scope.ONLY_CORE)
+        final Class<ReadablePacket>[] packets = classpathManager.findImplements(ReadablePacket.class, Scope.ONLY_CORE)
                 .toArray(Class.class);
 
         this.packetRegistry = ReadablePacketRegistry.of(packets);

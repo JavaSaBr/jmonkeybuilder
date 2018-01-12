@@ -5,7 +5,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -92,7 +92,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the node tree component.
      */
-    @FXThread
+    @FxThread
     protected @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
@@ -102,7 +102,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the generated node.
      */
-    @FXThread
+    @FxThread
     protected @NotNull TreeNode<?> getNode() {
         return node;
     }
@@ -114,7 +114,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -152,7 +152,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the check box about spliting mirrored.
      */
-    @FXThread
+    @FxThread
     private @NotNull CheckBox getSplitMirroredCheckBox() {
         return notNull(splitMirroredCheckBox);
     }
@@ -160,13 +160,13 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of types.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<AlgorithmType> getAlgorithmTypeComboBox() {
         return notNull(algorithmTypeComboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
 
         final NodeTree<?> nodeTree = getNodeTree();

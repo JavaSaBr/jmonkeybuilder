@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.physics.ReactivatePhysicsControl;
@@ -25,7 +25,7 @@ public class RigidBodyControlTreeNode extends PhysicsObjectTreeNode<RigidBodyCon
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
 
         final RigidBodyControl element = getElement();
@@ -51,7 +51,7 @@ public class RigidBodyControlTreeNode extends PhysicsObjectTreeNode<RigidBodyCon
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 

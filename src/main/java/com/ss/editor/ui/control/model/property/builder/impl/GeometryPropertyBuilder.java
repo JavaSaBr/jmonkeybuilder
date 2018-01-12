@@ -10,7 +10,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -99,7 +99,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -151,7 +151,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
      * @param geometry the geometry.
      * @return true if we can editor the material.
      */
-    @FXThread
+    @FxThread
     private boolean canEditMaterial(@NotNull final Geometry geometry) {
         return !(geometry instanceof ParticleGeometry);
     }

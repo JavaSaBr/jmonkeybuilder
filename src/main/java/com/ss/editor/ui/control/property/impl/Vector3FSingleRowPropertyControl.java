@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -55,7 +55,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
@@ -65,7 +65,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -105,13 +105,13 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
     /**
      * @return the field container.
      */
-    @FXThread
+    @FxThread
     private @NotNull HBox getFieldContainer() {
         return notNull(fieldContainer);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final Vector3f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
@@ -130,7 +130,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @param z the z.
      * @return the result x value.
      */
-    @FXThread
+    @FxThread
     protected float checkResultXValue(final float x, final float y, final float z) {
         return x;
     }
@@ -143,7 +143,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @param z the z.
      * @return the result y value.
      */
-    @FXThread
+    @FxThread
     protected float checkResultYValue(final float x, final float y, final float z) {
         return y;
     }
@@ -156,7 +156,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @param z the z.
      * @return the result z value.
      */
-    @FXThread
+    @FxThread
     protected float checkResultZValue(final float x, final float y, final float z) {
         return z;
     }
@@ -166,7 +166,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      *
      * @return the X field.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getXField() {
         return notNull(xField);
     }
@@ -176,7 +176,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      *
      * @return the Y field.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getYField() {
         return notNull(yField);
     }
@@ -186,13 +186,13 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      *
      * @return the Z field.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getZField() {
         return notNull(zField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final Vector3f vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
@@ -215,7 +215,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      *
      * @param event the change event.
      */
-    @FXThread
+    @FxThread
     private void updateVector(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

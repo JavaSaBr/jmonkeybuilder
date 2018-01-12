@@ -6,7 +6,7 @@ import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
@@ -70,21 +70,21 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_WHEEL;
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.WHEEL_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         final GenericFactoryDialog dialog = new GenericFactoryDialog(DEFINITIONS, this::handleResult);

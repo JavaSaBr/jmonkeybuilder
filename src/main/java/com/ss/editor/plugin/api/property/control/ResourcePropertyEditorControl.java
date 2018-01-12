@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -54,7 +54,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -81,7 +81,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * Process select a resource.
      */
-    @FXThread
+    @FxThread
     protected void processSelect() {
 
     }
@@ -89,14 +89,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * Handle grad exiting.
      */
-    @FXThread
+    @FxThread
     private void dragExited(@NotNull final DragEvent dragEvent) {
     }
 
     /**
      * Handle dropped files to editor.
      */
-    @FXThread
+    @FxThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -117,14 +117,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      *
      * @param file the dropped file.
      */
-    @FXThread
+    @FxThread
     protected void handleFile(@NotNull final File file) {
     }
 
     /**
      * Handle drag over.
      */
-    @FXThread
+    @FxThread
     private void dragOver(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -144,7 +144,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         dragEvent.consume();
     }
 
-    @FXThread
+    @FxThread
     protected boolean canAccept(@NotNull final File file) {
         return false;
     }
@@ -152,7 +152,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * @return the label with name of the resource.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Label getResourceLabel() {
         return notNull(resourceLabel);
     }

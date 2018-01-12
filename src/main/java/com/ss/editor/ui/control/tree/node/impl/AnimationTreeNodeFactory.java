@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.tree.node.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.model.node.control.anim.*;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactory;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class AnimationTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @FXThread
+    @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof Animation) {
@@ -37,7 +37,7 @@ public class AnimationTreeNodeFactory implements TreeNodeFactory {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public int getOrder() {
         return 1;
     }

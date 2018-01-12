@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
@@ -110,7 +110,7 @@ public class PropertyEditorControl<T> extends HBox {
     /**
      * Check dependency of this control.
      */
-    @FXThread
+    @FxThread
     public void checkDependency() {
 
         final Array<String> dependencies = getDependencies();
@@ -142,27 +142,27 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return the dependencies.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Array<String> getDependencies() {
         return dependencies;
     }
 
-    @FXThread
+    @FxThread
     protected void reload() {
     }
 
-    @FXThread
+    @FxThread
     protected void change() {
         if (isIgnoreListener()) return;
         changeImpl();
     }
 
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         validationCallback.run();
     }
 
-    @FXThread
+    @FxThread
     protected void createComponents() {
         setAlignment(Pos.CENTER_RIGHT);
 
@@ -199,7 +199,7 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @param propertyValue the new current property value.
      */
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final T propertyValue) {
         if (propertyValue == null) {
             vars.clear(id);
@@ -213,7 +213,7 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @param ignoreListener the flag for ignoring listeners.
      */
-    @FXThread
+    @FxThread
     protected void setIgnoreListener(final boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
@@ -223,7 +223,7 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return true if need to ignore listeners.
      */
-    @FXThread
+    @FxThread
     protected boolean isIgnoreListener() {
         return ignoreListener;
     }

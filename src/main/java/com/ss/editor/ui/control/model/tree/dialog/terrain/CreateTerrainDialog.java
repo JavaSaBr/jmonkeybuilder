@@ -22,7 +22,7 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -285,7 +285,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -445,7 +445,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * Update a list of available path sizes.
      */
-    @FXThread
+    @FxThread
     private void updatePathSizeValues() {
 
         final ComboBox<Integer> pathSizeComboBox = getPatchSizeComboBox();
@@ -473,7 +473,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the total size combo box.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<Integer> getTotalSizeComboBox() {
         return notNull(totalSizeComboBox);
     }
@@ -481,7 +481,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the patch size combo box.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<Integer> getPatchSizeComboBox() {
         return notNull(patchSizeComboBox);
     }
@@ -489,7 +489,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the alpha blend texture size combo box.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<Integer> getAlphaBlendTextureSizeComboBox() {
         return notNull(alphaBlendTextureSizeComboBox);
     }
@@ -497,7 +497,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the min radius field.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getHillMinRadiusField() {
         return notNull(hillMinRadiusField);
     }
@@ -505,7 +505,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the max radius field.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getHillMaxRadiusField() {
         return notNull(hillMaxRadiusField);
     }
@@ -513,7 +513,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the settingsRoot.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getSettingsRoot() {
         return notNull(settingsRoot);
     }
@@ -521,7 +521,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the base texture control.
      */
-    @FXThread
+    @FxThread
     private @NotNull ChooseTextureControl getBaseTextureControl() {
         return notNull(baseTextureControl);
     }
@@ -529,7 +529,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the base image control.
      */
-    @FXThread
+    @FxThread
     private @NotNull ChooseTextureControl getHeightMapImageControl() {
         return notNull(heightMapImageControl);
     }
@@ -537,7 +537,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the type of height map.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<HeightMapType> getHeightMapTypeComboBox() {
         return notNull(heightMapTypeComboBox);
     }
@@ -545,7 +545,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the height map scale field.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getHeightMapScaleField() {
         return notNull(heightMapScaleField);
     }
@@ -553,7 +553,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the height map smooth field.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getHeightMapSmoothField() {
         return notNull(heightMapSmoothField);
     }
@@ -561,7 +561,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the flattening field.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getHillFlatteningField() {
         return notNull(hillFlatteningField);
     }
@@ -569,7 +569,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the iterations field.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getHillIterationsField() {
         return notNull(hillIterationsField);
     }
@@ -577,7 +577,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the alpha texture folder control.
      */
-    @FXThread
+    @FxThread
     private @NotNull ChooseFolderControl getAlphaTextureFolderControl() {
         return notNull(alphaTextureFolderControl);
     }
@@ -585,7 +585,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle changing type of heightmap.
      */
-    @FXThread
+    @FxThread
     private void processChangeType(@NotNull final HeightMapType newValue) {
 
         final VBox root = getSettingsRoot();
@@ -614,7 +614,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate.
      */
-    @FXThread
+    @FxThread
     private void validate() {
 
         final FloatTextField hillMaxRadiusField = getHillMaxRadiusField();
@@ -647,7 +647,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
         EditorUtil.incrementLoading();
@@ -823,7 +823,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the node tree.
      */
-    @FXThread
+    @FxThread
     private @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
@@ -831,7 +831,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the parent node.
      */
-    @FXThread
+    @FxThread
     private @NotNull TreeNode<?> getParentNode() {
         return parentNode;
     }

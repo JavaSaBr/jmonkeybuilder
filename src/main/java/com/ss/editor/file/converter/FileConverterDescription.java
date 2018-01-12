@@ -1,7 +1,7 @@
 package com.ss.editor.file.converter;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +38,7 @@ public class FileConverterDescription {
      *
      * @return the list of extensions.
      */
-    @FXThread
+    @FxThread
     public @NotNull Array<String> getExtensions() {
         return notNull(extensions);
     }
@@ -48,7 +48,7 @@ public class FileConverterDescription {
      *
      * @param extensions the list of extensions.
      */
-    @FXThread
+    @FxThread
     public void setExtensions(@NotNull final Array<String> extensions) {
         this.extensions = extensions;
     }
@@ -58,7 +58,7 @@ public class FileConverterDescription {
      *
      * @return the constructor.
      */
-    @FXThread
+    @FxThread
     public @NotNull Supplier<FileConverter> getConstructor() {
         return notNull(constructor);
     }
@@ -68,7 +68,7 @@ public class FileConverterDescription {
      *
      * @param constructor the constructor.
      */
-    @FXThread
+    @FxThread
     public void setConstructor(@NotNull final Supplier<FileConverter> constructor) {
         this.constructor = constructor;
     }
@@ -78,7 +78,7 @@ public class FileConverterDescription {
      *
      * @return the description.
      */
-    @FXThread
+    @FxThread
     public @Nullable String getDescription() {
         return description;
     }
@@ -88,7 +88,7 @@ public class FileConverterDescription {
      *
      * @param description the description.
      */
-    @FXThread
+    @FxThread
     public void setDescription(@NotNull final String description) {
         this.description = description;
     }

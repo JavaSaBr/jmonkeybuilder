@@ -5,7 +5,7 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
@@ -71,7 +71,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         if(!(object instanceof Material)) return null;
 
@@ -93,7 +93,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @param material the material.
      * @return the editable property or null.
      */
-    @FXThread
+    @FxThread
     private @Nullable EditableProperty<?, Material> convert(@NotNull final MatParam param,
                                                             @NotNull final Material material) {
 
@@ -114,7 +114,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @param material the material.
      * @param newValue the new value.
      */
-    @FXThread
+    @FxThread
     protected void applyParam(@NotNull final MatParam param, @NotNull final Material material,
                               @Nullable final Object newValue) {
 
@@ -132,7 +132,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @param material the material.
      * @return the relevant value.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Object getParamValue(@NotNull final MatParam param, @NotNull final Material material) {
         final MatParam currentParam = material.getParam(param.getName());
         return currentParam == null ? null : currentParam.getValue();
@@ -144,7 +144,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @param varType the material parameter type.
      * @return the editable property type or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable EditablePropertyType convert(@NotNull final VarType varType) {
 
         switch (varType) {

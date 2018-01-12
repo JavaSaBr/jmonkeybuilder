@@ -3,7 +3,7 @@ package com.ss.editor.control.transform;
 import com.jme3.collision.CollisionResult;
 import com.jme3.scene.control.Control;
 
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,12 +18,12 @@ public interface TransformControl extends Control {
      *
      * @param colResult the col result
      */
-    @JMEThread
+    @JmeThread
     void setCollisionPlane(@NotNull final CollisionResult colResult);
 
     /**
      * Handle transformation.
      */
-    @JMEThread
+    @JmeThread
     void processTransform();
 }

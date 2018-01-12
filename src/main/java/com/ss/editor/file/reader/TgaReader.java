@@ -1,9 +1,8 @@
 package com.ss.editor.file.reader;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -11,16 +10,15 @@ import java.awt.image.BufferedImage;
  *
  * @author JavaSaBr
  */
-public class TGAReader {
+public class TgaReader {
 
     /**
-     * Gets image.
+     * Get the image by the byte array.
      *
-     * @param buffer the buffer
-     * @return the image
+     * @param buffer the data buffer.
+     * @return the image.
      */
-    @Nullable
-    public static Image getImage(@NotNull final byte[] buffer) {
+    public static @NotNull Image getImage(@NotNull final byte[] buffer) {
         return decode(buffer);
     }
 
@@ -32,8 +30,7 @@ public class TGAReader {
         return btoi(buffer[offset]);
     }
 
-    @Nullable
-    private static Image decode(@NotNull final byte[] buffer) {
+    private static @NotNull Image decode(@NotNull final byte[] buffer) {
 
         int offset = 0;
 

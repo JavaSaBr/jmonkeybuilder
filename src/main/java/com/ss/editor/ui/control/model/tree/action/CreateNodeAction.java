@@ -4,7 +4,7 @@ import static com.ss.editor.util.EditorUtil.getDefaultLayer;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -29,19 +29,19 @@ public class CreateNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_NODE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 

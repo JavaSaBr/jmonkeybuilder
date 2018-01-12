@@ -37,11 +37,6 @@ public class WorkspaceManager {
     @Nullable
     private static WorkspaceManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
     public static @NotNull WorkspaceManager getInstance() {
         if (instance == null) instance = new WorkspaceManager();
         return instance;
@@ -61,6 +56,7 @@ public class WorkspaceManager {
     /**
      * @return the table of workspaces.
      */
+    @FromAnyThread
     private @NotNull ObjectDictionary<Path, Workspace> getWorkspaces() {
         return workspaces;
     }
@@ -72,11 +68,9 @@ public class WorkspaceManager {
      */
     @FromAnyThread
     public @Nullable Workspace getCurrentWorkspace() {
-
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return null;
-
         return getWorkspace(currentAsset);
     }
 
@@ -134,7 +128,6 @@ public class WorkspaceManager {
      */
     @FromAnyThread
     public synchronized void save() {
-        final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
-        workspaces.forEach((path, workspace) -> workspace.save(true));
+        getWorkspaces().forEach((path, workspace) -> workspace.save(true));
     }
 }

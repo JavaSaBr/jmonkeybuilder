@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.control.physics.vehicle;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.RemoveVehicleWheelAction;
@@ -27,7 +27,7 @@ public class VehicleWheelTreeNode extends TreeNode<VehicleWheel> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.WHEEL_16;
     }
@@ -42,7 +42,7 @@ public class VehicleWheelTreeNode extends TreeNode<VehicleWheel> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         super.fillContextMenu(nodeTree, items);

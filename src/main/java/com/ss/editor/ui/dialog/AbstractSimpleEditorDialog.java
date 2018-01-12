@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
@@ -98,7 +98,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
         final Button okButton = getOkButton();
@@ -108,7 +108,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
     }
@@ -118,7 +118,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the ok button.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Button getOkButton() {
         return okButton;
     }
@@ -128,13 +128,13 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      *
      * @return the close button.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Button getCloseButton() {
         return closeButton;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
@@ -170,12 +170,12 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         }
     }
 
-    @FXThread
+    @FxThread
     protected void createBeforeActions(@NotNull final HBox container) {
 
     }
 
-    @FXThread
+    @FxThread
     protected void createAdditionalActions(@NotNull final HBox container) {
 
     }
@@ -196,7 +196,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         return true;
     }
 
-    @FXThread
+    @FxThread
     private void safeProcessOk() {
         try {
             processOk();
@@ -228,7 +228,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle ok button.
      */
-    @FXThread
+    @FxThread
     protected void processOk() {
         hide();
     }
@@ -236,7 +236,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle cancel button.
      */
-    @FXThread
+    @FxThread
     protected void processClose() {
         hide();
     }

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.app.state.property.builder.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
@@ -36,7 +36,7 @@ public class AppStatePropertyBuilder extends EditableModelObjectPropertyBuilder 
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         if (!(object instanceof EditableSceneAppState)) return null;
         final EditableSceneAppState state = (EditableSceneAppState) object;

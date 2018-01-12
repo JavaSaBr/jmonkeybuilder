@@ -3,7 +3,7 @@ package com.ss.editor.ui.builder;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorMenuBarComponent;
@@ -79,7 +79,7 @@ public class EditorFXSceneBuilder {
      * @return the editor fx scene
      */
     @NotNull
-    @FXThread
+    @FxThread
     public static EditorFXScene build(@NotNull final Stage stage) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();

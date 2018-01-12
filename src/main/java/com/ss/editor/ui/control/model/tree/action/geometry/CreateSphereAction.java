@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.geometry;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -25,19 +25,19 @@ public class CreateSphereAction extends AbstractCreateGeometryAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.SPHERE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Geometry createGeometry() {
         return new Geometry("Sphere", new Sphere(30, 30, 1));
     }

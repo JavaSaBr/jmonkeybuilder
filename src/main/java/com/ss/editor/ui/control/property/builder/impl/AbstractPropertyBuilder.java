@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
 import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.css.CSSClasses;
@@ -37,7 +37,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                          @NotNull final ChangeConsumer changeConsumer) {
 
@@ -54,7 +54,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
      * @param container      the container.
      * @param changeConsumer the change consumer.
      */
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final C changeConsumer) {
     }
@@ -64,7 +64,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
      *
      * @param pane the container of the line.
      */
-    @FXThread
+    @FxThread
     protected void buildSplitLine(@NotNull final Pane pane) {
         final HBox line = new HBox();
         final VBox container = new VBox(line);

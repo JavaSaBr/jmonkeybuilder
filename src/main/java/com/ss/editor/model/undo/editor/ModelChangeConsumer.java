@@ -1,7 +1,7 @@
 package com.ss.editor.model.undo.editor;
 
 import com.jme3.scene.Spatial;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,6 +16,6 @@ public interface ModelChangeConsumer extends ChangeConsumer {
      *
      * @return the current model of the editor.
      */
-    @FXThread
+    @FxThread
     @NotNull Spatial getCurrentModel();
 }

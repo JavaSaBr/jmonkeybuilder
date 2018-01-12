@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -30,19 +30,19 @@ public class CreateAudioNodeAction extends AbstractNodeAction<ModelChangeConsume
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.AUDIO_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 

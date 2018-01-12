@@ -5,7 +5,7 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CSSClasses;
@@ -135,7 +135,7 @@ public class EditorDialog {
      *
      * @param root the root container.
      */
-    @FXThread
+    @FxThread
     protected void createControls(@NotNull final VBox root) {
 
         final VBox actionsContainer = new VBox();
@@ -173,7 +173,7 @@ public class EditorDialog {
     /**
      * @return the width property of this dialog.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ReadOnlyDoubleProperty widthProperty() {
         return getContainer().widthProperty();
     }
@@ -181,7 +181,7 @@ public class EditorDialog {
     /**
      * @return the height property of this dialog.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ReadOnlyDoubleProperty heightProperty() {
         return getContainer().heightProperty();
     }
@@ -191,7 +191,7 @@ public class EditorDialog {
      *
      * @param container the root container.
      */
-    @FXThread
+    @FxThread
     protected void configureSize(@NotNull final VBox container) {
         configureSize(container, getSize());
     }
@@ -201,7 +201,7 @@ public class EditorDialog {
      *
      * @param size the size.
      */
-    @FXThread
+    @FxThread
     public void configureSize(@NotNull final Point size) {
         configureSize(container, size);
     }
@@ -212,7 +212,7 @@ public class EditorDialog {
      * @param container the root container.
      * @param size      the size.
      */
-    @FXThread
+    @FxThread
     private void configureSize(@NotNull final VBox container, @NotNull final Point size) {
 
         final Stage dialog = getDialog();
@@ -248,7 +248,7 @@ public class EditorDialog {
      *
      * @param size the size of the dialog.
      */
-    @FXThread
+    @FxThread
     public void updateSize(@NotNull final Point size) {
         configureSize(getContainer(), size);
     }
@@ -263,7 +263,7 @@ public class EditorDialog {
      *
      * @param event the event
      */
-    @FXThread
+    @FxThread
     protected void processKey(@NotNull final KeyEvent event) {
         event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
@@ -276,7 +276,7 @@ public class EditorDialog {
      *
      * @param owner the owner.
      */
-    @FXThread
+    @FxThread
     public void show(@NotNull final Node owner) {
         show(owner.getScene().getWindow());
     }
@@ -284,7 +284,7 @@ public class EditorDialog {
     /**
      * Show this dialog.
      */
-    @FXThread
+    @FxThread
     public void show() {
         show(JfxApplication.getInstance().getLastWindow());
     }
@@ -294,7 +294,7 @@ public class EditorDialog {
      *
      * @param owner the owner.
      */
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
 
         final Scene scene = owner.getScene();
@@ -330,7 +330,7 @@ public class EditorDialog {
         return getClass().getSimpleName();
     }
 
-    @FXThread
+    @FxThread
     public void hide() {
 
         final Duration duration = Duration.between(showedTime, LocalTime.now());
@@ -363,7 +363,7 @@ public class EditorDialog {
      *
      * @param root the root
      */
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
     }
 
@@ -372,7 +372,7 @@ public class EditorDialog {
      *
      * @param root the root
      */
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
     }
 
@@ -391,7 +391,7 @@ public class EditorDialog {
      *
      * @param root the root
      */
-    @FXThread
+    @FxThread
     protected void createActions(@NotNull final VBox root) {
     }
 
@@ -410,7 +410,7 @@ public class EditorDialog {
      *
      * @param title the new title.
      */
-    @FXThread
+    @FxThread
     public void setTitleText(@NotNull final String title) {
         dialog.setTitle(title);
     }

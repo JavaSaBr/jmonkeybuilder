@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 
 /**
- * The base implementation of file delete handler.
+ * The base implementation of {@link FileDeleteHandler}.
  *
  * @author JavaSaBr
  */
@@ -21,7 +21,7 @@ public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
     protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
-     * The editor.
+     * The jme application.
      */
     @NotNull
     protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();

@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.shape;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterShape;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
@@ -33,12 +33,12 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.GEOMETRY_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         super.process();
@@ -60,7 +60,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      *
      * @return the dialog size or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Point getDialogSize() {
         return null;
     }
@@ -70,7 +70,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      *
      * @return the dialog title.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull String getDialogTitle();
 
     /**
@@ -78,7 +78,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      *
      * @param vars the table with variables.
      */
-    @FXThread
+    @FxThread
     private void handleResult(@NotNull final VarTable vars) {
 
         final TreeNode<?> treeNode = getNode();
@@ -95,7 +95,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      *
      * @return the list of definitions.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull Array<PropertyDefinition> getPropertyDefinitions();
 
     /**
@@ -104,6 +104,6 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * @param vars the table with variables.
      * @return the emitter shape.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull EmitterShape createEmitterShape(@NotNull final VarTable vars);
 }

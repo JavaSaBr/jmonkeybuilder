@@ -4,7 +4,7 @@ import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
@@ -106,7 +106,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -152,7 +152,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the check box to chose an option of creating filter.
      */
-    @FXThread
+    @FxThread
     private @NotNull CheckBox getCustomCheckBox() {
         return notNull(customCheckBox);
     }
@@ -160,7 +160,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the full class name of creating filter.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getFilterNameField() {
         return notNull(filterNameField);
     }
@@ -168,13 +168,13 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of built in filters.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<String> getBuiltInBox() {
         return notNull(builtInBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
 
         final SceneNode currentModel = changeConsumer.getCurrentModel();

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.preview.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.util.EditorUtil;
@@ -22,7 +22,7 @@ import java.nio.file.Path;
 public class TextFilePreview extends AbstractFilePreview<TextArea> {
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull TextArea createGraphicsNode() {
         final TextArea textArea = new TextArea();
         textArea.setEditable(false);
@@ -30,7 +30,7 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void initialize(@NotNull final TextArea node, @NotNull final StackPane pane) {
         super.initialize(node, pane);
 
@@ -41,7 +41,7 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Path file) {
         super.show(file);
 
@@ -50,7 +50,7 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final String resource) {
         super.show(resource);
 

@@ -6,7 +6,7 @@ import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -43,7 +43,7 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -67,7 +67,7 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
      * @param changeConsumer the change consumer.
      * @param shape          the shape.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final EmitterPointShape shape) {
 
@@ -90,7 +90,7 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
      * @param changeConsumer the change consumer.
      * @param shape          the shape.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final EmitterBoxShape shape) {
 
@@ -122,7 +122,7 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
      * @param changeConsumer the change consumer.
      * @param shape          the shape.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final EmitterSphereShape shape) {
 

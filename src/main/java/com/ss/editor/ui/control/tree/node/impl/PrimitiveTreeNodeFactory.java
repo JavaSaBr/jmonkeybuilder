@@ -5,7 +5,7 @@ import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.VertexBuffer;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.model.node.BufferTreeNode;
 import com.ss.editor.ui.control.model.node.PositionTreeNode;
 import com.ss.editor.ui.control.model.node.VertexBufferTreeNode;
@@ -25,7 +25,7 @@ import java.nio.Buffer;
 public class PrimitiveTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @FXThread
+    @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof Vector3f) {
@@ -44,7 +44,7 @@ public class PrimitiveTreeNodeFactory implements TreeNodeFactory {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public int getOrder() {
         return 1;
     }

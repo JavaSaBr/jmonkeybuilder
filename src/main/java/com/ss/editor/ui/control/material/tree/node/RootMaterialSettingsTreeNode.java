@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.material.tree.node;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.node.material.*;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -22,7 +22,7 @@ public class RootMaterialSettingsTreeNode extends MaterialSettingsTreeNode<RootM
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final RootMaterialSettings settings = getElement();
@@ -43,7 +43,7 @@ public class RootMaterialSettingsTreeNode extends MaterialSettingsTreeNode<RootM
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }

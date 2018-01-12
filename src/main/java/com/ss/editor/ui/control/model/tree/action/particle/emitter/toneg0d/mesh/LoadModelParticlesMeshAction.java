@@ -8,7 +8,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -61,21 +61,21 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.OPEN_FILE_16;
     }
 
-    @FXThread
+    @FxThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_MODEL;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         UIUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);

@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.light;
 
 import com.jme3.light.AmbientLight;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 
@@ -24,7 +24,7 @@ public class AmbientLightTreeNode extends LightTreeNode<AmbientLight> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.AMBIENT_16;
     }

@@ -19,7 +19,7 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LightControl;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -55,7 +55,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
      *
      * @return the single instance
      */
-    @FXThread
+    @FxThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -65,7 +65,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -104,7 +104,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
 
         if (object instanceof LightControl) {
@@ -123,7 +123,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         return super.getProperties(object);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final AbstractCinematicEvent control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -167,7 +167,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(timeControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final AbstractControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -183,7 +183,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(enabledControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final MotionEvent control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -221,7 +221,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(rotationControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final CharacterControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -314,7 +314,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(walkDirectionControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final SkeletonControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -330,7 +330,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(hardwareSkinningPreferredControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final Animation animation, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -346,7 +346,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(lengthControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final RigidBodyControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -371,7 +371,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(kinematicSpatialControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final VehicleControl control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -396,7 +396,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(applyPhysicsLocalControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final VehicleWheel control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -551,7 +551,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         FXUtils.addToPane(axleControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void build(@NotNull final PhysicsRigidBody control, @NotNull final VBox container,
                        @NotNull final ModelChangeConsumer changeConsumer) {
 

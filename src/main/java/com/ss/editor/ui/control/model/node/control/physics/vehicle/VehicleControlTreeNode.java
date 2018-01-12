@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.control.physics.vehicle;
 
 import com.jme3.bullet.control.VehicleControl;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.physics.PhysicsObjectTreeNode;
@@ -26,7 +26,7 @@ public class VehicleControlTreeNode extends PhysicsObjectTreeNode<VehicleControl
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.VEHICLE_16;
     }
@@ -38,7 +38,7 @@ public class VehicleControlTreeNode extends PhysicsObjectTreeNode<VehicleControl
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 

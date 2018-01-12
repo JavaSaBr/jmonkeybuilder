@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -53,7 +53,7 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -69,13 +69,13 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     /**
      * @return The list of available options of the string value.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<String> getComboBox() {
         return notNull(comboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final String value = getPropertyValue();
@@ -84,7 +84,7 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         final ComboBox<String> comboBox = getComboBox();
         final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();

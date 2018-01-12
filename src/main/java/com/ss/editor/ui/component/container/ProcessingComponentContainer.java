@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.container;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.FXConstants;
@@ -88,7 +88,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
      *
      * @param component the processing component.
      */
-    @FXThread
+    @FxThread
     public void addComponent(@NotNull final C component) {
         components.add(component);
         component.initFor(this);
@@ -119,7 +119,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
      *
      * @param element the element to process.
      */
-    @FXThread
+    @FxThread
     public void showComponentFor(@Nullable final Object element) {
 
         final VBox container = getContainer();
@@ -148,7 +148,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     /**
      * Notify about showed this container.
      */
-    @FXThread
+    @FxThread
     public void notifyShowed() {
         setShowed(true);
 
@@ -162,7 +162,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     /**
      * Notify about hided this container.
      */
-    @FXThread
+    @FxThread
     public void notifyHided() {
         setShowed(false);
 
@@ -217,7 +217,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
      * @param object       the object
      * @param propertyName the property name
      */
-    @FXThread
+    @FxThread
     public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
 
         final VBox container = getContainer();

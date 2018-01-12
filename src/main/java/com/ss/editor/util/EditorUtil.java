@@ -6,14 +6,16 @@ import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
+import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
 import com.ss.editor.JfxApplication;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
@@ -79,12 +81,22 @@ public abstract class EditorUtil {
             new SimpleDateFormat("HH:mm:ss:SSS"));
 
     /**
+     * Get the asset manager.
+     *
+     * @return the asset manager.
+     */
+    @FromAnyThread
+    public static @NotNull AssetManager getAssetManager() {
+        return JmeApplication.getInstance().getAssetManager();
+    }
+
+    /**
      * Added files like files to copy to clipboard content.
      *
      * @param paths   the list of files.
      * @param content the content to store.
      */
-    @FXThread
+    @FxThread
     public static void addCopiedFile(@NotNull final Array<Path> paths, @NotNull final ClipboardContent content) {
 
         final List<File> files = paths.stream()
@@ -338,7 +350,7 @@ public abstract class EditorUtil {
      *
      * @return true if you have a file in your system clipboard.
      */
-    @FXThread
+    @FxThread
     public static boolean hasFileInClipboard() {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         if (clipboard == null) return false;
@@ -443,7 +455,7 @@ public abstract class EditorUtil {
     /**
      * Create a dialog for showing the exception.
      */
-    @FXThread
+    @FxThread
     private static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
                                           @Nullable final String stackTrace) {
 
@@ -635,7 +647,7 @@ public abstract class EditorUtil {
     /**
      * Increment the loading counter.
      */
-    @FXThread
+    @FxThread
     public static void incrementLoading() {
         final JfxApplication jfxApplication = JfxApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();
@@ -645,7 +657,7 @@ public abstract class EditorUtil {
     /**
      * Decrement the loading counter.
      */
-    @FXThread
+    @FxThread
     public static void decrementLoading() {
         final JfxApplication jfxApplication = JfxApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();

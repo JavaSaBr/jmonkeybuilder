@@ -7,7 +7,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -112,7 +112,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the node tree component.
      */
-    @FXThread
+    @FxThread
     private @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
@@ -122,7 +122,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the mesh.
      */
-    @FXThread
+    @FxThread
     public @NotNull Mesh getMesh() {
         return mesh;
     }
@@ -130,7 +130,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the geometry.
      */
-    @FXThread
+    @FxThread
     private @NotNull Geometry getGeometry() {
         return geometry;
     }
@@ -140,7 +140,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      *
      * @return the reduction method.
      */
-    @FXThread
+    @FxThread
     public @NotNull ReductionMethod getMethod() {
         final ComboBox<ReductionMethod> comboBox = getReductionMethodComboBox();
         final SingleSelectionModel<ReductionMethod> selectionModel = comboBox.getSelectionModel();
@@ -150,7 +150,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list view with levels of LoD.
      */
-    @FXThread
+    @FxThread
     private @NotNull ListView<Number> getLevelsList() {
         return notNull(levelsList);
     }
@@ -162,7 +162,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -222,7 +222,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Update disabling of OK button.
      */
-    @FXThread
+    @FxThread
     private void updateButtonOk() {
 
         final ListView<Number> levelsList = getLevelsList();
@@ -235,7 +235,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Clear added levels.
      */
-    @FXThread
+    @FxThread
     private void clearLevels() {
         final ListView<Number> levelsList = getLevelsList();
         final ObservableList<Number> items = levelsList.getItems();
@@ -245,7 +245,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Remove a selected level.
      */
-    @FXThread
+    @FxThread
     private void processRemove() {
 
         final ListView<Number> levelsList = getLevelsList();
@@ -258,7 +258,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Add a new level.
      */
-    @FXThread
+    @FxThread
     private void processAdd() {
 
         final ListView<Number> levelsList = getLevelsList();
@@ -273,20 +273,20 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processKey(@NotNull final KeyEvent event) {
     }
 
     /**
      * @return the list of reduction methods.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<ReductionMethod> getReductionMethodComboBox() {
         return notNull(reductionMethodComboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processGenerate);
@@ -296,7 +296,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * Process of generating.
      */
-    @FXThread
+    @FxThread
     private void processGenerate() {
 
         final Geometry geometry = getGeometry();

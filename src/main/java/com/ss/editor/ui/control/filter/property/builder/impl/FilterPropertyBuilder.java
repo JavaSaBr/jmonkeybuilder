@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.filter.property.builder.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
@@ -36,7 +36,7 @@ public class FilterPropertyBuilder extends EditableModelObjectPropertyBuilder {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         if (!(object instanceof EditableSceneFilter)) return null;
         final EditableSceneFilter filter = (EditableSceneFilter) object;

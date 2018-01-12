@@ -7,7 +7,7 @@ import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -67,7 +67,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
      *
      * @return the scene node
      */
-    @FXThread
+    @FxThread
     protected @NotNull SceneNode createScene() {
         final SceneNode newNode = new SceneNode();
         newNode.addLayer(new SceneLayer("Default", true));

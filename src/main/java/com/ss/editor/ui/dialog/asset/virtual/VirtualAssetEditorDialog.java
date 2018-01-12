@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.asset.virtual;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.virtual.tree.VirtualResourceTree;
 import com.ss.editor.ui.component.virtual.tree.resource.RootVirtualResourceElement;
@@ -65,13 +65,13 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable String getAssetPath(@NotNull final VirtualResourceElement<?> element) {
         return getResourceTree().getPath(element.getObject());
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Region buildFirstPart(@NotNull final HBox container) {
 
         resourceTree = new VirtualResourceTree<>(getObjectsType());
@@ -92,7 +92,7 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -107,7 +107,7 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable C getObject(@NotNull final VirtualResourceElement<?> element) {
         final Object object = element.getObject();
         final Class<C> type = getObjectsType();
@@ -117,13 +117,13 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     /**
      * @return the tree with all resources.
      */
-    @FXThread
+    @FxThread
     private @NotNull VirtualResourceTree<C> getResourceTree() {
         return notNull(resourceTree);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
 
         final VirtualResourceTree<C> resourceTree = getResourceTree();
@@ -149,7 +149,7 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
 

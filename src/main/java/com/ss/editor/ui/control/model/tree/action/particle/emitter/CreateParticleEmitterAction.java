@@ -10,7 +10,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -35,19 +35,19 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.EMITTER_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -85,7 +85,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         changeConsumer.execute(new AddChildOperation(emitter, parent));
     }
 
-    @FXThread
+    @FxThread
     protected @NotNull ParticleEmitter createParticleEmitter() {
         return new ParticleEmitter("Default Emitter", ParticleMesh.Type.Triangle, 30);
     }

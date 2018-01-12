@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.node;
 
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -27,7 +27,7 @@ public class PositionTreeNode extends TreeNode<Vector3f> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.WAY_POINT_16;
     }
@@ -39,13 +39,13 @@ public class PositionTreeNode extends TreeNode<Vector3f> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isNeedToSaveName() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void setName(@Nullable final String name) {
         this.name = name;
     }

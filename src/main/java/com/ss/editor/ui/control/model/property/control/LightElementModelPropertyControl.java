@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.property.control;
 
 import com.jme3.light.Light;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.LightSelectorDialog;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
@@ -24,14 +24,14 @@ public class LightElementModelPropertyControl<L extends Light, D> extends Elemen
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull NodeSelectorDialog<L> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         return new LightSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final L light = getPropertyValue();

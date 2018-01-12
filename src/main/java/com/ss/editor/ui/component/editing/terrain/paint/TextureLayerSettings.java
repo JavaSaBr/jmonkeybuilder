@@ -8,7 +8,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.texture.Texture;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -200,7 +200,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @param layerToAlphaName the function to convert layer index to alpha texture param name.
      */
-    @FXThread
+    @FxThread
     public void setLayerToAlphaName(@NotNull final Function<Integer, String> layerToAlphaName) {
         this.layerToAlphaName = layerToAlphaName;
     }
@@ -218,7 +218,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @param layerToDiffuseName the function to convert layer index to diffuse texture param name.
      */
-    @FXThread
+    @FxThread
     public void setLayerToDiffuseName(@NotNull final Function<Integer, String> layerToDiffuseName) {
         this.layerToDiffuseName = layerToDiffuseName;
     }
@@ -236,7 +236,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @param layerToNormalName the function to convert layer index to normal texture param name.
      */
-    @FXThread
+    @FxThread
     public void setLayerToNormalName(@NotNull final Function<Integer, String> layerToNormalName) {
         this.layerToNormalName = layerToNormalName;
     }
@@ -254,7 +254,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @param layerToScaleName the function to convert layer index to texture scale param name.
      */
-    @FXThread
+    @FxThread
     public void setLayerToScaleName(@NotNull final Function<Integer, String> layerToScaleName) {
         this.layerToScaleName = layerToScaleName;
     }
@@ -277,7 +277,7 @@ public class TextureLayerSettings extends VBox {
     /**
      * Refresh the layers list.
      */
-    @FXThread
+    @FxThread
     public void refresh() {
 
         final ListView<TextureLayer> listView = getListView();
@@ -340,7 +340,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @return the edited terrain.
      */
-    @FXThread
+    @FxThread
     private @NotNull Terrain getTerrain() {
         return editingComponent.getProcessedObject();
     }
@@ -350,7 +350,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @return the edited terrain.
      */
-    @FXThread
+    @FxThread
     private @NotNull Node getTerrainNode() {
         return editingComponent.getProcessedObject();
     }
@@ -563,7 +563,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @param maxLevels the max count of texture levels.
      */
-    @FXThread
+    @FxThread
     public void setMaxLevels(final int maxLevels) {
         this.maxLevels = maxLevels;
     }
@@ -592,7 +592,7 @@ public class TextureLayerSettings extends VBox {
     /**
      * Notify about changed property.
      */
-    @FXThread
+    @FxThread
     public void notifyChangeProperty() {
 
         final ListView<TextureLayer> listView = getListView();

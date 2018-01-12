@@ -8,7 +8,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -47,7 +47,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
@@ -64,14 +64,14 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         UIUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);

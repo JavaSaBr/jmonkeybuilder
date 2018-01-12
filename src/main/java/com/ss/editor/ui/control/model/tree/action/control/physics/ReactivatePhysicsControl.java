@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
@@ -29,21 +29,21 @@ public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeCons
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.REPLAY_16;
     }
 
-    @FXThread
+    @FxThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REACTIVATE;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
 

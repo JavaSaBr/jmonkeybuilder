@@ -3,7 +3,7 @@ package com.ss.editor.control.editing;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +20,7 @@ public interface EditingControl extends Control {
      * @return the edited model.
      */
     @Nullable
-    @JMEThread
+    @JmeThread
     default Spatial getEditedModel() {
         return null;
     }
@@ -31,7 +31,7 @@ public interface EditingControl extends Control {
      * @param editingInput the type of input.
      * @param contactPoint the contact point.
      */
-    @JMEThread
+    @JmeThread
     default void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
     }
 
@@ -50,7 +50,7 @@ public interface EditingControl extends Control {
      *
      * @param contactPoint the contact point.
      */
-    @JMEThread
+    @JmeThread
     default void finishEditing(@NotNull final Vector3f contactPoint) {
     }
 
@@ -59,7 +59,7 @@ public interface EditingControl extends Control {
      *
      * @param contactPoint the contact point.
      */
-    @JMEThread
+    @JmeThread
     default void updateEditing(@NotNull final Vector3f contactPoint) {
     }
 
@@ -68,7 +68,7 @@ public interface EditingControl extends Control {
      *
      * @return true if this control started editing.
      */
-    @JMEThread
+    @JmeThread
     default boolean isStartedEditing() {
         return false;
     }

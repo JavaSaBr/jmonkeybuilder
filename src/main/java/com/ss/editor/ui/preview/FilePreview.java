@@ -1,6 +1,6 @@
 package com.ss.editor.ui.preview;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.pools.Reusable;
@@ -21,13 +21,13 @@ public interface FilePreview extends Reusable {
      *
      * @param pane the pane.
      */
-    @FXThread
+    @FxThread
     void initialize(@NotNull StackPane pane);
 
     /**
      * Hide this preview.
      */
-    @FXThread
+    @FxThread
     void hide();
 
     /**
@@ -36,7 +36,7 @@ public interface FilePreview extends Reusable {
      * @param resource the resource.
      * @return true if this preview supports the resource.
      */
-    @FXThread
+    @FxThread
     default boolean isSupport(@NotNull final String resource) {
         return !StringUtils.isEmpty(FileUtils.getExtension(resource));
     }
@@ -47,7 +47,7 @@ public interface FilePreview extends Reusable {
      * @param file the file.
      * @return true if this preview supports the file.
      */
-    @FXThread
+    @FxThread
     default boolean isSupport(@NotNull final Path file) {
         return !StringUtils.isEmpty(FileUtils.getExtension(file));
     }
@@ -57,7 +57,7 @@ public interface FilePreview extends Reusable {
      *
      * @param resource the resource.
      */
-    @FXThread
+    @FxThread
     void show(@NotNull String resource);
 
     /**
@@ -65,7 +65,7 @@ public interface FilePreview extends Reusable {
      *
      * @param file the file.
      */
-    @FXThread
+    @FxThread
     void show(@NotNull Path file);
 
     /**
@@ -73,13 +73,13 @@ public interface FilePreview extends Reusable {
      *
      * @return the order.
      */
-    @FXThread
+    @FxThread
     default int getOrder() {
         return 0;
     }
 
     @Override
-    @FXThread
+    @FxThread
     default void release() {
     }
 }

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editing.terrain;
 
 import static java.lang.Math.abs;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
 
@@ -46,144 +46,144 @@ public class TerrainEditingStateWithEditorTool extends AbstractEditorState imple
         this.slopeSmoothly = true;
     }
 
-    @FXThread
+    @FxThread
     public float getBrushSize() {
         return brushSize;
     }
 
-    @FXThread
+    @FxThread
     public void setBrushSize(final float brushSize) {
         final boolean changed = abs(getBrushSize() - brushSize) > 0.001f;
         this.brushSize = brushSize;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getBrushPower() {
         return brushPower;
     }
 
-    @FXThread
+    @FxThread
     public void setBrushPower(final float brushPower) {
         final boolean changed = abs(getBrushPower() - brushPower) > 0.001f;
         this.brushPower = brushPower;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getLevelValue() {
         return levelValue;
     }
 
-    @FXThread
+    @FxThread
     public void setLevelValue(final float levelValue) {
         final boolean changed = abs(getLevelValue() - levelValue) > 0.001f;
         this.levelValue = levelValue;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getRoughtFrequency() {
         return roughtFrequency;
     }
 
-    @FXThread
+    @FxThread
     public void setRoughtFrequency(final float roughtFrequency) {
         final boolean changed = abs(getRoughtFrequency() - roughtFrequency) > 0.001f;
         this.roughtFrequency = roughtFrequency;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getRoughtLacunarity() {
         return roughtLacunarity;
     }
 
-    @FXThread
+    @FxThread
     public void setRoughtLacunarity(final float roughtLacunarity) {
         final boolean changed = abs(getRoughtLacunarity() - roughtLacunarity) > 0.001f;
         this.roughtLacunarity = roughtLacunarity;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getRoughtOctaves() {
         return roughtOctaves;
     }
 
-    @FXThread
+    @FxThread
     public void setRoughtOctaves(final float roughtOctaves) {
         final boolean changed = abs(getRoughtOctaves() - roughtOctaves) > 0.001f;
         this.roughtOctaves = roughtOctaves;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getRoughtRoughness() {
         return roughtRoughness;
     }
 
-    @FXThread
+    @FxThread
     public void setRoughtRoughness(final float roughtRoughness) {
         final boolean changed = abs(getRoughtRoughness() - roughtRoughness) > 0.001f;
         this.roughtRoughness = roughtRoughness;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public float getRoughtScale() {
         return roughtScale;
     }
 
-    @FXThread
+    @FxThread
     public void setRoughtScale(final float roughtScale) {
         final boolean changed = abs(getRoughtScale() - roughtScale) > 0.001f;
         this.roughtScale = roughtScale;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public boolean isLevelUseMarker() {
         return levelUseMarker;
     }
 
-    @FXThread
+    @FxThread
     public void setLevelUseMarker(final boolean levelUseMarker) {
         final boolean changed = isLevelUseMarker() != levelUseMarker;
         this.levelUseMarker = levelUseMarker;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public boolean isLevelSmoothly() {
         return levelSmoothly;
     }
 
-    @FXThread
+    @FxThread
     public void setLevelSmoothly(final boolean levelSmoothly) {
         final boolean changed = isLevelSmoothly() != levelSmoothly;
         this.levelSmoothly = levelSmoothly;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public boolean isSlopeLimited() {
         return slopeLimited;
     }
 
-    @FXThread
+    @FxThread
     public void setSlopeLimited(final boolean slopeLimited) {
         final boolean changed = isSlopeLimited() != slopeLimited;
         this.slopeLimited = slopeLimited;
         if (changed) notifyChange();
     }
 
-    @FXThread
+    @FxThread
     public boolean isSlopeSmoothly() {
         return slopeSmoothly;
     }
 
-    @FXThread
+    @FxThread
     public void setSlopeSmoothly(final boolean slopeSmoothly) {
         final boolean changed = isSlopeSmoothly() != slopeSmoothly;
         this.slopeSmoothly = slopeSmoothly;

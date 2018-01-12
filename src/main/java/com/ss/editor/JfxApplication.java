@@ -11,9 +11,9 @@ import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
@@ -165,7 +165,7 @@ public class JfxApplication extends Application {
      *
      * @param application the new jME application.
      */
-    @JMEThread
+    @JmeThread
     private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
@@ -188,7 +188,7 @@ public class JfxApplication extends Application {
      *
      * @return the new focus listener.
      */
-    @FXThread
+    @FxThread
     private static @NotNull ChangeListener<Boolean> makeFocusedListener() {
         return (observable, oldValue, newValue) -> {
 
@@ -276,7 +276,7 @@ public class JfxApplication extends Application {
      *
      * @param window the new opened window.
      */
-    @FXThread
+    @FxThread
     public void addWindow(@NotNull final Window window) {
         window.focusedProperty().addListener(makeFocusedListener());
         ArrayUtils.runInWriteLock(openedWindows, window, Collection::add);
@@ -287,7 +287,7 @@ public class JfxApplication extends Application {
      *
      * @param window the opened window.
      */
-    @FXThread
+    @FxThread
     public void removeWindow(@NotNull final Window window) {
         ArrayUtils.runInWriteLock(openedWindows, window, Array::slowRemove);
     }
@@ -297,13 +297,13 @@ public class JfxApplication extends Application {
      *
      * @return the last opened window.
      */
-    @FXThread
+    @FxThread
     public @NotNull Window getLastWindow() {
         return notNull(ArrayUtils.getInReadLock(openedWindows, Array::last));
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void start(final Stage stage) throws Exception {
         JfxApplication.instance = this;
         this.stage = stage;
@@ -370,7 +370,7 @@ public class JfxApplication extends Application {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void stop() throws Exception {
         super.stop();
         onExit();
@@ -379,7 +379,7 @@ public class JfxApplication extends Application {
     /**
      * On exit.
      */
-    @FXThread
+    @FxThread
     protected void onExit() {
 
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
@@ -400,7 +400,7 @@ public class JfxApplication extends Application {
     /**
      * Build the scene.
      */
-    @FXThread
+    @FxThread
     private void buildScene() {
         this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
@@ -425,7 +425,7 @@ public class JfxApplication extends Application {
         final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
         executor.addToExecute(() -> createSceneProcessor(scene, jmeApplication));
 
-        JMEFilePreviewManager.getInstance();
+        JmeFilePreviewManager.getInstance();
 
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.APPLICATION_LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
@@ -454,7 +454,7 @@ public class JfxApplication extends Application {
         });
     }
 
-    @FXThread
+    @FxThread
     private void createSceneProcessor(@NotNull final EditorFXScene scene, @NotNull final JmeApplication jmeApplication) {
 
         final FrameTransferSceneProcessor sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());

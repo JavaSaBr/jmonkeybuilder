@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.light;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddLightOperation;
@@ -24,7 +24,7 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -47,6 +47,6 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
      *
      * @return the light
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull Light createLight();
 }

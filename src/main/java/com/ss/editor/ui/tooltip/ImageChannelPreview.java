@@ -1,7 +1,7 @@
 package com.ss.editor.ui.tooltip;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -95,7 +95,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the alpha image.
      */
-    @FXThread
+    @FxThread
     private @NotNull WritableImage getAlphaImage() {
         return notNull(alphaImage);
     }
@@ -103,7 +103,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the red image.
      */
-    @FXThread
+    @FxThread
     private @NotNull WritableImage getRedImage() {
         return notNull(redImage);
     }
@@ -111,7 +111,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the blue image.
      */
-    @FXThread
+    @FxThread
     private @NotNull WritableImage getBlueImage() {
         return notNull(blueImage);
     }
@@ -119,13 +119,13 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the green image.
      */
-    @FXThread
+    @FxThread
     private @NotNull WritableImage getGreenImage() {
         return notNull(greenImage);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull GridPane createRoot() {
         final GridPane gridPane = new GridPane();
         FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.IMAGE_CHANNEL_PREVIEW);
@@ -135,7 +135,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the alpha image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getAlphaView() {
         return notNull(alphaView);
     }
@@ -143,7 +143,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the blue image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getBlueView() {
         return notNull(blueView);
     }
@@ -151,7 +151,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the green image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getGreenView() {
         return notNull(greenView);
     }
@@ -159,7 +159,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the red image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getRedView() {
         return notNull(redView);
     }
@@ -169,7 +169,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
      *
      * @param file the file
      */
-    @FXThread
+    @FxThread
     public void showImage(@Nullable final Path file) {
         setFile(file);
         setNeedToBuildFile(true);
@@ -181,7 +181,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
      *
      * @param resourcePath the resource path.
      */
-    @FXThread
+    @FxThread
     public void showImage(@Nullable final String resourcePath) {
         setResourcePath(resourcePath);
         setNeedToBuildResource(true);
@@ -191,7 +191,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * Clean.
      */
-    @FXThread
+    @FxThread
     public void clean() {
         setNeedToBuildFile(true);
         setNeedToBuildResource(false);
@@ -201,7 +201,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param resourcePath the resource path.
      */
-    @FXThread
+    @FxThread
     private void setResourcePath(@Nullable final String resourcePath) {
         this.resourcePath = resourcePath;
     }
@@ -209,7 +209,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the resource path.
      */
-    @FXThread
+    @FxThread
     private @Nullable String getResourcePath() {
         return resourcePath;
     }
@@ -217,7 +217,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param file the file.
      */
-    @FXThread
+    @FxThread
     private void setFile(@Nullable final Path file) {
         this.file = file;
     }
@@ -225,7 +225,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the file.
      */
-    @FXThread
+    @FxThread
     private @Nullable Path getFile() {
         return file;
     }
@@ -233,7 +233,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param needToBuildFile true of need to build from the file.
      */
-    @FXThread
+    @FxThread
     private void setNeedToBuildFile(final boolean needToBuildFile) {
         this.needToBuildFile = needToBuildFile;
     }
@@ -241,7 +241,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return true of need to build from the file.
      */
-    @FXThread
+    @FxThread
     private boolean isNeedToBuildFile() {
         return needToBuildFile;
     }
@@ -249,7 +249,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @param needToBuildResource true of need to build from the resource path.
      */
-    @FXThread
+    @FxThread
     private void setNeedToBuildResource(final boolean needToBuildResource) {
         this.needToBuildResource = needToBuildResource;
     }
@@ -257,13 +257,13 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return true of need to build from the resource path.
      */
-    @FXThread
+    @FxThread
     private boolean isNeedToBuildResource() {
         return needToBuildResource;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void show() {
         super.show();
 
@@ -296,7 +296,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
         }
     }
 
-    @FXThread
+    @FxThread
     private void buildPreview(@Nullable final Image image) {
 
         if (image == null || image.getWidth() != 120) {

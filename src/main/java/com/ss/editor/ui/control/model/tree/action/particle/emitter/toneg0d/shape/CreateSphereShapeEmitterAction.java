@@ -5,7 +5,7 @@ import static com.ss.editor.extension.property.EditablePropertyType.INTEGER;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -39,19 +39,19 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.SPHERE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
@@ -63,13 +63,13 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
         final int zSamples = vars.getInteger(PROPERTY_Z_SAMPLES);
         final int radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);

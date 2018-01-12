@@ -32,7 +32,7 @@ import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.editing.EditingControl;
 import com.ss.editor.control.editing.EditingInput;
 import com.ss.editor.control.transform.*;
@@ -349,7 +349,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
 
@@ -369,7 +369,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         super.registerActionListener(inputManager);
         inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
@@ -624,74 +624,74 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @return the current mode of transformation.
      */
     @Override
-    @JMEThread
+    @JmeThread
     public @NotNull TransformationMode getTransformationMode() {
         return transformMode;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public @Nullable Transform getTransformCenter() {
         return transformCenter;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void setPickedAxis(@NotNull final PickedAxis axis) {
         this.pickedAxis = axis;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public @NotNull PickedAxis getPickedAxis() {
         return notNull(pickedAxis);
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public @Nullable Node getCollisionPlane() {
         if (collisionPlane == null) throw new RuntimeException("collisionPlane is null");
         return collisionPlane;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void setTransformDeltaX(final float transformDeltaX) {
         this.transformDeltaX = transformDeltaX;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void setTransformDeltaY(final float transformDeltaY) {
         this.transformDeltaY = transformDeltaY;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void setTransformDeltaZ(final float transformDeltaZ) {
         this.transformDeltaZ = transformDeltaZ;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public float getTransformDeltaX() {
         return transformDeltaX;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public float getTransformDeltaY() {
         return transformDeltaY;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public float getTransformDeltaZ() {
         return transformDeltaZ;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public @Nullable Spatial getToTransform() {
         return toTransform;
     }
@@ -859,7 +859,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Update editing nodes.
      */
-    @JMEThread
+    @JmeThread
     private void updateEditingNodes() {
         if (!isEditingMode()) return;
 
@@ -878,7 +878,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Update the transformation node.
      */
-    @JMEThread
+    @JmeThread
     private void updateTransformNode(@Nullable final Transform transform) {
         if (transform == null) return;
 
@@ -892,7 +892,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         transformToolNode.setLocalRotation(transformationMode.getToolRotation(transform, getCamera()));
     }
 
-    @JMEThread
+    @JmeThread
     private @NotNull Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
 
         final LocalObjects local = LocalObjects.get();
@@ -991,7 +991,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of updating selected models.
      */
-    @JMEThread
+    @JmeThread
     private void updateSelectionImpl(@NotNull final Array<Spatial> spatials) {
 
         final Array<Spatial> selected = getSelected();
@@ -1041,7 +1041,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Update the transformation's center.
      */
-    @JMEThread
+    @JmeThread
     private void updateTransformCenter() {
 
         final Spatial toTransform = getToTransform();
@@ -1055,7 +1055,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Add the spatial to selection.
      */
-    @JMEThread
+    @JmeThread
     private void addToSelection(@NotNull final Spatial spatial) {
 
         if (spatial instanceof VisibleOnlyWhenSelected) {
@@ -1093,7 +1093,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Remove the spatial from the selection.
      */
-    @JMEThread
+    @JmeThread
     private void removeFromSelection(@NotNull final Spatial spatial) {
         setTransformCenter(null);
         setToTransform(null);
@@ -1110,7 +1110,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Build the selection box for the spatial.
      */
-    @JMEThread
+    @JmeThread
     private Spatial buildBoxSelection(@NotNull final Spatial spatial) {
         spatial.updateModelBound();
 
@@ -1152,7 +1152,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Build selection grid for the geometry.
      */
-    @JMEThread
+    @JmeThread
     private Spatial buildGeometrySelection(@NotNull final Geometry geom) {
 
         final Mesh mesh = geom.getMesh();
@@ -1194,7 +1194,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void notifyTransformed(@NotNull final Spatial spatial) {
         getFileEditor().notifyTransformed(spatial);
     }
@@ -1214,7 +1214,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @param showSelection true if needs to show selection
      */
-    @JMEThread
+    @JmeThread
     private void updateShowSelectionImpl(final boolean showSelection) {
         if (isShowSelection() == showSelection) return;
 
@@ -1231,7 +1231,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected void onActionImpl(@NotNull final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
         if (MOUSE_RIGHT_CLICK.equals(name)) {
@@ -1280,7 +1280,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Handling a click in the area of the editor.
      */
-    @JMEThread
+    @JmeThread
     private void processSelect() {
         if (isEditingMode()) return;
 
@@ -1354,12 +1354,12 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param screenY the y position on screen.
      * @return the position on a scene.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable Geometry getGeometryByScreenPos(final float screenX, final float screenY) {
         return GeomUtils.getGeometryFromScreenPos(notNull(getCurrentModel()), getCamera(), screenX, screenY);
     }
 
-    @JMEThread
+    @JmeThread
     private void notifySelected(@Nullable final Object object) {
         getFileEditor().notifySelected(object);
     }
@@ -1371,7 +1371,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      * @param screenY the y position on screen.
      * @return the position on a scene.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Vector3f getScenePosByScreenPos(final float screenX, final float screenY) {
 
         final Camera camera = getCamera();
@@ -1410,7 +1410,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of updating the showing grid.
      */
-    @JMEThread
+    @JmeThread
     private void updateShowGridImpl(final boolean showGrid) {
         if (isShowGrid() == showGrid) return;
 
@@ -1429,7 +1429,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Finish the transformation of the model.
      */
-    @JMEThread
+    @JmeThread
     private void endTransform() {
         if (!isActiveTransform()) return;
 
@@ -1465,7 +1465,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Start transformation.
      */
-    @JMEThread
+    @JmeThread
     private boolean startTransform() {
         updateTransformCenter();
 
@@ -1512,7 +1512,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Start editing.
      */
-    @JMEThread
+    @JmeThread
     private void startEditing(@NotNull final EditingInput editingInput) {
         final Node cursorNode = getCursorNode();
         final EditingControl control = EditingUtils.getEditingControl(cursorNode);
@@ -1524,7 +1524,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Finish editing.
      */
-    @JMEThread
+    @JmeThread
     private void finishEditing(@NotNull final EditingInput editingInput) {
 
         final Node cursorNode = getCursorNode();
@@ -1542,7 +1542,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * Update editing.
      */
-    @JMEThread
+    @JmeThread
     private void updateEditing() {
         final Node cursorNode = getCursorNode();
         final EditingControl control = EditingUtils.getEditingControl(cursorNode);
@@ -1556,7 +1556,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @param object the object with changes.
      */
-    @JMEThread
+    @JmeThread
     public void notifyPropertyChanged(@NotNull Object object) {
 
         if (object instanceof SimpleProperty) {
@@ -1602,7 +1602,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of showing the model in the scene.
      */
-    @JMEThread
+    @JmeThread
     private void openModelImpl(@NotNull final M model) {
 
         final Node modelNode = getModelNode();
@@ -1670,7 +1670,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of adding a light.
      */
-    @JMEThread
+    @JmeThread
     private void addLightImpl(@NotNull final Light light) {
 
         final Node node = LIGHT_MODEL_TABLE.get(light.getType());
@@ -1747,7 +1747,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of removing a light.
      */
-    @JMEThread
+    @JmeThread
     private void removeLightImpl(@NotNull final Light light) {
 
         final Node node = LIGHT_MODEL_TABLE.get(light.getType());
@@ -1779,7 +1779,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of adding an audio node.
      */
-    @JMEThread
+    @JmeThread
     private void addAudioNodeImpl(@NotNull final AudioNode audio) {
 
         final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
@@ -1818,7 +1818,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of removing an audio node.
      */
-    @JMEThread
+    @JmeThread
     private void removeAudioNodeImpl(@NotNull final AudioNode audio) {
 
         final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
@@ -1847,7 +1847,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of adding a presentable object.
      */
-    @JMEThread
+    @JmeThread
     private void addPresentableImpl(@NotNull final ScenePresentable presentable) {
 
         final ObjectDictionary<ScenePresentable, EditorPresentableNode> cache = getCachedPresentableObjects();
@@ -1907,7 +1907,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The process of removing an audio node.
      */
-    @JMEThread
+    @JmeThread
     private void removePresentableImpl(@NotNull final ScenePresentable presentable) {
 
         final ObjectDictionary<ScenePresentable, EditorPresentableNode> presentableNodes = getCachedPresentableObjects();
@@ -1990,7 +1990,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
                                                final float vRotation, final float targetDistance,
                                                final float cameraSpeed) {
@@ -2028,7 +2028,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @param editingMode true if editing mode is enabled.
      */
-    @JMEThread
+    @JmeThread
     private void changeEditingModeImpl(final boolean editingMode) {
         setEditingMode(editingMode);
 
@@ -2053,7 +2053,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the cursor node.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Node getCursorNode() {
         return cursorNode;
     }
@@ -2063,7 +2063,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      *
      * @return the markers node.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Node getMarkersNode() {
         return markersNode;
     }

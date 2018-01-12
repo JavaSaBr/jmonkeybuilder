@@ -3,7 +3,7 @@ package com.ss.editor.file.converter.impl;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
@@ -147,7 +147,7 @@ public abstract class AbstractFileConverter implements FileConverter {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileChangedImpl(file));
     }
 
-    @FXThread
+    @FxThread
     private void notifyFileChangedImpl(@NotNull final Path file) {
         EditorUtil.decrementLoading();
     }
@@ -162,7 +162,7 @@ public abstract class AbstractFileConverter implements FileConverter {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(file));
     }
 
-    @FXThread
+    @FxThread
     private void notifyFileCreatedImpl(@Nullable final Path file) {
         EditorUtil.decrementLoading();
     }

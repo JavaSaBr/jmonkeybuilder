@@ -4,7 +4,7 @@ import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -35,25 +35,25 @@ public class CreateCapsuleCollisionShapeAction extends AbstractCreateShapeAction
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.CAPSULE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));
@@ -62,7 +62,7 @@ public class CreateCapsuleCollisionShapeAction extends AbstractCreateShapeAction
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull CollisionShape createShape(@NotNull final VarTable vars) {
         final float height = vars.getFloat(PROPERTY_HEIGHT);
         final float radius = vars.getFloat(PROPERTY_RADIUS);

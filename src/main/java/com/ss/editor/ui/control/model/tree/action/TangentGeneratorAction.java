@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.GenerateTangentsDialog;
@@ -24,19 +24,19 @@ public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsum
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.MESH_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
         final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());

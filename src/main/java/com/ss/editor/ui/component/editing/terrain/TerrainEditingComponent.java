@@ -9,7 +9,7 @@ import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -373,7 +373,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void loadState(@NotNull final EditorState editorState) {
         this.state = editorState.getOrCreateAdditionalState(TerrainEditingStateWithEditorTool.class, TerrainEditingStateWithEditorTool::new);
         getLevelControlLevelField().setValue(state.getLevelValue());

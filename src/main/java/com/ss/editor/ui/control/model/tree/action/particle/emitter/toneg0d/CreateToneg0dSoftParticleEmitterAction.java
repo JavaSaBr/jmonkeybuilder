@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 
@@ -22,13 +22,13 @@ public class CreateToneg0dSoftParticleEmitterAction extends CreateToneg0dParticl
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ParticleEmitterNode createEmitterNode() {
         return new SoftParticleEmitterNode(JME_APPLICATION.getAssetManager());
     }

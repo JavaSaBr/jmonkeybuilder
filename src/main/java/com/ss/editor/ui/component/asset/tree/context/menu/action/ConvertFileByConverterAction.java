@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -30,13 +30,13 @@ class ConvertFileByConverterAction extends FileAction {
         setText(description.getDescription());
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.TRANSFORMATION_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);

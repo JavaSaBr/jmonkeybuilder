@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.editor;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
@@ -49,7 +49,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     private BorderPane editor3DArea;
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final StackPane root) {
         createEditorAreaPane();
 
@@ -75,7 +75,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     /**
      * Create editor area pane.
      */
-    @FXThread
+    @FxThread
     protected void createEditorAreaPane() {
 
         editorAreaPane = new StackPane();
@@ -97,12 +97,12 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      * @param oldValue the old value
      * @param newValue the new value
      */
-    @FXThread
+    @FxThread
     protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void loadState() {
         super.loadState();
 
@@ -116,7 +116,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable BorderPane get3DArea() {
         return editor3DArea;
     }
@@ -124,7 +124,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     /**
      * @return the pane of editor area.
      */
-    @FXThread
+    @FxThread
     protected @NotNull StackPane getEditorAreaPane() {
         return notNull(editorAreaPane);
     }
@@ -135,7 +135,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      * @param container the tool container.
      * @param root the root.
      */
-    @FXThread
+    @FxThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
@@ -144,7 +144,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      *
      * @param dragEvent the drag event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
     }
 
@@ -153,7 +153,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      *
      * @param dragEvent the drop event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
     }
 }

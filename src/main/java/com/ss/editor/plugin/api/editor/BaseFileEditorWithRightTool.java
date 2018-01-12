@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.editor;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
@@ -39,7 +39,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     private StackPane editorAreaPane;
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final StackPane root) {
         createEditorAreaPane();
 
@@ -65,7 +65,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     /**
      * Create editor area pane.
      */
-    @FXThread
+    @FxThread
     protected void createEditorAreaPane() {
 
         editorAreaPane = new StackPane();
@@ -81,12 +81,12 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      * @param oldValue the old value
      * @param newValue the new value
      */
-    @FXThread
+    @FxThread
     protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void loadState() {
         super.loadState();
 
@@ -102,7 +102,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     /**
      * @return the pane of editor area.
      */
-    @FXThread
+    @FxThread
     protected @NotNull StackPane getEditorAreaPane() {
         return notNull(editorAreaPane);
     }
@@ -113,7 +113,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      * @param container the tool container.
      * @param root the root.
      */
-    @FXThread
+    @FxThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
@@ -122,7 +122,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      *
      * @param dragEvent the drag event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
     }
 
@@ -131,7 +131,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      *
      * @param dragEvent the drop event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
     }
 }

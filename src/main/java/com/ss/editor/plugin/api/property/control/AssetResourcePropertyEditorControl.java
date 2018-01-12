@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
@@ -52,7 +52,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processSelect() {
         super.processSelect();
         UIUtils.openFileAssetDialog(this::processSelect, getExtensions(), getActionTester());
@@ -63,7 +63,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
      *
      * @param file the selected file.
      */
-    @FXThread
+    @FxThread
     protected void processSelect(@NotNull final Path file) {
         change();
         reload();

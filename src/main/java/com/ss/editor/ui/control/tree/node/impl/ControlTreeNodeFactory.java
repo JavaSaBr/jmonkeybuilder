@@ -9,7 +9,7 @@ import com.jme3.bullet.control.VehicleControl;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LightControl;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.LightControlTreeNode;
 import com.ss.editor.ui.control.model.node.control.SkeletonControlTreeNode;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class ControlTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @FXThread
+    @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof MotionEvent) {

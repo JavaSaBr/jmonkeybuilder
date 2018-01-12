@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -51,7 +51,7 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -83,14 +83,14 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     /**
      * Show dialog to choose an element.
      */
-    @FXThread
+    @FxThread
     protected void processAdd() {
     }
 
     /**
      * Open this material in the material editor.
      */
-    @FXThread
+    @FxThread
     protected void processRemove() {
         changed(null, getPropertyValue());
     }
@@ -100,7 +100,7 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
      *
      * @return the label with name of the material.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Label getElementLabel() {
         return notNull(elementLabel);
     }

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -23,13 +23,13 @@ public class CreateColorParticleInfluencerAction extends AbstractCreateParticleI
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.PARTICLE_INFLUENCER_COLOR;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ParticleInfluencer createInfluencer() {
         return new ColorInfluencer();
     }

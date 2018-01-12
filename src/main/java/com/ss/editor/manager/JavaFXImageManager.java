@@ -6,13 +6,13 @@ import static java.awt.Image.SCALE_DEFAULT;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
-import com.ss.editor.file.reader.DDSReader;
-import com.ss.editor.file.reader.TGAReader;
+import com.ss.editor.file.reader.DdsReader;
+import com.ss.editor.file.reader.TgaReader;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
@@ -156,6 +156,8 @@ public class JavaFXImageManager {
     }
 
     /**
+     * Get the cache folder.
+     *
      * @return the cache folder.
      */
     @FromAnyThread
@@ -164,14 +166,14 @@ public class JavaFXImageManager {
     }
 
     /**
-     * Get image preview.
+     * Get an image preview.
      *
      * @param file   the image file.
      * @param width  the required width.
      * @param height the required height.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImagePreview(@Nullable final Path file, final int width, final int height) {
         if (file == null || !Files.exists(file)) return Icons.IMAGE_512;
 
@@ -200,7 +202,7 @@ public class JavaFXImageManager {
      * @param height the height.
      * @return the image or null.
      */
-    @FXThread
+    @FxThread
     private @Nullable Image getFromCache(@NotNull final String path, final int width, final int height) {
 
         final IntegerDictionary<ObjectDictionary<String, Image>> heightImages = smallImageCache.get(width);
@@ -224,26 +226,23 @@ public class JavaFXImageManager {
      * @param width  the width.
      * @param height the height.
      */
-    @FXThread
+    @FxThread
     private void putImageToCache(@NotNull final String path, @NotNull final Image image, final int width,
                                  final int height) {
-
-        final IntegerDictionary<ObjectDictionary<String, Image>> heightImages =
-                smallImageCache.get(width, DictionaryFactory::newIntegerDictionary);
-
-        final ObjectDictionary<String, Image> images = heightImages.get(height, DictionaryFactory::newObjectDictionary);
-        images.put(path, image);
+        smallImageCache.get(width, DictionaryFactory::newIntegerDictionary)
+                .get(height, DictionaryFactory::newObjectDictionary)
+                .put(path, image);
     }
 
     /**
-     * Get image preview.
+     * Get an image preview.
      *
      * @param resourcePath the resource path to an image.
      * @param width        the required width.
      * @param height       the required height.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImagePreview(@Nullable final String resourcePath, final int width, final int height) {
 
         if (width <= CACHED_IMAGES_SIZE && height <= CACHED_IMAGES_SIZE) {
@@ -257,7 +256,6 @@ public class JavaFXImageManager {
         if (url == null) {
 
             final Path realFile = EditorUtil.getRealFile(resourcePath);
-
             if (realFile == null || !Files.exists(realFile)) {
                 return Icons.IMAGE_512;
             }
@@ -274,7 +272,7 @@ public class JavaFXImageManager {
         return image;
     }
 
-    @FXThread
+    @FxThread
     private @NotNull Image getImagePreview(@NotNull URL url, @Nullable final FileTime lastModFile, final int width,
                                            final int height) {
 
@@ -308,9 +306,9 @@ public class JavaFXImageManager {
         } else if (FileExtensions.IMAGE_DDS.equals(extension)) {
 
             final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
-            final int[] pixels = DDSReader.read(content, DDSReader.ARGB, 0);
-            final int currentWidth = DDSReader.getWidth(content);
-            final int currentHeight = DDSReader.getHeight(content);
+            final int[] pixels = DdsReader.read(content, DdsReader.ARGB, 0);
+            final int currentWidth = DdsReader.getWidth(content);
+            final int currentHeight = DdsReader.getHeight(content);
 
             final BufferedImage read = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
             read.setRGB(0, 0, currentWidth, currentHeight, pixels, 0, currentWidth);
@@ -322,14 +320,10 @@ public class JavaFXImageManager {
             final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
             final BufferedImage awtImage;
             try {
-                awtImage = (BufferedImage) TGAReader.getImage(content);
+                awtImage = (BufferedImage) TgaReader.getImage(content);
             } catch (final Exception e) {
                 LOGGER.warning(e);
                 writeDefaultToCache(cacheFile);
-                return Icons.IMAGE_512;
-            }
-
-            if (awtImage == null) {
                 return Icons.IMAGE_512;
             }
 
@@ -342,7 +336,7 @@ public class JavaFXImageManager {
         return Icons.IMAGE_512;
     }
 
-    @FXThread
+    @FxThread
     private void writeDefaultToCache(@NotNull final Path cacheFile) {
         final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(Icons.IMAGE_512, null);
         try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
@@ -352,7 +346,7 @@ public class JavaFXImageManager {
         }
     }
 
-    @FXThread
+    @FxThread
     private @NotNull Image readIOImage(@NotNull final URL url, final int width, final int height,
                                        @NotNull final Path cacheFile) {
 
@@ -367,7 +361,7 @@ public class JavaFXImageManager {
         return scaleAndWrite(width, height, cacheFile, read, read.getWidth(), read.getHeight());
     }
 
-    @FXThread
+    @FxThread
     private @NotNull Image readJMETexture(final int width, final int height, @NotNull final String externalForm,
                                           @NotNull final Path cacheFile) {
 
@@ -389,7 +383,7 @@ public class JavaFXImageManager {
         return scaleAndWrite(width, height, cacheFile, textureImage, imageWidth, imageHeight);
     }
 
-    @FXThread
+    @FxThread
     private @NotNull Image readFXImage(final int width, final int height, @NotNull final String externalForm,
                                        @NotNull final Path cacheFile) {
 
@@ -421,7 +415,7 @@ public class JavaFXImageManager {
         return image;
     }
 
-    @FXThread
+    @FxThread
     private @NotNull Image scaleAndWrite(final int targetWidth, final int targetHeight, @NotNull final Path cacheFile,
                                 @NotNull final BufferedImage textureImage, final int currentWidth,
                                 final int currentHeight) {
@@ -437,7 +431,7 @@ public class JavaFXImageManager {
         }
     }
 
-    @FXThread
+    @FxThread
     private @NotNull BufferedImage scaleImage(final int width, final int height, @NotNull final BufferedImage read,
                                               final int imageWidth, final int imageHeight) {
 
@@ -464,12 +458,12 @@ public class JavaFXImageManager {
         return bufferedImage;
     }
 
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final DeletedFileEvent event) {
         //TODO need to add remove from cache
     }
 
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final ChangedCurrentAssetFolderEvent event) {
         smallImageCache.clear();
     }

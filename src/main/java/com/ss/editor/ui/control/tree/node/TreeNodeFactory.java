@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +20,7 @@ public interface TreeNodeFactory extends Comparable<TreeNodeFactory> {
      * @param objectId the object id.
      * @return the tree node.
      */
-    @FXThread
+    @FxThread
     <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId);
 
     /**
@@ -28,7 +28,7 @@ public interface TreeNodeFactory extends Comparable<TreeNodeFactory> {
      *
      * @return the order.
      */
-    @FXThread
+    @FxThread
     default int getOrder() {
         return 0;
     }

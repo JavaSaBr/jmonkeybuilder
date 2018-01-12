@@ -1,6 +1,6 @@
 package com.ss.editor.executor.impl;
 
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
 
@@ -65,7 +65,7 @@ public class JMEThreadExecutor {
     /**
      * Execute waited tasks.
      */
-    @JMEThread
+    @JmeThread
     public void execute() {
         if (waitTasks.isEmpty()) return;
 
@@ -78,7 +78,7 @@ public class JMEThreadExecutor {
         }
     }
 
-    @JMEThread
+    @JmeThread
     private static void execute(@NotNull final Runnable runnable) {
         try {
             runnable.run();

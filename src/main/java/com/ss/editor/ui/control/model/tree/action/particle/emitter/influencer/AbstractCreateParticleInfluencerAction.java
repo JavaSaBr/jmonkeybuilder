@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.influencers.ParticleInfluencer;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeParticleInfluencerOperation;
@@ -27,13 +27,13 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -52,6 +52,6 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
      *
      * @return the particle influencer
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull ParticleInfluencer createInfluencer();
 }

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.tooltip;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -40,7 +40,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final BorderPane root) {
         super.createContent(root);
 
@@ -52,13 +52,13 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(final Window owner) {
         super.show(owner);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void show() {
 
         final ImageView imageView = getImageView();
@@ -70,7 +70,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull BorderPane createRoot() {
         final BorderPane pane = new BorderPane();
         FXUtils.addClassesTo(pane, CSSClasses.IMAGE_PREVIEW);
@@ -80,7 +80,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     /**
      * @return the image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
@@ -90,7 +90,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
      *
      * @param file the file
      */
-    @FXThread
+    @FxThread
     public void showImage(@Nullable final Path file) {
         getImageView().setImage(IMAGE_MANAGER.getImagePreview(file, 200, 200));
     }

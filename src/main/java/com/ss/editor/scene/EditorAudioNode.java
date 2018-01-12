@@ -8,7 +8,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,7 +69,7 @@ public class EditorAudioNode extends Node {
      *
      * @param audioNode the audio node.
      */
-    @JMEThread
+    @JmeThread
     public void setAudioNode(@Nullable final AudioNode audioNode) {
         this.audioNode = audioNode;
     }
@@ -79,7 +79,7 @@ public class EditorAudioNode extends Node {
      *
      * @return the audio node.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable AudioNode getAudioNode() {
         return audioNode;
     }
@@ -89,7 +89,7 @@ public class EditorAudioNode extends Node {
      *
      * @return the model.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable Node getModel() {
         return model;
     }
@@ -99,7 +99,7 @@ public class EditorAudioNode extends Node {
      *
      * @param model the model.
      */
-    @JMEThread
+    @JmeThread
     public void setModel(@Nullable final Node model) {
         this.model = model;
     }
@@ -109,13 +109,13 @@ public class EditorAudioNode extends Node {
      *
      * @return the edited node.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Node getEditedNode() {
         return editedNode;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void updateGeometricState() {
 
         final AudioNode audioNode = getAudioNode();
@@ -133,7 +133,7 @@ public class EditorAudioNode extends Node {
     /**
      * Synchronize this node with audio node.
      */
-    @JMEThread
+    @JmeThread
     public void sync() {
 
         final AudioNode audioNode = getAudioNode();
@@ -151,7 +151,7 @@ public class EditorAudioNode extends Node {
     /**
      * Update position and rotation of a model.
      */
-    @JMEThread
+    @JmeThread
     public void updateModel() {
 
         final AudioNode audioNode = getAudioNode();

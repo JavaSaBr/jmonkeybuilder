@@ -1,6 +1,6 @@
 package com.ss.editor.model.undo;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public interface EditorOperation {
      *
      * @param editor the editor
      */
-    @FXThread
+    @FxThread
     default void redo(@NotNull final UndoableEditor editor) {
     }
 
@@ -25,7 +25,7 @@ public interface EditorOperation {
      *
      * @param editor the editor
      */
-    @FXThread
+    @FxThread
     default void undo(@NotNull final UndoableEditor editor) {
     }
 }

@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.light;
 
 import com.jme3.light.SpotLight;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.rlib.util.StringUtils;
@@ -22,7 +22,7 @@ public class SpotLightTreeNode extends LightTreeNode<SpotLight> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.LAMP_16;
     }

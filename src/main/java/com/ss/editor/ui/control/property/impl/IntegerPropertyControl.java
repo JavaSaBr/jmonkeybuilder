@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -33,7 +33,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
@@ -43,7 +43,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -64,7 +64,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     /**
      * @return the filed with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getValueField() {
         return notNull(valueField);
     }
@@ -75,7 +75,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
      * @param min the min value.
      * @param max the max value.
      */
-    @FXThread
+    @FxThread
     public void setMinMax(final int min, final int max) {
         getValueField().setMinMax(min, max);
     }
@@ -85,7 +85,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
      *
      * @param scrollPower the scroll power.
      */
-    @FXThread
+    @FxThread
     public void setScrollPower(final int scrollPower) {
         getValueField().setScrollPower(scrollPower);
     }
@@ -95,13 +95,13 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
      *
      * @return the scroll power.
      */
-    @FXThread
+    @FxThread
     public int getScrollPower() {
         return getValueField().getScrollPower();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         final Integer element = getPropertyValue();
         final IntegerTextField valueField = getValueField();
@@ -113,7 +113,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     /**
      * Update the value.
      */
-    @FXThread
+    @FxThread
     private void updateValue() {
         if (isIgnoreListener()) return;
 

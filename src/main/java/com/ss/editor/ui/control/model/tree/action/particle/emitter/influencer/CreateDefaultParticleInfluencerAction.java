@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer;
 import com.jme3.effect.influencers.DefaultParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
@@ -20,13 +20,13 @@ public class CreateDefaultParticleInfluencerAction extends AbstractCreateParticl
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ParticleInfluencer createInfluencer() {
         return new DefaultParticleInfluencer();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_DEFAULT;
     }

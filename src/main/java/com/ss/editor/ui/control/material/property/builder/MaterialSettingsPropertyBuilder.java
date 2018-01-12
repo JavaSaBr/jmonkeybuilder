@@ -7,7 +7,7 @@ import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
@@ -70,7 +70,7 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
 
         if (!(object instanceof MaterialSettings) || object instanceof RootMaterialSettings) {
@@ -137,7 +137,7 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
      * @param object the presented object.
      * @return true of we can show the parameter.
      */
-    @FXThread
+    @FxThread
     private boolean filter(@NotNull final MatParam param, @NotNull final Object object) {
 
         if (object instanceof TexturesSettings) {
@@ -157,7 +157,7 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
      * @param settings the settings.
      * @return the editable property or null.
      */
-    @FXThread
+    @FxThread
     private @Nullable EditableProperty<?, ?> convert(@NotNull final MatParam param, @NotNull final Material material,
                                                      @NotNull final MaterialSettings settings) {
 

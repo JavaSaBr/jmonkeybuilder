@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ReflectionUtils.getStaticField;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.file.AssetEditorDialog;
@@ -64,7 +64,7 @@ public class UIUtils {
      * @param pane   the pane.
      * @param controls  the controls.
      */
-    @FXThread
+    @FxThread
     public static void addFocusBinding(@NotNull final Pane pane, @NotNull final Control... controls) {
 
         final BooleanProperty focused = new BooleanPropertyBase(false) {
@@ -109,7 +109,7 @@ public class UIUtils {
      *
      * @param pane the pane.
      */
-    @FXThread
+    @FxThread
     public static void clear(@NotNull final Pane pane) {
         final ObservableList<Node> children = pane.getChildren();
         children.forEach(UIUtils::unbind);
@@ -121,7 +121,7 @@ public class UIUtils {
      *
      * @param node the node.
      */
-    @FXThread
+    @FxThread
     private static void unbind(@NotNull final Node node) {
         if (node instanceof Control) {
             final Control control = (Control) node;
@@ -140,7 +140,7 @@ public class UIUtils {
      * @param container the container
      * @param node      the node
      */
-    @FXThread
+    @FxThread
     public static void fillComponents(@NotNull final Array<ScreenComponent> container, @NotNull final Node node) {
 
         if (node instanceof ScreenComponent) {
@@ -171,7 +171,7 @@ public class UIUtils {
      * @param type the type
      * @return the array
      */
-    @FXThread
+    @FxThread
     public static @NotNull <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
         final Array<T> container = ArrayFactory.newArray(type);
         fillComponents(container, node, type);
@@ -186,7 +186,7 @@ public class UIUtils {
      * @param node      the node
      * @param type      the type
      */
-    @FXThread
+    @FxThread
     public static <T extends Node> void fillComponents(@NotNull final Array<T> container, @NotNull final Node node,
                                                        @NotNull final Class<T> type) {
 
@@ -208,7 +208,7 @@ public class UIUtils {
      * @param menuBar the menu bar
      * @return the all items
      */
-    @FXThread
+    @FxThread
     public static @NotNull Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
 
         final Array<MenuItem> container = ArrayFactory.newArray(MenuItem.class);
@@ -222,7 +222,7 @@ public class UIUtils {
     /**
      * Collect all elements of a menu.
      */
-    @FXThread
+    @FxThread
     private static void getAllItems(@NotNull final Array<MenuItem> container, @NotNull final MenuItem menuItem) {
 
         container.add(menuItem);
@@ -241,7 +241,7 @@ public class UIUtils {
      * @param container  the container
      * @param menuButton the menu button
      */
-    @FXThread
+    @FxThread
     public static void getAllItems(@NotNull final Array<MenuItem> container, @NotNull final MenuButton menuButton) {
         final ObservableList<MenuItem> items = menuButton.getItems();
         items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
@@ -253,7 +253,7 @@ public class UIUtils {
      * @param item   the item
      * @param parent the parent
      */
-    @FXThread
+    @FxThread
     public static void addTo(@NotNull final TreeItem<? super Object> item,
                              @NotNull final TreeItem<? super Object> parent) {
         final ObservableList<TreeItem<Object>> children = parent.getChildren();
@@ -313,7 +313,7 @@ public class UIUtils {
      * @param objectId the object id.
      * @return the tree item or null.
      */
-    @FXThread
+    @FxThread
     public static @Nullable <T> TreeItem<T> findItem(@NotNull final TreeView<T> treeView, final long objectId) {
         return findItem(treeView.getRoot(), objectId);
     }
@@ -326,7 +326,7 @@ public class UIUtils {
      * @param objectId the object id.
      * @return the tree item or null.
      */
-    @FXThread
+    @FxThread
     public static @Nullable <T> TreeItem<T> findItem(@NotNull final TreeItem<T> root, final long objectId) {
 
         final T value = root.getValue();
@@ -355,7 +355,7 @@ public class UIUtils {
      * @param object   the value.
      * @return the tree item or null.
      */
-    @FXThread
+    @FxThread
     public static @Nullable <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
         return findItemForValue(treeView.getRoot(), object);
     }
@@ -368,7 +368,7 @@ public class UIUtils {
      * @param object the value.
      * @return the tree item or null.
      */
-    @FXThread
+    @FxThread
     public @Nullable static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
         if (object == null) return null;
 
@@ -395,7 +395,7 @@ public class UIUtils {
      * @param treeView the tree view.
      * @return the list of all items.
      */
-    @FXThread
+    @FxThread
     public static @NotNull <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeView<T> treeView) {
 
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
@@ -417,7 +417,7 @@ public class UIUtils {
      * @param item    the tree item.
      * @param visitor the visitor.
      */
-    @FXThread
+    @FxThread
     public static <T> void visit(@NotNull final TreeItem<T> item, @NotNull final Consumer<TreeItem<T>> visitor) {
         visitor.accept(item);
 
@@ -437,7 +437,7 @@ public class UIUtils {
      * @param visitor the visitor.
      * @return true of we can visit child elements.
      */
-    @FXThread
+    @FxThread
     public static <T> boolean visitUntil(@NotNull final TreeItem<T> item,
                                          @NotNull final Predicate<TreeItem<T>> visitor) {
 
@@ -460,7 +460,7 @@ public class UIUtils {
      * @param root the tree item.
      * @return the list with all items.
      */
-    @FXThread
+    @FxThread
     public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeItem<T> root) {
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
         collectAllItems(container, root);
@@ -474,7 +474,7 @@ public class UIUtils {
      * @param container the container.
      * @param root      the tree item.
      */
-    @FXThread
+    @FxThread
     public static <T> void collectAllItems(@NotNull final Array<TreeItem<T>> container, @NotNull final TreeItem<T> root) {
 
         container.add(root);
@@ -492,7 +492,7 @@ public class UIUtils {
      * @param color the color
      * @return the jme color
      */
-    @FXThread
+    @FxThread
     public static @Nullable ColorRGBA from(@Nullable final Color color) {
         if (color == null) return null;
         return new ColorRGBA((float) color.getRed(), (float) color.getGreen(),
@@ -505,7 +505,7 @@ public class UIUtils {
      * @param color the color
      * @return the FX color
      */
-    @FXThread
+    @FxThread
     public static @Nullable Color from(@Nullable final ColorRGBA color) {
         if (color == null) return null;
 
@@ -521,7 +521,7 @@ public class UIUtils {
      * @param event the event.
      * @return true if the event is not hotkey.
      */
-    @FXThread
+    @FxThread
     public static boolean isNotHotKey(@Nullable final KeyEvent event) {
         if (event == null) return false;
 
@@ -550,7 +550,7 @@ public class UIUtils {
      * @param event     the event.
      * @param condition the condition.
      */
-    @FXThread
+    @FxThread
     public static void consumeIf(@NotNull final KeyEvent event, @NotNull final Predicate<KeyEvent> condition) {
         if (condition.test(event)) {
             event.consume();
@@ -562,7 +562,7 @@ public class UIUtils {
      *
      * @param event the event.
      */
-    @FXThread
+    @FxThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
 
         if (event == null) {
@@ -584,7 +584,7 @@ public class UIUtils {
      *
      * @param cell the edited cell.
      */
-    @FXThread
+    @FxThread
     public static void updateEditedCell(final Labeled cell) {
 
         final javafx.scene.Node graphic = cell.getGraphic();
@@ -603,7 +603,7 @@ public class UIUtils {
      * @param handler   the result handler.
      * @param resources the resources.
      */
-    @FXThread
+    @FxThread
     public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
                                                @NotNull final Array<String> resources) {
         openResourceAssetDialog(handler, null, resources);
@@ -616,7 +616,7 @@ public class UIUtils {
      * @param validator the validator.
      * @param resources the resources.
      */
-    @FXThread
+    @FxThread
     public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
                                                @Nullable final Function<String, String> validator,
                                                @NotNull final Array<String> resources) {
@@ -631,7 +631,7 @@ public class UIUtils {
      * @param extensions   the extensions list.
      * @param actionTester the action tester.
      */
-    @FXThread
+    @FxThread
     public static void openFileAssetDialog(@NotNull final Consumer<Path> handler,
                                            @NotNull final Array<String> extensions,
                                            @Nullable final Predicate<Class<?>> actionTester) {
@@ -648,7 +648,7 @@ public class UIUtils {
      * @param handler      the result handler.
      * @param actionTester the action tester.
      */
-    @FXThread
+    @FxThread
     public static void openFolderAssetDialog(@NotNull final Consumer<Path> handler,
                                              @Nullable final Predicate<Class<?>> actionTester) {
 
@@ -664,7 +664,7 @@ public class UIUtils {
      * @param extension    the file extension.
      * @param actionTester the action tester.
      */
-    @FXThread
+    @FxThread
     public static void openSaveAsDialog(@NotNull final Consumer<@NotNull Path> handler, @NotNull final String extension,
                                         @Nullable final Predicate<@NotNull Class<?>> actionTester) {
 
@@ -684,7 +684,7 @@ public class UIUtils {
      * @param dragEvent  the drag event.
      * @param extensions the extensions.
      */
-    @FXThread
+    @FxThread
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -703,7 +703,7 @@ public class UIUtils {
      * @param dragEvent       the drag event.
      * @param targetExtension the extension.
      */
-    @FXThread
+    @FxThread
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final String targetExtension) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -724,7 +724,7 @@ public class UIUtils {
      * @param extensions the extensions.
      * @return true if there are required file.
      */
-    @FXThread
+    @FxThread
     public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final Array<String> extensions) {
 
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -746,7 +746,7 @@ public class UIUtils {
      * @param targetExtension the target extension.
      * @return true if there are required file.
      */
-    @FXThread
+    @FxThread
     public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final String targetExtension) {
 
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -768,7 +768,7 @@ public class UIUtils {
      * @param extensions the extensions.
      * @param handler    the handler.
      */
-    @FXThread
+    @FxThread
     public static void handleDroppedFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions,
                                          @NotNull final Consumer<Path> handler) {
 
@@ -798,7 +798,7 @@ public class UIUtils {
      * @param firstArg   the first argument.
      * @param handler    the handler.
      */
-    @FXThread
+    @FxThread
     public static <F> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                              @NotNull final Array<String> extensions, @NotNull final F firstArg,
                                              @NotNull final BiConsumer<F, Path> handler) {
@@ -831,7 +831,7 @@ public class UIUtils {
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
-    @FXThread
+    @FxThread
     public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                                 @NotNull final String targetExtension, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,
@@ -851,7 +851,7 @@ public class UIUtils {
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
-    @FXThread
+    @FxThread
     public static <F, S> void handleDroppedFile(@NotNull final Dragboard dragboard,
                                                 @NotNull final String targetExtension, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,
@@ -884,7 +884,7 @@ public class UIUtils {
      * @param secondArg  the second argument.
      * @param handler    the handler.
      */
-    @FXThread
+    @FxThread
     public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
                                                 @NotNull final Array<String> extensions, @NotNull final F firstArg,
                                                 @NotNull final S secondArg,

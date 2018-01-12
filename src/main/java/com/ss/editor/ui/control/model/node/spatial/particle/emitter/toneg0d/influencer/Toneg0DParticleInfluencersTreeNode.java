@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.inf
 import static com.ss.rlib.util.ClassUtils.getConstructor;
 import static com.ss.rlib.util.ClassUtils.newInstance;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
@@ -64,13 +64,13 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
         final Toneg0dParticleInfluencers element = getElement();
@@ -91,7 +91,7 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
 
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final Toneg0dParticleInfluencers element = getElement();
@@ -101,7 +101,7 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }

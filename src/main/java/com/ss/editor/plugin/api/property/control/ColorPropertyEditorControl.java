@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
@@ -31,7 +31,7 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -46,13 +46,13 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     /**
      * @return the color picker.
      */
-    @FXThread
+    @FxThread
     private @NotNull ColorPicker getColorPicker() {
         return notNull(colorPicker);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final ColorPicker colorPicker = getColorPicker();
@@ -60,7 +60,7 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         final ColorPicker colorPicker = getColorPicker();
         setPropertyValue(UIUtils.from(colorPicker.getValue()));

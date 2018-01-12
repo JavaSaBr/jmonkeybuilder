@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.node.control;
 
 import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.Named;
 import com.ss.editor.extension.scene.control.EditableControl;
@@ -28,26 +28,26 @@ public class ControlTreeNode<T extends Control> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveControlAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.GEAR_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canCopy() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canMove() {
         return true;
     }

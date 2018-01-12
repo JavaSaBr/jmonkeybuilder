@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.shap
 import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -32,19 +32,19 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.TRIANGLE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
@@ -54,13 +54,13 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
         final float size = vars.getFloat(PROPERTY_SIZE);
         return new TriangleEmitterShape(size);

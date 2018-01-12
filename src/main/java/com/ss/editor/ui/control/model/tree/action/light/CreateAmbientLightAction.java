@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.light;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.Light;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -25,19 +25,19 @@ public class CreateAmbientLightAction extends AbstractCreateLightAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.AMBIENT_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Light createLight() {
         return new AmbientLight();
     }

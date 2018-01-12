@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.control.motion;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.cinematic.MotionPath;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.PositionTreeNode;
@@ -34,13 +34,13 @@ public class MotionPathTreeNode extends TreeNode<MotionPath> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.PATH_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final MotionPath element = getElement();
@@ -58,7 +58,7 @@ public class MotionPathTreeNode extends TreeNode<MotionPath> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }

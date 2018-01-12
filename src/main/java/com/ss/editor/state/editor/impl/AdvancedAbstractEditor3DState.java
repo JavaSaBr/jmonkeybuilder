@@ -14,7 +14,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -416,7 +416,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param actionHandlers the action handlers
      */
-    @JMEThread
+    @JmeThread
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
         actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> setButtonLeftDown(isPressed));
@@ -484,7 +484,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param analogHandlers the analog handlers
      */
-    @JMEThread
+    @JmeThread
     protected void registerAnalogHandlers(@NotNull final ObjectDictionary<String, FloatFloatConsumer> analogHandlers) {
         analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
         analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
@@ -495,7 +495,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     /**
      * Handle analog events.
      */
-    @JMEThread
+    @JmeThread
     private void onAnalogImpl(@NotNull final String name, final float value, final float tpf) {
         final FloatFloatConsumer handler = analogHandlers.get(name);
         if (handler != null) handler.accept(value, tpf);
@@ -506,7 +506,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param value the value to move.
      */
-    @JMEThread
+    @JmeThread
     protected void moveXMouse(final float value) {
     }
 
@@ -515,14 +515,14 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param value the value to move.
      */
-    @JMEThread
+    @JmeThread
     protected void moveYMouse(final float value) {
     }
 
     /**
      * @return true if the camera is moving now.
      */
-    @JMEThread
+    @JmeThread
     public boolean isCameraMoving() {
         return cameraMoving.get() != 0;
     }
@@ -530,7 +530,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     /**
      * @return the state of camera keys.
      */
-    @JMEThread
+    @JmeThread
     private @NotNull boolean[] getCameraKeysState() {
         return cameraKeysState;
     }
@@ -538,7 +538,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     /**
      * Start to move the camera.
      */
-    @JMEThread
+    @JmeThread
     private void startCameraMoving(final int key) {
 
         if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
@@ -566,7 +566,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     /**
      * Finish to move the camera.
      */
-    @JMEThread
+    @JmeThread
     private void finishCameraMoving(final int key, final boolean force) {
 
         final boolean[] cameraKeysState = getCameraKeysState();
@@ -594,7 +594,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param value the value to move.
      */
-    @JMEThread
+    @JmeThread
     private void moveDirectionCamera(final float value, final boolean isAction, final boolean isPressed, final int key) {
         if (!canCameraMove()) return;
         if (isAction && isPressed) startCameraMoving(key);
@@ -620,7 +620,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param value the value to move.
      */
-    @JMEThread
+    @JmeThread
     private void moveSideCamera(final float value, final boolean isAction, final boolean isPressed, final int key) {
         if (!canCameraMove()) return;
         if (isAction && isPressed) startCameraMoving(key);
@@ -641,7 +641,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         nodeForCamera.setLocalTranslation(left);
     }
 
-    @JMEThread
+    @JmeThread
     private boolean canCameraMove() {
         return needMovableCamera() && isButtonMiddleDown();
     }
@@ -651,7 +651,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if camera can move.
      */
-    @JMEThread
+    @JmeThread
     protected boolean needMovableCamera() {
         return true;
     }
@@ -663,7 +663,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * @param isPressed the is pressed
      * @param tpf       the tpf
      */
-    @JMEThread
+    @JmeThread
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
 
         final BooleanFloatConsumer handler = actionHandlers.get(name);
@@ -682,7 +682,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * @param perspective the perspective
      * @param isPressed   the is pressed
      */
-    @JMEThread
+    @JmeThread
     protected void rotateTo(@NotNull final EditorCamera.Perspective perspective, final boolean isPressed) {
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null && isPressed) editorCamera.rotateTo(perspective);
@@ -694,7 +694,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * @param direction the direction
      * @param isPressed the is pressed
      */
-    @JMEThread
+    @JmeThread
     protected void rotateTo(@NotNull final EditorCamera.Direction direction, final boolean isPressed) {
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null && isPressed) editorCamera.rotateTo(direction, 10F);
@@ -703,14 +703,14 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     /**
      * Redo last operation.
      */
-    @JMEThread
+    @JmeThread
     protected void redo() {
     }
 
     /**
      * Undo last operation.
      */
-    @JMEThread
+    @JmeThread
     protected void undo() {
     }
 
@@ -719,7 +719,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if alt is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected boolean isAltDown() {
         return altDown;
     }
@@ -729,7 +729,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param altDown the alt is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected void setAltDown(final boolean altDown) {
         this.altDown = altDown;
     }
@@ -739,7 +739,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if control is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected boolean isControlDown() {
         return controlDown;
     }
@@ -749,7 +749,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param controlDown the control is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected void setControlDown(final boolean controlDown) {
         this.controlDown = controlDown;
     }
@@ -759,7 +759,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if shift is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected boolean isShiftDown() {
         return shiftDown;
     }
@@ -769,7 +769,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param shiftDown the shift is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected void setShiftDown(final boolean shiftDown) {
         this.shiftDown = shiftDown;
     }
@@ -779,7 +779,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param buttonLeftDown the left button is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected void setButtonLeftDown(final boolean buttonLeftDown) {
         this.buttonLeftDown = buttonLeftDown;
     }
@@ -789,7 +789,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param buttonMiddleDown the middle button is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
         this.buttonMiddleDown = buttonMiddleDown;
     }
@@ -799,7 +799,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param buttonRightDown the right button is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected void setButtonRightDown(final boolean buttonRightDown) {
         this.buttonRightDown = buttonRightDown;
     }
@@ -809,7 +809,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if left button is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected boolean isButtonLeftDown() {
         return buttonLeftDown;
     }
@@ -819,7 +819,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if middle button is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected boolean isButtonMiddleDown() {
         return buttonMiddleDown;
     }
@@ -829,7 +829,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if right button is pressed.
      */
-    @JMEThread
+    @JmeThread
     protected boolean isButtonRightDown() {
         return buttonRightDown;
     }
@@ -839,13 +839,13 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the editor camera.
      */
-    @JMEThread
+    @JmeThread
     protected @Nullable EditorCamera getEditorCamera() {
         return editorCamera;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         this.stateManager = stateManager;
@@ -874,19 +874,19 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param inputManager the input manager
      */
-    @JMEThread
+    @JmeThread
     protected void checkAndAddMappings(@NotNull final InputManager inputManager) {
         TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3DState::addMapping);
         MULTI_TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3DState::addMapping);
     }
 
-    @JMEThread
+    @JmeThread
     private static void addMapping(@NotNull final InputManager inputManager, @NotNull final String name,
                                    @NotNull final Trigger[] triggers) {
         if (!inputManager.hasMapping(name)) inputManager.addMapping(name, triggers);
     }
 
-    @JMEThread
+    @JmeThread
     private static void addMapping(@NotNull final InputManager inputManager, @NotNull final String name,
                                    @NotNull final Trigger trigger) {
         if (!inputManager.hasMapping(name)) inputManager.addMapping(name, trigger);
@@ -897,7 +897,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param inputManager the input manager
      */
-    @JMEThread
+    @JmeThread
     protected void registerAnalogListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS,
                 MOUSE_Y_AXIS_NEGATIVE, MOUSE_MOVE_CAMERA_X_AXIS, MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE,
@@ -909,7 +909,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param inputManager the input manager
      */
-    @JMEThread
+    @JmeThread
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
         inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_CTRL_S, KEY_CTRL_Z, KEY_CTRL_Y, KEY_NUM_1,
@@ -918,7 +918,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void cleanup() {
         super.cleanup();
 
@@ -944,7 +944,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if need an editor camera.
      */
-    @JMEThread
+    @JmeThread
     protected boolean needEditorCamera() {
         return false;
     }
@@ -954,7 +954,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if need a camera light.
      */
-    @JMEThread
+    @JmeThread
     protected boolean needLightForCamera() {
         return false;
     }
@@ -964,7 +964,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the new camera.
      */
-    @JMEThread
+    @JmeThread
     protected @NotNull EditorCamera createEditorCamera() {
 
         final Camera camera = JME_APPLICATION.getCamera();
@@ -983,7 +983,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the light for the camera.
      */
-    @JMEThread
+    @JmeThread
     protected @NotNull DirectionalLight createLightForCamera() {
         final DirectionalLight directionalLight = new DirectionalLight();
         directionalLight.setColor(ColorRGBA.White);
@@ -995,7 +995,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the node for the camera.
      */
-    @JMEThread
+    @JmeThread
     protected @NotNull Node getNodeForCamera() {
         return getStateNode();
     }
@@ -1005,7 +1005,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the light for the camera.
      */
-    @JMEThread
+    @JmeThread
     protected @Nullable DirectionalLight getLightForCamera() {
         return lightForCamera;
     }
@@ -1015,7 +1015,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the previous horizontal camera rotation.
      */
-    @JMEThread
+    @JmeThread
     protected float getPrevHRotation() {
         return prevHRotation;
     }
@@ -1025,7 +1025,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param prevHRotation the previous horizontal camera rotation.
      */
-    @JMEThread
+    @JmeThread
     protected void setPrevHRotation(final float prevHRotation) {
         this.prevHRotation = prevHRotation;
     }
@@ -1035,7 +1035,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the previous camera zoom.
      */
-    @JMEThread
+    @JmeThread
     protected float getPrevTargetDistance() {
         return prevTargetDistance;
     }
@@ -1045,7 +1045,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param prevTargetDistance the previous camera zoom.
      */
-    @JMEThread
+    @JmeThread
     protected void setPrevTargetDistance(final float prevTargetDistance) {
         this.prevTargetDistance = prevTargetDistance;
     }
@@ -1055,7 +1055,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return the previous vertical camera rotation.
      */
-    @JMEThread
+    @JmeThread
     protected float getPrevVRotation() {
         return prevVRotation;
     }
@@ -1065,7 +1065,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param prevVRotation the previous vertical camera rotation.
      */
-    @JMEThread
+    @JmeThread
     protected void setPrevVRotation(final float prevVRotation) {
         this.prevVRotation = prevVRotation;
     }
@@ -1113,7 +1113,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void update(float tpf) {
         super.update(tpf);
         preCameraUpdate(tpf);
@@ -1121,7 +1121,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         postCameraUpdate(tpf);
     }
 
-    @JMEThread
+    @JmeThread
     protected void postCameraUpdate(final float tpf) {
 
         final DirectionalLight lightForCamera = getLightForCamera();
@@ -1133,7 +1133,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         }
     }
 
-    @JMEThread
+    @JmeThread
     protected void cameraUpdate(final float tpf) {
 
         final EditorCamera editorCamera = getEditorCamera();
@@ -1163,7 +1163,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         checkCameraChanges(editorCamera);
     }
 
-    @JMEThread
+    @JmeThread
     protected void preCameraUpdate(final float tpf) {
 
     }
@@ -1173,7 +1173,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param editorCamera the editor camera
      */
-    @JMEThread
+    @JmeThread
     protected void checkCameraChanges(@NotNull final EditorCamera editorCamera) {
 
         int changes = 0;
@@ -1225,7 +1225,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * @param targetDistance the target distance.
      * @param cameraSpeed    the camera speed.
      */
-    @JMEThread
+    @JmeThread
     protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
                                                final float vRotation, final float targetDistance,
                                                final float cameraSpeed) {
@@ -1240,7 +1240,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * @param targetDistance the target distance.
      * @param cameraSpeed    the camera speed.
      */
-    @JMEThread
+    @JmeThread
     public void updateCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
                                      final float vRotation, final float targetDistance, final float cameraSpeed) {
 
@@ -1268,7 +1268,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @return true if need to update the camera light.
      */
-    @JMEThread
+    @JmeThread
     protected boolean needUpdateCameraLight() {
         return false;
     }

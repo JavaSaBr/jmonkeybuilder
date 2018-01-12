@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import com.ss.editor.util.NodeUtils;
@@ -24,7 +24,7 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull NodeSelectorDialog<Spatial> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         final Spatial currentModel = changeConsumer.getCurrentModel();

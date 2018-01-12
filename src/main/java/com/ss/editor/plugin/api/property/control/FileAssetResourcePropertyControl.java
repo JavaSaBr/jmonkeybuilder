@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -51,14 +51,14 @@ public class FileAssetResourcePropertyControl extends AssetResourcePropertyEdito
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processSelect(@NotNull final Path file) {
         setPropertyValue(notNull(getAssetFile(file)));
         super.processSelect(file);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final Path file = getPropertyValue();

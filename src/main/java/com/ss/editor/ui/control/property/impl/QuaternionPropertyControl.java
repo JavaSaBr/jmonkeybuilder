@@ -4,7 +4,7 @@ import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
 import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Quaternion;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -52,7 +52,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -94,7 +94,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final Quaternion quaternion) {
         super.setPropertyValue(quaternion == null ? null : quaternion.clone());
     }
@@ -102,7 +102,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the field X.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getXField() {
         return notNull(xField);
     }
@@ -110,7 +110,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the field Y.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getYFiled() {
         return notNull(yField);
     }
@@ -118,13 +118,13 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the field Z.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getZField() {
         return notNull(zField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final float[] angles = new float[3];
@@ -150,7 +150,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * Updating rotation.
      */
-    @FXThread
+    @FxThread
     private void updateRotation(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

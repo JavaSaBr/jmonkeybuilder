@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.model.tree.dialog.sky.CreateEditableSkyDialog;
 import com.ss.editor.ui.control.model.tree.dialog.sky.CreateSkyDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -20,13 +20,13 @@ public class CreateEditableSkyAction extends CreateSkyAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull CreateSkyDialog createDialog() {
         return new CreateEditableSkyDialog(getNode(), getNodeTree());
     }

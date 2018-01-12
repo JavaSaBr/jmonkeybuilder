@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
@@ -27,19 +27,19 @@ public class MakeAsEmbeddedMaterialAction extends AbstractNodeAction<ChangeConsu
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_MAKE_EMBEDDED;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 

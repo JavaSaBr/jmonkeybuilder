@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -29,7 +29,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -44,13 +44,13 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     /**
      * @return the value field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final String value = getPropertyValue();
@@ -58,7 +58,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getValueField().getText());
         super.changeImpl();

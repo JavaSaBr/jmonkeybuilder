@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.light;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -39,7 +39,7 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         final T element = getElement();
         final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
@@ -48,19 +48,19 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean canEditName() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.LIGHT_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveLightAction(nodeTree, this));
         items.add(new RenameNodeAction(nodeTree, this));

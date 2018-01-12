@@ -7,7 +7,7 @@ import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -37,19 +37,19 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.SPHERE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_CENTER, PROPERTY_CENTER, new Vector3f(1F, 1F, 1F)));
@@ -58,13 +58,13 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull EmitterShape createEmitterShape(@NotNull final VarTable vars) {
         final Vector3f center = vars.get(PROPERTY_CENTER);
         final float radius = vars.getFloat(PROPERTY_RADIUS);

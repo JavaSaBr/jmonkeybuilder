@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -61,7 +61,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -85,7 +85,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processKey(@NotNull final KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             processClose();
@@ -93,14 +93,14 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
         handler.accept(Boolean.TRUE);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processClose() {
         super.processClose();
         handler.accept(Boolean.FALSE);
@@ -121,7 +121,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createAdditionalActions(@NotNull final HBox container) {
         super.createAdditionalActions(container);
 

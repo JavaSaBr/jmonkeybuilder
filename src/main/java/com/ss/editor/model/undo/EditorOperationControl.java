@@ -1,6 +1,6 @@
 package com.ss.editor.model.undo;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 
@@ -92,7 +92,7 @@ public class EditorOperationControl {
      *
      * @param operation the operation.
      */
-    @FXThread
+    @FxThread
     private void executeImpl(@NotNull final EditorOperation operation) {
 
         final UndoableEditor editor = getEditor();
@@ -124,7 +124,7 @@ public class EditorOperationControl {
     /**
      * Undo the last operation.
      */
-    @FXThread
+    @FxThread
     private synchronized void undoImpl() {
 
         final Array<EditorOperation> operations = getOperations();
@@ -155,7 +155,7 @@ public class EditorOperationControl {
     /**
      * Redo the last undo operation.
      */
-    @FXThread
+    @FxThread
     private void redoImpl() {
 
         final Array<EditorOperation> toRedo = getToRedo();

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.preview.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Node;
@@ -31,11 +31,11 @@ public abstract class AbstractFilePreview<T extends Node> implements FilePreview
      *
      * @return the graphics node.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull T createGraphicsNode();
 
     @Override
-    @FXThread
+    @FxThread
     public void initialize(@NotNull final StackPane pane) {
         initialize(getGraphicsNode(), pane);
     }
@@ -46,7 +46,7 @@ public abstract class AbstractFilePreview<T extends Node> implements FilePreview
      * @param node the graphics node.
      * @param pane the pane container.
      */
-    @FXThread
+    @FxThread
     protected void initialize(@NotNull final T node, @NotNull final StackPane pane) {
         FXUtils.addToPane(node, pane);
     }
@@ -56,13 +56,13 @@ public abstract class AbstractFilePreview<T extends Node> implements FilePreview
      *
      * @return the graphics node.
      */
-    @FXThread
+    @FxThread
     protected @NotNull T getGraphicsNode() {
         return graphicsNode;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
         final T node = getGraphicsNode();
         node.setVisible(false);
@@ -71,12 +71,12 @@ public abstract class AbstractFilePreview<T extends Node> implements FilePreview
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final String resource) {
         prepareToShow();
     }
 
-    @FXThread
+    @FxThread
     protected void prepareToShow() {
         final T node = getGraphicsNode();
         node.setVisible(true);
@@ -85,7 +85,7 @@ public abstract class AbstractFilePreview<T extends Node> implements FilePreview
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Path file) {
         prepareToShow();
     }

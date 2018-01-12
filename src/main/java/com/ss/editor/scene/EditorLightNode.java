@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +64,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
      *
      * @param light the light.
      */
-    @JMEThread
+    @JmeThread
     public void setLight(@Nullable final Light light) {
         this.light = light;
         this.lastLightRotation.set(Quaternion.IDENTITY);
@@ -76,7 +76,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
      *
      * @return the light.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable Light getLight() {
         return light;
     }
@@ -86,7 +86,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
      *
      * @return the model.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable Node getModel() {
         return model;
     }
@@ -96,7 +96,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
      *
      * @param model the model.
      */
-    @JMEThread
+    @JmeThread
     public void setModel(@Nullable final Node model) {
         this.model = model;
     }
@@ -128,7 +128,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void updateGeometricState() {
 
         final Light light = getLight();
@@ -178,7 +178,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     /**
      * Synchronize this node with presented object.
      */
-    @JMEThread
+    @JmeThread
     public void sync() {
 
         final Light light = getLight();
@@ -216,7 +216,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     /**
      * Update position and rotation of a model.
      */
-    @JMEThread
+    @JmeThread
     public void updateModel() {
 
         final Node model = getModel();

@@ -10,7 +10,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
@@ -49,7 +49,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processSelect(@NotNull final Path file) {
 
         final AssetManager assetManager = JME_APPLICATION.getAssetManager();
@@ -70,13 +70,13 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
      * @param modelKey     the model key.
      * @return the target resource.
      */
-    @FXThread
+    @FxThread
     protected @Nullable T findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
         return unsafeCast(assetManager.loadModel(modelKey));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final T model = getPropertyValue();

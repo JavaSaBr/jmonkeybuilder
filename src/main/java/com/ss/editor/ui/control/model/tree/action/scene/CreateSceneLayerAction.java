@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.scene;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -29,19 +29,19 @@ public class CreateSceneLayerAction extends AbstractNodeAction<ModelChangeConsum
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.LAYERS_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_LAYER;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 

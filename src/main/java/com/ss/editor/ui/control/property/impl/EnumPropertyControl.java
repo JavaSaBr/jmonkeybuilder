@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.util.EditorUtil.getAvailableValues;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -55,7 +55,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -73,7 +73,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     /**
      * @return the list of available options of the {@link Enum} value.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<E> getEnumComboBox() {
         return notNull(enumComboBox);
     }
@@ -81,7 +81,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     /**
      * Update selected {@link Enum} value.
      */
-    @FXThread
+    @FxThread
     private void change() {
         if (isIgnoreListener()) return;
 
@@ -93,7 +93,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final E element = getPropertyValue();

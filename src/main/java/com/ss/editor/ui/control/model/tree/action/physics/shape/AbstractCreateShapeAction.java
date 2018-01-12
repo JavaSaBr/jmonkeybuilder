@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
@@ -31,13 +31,13 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.GEOMETRY_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -54,7 +54,7 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      *
      * @return the dialog title.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull String getDialogTitle();
 
     /**
@@ -62,7 +62,7 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      *
      * @param vars the table with variables.
      */
-    @FXThread
+    @FxThread
     private void handleResult(@NotNull final VarTable vars) {
 
         final TreeNode<?> treeNode = getNode();
@@ -80,7 +80,7 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      *
      * @return the list of definitions.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull Array<PropertyDefinition> getPropertyDefinitions();
 
     /**
@@ -89,6 +89,6 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      * @param vars the table with variables.
      * @return the collision shape
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull CollisionShape createShape(@NotNull final VarTable vars);
 }

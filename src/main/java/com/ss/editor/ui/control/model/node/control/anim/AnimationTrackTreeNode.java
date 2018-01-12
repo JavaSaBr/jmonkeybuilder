@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.control.anim;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Track;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
      *
      * @param control the animation control.
      */
-    @FXThread
+    @FxThread
     public void setControl(@Nullable final AnimControl control) {
         this.control = control;
         this.cachedName = computeName();
@@ -48,7 +48,7 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
      *
      * @return the string
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull String computeName();
 
     @Override
@@ -62,7 +62,7 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
      *
      * @return the animation control.
      */
-    @FXThread
+    @FxThread
     protected @Nullable AnimControl getControl() {
         return control;
     }

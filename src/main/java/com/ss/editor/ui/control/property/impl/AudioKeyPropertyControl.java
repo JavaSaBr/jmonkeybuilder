@@ -7,7 +7,7 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -81,7 +81,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -116,7 +116,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     /**
      * Show dialog for choosing another audio key.
      */
-    @FXThread
+    @FxThread
     protected void processChange() {
         UIUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
@@ -126,7 +126,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @param file the audio file.
      */
-    @FXThread
+    @FxThread
     private void addAudioData(@NotNull final Path file) {
 
         final Path assetFile = notNull(getAssetFile(file));
@@ -144,7 +144,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     /**
      * Open this audio data in the audio viewer.
      */
-    @FXThread
+    @FxThread
     protected void processOpen() {
 
         final AudioKey element = getPropertyValue();
@@ -168,13 +168,13 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @return the label with name of the audio key.
      */
-    @FXThread
+    @FxThread
     private @NotNull Label getAudioKeyLabel() {
         return notNull(audioKeyLabel);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         final AudioKey element = getPropertyValue();
         final Label audioKeyLabel = getAudioKeyLabel();

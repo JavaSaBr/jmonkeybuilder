@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog.about;
 
 import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
@@ -53,7 +53,7 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 

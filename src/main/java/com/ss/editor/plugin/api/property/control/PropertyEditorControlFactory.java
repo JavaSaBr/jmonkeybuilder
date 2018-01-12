@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class PropertyEditorControlFactory {
      * @param validation the validator.
      * @return the new property control.
      */
-    @FXThread
+    @FxThread
     public static @NotNull PropertyEditorControl<?> build(@NotNull final VarTable vars,
                                                           @NotNull final PropertyDefinition definition,
                                                           @NotNull final Runnable validation) {

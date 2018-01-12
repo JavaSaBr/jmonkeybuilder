@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
 import com.jme3.renderer.queue.RenderQueue;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
@@ -48,7 +48,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return the bucket type.
      */
-    @FXThread
+    @FxThread
     public @NotNull RenderQueue.Bucket getBucketType() {
         return BUCKETS[bucketTypeId];
     }
@@ -58,7 +58,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param bucketType the bucket type.
      */
-    @FXThread
+    @FxThread
     public void setBucketType(@NotNull final RenderQueue.Bucket bucketType) {
         final boolean changed = getBucketTypeId() != bucketType.ordinal();
         this.bucketTypeId = bucketType.ordinal();
@@ -73,7 +73,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return the bucket type ordinal.
      */
-    @FXThread
+    @FxThread
     public int getBucketTypeId() {
         return bucketTypeId;
     }
@@ -83,7 +83,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return the model type.
      */
-    @FXThread
+    @FxThread
     public int getModelType() {
         return modelType;
     }
@@ -93,7 +93,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param modelType the model type.
      */
-    @FXThread
+    @FxThread
     public void setModelType(@NotNull final BaseMaterialEditor3DState.ModelType modelType) {
         final boolean changed = getModelType() != modelType.ordinal();
         this.modelType = modelType.ordinal();
@@ -108,7 +108,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @return true if the light is enabled.
      */
-    @FXThread
+    @FxThread
     public boolean isLightEnable() {
         return lightEnable;
     }
@@ -118,7 +118,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      *
      * @param lightEnable true if the light is enabled.
      */
-    @FXThread
+    @FxThread
     public void setLightEnable(final boolean lightEnable) {
         final boolean changed = isLightEnable() != lightEnable;
         this.lightEnable = lightEnable;

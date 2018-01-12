@@ -6,6 +6,7 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.classpath.ClassPathScanner;
 import com.ss.rlib.classpath.ClassPathScannerFactory;
 import com.ss.rlib.manager.InitializeManager;
@@ -206,8 +207,7 @@ public class ClasspathManager {
     @FromAnyThread
     private void updateLibraries() {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLibrariesLoader();
 
         if (currentClassLoader != null) {
@@ -216,7 +216,9 @@ public class ClasspathManager {
         }
 
         final Path path = EDITOR_CONFIG.getLibrariesPath();
-        if (path == null) return;
+        if (path == null) {
+            return;
+        }
 
         final Array<Path> jars = FileUtils.getFiles(path, false, JAR_EXTENSIONS);
         final URL[] urls = jars.stream()
@@ -235,8 +237,7 @@ public class ClasspathManager {
     @FromAnyThread
     private void updateClasses() {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getClassesLoader();
 
         if (currentClassLoader != null) {
@@ -245,7 +246,9 @@ public class ClasspathManager {
         }
 
         final Path path = EDITOR_CONFIG.getClassesPath();
-        if (path == null) return;
+        if (path == null) {
+            return;
+        }
 
         final Array<Path> folders = ArrayFactory.newArray(Path.class);
 
@@ -276,8 +279,7 @@ public class ClasspathManager {
     @FromAnyThread
     public synchronized void loadLocalLibraries(@NotNull final Array<Path> libraries) {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalLibrariesLoader();
 
         if (currentClassLoader != null) {
@@ -319,8 +321,7 @@ public class ClasspathManager {
     @FromAnyThread
     public synchronized void loadLocalClasses(@Nullable final Path output) {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalClassesLoader();
 
         if (currentClassLoader != null) {
@@ -372,6 +373,7 @@ public class ClasspathManager {
     /**
      * @param librariesLoader the additional class loader.
      */
+    @FromAnyThread
     private void setLibrariesLoader(@Nullable final URLClassLoader librariesLoader) {
         this.librariesLoader = librariesLoader;
     }
@@ -391,6 +393,7 @@ public class ClasspathManager {
      *
      * @param classesLoader the classes loader.
      */
+    @FromAnyThread
     private void setClassesLoader(@Nullable final URLClassLoader classesLoader) {
         this.classesLoader = classesLoader;
     }
@@ -410,6 +413,7 @@ public class ClasspathManager {
      *
      * @return the local libraries class loader.
      */
+    @FromAnyThread
     private @Nullable URLClassLoader getLocalLibrariesLoader() {
         return localLibrariesLoader;
     }
@@ -419,6 +423,7 @@ public class ClasspathManager {
      *
      * @param localLibrariesLoader the local libraries class loader.
      */
+    @FromAnyThread
     private void setLocalLibrariesLoader(@Nullable final URLClassLoader localLibrariesLoader) {
         this.localLibrariesLoader = localLibrariesLoader;
     }
@@ -428,6 +433,7 @@ public class ClasspathManager {
      *
      * @return the local classes class loader.
      */
+    @FromAnyThread
     private @Nullable URLClassLoader getLocalClassesLoader() {
         return localClassesLoader;
     }
@@ -437,6 +443,7 @@ public class ClasspathManager {
      *
      * @param localClassesLoader the local classes class loader.
      */
+    @FromAnyThread
     private void setLocalClassesLoader(@Nullable final URLClassLoader localClassesLoader) {
         this.localClassesLoader = localClassesLoader;
     }
@@ -448,6 +455,7 @@ public class ClasspathManager {
      * @param interfaceClass the interface class.
      * @return the list of all available implementations.
      */
+    @FromAnyThread
     public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass) {
         return findImplements(interfaceClass, Scope.ONLY_CORE);
     }
@@ -457,6 +465,7 @@ public class ClasspathManager {
      *
      * @return the custom scanner.
      */
+    @FromAnyThread
     private @Nullable ClassPathScanner getCustomScanner() {
         return customScanner;
     }
@@ -466,6 +475,7 @@ public class ClasspathManager {
      *
      * @return the local libraries scanner.
      */
+    @FromAnyThread
     private @Nullable ClassPathScanner getLocalLibrariesScanner() {
         return localLibrariesScanner;
     }
@@ -475,6 +485,7 @@ public class ClasspathManager {
      *
      * @return the local classes scanner.
      */
+    @FromAnyThread
     private @Nullable ClassPathScanner getLocalClassesScanner() {
         return localClassesScanner;
     }
@@ -487,6 +498,7 @@ public class ClasspathManager {
      * @param scope          the scope.
      * @return the list of all available implementations.
      */
+    @FromAnyThread
     public @NotNull <T> Array<Class<T>> findImplements(@NotNull final Class<T> interfaceClass,
                                                        @NotNull final Set<Scope> scope) {
 

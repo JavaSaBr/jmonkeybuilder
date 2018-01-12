@@ -1,8 +1,8 @@
 package com.ss.editor.plugin;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
@@ -27,9 +27,6 @@ import java.net.URL;
  */
 public class EditorPlugin extends BasePlugin {
 
-    /**
-     * @param pluginContainer the plugin container.
-     */
     public EditorPlugin(@NotNull final PluginContainer pluginContainer) {
         super(pluginContainer);
     }
@@ -120,7 +117,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @JMEThread
+    @JmeThread
     public void onBeforeCreateJMEContext(@NotNull final PluginSystem pluginSystem) {
     }
 
@@ -129,7 +126,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @JMEThread
+    @JmeThread
     public void onAfterCreateJMEContext(@NotNull final PluginSystem pluginSystem) {
     }
 
@@ -138,7 +135,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FXThread
+    @FxThread
     public void onBeforeCreateJavaFXContext(@NotNull final PluginSystem pluginSystem) {
     }
 
@@ -147,7 +144,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FXThread
+    @FxThread
     public void onAfterCreateJavaFXContext(@NotNull final PluginSystem pluginSystem) {
     }
 
@@ -156,7 +153,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FXThread
+    @FxThread
     public void onFinishLoading(@NotNull final PluginSystem pluginSystem) {
     }
 

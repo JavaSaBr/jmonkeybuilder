@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.editor.impl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
@@ -54,13 +54,13 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     private TextArea textArea;
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
 
         textArea = new TextArea();
@@ -75,19 +75,19 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * Update dirty state.
      */
-    @FXThread
+    @FxThread
     private void updateDirty(final String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         FXUtils.addToPane(createSaveAction(), container);
@@ -96,13 +96,13 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the text area.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextArea getTextArea() {
         return notNull(textArea);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
@@ -122,7 +122,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
-    @FXThread
+    @FxThread
     private @NotNull String getOriginalContent() {
         return notNull(originalContent);
     }
@@ -130,7 +130,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @param originalContent the original content of the opened file.
      */
-    @FXThread
+    @FxThread
     private void setOriginalContent(@NotNull final String originalContent) {
         this.originalContent = originalContent;
     }
@@ -149,7 +149,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void postSave() {
         super.postSave();
 
@@ -161,7 +161,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 

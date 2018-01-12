@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
@@ -29,7 +29,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -44,13 +44,13 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     /**
      * @return the CheckBox with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull CheckBox getCheckBox() {
         return notNull(checkBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final Boolean value = getPropertyValue();
@@ -58,7 +58,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getCheckBox().isSelected());
         super.changeImpl();

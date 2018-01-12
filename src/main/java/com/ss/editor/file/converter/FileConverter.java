@@ -1,6 +1,6 @@
 package com.ss.editor.file.converter;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ public interface FileConverter {
      *
      * @param source the source file.
      */
-    @FXThread
+    @FxThread
     void convert(@NotNull Path source);
 
     /**
@@ -27,7 +27,7 @@ public interface FileConverter {
      * @param source      the source file.
      * @param destination the destination file.
      */
-    @FXThread
+    @FxThread
     void convert(@NotNull Path source, @NotNull Path destination);
 
     /**
@@ -35,6 +35,6 @@ public interface FileConverter {
      *
      * @return the result file format name.
      */
-    @FXThread
+    @FxThread
     @NotNull String getTargetExtension();
 }

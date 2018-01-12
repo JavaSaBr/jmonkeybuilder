@@ -10,7 +10,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -63,7 +63,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -249,14 +249,14 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         }
     }
 
-    @FXThread
+    @FxThread
     private boolean isNeedSkip(@NotNull final String key) {
         if (SceneLayer.KEY.equals(key)) return true;
         if (LOADED_MODEL_KEY.equals(key)) return true;
         return false;
     }
 
-    @FXThread
+    @FxThread
     private boolean canEditTransformation(@NotNull final Spatial spatial) {
         return !(spatial instanceof SceneNode || spatial instanceof SceneLayer);
     }

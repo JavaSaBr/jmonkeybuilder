@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.state;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 
 /**
  * The interface implementing a state of editor tool.
@@ -14,7 +14,7 @@ public interface EditorToolConfig {
      *
      * @return the tool width
      */
-    @FXThread
+    @FxThread
     int getToolWidth();
 
     /**
@@ -22,7 +22,7 @@ public interface EditorToolConfig {
      *
      * @param toolWidth the tool width
      */
-    @FXThread
+    @FxThread
     void setToolWidth(final int toolWidth);
 
     /**
@@ -30,7 +30,7 @@ public interface EditorToolConfig {
      *
      * @return the boolean
      */
-    @FXThread
+    @FxThread
     boolean isToolCollapsed();
 
     /**
@@ -38,6 +38,6 @@ public interface EditorToolConfig {
      *
      * @param toolCollapsed the tool collapsed
      */
-    @FXThread
+    @FxThread
     void setToolCollapsed(final boolean toolCollapsed);
 }

@@ -8,7 +8,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.DirectionLightPropertyControl;
@@ -47,7 +47,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -64,7 +64,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         }
     }
 
-    @FXThread
+    @FxThread
     private void buildForDirectionLight(@NotNull final DirectionalLight light, @NotNull final VBox container,
                                         @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -81,7 +81,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         buildSplitLine(container);
     }
 
-    @FXThread
+    @FxThread
     private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,
                                     @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -106,7 +106,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         FXUtils.addToPane(radiusControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void buildForSpotLight(@NotNull final SpotLight light, @NotNull final VBox container,
                                    @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -160,7 +160,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         FXUtils.addToPane(outerAngleControl, container);
     }
 
-    @FXThread
+    @FxThread
     private void buildForLight(@NotNull final Light object, @NotNull final VBox container,
                                @NotNull final ModelChangeConsumer changeConsumer) {
 

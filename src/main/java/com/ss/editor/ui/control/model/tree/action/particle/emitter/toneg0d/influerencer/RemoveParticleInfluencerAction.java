@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.infl
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -37,21 +37,21 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.REMOVE_12;
     }
 
-    @FXThread
+    @FxThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
 

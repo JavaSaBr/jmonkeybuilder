@@ -10,7 +10,7 @@ import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -101,7 +101,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     /**
      * @return the combo box with texture parameter name.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<String> getTextureParamNameComboBox() {
         return notNull(textureParamNameComboBox);
     }
@@ -109,13 +109,13 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     /**
      * @return the check box for applying the lighting transform.
      */
-    @FXThread
+    @FxThread
     private @NotNull CheckBox getApplyLightingTransformCheckBox() {
         return notNull(applyLightingTransformCheckBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOpen(@NotNull final ResourceElement element) {
         super.processOpen(element);
 
@@ -141,7 +141,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
         final ComboBox<String> comboBox = getTextureParamNameComboBox();
         final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
@@ -151,7 +151,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
 
         final ComboBox<String> comboBox = getTextureParamNameComboBox();

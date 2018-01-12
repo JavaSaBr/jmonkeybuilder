@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
@@ -33,7 +33,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processSelect() {
         super.processSelect();
 
@@ -48,7 +48,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      *
      * @param resource the selected resource.
      */
-    @FXThread
+    @FxThread
     private void processSelect(@NotNull final String resource) {
         setPropertyValue(resource);
         change();
@@ -61,7 +61,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      * @param resource the selected resource.
      * @return the message of problems or null if all are ok.
      */
-    @FXThread
+    @FxThread
     private String validate(@NotNull final String resource) {
 
         final String extension = FileUtils.getExtension(resource);
@@ -73,7 +73,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final String resource = getPropertyValue();

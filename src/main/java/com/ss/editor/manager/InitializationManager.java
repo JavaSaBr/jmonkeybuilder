@@ -1,8 +1,8 @@
 package com.ss.editor.manager;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -115,7 +115,7 @@ public class InitializationManager {
     /**
      * Execute all actions before when JME context will be created.
      */
-    @JMEThread
+    @JmeThread
     public synchronized void onBeforeCreateJMEContext() {
         onBeforeCreateJavaFXContext.forEach(Runnable::run);
     }
@@ -123,7 +123,7 @@ public class InitializationManager {
     /**
      * Execute all actions after when JME context was created.
      */
-    @JMEThread
+    @JmeThread
     public synchronized void onAfterCreateJMEContext() {
         onAfterCreateJMEContext.forEach(Runnable::run);
     }
@@ -131,7 +131,7 @@ public class InitializationManager {
     /**
      * Execute all actions before when JavaFX context will be created.
      */
-    @FXThread
+    @FxThread
     public synchronized void onBeforeCreateJavaFXContext() {
         onBeforeCreateJavaFXContext.forEach(Runnable::run);
     }
@@ -139,7 +139,7 @@ public class InitializationManager {
     /**
      * Execute all actions after when JavaFX context was created.
      */
-    @FXThread
+    @FxThread
     public synchronized void onAfterCreateJavaFXContext() {
         onAfterCreateJavaFXContext.forEach(Runnable::run);
     }
@@ -147,7 +147,7 @@ public class InitializationManager {
     /**
      * Execute all actions before when the editor is ready to work.
      */
-    @FXThread
+    @FxThread
     public synchronized void onFinishLoading() {
         onFinishLoading.forEach(Runnable::run);
     }

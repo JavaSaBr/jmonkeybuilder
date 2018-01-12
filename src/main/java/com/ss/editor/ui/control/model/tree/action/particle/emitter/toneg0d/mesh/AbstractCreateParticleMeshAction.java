@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -35,14 +35,14 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.MESH_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         super.process();

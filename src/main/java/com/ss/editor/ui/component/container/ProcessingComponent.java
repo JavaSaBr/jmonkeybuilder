@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.container;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.rlib.util.HasName;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public interface ProcessingComponent extends HasName {
      *
      * @param container the container.
      */
-    @FXThread
+    @FxThread
     default void initFor(@NotNull Object container) {
     }
 
@@ -26,7 +26,7 @@ public interface ProcessingComponent extends HasName {
      *
      * @param editorState the editor state.
      */
-    @FXThread
+    @FxThread
     default void loadState(@NotNull EditorState editorState) {
     }
 
@@ -36,7 +36,7 @@ public interface ProcessingComponent extends HasName {
      * @param object the object to check.
      * @return true if this object can be processed.
      */
-    @FXThread
+    @FxThread
     default boolean isSupport(@NotNull Object object) {
         return false;
     }
@@ -46,7 +46,7 @@ public interface ProcessingComponent extends HasName {
      *
      * @param object the object to process.
      */
-    @FXThread
+    @FxThread
     default void startProcessing(@NotNull Object object) {
     }
 
@@ -56,7 +56,7 @@ public interface ProcessingComponent extends HasName {
      * @return the processed object.
      */
     @NotNull
-    @FXThread
+    @FxThread
     default Object getProcessedObject() {
         throw new RuntimeException("not implemented");
     }
@@ -64,21 +64,21 @@ public interface ProcessingComponent extends HasName {
     /**
      * Stop processing last object.
      */
-    @FXThread
+    @FxThread
     default void stopProcessing() {
     }
 
     /**
      * Notify about showed this component.
      */
-    @FXThread
+    @FxThread
     default void notifyShowed() {
     }
 
     /**
      * Notify about hided this component.
      */
-    @FXThread
+    @FxThread
     default void notifyHided() {
     }
 
@@ -88,6 +88,6 @@ public interface ProcessingComponent extends HasName {
      * @param object       the object
      * @param propertyName the property name
      */
-    @FXThread
+    @FxThread
     void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);
 }

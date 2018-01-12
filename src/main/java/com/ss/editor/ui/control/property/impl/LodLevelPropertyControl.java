@@ -4,7 +4,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -71,7 +71,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -92,14 +92,14 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @param newValue the new level.
      */
-    @FXThread
+    @FxThread
     private void updateLevel(@Nullable final Integer newValue) {
         if (isIgnoreListener()) return;
         changed(newValue == null ? 0 : newValue, getPropertyValue());
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Integer getPropertyValue() {
         final Integer value = super.getPropertyValue();
         return value == null ? 0 : value;
@@ -110,13 +110,13 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @return The lod level combobox.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ComboBox<Integer> getLevelComboBox() {
         return ObjectUtils.notNull(levelComboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         if (!hasEditObject()) return;
 

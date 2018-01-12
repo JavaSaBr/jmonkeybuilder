@@ -3,7 +3,7 @@ package com.ss.editor.model.undo.impl;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
 import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
@@ -46,7 +46,7 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void redo(@NotNull final UndoableEditor editor) {
         redoImpl(unsafeCast(editor));
     }
@@ -56,11 +56,11 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      *
      * @param editor the editor.
      */
-    @FXThread
+    @FxThread
     protected abstract void redoImpl(@NotNull E editor);
 
     @Override
-    @FXThread
+    @FxThread
     public void undo(@NotNull final UndoableEditor editor) {
         undoImpl(unsafeCast(editor));
     }
@@ -70,6 +70,6 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      *
      * @param editor the editor.
      */
-    @FXThread
+    @FxThread
     protected abstract void undoImpl(@NotNull final E editor);
 }

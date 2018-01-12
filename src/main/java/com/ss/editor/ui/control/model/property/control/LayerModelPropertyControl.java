@@ -3,9 +3,9 @@ package com.ss.editor.ui.control.model.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -73,12 +73,12 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         };
     }
 
-    @JMEThread
+    @JmeThread
     private void setLayer(@NotNull final Spatial spatial, @NotNull final SceneLayer newLayer) {
         SceneLayer.setLayer(newLayer, spatial);
     }
 
-    @JMEThread
+    @JmeThread
     private SceneLayer getLayer(@NotNull final Spatial spatial) {
         final SceneLayer sceneLayer = SceneLayer.getLayer(spatial);
         return sceneLayer == null ? SceneLayer.NO_LAYER : sceneLayer;
@@ -91,7 +91,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -107,7 +107,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         FXUtils.addClassTo(layerComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
-    @FXThread
+    @FxThread
     private void updateLevel(@Nullable final SceneLayer layer) {
         if (isIgnoreListener()) return;
         changed(layer, getPropertyValue());
@@ -118,13 +118,13 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
      *
      * @return the layers combo box.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ComboBox<SceneLayer> getLayerComboBox() {
         return notNull(layerComboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final SceneChangeConsumer changeConsumer = (SceneChangeConsumer) getChangeConsumer();

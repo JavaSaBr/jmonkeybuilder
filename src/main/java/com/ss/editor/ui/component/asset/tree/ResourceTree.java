@@ -5,7 +5,7 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.editor.util.EditorUtil.hasFileInClipboard;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
@@ -231,7 +231,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Handle changed count of expanded elements.
      */
-    @FXThread
+    @FxThread
     private void processChangedExpands(@NotNull final Number newValue) {
 
         if (isLazyMode()) {
@@ -246,7 +246,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Start the process of loading children of the tree item in the background.
      */
-    @FXThread
+    @FxThread
     private void lazyLoadChildren() {
 
         final Array<TreeItem<ResourceElement>> expanded = ArrayFactory.newArray(TreeItem.class);
@@ -285,7 +285,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param children the loaded children.
      * @param callback the loading callback.
      */
-    @FXThread
+    @FxThread
     private void lazyLoadChildren(@NotNull final TreeItem<ResourceElement> treeItem,
                                   @NotNull final Array<ResourceElement> children,
                                   @Nullable final Consumer<@NotNull TreeItem<ResourceElement>> callback) {
@@ -395,7 +395,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param element the element
      * @return the context menu for the element.
      */
-    @FXThread
+    @FxThread
     protected @Nullable ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
@@ -442,7 +442,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @param assetFolder the asset folder.
      */
-    @FXThread
+    @FxThread
     public void fill(@NotNull final Path assetFolder) {
 
         final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
@@ -475,7 +475,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Refresh this tree.
      */
-    @FXThread
+    @FxThread
     public void refresh() {
 
         final EditorConfig config = EditorConfig.getInstance();
@@ -501,7 +501,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Update the list of expanded elements.
      */
-    @FXThread
+    @FxThread
     private void updateExpandedElements() {
 
         final ConcurrentArray<ResourceElement> expandedElements = getExpandedElements();
@@ -524,7 +524,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Update the list of selected elements.
      */
-    @FXThread
+    @FxThread
     private void updateSelectedElements() {
 
         final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
@@ -545,7 +545,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Show the process of loading.
      */
-    @FXThread
+    @FxThread
     private void showLoading() {
         setRoot(new TreeItem<>(LoadingResourceElement.getInstance()));
     }
@@ -644,7 +644,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Fill the node.
      */
-    @FXThread
+    @FxThread
     private void fill(@NotNull final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
@@ -670,7 +670,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @param file the created file.
      */
-    @FXThread
+    @FxThread
     public void notifyCreated(@NotNull final Path file) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -704,7 +704,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @param file the file
      */
-    @FXThread
+    @FxThread
     public void notifyDeleted(@NotNull final Path file) {
 
         final ResourceElement element = createFor(file);
@@ -724,7 +724,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param prevFile the prev version.
      * @param newFile  the new version.
      */
-    @FXThread
+    @FxThread
     public void notifyMoved(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
         final ResourceElement prevElement = createFor(prevFile);
@@ -752,7 +752,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         FXCollections.sort(newParentChildren, ITEM_COMPARATOR);
     }
 
-    @FXThread
+    @FxThread
     private void fillChildren(@NotNull final Path prevFile, @NotNull final Path newFile,
                               @NotNull final Array<TreeItem<ResourceElement>> children) {
         for (final TreeItem<ResourceElement> child : children) {
@@ -772,7 +772,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param prevFile the prev version.
      * @param newFile  the new version.
      */
-    @FXThread
+    @FxThread
     public void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
         final ResourceElement prevElement = createFor(prevFile);
@@ -790,7 +790,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Handle hotkeys.
      */
-    @FXThread
+    @FxThread
     private void processKey(@NotNull final KeyEvent event) {
         if (isReadOnly()) return;
 
@@ -872,7 +872,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Cleanup the tree.
      */
-    @FXThread
+    @FxThread
     private void cleanup(@NotNull final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
@@ -897,7 +897,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param treeItem   the tree item
      * @param needSelect the need select
      */
-    @FXThread
+    @FxThread
     public void expandTo(@NotNull final TreeItem<ResourceElement> treeItem, final boolean needSelect) {
 
         TreeItem<ResourceElement> parent = treeItem;
@@ -917,7 +917,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @param file the file
      */
-    @FXThread
+    @FxThread
     public void markExpand(@NotNull final Path file) {
 
         final ResourceElement element = createFor(file);
@@ -951,7 +951,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param file       the file
      * @param needSelect the need select
      */
-    @FXThread
+    @FxThread
     public void expandTo(@NotNull final Path file, final boolean needSelect) {
 
         if (isLazyMode()) {

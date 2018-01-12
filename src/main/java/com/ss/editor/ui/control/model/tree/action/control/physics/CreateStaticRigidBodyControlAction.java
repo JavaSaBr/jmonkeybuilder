@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.control.physics;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -24,20 +24,20 @@ public class CreateStaticRigidBodyControlAction extends CreateRigidBodyControlAc
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.STATIC_RIGID_BODY_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
     }
 
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull RigidBodyControl createControl(@NotNull final Spatial parent) {
         final RigidBodyControl rigidBodyControl = super.createControl(parent);
         rigidBodyControl.setMass(0F);

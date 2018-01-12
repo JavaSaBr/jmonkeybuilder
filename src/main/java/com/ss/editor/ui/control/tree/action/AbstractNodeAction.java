@@ -5,7 +5,7 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -80,13 +80,13 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the name of this action.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull String getName();
 
     /**
      * Execute this action.
      */
-    @FXThread
+    @FxThread
     protected void process() {
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EXECUTE_NODE_ACTION, getClass().getSimpleName());
     }
@@ -96,7 +96,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return he icon or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return null;
     }
@@ -106,7 +106,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the component of the model three.
      */
-    @FXThread
+    @FxThread
     protected @NotNull NodeTree<C> getNodeTree() {
         return nodeTree;
     }
@@ -116,7 +116,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the node of the model.
      */
-    @FXThread
+    @FxThread
     protected @NotNull TreeNode<?> getNode() {
         return node;
     }

@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action;
 
 import static com.ss.editor.ui.control.tree.NodeTreeCell.DATA_FORMAT;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -26,19 +26,19 @@ public class CopyNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_COPY;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.COPY_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 

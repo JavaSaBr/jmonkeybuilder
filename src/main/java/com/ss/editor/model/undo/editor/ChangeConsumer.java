@@ -1,8 +1,8 @@
 package com.ss.editor.model.undo.editor;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.EditorOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +20,7 @@ public interface ChangeConsumer {
      * @param object       the object
      * @param propertyName the property name
      */
-    @JMEThread
+    @JmeThread
     default void notifyJMEChangeProperty(@NotNull Object object, @NotNull String propertyName) {
     }
 
@@ -30,7 +30,7 @@ public interface ChangeConsumer {
      * @param object       the object
      * @param propertyName the property name
      */
-    @FXThread
+    @FxThread
     default void notifyFXChangeProperty(@NotNull Object object, @NotNull String propertyName) {
         notifyFXChangeProperty(null, object, propertyName);
     }
@@ -40,7 +40,7 @@ public interface ChangeConsumer {
      *
      * @param object the object
      */
-    @FXThread
+    @FxThread
     default void notifyFXChangePropertyCount(@NotNull Object object) {
     }
 
@@ -51,7 +51,7 @@ public interface ChangeConsumer {
      * @param object       the object
      * @param propertyName the property name
      */
-    @FXThread
+    @FxThread
     default void notifyFXChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName) {
     }
 
@@ -63,7 +63,7 @@ public interface ChangeConsumer {
      * @param index      the index of position.
      * @param needSelect true if need to select the child.
      */
-    @FXThread
+    @FxThread
     default void notifyFXAddedChild(@NotNull Object parent, @NotNull Object added, int index, boolean needSelect) {
     }
 
@@ -73,7 +73,7 @@ public interface ChangeConsumer {
      * @param parent  the parent
      * @param removed the removed
      */
-    @FXThread
+    @FxThread
     default void notifyFXRemovedChild(@NotNull Object parent, @NotNull Object removed) {
     }
 
@@ -86,7 +86,7 @@ public interface ChangeConsumer {
      * @param needExpand     true of need to expand new node.
      * @param needDeepExpand true of need to expand new node deeply.
      */
-    @FXThread
+    @FxThread
     default void notifyFXReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild,
                                   boolean needExpand, boolean needDeepExpand) {
     }
@@ -100,7 +100,7 @@ public interface ChangeConsumer {
      * @param index      the index of position.
      * @param needSelect true if need select this object.
      */
-    @FXThread
+    @FxThread
     default void notifyFXMoved(@NotNull Object prevParent, @NotNull Object newParent, @NotNull Object child, int index,
                                boolean needSelect) {
     }

@@ -8,7 +8,7 @@ import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -37,19 +37,19 @@ public class CreateMeshVertexShapeEmitterAction extends AbstractCreateShapeEmitt
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.MESH_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_VERTEX_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(GEOMETRY_FROM_ASSET_FOLDER, Messages.MODEL_PROPERTY_GEOMETRY, PROPERTY_GEOMETRY, null));
@@ -57,20 +57,20 @@ public class CreateMeshVertexShapeEmitterAction extends AbstractCreateShapeEmitt
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.ASSET_EDITOR_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull EmitterShape createEmitterShape(@NotNull final VarTable vars) {
         final Geometry geometry = vars.get(PROPERTY_GEOMETRY);
         final List<Mesh> meshes = singletonList(geometry.getMesh());
         return createEmitterShape(meshes);
     }
 
-    @FXThread
+    @FxThread
     protected @NotNull EmitterMeshVertexShape createEmitterShape(final List<Mesh> meshes) {
         return new EmitterMeshVertexShape(meshes);
     }

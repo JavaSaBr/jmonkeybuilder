@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -28,7 +28,7 @@ public class ComputedCollisionShapeTreeNode extends CollisionShapeTreeNode<Compo
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final CompoundCollisionShape element = getElement();
@@ -40,13 +40,13 @@ public class ComputedCollisionShapeTreeNode extends CollisionShapeTreeNode<Compo
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.ATOM_16;
     }

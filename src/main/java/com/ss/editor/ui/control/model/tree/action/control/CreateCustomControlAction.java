@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
@@ -32,21 +32,21 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @Nullable
     @Override
     protected Image getIcon() {
         return Icons.GEAR_16;
     }
 
-    @FXThread
+    @FxThread
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void process() {
         super.process();

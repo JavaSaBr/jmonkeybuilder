@@ -32,7 +32,7 @@ import com.jme3.system.AppSettings;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.asset.locator.FileSystemAssetLocator;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.Config;
@@ -95,7 +95,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the editor
      */
-    @JMEThread
+    @JmeThread
     static @NotNull JmeApplication prepareToStart() {
 
         if (Config.DEV_DEBUG) {
@@ -121,7 +121,7 @@ public class JmeApplication extends JmeToJFXApplication {
         return JME_APPLICATION;
     }
 
-    @JMEThread
+    @JmeThread
     private static void configureLogger() {
 
         // disable the standard logger
@@ -244,7 +244,7 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void destroy() {
         super.destroy();
 
@@ -261,7 +261,7 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void simpleInitApp() {
         super.simpleInitApp();
 
@@ -369,7 +369,7 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void loseFocus() {
         super.loseFocus();
 
@@ -381,7 +381,7 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void gainFocus() {
         super.gainFocus();
 
@@ -393,7 +393,7 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void simpleUpdate(final float tpf) {
         super.simpleUpdate(tpf);
 
@@ -402,7 +402,7 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void update() {
         final long stamp = syncLock();
         try {
@@ -427,7 +427,7 @@ public class JmeApplication extends JmeToJFXApplication {
         listener.setRotation(cam.getRotation());
     }
 
-    @JMEThread
+    @JmeThread
     private void finishWorkOnError(@NotNull final Throwable e) {
 
         GAnalytics.sendException(e, true);
@@ -444,7 +444,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the processor of post effects.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull FilterPostProcessor getPostProcessor() {
         return notNull(postProcessor);
     }
@@ -452,7 +452,7 @@ public class JmeApplication extends JmeToJFXApplication {
     /**
      * Create the light probes for the PBR render.
      */
-    @JMEThread
+    @JmeThread
     private void createLightProbes() {
 
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
@@ -486,7 +486,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @param progressAdapter the progress adapter
      */
-    @JMEThread
+    @JmeThread
     public void updateLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
         final LightProbe lightProbe = getLightProbe();
@@ -503,7 +503,7 @@ public class JmeApplication extends JmeToJFXApplication {
     /**
      * Disable PBR Light probe.
      */
-    @JMEThread
+    @JmeThread
     public void disableLightProbe() {
 
         final LightProbe lightProbe = getLightProbe();
@@ -516,7 +516,7 @@ public class JmeApplication extends JmeToJFXApplication {
     /**
      * Enable PBR Light probe.
      */
-    @JMEThread
+    @JmeThread
     public void enableLightProbe() {
 
         final LightProbe lightProbe = getLightProbe();
@@ -541,7 +541,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @param progressAdapter the progress adapter
      */
-    @JMEThread
+    @JmeThread
     public void updatePreviewLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
         final LightProbe lightProbe = getPreviewLightProbe();
@@ -560,7 +560,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the light probe.
      */
-    @JMEThread
+    @JmeThread
     private @Nullable LightProbe getLightProbe() {
         return lightProbe;
     }
@@ -570,7 +570,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return The preview view port.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull ViewPort getPreviewViewPort() {
         return notNull(previewViewPort);
     }
@@ -580,7 +580,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the preview light probe.
      */
-    @JMEThread
+    @JmeThread
     private @Nullable LightProbe getPreviewLightProbe() {
         return previewLightProbe;
     }
@@ -590,7 +590,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the environment camera.
      */
-    @JMEThread
+    @JmeThread
     private @Nullable EnvironmentCamera getEnvironmentCamera() {
         return environmentCamera;
     }
@@ -600,7 +600,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the preview camera.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Camera getPreviewCamera() {
         return notNull(previewCamera);
     }
@@ -610,7 +610,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the preview environment camera.
      */
-    @JMEThread
+    @JmeThread
     private @Nullable EnvironmentCamera getPreviewEnvironmentCamera() {
         return previewEnvironmentCamera;
     }
@@ -620,7 +620,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the preview node.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Node getPreviewNode() {
         return notNull(previewNode);
     }
@@ -630,7 +630,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the tone map filter.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull ToneMapFilter getToneMapFilter() {
         return notNull(toneMapFilter);
     }
@@ -640,7 +640,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the FXAA filter.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull FXAAFilter getFXAAFilter() {
         return notNull(fxaaFilter);
     }
@@ -650,7 +650,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the translucent bucket filter.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
         return notNull(translucentBucketFilter);
     }
@@ -660,7 +660,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @param paused true if this app is paused.
      */
-    @JMEThread
+    @JmeThread
     void setPaused(final boolean paused) {
         this.paused = paused;
     }
@@ -670,7 +670,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the gui font.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable BitmapFont getGuiFont() {
         return notNull(guiFont);
     }
@@ -680,7 +680,7 @@ public class JmeApplication extends JmeToJFXApplication {
      *
      * @return the default material.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Material getDefaultMaterial() {
         return notNull(defaultMaterial);
     }

@@ -7,7 +7,7 @@ import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
 import com.jme3.effect.shapes.*;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.ParticleEmitterTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.DefaultParticleInfluencerTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.EmptyParticleInfluencerTreeNode;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 public class DefaultParticlesTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @FXThread
+    @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof ParticleEmitter) {
@@ -66,7 +66,7 @@ public class DefaultParticlesTreeNodeFactory implements TreeNodeFactory {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public int getOrder() {
         return 1;
     }

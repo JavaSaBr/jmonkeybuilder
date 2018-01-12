@@ -4,7 +4,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LightControl;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -24,19 +24,19 @@ public class CreateLightControlAction extends AbstractCreateControlAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.LIGHT_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Control createControl(@NotNull final Spatial parent) {
         return new LightControl();
     }

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.sky.CreateSkyDialog;
@@ -24,19 +24,19 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.SKY_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_SKY;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -44,7 +44,7 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
         dialog.show();
     }
 
-    @FXThread
+    @FxThread
     protected @NotNull CreateSkyDialog createDialog() {
         return new CreateSkyDialog(getNode(), getNodeTree());
     }

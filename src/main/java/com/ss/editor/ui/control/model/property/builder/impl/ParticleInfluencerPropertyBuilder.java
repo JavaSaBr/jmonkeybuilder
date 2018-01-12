@@ -5,7 +5,7 @@ import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -43,7 +43,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -90,7 +90,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param changeConsumer the change consumer.
      * @param influencer     the influencer.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                 @NotNull final RadialParticleInfluencer influencer) {
 

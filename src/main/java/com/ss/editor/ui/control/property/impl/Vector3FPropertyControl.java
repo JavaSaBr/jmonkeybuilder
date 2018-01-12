@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -58,7 +58,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -103,7 +103,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final Vector3f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
@@ -113,7 +113,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the scroll power.
      */
-    @FXThread
+    @FxThread
     protected float getScrollPower() {
         return 10F;
     }
@@ -123,7 +123,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field X.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getXField() {
         return notNull(xField);
     }
@@ -133,7 +133,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field Y.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getYFiled() {
         return notNull(yField);
     }
@@ -143,13 +143,13 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field Z.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getZField() {
         return notNull(zField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final Vector3f vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
@@ -172,7 +172,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @param event the event
      */
-    @FXThread
+    @FxThread
     protected void updateVector(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

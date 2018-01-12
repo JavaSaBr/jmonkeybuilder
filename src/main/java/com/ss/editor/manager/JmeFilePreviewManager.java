@@ -28,9 +28,9 @@ import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JfxApplication;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
@@ -56,10 +56,10 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class JMEFilePreviewManager extends AbstractControl {
+public class JmeFilePreviewManager extends AbstractControl {
 
     @NotNull
-    private static final Logger LOGGER = LoggerManager.getLogger(JMEFilePreviewManager.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(JmeFilePreviewManager.class);
 
     @NotNull
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
@@ -98,7 +98,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     private static final JMEThreadExecutor EDITOR_THREAD_EXECUTOR = JMEThreadExecutor.getInstance();
 
     @Nullable
-    private static volatile JMEFilePreviewManager instance;
+    private static volatile JmeFilePreviewManager instance;
 
     /**
      * Gets instance.
@@ -106,11 +106,11 @@ public class JMEFilePreviewManager extends AbstractControl {
      * @return the instance
      */
     @FromAnyThread
-    public static @NotNull JMEFilePreviewManager getInstance() {
+    public static @NotNull JmeFilePreviewManager getInstance() {
         if (instance == null) {
-            synchronized (JMEFilePreviewManager.class) {
+            synchronized (JmeFilePreviewManager.class) {
                 if (instance == null) {
-                    instance = new JMEFilePreviewManager();
+                    instance = new JmeFilePreviewManager();
                 }
             }
         }
@@ -233,7 +233,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      */
     private int frame;
 
-    private JMEFilePreviewManager() {
+    private JmeFilePreviewManager() {
         this.imageView = new ImageView();
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.modelNode = new Node("Model Node");
@@ -255,7 +255,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected void controlUpdate(final float tpf) {
 
         if (frame == 2) {
@@ -266,7 +266,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         frame++;
     }
 
-    @JMEThread
+    @JmeThread
     private void notifyProbeComplete() {
         final JmeApplication jmeApplication = JmeApplication.getInstance();
         final Node rootNode = jmeApplication.getPreviewNode();
@@ -274,7 +274,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 
@@ -348,7 +348,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      * @param path     the path to object.
      * @param external true if the object is external object.
      */
-    @JMEThread
+    @JmeThread
     private void showObject(@NotNull final String path, final boolean external) {
         prepareProcessor();
 
@@ -379,7 +379,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param model the model.
      */
-    @JMEThread
+    @JmeThread
     private void tryToLoad(@NotNull final Spatial model) {
         try {
 
@@ -397,7 +397,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     /**
      * Prepare the processor to render the a preview object.
      */
-    @JMEThread
+    @JmeThread
     private void prepareProcessor() {
 
         if (processor != null) {
@@ -419,7 +419,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param path the path to material.
      */
-    @JMEThread
+    @JmeThread
     private void showMaterial(@NotNull final String path) {
         prepareProcessor();
 
@@ -442,7 +442,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         EDITOR_THREAD_EXECUTOR.addToExecute(this::clearImpl);
     }
 
-    @JMEThread
+    @JmeThread
     private void clearImpl() {
 
         final JmeApplication jmeApplication = JmeApplication.getInstance();
@@ -459,7 +459,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @return the image view with a preview.
      */
-    @FXThread
+    @FxThread
     public @NotNull ImageView getImageView() {
         return imageView;
     }
@@ -469,7 +469,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @return the transfer processor.
      */
-    @JMEThread
+    @JmeThread
     private @NotNull FrameTransferSceneProcessor prepareScene() {
 
         final JmeApplication jmeApplication = JmeApplication.getInstance();

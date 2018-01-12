@@ -17,7 +17,7 @@ import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ResourceManager;
@@ -95,13 +95,13 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull MaterialEditor3DState create3DEditorState() {
         return new MaterialEditor3DState(this);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         super.processChangedFile(event);
 
@@ -130,7 +130,7 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
@@ -203,7 +203,7 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
         UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
@@ -211,7 +211,7 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragOverEvent(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
@@ -219,7 +219,7 @@ public class MaterialFileEditor extends
 
 
     @Override
-    @FXThread
+    @FxThread
     protected void doOpenFile(@NotNull final Path file) throws IOException {
         super.doOpenFile(file);
 
@@ -235,7 +235,7 @@ public class MaterialFileEditor extends
         reload(material);
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;
@@ -244,7 +244,7 @@ public class MaterialFileEditor extends
     /**
      * Reload the material.
      */
-    @FXThread
+    @FxThread
     private void reload(@NotNull final Material material) {
         setCurrentMaterial(material);
         setIgnoreListeners(true);
@@ -277,7 +277,7 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
 
@@ -298,7 +298,7 @@ public class MaterialFileEditor extends
     /**
      * Handle changing the type.
      */
-    @FXThread
+    @FxThread
     private void changeType(@Nullable final String newType) {
         if (isIgnoreListeners()) return;
         processChangeTypeImpl(newType);
@@ -307,7 +307,7 @@ public class MaterialFileEditor extends
     /**
      * Handle changing the type.
      */
-    @FXThread
+    @FxThread
     private void processChangeTypeImpl(@Nullable final String newType) {
         if (newType == null) return;
 
@@ -331,7 +331,7 @@ public class MaterialFileEditor extends
     /**
      * @param currentMaterial the current editing material.
      */
-    @FXThread
+    @FxThread
     private void setCurrentMaterial(@NotNull final Material currentMaterial) {
         this.currentMaterial = currentMaterial;
     }

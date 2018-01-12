@@ -1,6 +1,6 @@
 package com.ss.editor.ui.preview;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.preview.impl.DefaultFilePreviewFactory;
 import com.ss.rlib.util.ArrayUtils;
@@ -51,7 +51,7 @@ public class FilePreviewFactoryRegistry {
      *
      * @return the list of available file previews.
      */
-    @FXThread
+    @FxThread
     public Array<FilePreview> createAvailablePreviews() {
 
         final Array<FilePreview> result = ArrayFactory.newArray(FilePreview.class);

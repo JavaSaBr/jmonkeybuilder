@@ -8,7 +8,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
@@ -53,20 +53,20 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
         super(nodeTree, node);
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.ADD_12;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -87,7 +87,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
      * @param vars the input paramaters.
      * @return true if all is ok.
      */
-    @FXThread
+    @FxThread
     private boolean validate(@NotNull final VarTable vars) {
         if(!vars.has(PROPERTY_NAME)) return false;
 
@@ -104,7 +104,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
      *
      * @param vars the input paramaters.
      */
-    @FXThread
+    @FxThread
     private void addUserData(@NotNull final VarTable vars) {
 
         final String name = vars.get(PROPERTY_NAME);

@@ -2,8 +2,8 @@ package com.ss.editor.ui.control.model.tree.action.operation;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -41,13 +41,13 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> apply(editor, oldSpatial, newSpatial));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> apply(editor, newSpatial, oldSpatial));
     }
@@ -59,7 +59,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
      * @param newSpatial the new spatial.
      * @param oldSpatial the new old spatial.
      */
-    @JMEThread
+    @JmeThread
     private void apply(@NotNull final ModelChangeConsumer consumer, @NotNull final Spatial newSpatial,
                        @NotNull final Spatial oldSpatial) {
 

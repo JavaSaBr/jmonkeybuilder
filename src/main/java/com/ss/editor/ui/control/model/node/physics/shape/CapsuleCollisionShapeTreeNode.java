@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import javafx.scene.image.Image;
@@ -21,7 +21,7 @@ public class CapsuleCollisionShapeTreeNode extends CollisionShapeTreeNode<Capsul
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.CAPSULE_16;
     }

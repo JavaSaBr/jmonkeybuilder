@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.tooltip.ImagePreview;
 import javafx.scene.control.Tooltip;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class ImageResourceElement extends FileResourceElement {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Tooltip createToolTip() {
         return new ImagePreview(getFile());
     }

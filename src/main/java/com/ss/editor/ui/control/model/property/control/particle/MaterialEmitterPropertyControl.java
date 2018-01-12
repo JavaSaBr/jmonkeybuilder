@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.control.particle;
 import static com.ss.editor.util.EditorUtil.getRealFile;
 import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.impl.MaterialPropertyControl;
 import com.ss.editor.ui.dialog.asset.file.ParticlesAssetEditorDialog;
@@ -35,7 +35,7 @@ public class MaterialEmitterPropertyControl extends
     /**
      * Show dialog for choosing another material.
      */
-    @FXThread
+    @FxThread
     protected void processChange() {
         final ParticlesAssetEditorDialog dialog = new ParticlesAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSIONS);
@@ -49,7 +49,7 @@ public class MaterialEmitterPropertyControl extends
         changed(particlesMaterial, getPropertyValue());
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void processEdit() {
 
@@ -70,7 +70,7 @@ public class MaterialEmitterPropertyControl extends
         FX_EVENT_MANAGER.notify(event);
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void reload() {
 

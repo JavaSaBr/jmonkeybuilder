@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.property.control;
 
 import com.jme3.scene.Spatial;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import com.ss.editor.ui.control.model.tree.dialog.SpatialSelectorDialog;
@@ -24,14 +24,14 @@ public class SpatialElementModelPropertyControl<S extends Spatial, D> extends El
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull NodeSelectorDialog<S> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         return new SpatialSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final Spatial spatial = getPropertyValue();

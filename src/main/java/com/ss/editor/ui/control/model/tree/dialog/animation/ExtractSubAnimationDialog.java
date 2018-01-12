@@ -6,7 +6,7 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -95,7 +95,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      *
      * @return the node tree component.
      */
-    @FXThread
+    @FxThread
     protected @NotNull NodeTree<?> getNodeTree() {
         return nodeTree;
     }
@@ -105,7 +105,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      *
      * @return the animation node.
      */
-    @FXThread
+    @FxThread
     protected @NotNull AnimationTreeNode getNode() {
         return node;
     }
@@ -117,7 +117,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -159,7 +159,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the field with a value of new animation name.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getNameField() {
         return notNull(nameField);
     }
@@ -167,7 +167,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the field with a value of start frame.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getStartFrameField() {
         return notNull(startFrameField);
     }
@@ -175,13 +175,13 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the field with a value of end frame.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getEndFrameField() {
         return notNull(endFrameField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processExtract);

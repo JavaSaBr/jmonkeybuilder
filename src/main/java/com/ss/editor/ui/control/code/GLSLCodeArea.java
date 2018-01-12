@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.code;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.util.GLSLType;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +65,7 @@ public class GLSLCodeArea extends BaseCodeArea {
      *
      * @return available fields.
      */
-    @FXThread
+    @FxThread
     private @Nullable List<String> getFields() {
         return fields;
     }
@@ -75,7 +75,7 @@ public class GLSLCodeArea extends BaseCodeArea {
      *
      * @return the pattern to highlight code.
      */
-    @FXThread
+    @FxThread
     private @NotNull Pattern buildPattern() {
 
         String result = "(?<" + CLASS_KEYWORD + ">" + KEYWORD_PATTERN + ")" +
@@ -97,7 +97,7 @@ public class GLSLCodeArea extends BaseCodeArea {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull StyleSpans<? extends Collection<String>> calculateStyleSpans(@NotNull final String text) {
         return computeHighlighting(pattern, text);
     }

@@ -6,7 +6,7 @@ import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -36,19 +36,19 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.CUBE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_BOX_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_MIN, PROPERTY_MIN, new Vector3f(1F, 1F, 1F)));
@@ -57,13 +57,13 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull EmitterShape createEmitterShape(@NotNull final VarTable vars) {
         final Vector3f min = vars.get(PROPERTY_MIN);
         final Vector3f max = vars.get(PROPERTY_MAX);

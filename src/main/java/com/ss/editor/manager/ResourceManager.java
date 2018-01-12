@@ -233,6 +233,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @param fileExtension the file type.
      */
+    @FromAnyThread
     public synchronized void registerInterestedFileType(@NotNull final String fileExtension) {
 
         ObjectDictionary<String, Array<String>> resources = getInterestedResources();

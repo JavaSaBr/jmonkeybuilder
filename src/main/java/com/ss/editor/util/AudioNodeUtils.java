@@ -3,7 +3,7 @@ package com.ss.editor.util;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.annotation.FromAnyThread;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +42,7 @@ public class AudioNodeUtils {
      * @param audioData the audio data.
      * @param audioKey  the audio key.
      */
-    @JMEThread
+    @JmeThread
     public static void updateData(@NotNull final AudioNode audioNode, @Nullable final AudioData audioData,
                                   @Nullable final AudioKey audioKey) {
         try {

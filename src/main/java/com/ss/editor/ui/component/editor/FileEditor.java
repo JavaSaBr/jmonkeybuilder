@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.state.editor.Editor3DState;
 import com.ss.rlib.util.array.Array;
@@ -32,7 +32,7 @@ public interface FileEditor {
      *
      * @return the page for showing the editor.
      */
-    @FXThread
+    @FxThread
     @NotNull Parent getPage();
 
     /**
@@ -40,7 +40,7 @@ public interface FileEditor {
      *
      * @return the area to place 3D scene.
      */
-    @FXThread
+    @FxThread
     default @Nullable BorderPane get3DArea() {
         return null;
     }
@@ -50,7 +50,7 @@ public interface FileEditor {
      *
      * @return the file name of the current opened file.
      */
-    @FXThread
+    @FxThread
     @NotNull String getFileName();
 
     /**
@@ -58,7 +58,7 @@ public interface FileEditor {
      *
      * @return the editing file.
      */
-    @FXThread
+    @FxThread
     @NotNull Path getEditFile();
 
     /**
@@ -66,7 +66,7 @@ public interface FileEditor {
      *
      * @param file the file.
      */
-    @FXThread
+    @FxThread
     void openFile(@NotNull final Path file);
 
     /**
@@ -74,7 +74,7 @@ public interface FileEditor {
      *
      * @return the dirty property of this editor.
      */
-    @FXThread
+    @FxThread
     @NotNull BooleanProperty dirtyProperty();
 
     /**
@@ -82,13 +82,13 @@ public interface FileEditor {
      *
      * @return true if the current file was changed.
      */
-    @FXThread
+    @FxThread
     boolean isDirty();
 
     /**
      * Save new changes.
      */
-    @FXThread
+    @FxThread
     default void save() {
         save(null);
     }
@@ -98,7 +98,7 @@ public interface FileEditor {
      *
      * @param callback the callback.
      */
-    @FXThread
+    @FxThread
     default void save(@Nullable Consumer<@NotNull FileEditor> callback) {
     }
 
@@ -107,7 +107,7 @@ public interface FileEditor {
      *
      * @return the 3D part of this editor.
      */
-    @FXThread
+    @FxThread
     default @NotNull Array<Editor3DState> get3DStates() {
         return EMPTY_3D_STATES;
     }
@@ -115,7 +115,7 @@ public interface FileEditor {
     /**
      * Notify that this editor was closed.
      */
-    @FXThread
+    @FxThread
     default void notifyClosed() {
     }
 
@@ -125,7 +125,7 @@ public interface FileEditor {
      * @param prevFile the prev file
      * @param newFile  the new file
      */
-    @FXThread
+    @FxThread
     default void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
     }
 
@@ -135,7 +135,7 @@ public interface FileEditor {
      * @param prevFile the prev file
      * @param newFile  the new file
      */
-    @FXThread
+    @FxThread
     default void notifyMoved(@NotNull final Path prevFile, @NotNull final Path newFile) {
     }
 
@@ -150,14 +150,14 @@ public interface FileEditor {
     /**
      * Notify that this editor was showed.
      */
-    @FXThread
+    @FxThread
     default void notifyShowed() {
     }
 
     /**
      * Notify that this editor was hided.
      */
-    @FXThread
+    @FxThread
     default void notifyHided() {
     }
 
@@ -169,7 +169,7 @@ public interface FileEditor {
      * @param eventType the event type.
      * @return true if the point is inside in the editing area.
      */
-    @FXThread
+    @FxThread
     default boolean isInside(double sceneX, double sceneY, @NotNull Class<? extends Event> eventType) {
         return false;
     }

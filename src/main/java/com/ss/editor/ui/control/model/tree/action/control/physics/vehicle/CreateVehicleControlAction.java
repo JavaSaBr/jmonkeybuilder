@@ -6,7 +6,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -27,19 +27,19 @@ public class CreateVehicleControlAction extends AbstractCreateControlAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.VEHICLE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Control createControl(@NotNull final Spatial parent) {
         return new VehicleControl(new BoxCollisionShape(new Vector3f(1F, 1F, 1F)), 1F);
     }

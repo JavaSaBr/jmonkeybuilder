@@ -7,7 +7,7 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
@@ -126,7 +126,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         validateFileName();
     }
 
-    @FXThread
+    @FxThread
     private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
                         @NotNull final Boolean finished) {
         if (finished) resourceTree.expandTo(file, true);
@@ -209,7 +209,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
 
@@ -258,7 +258,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -350,7 +350,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @param container the preview container.
      */
-    @FXThread
+    @FxThread
     protected void createPreview(@NotNull final BorderPane container) {
     }
 
@@ -367,7 +367,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @param root the root
      */
-    @FXThread
+    @FxThread
     protected void createSettings(@NotNull final GridPane root) {
 
         final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
@@ -398,7 +398,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * Validate the inputted name.
      */
-    @FXThread
+    @FxThread
     protected void validateFileName() {
 
         final Button okButton = getOkButton();

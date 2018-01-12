@@ -1,6 +1,6 @@
 package com.ss.editor.executor.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
 import com.sun.javafx.application.PlatformImpl;
@@ -36,7 +36,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
 
         final Runnable[] array = execute.array();

@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.dialog;
 import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
@@ -88,7 +88,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      *
      * @param title the new title.
      */
-    @FXThread
+    @FxThread
     public void setTitle(@NotNull final String title) {
         getDialog().setTitle(title);
     }
@@ -98,7 +98,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      *
      * @param text the new text.
      */
-    @FXThread
+    @FxThread
     public void setButtonOkText(@NotNull final String text) {
         notNull(getOkButton()).setText(text);
     }
@@ -108,7 +108,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      *
      * @param text the new text.
      */
-    @FXThread
+    @FxThread
     public void setButtonCloseText(@NotNull final String text) {
         notNull(getCloseButton()).setText(text);
     }
@@ -120,7 +120,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
         this.root = root;
@@ -131,7 +131,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      *
      * @return the root.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getRoot() {
         return notNull(root);
     }
@@ -139,7 +139,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     /**
      * Create controls.
      */
-    @FXThread
+    @FxThread
     private void createControls() {
 
         final ObservableList<Node> children = getRoot().getChildren();
@@ -161,7 +161,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of all definitions.
      */
-    @FXThread
+    @FxThread
     private @NotNull Array<PropertyDefinition> getDefinitions() {
         return definitions;
     }
@@ -169,7 +169,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate current values.
      */
-    @FXThread
+    @FxThread
     protected void validate() {
 
         getRoot().getChildren().stream()
@@ -181,7 +181,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
         handler.accept(vars);

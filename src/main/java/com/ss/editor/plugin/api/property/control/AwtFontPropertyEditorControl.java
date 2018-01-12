@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -59,7 +59,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -86,13 +86,13 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     /**
      * @return The list of available options of the string value.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<Font> getComboBox() {
         return notNull(comboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final Font value = getPropertyValue();
@@ -101,7 +101,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         final ComboBox<Font> comboBox = getComboBox();
         final SingleSelectionModel<Font> selectionModel = comboBox.getSelectionModel();

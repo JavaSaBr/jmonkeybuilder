@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -67,7 +67,7 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -80,7 +80,7 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void reload() {
         super.reload();
 

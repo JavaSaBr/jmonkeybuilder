@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer.RemoveParticleInfluencerAction;
@@ -25,13 +25,13 @@ public class Toneg0DParticleInfluencerTreeNode extends TreeNode<ParticleInfluenc
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveParticleInfluencerAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);

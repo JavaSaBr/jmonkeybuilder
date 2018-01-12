@@ -1,7 +1,7 @@
 package com.ss.editor.ui.event;
 
 import static com.ss.rlib.util.array.ArrayFactory.newArray;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.rlib.util.array.Array;
@@ -52,7 +52,7 @@ public class FXEventManager {
      * @param eventType    the event type.
      * @param eventHandler the event handler.
      */
-    @FXThread
+    @FxThread
     public void addEventHandler(@NotNull final EventType<? extends Event> eventType,
                                 @NotNull final EventHandler<? super Event> eventHandler) {
 
@@ -68,7 +68,7 @@ public class FXEventManager {
      * @param eventType    the event type.
      * @param eventHandler the event handler.
      */
-    @FXThread
+    @FxThread
     public void removeEventHandler(@NotNull final EventType<? extends Event> eventType,
                                    @NotNull final EventHandler<? super Event> eventHandler) {
 
@@ -82,7 +82,7 @@ public class FXEventManager {
      * @return the table of event handlers.
      */
     @NotNull
-    @FXThread
+    @FxThread
     private ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> getEventHandlers() {
         return eventHandlers;
     }
@@ -105,7 +105,7 @@ public class FXEventManager {
     /**
      * The process of handling a new event.
      */
-    @FXThread
+    @FxThread
     private void notifyImpl(@NotNull final Event event) {
 
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();

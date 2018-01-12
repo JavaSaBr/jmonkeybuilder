@@ -8,7 +8,7 @@ import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.rlib.util.array.Array;
@@ -76,7 +76,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * @return the node for the placement of custom sky.
      */
-    @JMEThread
+    @JmeThread
     private @NotNull Node getCustomSkyNode() {
         return customSkyNode;
     }
@@ -84,7 +84,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * @return the array of custom skies.
      */
-    @JMEThread
+    @JmeThread
     private @NotNull Array<Spatial> getCustomSky() {
         return customSky;
     }
@@ -92,7 +92,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * Activate the node with models.
      */
-    @JMEThread
+    @JmeThread
     private void notifyProbeComplete() {
 
         final Node stateNode = getStateNode();
@@ -109,7 +109,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * @param currentFastSky the current fast sky.
      */
-    @JMEThread
+    @JmeThread
     private void setCurrentFastSky(@Nullable final Spatial currentFastSky) {
         this.currentFastSky = currentFastSky;
     }
@@ -117,7 +117,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * @return the current fast sky.
      */
-    @JMEThread
+    @JmeThread
     private @Nullable Spatial getCurrentFastSky() {
         return currentFastSky;
     }
@@ -125,7 +125,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * @return true if the light of the camera is enabled.
      */
-    @JMEThread
+    @JmeThread
     private boolean isLightEnabled() {
         return lightEnabled;
     }
@@ -133,20 +133,20 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * @param lightEnabled the flag of activity light of the camera.
      */
-    @JMEThread
+    @JmeThread
     private void setLightEnabled(final boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         frame = 0;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void cleanup() {
         super.cleanup();
 
@@ -156,7 +156,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void update(final float tpf) {
         super.update(tpf);
 
@@ -174,13 +174,13 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected boolean needUpdateCameraLight() {
         return true;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     protected boolean needLightForCamera() {
         return true;
     }
@@ -198,7 +198,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * The process of updating the light.
      */
-    @JMEThread
+    @JmeThread
     private void updateLightEnabledImpl(boolean enabled) {
         if (enabled == isLightEnabled()) return;
 
@@ -227,7 +227,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * The process of changing the fast sky.
      */
-    @JMEThread
+    @JmeThread
     private void changeFastSkyImpl(@Nullable final Spatial fastSky) {
 
         final Node stateNode = getStateNode();
@@ -262,7 +262,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * The process of adding the custom sky.
      */
-    @JMEThread
+    @JmeThread
     private void addCustomSkyImpl(@NotNull final Spatial sky) {
         final Array<Spatial> customSky = getCustomSky();
         customSky.add(sky);
@@ -281,7 +281,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
     /**
      * The process of removing the custom sky.
      */
-    @JMEThread
+    @JmeThread
     private void removeCustomSkyImpl(@NotNull final Spatial sky) {
         final Array<Spatial> customSky = getCustomSky();
         customSky.slowRemove(sky);

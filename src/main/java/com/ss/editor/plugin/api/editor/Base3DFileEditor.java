@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.editor;
 
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.state.editor.impl.AbstractEditor3DState;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
@@ -35,7 +35,7 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
     }
@@ -50,7 +50,7 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
      *
      * @return the 3D part.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull T create3DEditorState();
 
     /**
@@ -64,7 +64,7 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
                                             final float vRotation, final float targetDistance,
                                             final float cameraSpeed) {
@@ -81,7 +81,7 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
 
         final Pane editorPage = getPage();

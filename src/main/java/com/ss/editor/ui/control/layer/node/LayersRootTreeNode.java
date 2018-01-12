@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.layer.node;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -33,13 +33,13 @@ public class LayersRootTreeNode extends TreeNode<LayersRoot> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.SCENE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new CreateSceneLayerAction(nodeTree, this));
     }
@@ -55,7 +55,7 @@ public class LayersRootTreeNode extends TreeNode<LayersRoot> {
 
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final LayersRoot element = getElement();
@@ -70,7 +70,7 @@ public class LayersRootTreeNode extends TreeNode<LayersRoot> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof LayerNodeTree;
     }

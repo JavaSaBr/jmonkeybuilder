@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.scene;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
@@ -29,19 +29,19 @@ public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsum
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.REMOVE_12;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 

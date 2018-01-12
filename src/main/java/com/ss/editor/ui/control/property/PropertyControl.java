@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.property;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFXImageManager;
@@ -200,7 +200,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param editObject the edit object.
      */
-    @FXThread
+    @FxThread
     public void setEditObject(@NotNull final D editObject) {
         this.editObject = editObject;
     }
@@ -211,7 +211,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @param editObject the edit object.
      * @param needReload the true if need to reload.
      */
-    @FXThread
+    @FxThread
     public void setEditObject(@NotNull final D editObject, final boolean needReload) {
         setEditObject(editObject);
         if (!needReload) return;
@@ -228,7 +228,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param applyHandler the handler for handling new value.
      */
-    @FXThread
+    @FxThread
     public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
@@ -248,7 +248,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param syncHandler the handler for getting actual value.
      */
-    @FXThread
+    @FxThread
     public void setSyncHandler(@Nullable final Function<D, T> syncHandler) {
         this.syncHandler = syncHandler;
     }
@@ -276,7 +276,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     /**
      * Initializing control.
      */
-    @FXThread
+    @FxThread
     protected void reload() {
     }
 
@@ -284,7 +284,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * Synchronize value from the edit object.
      */
     @Override
-    @FXThread
+    @FxThread
     public void sync() {
         setIgnoreListener(true);
         try {
@@ -308,7 +308,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     /**
      * Create this control.
      */
-    @FXThread
+    @FxThread
     protected void createComponents() {
         setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
@@ -337,7 +337,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return the property name label.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Label getPropertyNameLabel() {
         return propertyNameLabel;
     }
@@ -347,7 +347,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param controlWidthPercent the control width percent.
      */
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
 
         if (!isSingleRow()) {
@@ -374,7 +374,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param container the container
      */
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
     }
 
@@ -404,7 +404,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @param newValue the new value
      * @param oldValue the old value
      */
-    @FXThread
+    @FxThread
     protected void changed(@Nullable final T newValue, @Nullable final T oldValue) {
         changeHandler.accept(getChangeConsumer(), getEditObject(), getPropertyName(), newValue, oldValue, getApplyHandler());
     }
@@ -414,7 +414,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return the value of the property.
      */
-    @FXThread
+    @FxThread
     public @Nullable T getPropertyValue() {
         return propertyValue;
     }
@@ -434,7 +434,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param propertyValue the value of the property.
      */
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final T propertyValue) {
         this.propertyValue = propertyValue;
     }
@@ -444,7 +444,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param ignoreListener the flag for ignoring listeners.
      */
-    @FXThread
+    @FxThread
     protected void setIgnoreListener(final boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
@@ -454,7 +454,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return true if need to ignore listeners.
      */
-    @FXThread
+    @FxThread
     protected boolean isIgnoreListener() {
         return ignoreListener;
     }

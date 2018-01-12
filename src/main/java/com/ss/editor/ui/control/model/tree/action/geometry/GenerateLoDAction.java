@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.geometry;
 
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.GeometryTreeNode;
@@ -27,19 +27,19 @@ public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.MESH_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         final GeometryTreeNode<Geometry> modelNode = ClassUtils.unsafeCast(getNode());
         final Geometry geometry = modelNode.getElement();

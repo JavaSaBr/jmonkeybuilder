@@ -4,7 +4,7 @@ import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,12 +35,12 @@ public class FolderAssetLocator implements AssetLocator {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void setRootPath(@NotNull final String rootPath) {
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public AssetInfo locate(@NotNull final AssetManager manager, @NotNull final AssetKey key) {
         if (IGNORE_LOCAL.get() == Boolean.TRUE) return null;
 
@@ -76,7 +76,7 @@ public class FolderAssetLocator implements AssetLocator {
         }
 
         @Override
-        @JMEThread
+        @JmeThread
         public @NotNull InputStream openStream() {
             try {
                 return Files.newInputStream(path, StandardOpenOption.READ);

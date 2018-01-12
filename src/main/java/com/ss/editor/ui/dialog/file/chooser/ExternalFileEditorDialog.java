@@ -3,7 +3,7 @@ package com.ss.editor.ui.dialog.file.chooser;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
@@ -73,7 +73,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
 
         resourceTree = new ResourceTree(this::processOpen, false);
@@ -90,7 +90,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(root, CSSClasses.OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG);
     }
 
-    @FXThread
+    @FxThread
     private void processOpen(@NotNull final ResourceElement element) {
 
         final Button okButton = getOkButton();
@@ -103,7 +103,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
 
@@ -116,7 +116,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -142,7 +142,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle selected element in the tree.
      */
-    @FXThread
+    @FxThread
     private void processSelected(@Nullable final TreeItem<ResourceElement> newValue) {
         final ResourceElement element = newValue == null ? null : newValue.getValue();
         final Path file = element == null ? null : element.getFile();
@@ -155,7 +155,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the function for handling the choose.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Consumer<@NotNull Path> getConsumer() {
         return consumer;
     }
@@ -165,7 +165,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param initDirectory the init directory.
      */
-    @FXThread
+    @FxThread
     public void setInitDirectory(@Nullable final Path initDirectory) {
         this.initDirectory = initDirectory;
     }
@@ -175,7 +175,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the init directory.
      */
-    @FXThread
+    @FxThread
     public @Nullable Path getInitDirectory() {
         return initDirectory;
     }
@@ -183,7 +183,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the tree with all resources.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }

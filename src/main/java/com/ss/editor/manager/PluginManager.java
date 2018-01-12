@@ -3,8 +3,8 @@ package com.ss.editor.manager;
 import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.rlib.logging.Logger;
@@ -120,7 +120,7 @@ public class PluginManager {
     /**
      * Do some things before when JME context will be created.
      */
-    @JMEThread
+    @JmeThread
     private void onBeforeCreateJMEContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
@@ -131,7 +131,7 @@ public class PluginManager {
     /**
      * Do some things after when JME context was created.
      */
-    @JMEThread
+    @JmeThread
     private void onAfterCreateJMEContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
@@ -151,7 +151,7 @@ public class PluginManager {
     /**
      * Do some things before when JavaFX context will be created.
      */
-    @FXThread
+    @FxThread
     private void onBeforeCreateJavaFXContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
@@ -162,7 +162,7 @@ public class PluginManager {
     /**
      * Do some things after when JavaFX context was created.
      */
-    @FXThread
+    @FxThread
     private void onAfterCreateJavaFXContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
@@ -173,7 +173,7 @@ public class PluginManager {
     /**
      * Do some things before when the editor is ready to work.
      */
-    @FXThread
+    @FxThread
     private void onFinishLoading() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)

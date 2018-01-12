@@ -5,7 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.PluginManager;
 import com.ss.editor.plugin.EditorPlugin;
@@ -103,7 +103,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -264,7 +264,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
      * @param oldValue   the old selected plugin.
      * @param newValue   the new selected plugin.
      */
-    @FXThread
+    @FxThread
     private void onSelected(@NotNull final ObservableValue<? extends EditorPlugin> observable,
                             @Nullable final EditorPlugin oldValue, @Nullable final EditorPlugin newValue) {
         getRemoveButton().setDisable(newValue == null || newValue.isEmbedded());
@@ -352,7 +352,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of installed plugins.
      */
-    @FXThread
+    @FxThread
     private @NotNull ListView<EditorPlugin> getPluginListView() {
         return notNull(pluginListView);
     }
@@ -360,7 +360,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * Refresh the list of installed plugins.
      */
-    @FXThread
+    @FxThread
     private void refreshPlugins() {
 
         final ObservableList<EditorPlugin> items = pluginListView.getItems();
@@ -372,7 +372,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * Process remove.
      */
-    @FXThread
+    @FxThread
     private void processRemove() {
 
         final ListView<EditorPlugin> pluginListView = getPluginListView();
@@ -391,13 +391,13 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of original plugin ids.
      */
-    @FXThread
+    @FxThread
     private @NotNull Array<String> getOriginalIds() {
         return originalIds;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processClose() {
         super.processClose();
 
@@ -421,7 +421,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * Process install a plugin.
      */
-    @FXThread
+    @FxThread
     private void processAdd() {
 
         GAnalytics.sendPageView("PluginChooseDialog", null, "/dialog/PluginChooseDialog");

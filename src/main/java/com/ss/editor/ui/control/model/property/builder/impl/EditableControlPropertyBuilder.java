@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.control.EditableControl;
@@ -35,7 +35,7 @@ public class EditableControlPropertyBuilder extends EditableModelObjectPropertyB
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
         if(!(object instanceof EditableControl)) return null;
         return ((EditableControl) object).getEditableProperties();

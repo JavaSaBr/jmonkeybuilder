@@ -5,7 +5,7 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -26,20 +26,20 @@ public class CreateCharacterControlAction extends AbstractCreateControlAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.CHARACTER_16;
     }
 
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Control createControl(@NotNull final Spatial parent) {
         return new CharacterControl(new CapsuleCollisionShape(0.6f, 1.8f), 0.03f);
     }

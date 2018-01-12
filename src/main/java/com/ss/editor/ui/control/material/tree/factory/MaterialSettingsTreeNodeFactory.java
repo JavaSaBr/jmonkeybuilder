@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.material.tree.factory;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.node.material.*;
 import com.ss.editor.ui.control.material.tree.node.*;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class MaterialSettingsTreeNodeFactory implements TreeNodeFactory {
 
     @Override
-    @FXThread
+    @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
 
         if (element instanceof RootMaterialSettings) {

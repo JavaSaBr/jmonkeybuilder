@@ -5,7 +5,7 @@ import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -39,19 +39,19 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.QUAD_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_QUAD_SHAPE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
@@ -63,13 +63,13 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         return Messages.CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
         final float width = vars.getFloat(PROPERTY_WIDTH);
         final float height = vars.getFloat(PROPERTY_HEIGHT);

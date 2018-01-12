@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -47,7 +47,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     private TextField nameField;
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
@@ -72,7 +72,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
         EXECUTOR_MANAGER.addFXTask(() -> getNameField().requestFocus());
@@ -89,7 +89,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param initName the initial name.
      */
-    @FXThread
+    @FxThread
     public void setInitName(@NotNull final String initName) {
         final TextField nameField = getNameField();
         nameField.setText(initName);
@@ -98,7 +98,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the text field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getNameField() {
         return notNull(nameField);
     }
@@ -106,7 +106,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the function for validation name.
      */
-    @FXThread
+    @FxThread
     private @Nullable Function<String, Boolean> getValidator() {
         return validator;
     }
@@ -116,7 +116,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param validator the function for validation name.
      */
-    @FXThread
+    @FxThread
     public void setValidator(@Nullable final Function<String, Boolean> validator) {
         this.validator = validator;
     }
@@ -124,7 +124,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the function for handling a new name.
      */
-    @FXThread
+    @FxThread
     private @Nullable Consumer<String> getHandler() {
         return handler;
     }
@@ -134,7 +134,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param handler the function for handling a new name.
      */
-    @FXThread
+    @FxThread
     public void setHandler(@Nullable final Consumer<String> handler) {
         this.handler = handler;
     }
@@ -142,7 +142,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate a new name.
      */
-    @FXThread
+    @FxThread
     private void validateName(@NotNull final String name) {
         final Function<String, Boolean> validator = getValidator();
         final Button okButton = getOkButton();
@@ -165,7 +165,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      * Finish this dialog.
      */
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
 

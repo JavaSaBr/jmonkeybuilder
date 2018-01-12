@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.property.builder.impl;
 
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.*;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.*;
@@ -51,7 +51,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      *
      * @return the single instance.
      */
-    @FXThread
+    @FxThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -61,7 +61,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -103,7 +103,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final InterpolatedParticleInfluencer influencer,
                                 @NotNull final Object parent) {
@@ -128,7 +128,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
 
@@ -148,7 +148,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
 
@@ -177,7 +177,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
 
@@ -217,7 +217,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final SpriteInfluencer influencer, @NotNull final Object parent) {
 
@@ -273,7 +273,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
 
@@ -303,7 +303,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final ImpulseInfluencer influencer, @NotNull final Object parent) {
 
@@ -348,7 +348,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
 
@@ -394,7 +394,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final PhysicsInfluencer influencer, @NotNull final Object parent) {
 
@@ -436,7 +436,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
 
@@ -513,7 +513,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer.
      * @param parent         the parent.
      */
-    @FXThread
+    @FxThread
     private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                 @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
 

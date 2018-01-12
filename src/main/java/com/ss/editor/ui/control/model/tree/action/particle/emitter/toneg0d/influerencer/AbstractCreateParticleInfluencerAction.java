@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.node.particles.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -28,13 +28,13 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -54,6 +54,6 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
      *
      * @return the particle influencer
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull ParticleInfluencer createInfluencer();
 }

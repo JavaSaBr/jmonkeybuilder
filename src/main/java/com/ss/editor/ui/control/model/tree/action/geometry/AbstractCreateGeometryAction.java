@@ -6,7 +6,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
@@ -27,7 +27,7 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -55,6 +55,6 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
      *
      * @return the geometry
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull Geometry createGeometry();
 }

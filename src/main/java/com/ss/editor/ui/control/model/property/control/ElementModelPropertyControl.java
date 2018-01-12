@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import com.ss.editor.ui.control.property.impl.ElementPropertyControl;
@@ -23,7 +23,7 @@ public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processAdd() {
         final NodeSelectorDialog<T> dialog = createNodeSelectorDialog();
         dialog.show(this);
@@ -34,7 +34,7 @@ public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyC
      *
      * @return the node selector dialog
      */
-    @FXThread
+    @FxThread
     protected @NotNull NodeSelectorDialog<T> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         return new NodeSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
@@ -45,7 +45,7 @@ public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyC
      *
      * @param newElement the new element
      */
-    @FXThread
+    @FxThread
     protected void processAdd(@NotNull final T newElement) {
         changed(newElement, getPropertyValue());
     }

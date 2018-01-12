@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.editor;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
 import com.ss.editor.ui.css.CSSClasses;
@@ -27,7 +27,7 @@ public abstract class Advanced3DFileEditorWithSplitRightTool<T extends Advanced3
      * @param root the root.
      * @return the result component.
      */
-    @FXThread
+    @FxThread
     protected Region buildSplitComponent(@NotNull final Node first, @NotNull final Node second,
                                          @NotNull final StackPane root) {
 
@@ -47,7 +47,7 @@ public abstract class Advanced3DFileEditorWithSplitRightTool<T extends Advanced3
      *
      * @param splitPane the split pane
      */
-    @FXThread
+    @FxThread
     protected void calcVSplitSize(@NotNull final SplitPane splitPane) {
         splitPane.setDividerPosition(0, 0.3);
     }

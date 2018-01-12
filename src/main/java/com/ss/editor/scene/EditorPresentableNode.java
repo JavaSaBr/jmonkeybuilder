@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.ScenePresentable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ public class EditorPresentableNode extends Node {
         }
 
         @Override
-        @JMEThread
+        @JmeThread
         public void setCullHint(final CullHint hint) {
             super.setCullHint(hint);
             notNull(getModel()).setCullHint(hint);
@@ -65,7 +65,7 @@ public class EditorPresentableNode extends Node {
      *
      * @param object the object.
      */
-    @JMEThread
+    @JmeThread
     public void setObject(@Nullable final ScenePresentable object) {
         this.object = object;
     }
@@ -75,7 +75,7 @@ public class EditorPresentableNode extends Node {
      *
      * @return the edited node.
      */
-    @JMEThread
+    @JmeThread
     public @NotNull Node getEditedNode() {
         return editedNode;
     }
@@ -85,7 +85,7 @@ public class EditorPresentableNode extends Node {
      *
      * @return the object.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable ScenePresentable getObject() {
         return object;
     }
@@ -95,7 +95,7 @@ public class EditorPresentableNode extends Node {
      *
      * @return the model.
      */
-    @JMEThread
+    @JmeThread
     public @Nullable Geometry getModel() {
         return model;
     }
@@ -105,13 +105,13 @@ public class EditorPresentableNode extends Node {
      *
      * @param model the model.
      */
-    @JMEThread
+    @JmeThread
     public void setModel(@Nullable final Geometry model) {
         this.model = model;
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public void updateGeometricState() {
 
         final ScenePresentable object = getObject();
@@ -129,7 +129,7 @@ public class EditorPresentableNode extends Node {
     /**
      * Synchronize this node with presented object.
      */
-    @JMEThread
+    @JmeThread
     public void sync() {
 
         final ScenePresentable object = getObject();
@@ -143,7 +143,7 @@ public class EditorPresentableNode extends Node {
     /**
      * Update position and rotation of a model.
      */
-    @JMEThread
+    @JmeThread
     public void updateModel() {
 
         final ScenePresentable object = getObject();

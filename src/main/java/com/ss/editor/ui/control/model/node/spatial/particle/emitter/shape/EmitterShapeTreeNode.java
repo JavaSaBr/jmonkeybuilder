@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.shape;
 
 import com.jme3.effect.shapes.EmitterShape;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -21,7 +21,7 @@ public class EmitterShapeTreeNode extends TreeNode<EmitterShape> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.GEOMETRY_16;
     }

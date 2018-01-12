@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.operation;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.EditorUtil;
@@ -64,7 +64,7 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void redoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
@@ -74,7 +74,7 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void undoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);

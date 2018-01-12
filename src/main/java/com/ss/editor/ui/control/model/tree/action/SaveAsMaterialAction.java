@@ -9,7 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.Icons;
@@ -49,19 +49,19 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.SAVE_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_SAVE_AS;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
         UIUtils.openSaveAsDialog(this::processSave, FileExtensions.JME_MATERIAL, ACTION_TESTER);
@@ -72,7 +72,7 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
      *
      * @param file the file to save
      */
-    @FXThread
+    @FxThread
     private void processSave(@NotNull final Path file) {
 
         final TreeNode<?> node = getNode();

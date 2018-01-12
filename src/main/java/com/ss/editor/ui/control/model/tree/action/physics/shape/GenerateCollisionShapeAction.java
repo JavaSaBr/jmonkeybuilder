@@ -15,7 +15,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
@@ -44,13 +44,13 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.INFLUENCER_16;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void process() {
         super.process();
 
@@ -92,25 +92,25 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getDialogTitle() {
         throw new RuntimeException();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return EMPTY_DEFINITIONS;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull CollisionShape createShape(@NotNull final VarTable vars) {
         throw new RuntimeException();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
     }
