@@ -2,7 +2,7 @@ package com.ss.editor.model.undo.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
@@ -37,7 +37,7 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * Instantiates a new Abstract editor operation.

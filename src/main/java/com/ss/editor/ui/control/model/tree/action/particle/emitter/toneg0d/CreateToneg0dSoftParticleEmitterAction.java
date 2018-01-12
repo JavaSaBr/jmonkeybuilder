@@ -30,6 +30,6 @@ public class CreateToneg0dSoftParticleEmitterAction extends CreateToneg0dParticl
     @Override
     @FXThread
     protected @NotNull ParticleEmitterNode createEmitterNode() {
-        return new SoftParticleEmitterNode(EDITOR.getAssetManager());
+        return new SoftParticleEmitterNode(JME_APPLICATION.getAssetManager());
     }
 }

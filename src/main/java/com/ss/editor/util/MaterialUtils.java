@@ -16,7 +16,7 @@ import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
@@ -43,7 +43,7 @@ import java.util.List;
 public class MaterialUtils {
 
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @NotNull
     private static final String[][] TEXTURE_TYPE_PARAM_NAMES = {
@@ -131,7 +131,7 @@ public class MaterialUtils {
     @Nullable
     public static Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         boolean needToReload = false;
         String textureKey = null;
@@ -280,7 +280,7 @@ public class MaterialUtils {
      */
     private static void refreshTextures(@NotNull final Material material, @NotNull final String textureKey) {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Collection<MatParam> params = material.getParams();
         params.forEach(matParam -> {

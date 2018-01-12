@@ -6,7 +6,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioSource;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 
 /**
- * The implementation of the {@link Editor} to view audio files.
+ * The implementation of the {@link JmeApplication} to view audio files.
  *
  * @author JavaSaBr
  */
@@ -201,7 +201,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AudioKey audioKey = new AudioKey(assetPath);
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final AudioData audioData = assetManager.loadAudio(audioKey);
 
         final float duration = audioData.getDuration();

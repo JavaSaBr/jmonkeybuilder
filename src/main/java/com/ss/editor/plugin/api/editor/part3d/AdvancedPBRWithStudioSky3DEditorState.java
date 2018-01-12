@@ -17,7 +17,7 @@ public class AdvancedPBRWithStudioSky3DEditorState<T extends Advanced3DFileEdito
     public AdvancedPBRWithStudioSky3DEditorState(@NotNull final T fileEditor) {
         super(fileEditor);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Geometry sky = (Geometry) SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
                 SkyFactory.EnvMapType.EquirectMap);

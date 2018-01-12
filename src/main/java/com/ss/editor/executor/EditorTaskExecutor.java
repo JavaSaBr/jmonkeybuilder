@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public interface EditorTaskExecutor {
 
     /**
-     * Add a new task.
+     * Add the new task.
      *
      * @param task the new task.
      */

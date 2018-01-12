@@ -4,8 +4,8 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppStateManager;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
@@ -103,10 +103,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    private static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The table of opened editors.
@@ -376,7 +376,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @JMEThread
     private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
-        final AppStateManager stateManager = EDITOR.getStateManager();
+        final AppStateManager stateManager = JME_APPLICATION.getStateManager();
         final ImageView canvas = JFX_APPLICATION.getScene().getCanvas();
         final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
 
@@ -460,7 +460,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final FileEditor resultEditor = editor;
 
-        final long stamp = EDITOR.asyncLock();
+        final long stamp = JME_APPLICATION.asyncLock();
         try {
             editor.openFile(file);
         } catch (final Throwable e) {
@@ -478,7 +478,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             return;
         } finally {
-            EDITOR.asyncUnlock(stamp);
+            JME_APPLICATION.asyncUnlock(stamp);
         }
 
         EXECUTOR_MANAGER.addFXTask(() -> addEditor(resultEditor, event.isNeedShow()));

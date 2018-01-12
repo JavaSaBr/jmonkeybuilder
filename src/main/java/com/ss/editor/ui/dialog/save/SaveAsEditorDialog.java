@@ -5,7 +5,7 @@ import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -66,7 +66,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @NotNull
     private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);

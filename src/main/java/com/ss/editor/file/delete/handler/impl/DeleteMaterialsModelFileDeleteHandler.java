@@ -42,7 +42,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     public void preDelete(@NotNull final Path file) {
         super.preDelete(file);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 

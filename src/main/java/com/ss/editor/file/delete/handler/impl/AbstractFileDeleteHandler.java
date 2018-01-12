@@ -1,7 +1,7 @@
 package com.ss.editor.file.delete.handler.impl;
 
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.file.delete.handler.FileDeleteHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,13 +18,13 @@ public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
      * The javaFX application.
      */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @Override
     public void preDelete(@NotNull final Path file) {

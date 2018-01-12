@@ -90,7 +90,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(assetPath);
         final Geometry geometry = NodeUtils.findGeometry(loadedModel);
 

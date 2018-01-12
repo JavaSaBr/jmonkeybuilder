@@ -7,7 +7,7 @@ import com.jme3.math.Transform;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -30,7 +30,7 @@ public abstract class AbstractTransformControl extends AbstractControl implement
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The scene editor controller.

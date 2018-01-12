@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
@@ -80,7 +80,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The javaFX part of this editor.
      */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * The executor manager.
@@ -98,7 +98,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The change handler.

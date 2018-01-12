@@ -125,7 +125,7 @@ public class MaterialFileCreator extends GenericFileCreator {
     protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final String matDef = vars.get(PROP_MAT_DEF);
 
         final Material material = new Material(assetManager, matDef);

@@ -35,7 +35,7 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
         final ModelChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         final SceneLayer defaultLayer = getDefaultLayer(consumer);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Geometry geometry = createGeometry();
         geometry.setMaterial(new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md"));

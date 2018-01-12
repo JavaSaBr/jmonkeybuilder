@@ -55,7 +55,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         final SceneLayer defaultLayer = getDefaultLayer(changeConsumer);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Material material = new Material(assetManager,"Common/MatDefs/Misc/Particle.j3md");
         material.setTexture("Texture", assetManager.loadTexture( "Effects/Explosion/flame.png"));

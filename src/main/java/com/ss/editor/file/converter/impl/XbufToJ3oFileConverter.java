@@ -14,7 +14,7 @@ import com.ss.rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class XBufToJ3oFileConverter extends AbstractModelFileConverter {
+public class XbufToJ3oFileConverter extends AbstractModelFileConverter {
 
     @NotNull
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
@@ -25,29 +25,27 @@ public class XBufToJ3oFileConverter extends AbstractModelFileConverter {
     }
 
     /**
-     * The constant DESCRIPTION.
+     * The description.
      */
     @NotNull
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
 
     static {
         DESCRIPTION.setDescription(Messages.XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION);
-        DESCRIPTION.setConstructor(XBufToJ3oFileConverter::new);
+        DESCRIPTION.setConstructor(XbufToJ3oFileConverter::new);
         DESCRIPTION.setExtensions(EXTENSIONS);
     }
 
-    private XBufToJ3oFileConverter() {
+    private XbufToJ3oFileConverter() {
     }
 
-    @NotNull
     @Override
-    protected Array<String> getAvailableExtensions() {
+    protected @NotNull Array<String> getAvailableExtensions() {
         return EXTENSIONS;
     }
 
-    @NotNull
     @Override
-    public String getTargetExtension() {
+    public @NotNull String getTargetExtension() {
         return FileExtensions.JME_OBJECT;
     }
 }

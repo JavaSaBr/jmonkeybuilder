@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -24,7 +24,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
      * The jME part of the editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The type of change consumer,

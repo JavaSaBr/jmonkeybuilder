@@ -1,8 +1,8 @@
 package com.ss.editor.file.converter.impl;
 
 import static com.ss.rlib.util.FileUtils.containsExtensions;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
@@ -23,50 +23,50 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * The base implementation of a file converter.
+ * The base implementation of {@link FileConverter}.
  *
  * @author JavaSaBr
  */
 public abstract class AbstractFileConverter implements FileConverter {
 
-    /**
-     * The constant LOGGER.
-     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileConverter.class);
 
+    /**
+     * The empty array.
+     */
     @NotNull
     private static final Array<String> EMPTY_ARRAY = ArrayFactory.newArray(String.class);
 
     /**
-     * The constant EDITOR_CONFIG.
+     * The editor config.
      */
     @NotNull
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executor manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The constant FX_EVENT_MANAGER.
+     * The FX event manager.
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * The constant JFX_APPLICATION.
+     * The javaFX application.
      */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
-     * The constant EDITOR.
+     * The jme application.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @Override
     public void convert(@NotNull final Path source) {
@@ -126,21 +126,19 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     /**
-     * Gets available extensions.
+     * Get the list of available extensions.
      *
      * @return the list of available extensions.
      */
-    @NotNull
-    protected Array<String> getAvailableExtensions() {
+    protected @NotNull Array<String> getAvailableExtensions() {
         return EMPTY_ARRAY;
     }
 
-    @NotNull
     @Override
-    public abstract String getTargetExtension();
+    public abstract @NotNull String getTargetExtension();
 
     /**
-     * Notify the Editor about file changing.
+     * Notify the eEditor about file changing.
      *
      * @param file the changed file.
      */
@@ -155,7 +153,7 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     /**
-     * Notify the Editor about file creating.
+     * Notify the editor about file creating.
      *
      * @param file the created file.
      */

@@ -12,7 +12,7 @@ import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -218,8 +218,8 @@ public class GeomUtils {
     @Nullable
     public static Vector3f getContactPointFromCursor(@NotNull final Spatial spatial, @NotNull final Camera camera) {
 
-        final Editor editor = Editor.getInstance();
-        final InputManager inputManager = editor.getInputManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final InputManager inputManager = jmeApplication.getInputManager();
         final Vector2f cursor = inputManager.getCursorPosition();
 
         return getContactPointFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
@@ -251,8 +251,8 @@ public class GeomUtils {
     @Nullable
     public static Geometry getGeometryFromCursor(@NotNull final Spatial spatial, @NotNull final Camera camera) {
 
-        final Editor editor = Editor.getInstance();
-        final InputManager inputManager = editor.getInputManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final InputManager inputManager = jmeApplication.getInputManager();
         final Vector2f cursor = inputManager.getCursorPosition();
 
         return getGeometryFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());

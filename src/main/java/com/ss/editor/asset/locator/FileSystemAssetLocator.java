@@ -4,7 +4,7 @@ import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.ArrayUtils;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -34,8 +34,8 @@ public class FileSystemAssetLocator implements AssetLocator {
         final long stamp = LOCATED_KEYS.writeLock();
         try {
 
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
+            final JmeApplication jmeApplication = JmeApplication.getInstance();
+            final AssetManager assetManager = jmeApplication.getAssetManager();
 
             LOCATED_KEYS.forEach(assetManager, (assetKey, manager) -> manager.deleteFromCache(assetKey));
 

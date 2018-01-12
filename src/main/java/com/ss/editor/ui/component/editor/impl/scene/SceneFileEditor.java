@@ -152,7 +152,7 @@ public class SceneFileEditor extends
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         Spatial loadedScene = assetManager.loadAsset(modelKey);
 
@@ -701,14 +701,14 @@ public class SceneFileEditor extends
     @FXThread
     public void notifyHided() {
         super.notifyHided();
-        EXECUTOR_MANAGER.addJMETask(EDITOR::enableLightProbe);
+        EXECUTOR_MANAGER.addJMETask(JME_APPLICATION::enableLightProbe);
     }
 
     @Override
     @FXThread
     public void notifyShowed() {
         super.notifyShowed();
-        EXECUTOR_MANAGER.addJMETask(EDITOR::disableLightProbe);
+        EXECUTOR_MANAGER.addJMETask(JME_APPLICATION::disableLightProbe);
     }
 
     @Override

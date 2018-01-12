@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -37,7 +37,7 @@ public class PropertyEditorControl<T> extends HBox {
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The validation callback to call re-validating.

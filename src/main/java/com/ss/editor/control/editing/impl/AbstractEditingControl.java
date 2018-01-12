@@ -8,7 +8,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.control.editing.EditingControl;
 import com.ss.editor.control.editing.EditingInput;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
      * The constant EDITOR.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The current editing input.
@@ -77,7 +77,7 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
     @NotNull
     protected Material createMaterial(@NotNull final ColorRGBA color) {
 
-        final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        final Material material = new Material(JME_APPLICATION.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", color);
 
         return material;

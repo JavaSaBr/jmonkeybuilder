@@ -310,7 +310,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         final TextureKey newKey = new TextureKey(key.getName());
         newKey.setFlipY(needFlipY);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         assetManager.deleteFromCache(key);
 
         final Texture2D loadedTexture = (Texture2D) assetManager.loadTexture(newKey);
@@ -340,7 +340,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
             textureKey.setFlipY(config.isDefaultUseFlippedTexture());
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
             final Texture2D texture = (Texture2D) assetManager.loadTexture(textureKey);
             texture.setWrap(Texture.WrapMode.Repeat);
 

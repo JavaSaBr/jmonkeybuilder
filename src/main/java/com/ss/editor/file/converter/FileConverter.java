@@ -14,7 +14,7 @@ import java.nio.file.Path;
 public interface FileConverter {
 
     /**
-     * Convert a source file.
+     * Convert the source file.
      *
      * @param source the source file.
      */
@@ -22,7 +22,7 @@ public interface FileConverter {
     void convert(@NotNull Path source);
 
     /**
-     * Convert a source file to destination file.
+     * Convert the source file to destination file.
      *
      * @param source      the source file.
      * @param destination the destination file.
@@ -30,13 +30,11 @@ public interface FileConverter {
     @FXThread
     void convert(@NotNull Path source, @NotNull Path destination);
 
-
     /**
-     * Gets target extension.
+     * Get the target extension.
      *
      * @return the result file format name.
      */
-    @NotNull
     @FXThread
-    String getTargetExtension();
+    @NotNull String getTargetExtension();
 }

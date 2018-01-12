@@ -63,10 +63,10 @@ import java.util.logging.Level;
  *
  * @author JavaSaBr
  */
-public class Editor extends JmeToJFXApplication {
+public class JmeApplication extends JmeToJFXApplication {
 
     @NotNull
-    private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(JmeApplication.class);
 
     /**
      * The empty job adapter for handling creating {@link LightProbe}.
@@ -78,7 +78,7 @@ public class Editor extends JmeToJFXApplication {
     };
 
     @NotNull
-    private static final Editor EDITOR = new Editor();
+    private static final JmeApplication JME_APPLICATION = new JmeApplication();
 
     /**
      * Gets the jME part of this editor.
@@ -86,8 +86,8 @@ public class Editor extends JmeToJFXApplication {
      * @return the jME part.
      */
     @FromAnyThread
-    public static @NotNull Editor getInstance() {
-        return EDITOR;
+    public static @NotNull JmeApplication getInstance() {
+        return JME_APPLICATION;
     }
 
     /**
@@ -96,7 +96,7 @@ public class Editor extends JmeToJFXApplication {
      * @return the editor
      */
     @JMEThread
-    static @NotNull Editor prepareToStart() {
+    static @NotNull JmeApplication prepareToStart() {
 
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
@@ -108,17 +108,17 @@ public class Editor extends JmeToJFXApplication {
             final EditorConfig config = EditorConfig.getInstance();
             final AppSettings settings = config.getSettings();
 
-            EDITOR.setSettings(settings);
-            EDITOR.setShowSettings(false);
-            EDITOR.setDisplayStatView(false);
-            EDITOR.setDisplayFps(false);
+            JME_APPLICATION.setSettings(settings);
+            JME_APPLICATION.setShowSettings(false);
+            JME_APPLICATION.setDisplayStatView(false);
+            JME_APPLICATION.setDisplayFps(false);
 
         } catch (final Exception e) {
             LOGGER.warning(e);
             throw new RuntimeException(e);
         }
 
-        return EDITOR;
+        return JME_APPLICATION;
     }
 
     @JMEThread
@@ -218,7 +218,7 @@ public class Editor extends JmeToJFXApplication {
     @Nullable
     private Material defaultMaterial;
 
-    private Editor() {
+    private JmeApplication() {
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
     }
@@ -335,7 +335,7 @@ public class Editor extends JmeToJFXApplication {
         createLightProbes();
         stateManager.detach(stateManager.getState(DebugKeysAppState.class));
 
-        new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
+        new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch").start();
     }
 
     /**

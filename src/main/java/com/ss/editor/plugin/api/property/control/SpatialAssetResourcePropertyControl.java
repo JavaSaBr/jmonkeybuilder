@@ -52,7 +52,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     @FXThread
     protected void processSelect(@NotNull final Path file) {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Path assetFile = notNull(getAssetFile(file));
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));

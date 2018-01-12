@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
@@ -55,7 +55,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * The editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
 
     /**

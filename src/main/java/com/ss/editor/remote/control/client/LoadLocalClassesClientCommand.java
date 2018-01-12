@@ -1,6 +1,6 @@
 package com.ss.editor.remote.control.client;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
@@ -25,7 +25,7 @@ public class LoadLocalClassesClientCommand extends ClientCommand {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @Override
     @BackgroundThread
@@ -36,6 +36,6 @@ public class LoadLocalClassesClientCommand extends ClientCommand {
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
         classpathManager.loadLocalClasses(output);
 
-        EXECUTOR_MANAGER.addJMETask(() -> EDITOR.getAssetManager().clearCache());
+        EXECUTOR_MANAGER.addJMETask(() -> JME_APPLICATION.getAssetManager().clearCache());
     }
 }

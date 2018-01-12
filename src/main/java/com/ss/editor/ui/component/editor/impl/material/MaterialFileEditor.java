@@ -137,7 +137,7 @@ public class MaterialFileEditor extends
         final Path assetFile = notNull(getAssetFile(getEditFile()));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
 
         reload(material);
@@ -186,7 +186,7 @@ public class MaterialFileEditor extends
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
             textureKey.setFlipY(config.isDefaultUseFlippedTexture());
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
             final Texture texture = assetManager.loadTexture(textureKey);
             texture.setWrap(Texture.WrapMode.Repeat);
 
@@ -226,7 +226,7 @@ public class MaterialFileEditor extends
         final Path assetFile = notNull(getAssetFile(file));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
 
         final MaterialEditor3DState editor3DState = getEditor3DState();
@@ -311,7 +311,7 @@ public class MaterialFileEditor extends
     private void processChangeTypeImpl(@Nullable final String newType) {
         if (newType == null) return;
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Material newMaterial = new Material(assetManager, newType);
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());

@@ -167,7 +167,7 @@ public class MoveToolControl extends AbstractTransformControl {
         final LocalObjects local = LocalObjects.get();
 
         final Camera camera = editorControl.getCamera();
-        final InputManager inputManager = EDITOR.getInputManager();
+        final InputManager inputManager = JME_APPLICATION.getInputManager();
         final Vector2f cursorPosition = inputManager.getCursorPosition();
         final CollisionResults results = local.nextCollisionResults();
 

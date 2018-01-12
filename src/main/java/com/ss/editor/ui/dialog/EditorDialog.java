@@ -1,8 +1,8 @@
 package com.ss.editor.ui.dialog;
 
 import static javafx.geometry.Pos.CENTER;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
@@ -39,7 +39,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 /**
- * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link Editor}.
+ * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link JmeApplication}.
  *
  * @author JavaSaBr
  */
@@ -286,7 +286,7 @@ public class EditorDialog {
      */
     @FXThread
     public void show() {
-        show(JFXApplication.getInstance().getLastWindow());
+        show(JfxApplication.getInstance().getLastWindow());
     }
 
     /**
@@ -314,7 +314,7 @@ public class EditorDialog {
         GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
 
-        final JFXApplication application = JFXApplication.getInstance();
+        final JfxApplication application = JfxApplication.getInstance();
         application.addWindow(dialog);
 
         Platform.runLater(dialog::sizeToScene);
@@ -351,7 +351,7 @@ public class EditorDialog {
 
         dialog.hide();
 
-        final JFXApplication application = JFXApplication.getInstance();
+        final JfxApplication application = JfxApplication.getInstance();
         application.removeWindow(dialog);
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, getDialogId());

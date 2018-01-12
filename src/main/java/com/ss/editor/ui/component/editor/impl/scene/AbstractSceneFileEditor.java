@@ -330,11 +330,11 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
         if (geometries.isEmpty()) return;
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
         translucentBucketFilter.refresh();
     }
 
@@ -362,7 +362,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
         translucentBucketFilter.refresh();
     }
 
@@ -410,7 +410,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         super.loadState();
 
         scriptingComponent.addVariable("root", getCurrentModel());
-        scriptingComponent.addVariable("assetManager", EDITOR.getAssetManager());
+        scriptingComponent.addVariable("assetManager", JME_APPLICATION.getAssetManager());
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -1099,7 +1099,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final Object linkNode = findParent(geometry, AssetLinkNode.class::isInstance);
             if (linkNode != null) return;
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
             final Material material = assetManager.loadAsset(materialKey);
 
             final PropertyOperation<ChangeConsumer, Geometry, Material> operation =
@@ -1149,7 +1149,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final SceneLayer defaultLayer = getDefaultLayer(this);
             final LocalObjects local = LocalObjects.get();
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
 
             final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);

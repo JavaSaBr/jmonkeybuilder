@@ -18,8 +18,8 @@ import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.HillHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
@@ -83,13 +83,13 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * The constant JFX_APPLICATION.
      */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * The constant EDITOR.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     private enum HeightMapType {
         /**
@@ -669,7 +669,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @BackgroundThread
     private void createTerrainInBackground() throws Exception {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final ComboBox<HeightMapType> heightMapTypeComboBox = getHeightMapTypeComboBox();
         final HeightMapType heightMapType = heightMapTypeComboBox.getSelectionModel().getSelectedItem();
 

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.about;
 
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -57,7 +57,7 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
-        final JFXApplication application = JFXApplication.getInstance();
+        final JfxApplication application = JfxApplication.getInstance();
         final HostServices hostServices = application.getHostServices();
 
         final GridPane gridPane = new GridPane();

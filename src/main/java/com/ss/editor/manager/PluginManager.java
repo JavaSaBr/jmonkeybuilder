@@ -2,7 +2,7 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.config.Config;
@@ -62,7 +62,7 @@ public class PluginManager {
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
         } else {
-            final Path rootFolder = Utils.getRootFolderFromClass(Editor.class);
+            final Path rootFolder = Utils.getRootFolderFromClass(JmeApplication.class);
             final Path embeddedPluginPath = rootFolder.resolve("embedded-plugins");
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             if (Files.exists(embeddedPluginPath)) {
@@ -142,8 +142,8 @@ public class PluginManager {
                     final PluginContainer container = editorPlugin.getContainer();
                     final URLClassLoader classLoader = container.getClassLoader();
 
-                    final Editor editor = Editor.getInstance();
-                    final AssetManager assetManager = editor.getAssetManager();
+                    final JmeApplication jmeApplication = JmeApplication.getInstance();
+                    final AssetManager assetManager = jmeApplication.getAssetManager();
                     assetManager.addClassLoader(classLoader);
                 });
     }

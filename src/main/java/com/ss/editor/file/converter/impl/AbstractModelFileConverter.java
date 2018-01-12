@@ -101,15 +101,12 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         }
 
         final String resultName = vars.getString(PROP_RESULT_NAME);
-        if (StringUtils.isEmpty(resultName)) return false;
-
-        final boolean exportMaterials = vars.getBoolean(PROP_EXPORT_MATERIALS);
-
-        if (exportMaterials && !vars.has(PROP_MATERIALS_FOLDER)) {
+        if (StringUtils.isEmpty(resultName)) {
             return false;
         }
 
-        return true;
+        final boolean exportMaterials = vars.getBoolean(PROP_EXPORT_MATERIALS);
+        return !exportMaterials || vars.has(PROP_MATERIALS_FOLDER);
     }
 
     /**
@@ -142,7 +139,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
         if (EDITOR_CONFIG.isAutoTangentGenerating()) {
@@ -176,7 +173,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     }
 
     /**
-     * Store embedded materials.
+     * Store the embedded materials.
      *
      * @param materialsFolder the materials destination folder.
      * @param canOverwrite    can we overwrite exists materials.
@@ -206,12 +203,12 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
 
         final String assetPath = toAssetPath(assetFile);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         geometry.setMaterial(assetManager.loadMaterial(assetPath));
     }
 
     /**
-     * Generate names for materials.
+     * Generate names for the materials.
      */
     private void generateNames(@NotNull final ObjectDictionary<String, Geometry> mapping,
                                @NotNull final Geometry geometry) {
@@ -233,8 +230,12 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     }
 
     private void checkAndAdd(@NotNull final Array<Geometry> geometries, @NotNull final Geometry geometry) {
+
         final Material material = geometry.getMaterial();
         final AssetKey key = material.getKey();
-        if (key == null) geometries.add(geometry);
+
+        if (key == null) {
+            geometries.add(geometry);
+        }
     }
 }

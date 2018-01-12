@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The implementation to work with Google Analytics.
+ * The implementation of a client to work with Google Analytics.
  *
  * @author JavaSaBr
  */
@@ -76,14 +76,8 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private static final GAnalytics INSTANCE = new GAnalytics();
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
     @FromAnyThread
-    public static GAnalytics getInstance() {
+    public static @NotNull GAnalytics getInstance() {
         return INSTANCE;
     }
 
@@ -100,7 +94,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send an event.
+     * Send the event.
      *
      * @param category the category.
      * @param action   the action.
@@ -112,7 +106,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send an event.
+     * Send the event.
      *
      * @param category the category.
      * @param action   the action.
@@ -127,13 +121,15 @@ public class GAnalytics extends EditorThread {
         parameters.put(PARAM_EVENT_CATEGORY, category);
         parameters.put(PARAM_EVENT_ACTION, action);
 
-        if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
+        if (!isEmpty(label)) {
+            parameters.put(PARAM_EVENT_LABEL, label);
+        }
 
         send(HitType.EVENT, parameters);
     }
 
     /**
-     * Send an event ignoring disabling GA.
+     * Send the event with ignoring disabling GA.
      *
      * @param category the category.
      * @param action   the action.
@@ -147,13 +143,15 @@ public class GAnalytics extends EditorThread {
         parameters.put(PARAM_EVENT_CATEGORY, category);
         parameters.put(PARAM_EVENT_ACTION, action);
 
-        if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
+        if (!isEmpty(label)) {
+            parameters.put(PARAM_EVENT_LABEL, label);
+        }
 
         send(HitType.EVENT, parameters);
     }
 
     /**
-     * Send an exception.
+     * Send the exception.
      *
      * @param exception the exception.
      * @param fatal     true if the exception is fatal.
@@ -178,7 +176,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send a page view event.
+     * Send the page view event.
      *
      * @param title    the title.
      * @param location the location.
@@ -198,7 +196,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send a timing stats.
+     * Send the timing stats.
      *
      * @param timingCategory the category.
      * @param timingVar      the variable.
@@ -215,13 +213,15 @@ public class GAnalytics extends EditorThread {
         parameters.put(PARAM_USER_TIMING_VAR_NAME, timingVar);
         parameters.put(PARAM_USER_TIMING_TIME, timingValue);
 
-        if (!isEmpty(timingLabel)) parameters.put(PARAM_USER_TIMING_LABEL, timingLabel);
+        if (!isEmpty(timingLabel)) {
+            parameters.put(PARAM_USER_TIMING_LABEL, timingLabel);
+        }
 
         send(HitType.TIMING, parameters);
     }
 
     /**
-     * Send an analytic event.
+     * Send the analytic event.
      *
      * @param hitType    the hit type.
      * @param parameters the parameters.
@@ -232,7 +232,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send an analytic event.
+     * Send the analytic event.
      *
      * @param parameters the parameters.
      */
@@ -241,7 +241,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Process sending an analytic events.
+     * Process of sending the analytic event.
      *
      * @param parameters the parameters.
      */
@@ -289,13 +289,14 @@ public class GAnalytics extends EditorThread {
             }
 
         } catch (final IOException e) {
+            // ignore the exception
         } finally {
             progressCount.decrementAndGet();
             ConcurrentUtils.notifyAll(progressCount);
         }
     }
 
-    private static String buildParameters(@NotNull final Map<String, Object> parameters) {
+    private static @NotNull String buildParameters(@NotNull final Map<String, Object> parameters) {
         final StringBuilder builder = new StringBuilder();
         parameters.forEach((key, value) -> appendParam(builder, key, value));
         return builder.toString();
@@ -333,10 +334,7 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private final AtomicInteger progressCount;
 
-    /**
-     * Instantiates a new G analytics.
-     */
-    public GAnalytics() {
+    private GAnalytics() {
         setName("GAnalytics Thread");
         this.queue = LinkedListFactory.newLinkedList(Runnable.class);
         this.progressCount = new AtomicInteger();
@@ -344,7 +342,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Add a new task for executing.
+     * Add the new task to execute.
      *
      * @param runnable a new task.
      */

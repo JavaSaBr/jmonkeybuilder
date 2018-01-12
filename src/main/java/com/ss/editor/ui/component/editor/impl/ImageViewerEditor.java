@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 
 /**
- * The implementation of the {@link Editor} to view image files.
+ * The implementation of the {@link JmeApplication} to view image files.
  *
  * @author JavaSaBr
  */

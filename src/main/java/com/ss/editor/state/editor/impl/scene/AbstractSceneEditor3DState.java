@@ -101,7 +101,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
     static {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         AUDIO_NODE_MODEL = (Node) assetManager.loadModel("graphics/models/speaker/speaker.j3o");
 
@@ -418,7 +418,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     @FromAnyThread
     private void createCollisionPlane() {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         final RenderState renderState = material.getAdditionalRenderState();
@@ -518,7 +518,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     @FromAnyThread
     private void createManipulators() {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Material redMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         redMaterial.setColor("Color", ColorRGBA.Red);
@@ -574,7 +574,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     private @NotNull Material createColorMaterial(@NotNull final ColorRGBA color) {
-        final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        final Material material = new Material(JME_APPLICATION.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.getAdditionalRenderState().setWireframe(true);
         material.setColor("Color", color);
         return material;
@@ -896,7 +896,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private @NotNull Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
 
         final LocalObjects local = LocalObjects.get();
-        final Camera camera = EDITOR.getCamera();
+        final Camera camera = JME_APPLICATION.getCamera();
 
         final Vector3f cameraLocation = camera.getLocation();
         final Vector3f resultPosition = location.subtract(cameraLocation, local.nextVector())
@@ -1469,8 +1469,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private boolean startTransform() {
         updateTransformCenter();
 
-        final Camera camera = EDITOR.getCamera();
-        final InputManager inputManager = EDITOR.getInputManager();
+        final Camera camera = JME_APPLICATION.getCamera();
+        final InputManager inputManager = JME_APPLICATION.getInputManager();
         final Vector2f cursorPosition = inputManager.getCursorPosition();
 
         final CollisionResults collisionResults = new CollisionResults();
@@ -1614,7 +1614,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         NodeUtils.visitGeometry(model, geometry -> {
 
-            final RenderManager renderManager = EDITOR.getRenderManager();
+            final RenderManager renderManager = JME_APPLICATION.getRenderManager();
             try {
                 renderManager.preloadScene(geometry);
             } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
@@ -1623,7 +1623,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
                         new RuntimeException("Found invalid material in the geometry: [" + geometry.getName() + "]. " +
                                 "The material will be removed from the geometry.", e));
 
-                geometry.setMaterial(EDITOR.getDefaultMaterial());
+                geometry.setMaterial(JME_APPLICATION.getDefaultMaterial());
             }
         });
 
@@ -1678,7 +1678,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
 
-        final Camera camera = EDITOR.getCamera();
+        final Camera camera = JME_APPLICATION.getCamera();
         final EditorLightNode lightModel = notNull(cachedLights.get(light, () -> {
 
             final Node model = (Node) node.clone();
@@ -1874,7 +1874,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
     protected @NotNull Geometry createGeometry(@NotNull final ScenePresentable.PresentationType presentationType) {
 
-        final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        final Material material = new Material(JME_APPLICATION.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", ColorRGBA.Yellow);
         material.getAdditionalRenderState().setWireframe(true);
 
@@ -2070,6 +2070,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
     @Override
     public @NotNull Camera getCamera() {
-        return EDITOR.getCamera();
+        return JME_APPLICATION.getCamera();
     }
 }

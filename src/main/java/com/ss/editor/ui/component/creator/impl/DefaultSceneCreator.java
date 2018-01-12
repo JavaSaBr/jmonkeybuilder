@@ -55,7 +55,7 @@ public class DefaultSceneCreator extends EmptySceneCreator {
 
         final EditableSkySceneAppState skyState = new EditableSkySceneAppState();
         skyState.setFlatShaded(false);
-        skyState.init(lightingState.getLightDirRef(), EDITOR.getAssetManager());
+        skyState.init(lightingState.getLightDirRef(), JME_APPLICATION.getAssetManager());
 
         sceneNode.addAppState(lightingState);
         sceneNode.addAppState(skyState);

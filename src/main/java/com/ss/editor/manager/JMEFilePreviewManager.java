@@ -25,9 +25,9 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.SkyFactory;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
@@ -241,7 +241,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         final ExecutorManager executorManager = ExecutorManager.getInstance();
         executorManager.addFXTask(() -> {
 
-            final JFXApplication application = JFXApplication.getInstance();
+            final JfxApplication application = JfxApplication.getInstance();
             final EditorFXScene scene = application.getScene();
             final StackPane container = scene.getHideLayer();
 
@@ -259,8 +259,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     protected void controlUpdate(final float tpf) {
 
         if (frame == 2) {
-            final Editor editor = Editor.getInstance();
-            editor.updatePreviewLightProbe(probeHandler);
+            final JmeApplication jmeApplication = JmeApplication.getInstance();
+            jmeApplication.updatePreviewLightProbe(probeHandler);
         }
 
         frame++;
@@ -268,8 +268,8 @@ public class JMEFilePreviewManager extends AbstractControl {
 
     @JMEThread
     private void notifyProbeComplete() {
-        final Editor editor = Editor.getInstance();
-        final Node rootNode = editor.getPreviewNode();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final Node rootNode = jmeApplication.getPreviewNode();
         rootNode.attachChild(modelNode);
     }
 
@@ -352,8 +352,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     private void showObject(@NotNull final String path, final boolean external) {
         prepareProcessor();
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final Spatial model;
 
         FolderAssetLocator.setIgnore(external);
@@ -370,7 +370,7 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         tryToLoad(model);
 
-        final Node rootNode = editor.getPreviewNode();
+        final Node rootNode = jmeApplication.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -383,8 +383,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     private void tryToLoad(@NotNull final Spatial model) {
         try {
 
-            final Editor editor = Editor.getInstance();
-            final RenderManager renderManager = editor.getRenderManager();
+            final JmeApplication jmeApplication = JmeApplication.getInstance();
+            final RenderManager renderManager = jmeApplication.getRenderManager();
             renderManager.preloadScene(model);
 
             modelNode.attachChild(model);
@@ -406,8 +406,8 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         frame = 0;
 
-        final Editor editor = Editor.getInstance();
-        final Camera camera = editor.getPreviewCamera();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final Camera camera = jmeApplication.getPreviewCamera();
         camera.setLocation(CAMERA_LOCATION);
         camera.setRotation(CAMERA_ROTATION);
 
@@ -423,14 +423,14 @@ public class JMEFilePreviewManager extends AbstractControl {
     private void showMaterial(@NotNull final String path) {
         prepareProcessor();
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final Material material = assetManager.loadMaterial(path);
 
         testBox.setMaterial(material);
         tryToLoad(testBox);
 
-        final Node rootNode = editor.getPreviewNode();
+        final Node rootNode = jmeApplication.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -445,8 +445,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     @JMEThread
     private void clearImpl() {
 
-        final Editor editor = Editor.getInstance();
-        final Node rootNode = editor.getPreviewNode();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final Node rootNode = jmeApplication.getPreviewNode();
         rootNode.detachChild(modelNode);
 
         if (processor != null) {
@@ -472,8 +472,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     @JMEThread
     private @NotNull FrameTransferSceneProcessor prepareScene() {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
                         SkyFactory.EnvMapType.EquirectMap);
 
@@ -481,14 +481,14 @@ public class JMEFilePreviewManager extends AbstractControl {
         light.setDirection(LIGHT_DIRECTION);
 
         final Node cameraNode = new Node("Camera node");
-        final Node rootNode = editor.getPreviewNode();
+        final Node rootNode = jmeApplication.getPreviewNode();
         rootNode.addControl(this);
         rootNode.attachChild(sky);
         rootNode.addLight(light);
         rootNode.attachChild(cameraNode);
         rootNode.attachChild(modelNode);
 
-        final Camera camera = editor.getPreviewCamera();
+        final Camera camera = jmeApplication.getPreviewCamera();
         final EditorCamera editorCamera = new EditorCamera(camera, cameraNode);
         editorCamera.setMaxDistance(10000);
         editorCamera.setMinDistance(0.01F);
@@ -498,7 +498,7 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         //TODO added supporting moving the camera
 
-        processor = bind(editor, imageView, imageView, editor.getPreviewViewPort(), false);
+        processor = bind(jmeApplication, imageView, imageView, jmeApplication.getPreviewViewPort(), false);
         processor.setTransferMode(ON_CHANGES);
         processor.setEnabled(false);
 

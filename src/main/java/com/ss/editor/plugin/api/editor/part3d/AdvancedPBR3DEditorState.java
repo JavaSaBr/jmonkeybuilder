@@ -84,7 +84,7 @@ public abstract class AdvancedPBR3DEditorState<T extends Advanced3DFileEditor> e
         super.update(tpf);
 
         if (frame == 2) {
-            EDITOR.updateLightProbe(probeHandler);
+            JME_APPLICATION.updateLightProbe(probeHandler);
         }
 
         frame++;

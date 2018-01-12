@@ -96,7 +96,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
 
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         final Geometry geometry = NodeUtils.findGeometry(loadedModel);
 

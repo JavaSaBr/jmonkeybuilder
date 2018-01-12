@@ -45,15 +45,21 @@ public class FolderAssetLocator implements AssetLocator {
         if (IGNORE_LOCAL.get() == Boolean.TRUE) return null;
 
         final Path absoluteFile = Paths.get(key.getName());
-        if (Files.exists(absoluteFile)) return null;
+        if (Files.exists(absoluteFile)) {
+            return null;
+        }
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return null;
+        if (currentAsset == null) {
+            return null;
+        }
 
         final String name = key.getName();
         final Path resolve = currentAsset.resolve(name);
-        if (!Files.exists(resolve)) return null;
+        if (!Files.exists(resolve)) {
+            return null;
+        }
 
         return new PathAssetInfo(manager, key, resolve);
     }

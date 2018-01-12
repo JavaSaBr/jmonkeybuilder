@@ -3,8 +3,8 @@ package com.ss.editor.ui.component.editor.impl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import com.jme3.math.Vector3f;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -83,13 +83,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The javaFX application.
      */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * The jme application.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The array of 3D parts of this editor.
@@ -364,7 +364,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             final String editorId = description.getEditorId();
 
             final Path tempFile = Utils.get(editorId, prefix -> Files.createTempFile(prefix, "toSave.tmp"));
-            final long stamp = EDITOR.asyncLock();
+            final long stamp = JME_APPLICATION.asyncLock();
             try {
 
                 final Path editFile = getEditFile();
@@ -380,7 +380,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
                 LOGGER.warning(this, e);
                 EXECUTOR_MANAGER.addFXTask(this::notifyFinishSaving);
             } finally {
-                EDITOR.asyncUnlock(stamp);
+                JME_APPLICATION.asyncUnlock(stamp);
             }
 
             EXECUTOR_MANAGER.addFXTask(this::postSave);

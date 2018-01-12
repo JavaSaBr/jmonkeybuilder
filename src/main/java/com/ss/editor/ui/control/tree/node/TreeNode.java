@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.node;
 
 import static com.ss.editor.ui.control.tree.NodeTreeCell.DATA_FORMAT;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.UObject;
@@ -42,7 +42,7 @@ public abstract class TreeNode<T> implements UObject {
      * The constant EDITOR.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The constant FACTORY_REGISTRY.

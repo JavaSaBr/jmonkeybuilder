@@ -207,7 +207,7 @@ public class ModelImportDialog extends GenericFileCreator {
 
         final Path importedFile = vars.get(PROP_FILE);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Spatial model;
 
         FolderAssetLocator.setIgnore(true);

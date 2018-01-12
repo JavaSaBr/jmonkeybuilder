@@ -9,7 +9,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
@@ -855,7 +855,7 @@ public final class EditorConfig implements AssetEventListener {
      */
     private void init() {
 
-        final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
+        final Preferences prefs = Preferences.userNodeForPackage(JmeApplication.class);
 
         this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
         this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
@@ -954,7 +954,7 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public synchronized void save() {
 
-        final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
+        final Preferences prefs = Preferences.userNodeForPackage(JmeApplication.class);
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
         prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
         prefs.putBoolean(PREF_GRAPHIC_GAMA_CORRECTION, isGammaCorrection());

@@ -38,7 +38,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     @NotNull
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         if (materialKey == null) {
 

@@ -162,7 +162,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
@@ -327,7 +327,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             return;
         }
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final TextureKey key = new TextureKey(newSky, true);
         key.setGenerateMips(false);

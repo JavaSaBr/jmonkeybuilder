@@ -81,6 +81,6 @@ public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<Model
      */
     @FXThread
     protected @NotNull ParticleEmitterNode createEmitterNode() {
-        return new ParticleEmitterNode(EDITOR.getAssetManager());
+        return new ParticleEmitterNode(JME_APPLICATION.getAssetManager());
     }
 }

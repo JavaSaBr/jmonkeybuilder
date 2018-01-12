@@ -4,7 +4,7 @@ import static com.ss.editor.util.EditorUtil.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ import java.nio.file.Path;
 public class TextureLayer implements Comparable<TextureLayer> {
 
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The settings.
@@ -107,7 +107,7 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     @FromAnyThread
     public void setDiffuseFile(@Nullable final Path diffuseFile) {
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Path assetFile = diffuseFile == null ? null : getAssetFile(diffuseFile);
         final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
         final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
@@ -134,7 +134,7 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     @FromAnyThread
     public void setNormalFile(@Nullable final Path normalFile) {
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Path assetFile = normalFile == null ? null : getAssetFile(normalFile);
         final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
         final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);

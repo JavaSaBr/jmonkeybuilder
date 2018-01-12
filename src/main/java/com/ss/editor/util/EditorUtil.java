@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -195,7 +195,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @Nullable InputStream getInputStream(@NotNull final String path) {
-        return JFXApplication.class.getResourceAsStream(path);
+        return JfxApplication.class.getResourceAsStream(path);
     }
 
     /**
@@ -637,7 +637,7 @@ public abstract class EditorUtil {
      */
     @FXThread
     public static void incrementLoading() {
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final JfxApplication jfxApplication = JfxApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();
         scene.incrementLoading();
     }
@@ -647,7 +647,7 @@ public abstract class EditorUtil {
      */
     @FXThread
     public static void decrementLoading() {
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final JfxApplication jfxApplication = JfxApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();
         scene.decrementLoading();
     }

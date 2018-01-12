@@ -61,7 +61,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     static {
         AVAILABLE_GLSL = ArrayFactory.newArray(String.class);
 
-        final Renderer renderer = EDITOR.getRenderer();
+        final Renderer renderer = JME_APPLICATION.getRenderer();
 
         final EnumSet<Caps> caps = renderer.getCaps();
         caps.stream().filter(cap -> cap.name().startsWith("GLSL"))

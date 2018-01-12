@@ -33,7 +33,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         if (audioKey == null) {
             audioNode.setAudioData(null, null);

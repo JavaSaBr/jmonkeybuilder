@@ -125,7 +125,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
         final CheckBox transformBox = getApplyLightingTransformCheckBox();
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         final Path file = element.getFile();
         final Path assetFile = getAssetFile(file);
@@ -162,7 +162,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
         if (file != null && !Files.isDirectory(file)) {
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
             final Path assetFile = getAssetFile(file);
 
             if (assetFile == null) {

@@ -2,7 +2,7 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
@@ -127,7 +127,7 @@ public class ClasspathManager {
     private ClasspathManager() {
         InitializeManager.valid(getClass());
 
-        coreScanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
+        coreScanner = ClassPathScannerFactory.newManifestScanner(JmeApplication.class, "Class-Path");
         coreScanner.setUseSystemClasspath(true);
         coreScanner.scan(path -> {
 
@@ -206,8 +206,8 @@ public class ClasspathManager {
     @FromAnyThread
     private void updateLibraries() {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final URLClassLoader currentClassLoader = getLibrariesLoader();
 
         if (currentClassLoader != null) {
@@ -235,8 +235,8 @@ public class ClasspathManager {
     @FromAnyThread
     private void updateClasses() {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final URLClassLoader currentClassLoader = getClassesLoader();
 
         if (currentClassLoader != null) {
@@ -276,8 +276,8 @@ public class ClasspathManager {
     @FromAnyThread
     public synchronized void loadLocalLibraries(@NotNull final Array<Path> libraries) {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalLibrariesLoader();
 
         if (currentClassLoader != null) {
@@ -319,8 +319,8 @@ public class ClasspathManager {
     @FromAnyThread
     public synchronized void loadLocalClasses(@Nullable final Path output) {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final AssetManager assetManager = jmeApplication.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalClassesLoader();
 
         if (currentClassLoader != null) {

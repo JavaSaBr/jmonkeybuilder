@@ -90,7 +90,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         loadedModel.setUserData(LOADED_MODEL_KEY, true);
 

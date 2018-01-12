@@ -48,7 +48,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
         EXECUTOR_MANAGER.addJMETask(() -> {
             parent.attachChildAt(newChild, 0);
 
-            final TonegodTranslucentBucketFilter filter = EDITOR.getTranslucentBucketFilter();
+            final TonegodTranslucentBucketFilter filter = JME_APPLICATION.getTranslucentBucketFilter();
             filter.refresh();
 
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, newChild, 0, needSelect));

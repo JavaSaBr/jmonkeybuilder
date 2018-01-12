@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.tree.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
@@ -42,13 +42,13 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * The FX application of this Editor.
      */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * The Editor.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The component of the node tree.

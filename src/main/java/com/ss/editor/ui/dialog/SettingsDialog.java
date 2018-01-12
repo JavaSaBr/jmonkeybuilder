@@ -6,8 +6,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -72,10 +72,10 @@ public class SettingsDialog extends EditorDialog {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    private static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     static {
         ANISOTROPYCS.add(0);
@@ -1489,10 +1489,10 @@ public class SettingsDialog extends EditorDialog {
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
+            final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
             fxaaFilter.setEnabled(editorConfig.isFXAA());
 
-            final ToneMapFilter filter = EDITOR.getToneMapFilter();
+            final ToneMapFilter filter = JME_APPLICATION.getToneMapFilter();
             filter.setEnabled(editorConfig.isToneMapFilter());
             filter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         });
@@ -1502,7 +1502,7 @@ public class SettingsDialog extends EditorDialog {
             final ClasspathManager classpathManager = ClasspathManager.getInstance();
             classpathManager.reload();
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
             assetManager.clearCache();
         }
 

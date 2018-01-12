@@ -102,7 +102,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
         final Node customSkyNode = getCustomSkyNode();
         customSkyNode.detachAllChildren();
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
         translucentBucketFilter.refresh();
     }
 
@@ -167,7 +167,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
             final Array<Spatial> customSky = getCustomSky();
             customSky.forEach(spatial -> customSkyNode.attachChild(spatial.clone(false)));
 
-            EDITOR.updateLightProbe(probeHandler);
+            JME_APPLICATION.updateLightProbe(probeHandler);
         }
 
         frame++;

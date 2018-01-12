@@ -71,10 +71,10 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
             getModelNode().attachChild(currentModel);
         }
 
-        final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
+        final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
         fxaaFilter.setEnabled(false);
 
-        final ToneMapFilter toneMapFilter = EDITOR.getToneMapFilter();
+        final ToneMapFilter toneMapFilter = JME_APPLICATION.getToneMapFilter();
         toneMapFilter.setEnabled(false);
     }
 
@@ -91,10 +91,10 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
 
-        final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
+        final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
         fxaaFilter.setEnabled(editorConfig.isFXAA());
 
-        final ToneMapFilter toneMapFilter = EDITOR.getToneMapFilter();
+        final ToneMapFilter toneMapFilter = JME_APPLICATION.getToneMapFilter();
         toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
     }
 
@@ -110,7 +110,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
 
     @JMEThread
     private void addAppStateImpl(@NotNull final SceneAppState appState) {
-        final AppStateManager stateManager = EDITOR.getStateManager();
+        final AppStateManager stateManager = JME_APPLICATION.getStateManager();
         stateManager.attach(appState);
     }
 
@@ -126,7 +126,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
 
     @JMEThread
     private void removeAppStateImpl(@NotNull final SceneAppState appState) {
-        final AppStateManager stateManager = EDITOR.getStateManager();
+        final AppStateManager stateManager = JME_APPLICATION.getStateManager();
         stateManager.detach(appState);
     }
 
@@ -142,7 +142,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
 
     @JMEThread
     private void addFilterImpl(@NotNull final SceneFilter sceneFilter) {
-        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
+        final FilterPostProcessor postProcessor = JME_APPLICATION.getPostProcessor();
         postProcessor.addFilter(sceneFilter.get());
     }
 
@@ -158,7 +158,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
 
     @JMEThread
     private void removeFilterImpl(@NotNull final SceneFilter sceneFilter) {
-        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
+        final FilterPostProcessor postProcessor = JME_APPLICATION.getPostProcessor();
         postProcessor.removeFilter(sceneFilter.get());
     }
 

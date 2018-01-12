@@ -48,7 +48,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
         final AudioTreeNode audioModelNode = (AudioTreeNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 

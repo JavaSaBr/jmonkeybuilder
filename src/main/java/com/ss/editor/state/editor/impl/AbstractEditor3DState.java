@@ -2,7 +2,7 @@ package com.ss.editor.state.editor.impl;
 
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.scene.Node;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.Editor3DState;
@@ -37,7 +37,7 @@ public abstract class AbstractEditor3DState<T extends FileEditor> extends Abstra
      * The constant EDITOR.
      */
     @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The owner editor.

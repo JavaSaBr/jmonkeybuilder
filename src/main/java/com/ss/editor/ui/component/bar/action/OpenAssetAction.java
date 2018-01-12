@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -27,7 +27,7 @@ public class OpenAssetAction extends MenuItem {
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    private static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * Instantiates a new Open asset action.

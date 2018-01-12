@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.renderer.queue.GeometryList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -40,7 +40,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      * The constant JFX_APPLICATION.
      */
     @NotNull
-    public static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    public static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
 
     /**
      * The consumer of changes.

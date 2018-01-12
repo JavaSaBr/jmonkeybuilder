@@ -1,6 +1,6 @@
 package com.ss.editor.remote.control.client;
 
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
@@ -72,6 +72,6 @@ public class OpenFileClientCommand extends ClientCommand {
      */
     private void openFile(@NotNull final Path fileToOpen) {
         FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
-        JFXApplication.getInstance().requestFocus();
+        JfxApplication.getInstance().requestFocus();
     }
 }
