@@ -313,7 +313,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
 
         validateFileName();
 
-        EXECUTOR_MANAGER.addFXTask(getFileNameField()::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(getFileNameField()::requestFocus);
     }
 
     @FxThread

@@ -575,7 +575,7 @@ public class SceneFileEditor extends
             layerNodeTree.notifyAdded((Spatial) added);
         }
 
-        EXECUTOR_MANAGER.addJMETask(() -> getCurrentModel().notifyAdded(added));
+        EXECUTOR_MANAGER.addJmeTask(() -> getCurrentModel().notifyAdded(added));
     }
 
     @Override
@@ -591,7 +591,7 @@ public class SceneFileEditor extends
             layerNodeTree.notifyRemoved((Spatial) removed);
         }
 
-        EXECUTOR_MANAGER.addJMETask(() -> getCurrentModel().notifyRemoved(removed));
+        EXECUTOR_MANAGER.addJmeTask(() -> getCurrentModel().notifyRemoved(removed));
     }
 
     @Override
@@ -701,14 +701,14 @@ public class SceneFileEditor extends
     @FxThread
     public void notifyHided() {
         super.notifyHided();
-        EXECUTOR_MANAGER.addJMETask(JME_APPLICATION::enableLightProbe);
+        EXECUTOR_MANAGER.addJmeTask(JME_APPLICATION::enableLightProbe);
     }
 
     @Override
     @FxThread
     public void notifyShowed() {
         super.notifyShowed();
-        EXECUTOR_MANAGER.addJMETask(JME_APPLICATION::disableLightProbe);
+        EXECUTOR_MANAGER.addJmeTask(JME_APPLICATION::disableLightProbe);
     }
 
     @Override

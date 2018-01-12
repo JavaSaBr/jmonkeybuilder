@@ -283,7 +283,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FromAnyThread
     public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown,
                                 final boolean isShiftDown, final boolean isButtonMiddleDown) {
-        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
+        EXECUTOR_MANAGER.addFxTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
     }
 
     /**
@@ -378,12 +378,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
             } catch (final IOException e) {
                 LOGGER.warning(this, e);
-                EXECUTOR_MANAGER.addFXTask(this::notifyFinishSaving);
+                EXECUTOR_MANAGER.addFxTask(this::notifyFinishSaving);
             } finally {
                 JME_APPLICATION.asyncUnlock(stamp);
             }
 
-            EXECUTOR_MANAGER.addFXTask(this::postSave);
+            EXECUTOR_MANAGER.addFxTask(this::postSave);
         });
     }
 

@@ -659,7 +659,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
                 EditorUtil.handleException(LOGGER, this, e);
             }
 
-            EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
         });
     }
 

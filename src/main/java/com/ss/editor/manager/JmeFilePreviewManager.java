@@ -239,7 +239,7 @@ public class JmeFilePreviewManager extends AbstractControl {
         this.modelNode = new Node("Model Node");
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> {
+        executorManager.addFxTask(() -> {
 
             final JfxApplication application = JfxApplication.getInstance();
             final EditorFXScene scene = application.getScene();

@@ -6,6 +6,7 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
 import com.ss.editor.state.editor.Editor3DState;
 import org.jetbrains.annotations.NotNull;
@@ -52,13 +53,14 @@ public class ModelEditorBulletState extends EditableBulletSceneAppState implemen
      * @param spatial      the spatial.
      * @param physicsSpace the new physical space or null.
      */
+    @JmeThread
     private void updateNode(@NotNull final Spatial spatial, @Nullable final PhysicsSpace physicsSpace) {
-        spatial.depthFirstTraversal(spatial1 -> {
+        spatial.depthFirstTraversal(sub -> {
 
-            final int numControls = spatial1.getNumControls();
+            final int numControls = sub.getNumControls();
 
             for (int i = 0; i < numControls; i++) {
-                final Control control = spatial1.getControl(i);
+                final Control control = sub.getControl(i);
                 if (control instanceof PhysicsControl) {
                     ((PhysicsControl) control).setPhysicsSpace(physicsSpace);
                 }

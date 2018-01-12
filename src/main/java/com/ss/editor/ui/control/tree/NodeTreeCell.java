@@ -347,7 +347,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
         final ContextMenu contextMenu = nodeTree.getContextMenu(item);
         if (contextMenu == null) return;
 
-        EXECUTOR_MANAGER.addFXTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
+        EXECUTOR_MANAGER.addFxTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
     }
 
     /**

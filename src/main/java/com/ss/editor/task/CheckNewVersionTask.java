@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * The task to check new versions of the Editor.
+ * The task to check new versions of the editor.
  *
  * @author JavaSaBr
  */

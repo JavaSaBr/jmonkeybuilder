@@ -7,6 +7,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.editing.EditingControl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,24 +20,24 @@ import org.jetbrains.annotations.Nullable;
 public class EditingUtils {
 
     /**
-     * Get an editing control of a cursor node.
+     * Get an editing control of the cursor node.
      *
      * @param cursorNode the cursor node.
      * @return the editing control or null.
      */
-    @Nullable
-    public static EditingControl getEditingControl(@NotNull final Node cursorNode) {
+    @FromAnyThread
+    public static @Nullable EditingControl getEditingControl(@NotNull final Node cursorNode) {
         return cursorNode.getControl(EditingControl.class);
     }
 
     /**
-     * Get an edit model of a cursor node.
+     * Get an edit model of the cursor node.
      *
      * @param cursorNode the cursor node.
      * @return the edited model or null.
      */
-    @Nullable
-    public static Spatial getEditedModel(@NotNull final Node cursorNode) {
+    @FromAnyThread
+    public static @Nullable Spatial getEditedModel(@NotNull final Node cursorNode) {
         final EditingControl control = getEditingControl(cursorNode);
         return control == null ? null : control.getEditedModel();
     }
@@ -47,19 +48,20 @@ public class EditingUtils {
      * @param control the editing control.
      * @return the edited model or null.
      */
-    @Nullable
-    public static Spatial getEditedModel(@Nullable final EditingControl control) {
+    @FromAnyThread
+    public static @Nullable Spatial getEditedModel(@Nullable final EditingControl control) {
         return control == null ? null : control.getEditedModel();
     }
 
     /**
-     * Check that a point is contains in a geometry.
+     * Check that the point is contains in a geometry.
      *
      * @param geometry the geometry.
      * @param x        the X coord.
      * @param y        the Y coord.
      * @return true of the mesh contains the point.
      */
+    @FromAnyThread
     public static boolean isContains(@NotNull final Geometry geometry, final float x, final float y) {
 
         final Mesh mesh = geometry.getMesh();
@@ -81,13 +83,14 @@ public class EditingUtils {
      * The farther from the center, the less the height will be.
      * This produces a linear height falloff.
      *
-     * @param radius       of the tool
-     * @param heightFactor potential height value to be adjusted
-     * @param x            location
-     * @param z            location
-     * @return the adjusted height value
+     * @param radius       of the tool.
+     * @param heightFactor potential height value to be adjusted.
+     * @param x            location.
+     * @param z            location.
+     * @return the adjusted height value.
      */
-    public static float calculateHeight(float radius, float heightFactor, float x, float z) {
+    @FromAnyThread
+    public static float calculateHeight(final float radius, final float heightFactor, final float x, final float z) {
         float val = calculateRadiusPercent(radius, x, z);
         return heightFactor * val;
     }
@@ -95,52 +98,57 @@ public class EditingUtils {
     /**
      * Calculate radius percent float.
      *
-     * @param radius the radius
-     * @param x      the x
-     * @param z      the z
-     * @return the float
+     * @param radius the radius.
+     * @param x      the x.
+     * @param z      the z.
+     * @return the float.
      */
-    public static float calculateRadiusPercent(float radius, float x, float z) {
+    @FromAnyThread
+    public static float calculateRadiusPercent(final float radius, final float x, final float z) {
         // find percentage for each 'unit' in radius
-        Vector2f point = new Vector2f(x,z);
+        final Vector2f point = LocalObjects.get().nextVector(x, z);
         float val = Math.abs(point.length()) / radius;
         val = 1f - val;
         return val;
     }
 
     /**
-     * Float equals boolean.
+     * Compare the two float values by the epsilon.
      *
-     * @param a       the a
-     * @param b       the b
-     * @param epsilon the epsilon
-     * @return the boolean
+     * @param first   the first.
+     * @param second  the second.
+     * @param epsilon the epsilon.
+     * @return true if the values are equals.
      */
-    public static boolean floatEquals(float a, float b, float epsilon) {
-        return a == b || Math.abs(a - b) < epsilon;
+    @FromAnyThread
+    public static boolean floatEquals(final float first, final float second, final float epsilon) {
+        return first == second || Math.abs(first - second) < epsilon;
     }
 
     /**
-     * Float less than boolean.
+     * Compare the two float values by the epsilon.
      *
-     * @param a       the a
-     * @param b       the b
-     * @param epsilon the epsilon
-     * @return the boolean
+     * @param first   the first.
+     * @param second  the second.
+     * @param epsilon the epsilon.
+     * @return true if the first value is less than the second value.
      */
-    public static boolean floatLessThan(float a, float b, float epsilon) {
-        return b - a > epsilon;
+    @FromAnyThread
+    public static boolean floatLessThan(final float first, final float second, final float epsilon) {
+        return second - first > epsilon;
     }
 
     /**
-     * Float greater than boolean.
+     * Compare the two float values by the epsilon.
      *
-     * @param a       the a
-     * @param b       the b
-     * @param epsilon the epsilon
+     * @param first   the first.
+     * @param second  the second.
+     * @param epsilon the epsilon.
      * @return the boolean
+     * @return true if the first value is greater than the second value.
      */
-    public static boolean floatGreaterThan(float a, float b, float epsilon) {
-        return a - b > epsilon;
+    @FromAnyThread
+    public static boolean floatGreaterThan(final float first, final float second, final float epsilon) {
+        return first - second > epsilon;
     }
 }

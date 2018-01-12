@@ -302,7 +302,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         newParentTreeNode.notifyChildAdded(node);
 
-        EXECUTOR_MANAGER.addFXTask(() -> select(node.getElement()));
+        EXECUTOR_MANAGER.addFxTask(() -> select(node.getElement()));
     }
 
     /**

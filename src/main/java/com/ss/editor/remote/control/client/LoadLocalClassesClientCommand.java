@@ -36,6 +36,6 @@ public class LoadLocalClassesClientCommand extends ClientCommand {
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
         classpathManager.loadLocalClasses(output);
 
-        EXECUTOR_MANAGER.addJMETask(() -> JME_APPLICATION.getAssetManager().clearCache());
+        EXECUTOR_MANAGER.addJmeTask(() -> JME_APPLICATION.getAssetManager().clearCache());
     }
 }

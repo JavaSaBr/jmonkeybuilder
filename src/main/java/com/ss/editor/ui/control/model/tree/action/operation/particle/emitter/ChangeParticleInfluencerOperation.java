@@ -40,7 +40,7 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> switchInfluencer(editor));
+        EXECUTOR_MANAGER.addJmeTask(() -> switchInfluencer(editor));
     }
 
     private void switchInfluencer(final @NotNull ModelChangeConsumer editor) {
@@ -50,11 +50,11 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
         prevInfluencer = influencer;
         emitter.setParticleInfluencer(newInfluencer);
 
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(emitter, prevInfluencer, newInfluencer, true, true));
+        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXReplaced(emitter, prevInfluencer, newInfluencer, true, true));
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> switchInfluencer(editor));
+        EXECUTOR_MANAGER.addJmeTask(() -> switchInfluencer(editor));
     }
 }

@@ -7,6 +7,7 @@ import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
 import com.jme3.asset.AssetManager;
+import com.jme3.input.InputManager;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -88,6 +89,16 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static @NotNull AssetManager getAssetManager() {
         return JmeApplication.getInstance().getAssetManager();
+    }
+
+    /**
+     * Get the input manager.
+     *
+     * @return the input manager.
+     */
+    @FromAnyThread
+    public static @NotNull InputManager getInputManager() {
+        return JmeApplication.getInstance().getInputManager();
     }
 
     /**
@@ -405,7 +416,7 @@ public abstract class EditorUtil {
         }
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> {
+        executorManager.addFxTask(() -> {
 
             GAnalytics.sendException(e, false);
 
@@ -625,7 +636,7 @@ public abstract class EditorUtil {
 
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
-        try (final ObjectInputStream in = new SSObjectInputStream(bin)) {
+        try (final ObjectInputStream in = new ExtObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
         } catch (final ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);

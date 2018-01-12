@@ -149,9 +149,9 @@ public class JavaFXImageManager {
         this.smallImageCache = DictionaryFactory.newIntegerDictionary();
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE,
+        executorManager.addFxTask(() -> FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE,
                 event -> processEvent((DeletedFileEvent) event)));
-        executorManager.addFXTask(() -> FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE,
+        executorManager.addFxTask(() -> FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE,
                 event -> processEvent((ChangedCurrentAssetFolderEvent) event)));
     }
 

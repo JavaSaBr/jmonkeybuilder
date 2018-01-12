@@ -252,7 +252,7 @@ public class SettingsDialog extends EditorDialog {
         } finally {
             setIgnoreListeners(false);
         }
-        EXECUTOR_MANAGER.addFXTask(() -> getDialog().sizeToScene());
+        EXECUTOR_MANAGER.addFxTask(() -> getDialog().sizeToScene());
     }
 
     /**
@@ -1487,7 +1487,7 @@ public class SettingsDialog extends EditorDialog {
             sceneProcessor.reshape();
         }
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
             fxaaFilter.setEnabled(editorConfig.isFXAA());

@@ -142,7 +142,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
             throw new RuntimeException(e);
         }
 
-        EXECUTOR_MANAGER.addFXTask(this::loadState);
+        EXECUTOR_MANAGER.addFxTask(this::loadState);
     }
 
     /**

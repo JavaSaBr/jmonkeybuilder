@@ -147,6 +147,8 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     /**
+     * Get the test box.
+     *
      * @return the test box.
      */
     @JmeThread
@@ -155,6 +157,8 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     /**
+     * Get the test quad.
+     *
      * @return the test quad.
      */
     @JmeThread
@@ -163,6 +167,8 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
     }
 
     /**
+     * Get the test sphere.
+     *
      * @return the test sphere.
      */
     @JmeThread
@@ -177,7 +183,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      */
     @FromAnyThread
     public void updateMaterial(@NotNull final Material material) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateMaterialImpl(material));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateMaterialImpl(material));
     }
 
     /**
@@ -225,7 +231,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      */
     @FromAnyThread
     public void changeMode(@NotNull final ModelType modelType) {
-        EXECUTOR_MANAGER.addJMETask(() -> changeModeImpl(modelType));
+        EXECUTOR_MANAGER.addJmeTask(() -> changeModeImpl(modelType));
     }
 
     /**
@@ -264,7 +270,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      */
     @FromAnyThread
     public void changeBucketType(@NotNull final Bucket bucket) {
-        EXECUTOR_MANAGER.addJMETask(() -> changeBucketTypeImpl(bucket));
+        EXECUTOR_MANAGER.addJmeTask(() -> changeBucketTypeImpl(bucket));
     }
 
     /**
@@ -349,7 +355,7 @@ public class BaseMaterialEditor3DState<T extends BaseMaterialFileEditor> extends
      */
     @FromAnyThread
     public void updateLightEnabled(final boolean enabled) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateLightEnabledImpl(enabled));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateLightEnabledImpl(enabled));
     }
 
     /**

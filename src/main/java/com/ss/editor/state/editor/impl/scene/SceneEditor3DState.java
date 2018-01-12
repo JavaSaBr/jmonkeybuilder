@@ -105,7 +105,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     @FromAnyThread
     public void addAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addJMETask(() -> addAppStateImpl(appState));
+        EXECUTOR_MANAGER.addJmeTask(() -> addAppStateImpl(appState));
     }
 
     @JmeThread
@@ -121,7 +121,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     @FromAnyThread
     public void removeAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addJMETask(() -> removeAppStateImpl(appState));
+        EXECUTOR_MANAGER.addJmeTask(() -> removeAppStateImpl(appState));
     }
 
     @JmeThread
@@ -137,7 +137,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     @FromAnyThread
     public void addFilter(@NotNull final SceneFilter sceneFilter) {
-        EXECUTOR_MANAGER.addJMETask(() -> addFilterImpl(sceneFilter));
+        EXECUTOR_MANAGER.addJmeTask(() -> addFilterImpl(sceneFilter));
     }
 
     @JmeThread
@@ -153,7 +153,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     @FromAnyThread
     public void removeFilter(@NotNull final SceneFilter sceneFilter) {
-        EXECUTOR_MANAGER.addJMETask(() -> removeFilterImpl(sceneFilter));
+        EXECUTOR_MANAGER.addJmeTask(() -> removeFilterImpl(sceneFilter));
     }
 
     @JmeThread
@@ -201,7 +201,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     @FromAnyThread
     public void updateLightShowed(final boolean showed) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateLightShowedImpl(showed));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateLightShowedImpl(showed));
     }
 
     /**
@@ -230,7 +230,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      */
     @FromAnyThread
     public void updateAudioShowed(final boolean showed) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateAudioShowedImpl(showed));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateAudioShowedImpl(showed));
     }
 
     /**

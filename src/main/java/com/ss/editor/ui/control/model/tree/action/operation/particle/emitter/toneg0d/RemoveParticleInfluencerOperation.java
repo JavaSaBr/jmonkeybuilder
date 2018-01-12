@@ -50,25 +50,25 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             emitterNode.killAllParticles();
             emitterNode.removeInfluencer(influencer);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(new Toneg0dParticleInfluencers(emitterNode), influencer));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(new Toneg0dParticleInfluencers(emitterNode), influencer));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             emitterNode.killAllParticles();
             emitterNode.addInfluencer(influencer, childIndex);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(new Toneg0dParticleInfluencers(emitterNode), influencer, childIndex, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(new Toneg0dParticleInfluencers(emitterNode), influencer, childIndex, false));
         });
     }
 }

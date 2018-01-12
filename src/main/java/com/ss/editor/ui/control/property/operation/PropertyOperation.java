@@ -66,20 +66,20 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     @Override
     @FxThread
     protected void redoImpl(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, newValue);
             editor.notifyJMEChangeProperty(target, propertyName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 
     @Override
     @FxThread
     protected void undoImpl(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, oldValue);
             editor.notifyJMEChangeProperty(target, propertyName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 

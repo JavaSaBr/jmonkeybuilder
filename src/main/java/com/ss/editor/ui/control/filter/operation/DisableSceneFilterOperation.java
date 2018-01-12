@@ -30,17 +30,17 @@ public class DisableSceneFilterOperation extends AbstractEditorOperation<SceneCh
 
     @Override
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneFilter.setEnabled(false);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangedFilter(sceneFilter));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedFilter(sceneFilter));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneFilter.setEnabled(true);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangedFilter(sceneFilter));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedFilter(sceneFilter));
         });
     }
 }

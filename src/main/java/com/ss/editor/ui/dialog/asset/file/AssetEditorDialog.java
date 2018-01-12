@@ -161,7 +161,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
         FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
         FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
 
-        EXECUTOR_MANAGER.addFXTask(resourceTree::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
     }
 
     /**

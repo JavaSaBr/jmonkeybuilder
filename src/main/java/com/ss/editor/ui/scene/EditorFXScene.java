@@ -251,7 +251,7 @@ public class EditorFXScene extends Scene {
         container.setDisable(false);
 
         if (focused != null) {
-            EXECUTOR_MANAGER.addFXTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> {
                 focused.requestFocus();
                 focused = null;
             });

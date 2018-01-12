@@ -83,7 +83,7 @@ public class EditorOperationControl {
             executeImpl(operation);
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(() -> executeImpl(operation));
+            executorManager.addFxTask(() -> executeImpl(operation));
         }
     }
 
@@ -117,7 +117,7 @@ public class EditorOperationControl {
             undoImpl();
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(this::undoImpl);
+            executorManager.addFxTask(this::undoImpl);
         }
     }
 
@@ -148,7 +148,7 @@ public class EditorOperationControl {
             redoImpl();
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(this::redoImpl);
+            executorManager.addFxTask(this::redoImpl);
         }
     }
 
@@ -180,7 +180,7 @@ public class EditorOperationControl {
             clearImpl();
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(this::clearImpl);
+            executorManager.addFxTask(this::clearImpl);
         }
     }
 

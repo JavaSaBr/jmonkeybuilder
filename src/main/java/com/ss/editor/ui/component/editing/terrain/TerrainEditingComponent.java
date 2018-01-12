@@ -840,7 +840,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeLevelControlSmoothly(@NotNull final Boolean newValue) {
         if (state != null) state.setLevelSmoothly(newValue);
-        EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setPrecision(!newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setPrecision(!newValue));
     }
 
     /**
@@ -849,7 +849,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeLevelControlUseMarker(@NotNull final Boolean newValue) {
         if (state != null) state.setLevelUseMarker(newValue);
-        EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setUseMarker(newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setUseMarker(newValue));
     }
 
     /**
@@ -858,7 +858,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeLevelControlLevel(@NotNull final Float newLevel) {
         if (state != null) state.setLevelValue(newLevel);
-        EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setLevel(newLevel));
+        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setLevel(newLevel));
     }
 
     /**
@@ -867,7 +867,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeSlopeControlSmoothly(@NotNull final Boolean newValue) {
         if (state != null) state.setSlopeSmoothly(newValue);
-        EXECUTOR_MANAGER.addJMETask(() -> getSlopeToolControl().setPrecision(!newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getSlopeToolControl().setPrecision(!newValue));
     }
 
     /**
@@ -876,7 +876,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeSlopeControlLimited(@NotNull final Boolean newValue) {
         if (state != null) state.setSlopeLimited(newValue);
-        EXECUTOR_MANAGER.addJMETask(() -> getSlopeToolControl().setLock(newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getSlopeToolControl().setLock(newValue));
     }
 
     /**
@@ -885,7 +885,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeRoughControlScale(@NotNull final Float newScale) {
         if (state != null) state.setRoughtScale(newScale);
-        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setScale(newScale));
+        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setScale(newScale));
     }
 
     /**
@@ -894,7 +894,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeRoughControlFrequency(@NotNull final Float newFrequency) {
         if (state != null) state.setRoughtFrequency(newFrequency);
-        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setFrequency(newFrequency));
+        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setFrequency(newFrequency));
     }
 
     /**
@@ -903,7 +903,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeRoughControlLacunarity(@NotNull final Float newLacunarity) {
         if (state != null) state.setRoughtLacunarity(newLacunarity);
-        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setLacunarity(newLacunarity));
+        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setLacunarity(newLacunarity));
     }
 
     /**
@@ -912,7 +912,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeRoughControlOctaves(@NotNull final Float newOctaves) {
         if (state != null) state.setRoughtOctaves(newOctaves);
-        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setOctaves(newOctaves));
+        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setOctaves(newOctaves));
     }
 
     /**
@@ -921,7 +921,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeRoughControlRoughness(@NotNull final Float newRoughness) {
         if (state != null) state.setRoughtRoughness(newRoughness);
-        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setRoughness(newRoughness));
+        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setRoughness(newRoughness));
     }
 
     /**
@@ -930,7 +930,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeBrushSize(@NotNull final Float size) {
         if (state != null) state.setBrushSize(size);
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(size, TerrainToolControl::setBrushSize);
         });
@@ -942,7 +942,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FromAnyThread
     private void changeBrushPower(@NotNull final Float power) {
         if (state != null) state.setBrushPower(power);
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(power, TerrainToolControl::setBrushPower);
         });
@@ -1076,7 +1076,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         if (!isShowed()) return;
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             final Node cursorNode = getCursorNode();
             cursorNode.removeControl(TerrainToolControl.class);
             cursorNode.addControl(toolControl);
@@ -1144,13 +1144,13 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @Override
     public void notifyShowed() {
         super.notifyShowed();
-        EXECUTOR_MANAGER.addJMETask(() -> getCursorNode().addControl(getToolControl()));
+        EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().addControl(getToolControl()));
     }
 
     @Override
     public void notifyHided() {
         super.notifyHided();
-        EXECUTOR_MANAGER.addJMETask(() -> getCursorNode().removeControl(TerrainToolControl.class));
+        EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().removeControl(TerrainToolControl.class));
     }
 
     /**

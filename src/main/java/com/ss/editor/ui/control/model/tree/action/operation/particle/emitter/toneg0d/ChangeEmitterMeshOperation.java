@@ -41,7 +41,7 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> switchShape(editor));
+        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 
     private void switchShape(final @NotNull ModelChangeConsumer editor) {
@@ -51,11 +51,11 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
         prevShape = emitterMesh.getMesh();
         emitterNode.changeEmitterShapeMesh(newShape);
 
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(emitterNode, emitterMesh, emitterMesh, true, true));
+        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXReplaced(emitterNode, emitterMesh, emitterMesh, true, true));
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> switchShape(editor));
+        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 }

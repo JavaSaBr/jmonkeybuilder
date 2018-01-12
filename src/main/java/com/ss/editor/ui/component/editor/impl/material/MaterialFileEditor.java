@@ -108,10 +108,10 @@ public class MaterialFileEditor extends
         final Material currentMaterial = getCurrentMaterial();
         final Path file = event.getFile();
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
             if (newMaterial != null) {
-                EXECUTOR_MANAGER.addFXTask(() -> reload(newMaterial));
+                EXECUTOR_MANAGER.addFxTask(() -> reload(newMaterial));
             }
         });
     }
@@ -179,7 +179,7 @@ public class MaterialFileEditor extends
 
         final MatParam matParam = param.get();
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final EditorConfig config = EditorConfig.getInstance();
             final Path assetFile = notNull(getAssetFile(path));

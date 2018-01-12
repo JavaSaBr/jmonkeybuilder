@@ -304,8 +304,8 @@ public class TextureLayerSettings extends VBox {
         }
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(this::refreshHeight);
-        executorManager.addFXTask(this::refreshAddButton);
+        executorManager.addFxTask(this::refreshHeight);
+        executorManager.addFxTask(this::refreshAddButton);
     }
 
     /**

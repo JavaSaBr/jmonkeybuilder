@@ -41,26 +41,26 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             parent.killAllParticles();
             parent.addInfluencer(influencer);
             parent.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(new Toneg0dParticleInfluencers(parent),
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(new Toneg0dParticleInfluencers(parent),
                     influencer, -1, true));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             parent.killAllParticles();
             parent.removeInfluencer(influencer);
             parent.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(new Toneg0dParticleInfluencers(parent), influencer));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(new Toneg0dParticleInfluencers(parent), influencer));
         });
     }
 }

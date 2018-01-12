@@ -103,7 +103,7 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
         resourceTree.fill(newRoot);
         resourceTree.expandAll();
 
-        EXECUTOR_MANAGER.addFXTask(resourceTree::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
     }
 
     @Override

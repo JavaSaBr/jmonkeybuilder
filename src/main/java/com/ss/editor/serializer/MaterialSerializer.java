@@ -13,6 +13,7 @@ import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.TextureCubeMap;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,7 @@ public class MaterialSerializer {
      * @param material the material
      * @return the string
      */
+    @FromAnyThread
     public static @NotNull String serializeToString(@NotNull final Material material) {
 
         final MaterialDef materialDef = material.getMaterialDef();
@@ -83,6 +85,7 @@ public class MaterialSerializer {
      * @param builder  the builder.
      * @param matParam the material parameter.
      */
+    @FromAnyThread
     private static void addMaterialParameter(@NotNull final StringBuilder builder, @NotNull final MatParam matParam) {
 
         final String value = toString(matParam.getVarType(), matParam.getValue());
@@ -97,6 +100,7 @@ public class MaterialSerializer {
                 .append('\n');
     }
 
+    @FromAnyThread
     private static @NotNull String toString(@NotNull final VarType varType, @NotNull final Object value) {
 
         switch (varType) {

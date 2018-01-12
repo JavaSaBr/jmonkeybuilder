@@ -30,17 +30,17 @@ public class EnableAppStateOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             appState.setEnabled(true);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangedAppState(appState));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedAppState(appState));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             appState.setEnabled(false);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangedAppState(appState));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedAppState(appState));
         });
     }
 }

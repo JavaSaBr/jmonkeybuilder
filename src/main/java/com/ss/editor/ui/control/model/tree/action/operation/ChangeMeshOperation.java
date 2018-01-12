@@ -47,17 +47,17 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             geometry.setMesh(newMesh);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(geometry, newMesh, "mesh"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(geometry, newMesh, "mesh"));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             geometry.setMesh(oldMesh);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(geometry, oldMesh, "mesh"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(geometry, oldMesh, "mesh"));
         });
     }
 }

@@ -325,7 +325,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         final LodGenerator generator = new LodGenerator(geometry);
         final VertexBuffer[] newLodLevels = generator.computeLods(resultMethod, values);
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
+        EXECUTOR_MANAGER.addFxTask(() -> {
 
             final NodeTree<?> nodeTree = getNodeTree();
             final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());

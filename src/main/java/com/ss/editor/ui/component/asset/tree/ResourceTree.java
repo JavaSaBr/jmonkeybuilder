@@ -235,7 +235,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void processChangedExpands(@NotNull final Number newValue) {
 
         if (isLazyMode()) {
-            EXECUTOR_MANAGER.addFXTask(this::lazyLoadChildren);
+            EXECUTOR_MANAGER.addFxTask(this::lazyLoadChildren);
         }
 
         final IntObjectConsumer<ResourceTree> expandHandler = getExpandHandler();
@@ -275,7 +275,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final Array<ResourceElement> children = element.getChildren(extensionFilter, isOnlyFolders());
         children.sort(NAME_COMPARATOR);
 
-        EXECUTOR_MANAGER.addFXTask(() -> lazyLoadChildren(treeItem, children, callback));
+        EXECUTOR_MANAGER.addFxTask(() -> lazyLoadChildren(treeItem, children, callback));
     }
 
     /**
@@ -566,7 +566,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             cleanup(newRoot);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
+        EXECUTOR_MANAGER.addFxTask(() -> {
             setRoot(newRoot);
 
             final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
@@ -605,7 +605,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             expandedElements.writeUnlock(stamp);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
+        EXECUTOR_MANAGER.addFxTask(() -> {
             setRoot(newRoot);
             restoreSelection();
 
@@ -619,7 +619,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FromAnyThread
     private void restoreSelection() {
-        EXECUTOR_MANAGER.addFXTask(() -> {
+        EXECUTOR_MANAGER.addFxTask(() -> {
 
             final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
             final long stamp = selectedElements.writeLock();
@@ -1005,7 +1005,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     @FromAnyThread
     private void scrollToAndSelect(@NotNull final TreeItem<ResourceElement> treeItem) {
-        EXECUTOR_MANAGER.addFXTask(() -> {
+        EXECUTOR_MANAGER.addFxTask(() -> {
             final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
             selectionModel.clearSelection();
             selectionModel.select(treeItem);

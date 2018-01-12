@@ -80,7 +80,7 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             for (int i = 0, length = control.getNumWheels(); i < length; i++) {
                 final VehicleWheel wheel = control.getWheel(i);
@@ -94,20 +94,20 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
 
             this.createdWheel = null;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(control, toRemove));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(control, toRemove));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
                     wheelRadius, isFrontWheel);
 
             this.createdWheel = vehicleWheel;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1, false));
         });
     }
 }

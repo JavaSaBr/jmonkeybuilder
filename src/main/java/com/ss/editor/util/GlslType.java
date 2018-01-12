@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public enum GLSLType {
+public enum GlslType {
     BOOL("bool", "Bool"),
     BOOL_VEC_2("bvec2", "Bool vec2"),
     BOOL_VEC_3("bvec3", "Bool vec3"),
@@ -35,16 +35,16 @@ public enum GLSLType {
     SAMPLER_CUBE("samplerCube", "Cube Texture");
 
     @NotNull
-    public static final GLSLType[] VALUES = values();
+    public static final GlslType[] VALUES = values();
 
     @NotNull
-    private static final ObjectDictionary<String, GLSLType> RAW_TYPE_TO_ENUM = DictionaryFactory.newObjectDictionary();
+    private static final ObjectDictionary<String, GlslType> RAW_TYPE_TO_ENUM = DictionaryFactory.newObjectDictionary();
 
     @NotNull
-    private static final ObjectDictionary<String, GLSLType> UI_NAME_TO_ENUM = DictionaryFactory.newObjectDictionary();
+    private static final ObjectDictionary<String, GlslType> UI_NAME_TO_ENUM = DictionaryFactory.newObjectDictionary();
 
     static {
-        for (final GLSLType glslType : VALUES) {
+        for (final GlslType glslType : VALUES) {
             RAW_TYPE_TO_ENUM.put(glslType.getRawType(), glslType);
             UI_NAME_TO_ENUM.put(glslType.getUIName(), glslType);
         }
@@ -57,7 +57,7 @@ public enum GLSLType {
      * @return the enum value.
      */
     @FromAnyThread
-    public static @NotNull GLSLType ofRawType(@NotNull final String rawType) {
+    public static @NotNull GlslType ofRawType(@NotNull final String rawType) {
         return notNull(RAW_TYPE_TO_ENUM.get(rawType));
     }
 
@@ -68,7 +68,7 @@ public enum GLSLType {
      * @return the enum value.
      */
     @FromAnyThread
-    public static @NotNull GLSLType ofUIName(@NotNull final String uiName) {
+    public static @NotNull GlslType ofUIName(@NotNull final String uiName) {
         return notNull(RAW_TYPE_TO_ENUM.get(uiName));
     }
 
@@ -84,7 +84,7 @@ public enum GLSLType {
     @NotNull
     private String uiName;
 
-    GLSLType(@NotNull final String rawType, @NotNull final String uiName) {
+    GlslType(@NotNull final String rawType, @NotNull final String uiName) {
         this.rawType = rawType;
         this.uiName = uiName;
     }

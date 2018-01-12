@@ -263,7 +263,7 @@ public class Stats3DState extends AbstractAppState implements Editor3DState {
 
         statistics.setEnabled(STATISTICS_ENABLED.incrementAndGet() > 0);
 
-        EXECUTOR_MANAGER.addFXTask(() -> FXUtils.addToPane(statsContainer, parent));
+        EXECUTOR_MANAGER.addFxTask(() -> FXUtils.addToPane(statsContainer, parent));
     }
 
     @Override
@@ -463,7 +463,7 @@ public class Stats3DState extends AbstractAppState implements Editor3DState {
         final int frameBuffersF = statsData[11];
         final int frameBuffersM = statsData[12];
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
+        EXECUTOR_MANAGER.addFxTask(() -> {
             getVerticesField().setText(Integer.toString(vertices));
             getTrianglesField().setText(Integer.toString(triangles));
             getUniformsField().setText(Integer.toString(uniforms));
@@ -484,7 +484,7 @@ public class Stats3DState extends AbstractAppState implements Editor3DState {
      * Update the FPS value.
      */
     private void updateFps(final int fps) {
-        EXECUTOR_MANAGER.addFXTask(() -> getFpsField().setText(Integer.toString(fps)));
+        EXECUTOR_MANAGER.addFxTask(() -> getFpsField().setText(Integer.toString(fps)));
     }
 
     @Override
@@ -494,6 +494,6 @@ public class Stats3DState extends AbstractAppState implements Editor3DState {
         final Statistics statistics = getStatistics();
         statistics.setEnabled(STATISTICS_ENABLED.decrementAndGet() == 0);
 
-        EXECUTOR_MANAGER.addFXTask(() -> FXUtils.removeFromParent(statsContainer, parent));
+        EXECUTOR_MANAGER.addFxTask(() -> FXUtils.removeFromParent(statsContainer, parent));
     }
 }

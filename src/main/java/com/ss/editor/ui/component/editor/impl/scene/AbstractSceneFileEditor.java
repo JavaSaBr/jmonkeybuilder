@@ -309,9 +309,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            EXECUTOR_MANAGER.addJMETask(() -> updateMaterial(file));
+            EXECUTOR_MANAGER.addJmeTask(() -> updateMaterial(file));
         } else if (MaterialUtils.isShaderFile(file) || MaterialUtils.isTextureFile(file)) {
-            EXECUTOR_MANAGER.addJMETask(() -> updateMaterials(file));
+            EXECUTOR_MANAGER.addJmeTask(() -> updateMaterials(file));
         }
     }
 
@@ -594,7 +594,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         }
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addJMETask(() -> EXECUTOR_MANAGER.addFXTask(() -> modelNodeTree.select(added)));
+            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.select(added)));
         }
     }
 
@@ -652,7 +652,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addJMETask(() -> EXECUTOR_MANAGER.addFXTask(() -> modelNodeTree.select(child)));
+            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.select(child)));
         }
     }
 
@@ -1090,7 +1090,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final Geometry geometry = editor3DState.getGeometryByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
@@ -1144,7 +1144,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final SceneLayer defaultLayer = getDefaultLayer(this);
             final LocalObjects local = LocalObjects.get();
@@ -1220,7 +1220,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      */
     @FromAnyThread
     public void notifyTransformed(@NotNull final Spatial spatial) {
-        EXECUTOR_MANAGER.addFXTask(() -> notifyTransformedImpl(spatial));
+        EXECUTOR_MANAGER.addFxTask(() -> notifyTransformedImpl(spatial));
     }
 
     /**

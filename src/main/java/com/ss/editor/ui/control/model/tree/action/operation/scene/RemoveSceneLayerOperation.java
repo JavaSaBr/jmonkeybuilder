@@ -60,11 +60,11 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             final Spatial currentModel = editor.getCurrentModel();
             currentModel.depthFirstTraversal(this::clean);
             sceneNode.removeLayer(layer);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(layersRoot, layer));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(layersRoot, layer));
         });
     }
 
@@ -79,12 +79,12 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.addLayer(layer);
             toRevert.forEach(spatial -> SceneLayer.setLayer(layer, spatial));
             toRevert.forEach(spatial -> spatial.setVisible(layer.isShowed()));
             toRevert.clear();
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(layersRoot, layer, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(layersRoot, layer, -1, false));
         });
     }
 }

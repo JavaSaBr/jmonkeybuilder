@@ -43,9 +43,9 @@ public class OpenFileClientCommand extends ClientCommand {
         final Path currentAsset = editorConfig.getCurrentAsset();
 
         if (currentAsset != null && assetPath.equals(currentAsset)) {
-            EXECUTOR_MANAGER.addFXTask(() -> openFile(fileToOpen));
+            EXECUTOR_MANAGER.addFxTask(() -> openFile(fileToOpen));
         } else {
-            EXECUTOR_MANAGER.addFXTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> {
 
                 final OpenAssetAction action = new OpenAssetAction();
                 action.openAssetFolder(assetPath);

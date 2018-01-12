@@ -26,7 +26,7 @@ public class UpdateClasspathAndAssetCacheAction extends MenuItem {
      * Update classpath and clear asset cache.
      */
     private void process() {
-        ExecutorManager.getInstance().addJMETask(() -> {
+        ExecutorManager.getInstance().addJmeTask(() -> {
 
             final ClasspathManager classpathManager = ClasspathManager.getInstance();
             classpathManager.reload();

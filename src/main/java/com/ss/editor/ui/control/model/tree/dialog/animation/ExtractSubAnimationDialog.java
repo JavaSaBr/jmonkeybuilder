@@ -215,7 +215,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
 
-        EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+        EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
     }
 
     @Override

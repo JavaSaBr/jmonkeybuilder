@@ -44,11 +44,6 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     @Nullable
     private AudioKey audioKey;
 
-    /**
-     * Create a file editor app state.
-     *
-     * @param fileEditor the editor.
-     */
     public AudioViewer3DState(@NotNull final AudioViewerEditor fileEditor) {
         super(fileEditor);
     }
@@ -61,7 +56,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      */
     @FromAnyThread
     public void load(@NotNull final AudioData audioData, @NotNull final AudioKey audioKey) {
-        EXECUTOR_MANAGER.addJMETask(() -> loadImpl(audioData, audioKey));
+        EXECUTOR_MANAGER.addJmeTask(() -> loadImpl(audioData, audioKey));
     }
 
     /**
@@ -112,7 +107,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      */
     @FromAnyThread
     public void play() {
-        EXECUTOR_MANAGER.addJMETask(this::playImpl);
+        EXECUTOR_MANAGER.addJmeTask(this::playImpl);
     }
 
     /**
@@ -153,7 +148,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      */
     @FromAnyThread
     public void pause() {
-        EXECUTOR_MANAGER.addJMETask(this::pauseImpl);
+        EXECUTOR_MANAGER.addJmeTask(this::pauseImpl);
     }
 
     /**
@@ -171,7 +166,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      */
     @FromAnyThread
     public void stop() {
-        EXECUTOR_MANAGER.addJMETask(this::stopImpl);
+        EXECUTOR_MANAGER.addJmeTask(this::stopImpl);
     }
 
     /**
@@ -180,7 +175,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     @JmeThread
     private void stopImpl() {
         removeAudioNode();
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedStatus(Status.Stopped));
+        EXECUTOR_MANAGER.addFxTask(() -> getFileEditor().notifyChangedStatus(Status.Stopped));
     }
 
     @Override
@@ -193,12 +188,14 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
 
         final Status status = audioNode.getStatus();
         if (status != getPrevStatus()) {
-            EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedStatus(status));
+            EXECUTOR_MANAGER.addFxTask(() -> getFileEditor().notifyChangedStatus(status));
             setPrevStatus(status);
         }
     }
 
     /**
+     * Get the audio node.
+     *
      * @return the audio node.
      */
     @JmeThread
@@ -207,6 +204,8 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
+     * Set the audio node.
+     *
      * @param audioNode the audio node.
      */
     @JmeThread
@@ -215,6 +214,8 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
+     * Get the audio data.
+     *
      * @return the audio data.
      */
     @JmeThread
@@ -223,6 +224,8 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
+     * Set the audio data.
+     *
      * @param audioData the audio data.
      */
     @JmeThread
@@ -231,6 +234,8 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
+     * Get the audio key.
+     *
      * @return the audio key.
      */
     @JmeThread
@@ -239,6 +244,8 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
+     * Set the audio key.
+     *
      * @param audioKey the audio key.
      */
     @JmeThread
@@ -247,7 +254,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
-     * Gets prev status.
+     * Get previous prev status.
      *
      * @return the previous status.
      */
@@ -257,6 +264,8 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
     }
 
     /**
+     * Set previous prev status.
+     *
      * @param prevStatus the previous status.
      */
     @JmeThread

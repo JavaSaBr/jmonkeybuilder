@@ -118,7 +118,7 @@ public class ExecutorManager {
      * @param task the javaFX task.
      */
     @FromAnyThread
-    public void addFXTask(@NotNull final Runnable task) {
+    public void addFxTask(@NotNull final Runnable task) {
         final EditorTaskExecutor executor = getFxTaskExecutor();
         executor.execute(task);
     }
@@ -129,7 +129,7 @@ public class ExecutorManager {
      * @param task the editor task.
      */
     @FromAnyThread
-    public void addJMETask(@NotNull final Runnable task) {
+    public void addJmeTask(@NotNull final Runnable task) {
         final JMEThreadExecutor executor = getJmeTasksExecutor();
         executor.addToExecute(task);
     }

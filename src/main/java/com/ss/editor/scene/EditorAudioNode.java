@@ -26,7 +26,6 @@ public class EditorAudioNode extends Node {
             super(name);
         }
 
-
         @Override
         @FromAnyThread
         public @NotNull Object getWrappedObject() {
@@ -65,7 +64,7 @@ public class EditorAudioNode extends Node {
     }
 
     /**
-     * Set a audio node.
+     * Set the audio node.
      *
      * @param audioNode the audio node.
      */
@@ -75,7 +74,7 @@ public class EditorAudioNode extends Node {
     }
 
     /**
-     * Get a audio node.
+     * Get the audio node.
      *
      * @return the audio node.
      */
@@ -85,7 +84,7 @@ public class EditorAudioNode extends Node {
     }
 
     /**
-     * Get a model.
+     * Get the model.
      *
      * @return the model.
      */
@@ -95,7 +94,7 @@ public class EditorAudioNode extends Node {
     }
 
     /**
-     * Set a model.
+     * Set the model.
      *
      * @param model the model.
      */
@@ -105,7 +104,7 @@ public class EditorAudioNode extends Node {
     }
 
     /**
-     * Gets edited node.
+     * Get the edited node.
      *
      * @return the edited node.
      */

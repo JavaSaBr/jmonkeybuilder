@@ -61,7 +61,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
 
             modelNode.setChannel(control.getNumChannels());
 
-            EXECUTOR_MANAGER.addJMETask(() -> {
+            EXECUTOR_MANAGER.addJmeTask(() -> {
                 control.addListener(this);
 
                 final AnimChannel channel = control.createChannel();
@@ -88,8 +88,8 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
 
         modelNode.setChannel(-1);
 
-        EXECUTOR_MANAGER.addFXTask(() -> getNodeTree().update(modelNode));
-        EXECUTOR_MANAGER.addJMETask(control::clearChannels);
+        EXECUTOR_MANAGER.addFxTask(() -> getNodeTree().update(modelNode));
+        EXECUTOR_MANAGER.addJmeTask(control::clearChannels);
     }
 
     @Override

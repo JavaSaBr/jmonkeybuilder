@@ -60,7 +60,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     }
 
     /**
-     * Set a light.
+     * Set the light.
      *
      * @param light the light.
      */
@@ -72,7 +72,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     }
 
     /**
-     * Get a light.
+     * Get the light.
      *
      * @return the light.
      */
@@ -82,7 +82,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     }
 
     /**
-     * Get a model.
+     * Get the model.
      *
      * @return the model.
      */
@@ -92,7 +92,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
     }
 
     /**
-     * Set a model.
+     * Set the model.
      *
      * @param model the model.
      */

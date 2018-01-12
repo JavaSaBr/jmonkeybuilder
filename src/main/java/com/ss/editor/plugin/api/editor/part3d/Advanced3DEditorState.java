@@ -64,6 +64,6 @@ public abstract class Advanced3DEditorState<T extends Advanced3DFileEditor> exte
     protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation, final float vRotation,
                                                final float targetDistance, final float cameraSpeed) {
         super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
+        EXECUTOR_MANAGER.addFxTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
     }
 }

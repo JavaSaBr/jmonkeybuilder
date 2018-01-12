@@ -360,7 +360,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     private void changePhysics(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setEnabled(newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getBulletState().setEnabled(newValue));
 
         if (editorState != null) editorState.setEnablePhysics(newValue);
     }
@@ -372,7 +372,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     private void changeDebugPhysics(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setDebugEnabled(newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getBulletState().setDebugEnabled(newValue));
 
         if (editorState != null) editorState.setEnableDebugPhysics(newValue);
     }
@@ -409,7 +409,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             }
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyAdded(added));
+        EXECUTOR_MANAGER.addFxTask(() -> getBulletState().notifyAdded(added));
     }
 
     @Override
@@ -430,7 +430,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             }
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyRemoved(removed));
+        EXECUTOR_MANAGER.addFxTask(() -> getBulletState().notifyRemoved(removed));
     }
 
     @Override

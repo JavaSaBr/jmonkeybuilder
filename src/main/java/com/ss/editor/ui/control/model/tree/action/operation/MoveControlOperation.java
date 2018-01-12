@@ -45,19 +45,19 @@ public class MoveControlOperation extends AbstractEditorOperation<ModelChangeCon
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             oldParent.removeControl(moved);
             newParent.addControl(moved);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXMoved(oldParent, newParent, moved, -1, true));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXMoved(oldParent, newParent, moved, -1, true));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             newParent.removeControl(moved);
             oldParent.addControl(moved);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXMoved(newParent, oldParent, moved, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXMoved(newParent, oldParent, moved, -1, false));
         });
     }
 }

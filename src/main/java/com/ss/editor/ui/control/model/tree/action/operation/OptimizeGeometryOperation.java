@@ -43,13 +43,13 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     @Override
     @FxThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, oldSpatial, newSpatial));
+        EXECUTOR_MANAGER.addJmeTask(() -> apply(editor, oldSpatial, newSpatial));
     }
 
     @Override
     @FxThread
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, newSpatial, oldSpatial));
+        EXECUTOR_MANAGER.addJmeTask(() -> apply(editor, newSpatial, oldSpatial));
     }
 
     /**
@@ -67,6 +67,6 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
         parent.detachChildAt(index);
         parent.attachChildAt(oldSpatial, index);
 
-        EXECUTOR_MANAGER.addFXTask(() -> consumer.notifyFXReplaced(parent, newSpatial, oldSpatial, true, false));
+        EXECUTOR_MANAGER.addFxTask(() -> consumer.notifyFXReplaced(parent, newSpatial, oldSpatial, true, false));
     }
 }

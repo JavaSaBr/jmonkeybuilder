@@ -61,7 +61,7 @@ public class EditorPresentableNode extends Node {
     }
 
     /**
-     * Set an object.
+     * Set the object.
      *
      * @param object the object.
      */
@@ -71,7 +71,7 @@ public class EditorPresentableNode extends Node {
     }
 
     /**
-     * Gets edited node.
+     * Get the edited node.
      *
      * @return the edited node.
      */
@@ -81,7 +81,7 @@ public class EditorPresentableNode extends Node {
     }
 
     /**
-     * Get an object.
+     * Get the object.
      *
      * @return the object.
      */
@@ -91,7 +91,7 @@ public class EditorPresentableNode extends Node {
     }
 
     /**
-     * Get a model.
+     * Get the model.
      *
      * @return the model.
      */
@@ -101,7 +101,7 @@ public class EditorPresentableNode extends Node {
     }
 
     /**
-     * Set a model.
+     * Set the model.
      *
      * @param model the model.
      */

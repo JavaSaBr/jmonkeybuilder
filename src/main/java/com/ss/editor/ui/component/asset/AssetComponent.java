@@ -208,7 +208,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
             final EditorConfig editorConfig = EditorConfig.getInstance();
             final Path currentAsset = editorConfig.getCurrentAsset();
 
-            EXECUTOR_MANAGER.addFXTask(() -> setIgnoreExpanded(false));
+            EXECUTOR_MANAGER.addFxTask(() -> setIgnoreExpanded(false));
 
             if (currentAsset != null) {
                 FX_EVENT_MANAGER.notify(new AssetComponentLoadedEvent(currentAsset));

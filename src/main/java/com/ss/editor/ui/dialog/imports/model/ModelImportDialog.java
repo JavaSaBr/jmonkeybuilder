@@ -183,7 +183,7 @@ public class ModelImportDialog extends GenericFileCreator {
             try {
                 importModel();
             } finally {
-                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
             }
         });
     }

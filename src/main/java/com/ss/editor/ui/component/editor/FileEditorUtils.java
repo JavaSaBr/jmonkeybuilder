@@ -29,6 +29,6 @@ public class FileEditorUtils {
         final float tDistance = editorState.getCameraTDistance();
         final float cameraSpeed = editorState.getCameraSpeed();
 
-        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCameraSettings(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));
+        EXECUTOR_MANAGER.addJmeTask(() -> editor3DState.updateCameraSettings(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));
     }
 }

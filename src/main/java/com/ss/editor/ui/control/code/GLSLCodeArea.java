@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.code;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.util.GLSLType;
+import com.ss.editor.util.GlslType;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,8 +35,8 @@ public class GLSLCodeArea extends BaseCodeArea {
     private static final String[] VALUE_TYPES;
 
     static {
-        VALUE_TYPES = Arrays.stream(GLSLType.VALUES)
-                .map(GLSLType::getRawType)
+        VALUE_TYPES = Arrays.stream(GlslType.VALUES)
+                .map(GlslType::getRawType)
                 .toArray(String[]::new);
     }
 

@@ -108,7 +108,7 @@ public abstract class AbstractFileConverter implements FileConverter {
 
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(null));
+                EXECUTOR_MANAGER.addFxTask(() -> notifyFileCreatedImpl(null));
             }
         });
     }
@@ -144,7 +144,7 @@ public abstract class AbstractFileConverter implements FileConverter {
      */
     @FromAnyThread
     protected void notifyFileChanged(@NotNull final Path file) {
-        EXECUTOR_MANAGER.addFXTask(() -> notifyFileChangedImpl(file));
+        EXECUTOR_MANAGER.addFxTask(() -> notifyFileChangedImpl(file));
     }
 
     @FxThread
@@ -159,7 +159,7 @@ public abstract class AbstractFileConverter implements FileConverter {
      */
     @FromAnyThread
     protected void notifyFileCreated(@Nullable final Path file) {
-        EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(file));
+        EXECUTOR_MANAGER.addFxTask(() -> notifyFileCreatedImpl(file));
     }
 
     @FxThread

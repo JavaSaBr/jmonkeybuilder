@@ -18,7 +18,10 @@ import java.lang.reflect.Field;
  */
 public class AudioNodeUtils {
 
+    @NotNull
     private static final Field AUDIO_DATA_FIELD;
+
+    @NotNull
     private static final Field AUDIO_KEY_FIELD;
 
     static {
@@ -59,9 +62,8 @@ public class AudioNodeUtils {
      * @param audioNode the audio node.
      * @return the audio key.
      */
-    @Nullable
     @FromAnyThread
-    public static AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
+    public static @Nullable AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
         try {
             return (AudioKey) AUDIO_KEY_FIELD.get(audioNode);
         } catch (final IllegalAccessException e) {

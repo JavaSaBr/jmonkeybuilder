@@ -54,7 +54,7 @@ public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
         final AnimChannel channel = control.getChannel(modelNode.getChannel());
         channel.setLoopMode(LoopMode.DontLoop);
 
-        EXECUTOR_MANAGER.addJMETask(control::clearChannels);
+        EXECUTOR_MANAGER.addJmeTask(control::clearChannels);
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.update(modelNode);

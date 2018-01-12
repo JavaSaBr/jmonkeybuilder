@@ -32,7 +32,7 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> switchShape(editor));
+        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 
     private void switchShape(final @NotNull ModelChangeConsumer editor) {
@@ -42,11 +42,11 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
         prevShape = shape;
         emitter.setShape(newShape);
 
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(emitter, prevShape, newShape, true, true));
+        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXReplaced(emitter, prevShape, newShape, true, true));
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> switchShape(editor));
+        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 }

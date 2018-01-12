@@ -39,17 +39,17 @@ public class AddSceneFilterOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.addFilter(sceneFilter);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedFilter(sceneFilter));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyAddedFilter(sceneFilter));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.removeFilter(sceneFilter);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedFilter(sceneFilter));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyRemovedFilter(sceneFilter));
         });
     }
 }

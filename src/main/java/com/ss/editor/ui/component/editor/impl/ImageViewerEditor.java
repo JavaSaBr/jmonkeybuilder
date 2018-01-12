@@ -79,7 +79,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         final Path file = event.getFile();
         if (!getEditFile().equals(file)) return;
-        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> showImage(file)), 1000);
+        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFxTask(() -> showImage(file)), 1000);
     }
 
     @FxThread

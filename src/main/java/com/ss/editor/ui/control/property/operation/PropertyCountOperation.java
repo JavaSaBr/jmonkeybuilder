@@ -21,17 +21,17 @@ public class PropertyCountOperation<C extends ChangeConsumer, D, T> extends Prop
 
     @Override
     protected void redoImpl(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(target));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangePropertyCount(target));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(target));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangePropertyCount(target));
         });
     }
 }

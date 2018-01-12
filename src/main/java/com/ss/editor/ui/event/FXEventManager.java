@@ -98,7 +98,7 @@ public class FXEventManager {
             notifyImpl(event);
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(() -> notifyImpl(event));
+            executorManager.addFxTask(() -> notifyImpl(event));
         }
     }
 
@@ -121,7 +121,7 @@ public class FXEventManager {
 
         if (event instanceof ConsumableEvent && !event.isConsumed()) {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(() -> notifyImpl(event));
+            executorManager.addFxTask(() -> notifyImpl(event));
         }
     }
 }

@@ -178,7 +178,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Workspace workspace = notNull(WORKSPACE_MANAGER.getCurrentWorkspace());
         workspace.updateCurrentEditedFile(newCurrentFile);
 
-        EXECUTOR_MANAGER.addJMETask(() -> processShowEditor(oldValue, newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> processShowEditor(oldValue, newValue));
     }
 
     /**
@@ -404,7 +404,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         if (sceneProcessor.isEnabled() != enabled) {
             final boolean result = enabled;
-            EXECUTOR_MANAGER.addFXTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> {
                 ThreadUtils.sleep(100);
                 canvas.setOpacity(result ? 1D : 0D);
                 sceneProcessor.setEnabled(result);
@@ -449,12 +449,12 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
-            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
             return;
         }
 
         if (editor == null) {
-            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
             return;
         }
 
@@ -471,7 +471,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 workspace.removeOpenedFile(file);
             }
 
-            EXECUTOR_MANAGER.addFXTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> {
                 EditorUtil.decrementLoading();
                 resultEditor.notifyClosed();
             });
@@ -481,7 +481,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             JME_APPLICATION.asyncUnlock(stamp);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> addEditor(resultEditor, event.isNeedShow()));
+        EXECUTOR_MANAGER.addFxTask(() -> addEditor(resultEditor, event.isNeedShow()));
     }
 
     /**

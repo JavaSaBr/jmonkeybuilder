@@ -162,7 +162,7 @@ public class LogView extends CodeArea {
         lastLog = newLog;
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> {
+        executorManager.addFxTask(() -> {
             final String text = getText();
             replaceText(0, text.length(), newLog);
             try {

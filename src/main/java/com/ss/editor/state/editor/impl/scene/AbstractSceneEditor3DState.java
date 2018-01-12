@@ -985,7 +985,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void updateSelection(@NotNull final Array<Spatial> spatials) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateSelectionImpl(spatials));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateSelectionImpl(spatials));
     }
 
     /**
@@ -1206,7 +1206,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void updateShowSelection(final boolean showSelection) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateShowSelectionImpl(showSelection));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateShowSelectionImpl(showSelection));
     }
 
     /**
@@ -1295,7 +1295,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final Object result = toSelect;
 
-        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(result));
+        EXECUTOR_MANAGER.addFxTask(() -> notifySelected(result));
     }
 
     /**
@@ -1404,7 +1404,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void updateShowGrid(final boolean showGrid) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateShowGridImpl(showGrid));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateShowGridImpl(showGrid));
     }
 
     /**
@@ -1596,7 +1596,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void openModel(@NotNull final M model) {
-        EXECUTOR_MANAGER.addJMETask(() -> openModelImpl(model));
+        EXECUTOR_MANAGER.addJmeTask(() -> openModelImpl(model));
     }
 
     /**
@@ -1664,7 +1664,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void addLight(@NotNull final Light light) {
-        EXECUTOR_MANAGER.addJMETask(() -> addLightImpl(light));
+        EXECUTOR_MANAGER.addJmeTask(() -> addLightImpl(light));
     }
 
     /**
@@ -1717,7 +1717,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void moveCameraTo(@NotNull final Vector3f location) {
-        EXECUTOR_MANAGER.addJMETask(() -> getNodeForCamera().setLocalTranslation(location));
+        EXECUTOR_MANAGER.addJmeTask(() -> getNodeForCamera().setLocalTranslation(location));
     }
 
     /**
@@ -1727,7 +1727,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void cameraLookAt(@NotNull final Vector3f location) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             final EditorCamera editorCamera = notNull(getEditorCamera());
             editorCamera.setTargetDistance(location.distance(getCamera().getLocation()));
             getNodeForCamera().setLocalTranslation(location);
@@ -1741,7 +1741,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void removeLight(@NotNull final Light light) {
-        EXECUTOR_MANAGER.addJMETask(() -> removeLightImpl(light));
+        EXECUTOR_MANAGER.addJmeTask(() -> removeLightImpl(light));
     }
 
     /**
@@ -1773,7 +1773,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void addAudioNode(@NotNull final AudioNode audioNode) {
-        EXECUTOR_MANAGER.addJMETask(() -> addAudioNodeImpl(audioNode));
+        EXECUTOR_MANAGER.addJmeTask(() -> addAudioNodeImpl(audioNode));
     }
 
     /**
@@ -1812,7 +1812,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void removeAudioNode(@NotNull final AudioNode audio) {
-        EXECUTOR_MANAGER.addJMETask(() -> removeAudioNodeImpl(audio));
+        EXECUTOR_MANAGER.addJmeTask(() -> removeAudioNodeImpl(audio));
     }
 
     /**
@@ -1841,7 +1841,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void addPresentable(@NotNull final ScenePresentable presentable) {
-        EXECUTOR_MANAGER.addJMETask(() -> addPresentableImpl(presentable));
+        EXECUTOR_MANAGER.addJmeTask(() -> addPresentableImpl(presentable));
     }
 
     /**
@@ -1901,7 +1901,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void removePresentable(@NotNull final ScenePresentable presentable) {
-        EXECUTOR_MANAGER.addJMETask(() -> removePresentableImpl(presentable));
+        EXECUTOR_MANAGER.addJmeTask(() -> removePresentableImpl(presentable));
     }
 
     /**
@@ -1995,7 +1995,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
                                                final float vRotation, final float targetDistance,
                                                final float cameraSpeed) {
         super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
+        EXECUTOR_MANAGER.addFxTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
                         vRotation, targetDistance, cameraSpeed));
     }
 
@@ -2020,7 +2020,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @FromAnyThread
     public void changeEditingMode(final boolean editingMode) {
-        EXECUTOR_MANAGER.addJMETask(() -> changeEditingModeImpl(editingMode));
+        EXECUTOR_MANAGER.addJmeTask(() -> changeEditingModeImpl(editingMode));
     }
 
     /**

@@ -75,7 +75,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
-        EXECUTOR_MANAGER.addFXTask(() -> getNameField().requestFocus());
+        EXECUTOR_MANAGER.addFxTask(() -> getNameField().requestFocus());
     }
 
     @Override

@@ -16,9 +16,9 @@ import java.io.ObjectStreamClass;
  *
  * @author JavaSaBr
  */
-public class SSObjectInputStream extends ObjectInputStream {
+public class ExtObjectInputStream extends ObjectInputStream {
 
-    public SSObjectInputStream(@NotNull final InputStream in) throws IOException {
+    public ExtObjectInputStream(@NotNull final InputStream in) throws IOException {
         super(in);
     }
 
@@ -41,13 +41,13 @@ public class SSObjectInputStream extends ObjectInputStream {
                     try {
                         ref.setObject(classLoader.loadClass(name));
                     } catch (final ClassNotFoundException ex) {
+                        // ignore this exception
                     }
                 });
 
                 if (ref.getObject() != null) {
                     return (Class<?>) ref.getObject();
                 }
-
             }
 
             throw e;

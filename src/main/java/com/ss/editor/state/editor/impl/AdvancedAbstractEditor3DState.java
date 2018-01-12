@@ -474,7 +474,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
             final FileEditor fileEditor = getFileEditor();
 
             if (isPressed && isControlDown() && fileEditor.isDirty()) {
-                EXECUTOR_MANAGER.addFXTask(fileEditor::save);
+                EXECUTOR_MANAGER.addFxTask(fileEditor::save);
             }
         });
     }

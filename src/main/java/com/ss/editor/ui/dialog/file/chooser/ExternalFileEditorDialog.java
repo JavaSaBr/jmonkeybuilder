@@ -136,7 +136,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
             }
         });
 
-        EXECUTOR_MANAGER.addFXTask(resourceTree::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
     }
 
     /**

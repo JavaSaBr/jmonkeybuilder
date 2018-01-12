@@ -146,7 +146,7 @@ public class ClasspathManager {
         });
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addJMETask(this::reload);
+        executorManager.addJmeTask(this::reload);
     }
 
     /**

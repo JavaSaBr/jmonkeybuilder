@@ -120,7 +120,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
                 convertImpl(source, vars);
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
             }
         });
     }

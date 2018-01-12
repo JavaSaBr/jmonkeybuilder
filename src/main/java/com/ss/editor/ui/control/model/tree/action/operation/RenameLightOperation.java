@@ -41,17 +41,17 @@ public class RenameLightOperation extends AbstractEditorOperation<ModelChangeCon
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             light.setName(newName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(light, PROPERTY_NAME));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(light, PROPERTY_NAME));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             light.setName(oldName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(light, PROPERTY_NAME));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(light, PROPERTY_NAME));
         });
     }
 }

@@ -121,7 +121,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         resourceTree.setOnLoadHandler(finished -> expand(file, resourceTree, finished));
         resourceTree.fill(currentAsset);
 
-        EXECUTOR_MANAGER.addFXTask(getFileNameField()::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(getFileNameField()::requestFocus);
 
         validateFileName();
     }
@@ -222,7 +222,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
                 tempFile = Files.createTempFile("SSEditor", "fileCreator");
             } catch (final IOException e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
                 return;
             }
 
@@ -243,7 +243,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
                 EditorUtil.handleException(LOGGER, this, e);
             }
 
-            EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
         });
     }
 

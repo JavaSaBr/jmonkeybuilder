@@ -25,7 +25,7 @@ public class ClearAssetCacheAction extends MenuItem {
      * Clear asset cache.
      */
     private void process() {
-        ExecutorManager.getInstance().addJMETask(() -> {
+        ExecutorManager.getInstance().addJmeTask(() -> {
             final JmeApplication jmeApplication = JmeApplication.getInstance();
             final AssetManager assetManager = jmeApplication.getAssetManager();
             assetManager.clearCache();

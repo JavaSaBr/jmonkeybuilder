@@ -44,17 +44,17 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             spatial.setName(newName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(spatial, PROPERTY_NAME));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(spatial, PROPERTY_NAME));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             spatial.setName(oldName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(spatial, PROPERTY_NAME));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(spatial, PROPERTY_NAME));
         });
     }
 }

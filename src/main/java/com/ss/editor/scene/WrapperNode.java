@@ -1,5 +1,6 @@
 package com.ss.editor.scene;
 
+import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,5 +10,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface WrapperNode {
 
+    @FromAnyThread
     @NotNull Object getWrappedObject();
 }

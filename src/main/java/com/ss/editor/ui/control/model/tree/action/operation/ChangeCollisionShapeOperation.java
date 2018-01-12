@@ -47,19 +47,19 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(collisionObject, oldShape));
+        EXECUTOR_MANAGER.addJmeTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(collisionObject, oldShape));
             collisionObject.setCollisionShape(newShape);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(collisionObject, newShape, -1, true));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(collisionObject, newShape, -1, true));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(collisionObject, newShape));
+        EXECUTOR_MANAGER.addJmeTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(collisionObject, newShape));
             collisionObject.setCollisionShape(oldShape);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(collisionObject, oldShape, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(collisionObject, oldShape, -1, false));
         });
     }
 }

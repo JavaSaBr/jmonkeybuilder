@@ -62,7 +62,7 @@ public abstract class AbstractEditor3DState<T extends FileEditor> extends Abstra
     }
 
     /**
-     * Gets state node.
+     * Get the state node.
      *
      * @return the root node.
      */
@@ -72,7 +72,7 @@ public abstract class AbstractEditor3DState<T extends FileEditor> extends Abstra
     }
 
     /**
-     * Gets file editor.
+     * Get the file editor.
      *
      * @return the owner editor.
      */

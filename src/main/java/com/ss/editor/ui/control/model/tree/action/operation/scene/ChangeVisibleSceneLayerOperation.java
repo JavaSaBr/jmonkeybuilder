@@ -38,7 +38,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
 
@@ -52,7 +52,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
             needShow = !needShow;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(layer, "Showed"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(layer, "Showed"));
         });
     }
 
@@ -63,7 +63,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
 
@@ -77,7 +77,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
             needShow = !needShow;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(layer, "Showed"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(layer, "Showed"));
         });
     }
 }

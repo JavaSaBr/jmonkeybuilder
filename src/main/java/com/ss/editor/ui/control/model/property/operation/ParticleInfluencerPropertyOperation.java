@@ -79,9 +79,9 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(influencer, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(parent, influencer, propertyName));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(parent, influencer, propertyName));
         });
     }
 
@@ -97,9 +97,9 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(influencer, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(parent, influencer, propertyName));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(parent, influencer, propertyName));
         });
     }
 }

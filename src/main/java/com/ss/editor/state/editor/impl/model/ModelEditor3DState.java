@@ -192,7 +192,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
      */
     @FromAnyThread
     public void updateLightEnabled(final boolean enabled) {
-        EXECUTOR_MANAGER.addJMETask(() -> updateLightEnabledImpl(enabled));
+        EXECUTOR_MANAGER.addJmeTask(() -> updateLightEnabledImpl(enabled));
     }
 
     /**
@@ -221,7 +221,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
      */
     @FromAnyThread
     public void changeFastSky(@Nullable final Spatial fastSky) {
-        EXECUTOR_MANAGER.addJMETask(() -> changeFastSkyImpl(fastSky));
+        EXECUTOR_MANAGER.addJmeTask(() -> changeFastSkyImpl(fastSky));
     }
 
     /**
@@ -256,7 +256,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
      */
     @FromAnyThread
     public void addCustomSky(@NotNull final Spatial sky) {
-        EXECUTOR_MANAGER.addJMETask(() -> addCustomSkyImpl(sky));
+        EXECUTOR_MANAGER.addJmeTask(() -> addCustomSkyImpl(sky));
     }
 
     /**
@@ -275,7 +275,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
      */
     @FromAnyThread
     public void removeCustomSky(@NotNull final Spatial sky) {
-        EXECUTOR_MANAGER.addJMETask(() -> removeCustomSkyImpl(sky));
+        EXECUTOR_MANAGER.addJmeTask(() -> removeCustomSkyImpl(sky));
     }
 
     /**
@@ -292,7 +292,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
      */
     @FromAnyThread
     public void updateLightProbe() {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final Node stateNode = getStateNode();
             stateNode.detachChild(getModelNode());

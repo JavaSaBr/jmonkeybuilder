@@ -49,17 +49,17 @@ public class AddSceneLayerOperation extends AbstractEditorOperation<ModelChangeC
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.addLayer(layer);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(layersRoot, layer, -1, true));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(layersRoot, layer, -1, true));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.removeLayer(layer);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(layersRoot, layer));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(layersRoot, layer));
         });
     }
 }
