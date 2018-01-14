@@ -11,13 +11,15 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.Renderer;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
 import com.ss.editor.JfxApplication;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -99,6 +101,26 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static @NotNull InputManager getInputManager() {
         return JmeApplication.getInstance().getInputManager();
+    }
+
+    /**
+     * Get the render manager.
+     *
+     * @return the render manager.
+     */
+    @FromAnyThread
+    public static @NotNull RenderManager getRenderManager() {
+        return JmeApplication.getInstance().getRenderManager();
+    }
+
+    /**
+     * Get the renderer.
+     *
+     * @return the renderer.
+     */
+    @FromAnyThread
+    public static @NotNull Renderer getRenderer() {
+        return JmeApplication.getInstance().getRenderer();
     }
 
     /**

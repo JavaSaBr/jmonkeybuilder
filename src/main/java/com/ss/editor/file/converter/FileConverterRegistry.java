@@ -1,12 +1,12 @@
 package com.ss.editor.file.converter;
 
+import static com.ss.rlib.util.FileUtils.containsExtensions;
+import static com.ss.rlib.util.array.ArrayCollectors.toArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.file.converter.impl.*;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayCollectors;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,9 +75,8 @@ public class FileConverterRegistry {
     @FromAnyThread
     public @NotNull Array<FileConverterDescription> getDescriptions(@NotNull final Path path) {
         return getDescriptions().stream()
-                // FIXME replace to better method
-                .filter(desc -> FileUtils.containsExtensions(desc.getExtensions().array(), path))
-                .collect(ArrayCollectors.simple(FileConverterDescription.class));
+                .filter(desc -> containsExtensions(desc.getExtensions(), path))
+                .collect(toArray(FileConverterDescription.class));
     }
 
     /**
