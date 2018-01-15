@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.terrain;
 
 import com.jme3.terrain.geomipmap.TerrainGrid;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -27,18 +28,21 @@ public class TerrainGridTreeNode extends NodeTreeNode<TerrainGrid> {
         super(element, objectId);
     }
 
+    @FxThread
     @Nullable
     @Override
     public Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
+    @FxThread
     @Nullable
     @Override
     protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
+    @FxThread
     @Nullable
     @Override
     protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {

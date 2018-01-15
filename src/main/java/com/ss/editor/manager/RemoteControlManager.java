@@ -43,7 +43,7 @@ public class RemoteControlManager {
         this.packetRegistry = ReadablePacketRegistry.of(packets);
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnAfterCreateJMEContext(this::start);
+        initializationManager.addOnAfterCreateJmeContext(this::start);
     }
 
     /**

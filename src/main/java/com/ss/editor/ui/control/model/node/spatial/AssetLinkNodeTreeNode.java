@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.node.spatial;
 
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,7 @@ public class AssetLinkNodeTreeNode extends NodeTreeNode<AssetLinkNode> {
         super(element, objectId);
     }
 
+    @FxThread
     @Nullable
     @Override
     public Image getIcon() {

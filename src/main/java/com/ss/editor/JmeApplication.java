@@ -43,6 +43,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
@@ -51,7 +52,6 @@ import com.ss.rlib.util.os.OperatingSystem;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,11 +80,7 @@ public class JmeApplication extends JmeToJFXApplication {
     @NotNull
     private static final JmeApplication JME_APPLICATION = new JmeApplication();
 
-    /**
-     * Gets the jME part of this editor.
-     *
-     * @return the jME part.
-     */
+    @Deprecated
     @FromAnyThread
     public static @NotNull JmeApplication getInstance() {
         return JME_APPLICATION;
@@ -207,18 +203,13 @@ public class JmeApplication extends JmeToJFXApplication {
     private ToneMapFilter toneMapFilter;
 
     /**
-     * The translucent bucket filter.
-     */
-    @Nullable
-    private TonegodTranslucentBucketFilter translucentBucketFilter;
-
-    /**
      * The default material.
      */
     @Nullable
     private Material defaultMaterial;
 
     private JmeApplication() {
+        EditorUtil.setJmeApplication(this);
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
     }
@@ -317,11 +308,8 @@ public class JmeApplication extends JmeToJFXApplication {
         toneMapFilter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
 
-        translucentBucketFilter = new TonegodTranslucentBucketFilter(true);
-
         postProcessor.addFilter(fxaaFilter);
         postProcessor.addFilter(toneMapFilter);
-        postProcessor.addFilter(translucentBucketFilter);
 
         SceneLoader.install(this, postProcessor);
 
@@ -643,16 +631,6 @@ public class JmeApplication extends JmeToJFXApplication {
     @JmeThread
     public @NotNull FXAAFilter getFXAAFilter() {
         return notNull(fxaaFilter);
-    }
-
-    /**
-     * Get the translucent bucket filter.
-     *
-     * @return the translucent bucket filter.
-     */
-    @JmeThread
-    public @NotNull TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
-        return notNull(translucentBucketFilter);
     }
 
     /**

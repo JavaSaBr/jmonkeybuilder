@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
+import com.jme3.scene.Node;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
 import com.ss.editor.JfxApplication;
@@ -75,13 +76,27 @@ public abstract class EditorUtil {
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
     /**
-     * Represents a List of Files.
+     * Represents a list of files.
      */
     public static final DataFormat GNOME_FILES = new DataFormat("x-special/gnome-copied-files");
 
     @NotNull
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
             new SimpleDateFormat("HH:mm:ss:SSS"));
+
+    @NotNull
+    private static JmeApplication jmeApplication;
+
+    @NotNull
+    private static JfxApplication jfxApplication;
+
+    public static void setJmeApplication(@NotNull final JmeApplication jmeApplication) {
+        EditorUtil.jmeApplication = jmeApplication;
+    }
+
+    public static void setJfxApplication(@NotNull final JfxApplication jfxApplication) {
+        EditorUtil.jfxApplication = jfxApplication;
+    }
 
     /**
      * Get the asset manager.
@@ -90,7 +105,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @NotNull AssetManager getAssetManager() {
-        return JmeApplication.getInstance().getAssetManager();
+        return jmeApplication.getAssetManager();
     }
 
     /**
@@ -100,7 +115,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @NotNull InputManager getInputManager() {
-        return JmeApplication.getInstance().getInputManager();
+        return jmeApplication.getInputManager();
     }
 
     /**
@@ -110,7 +125,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @NotNull RenderManager getRenderManager() {
-        return JmeApplication.getInstance().getRenderManager();
+        return jmeApplication.getRenderManager();
     }
 
     /**
@@ -120,7 +135,27 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @NotNull Renderer getRenderer() {
-        return JmeApplication.getInstance().getRenderer();
+        return jmeApplication.getRenderer();
+    }
+
+    /**
+     * Get the root node.
+     *
+     * @return the root node.
+     */
+    @FromAnyThread
+    public static @NotNull Node getRootNode() {
+        return JmeApplication.getInstance().getRootNode();
+    }
+
+    /**
+     * Get the camera.
+     *
+     * @return the camera.
+     */
+    @FromAnyThread
+    public static @NotNull Camera getCamera() {
+        return JmeApplication.getInstance().getCamera();
     }
 
     /**

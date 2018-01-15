@@ -3,6 +3,9 @@ package com.ss.editor.ui.scene;
 import javafx.scene.image.ImageView;
 
 /**
+ * The resizable image view.
+ *
+ * @author JavaSaBr
  */
 public class EditorFXImageView extends ImageView {
 

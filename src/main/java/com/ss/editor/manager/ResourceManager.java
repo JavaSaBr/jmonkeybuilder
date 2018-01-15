@@ -156,7 +156,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
         });
 
-        initializationManager.addOnAfterCreateJMEContext(() -> {
+        initializationManager.addOnAfterCreateJmeContext(() -> {
             final JmeApplication jmeApplication = JmeApplication.getInstance();
             final AssetManager assetManager = jmeApplication.getAssetManager();
             assetManager.addAssetEventListener(this);

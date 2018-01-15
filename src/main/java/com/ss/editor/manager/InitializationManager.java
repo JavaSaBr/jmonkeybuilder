@@ -26,25 +26,25 @@ public class InitializationManager {
      * The list of actions to execute before creating jME context.
      */
     @NotNull
-    private final Array<Runnable> onBeforeCreateJMEContext;
+    private final Array<Runnable> onBeforeCreateJmeContext;
 
     /**
      * The list of actions to execute after creating jME context.
      */
     @NotNull
-    private final Array<Runnable> onAfterCreateJMEContext;
+    private final Array<Runnable> onAfterCreateJmeContext;
 
     /**
      * The list of actions to execute before creating JavaFX context.
      */
     @NotNull
-    private final Array<Runnable> onBeforeCreateJavaFXContext;
+    private final Array<Runnable> onBeforeCreateJavaFxContext;
 
     /**
      * The list of actions to execute after creating JavaFX context.
      */
     @NotNull
-    private final Array<Runnable> onAfterCreateJavaFXContext;
+    private final Array<Runnable> onAfterCreateJavaFxContext;
 
     /**
      * The list of actions to execute when the editor finish loading.
@@ -55,31 +55,31 @@ public class InitializationManager {
     private InitializationManager() {
         InitializeManager.valid(getClass());
 
-        this.onBeforeCreateJMEContext = ArrayFactory.newArray(Runnable.class);
-        this.onAfterCreateJMEContext = ArrayFactory.newArray(Runnable.class);
-        this.onBeforeCreateJavaFXContext = ArrayFactory.newArray(Runnable.class);
-        this.onAfterCreateJavaFXContext = ArrayFactory.newArray(Runnable.class);
+        this.onBeforeCreateJmeContext = ArrayFactory.newArray(Runnable.class);
+        this.onAfterCreateJmeContext = ArrayFactory.newArray(Runnable.class);
+        this.onBeforeCreateJavaFxContext = ArrayFactory.newArray(Runnable.class);
+        this.onAfterCreateJavaFxContext = ArrayFactory.newArray(Runnable.class);
         this.onFinishLoading = ArrayFactory.newArray(Runnable.class);
     }
 
     /**
-     * Do some things before when JME context will be created.
+     * Do some things before when jME context will be created.
      *
      * @param runnable the action.
      */
     @FromAnyThread
-    public synchronized void addOnBeforeCreateJMEContext(@NotNull final Runnable runnable) {
-        this.onBeforeCreateJMEContext.add(runnable);
+    public synchronized void addOnBeforeCreateJmeContext(@NotNull final Runnable runnable) {
+        this.onBeforeCreateJmeContext.add(runnable);
     }
 
     /**
-     * Do some things after when JME context was created.
+     * Do some things after when jME context was created.
      *
      * @param runnable the action.
      */
     @FromAnyThread
-    public synchronized void addOnAfterCreateJMEContext(@NotNull final Runnable runnable) {
-        this.onAfterCreateJMEContext.add(runnable);
+    public synchronized void addOnAfterCreateJmeContext(@NotNull final Runnable runnable) {
+        this.onAfterCreateJmeContext.add(runnable);
     }
 
     /**
@@ -88,8 +88,8 @@ public class InitializationManager {
      * @param runnable the action.
      */
     @FromAnyThread
-    public synchronized void addOnBeforeCreateJavaFXContext(@NotNull final Runnable runnable) {
-        this.onBeforeCreateJavaFXContext.add(runnable);
+    public synchronized void addOnBeforeCreateJavaFxContext(@NotNull final Runnable runnable) {
+        this.onBeforeCreateJavaFxContext.add(runnable);
     }
 
     /**
@@ -98,8 +98,8 @@ public class InitializationManager {
      * @param runnable the action.
      */
     @FromAnyThread
-    public synchronized void addOnAfterCreateJavaFXContext(@NotNull final Runnable runnable) {
-        this.onAfterCreateJavaFXContext.add(runnable);
+    public synchronized void addOnAfterCreateJavaFxContext(@NotNull final Runnable runnable) {
+        this.onAfterCreateJavaFxContext.add(runnable);
     }
 
     /**
@@ -113,35 +113,35 @@ public class InitializationManager {
     }
 
     /**
-     * Execute all actions before when JME context will be created.
+     * Execute all actions before when jME context will be created.
      */
     @JmeThread
-    public synchronized void onBeforeCreateJMEContext() {
-        onBeforeCreateJavaFXContext.forEach(Runnable::run);
+    public synchronized void onBeforeCreateJmeContext() {
+        onBeforeCreateJmeContext.forEach(Runnable::run);
     }
 
     /**
-     * Execute all actions after when JME context was created.
+     * Execute all actions after when jME context was created.
      */
     @JmeThread
-    public synchronized void onAfterCreateJMEContext() {
-        onAfterCreateJMEContext.forEach(Runnable::run);
+    public synchronized void onAfterCreateJmeContext() {
+        onAfterCreateJmeContext.forEach(Runnable::run);
     }
 
     /**
      * Execute all actions before when JavaFX context will be created.
      */
     @FxThread
-    public synchronized void onBeforeCreateJavaFXContext() {
-        onBeforeCreateJavaFXContext.forEach(Runnable::run);
+    public synchronized void onBeforeCreateJavaFxContext() {
+        onBeforeCreateJavaFxContext.forEach(Runnable::run);
     }
 
     /**
      * Execute all actions after when JavaFX context was created.
      */
     @FxThread
-    public synchronized void onAfterCreateJavaFXContext() {
-        onAfterCreateJavaFXContext.forEach(Runnable::run);
+    public synchronized void onAfterCreateJavaFxContext() {
+        onAfterCreateJavaFxContext.forEach(Runnable::run);
     }
 
     /**

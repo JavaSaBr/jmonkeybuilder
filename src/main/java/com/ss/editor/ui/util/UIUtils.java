@@ -537,11 +537,7 @@ public class UIUtils {
 
         if (event.isControlDown()) {
             return false;
-        } else if (event.isShiftDown()) {
-            return false;
-        }
-
-        return true;
+        } else return !event.isShiftDown();
     }
 
     /**
@@ -593,7 +589,6 @@ public class UIUtils {
             final HBox hbox = (HBox) graphic;
             hbox.setAlignment(Pos.CENTER_LEFT);
             hbox.setMinHeight(cell.getMinHeight());
-        } else if (graphic instanceof Control) {
         }
     }
 

@@ -22,9 +22,6 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     @NotNull
     private final R root;
 
-    /**
-     * Instantiates a new Custom tooltip.
-     */
     public CustomTooltip() {
         this.root = createRoot();
         this.root.setStyle("-fx-background-color: -var-menu-background-color;");

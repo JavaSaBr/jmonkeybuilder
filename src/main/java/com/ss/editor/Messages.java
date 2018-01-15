@@ -246,8 +246,6 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     public static final String MODEL_NODE_TREE_ACTION_COPY;
     public static final String MODEL_NODE_TREE_ACTION_PASTE;
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
@@ -929,8 +927,6 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_COPY = bundle.getString("ModelNodeTreeActionCopy");
         MODEL_NODE_TREE_ACTION_PASTE = bundle.getString("ModelNodeTreeActionPaste");
-        MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateToneg0dParticleEmitter");
-        MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");
         MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS = bundle.getString("ModelNodeTreeActionResetParticleEmitters");
         MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterChangeShape");

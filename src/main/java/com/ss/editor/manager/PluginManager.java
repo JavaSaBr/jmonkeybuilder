@@ -92,10 +92,10 @@ public class PluginManager {
         pluginSystem.initialize();
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnBeforeCreateJMEContext(this::onBeforeCreateJMEContext);
-        initializationManager.addOnAfterCreateJMEContext(this::onAfterCreateJMEContext);
-        initializationManager.addOnBeforeCreateJavaFXContext(this::onBeforeCreateJavaFXContext);
-        initializationManager.addOnAfterCreateJavaFXContext(this::onAfterCreateJavaFXContext);
+        initializationManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJMEContext);
+        initializationManager.addOnAfterCreateJmeContext(this::onAfterCreateJMEContext);
+        initializationManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFXContext);
+        initializationManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFXContext);
         initializationManager.addOnFinishLoading(this::onFinishLoading);
     }
 
@@ -125,7 +125,7 @@ public class PluginManager {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJMEContext(pluginSystem));
+                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJmeContext(pluginSystem));
     }
 
     /**
@@ -137,7 +137,7 @@ public class PluginManager {
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> {
-                    editorPlugin.onAfterCreateJMEContext(pluginSystem);
+                    editorPlugin.onAfterCreateJmeContext(pluginSystem);
 
                     final PluginContainer container = editorPlugin.getContainer();
                     final URLClassLoader classLoader = container.getClassLoader();
@@ -156,7 +156,7 @@ public class PluginManager {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFXContext(pluginSystem));
+                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFxContext(pluginSystem));
     }
 
     /**
@@ -167,7 +167,7 @@ public class PluginManager {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFXContext(pluginSystem));
+                .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFxContext(pluginSystem));
     }
 
     /**

@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.node.spatial;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.audio.PlayAudioNodeAction;
@@ -33,6 +34,7 @@ public class AudioTreeNode extends NodeTreeNode<AudioNode> {
         super(element, objectId);
     }
 
+    @FxThread
     @Override
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
@@ -50,6 +52,7 @@ public class AudioTreeNode extends NodeTreeNode<AudioNode> {
         super.fillContextMenu(nodeTree, items);
     }
 
+    @FxThread
     @Nullable
     @Override
     public Image getIcon() {
