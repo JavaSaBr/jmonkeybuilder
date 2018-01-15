@@ -58,7 +58,6 @@ public class PropertyBuilderRegistry {
         builders.add(MaterialPropertyBuilder.getInstance());
         builders.add(ParticleInfluencerPropertyBuilder.getInstance());
         builders.add(EmitterShapePropertyBuilder.getInstance());
-        builders.add(Toneg0dParticleInfluencerPropertyBuilder.getInstance());
         builders.add(MaterialSettingsPropertyBuilder.getInstance());
     }
 

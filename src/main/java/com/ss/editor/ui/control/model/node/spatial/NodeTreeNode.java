@@ -4,11 +4,13 @@ import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -26,8 +28,6 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateParticleEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.CreateToneg0dParticleEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.CreateToneg0dSoftParticleEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.terrain.CreateTerrainAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -44,11 +44,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.ParticleEmitterNode;
 
 import java.nio.file.Path;
 import java.util.List;
-
+import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link SpatialTreeNode} for representing the {@link Node} in the editor.
@@ -58,11 +57,27 @@ import java.util.List;
  */
 public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
+    /**
+     * The additional particle emitter finders.
+     */
+    @NotNull
+    private static final Array<Predicate<@NotNull Node>> PARTICLE_EMITTER_FINDERS = ArrayFactory.newArray(Predicate.class);
+
+    /**
+     * Register the additional particle emitter finder.
+     *
+     * @param finder the additional particle emitter finder.
+     */
+    public static void registerParticleEmitterFinder(@NotNull final Predicate<@NotNull Node> finder) {
+        PARTICLE_EMITTER_FINDERS.add(finder);
+    }
+
     public NodeTreeNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
     @Override
+    @FxThread
     protected @Nullable Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
         final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
@@ -70,6 +85,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final Menu menu = super.createCreationMenu(nodeTree);
@@ -94,8 +110,6 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
                 new LinkModelAction(nodeTree, this),
                 new CreateSkyAction(nodeTree, this),
                 new CreateEditableSkyAction(nodeTree, this),
-                new CreateToneg0dParticleEmitterAction(nodeTree, this),
-                new CreateToneg0dSoftParticleEmitterAction(nodeTree, this),
                 new CreateParticleEmitterAction(nodeTree, this),
                 new CreateAudioNodeAction(nodeTree, this),
                 new CreateTerrainAction(nodeTree, this),
@@ -105,14 +119,15 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final T element = getElement();
-        final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitterNode.class::isInstance);
+        final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitter.class::isInstance);
 
-        if (emitter != null) {
+        if (emitter != null || PARTICLE_EMITTER_FINDERS.search(element, Predicate::test) != null) {
             items.add(new ResetParticleEmittersAction(nodeTree, this));
         }
 
@@ -120,11 +135,13 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
@@ -136,21 +153,22 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     /**
-     * Gets spatials.
+     * Get the spatials.
      *
-     * @return the spatials
+     * @return the spatials.
      */
+    @FxThread
     protected @NotNull List<Spatial> getSpatials() {
         final Node element = getElement();
         return element.getChildren();
     }
 
     @Override
+    @FxThread
     public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
         if (treeNode == this) return false;
 
         final Object element = treeNode.getElement();
-
         if (element instanceof Spatial) {
             return GeomUtils.canAttach(getElement(), (Spatial) element, isCopy);
         }
@@ -159,6 +177,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
                        final boolean isCopy) {
 
@@ -190,6 +209,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     public void add(@NotNull final TreeNode<?> child) {
         super.add(child);
 
@@ -202,6 +222,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     public void remove(@NotNull final TreeNode<?> child) {
         super.remove(child);
 
@@ -214,16 +235,19 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     @Override
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.NODE_16;
     }
 
     @Override
+    @FxThread
     public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
         return UIUtils.isHasFile(dragboard, FileExtensions.JME_OBJECT);
     }
 
     @Override
+    @FxThread
     public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
         UIUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT, getElement(), consumer, this::dropExternalObject);
     }
@@ -235,6 +259,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * @param cons the change consumer.
      * @param path the path to the external object.
      */
+    @FxThread
     protected void dropExternalObject(@NotNull final T node, @NotNull final ChangeConsumer cons,
                                       @NotNull final Path path) {
 

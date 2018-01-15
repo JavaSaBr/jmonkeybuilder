@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.terrain;
 
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -21,11 +22,13 @@ public class TerrainQuadTreeNode extends NodeTreeNode<TerrainQuad> {
         super(element, objectId);
     }
 
+    @FxThread
     @Override
     public @Nullable Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
+    @FxThread
     @Override
     protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;

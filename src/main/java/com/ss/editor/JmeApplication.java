@@ -51,7 +51,6 @@ import com.ss.rlib.util.os.OperatingSystem;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -207,12 +206,6 @@ public class JmeApplication extends JmeToJFXApplication {
     private ToneMapFilter toneMapFilter;
 
     /**
-     * The translucent bucket filter.
-     */
-    @Nullable
-    private TonegodTranslucentBucketFilter translucentBucketFilter;
-
-    /**
      * The default material.
      */
     @Nullable
@@ -317,11 +310,8 @@ public class JmeApplication extends JmeToJFXApplication {
         toneMapFilter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
 
-        translucentBucketFilter = new TonegodTranslucentBucketFilter(true);
-
         postProcessor.addFilter(fxaaFilter);
         postProcessor.addFilter(toneMapFilter);
-        postProcessor.addFilter(translucentBucketFilter);
 
         SceneLoader.install(this, postProcessor);
 
@@ -643,16 +633,6 @@ public class JmeApplication extends JmeToJFXApplication {
     @JmeThread
     public @NotNull FXAAFilter getFXAAFilter() {
         return notNull(fxaaFilter);
-    }
-
-    /**
-     * Get the translucent bucket filter.
-     *
-     * @return the translucent bucket filter.
-     */
-    @JmeThread
-    public @NotNull TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
-        return notNull(translucentBucketFilter);
     }
 
     /**

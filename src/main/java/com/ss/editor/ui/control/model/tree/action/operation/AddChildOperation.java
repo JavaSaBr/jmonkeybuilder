@@ -4,10 +4,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
+import com.ss.editor.plugin.api.RenderFilterExtension;
 import org.jetbrains.annotations.NotNull;
-
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to add a new {@link Spatial} to a {@link Node}.
@@ -48,8 +46,8 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.attachChildAt(newChild, 0);
 
-            final TonegodTranslucentBucketFilter filter = JME_APPLICATION.getTranslucentBucketFilter();
-            filter.refresh();
+            final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+            filterExtension.refreshFilters();
 
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(parent, newChild, 0, needSelect));
         });

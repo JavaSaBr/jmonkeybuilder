@@ -46,7 +46,6 @@ public class TreeNodeFactoryRegistry {
         register(new DefaultParticlesTreeNodeFactory());
         register(new DefaultTreeNodeFactory());
         register(new LightTreeNodeFactory());
-        register(new Toneg0dTreeNodeFactory());
         register(new MaterialSettingsTreeNodeFactory());
     }
 

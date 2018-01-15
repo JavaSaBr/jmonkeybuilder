@@ -31,25 +31,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
 
-    /**
-     * Instantiates a new particle emitter model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public ParticleEmitterTreeNode(@NotNull final ParticleEmitter element, final long objectId) {
         super(element, objectId);
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    public @Nullable Image getIcon() {
         return Icons.PARTICLES_16;
     }
 
-    @NotNull
     @Override
-    public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final ParticleEmitter element = getElement();
         final TreeNode<ParticleInfluencer> influencerTreeNode = FACTORY_REGISTRY.createFor(element.getParticleInfluencer());
@@ -91,15 +83,13 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
         super.fillContextMenu(nodeTree, items);
     }
 
-    @Nullable
     @Override
-    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
-    @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 }
