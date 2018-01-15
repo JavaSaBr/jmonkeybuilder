@@ -9,13 +9,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link AbstractSceneEditor3DState} for the {@link ModelFileEditor}.
@@ -62,7 +62,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
      */
     private int frame;
 
-    public ModelEditor3DState(final ModelFileEditor fileEditor) {
+    public ModelEditor3DState(@NotNull final ModelFileEditor fileEditor) {
         super(fileEditor);
         this.customSkyNode = new Node("Custom Sky");
         this.customSky = ArrayFactory.newArray(Spatial.class);
@@ -102,8 +102,8 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
         final Node customSkyNode = getCustomSkyNode();
         customSkyNode.detachAllChildren();
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
-        translucentBucketFilter.refresh();
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.refreshFilters();
     }
 
     /**

@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
+import com.jme3.scene.Node;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
 import com.ss.editor.JfxApplication;
@@ -135,6 +136,26 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static @NotNull Renderer getRenderer() {
         return jmeApplication.getRenderer();
+    }
+
+    /**
+     * Get the root node.
+     *
+     * @return the root node.
+     */
+    @FromAnyThread
+    public static @NotNull Node getRootNode() {
+        return JmeApplication.getInstance().getRootNode();
+    }
+
+    /**
+     * Get the camera.
+     *
+     * @return the camera.
+     */
+    @FromAnyThread
+    public static @NotNull Camera getCamera() {
+        return JmeApplication.getInstance().getCamera();
     }
 
     /**

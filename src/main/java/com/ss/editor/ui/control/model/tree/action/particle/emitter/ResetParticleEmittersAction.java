@@ -7,20 +7,39 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.ParticleEmitterNode;
+
+import java.util.function.Function;
 
 /**
- * The action to reset a {@link ParticleEmitterNode} and a {@link ParticleEmitter}.
+ * The action to reset a {@link ParticleEmitter}.
  *
  * @author JavaSaBr
  */
 public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeConsumer> {
+
+    /**
+     * The list of additional action on executing this action.
+     */
+    @NotNull
+    private static final Array<Function<@NotNull Node, @Nullable Runnable>> ADDITIONAL_ACTIONS = ArrayFactory.newArray(Function.class);
+
+    /**
+     * Register the additional action on executing this action.
+     *
+     * @param action the additional action on executing this action.
+     */
+    @FxThread
+    public static void registerAdditionalAction(@NotNull final Function<@NotNull Node, @Nullable Runnable> action) {
+        ADDITIONAL_ACTIONS.add(action);
+    }
 
     public ResetParticleEmittersAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
@@ -46,7 +65,12 @@ public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeC
         final TreeNode<?> treeNode = getNode();
         final Node node = (Node) treeNode.getElement();
 
-        EXECUTOR_MANAGER.addJmeTask(() -> visitSpatial(node, ParticleEmitterNode.class, ParticleEmitterNode::reset));
         EXECUTOR_MANAGER.addJmeTask(() -> visitSpatial(node, ParticleEmitter.class, ParticleEmitter::killAllParticles));
+        ADDITIONAL_ACTIONS.forEach(node, (factory, toCheck) -> {
+            final Runnable action = factory.apply(toCheck);
+            if (action != null) {
+                EXECUTOR_MANAGER.addJmeTask(action);
+            }
+        });
     }
 }

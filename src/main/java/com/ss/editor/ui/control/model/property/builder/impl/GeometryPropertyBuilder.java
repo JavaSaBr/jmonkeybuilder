@@ -10,8 +10,9 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -20,13 +21,15 @@ import com.ss.editor.ui.control.property.impl.LodLevelPropertyControl;
 import com.ss.editor.ui.control.property.impl.MaterialKeyPropertyControl;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.geometry.ParticleGeometry;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Geometry} objects.
@@ -34,6 +37,22 @@ import java.util.function.Function;
  * @author JavaSaBr
  */
 public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+
+    /**
+     * The list of additional checkers.
+     */
+    @NotNull
+    private static final Array<Predicate<@NotNull Geometry>> CAN_EDIT_MATERIAL_CHECKERS = ArrayFactory.newArray(Predicate.class);
+
+    /**
+     * Register the additional checker.
+     *
+     * @param checker the additional checker.
+     */
+    @JmeThread
+    public static void registerCanEditMaterialChecker(@NotNull final Predicate<@NotNull Geometry> checker) {
+        CAN_EDIT_MATERIAL_CHECKERS.add(checker.negate());
+    }
 
     @NotNull
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
@@ -84,11 +103,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     @NotNull
     private static final PropertyBuilder INSTANCE = new GeometryPropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -153,6 +167,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
      */
     @FxThread
     private boolean canEditMaterial(@NotNull final Geometry geometry) {
-        return !(geometry instanceof ParticleGeometry);
+        return CAN_EDIT_MATERIAL_CHECKERS.search(geometry, Predicate::test) == null;
     }
 }

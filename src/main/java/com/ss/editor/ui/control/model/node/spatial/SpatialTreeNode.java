@@ -15,8 +15,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.extension.scene.InvisibleObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -48,6 +48,8 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 /**
  * The implementation of the {@link TreeNode} to represent a {@link Spatial} in an editor.
  *
@@ -55,6 +57,21 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
+
+    /**
+     * The list of additional creation action factories.
+     */
+    @NotNull
+    private static final Array<Function<@NotNull Spatial, @Nullable MenuItem>> CREATION_ACTION_FACTORIES = ArrayFactory.newArray(Function.class);
+
+    /**
+     * Register the additional creation action factory.
+     *
+     * @param actionFactory the additional creation action factory.
+     */
+    public static void registerCreationAction(@NotNull final Function<@NotNull Spatial, @Nullable MenuItem> actionFactory) {
+        CREATION_ACTION_FACTORIES.add(actionFactory);
+    }
 
     protected SpatialTreeNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
@@ -179,6 +196,13 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         //}
 
         menu.getItems().add(createControlsMenu);
+
+        for (final Function<Spatial, MenuItem> creationAction : CREATION_ACTION_FACTORIES) {
+            final MenuItem item = creationAction.apply(element);
+            if (item != null) {
+                menu.getItems().add(item);
+            }
+        }
 
         return menu;
     }

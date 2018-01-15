@@ -118,7 +118,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @JmeThread
-    public void onBeforeCreateJMEContext(@NotNull final PluginSystem pluginSystem) {
+    public void onBeforeCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**
@@ -127,7 +127,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @JmeThread
-    public void onAfterCreateJMEContext(@NotNull final PluginSystem pluginSystem) {
+    public void onAfterCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**
@@ -136,7 +136,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @FxThread
-    public void onBeforeCreateJavaFXContext(@NotNull final PluginSystem pluginSystem) {
+    public void onBeforeCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**
@@ -145,7 +145,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @FxThread
-    public void onAfterCreateJavaFXContext(@NotNull final PluginSystem pluginSystem) {
+    public void onAfterCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**

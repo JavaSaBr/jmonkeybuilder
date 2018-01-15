@@ -17,7 +17,9 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
+import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.function.FloatFloatConsumer;
@@ -26,7 +28,6 @@ import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -853,8 +854,8 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         final Node rootNode = JME_APPLICATION.getRootNode();
         rootNode.attachChild(getStateNode());
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
-        translucentBucketFilter.setEnabled(true);
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.enableFilters();
 
         final EditorCamera editorCamera = getEditorCamera();
         final InputManager inputManager = JME_APPLICATION.getInputManager();
@@ -922,14 +923,14 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     public void cleanup() {
         super.cleanup();
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
-        translucentBucketFilter.setEnabled(false);
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.disableFilters();
 
-        final Node rootNode = JME_APPLICATION.getRootNode();
+        final Node rootNode = EditorUtil.getRootNode();
         rootNode.detachChild(getStateNode());
 
         final EditorCamera editorCamera = getEditorCamera();
-        final InputManager inputManager = JME_APPLICATION.getInputManager();
+        final InputManager inputManager = EditorUtil.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
 
@@ -967,7 +968,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     @JmeThread
     protected @NotNull EditorCamera createEditorCamera() {
 
-        final Camera camera = JME_APPLICATION.getCamera();
+        final Camera camera = EditorUtil.getCamera();
         final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
         editorCamera.setMaxDistance(10000);
         editorCamera.setMinDistance(0.01F);

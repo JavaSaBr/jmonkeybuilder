@@ -28,11 +28,6 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
     @NotNull
     private static final PropertyBuilder INSTANCE = new ParticleInfluencerPropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;

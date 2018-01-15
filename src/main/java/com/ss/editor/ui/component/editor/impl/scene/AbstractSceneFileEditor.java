@@ -29,8 +29,8 @@ import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
@@ -39,6 +39,7 @@ import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
@@ -89,7 +90,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -334,8 +334,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
-        translucentBucketFilter.refresh();
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.refreshFilters();
     }
 
     /**
@@ -362,8 +362,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = JME_APPLICATION.getTranslucentBucketFilter();
-        translucentBucketFilter.refresh();
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.refreshFilters();
     }
 
     /**

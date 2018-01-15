@@ -61,7 +61,7 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.13'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.7.3'
+    compile 'com.github.JavaSaBr:RLib:6.7.4'
     compile 'com.github.JavaSaBr:JME3-JFX:1.7.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
@@ -131,9 +131,9 @@ dependencies {
     compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.4') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.4.1') {
+    /*compile ('com.github.JavaSaBr:tonegodemitter:2.4.1') {
         exclude group: 'org.jmonkeyengine'
-    }
+    }*/
 
     compile "org.xbuf.jme3_xbuf:jme3_xbuf_loader:${jme3_xbuf_version}"
 

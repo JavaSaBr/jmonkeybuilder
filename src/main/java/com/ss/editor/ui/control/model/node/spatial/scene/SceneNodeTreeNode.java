@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.node.spatial.scene;
 
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -33,6 +34,7 @@ public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
         super(element, objectId);
     }
 
+    @FxThread
     @Override
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
@@ -43,6 +45,7 @@ public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
         items.add(new RenameNodeAction(nodeTree, this));
     }
 
+    @FxThread
     @Nullable
     @Override
     public Image getIcon() {
