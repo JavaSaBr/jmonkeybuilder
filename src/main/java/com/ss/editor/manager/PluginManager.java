@@ -92,10 +92,10 @@ public class PluginManager {
         pluginSystem.initialize();
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnBeforeCreateJMEContext(this::onBeforeCreateJMEContext);
-        initializationManager.addOnAfterCreateJMEContext(this::onAfterCreateJMEContext);
-        initializationManager.addOnBeforeCreateJavaFXContext(this::onBeforeCreateJavaFXContext);
-        initializationManager.addOnAfterCreateJavaFXContext(this::onAfterCreateJavaFXContext);
+        initializationManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJMEContext);
+        initializationManager.addOnAfterCreateJmeContext(this::onAfterCreateJMEContext);
+        initializationManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFXContext);
+        initializationManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFXContext);
         initializationManager.addOnFinishLoading(this::onFinishLoading);
     }
 

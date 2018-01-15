@@ -6,6 +6,7 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.ColorSpace;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSIds;
 import org.fxmisc.richtext.CodeArea;
@@ -31,13 +32,7 @@ public class LogView extends CodeArea {
 
     private static final int MAX_LENGTH = 8000;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static LogView getInstance() {
+    public static @NotNull LogView getInstance() {
         return INSTANCE;
     }
 
@@ -93,8 +88,7 @@ public class LogView extends CodeArea {
                     + "|(?<CLASS>" + CLASS_PATTERN + ")"
     );
 
-    @NotNull
-    private static StyleSpans<Collection<String>> computeHighlighting(@NotNull final String text) {
+    private static @NotNull StyleSpans<Collection<String>> computeHighlighting(@NotNull final String text) {
 
         final Matcher matcher = PATTERN.matcher(text);
         final StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
@@ -130,9 +124,6 @@ public class LogView extends CodeArea {
     @NotNull
     private String lastLog;
 
-    /**
-     * Instantiates a new Log view.
-     */
     public LogView() {
         this.currentLog = new StringBuilder();
         this.lastLog = "";
@@ -152,6 +143,7 @@ public class LogView extends CodeArea {
     /**
      * Update log content.
      */
+    @FromAnyThread
     private synchronized void update() {
 
         if (lastLog.contentEquals(currentLog)) {
@@ -168,6 +160,7 @@ public class LogView extends CodeArea {
             try {
                 showParagraphAtTop(getParagraphs().size() - 1);
             } catch (final NullPointerException e) {
+                // ignore
             }
         });
     }
@@ -177,6 +170,7 @@ public class LogView extends CodeArea {
      *
      * @param text the new information.
      */
+    @FromAnyThread
     private synchronized void appendLog(@NotNull final String text) {
 
         final int resultLength = currentLog.length() + text.length();
@@ -184,16 +178,14 @@ public class LogView extends CodeArea {
         if (resultLength <= MAX_LENGTH) {
             currentLog.append(text);
         } else {
-
             final int toRemove = resultLength - MAX_LENGTH;
-
             currentLog.delete(0, toRemove);
             currentLog.append(text);
         }
     }
 
-    @NotNull
-    private Consumer<String> externalAppendText() {
+    @FromAnyThread
+    private @NotNull Consumer<String> externalAppendText() {
         return this::appendLog;
     }
 }

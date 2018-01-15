@@ -43,7 +43,7 @@ public class EditorFXScene extends Scene {
     private final Array<ScreenComponent> components;
 
     /**
-     * The view for drawing JME.
+     * The view to draw jME.
      */
     @NotNull
     private final ImageView canvas;
@@ -122,9 +122,9 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Gets canvas.
+     * Get the canvas.
      *
-     * @return the view for drawing JME.
+     * @return the view tp draw jME.
      */
     @FxThread
     public @NotNull ImageView getCanvas() {
@@ -168,7 +168,7 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Gets container.
+     * Get the container.
      *
      * @return the container of this scene.
      */
@@ -178,6 +178,8 @@ public class EditorFXScene extends Scene {
     }
 
     /**
+     * Get the loading layer.
+     *
      * @return the loading layer.
      */
     @FxThread
@@ -186,7 +188,7 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Gets hide layer.
+     * Get the hide layer.
      *
      * @return the hide layer.
      */

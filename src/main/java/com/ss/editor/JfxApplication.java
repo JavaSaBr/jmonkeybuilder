@@ -166,7 +166,7 @@ public class JfxApplication extends Application {
     private static void startJmeApplication(@NotNull final JmeToJFXApplication application) {
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.onBeforeCreateJMEContext();
+        initializationManager.onBeforeCreateJmeContext();
 
         application.start();
 
@@ -313,14 +313,13 @@ public class JfxApplication extends Application {
             resourceManager.reload();
 
             final InitializationManager initializationManager = InitializationManager.getInstance();
-            initializationManager.onBeforeCreateJavaFXContext();
+            initializationManager.onBeforeCreateJavaFxContext();
 
             final PluginManager pluginManager = PluginManager.getInstance();
             pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CSSRegistry.getInstance()));
 
             LogView.getInstance();
             SvgImageLoaderFactory.install();
-
             ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
 
             final ObservableList<Image> icons = stage.getIcons();
@@ -357,7 +356,8 @@ public class JfxApplication extends Application {
                 config.setScreenHeight(newValue.intValue());
             });
 
-            stage.maximizedProperty().addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
+            stage.maximizedProperty()
+                    .addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
 
             buildScene();
 
@@ -403,7 +403,7 @@ public class JfxApplication extends Application {
         this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.onAfterCreateJMEContext();
+        initializationManager.onAfterCreateJmeContext();
 
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.handlePlugins(editorPlugin -> {
@@ -432,7 +432,9 @@ public class JfxApplication extends Application {
         executorManager.addBackgroundTask(new CheckNewVersionTask());
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        if (editorConfig.isAnalyticsQuestion()) return;
+        if (editorConfig.isAnalyticsQuestion()) {
+            return;
+        }
 
         editorConfig.setAnalytics(false);
         editorConfig.save();
