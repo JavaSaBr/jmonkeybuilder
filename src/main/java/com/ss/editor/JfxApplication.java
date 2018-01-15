@@ -32,6 +32,7 @@ import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.svg.SvgImageLoaderFactory;
 import com.ss.rlib.logging.Logger;
@@ -72,11 +73,7 @@ public class JfxApplication extends Application {
     @Nullable
     private static JfxApplication instance;
 
-    /**
-     * Get the JavaFX part of this editor.
-     *
-     * @return the JavaFX part of this editor.
-     */
+    @Deprecated
     @FromAnyThread
     public static @NotNull JfxApplication getInstance() {
         return notNull(instance);
@@ -157,7 +154,7 @@ public class JfxApplication extends Application {
         InitializeManager.initialize();
 
         new EditorThread(new ThreadGroup("LWJGL"),
-                () -> startJMEApplication(application), "LWJGL Render").start();
+                () -> startJmeApplication(application), "LWJGL Render").start();
     }
 
     /**
@@ -166,7 +163,7 @@ public class JfxApplication extends Application {
      * @param application the new jME application.
      */
     @JmeThread
-    private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
+    private static void startJmeApplication(@NotNull final JmeToJFXApplication application) {
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
         initializationManager.onBeforeCreateJMEContext();
@@ -261,6 +258,7 @@ public class JfxApplication extends Application {
     private Stage stage;
 
     public JfxApplication() {
+        EditorUtil.setJfxApplication(this);
         this.openedWindows = ArrayFactory.newConcurrentStampedLockArray(Window.class);
     }
 

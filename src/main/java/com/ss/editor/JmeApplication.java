@@ -43,6 +43,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
@@ -80,11 +81,7 @@ public class JmeApplication extends JmeToJFXApplication {
     @NotNull
     private static final JmeApplication JME_APPLICATION = new JmeApplication();
 
-    /**
-     * Gets the jME part of this editor.
-     *
-     * @return the jME part.
-     */
+    @Deprecated
     @FromAnyThread
     public static @NotNull JmeApplication getInstance() {
         return JME_APPLICATION;
@@ -219,6 +216,7 @@ public class JmeApplication extends JmeToJFXApplication {
     private Material defaultMaterial;
 
     private JmeApplication() {
+        EditorUtil.setJmeApplication(this);
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
     }
