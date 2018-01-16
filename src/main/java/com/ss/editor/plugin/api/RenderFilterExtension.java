@@ -67,7 +67,7 @@ public class RenderFilterExtension {
     @JmeThread
     public <T extends Filter> void setOnRefresh(@NotNull final T filter, @NotNull final Consumer<@NotNull T> handler) {
 
-        if (filters.contains(filter)) {
+        if (!filters.contains(filter)) {
             throw new IllegalArgumentException("The filter " + filter + "isn't registered.");
         }
 
