@@ -18,20 +18,20 @@ import com.ss.rlib.util.array.ConcurrentArray;
  *
  * @author JavaSaBr
  */
-public class JMEThreadExecutor {
+public class JmeThreadExecutor {
 
     @NotNull
-    private static final Logger LOGGER = LoggerManager.getLogger(JMEThreadExecutor.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(JmeThreadExecutor.class);
 
     @NotNull
-    private static final JMEThreadExecutor INSTANCE = new JMEThreadExecutor();
+    private static final JmeThreadExecutor INSTANCE = new JmeThreadExecutor();
 
     /**
      * Gets instance.
      *
      * @return the instance
      */
-    public static JMEThreadExecutor getInstance() {
+    public static JmeThreadExecutor getInstance() {
         return INSTANCE;
     }
 
@@ -47,7 +47,7 @@ public class JMEThreadExecutor {
     @NotNull
     private final Array<Runnable> execute;
 
-    private JMEThreadExecutor() {
+    private JmeThreadExecutor() {
         this.waitTasks = ArrayFactory.newConcurrentAtomicARSWLockArray(Runnable.class);
         this.execute = ArrayFactory.newArray(Runnable.class);
     }
@@ -72,7 +72,7 @@ public class JMEThreadExecutor {
         ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
 
         try {
-            execute.forEach(JMEThreadExecutor::execute);
+            execute.forEach(JmeThreadExecutor::execute);
         } finally {
             execute.clear();
         }

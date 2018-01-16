@@ -17,7 +17,7 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.*;
 import com.ss.editor.task.CheckNewVersionTask;
@@ -143,7 +143,6 @@ public class JfxApplication extends Application {
             return;
         }
 
-        InitializeManager.register(InitializationManager.class);
         InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
@@ -386,7 +385,7 @@ public class JfxApplication extends Application {
         final EditorConfig config = EditorConfig.getInstance();
         config.save();
 
-        final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
+        final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
         executor.addToExecute(() -> {
             final JmeApplication jmeApplication = JmeApplication.getInstance();
             jmeApplication.destroy();
@@ -420,7 +419,7 @@ public class JfxApplication extends Application {
         final EditorFXScene scene = getScene();
 
         final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
+        final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
         executor.addToExecute(() -> createSceneProcessor(scene, jmeApplication));
 
         JmeFilePreviewManager.getInstance();

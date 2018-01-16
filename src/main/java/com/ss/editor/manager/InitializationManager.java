@@ -1,9 +1,8 @@
 package com.ss.editor.manager;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InitializationManager {
 
-    private static InitializationManager instance;
+    @NotNull
+    private static final InitializationManager INSTANCE = new InitializationManager();
 
     public static @NotNull InitializationManager getInstance() {
-        if (instance == null) instance = new InitializationManager();
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -53,8 +52,6 @@ public class InitializationManager {
     private final Array<Runnable> onFinishLoading;
 
     private InitializationManager() {
-        InitializeManager.valid(getClass());
-
         this.onBeforeCreateJmeContext = ArrayFactory.newArray(Runnable.class);
         this.onAfterCreateJmeContext = ArrayFactory.newArray(Runnable.class);
         this.onBeforeCreateJavaFxContext = ArrayFactory.newArray(Runnable.class);

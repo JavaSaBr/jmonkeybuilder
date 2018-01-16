@@ -62,7 +62,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * The list of additional creation action factories.
      */
     @NotNull
-    private static final Array<BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem>> CREATION_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
+    private static final Array<BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem>>
+            CREATION_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
 
     /**
      * Register the additional creation action factory.

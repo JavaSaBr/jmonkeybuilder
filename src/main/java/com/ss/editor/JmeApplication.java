@@ -37,7 +37,7 @@ import com.ss.editor.asset.locator.FileSystemAssetLocator;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.InitializationManager;
@@ -399,7 +399,7 @@ public class JmeApplication extends JmeToJFXApplication {
         final long stamp = syncLock();
         try {
 
-            final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
+            final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
             executor.execute();
 
             //System.out.println(cam.getRotation());
@@ -455,7 +455,7 @@ public class JmeApplication extends JmeToJFXApplication {
         }
 
         if (environmentCamera.getApplication() == null) {
-            final JMEThreadExecutor gameThreadExecutor = JMEThreadExecutor.getInstance();
+            final JmeThreadExecutor gameThreadExecutor = JmeThreadExecutor.getInstance();
             gameThreadExecutor.addToExecute(this::createLightProbes);
             return;
         }

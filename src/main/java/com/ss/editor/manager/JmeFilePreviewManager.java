@@ -33,7 +33,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -95,7 +95,7 @@ public class JmeFilePreviewManager extends AbstractControl {
     }
 
     @NotNull
-    private static final JMEThreadExecutor EDITOR_THREAD_EXECUTOR = JMEThreadExecutor.getInstance();
+    private static final JmeThreadExecutor EDITOR_THREAD_EXECUTOR = JmeThreadExecutor.getInstance();
 
     @Nullable
     private static volatile JmeFilePreviewManager instance;
@@ -249,7 +249,7 @@ public class JmeFilePreviewManager extends AbstractControl {
 
             TangentGenerator.useMikktspaceGenerator(testBox);
 
-            final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
+            final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
             executor.addToExecute(this::prepareScene);
         });
     }

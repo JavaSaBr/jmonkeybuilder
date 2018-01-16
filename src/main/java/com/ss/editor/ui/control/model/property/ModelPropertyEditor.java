@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 /**
  * The component to contains property controls in the editor.
@@ -26,13 +25,13 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
      * The list of additional 'isNeedUpdate' checkers.
      */
     @NotNull
-    private static final Array<BiPredicate<@Nullable Object, @Nullable Object>> IS_NEED_UPDATE_CHECKERS = ArrayFactory.newArray(Predicate.class);
+    private static final Array<BiPredicate<@Nullable Object, @Nullable Object>> IS_NEED_UPDATE_CHECKERS = ArrayFactory.newArray(BiPredicate.class);
 
     /**
      * The list of additional 'canEdit' checkers.
      */
     @NotNull
-    private static final Array<BiPredicate<@Nullable Object, @Nullable Object>> CAN_EDIT_CHECKERS = ArrayFactory.newArray(Predicate.class);
+    private static final Array<BiPredicate<@Nullable Object, @Nullable Object>> CAN_EDIT_CHECKERS = ArrayFactory.newArray(BiPredicate.class);
 
     /**
      * Register the additional checker which checks a current object and a checked object and
@@ -65,7 +64,6 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
     protected boolean isNeedUpdate(@Nullable final Object object) {
         return IS_NEED_UPDATE_CHECKERS.search(getCurrentObject(), object, BiPredicate::test) != null ||
                 super.isNeedUpdate(object);
-
     }
 
     @Override
