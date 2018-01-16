@@ -45,6 +45,9 @@ public class PluginManager {
         return instance;
     }
 
+    /**
+     * The plugin system.
+     */
     @NotNull
     private final ConfigurablePluginSystem pluginSystem;
 
@@ -92,10 +95,10 @@ public class PluginManager {
         pluginSystem.initialize();
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJMEContext);
-        initializationManager.addOnAfterCreateJmeContext(this::onAfterCreateJMEContext);
-        initializationManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFXContext);
-        initializationManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFXContext);
+        initializationManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
+        initializationManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
+        initializationManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
+        initializationManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
         initializationManager.addOnFinishLoading(this::onFinishLoading);
     }
 
@@ -121,7 +124,7 @@ public class PluginManager {
      * Do some things before when JME context will be created.
      */
     @JmeThread
-    private void onBeforeCreateJMEContext() {
+    private void onBeforeCreateJmeContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
@@ -132,7 +135,7 @@ public class PluginManager {
      * Do some things after when JME context was created.
      */
     @JmeThread
-    private void onAfterCreateJMEContext() {
+    private void onAfterCreateJmeContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
@@ -152,7 +155,7 @@ public class PluginManager {
      * Do some things before when JavaFX context will be created.
      */
     @FxThread
-    private void onBeforeCreateJavaFXContext() {
+    private void onBeforeCreateJavaFxContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
@@ -163,7 +166,7 @@ public class PluginManager {
      * Do some things after when JavaFX context was created.
      */
     @FxThread
-    private void onAfterCreateJavaFXContext() {
+    private void onAfterCreateJavaFxContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)

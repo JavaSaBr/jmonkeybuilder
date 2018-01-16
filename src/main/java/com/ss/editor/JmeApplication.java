@@ -40,6 +40,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
@@ -322,6 +323,9 @@ public class JmeApplication extends JmeToJFXApplication {
 
         createLightProbes();
         stateManager.detach(stateManager.getState(DebugKeysAppState.class));
+
+        final InitializationManager initializationManager = InitializationManager.getInstance();
+        initializationManager.onAfterCreateJmeContext();
 
         new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch").start();
     }

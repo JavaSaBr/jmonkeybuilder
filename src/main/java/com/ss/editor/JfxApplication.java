@@ -403,7 +403,7 @@ public class JfxApplication extends Application {
         this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.onAfterCreateJmeContext();
+        initializationManager.onAfterCreateJavaFxContext();
 
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.handlePlugins(editorPlugin -> {
