@@ -18,34 +18,25 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TerrainGridTreeNode extends NodeTreeNode<TerrainGrid> {
 
-    /**
-     * Instantiates a new Terrain grid model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public TerrainGridTreeNode(@NotNull final TerrainGrid element, final long objectId) {
         super(element, objectId);
     }
 
-    @FxThread
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FxThread
+    public @Nullable Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
-    @FxThread
-    @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
+    @FxThread
+    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
-    @FxThread
-    @Nullable
     @Override
-    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
+    @FxThread
+    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 }

@@ -24,18 +24,12 @@ import javafx.scene.image.Image;
  */
 public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
 
-    /**
-     * Instantiates a new Scene node model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public SceneNodeTreeNode(@NotNull final SceneNode element, final long objectId) {
         super(element, objectId);
     }
 
-    @FxThread
     @Override
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
@@ -45,24 +39,26 @@ public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
         items.add(new RenameNodeAction(nodeTree, this));
     }
 
-    @FxThread
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FxThread
+    public @Nullable Image getIcon() {
         return Icons.SCENE_16;
     }
 
     @Override
+    @FxThread
     public boolean canMove() {
         return false;
     }
 
     @Override
+    @FxThread
     public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
         return false;
     }
 
     @Override
+    @FxThread
     public boolean canCopy() {
         return false;
     }

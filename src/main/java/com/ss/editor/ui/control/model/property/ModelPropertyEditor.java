@@ -40,18 +40,20 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
      *
      * @param checker the additional checker.
      */
+    @FxThread
     public static void registerIsNeedUpdateChecker(@NotNull final BiPredicate<@Nullable Object, @Nullable Object> checker) {
         IS_NEED_UPDATE_CHECKERS.add(checker);
     }
 
     /**
      * Register the additional checker which checks a checked object and its parent and
-     * returns true if can edit this in the property editor.
+     * returns false if we can't edit this in the property editor.
      *
      * @param checker the additional checker.
      */
+    @FxThread
     public static void registerCanEditChecker(@NotNull final BiPredicate<@Nullable Object, @Nullable Object> checker) {
-        CAN_EDIT_CHECKERS.add(checker);
+        CAN_EDIT_CHECKERS.add(checker.negate());
     }
 
     public ModelPropertyEditor(@NotNull final ModelChangeConsumer changeConsumer) {
@@ -80,7 +82,7 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
             final Object linkNode = findParent((Spatial) parent, AssetLinkNode.class::isInstance);
             return linkNode == null;
         } else if (CAN_EDIT_CHECKERS.search(object, parent, BiPredicate::test) != null) {
-            return true;
+            return false;
         }
 
         return super.canEdit(object, parent);

@@ -22,14 +22,14 @@ public class TerrainQuadTreeNode extends NodeTreeNode<TerrainQuad> {
         super(element, objectId);
     }
 
-    @FxThread
     @Override
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }

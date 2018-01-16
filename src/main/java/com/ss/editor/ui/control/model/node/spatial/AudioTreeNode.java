@@ -24,18 +24,12 @@ import javafx.scene.image.Image;
  */
 public class AudioTreeNode extends NodeTreeNode<AudioNode> {
 
-    /**
-     * Instantiates a new Audio model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public AudioTreeNode(@NotNull final AudioNode element, final long objectId) {
         super(element, objectId);
     }
 
-    @FxThread
     @Override
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
@@ -52,10 +46,9 @@ public class AudioTreeNode extends NodeTreeNode<AudioNode> {
         super.fillContextMenu(nodeTree, items);
     }
 
-    @FxThread
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FxThread
+    public @Nullable Image getIcon() {
         return Icons.AUDIO_16;
     }
 }

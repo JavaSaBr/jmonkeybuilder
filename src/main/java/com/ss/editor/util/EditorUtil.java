@@ -10,6 +10,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
@@ -156,6 +157,16 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static @NotNull Camera getCamera() {
         return JmeApplication.getInstance().getCamera();
+    }
+
+    /**
+     * Get the global filter post processor.
+     *
+     * @return the global filter post processor.
+     */
+    @FromAnyThread
+    public static @NotNull FilterPostProcessor getGlobalFilterPostProcessor() {
+        return JmeApplication.getInstance().getPostProcessor();
     }
 
     /**

@@ -4,6 +4,7 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.shapes.EmitterShape;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.GeometryTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
@@ -36,11 +37,13 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
     }
 
     @Override
+    @FxThread
     public @Nullable Image getIcon() {
         return Icons.PARTICLES_16;
     }
 
     @Override
+    @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final ParticleEmitter element = getElement();
@@ -56,6 +59,7 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
     }
 
     @Override
+    @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
@@ -84,11 +88,13 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
     }
 
     @Override
+    @FxThread
     protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
     @Override
+    @FxThread
     protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }

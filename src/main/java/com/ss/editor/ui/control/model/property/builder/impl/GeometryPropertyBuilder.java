@@ -12,7 +12,6 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -45,11 +44,11 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     private static final Array<Predicate<@NotNull Geometry>> CAN_EDIT_MATERIAL_CHECKERS = ArrayFactory.newArray(Predicate.class);
 
     /**
-     * Register the additional checker.
+     * Register the additional checker which should return false if we can't edit material for a geometry.
      *
      * @param checker the additional checker.
      */
-    @JmeThread
+    @FxThread
     public static void registerCanEditMaterialChecker(@NotNull final Predicate<@NotNull Geometry> checker) {
         CAN_EDIT_MATERIAL_CHECKERS.add(checker.negate());
     }

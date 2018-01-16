@@ -48,7 +48,7 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 /**
  * The implementation of the {@link TreeNode} to represent a {@link Spatial} in an editor.
@@ -62,14 +62,14 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * The list of additional creation action factories.
      */
     @NotNull
-    private static final Array<Function<@NotNull Spatial, @Nullable MenuItem>> CREATION_ACTION_FACTORIES = ArrayFactory.newArray(Function.class);
+    private static final Array<BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem>> CREATION_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
 
     /**
      * Register the additional creation action factory.
      *
      * @param actionFactory the additional creation action factory.
      */
-    public static void registerCreationAction(@NotNull final Function<@NotNull Spatial, @Nullable MenuItem> actionFactory) {
+    public static void registerCreationAction(@NotNull final BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem> actionFactory) {
         CREATION_ACTION_FACTORIES.add(actionFactory);
     }
 
@@ -197,8 +197,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         menu.getItems().add(createControlsMenu);
 
-        for (final Function<Spatial, MenuItem> creationAction : CREATION_ACTION_FACTORIES) {
-            final MenuItem item = creationAction.apply(element);
+        for (final BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem> creationAction : CREATION_ACTION_FACTORIES) {
+            final MenuItem item = creationAction.apply(this, nodeTree);
             if (item != null) {
                 menu.getItems().add(item);
             }

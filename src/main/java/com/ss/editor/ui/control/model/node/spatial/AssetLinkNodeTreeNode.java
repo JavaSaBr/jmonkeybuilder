@@ -15,20 +15,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AssetLinkNodeTreeNode extends NodeTreeNode<AssetLinkNode> {
 
-    /**
-     * Instantiates a new Asset link node model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public AssetLinkNodeTreeNode(@NotNull final AssetLinkNode element, final long objectId) {
         super(element, objectId);
     }
 
-    @FxThread
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FxThread
+    public @Nullable Image getIcon() {
         return Icons.LINKED_NODE_16;
     }
 }

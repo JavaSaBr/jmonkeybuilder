@@ -3,6 +3,8 @@ package com.ss.editor.plugin.api;
 import com.jme3.post.Filter;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
@@ -51,6 +53,8 @@ public class RenderFilterExtension {
     @JmeThread
     public void register(@NotNull final Filter filter) {
         this.filters.add(filter);
+        EditorUtil.getGlobalFilterPostProcessor()
+                .addFilter(filter);
     }
 
     /**
@@ -75,11 +79,9 @@ public class RenderFilterExtension {
      */
     @JmeThread
     public void refreshFilters() {
-        filters.forEach(refreshActions, (filter, map) -> {
-            final Consumer<@NotNull Filter> consumer = (Consumer<Filter>) map.get(filter);
-            if (consumer != null) {
-                consumer.accept(filter);
-            }
+        refreshActions.forEach((filter, consumer) -> {
+            final Consumer<@NotNull Filter> cast = ClassUtils.unsafeCast(consumer);
+            cast.accept(filter);
         });
     }
 
