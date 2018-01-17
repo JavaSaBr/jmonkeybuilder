@@ -16,16 +16,14 @@ public interface Editor3DProvider {
      *
      * @return the cursor node.
      */
-    @NotNull
     @JmeThread
-    Node getCursorNode();
+    @NotNull Node getCursorNode();
 
     /**
      * Get a node to place some markers in 3D editor.
      *
      * @return the markers node.
      */
-    @NotNull
     @JmeThread
-    Node getMarkersNode();
+    @NotNull Node getMarkersNode();
 }

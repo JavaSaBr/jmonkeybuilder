@@ -14,7 +14,7 @@ import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.serializer.MaterialSerializer;
+import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;

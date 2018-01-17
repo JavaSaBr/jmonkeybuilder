@@ -51,7 +51,7 @@ public class RenameAnimationNodeOperation extends AbstractEditorOperation<ModelC
         EXECUTOR_MANAGER.addJmeTask(() -> {
             final Animation anim = control.getAnim(oldName);
             AnimationUtils.changeName(control, anim, oldName, newName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(control, anim, "name"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(control, anim, "name"));
         });
     }
 
@@ -60,7 +60,7 @@ public class RenameAnimationNodeOperation extends AbstractEditorOperation<ModelC
         EXECUTOR_MANAGER.addJmeTask(() -> {
             final Animation anim = control.getAnim(newName);
             AnimationUtils.changeName(control, anim, newName, oldName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(control, anim, "name"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(control, anim, "name"));
         });
     }
 }

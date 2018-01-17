@@ -17,8 +17,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.state.editor.impl.model.ModelEditor3DState;
-import com.ss.editor.state.editor.impl.model.ModelEditorBulletState;
+import com.ss.editor.part3d.editor.impl.model.ModelEditor3DPart;
+import com.ss.editor.part3d.editor.impl.model.ModelEditorBulletPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -48,7 +48,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DState, EditorModelEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DPart, EditorModelEditorState> {
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -81,7 +81,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @NotNull
-    private final ModelEditorBulletState bulletState;
+    private final ModelEditorBulletPart bulletState;
 
     /**
      * The list of fast skies.
@@ -109,17 +109,17 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     private ModelFileEditor() {
         super();
-        this.bulletState = new ModelEditorBulletState(getEditor3DState());
+        this.bulletState = new ModelEditorBulletPart(getEditor3DPart());
         this.bulletState.setEnabled(false);
         this.bulletState.setDebugEnabled(false);
         this.bulletState.setSpeed(1F);
-        addEditorState(bulletState);
+        addEditor3DPart(bulletState);
     }
 
     @Override
     @FxThread
-    protected @NotNull ModelEditor3DState create3DEditorState() {
-        return new ModelEditor3DState(this);
+    protected @NotNull ModelEditor3DPart create3DEditorPart() {
+        return new ModelEditor3DPart(this);
     }
 
     /**
@@ -167,7 +167,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         editor3DState.openModel(model);
 
         handleAddedObject(model);
@@ -217,7 +217,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     protected void handleAddedObject(@NotNull final Spatial model) {
         super.handleAddedObject(model);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -236,7 +236,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     protected void handleRemovedObject(@NotNull final Spatial model) {
         super.handleRemovedObject(model);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -318,7 +318,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     private void changeFastSky(@NotNull final String newSky) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
 
         if (NO_FAST_SKY.equals(newSky)) {
             editor3DState.changeFastSky(null);
@@ -349,7 +349,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      * @return the bullet state.
      */
     @FxThread
-    private @NotNull ModelEditorBulletState getBulletState() {
+    private @NotNull ModelEditorBulletPart getBulletState() {
         return bulletState;
     }
 
@@ -384,7 +384,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         editor3DState.updateLightEnabled(newValue);
 
         if (editorState != null) editorState.setEnableLight(newValue);
@@ -392,11 +392,11 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     @Override
     @FxThread
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+    public void notifyFxAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
                                    final boolean needSelect) {
-        super.notifyFXAddedChild(parent, added, index, needSelect);
+        super.notifyFxAddedChild(parent, added, index, needSelect);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
 
         if (added instanceof Spatial) {
 
@@ -414,10 +414,10 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     @Override
     @FxThread
-    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
-        super.notifyFXRemovedChild(parent, removed);
+    public void notifyFxRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+        super.notifyFxRemovedChild(parent, removed);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
 
         if (removed instanceof Spatial) {
 

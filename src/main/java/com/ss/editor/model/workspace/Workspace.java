@@ -81,9 +81,6 @@ public class Workspace implements Serializable {
     @Nullable
     private volatile String currentEditedFile;
 
-    /**
-     * Instantiates a new Workspace.
-     */
     public Workspace() {
         this.changes = new AtomicInteger();
     }
@@ -111,7 +108,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Gets current edited file.
+     * Get the current edited file.
      *
      * @return the current edited file.
      */
@@ -121,7 +118,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Update a current edited file.
+     * Update the current edited file.
      *
      * @param file the current edited file.
      */
@@ -138,6 +135,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Get the table with states of editors.
+     *
      * @return the table with states of editors.
      */
     @FromAnyThread
@@ -146,6 +145,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Get the list of expanded folders.
+     *
      * @return the list of expanded folders.
      */
     @FromAnyThread
@@ -154,7 +155,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Gets expanded absolute folders.
+     * Get the expanded absolute folders.
      *
      * @return the list of expanded absolute folders.
      */
@@ -171,7 +172,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Update a list of expanded folders.
+     * Update the list of expanded folders.
      *
      * @param folders the folders
      */
@@ -188,9 +189,9 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Get an editor state for a file.
+     * Get the editor state for the file.
      *
-     * @param <T>          the type parameter
+     * @param <T>          the editor state's type.
      * @param file         the edited file.
      * @param stateFactory the state factory.
      * @return the state of the editor.
@@ -215,7 +216,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Remove an editor state of a file.
+     * Remove an editor state of the file.
      *
      * @param file the file.
      */
@@ -232,7 +233,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Sets asset folder.
+     * Set the asset folder.
      *
      * @param assetFolder the asset folder of this workspace.
      */
@@ -242,7 +243,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Gets opened files.
+     * Get the opened files.
      *
      * @return the table of opened files.
      */
@@ -252,7 +253,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Add a new opened file.
+     * Add the new opened file.
      *
      * @param file       the opened file.
      * @param fileEditor the editor.
@@ -267,13 +268,15 @@ public class Workspace implements Serializable {
 
         final Map<String, String> openedFiles = getOpenedFiles();
         final String previous = openedFiles.put(assetPath, description.getEditorId());
-        if (StringUtils.equals(previous, description.getEditorId())) return;
+        if (StringUtils.equals(previous, description.getEditorId())) {
+            return;
+        }
 
         incrementChanges();
     }
 
     /**
-     * Remove an opened file.
+     * Remove the opened file.
      *
      * @param file the removed file.
      */
@@ -290,7 +293,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Gets asset folder.
+     * Get the asset folder.
      *
      * @return the asset folder of this workspace.
      */
@@ -322,10 +325,14 @@ public class Workspace implements Serializable {
      */
     @FromAnyThread
     public synchronized void save(final boolean force) {
-        if (!force && changes.get() == 0) return;
+        if (!force && changes.get() == 0) {
+            return;
+        }
 
         final Path assetFolder = getAssetFolder();
-        if (!Files.exists(assetFolder)) return;
+        if (!Files.exists(assetFolder)) {
+            return;
+        }
 
         final Path workspaceFile = assetFolder.resolve(WorkspaceManager.FOLDER_EDITOR)
                 .resolve(WorkspaceManager.FILE_WORKSPACE);
@@ -356,7 +363,6 @@ public class Workspace implements Serializable {
         }
 
         changes.set(0);
-
         try {
             Files.write(workspaceFile, EditorUtil.serialize(this));
         } catch (final IOException e) {

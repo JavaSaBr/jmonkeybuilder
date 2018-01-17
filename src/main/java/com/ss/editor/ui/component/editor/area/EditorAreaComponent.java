@@ -18,7 +18,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.workspace.Workspace;
-import com.ss.editor.state.editor.Editor3DState;
+import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -30,7 +30,7 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.logging.Logger;
@@ -165,7 +165,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             current3DArea = fileEditor.get3DArea();
         }
 
-        final EditorFXScene scene = (EditorFXScene) getScene();
+        final EditorFxScene scene = (EditorFxScene) getScene();
         final ImageView canvas = scene.getCanvas();
 
         if (new3DArea != null) {
@@ -387,7 +387,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = prevTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<Editor3DState> states = fileEditor.get3DStates();
+            final Array<Editor3DPart> states = fileEditor.get3DStates();
             states.forEach(stateManager::detach);
         }
 
@@ -396,7 +396,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = newTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<Editor3DState> states = fileEditor.get3DStates();
+            final Array<Editor3DPart> states = fileEditor.get3DStates();
             states.forEach(stateManager::attach);
 
             enabled = states.size() > 0;
@@ -437,7 +437,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @BackgroundThread
     private void processOpenFileImpl(@NotNull final RequestedOpenFileEvent event, @NotNull final Path file) {
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final EditorFxScene scene = JFX_APPLICATION.getScene();
 
         FileEditor editor;
         try {

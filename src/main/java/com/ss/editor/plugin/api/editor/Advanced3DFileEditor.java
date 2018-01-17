@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.editor;
 
 import static com.ss.editor.ui.component.editor.FileEditorUtils.loadCameraState;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
 
 /**
@@ -10,7 +10,7 @@ import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
  *
  * @author JavaSaBr
  */
-public abstract class Advanced3DFileEditor<T extends Advanced3DEditorState, S extends Editor3DEditorState>
+public abstract class Advanced3DFileEditor<T extends Advanced3DEditorPart, S extends Editor3DEditorState>
         extends Base3DFileEditor<T, S> {
 
     @Override
@@ -20,7 +20,7 @@ public abstract class Advanced3DFileEditor<T extends Advanced3DEditorState, S ex
 
         final S editorState = getEditorState();
         if (editorState != null) {
-            loadCameraState(editorState, getEditor3DState());
+            loadCameraState(editorState, getEditor3DPart());
         }
     }
 }

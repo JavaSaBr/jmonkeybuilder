@@ -50,7 +50,7 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
         prevInfluencer = influencer;
         emitter.setParticleInfluencer(newInfluencer);
 
-        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXReplaced(emitter, prevInfluencer, newInfluencer, true, true));
+        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxReplaced(emitter, prevInfluencer, newInfluencer, true, true));
     }
 
     @Override

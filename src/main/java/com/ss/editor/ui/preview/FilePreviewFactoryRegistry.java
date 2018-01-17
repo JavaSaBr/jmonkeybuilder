@@ -26,7 +26,7 @@ public class FilePreviewFactoryRegistry {
     }
 
     /**
-     * THe list of available factories.
+     * The list of available factories.
      */
     @NotNull
     private final ConcurrentArray<FilePreviewFactory> factories;

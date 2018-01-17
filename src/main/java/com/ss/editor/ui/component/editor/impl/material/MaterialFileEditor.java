@@ -24,10 +24,10 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.node.material.RootMaterialSettings;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DState.ModelType;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialFileEditor;
-import com.ss.editor.serializer.MaterialSerializer;
-import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
+import com.ss.editor.util.MaterialSerializer;
+import com.ss.editor.part3d.editor.impl.material.MaterialEditor3DPart;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
@@ -60,7 +60,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class MaterialFileEditor extends
-        BaseMaterialFileEditor<MaterialEditor3DState, EditorMaterialEditorState, ChangeConsumer> {
+        BaseMaterialFileEditor<MaterialEditor3DPart, EditorMaterialEditorState, ChangeConsumer> {
 
     /**
      * The description.
@@ -96,8 +96,8 @@ public class MaterialFileEditor extends
 
     @Override
     @FxThread
-    protected @NotNull MaterialEditor3DState create3DEditorState() {
-        return new MaterialEditor3DState(this);
+    protected @NotNull MaterialEditor3DPart create3DEditorPart() {
+        return new MaterialEditor3DPart(this);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class MaterialFileEditor extends
         final AssetManager assetManager = JME_APPLICATION.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
 
-        final MaterialEditor3DState editor3DState = getEditor3DState();
+        final MaterialEditor3DPart editor3DState = getEditor3DPart();
         editor3DState.changeMode(ModelType.BOX);
 
         reload(material);
@@ -250,7 +250,7 @@ public class MaterialFileEditor extends
         setIgnoreListeners(true);
         try {
 
-            final MaterialEditor3DState editor3DState = getEditor3DState();
+            final MaterialEditor3DPart editor3DState = getEditor3DPart();
             editor3DState.updateMaterial(material);
 
             getSettingsTree().fill(new RootMaterialSettings(material));

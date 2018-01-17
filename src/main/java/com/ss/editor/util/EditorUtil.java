@@ -30,7 +30,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.ClassUtils;
@@ -729,7 +729,7 @@ public abstract class EditorUtil {
     @FxThread
     public static void incrementLoading() {
         final JfxApplication jfxApplication = JfxApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
+        final EditorFxScene scene = jfxApplication.getScene();
         scene.incrementLoading();
     }
 
@@ -739,7 +739,7 @@ public abstract class EditorUtil {
     @FxThread
     public static void decrementLoading() {
         final JfxApplication jfxApplication = JfxApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
+        final EditorFxScene scene = jfxApplication.getScene();
         scene.decrementLoading();
     }
 

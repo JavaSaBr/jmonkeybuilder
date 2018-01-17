@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.editor;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public abstract class Advanced3DFileEditorWithSplitRightTool<T extends Advanced3DEditorState, S extends Editor3DWithEditorToolEditorState> extends
+public abstract class Advanced3DFileEditorWithSplitRightTool<T extends Advanced3DEditorPart, S extends Editor3DWithEditorToolEditorState> extends
         Advanced3DFileEditorWithRightTool<T, S> {
 
     /**

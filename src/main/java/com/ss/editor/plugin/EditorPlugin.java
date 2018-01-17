@@ -113,7 +113,7 @@ public class EditorPlugin extends BasePlugin {
     }
 
     /**
-     * Do some things before when JME context will be created.
+     * Do some things before when jME context will be created.
      *
      * @param pluginSystem the plugin system.
      */
@@ -122,7 +122,7 @@ public class EditorPlugin extends BasePlugin {
     }
 
     /**
-     * Do some things after when JME context was created.
+     * Do some things after when jME context was created.
      *
      * @param pluginSystem the plugin system.
      */

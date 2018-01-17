@@ -23,7 +23,7 @@ public class PropertyCountOperation<C extends ChangeConsumer, D, T> extends Prop
     protected void redoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, newValue);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangePropertyCount(target));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangePropertyCount(target));
         });
     }
 
@@ -31,7 +31,7 @@ public class PropertyCountOperation<C extends ChangeConsumer, D, T> extends Prop
     protected void undoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, oldValue);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangePropertyCount(target));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangePropertyCount(target));
         });
     }
 }

@@ -49,7 +49,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
             final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
             filterExtension.refreshFilters();
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(parent, newChild, 0, needSelect));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(parent, newChild, 0, needSelect));
         });
     }
 
@@ -57,7 +57,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.detachChild(newChild);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(parent, newChild));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(parent, newChild));
         });
     }
 }

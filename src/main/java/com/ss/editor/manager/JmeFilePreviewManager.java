@@ -35,8 +35,8 @@ import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.TangentGenerator;
+import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -237,7 +237,7 @@ public class JmeFilePreviewManager extends AbstractControl {
         executorManager.addFxTask(() -> {
 
             final JfxApplication application = JfxApplication.getInstance();
-            final EditorFXScene scene = application.getScene();
+            final EditorFxScene scene = application.getScene();
             final StackPane container = scene.getHideLayer();
 
             FXUtils.addToPane(imageView, container);

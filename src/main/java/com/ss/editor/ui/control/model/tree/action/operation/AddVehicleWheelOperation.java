@@ -93,7 +93,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
             this.createdWheel = vehicleWheel;
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1, true));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, vehicleWheel, -1, true));
         });
     }
 
@@ -113,7 +113,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
             this.createdWheel = null;
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(control, toRemove));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, toRemove));
         });
     }
 }

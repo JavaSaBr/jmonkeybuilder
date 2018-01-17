@@ -11,7 +11,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.impl.audio.AudioViewer3DState;
+import com.ss.editor.part3d.editor.impl.audio.AudioViewer3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
@@ -54,7 +54,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * The editor app state.
      */
     @NotNull
-    private final AudioViewer3DState editorAppState;
+    private final AudioViewer3DPart editorAppState;
 
     /**
      * The play button.
@@ -99,8 +99,8 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     private TextField sampleRateField;
 
     private AudioViewerEditor() {
-        this.editorAppState = new AudioViewer3DState(this);
-        addEditorState(editorAppState);
+        this.editorAppState = new AudioViewer3DPart(this);
+        addEditor3DPart(editorAppState);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @FxThread
     private void processPlay() {
-        final AudioViewer3DState appState = getEditorAppState();
+        final AudioViewer3DPart appState = getEditorAppState();
         if (appState.getPrevStatus() == Playing) {
             appState.pause();
         } else {
@@ -210,7 +210,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         final AudioData.DataType dataType = audioData.getDataType();
         final int sampleRate = audioData.getSampleRate();
 
-        final AudioViewer3DState editorAppState = getEditorAppState();
+        final AudioViewer3DPart editorAppState = getEditorAppState();
         editorAppState.load(audioData, audioKey);
 
         getChannelsField().setText(String.valueOf(channels));
@@ -230,7 +230,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * @return the editor app state.
      */
     @FromAnyThread
-    private @NotNull AudioViewer3DState getEditorAppState() {
+    private @NotNull AudioViewer3DPart getEditorAppState() {
         return editorAppState;
     }
 

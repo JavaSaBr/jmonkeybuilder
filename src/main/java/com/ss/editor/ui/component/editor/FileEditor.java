@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.Editor3DState;
+import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
@@ -25,7 +25,7 @@ public interface FileEditor {
     /**
      * The Empty states.
      */
-    @NotNull Array<Editor3DState> EMPTY_3D_STATES = ArrayFactory.newArray(Editor3DState.class);
+    @NotNull Array<Editor3DPart> EMPTY_3D_STATES = ArrayFactory.newArray(Editor3DPart.class);
 
     /**
      * Get the page for showing the editor.
@@ -108,7 +108,7 @@ public interface FileEditor {
      * @return the 3D part of this editor.
      */
     @FxThread
-    default @NotNull Array<Editor3DState> get3DStates() {
+    default @NotNull Array<Editor3DPart> get3DStates() {
         return EMPTY_3D_STATES;
     }
 

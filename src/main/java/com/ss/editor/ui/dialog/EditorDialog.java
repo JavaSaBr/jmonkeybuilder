@@ -12,7 +12,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -299,9 +299,9 @@ public class EditorDialog {
 
         final Scene scene = owner.getScene();
 
-        if (scene instanceof EditorFXScene) {
-            final EditorFXScene editorFXScene = (EditorFXScene) scene;
-            final StackPane container = editorFXScene.getContainer();
+        if (scene instanceof EditorFxScene) {
+            final EditorFxScene editorFxScene = (EditorFxScene) scene;
+            final StackPane container = editorFxScene.getContainer();
             container.setFocusTraversable(false);
         }
 
@@ -339,9 +339,9 @@ public class EditorDialog {
         final Window window = dialog.getOwner();
         final Scene scene = window.getScene();
 
-        if (scene instanceof EditorFXScene) {
-            final EditorFXScene editorFXScene = (EditorFXScene) scene;
-            final StackPane container = editorFXScene.getContainer();
+        if (scene instanceof EditorFxScene) {
+            final EditorFxScene editorFxScene = (EditorFxScene) scene;
+            final StackPane container = editorFxScene.getContainer();
             container.setFocusTraversable(true);
         }
 

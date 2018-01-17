@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor;
 
 import com.jme3.math.Vector3f;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
+import com.ss.editor.part3d.editor.impl.AdvancedAbstractEditor3DPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public class FileEditorUtils {
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     public static void loadCameraState(@NotNull final Editor3DEditorState editorState,
-                                       @NotNull final AdvancedAbstractEditor3DState editor3DState) {
+                                       @NotNull final AdvancedAbstractEditor3DPart editor3DState) {
 
         final Vector3f cameraLocation = editorState.getCameraLocation();
 

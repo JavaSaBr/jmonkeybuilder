@@ -48,7 +48,7 @@ public class MoveControlOperation extends AbstractEditorOperation<ModelChangeCon
         EXECUTOR_MANAGER.addJmeTask(() -> {
             oldParent.removeControl(moved);
             newParent.addControl(moved);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXMoved(oldParent, newParent, moved, -1, true));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxMoved(oldParent, newParent, moved, -1, true));
         });
     }
 
@@ -57,7 +57,7 @@ public class MoveControlOperation extends AbstractEditorOperation<ModelChangeCon
         EXECUTOR_MANAGER.addJmeTask(() -> {
             newParent.removeControl(moved);
             oldParent.addControl(moved);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXMoved(newParent, oldParent, moved, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxMoved(newParent, oldParent, moved, -1, false));
         });
     }
 }

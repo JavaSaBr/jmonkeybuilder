@@ -41,7 +41,7 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             spatial.addControl(newControl);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(spatial, newControl, -1, true));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(spatial, newControl, -1, true));
         });
     }
 
@@ -49,7 +49,7 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             spatial.removeControl(newControl);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(spatial, newControl));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(spatial, newControl));
         });
     }
 }

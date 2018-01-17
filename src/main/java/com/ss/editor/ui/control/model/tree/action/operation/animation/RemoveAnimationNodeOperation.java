@@ -40,7 +40,7 @@ public class RemoveAnimationNodeOperation extends AbstractEditorOperation<ModelC
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             control.removeAnim(animation);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(control, animation));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, animation));
         });
     }
 
@@ -48,7 +48,7 @@ public class RemoveAnimationNodeOperation extends AbstractEditorOperation<ModelC
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             control.addAnim(animation);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(control, animation, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, animation, -1, false));
         });
     }
 }

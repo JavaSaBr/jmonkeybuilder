@@ -12,7 +12,7 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.Editor3DState;
+import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -95,7 +95,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The array of 3D parts of this editor.
      */
     @NotNull
-    private final Array<Editor3DState> editorStates;
+    private final Array<Editor3DPart> editor3DParts;
 
     /**
      * The file changes listener.
@@ -158,7 +158,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
-        this.editorStates = ArrayFactory.newArray(Editor3DState.class);
+        this.editor3DParts = ArrayFactory.newArray(Editor3DPart.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         createContent();
@@ -167,11 +167,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Add the new 3D part of this editor.
      *
-     * @param editor3DState the editor app state
+     * @param editor3DPart the editor app state
      */
     @FxThread
-    protected void addEditorState(@NotNull final Editor3DState editor3DState) {
-        this.editorStates.add(editor3DState);
+    protected void addEditor3DPart(@NotNull final Editor3DPart editor3DPart) {
+        this.editor3DParts.add(editor3DPart);
     }
 
     /**
@@ -492,8 +492,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FxThread
-    public @NotNull Array<Editor3DState> get3DStates() {
-        return editorStates;
+    public @NotNull Array<Editor3DPart> get3DStates() {
+        return editor3DParts;
     }
 
     @Override

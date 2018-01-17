@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
@@ -41,12 +41,12 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
-import com.ss.editor.scene.EditorAudioNode;
-import com.ss.editor.scene.EditorLightNode;
-import com.ss.editor.scene.EditorPresentableNode;
-import com.ss.editor.scene.WrapperNode;
-import com.ss.editor.state.editor.impl.Stats3DState;
-import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
+import com.ss.editor.model.scene.EditorAudioNode;
+import com.ss.editor.model.scene.EditorLightNode;
+import com.ss.editor.model.scene.EditorPresentableNode;
+import com.ss.editor.model.scene.WrapperNode;
+import com.ss.editor.part3d.editor.impl.Stats3DPart;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.container.ProcessingComponent;
 import com.ss.editor.ui.component.editing.EditingComponent;
@@ -102,11 +102,11 @@ import java.util.function.Consumer;
  * The base implementation of a model file editor.
  *
  * @param <M>  the type edited object.
- * @param <MA> the type of {@link AbstractSceneEditor3DState}
+ * @param <MA> the type of {@link AbstractSceneEditor3DPart}
  * @param <ES> the type of an editor state.
  * @author JavaSaBr
  */
-public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DState, ES extends BaseEditorSceneEditorState> extends
+public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DPart, ES extends BaseEditorSceneEditorState> extends
         Advanced3DFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
@@ -124,7 +124,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * The stats app state.
      */
     @NotNull
-    private final Stats3DState statsAppState;
+    private final Stats3DPart statsAppState;
 
     /**
      * The opened model.
@@ -234,8 +234,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private boolean ignoreCameraMove;
 
     public AbstractSceneFileEditor() {
-        this.statsAppState = new Stats3DState(statsContainer);
-        addEditorState(statsAppState);
+        this.statsAppState = new Stats3DPart(statsContainer);
+        addEditor3DPart(statsAppState);
         statsAppState.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
     }
@@ -374,7 +374,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleAddedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
@@ -393,7 +393,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleRemovedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
@@ -462,7 +462,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                                           final boolean isControlDown, final boolean isShiftDown,
                                           final boolean isButtonMiddleDown) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         if (editor3DState.isCameraMoving()) {
             return false;
         }
@@ -546,7 +546,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    public void notifyFXChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+    public void notifyFxChangeProperty(@Nullable final Object parent, @NotNull final Object object,
                                        @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
@@ -565,23 +565,23 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    public void notifyJMEChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-        getEditor3DState().notifyPropertyChanged(object);
+    public void notifyJmeChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+        getEditor3DPart().notifyPropertyChanged(object);
     }
 
     @Override
     @FxThread
-    public void notifyFXChangePropertyCount(@NotNull final Object object) {
+    public void notifyFxChangePropertyCount(@NotNull final Object object) {
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.rebuildFor(object, null);
     }
 
     @Override
     @FxThread
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+    public void notifyFxAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
                                    final boolean needSelect) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);
 
@@ -600,9 +600,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+    public void notifyFxRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
 
@@ -617,11 +617,11 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
+    public void notifyFxReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
                                  @Nullable final Object newChild, final boolean needExpand,
                                  final boolean needDeepExpand) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final Spatial currentModel = getCurrentModel();
 
         if (currentModel == oldChild && newChild != null) {
@@ -645,7 +645,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    public void notifyFXMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
+    public void notifyFxMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
                               @NotNull final Object child, final int index, final boolean needSelect) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -689,7 +689,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     public void selectNodeFromTree(@Nullable final Object object) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
 
         Object parent = null;
         Object element;
@@ -742,7 +742,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final Camera camera = editor3DState.getCamera();
 
         final Vector3f position = spatial.getWorldTranslation();
@@ -765,7 +765,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Array<Spatial> selection = ArrayFactory.newArray(Spatial.class);
         if (spatial != null) selection.add(spatial);
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.updateSelection(selection);
     }
 
@@ -821,7 +821,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private void changeTransformMode(@NotNull final TransformationMode transformationMode) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.setTransformMode(transformationMode);
 
         final ES editorState = getEditorState();
@@ -837,7 +837,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private void updateTransformTool(@NotNull final TransformType transformType, @NotNull final Boolean newValue) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final ToggleButton scaleToolButton = getScaleToolButton();
         final ToggleButton moveToolButton = getMoveToolButton();
         final ToggleButton rotationToolButton = getRotationToolButton();
@@ -1048,7 +1048,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             editingComponentContainer.notifyHided();
         }
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.changeEditingMode(newIndex == EDITING_TOOL);
     }
 
@@ -1083,7 +1083,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final MaterialKey materialKey = new MaterialKey(assetPath);
         final Camera camera = editor3DState.getCamera();
 
@@ -1137,7 +1137,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final ModelKey modelKey = new ModelKey(assetPath);
         final Camera camera = editor3DState.getCamera();
 
@@ -1179,7 +1179,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private void changeSelectionVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.updateShowSelection(newValue);
 
         final ES editorState = getEditorState();
@@ -1193,7 +1193,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private void changeGridVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.updateShowGrid(newValue);
 
         final ES editorState = getEditorState();
@@ -1242,13 +1242,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @JmeThread
     public @NotNull Node getCursorNode() {
-        return getEditor3DState().getCursorNode();
+        return getEditor3DPart().getCursorNode();
     }
 
     @Override
     @JmeThread
     public  @NotNull Node getMarkersNode() {
-        return getEditor3DState().getMarkersNode();
+        return getEditor3DPart().getMarkersNode();
     }
 }
 

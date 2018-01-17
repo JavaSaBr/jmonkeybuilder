@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ModelChangeConsumer extends ChangeConsumer {
 
     /**
-     * Gets current model.
+     * Get the current model.
      *
      * @return the current model of the editor.
      */

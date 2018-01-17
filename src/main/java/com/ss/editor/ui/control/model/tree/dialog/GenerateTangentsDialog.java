@@ -7,7 +7,7 @@ import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.model.tool.TangentGenerator;
+import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
 import com.ss.editor.ui.control.tree.NodeTree;

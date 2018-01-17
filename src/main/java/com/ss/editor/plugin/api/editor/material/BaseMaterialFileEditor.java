@@ -12,7 +12,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DState.ModelType;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
+public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
         Advanced3DFileEditorWithSplitRightTool<T, S> {
 
     /**
@@ -304,7 +304,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     @FxThread
     private void changeBucketType(@NotNull final RenderQueue.Bucket newValue) {
 
-        final T editor3DState = getEditor3DState();
+        final T editor3DState = getEditor3DPart();
         editor3DState.changeBucketType(newValue);
 
         final EditorMaterialEditorState editorState = getEditorState();
@@ -317,7 +317,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     @FxThread
     private void changeLight(@NotNull final Boolean newValue) {
 
-        final T editor3DState = getEditor3DState();
+        final T editor3DState = getEditor3DPart();
         editor3DState.updateLightEnabled(newValue);
 
         final EditorMaterialEditorState editorState = getEditorState();
@@ -371,7 +371,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     private void changeModelType(@NotNull final ModelType modelType, @NotNull final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
-        final T editor3DState = getEditor3DState();
+        final T editor3DState = getEditor3DPart();
 
         final ToggleButton cubeButton = getCubeButton();
         final ToggleButton sphereButton = getSphereButton();
@@ -409,7 +409,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
 
     @Override
     @FxThread
-    public void notifyFXChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyFxChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
         if (object instanceof Material) {
             getPropertyEditor().refresh();
         } else {

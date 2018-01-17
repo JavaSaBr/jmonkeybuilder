@@ -42,7 +42,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.removeLight(light);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(parent, light));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(parent, light));
         });
     }
 
@@ -50,7 +50,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.addLight(light);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(parent, light, -1, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(parent, light, -1, false));
         });
     }
 }

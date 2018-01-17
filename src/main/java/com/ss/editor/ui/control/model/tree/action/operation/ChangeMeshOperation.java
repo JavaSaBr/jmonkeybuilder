@@ -49,7 +49,7 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             geometry.setMesh(newMesh);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(geometry, newMesh, "mesh"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(geometry, newMesh, "mesh"));
         });
     }
 
@@ -57,7 +57,7 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             geometry.setMesh(oldMesh);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXChangeProperty(geometry, oldMesh, "mesh"));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(geometry, oldMesh, "mesh"));
         });
     }
 }

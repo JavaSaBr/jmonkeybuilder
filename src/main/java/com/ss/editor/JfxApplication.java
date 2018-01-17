@@ -21,7 +21,7 @@ import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.*;
 import com.ss.editor.task.CheckNewVersionTask;
-import com.ss.editor.ui.builder.EditorFXSceneBuilder;
+import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
@@ -31,7 +31,7 @@ import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.svg.SvgImageLoaderFactory;
@@ -242,7 +242,7 @@ public class JfxApplication extends Application {
      * The JavaFX scene.
      */
     @Nullable
-    private volatile EditorFXScene scene;
+    private volatile EditorFxScene scene;
 
     /**
      * The scene processor.
@@ -399,7 +399,7 @@ public class JfxApplication extends Application {
      */
     @FxThread
     private void buildScene() {
-        this.scene = EditorFXSceneBuilder.build(notNull(stage));
+        this.scene = EditorFxSceneBuilder.build(notNull(stage));
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
         initializationManager.onAfterCreateJavaFxContext();
@@ -416,7 +416,7 @@ public class JfxApplication extends Application {
             editorPlugin.register(FilePreviewFactoryRegistry.getInstance());
         });
 
-        final EditorFXScene scene = getScene();
+        final EditorFxScene scene = getScene();
 
         final JmeApplication jmeApplication = JmeApplication.getInstance();
         final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
@@ -454,7 +454,7 @@ public class JfxApplication extends Application {
     }
 
     @FxThread
-    private void createSceneProcessor(@NotNull final EditorFXScene scene, @NotNull final JmeApplication jmeApplication) {
+    private void createSceneProcessor(@NotNull final EditorFxScene scene, @NotNull final JmeApplication jmeApplication) {
 
         final FrameTransferSceneProcessor sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
         sceneProcessor.setEnabled(false);
@@ -474,7 +474,7 @@ public class JfxApplication extends Application {
      * @return the JavaFX scene.
      */
     @FromAnyThread
-    public @NotNull EditorFXScene getScene() {
+    public @NotNull EditorFxScene getScene() {
         return notNull(scene, "Scene can't be null.");
     }
 
