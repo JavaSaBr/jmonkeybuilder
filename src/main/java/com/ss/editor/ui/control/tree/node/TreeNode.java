@@ -2,18 +2,20 @@ package com.ss.editor.ui.control.tree.node;
 
 import static com.ss.editor.ui.control.tree.NodeTreeCell.DATA_FORMAT;
 import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.CopyNodeAction;
 import com.ss.editor.ui.control.model.tree.action.PasteNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
@@ -22,6 +24,7 @@ import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -49,6 +52,22 @@ public abstract class TreeNode<T> implements UObject {
      */
     @NotNull
     protected static final TreeNodeFactoryRegistry FACTORY_REGISTRY = TreeNodeFactoryRegistry.getInstance();
+
+    /**
+     * The action's comparator.
+     */
+    @NotNull
+    protected static final Comparator<MenuItem> ACTION_COMPARATOR = (first, second) -> {
+        if (first instanceof Menu) {
+            return -1;
+        } else if (second instanceof Menu) {
+            return 1;
+        } else if (first instanceof AbstractNodeAction) {
+            return ((AbstractNodeAction) first).compareTo(second);
+        } else {
+            return 0;
+        }
+    };
 
     /**
      * The uniq id of this node.
@@ -177,8 +196,14 @@ public abstract class TreeNode<T> implements UObject {
      */
     @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
-        if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
-        if (canCopy()) items.add(new CopyNodeAction(nodeTree, this));
+
+        if (canEditName()) {
+            items.add(new RenameNodeAction(nodeTree, this));
+        }
+
+        if (canCopy()) {
+            items.add(new CopyNodeAction(nodeTree, this));
+        }
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final Object content = clipboard.getContent(DATA_FORMAT);
@@ -193,6 +218,18 @@ public abstract class TreeNode<T> implements UObject {
         if (treeNode != null && canAccept(treeNode, true)) {
             items.add(new PasteNodeAction(nodeTree, this, treeNode));
         }
+    }
+
+    /**
+     * Handle the result context menu.
+     *
+     * @param nodeTree the node tree.
+     * @param items    the result items.
+     */
+    @FxThread
+    public void handleResultContextMenu(@NotNull final NodeTree<?> nodeTree,
+                                        @NotNull final ObservableList<MenuItem> items) {
+        items.sort(ACTION_COMPARATOR);
     }
 
     /**

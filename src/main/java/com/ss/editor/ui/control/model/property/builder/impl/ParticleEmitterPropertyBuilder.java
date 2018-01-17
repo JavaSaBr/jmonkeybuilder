@@ -87,7 +87,7 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
-        if (object instanceof ParticleEmitter) {
+        if (!(object instanceof ParticleEmitter)) {
             return;
         }
 

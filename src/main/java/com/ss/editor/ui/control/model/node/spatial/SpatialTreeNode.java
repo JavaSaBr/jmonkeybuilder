@@ -82,16 +82,28 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
-        if (!(nodeTree instanceof ModelNodeTree)) return;
+
+        if (!(nodeTree instanceof ModelNodeTree)) {
+            return;
+        }
 
         final T element = getElement();
         final AssetLinkNode linkNode = findParent(element, AssetLinkNode.class::isInstance);
 
         if (linkNode == null) {
+
             final Menu createMenu = createCreationMenu(nodeTree);
-            if (createMenu != null) items.add(createMenu);
+
+            if (createMenu != null) {
+                createMenu.getItems().sort(ACTION_COMPARATOR);
+                items.add(createMenu);
+            }
+
             final Menu toolMenu = createToolMenu(nodeTree);
-            if (toolMenu != null) items.add(toolMenu);
+            if (toolMenu != null) {
+                toolMenu.getItems().sort(ACTION_COMPARATOR);
+                items.add(toolMenu);
+            }
         }
 
         if (linkNode == null || element == linkNode) {

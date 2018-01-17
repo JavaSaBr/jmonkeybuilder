@@ -229,7 +229,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     public void update(@NotNull final TreeNode<?> treeNode) {
 
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), treeNode);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         treeItem.setValue(null);
         treeItem.setValue(treeNode);
@@ -245,12 +247,19 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     public ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
 
         final C changeConsumer = getChangeConsumer();
-        if (changeConsumer == null) return null;
+        if (changeConsumer == null) {
+            return null;
+        }
 
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
         treeNode.fillContextMenu(this, items);
-        if (items.isEmpty()) return null;
+
+        if (items.isEmpty()) {
+            return null;
+        }
+
+        treeNode.handleResultContextMenu(this, items);
 
         return contextMenu;
     }

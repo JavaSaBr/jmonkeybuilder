@@ -19,32 +19,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Create terrain action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public CreateTerrainAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FxThread
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FxThread
+    protected @Nullable Image getIcon() {
         return Icons.TERRAIN_16;
     }
 
-    @FxThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FxThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected void process() {
         super.process();
         final CreateTerrainDialog dialog = new CreateTerrainDialog(getNode(), getNodeTree());

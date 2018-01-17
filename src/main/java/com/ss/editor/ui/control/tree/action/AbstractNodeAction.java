@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.tree.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FxThread;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem {
+public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem implements Comparable<MenuItem> {
 
     /**
      * The logger.
@@ -102,7 +102,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     }
 
     /**
-     * Gets node tree.
+     * Get the node tree.
      *
      * @return the component of the model three.
      */
@@ -119,6 +119,25 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     @FxThread
     protected @NotNull TreeNode<?> getNode() {
         return node;
+    }
+
+    /**
+     * Get the order.
+     *
+     * @return the order.
+     */
+    @FxThread
+    protected int getOrder() {
+        return 0;
+    }
+
+    @Override
+    public int compareTo(@NotNull final MenuItem item) {
+        if (!(item instanceof AbstractNodeAction)) {
+            return 0;
+        } else {
+            return ((AbstractNodeAction) item).getOrder() - getOrder();
+        }
     }
 
     @Override
