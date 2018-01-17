@@ -28,6 +28,7 @@ ext.applicationMainClass = "com.ss.editor.JFXApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
 ext.jmeVersion = "3.3_branch-SNAPSHOT"
+ext.jmbExtVersion = "1.9.4"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.5"
 ext.junitPlatformVersion = "1.0.0"
@@ -128,12 +129,9 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jmonkeybuilder-extension:1.9.4') {
+    compile ("com.github.JavaSaBr:jmonkeybuilder-extension:$jmbExtVersion") {
         exclude group: 'org.jmonkeyengine'
     }
-    /*compile ('com.github.JavaSaBr:tonegodemitter:2.4.1') {
-        exclude group: 'org.jmonkeyengine'
-    }*/
 
     compile "org.xbuf.jme3_xbuf:jme3_xbuf_loader:${jme3_xbuf_version}"
 
@@ -141,6 +139,37 @@ dependencies {
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-beta-1'
 
     // TESTS
+    testRuntime "com.github.JavaSaBr.jmonkeyengine:jme3-lwjgl3:$jmeVersion"
+    testCompile ("com.github.JavaSaBr:jmonkeybuilder-extension:$jmbExtVersion") {
+        exclude group: 'org.jmonkeyengine'
+    }
+
+    testRuntime "org.lwjgl:lwjgl:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+    testRuntime "org.lwjgl:lwjgl:${lwjglVersion}:natives-windows"
+    testRuntime "org.lwjgl:lwjgl:${lwjglVersion}:natives-linux"
+    testRuntime "org.lwjgl:lwjgl:${lwjglVersion}:natives-macos"
+    testRuntime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-windows"
+    testRuntime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-linux"
+    testRuntime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-macos"
+    testRuntime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-windows"
+    testRuntime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-linux"
+    testRuntime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-macos"
+    testRuntime "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-windows"
+    testRuntime "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-linux"
+    testRuntime "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-macos"
+    testRuntime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-windows"
+    testRuntime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-linux"
+    testRuntime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-macos"
+    testRuntime "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-windows"
+    testRuntime "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-linux"
+    testRuntime "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-macos"
+
     testCompile "org.junit.platform:junit-platform-commons:$junitPlatformVersion"
     testRuntime "org.junit.platform:junit-platform-engine:$junitPlatformVersion"
 
@@ -174,7 +203,6 @@ task prepareDependencies(type: Copy) {
     into "$buildDir/dependencies"
     from configurations.runtime
 }
-
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'

@@ -1,4 +1,4 @@
-package com.ss.editor.test.plugin;
+package com.ss.editor.test.internal.plugin;
 
 import com.jme3.post.filters.FXAAFilter;
 import com.ss.editor.manager.InitializationManager;

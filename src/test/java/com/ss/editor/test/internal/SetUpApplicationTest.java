@@ -1,4 +1,4 @@
-package com.ss.editor.test;
+package com.ss.editor.test.internal;
 
 import com.ss.editor.JfxApplication;
 import com.ss.editor.config.CommandLineConfig;
