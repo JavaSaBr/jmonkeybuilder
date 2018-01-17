@@ -2,6 +2,11 @@ package com.ss.editor.test.external;
 
 import com.ss.editor.extension.loader.SceneLoader;
 
+/**
+ * The simple test of j3s scenes.
+ *
+ * @author JavaSaBr
+ */
 public class PbrSceneTest extends BaseExternalTest {
 
     public static void main(String[] args) {

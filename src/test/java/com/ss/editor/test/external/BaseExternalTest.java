@@ -45,11 +45,10 @@ public class BaseExternalTest extends SimpleApplication {
 
         postProcessor = new FilterPostProcessor(assetManager);
         postProcessor.initialize(renderManager, viewPort);
+
         viewPort.addProcessor(postProcessor);
-
-        flyCam.setDragToRotate(false);
-
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
+
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, Integer.MAX_VALUE);
     }
 }
