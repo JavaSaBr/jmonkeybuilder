@@ -1,6 +1,7 @@
 package com.ss.editor.executor.impl;
 
 import com.ss.editor.EditorThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.rlib.concurrent.lock.LockFactory;
 import com.ss.rlib.concurrent.lock.Lockable;
@@ -22,13 +23,13 @@ import java.util.concurrent.locks.Lock;
 public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor, Lockable {
 
     /**
-     * The constant LOGGER.
+     * The logger.
      */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorTaskExecutor.class);
 
     /**
-     * The array of task to execute for each iteration.
+     * The task list to execute for each iteration.
      */
     @NotNull
     protected final Array<Runnable> execute;
@@ -57,9 +58,6 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     @NotNull
     private final Lock lock;
 
-    /**
-     * Instantiates a new Abstract editor task executor.
-     */
     public AbstractEditorTaskExecutor() {
         this.execute = createExecuteArray();
         this.executed = createExecuteArray();
@@ -68,18 +66,26 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
         this.wait = new AtomicBoolean(false);
     }
 
-    @NotNull
-    private Array<Runnable> createExecuteArray() {
+    /**
+     * Create a new execute tasks array.
+     *
+     * @return the new execute tasks array.
+     */
+    @FromAnyThread
+    private @NotNull Array<Runnable> createExecuteArray() {
         return ArrayFactory.newArray(Runnable.class);
     }
 
     @Override
+    @FromAnyThread
     public void execute(@NotNull final Runnable task) {
         lock();
         try {
 
             waitTasks.add(task);
-            if (!wait.get()) return;
+            if (!wait.get()) {
+                return;
+            }
 
             synchronized (wait) {
                 if (wait.compareAndSet(true, false)) {
@@ -128,9 +134,15 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
                 }
             }
 
-            if (execute.isEmpty()) continue;
+            if (execute.isEmpty()) {
+                continue;
+            }
+
             doExecute(execute, executed);
-            if (executed.isEmpty()) continue;
+
+            if (executed.isEmpty()) {
+                continue;
+            }
 
             lock();
             try {

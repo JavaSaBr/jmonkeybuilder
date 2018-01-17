@@ -1,7 +1,7 @@
 package com.ss.editor.ui.preview.impl;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class ImageFilePreview extends AbstractFilePreview<ImageView> {
      * The image manager.
      */
     @NotNull
-    protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    protected static final JavaFxImageManager JAVA_FX_IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     @Override
     @FxThread
@@ -70,13 +70,13 @@ public class ImageFilePreview extends AbstractFilePreview<ImageView> {
     @Override
     @FxThread
     public boolean isSupport(@NotNull final String resource) {
-        return JavaFXImageManager.isImage(resource);
+        return JavaFxImageManager.isImage(resource);
     }
 
     @Override
     @FxThread
     public boolean isSupport(@NotNull final Path file) {
-        return JavaFXImageManager.isImage(file);
+        return JavaFxImageManager.isImage(file);
     }
 
     @Override

@@ -26,12 +26,8 @@ public class JmeThreadExecutor {
     @NotNull
     private static final JmeThreadExecutor INSTANCE = new JmeThreadExecutor();
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static JmeThreadExecutor getInstance() {
+    @FromAnyThread
+    public static @NotNull JmeThreadExecutor getInstance() {
         return INSTANCE;
     }
 
@@ -67,10 +63,12 @@ public class JmeThreadExecutor {
      */
     @JmeThread
     public void execute() {
-        if (waitTasks.isEmpty()) return;
+
+        if (waitTasks.isEmpty()) {
+            return;
+        }
 
         ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
-
         try {
             execute.forEach(JmeThreadExecutor::execute);
         } finally {

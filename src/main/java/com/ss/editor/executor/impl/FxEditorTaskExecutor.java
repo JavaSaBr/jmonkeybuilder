@@ -16,7 +16,7 @@ import com.ss.rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
-public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
+public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
 
     private static final int EXECUTE_LIMIT = 300;
 
@@ -26,11 +26,8 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     @NotNull
     private final Runnable fxTask = () -> doExecute(execute, executed);
 
-    /**
-     * Instantiates a new Fx editor task executor.
-     */
-    public FXEditorTaskExecutor() {
-        setName(FXEditorTaskExecutor.class.getSimpleName());
+    public FxEditorTaskExecutor() {
+        setName(FxEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
         PlatformImpl.startup(this::start);
     }
@@ -91,9 +88,15 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 }
             }
 
-            if (execute.isEmpty()) continue;
-            executeInFXUIThread();
-            if (executed.isEmpty()) continue;
+            if (execute.isEmpty()) {
+                continue;
+            }
+
+            executeInFxUiThread();
+
+            if (executed.isEmpty()) {
+                continue;
+            }
 
             lock();
             try {
@@ -105,7 +108,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     }
 
     @FromAnyThread
-    private void executeInFXUIThread() {
+    private void executeInFxUiThread() {
         while (true) {
             try {
                 PlatformImpl.runAndWait(fxTask);

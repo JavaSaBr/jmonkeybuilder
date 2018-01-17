@@ -6,7 +6,7 @@ import com.ss.editor.JfxApplication;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -92,7 +92,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The image preview manager.
      */
     @NotNull
-    protected static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    protected static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     /**
      * The editor.

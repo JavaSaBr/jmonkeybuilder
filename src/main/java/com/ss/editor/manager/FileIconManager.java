@@ -3,8 +3,8 @@ package com.ss.editor.manager;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
@@ -111,11 +111,6 @@ public class FileIconManager {
     @Nullable
     private static FileIconManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
     @FromAnyThread
     public static @NotNull FileIconManager getInstance() {
         if (instance == null) instance = new FileIconManager();
@@ -194,7 +189,6 @@ public class FileIconManager {
         final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
 
         String url = extensionToUrl.get(extension);
-
         if (url != null) {
             return getImage(url, size);
         }
@@ -334,20 +328,18 @@ public class FileIconManager {
     @FxThread
     public @NotNull Image getImage(@NotNull final String url, @NotNull final ClassLoader classLoader, final int size,
                                    final boolean useCache) {
+        if (!useCache) {
+            return buildImage(url, classLoader, size);
+        }
 
-        if (!useCache) return buildImage(url, classLoader, size);
-
-        final ObjectDictionary<String, Image> cache = imageCache.get(size, DictionaryFactory::newObjectDictionary);
-        final Image image = cache.get(url, () -> buildImage(url, classLoader, size));
-
-        return notNull(image);
+        return imageCache.get(size, DictionaryFactory::newObjectDictionary)
+                .get(url, () -> buildImage(url, classLoader, size));
     }
 
     @FxThread
     private @NotNull Image buildImage(@NotNull final String url, @NotNull final ClassLoader classLoader,
                                       final int size) {
-        final InputStream in = EditorUtil.getInputStream(url, classLoader);
-        return buildImage(url, in, size);
+        return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
     }
 
     @FxThread
@@ -383,6 +375,7 @@ public class FileIconManager {
                     } else {
                         coloredImage = new Image(url, size, size, false, true);
                     }
+
                 } finally {
                     SvgImageLoader.OVERRIDE_COLOR.set(null);
                 }

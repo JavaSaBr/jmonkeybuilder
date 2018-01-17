@@ -130,9 +130,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @NotNull
     private final Array<WatchKey> watchKeys;
 
-    /**
-     * Instantiates a new Resource manager.
-     */
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
@@ -252,12 +249,15 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public synchronized void assetLoaded(@NotNull final AssetKey key) {
+
         if (key.getCacheType() == null) {
             return;
         }
 
         final String extension = key.getExtension();
-        if (StringUtils.isEmpty(extension)) return;
+        if (StringUtils.isEmpty(extension)) {
+            return;
+        }
 
         final ObjectDictionary<String, Reference> table = getAssetCacheTable();
         final Reference reference = notNull(table.get(key.getName(), () -> newRef(ReferenceType.LONG)));
@@ -267,26 +267,35 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public synchronized void assetRequested(@NotNull final AssetKey key) {
+
         if (key.getCacheType() == null) {
             return;
         }
 
         final String extension = key.getExtension();
-        if (StringUtils.isEmpty(extension)) return;
+        if (StringUtils.isEmpty(extension)){
+            return;
+        }
 
         final ObjectDictionary<String, Reference> table = getAssetCacheTable();
         final Reference reference = table.get(key.getName());
-        if (reference == null) return;
+        if (reference == null) {
+            return;
+        }
 
         final Path assetFile = getRealFile(Paths.get(key.getName()));
-        if (assetFile == null || !Files.exists(assetFile)) return;
+        if (assetFile == null || !Files.exists(assetFile)) {
+            return;
+        }
 
         try {
 
             final long timestamp = reference.getLong();
 
             final FileTime lastModifiedTime = Files.getLastModifiedTime(assetFile);
-            if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) return;
+            if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) {
+                return;
+            }
 
             final JmeApplication jmeApplication = JmeApplication.getInstance();
             final AssetManager assetManager = jmeApplication.getAssetManager();
@@ -309,12 +318,13 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     public synchronized void updateAdditionalEnvs() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-
         final Array<Path> additionalEnvs = getAdditionalEnvs();
         additionalEnvs.clear();
 
         final Path folder = editorConfig.getAdditionalEnvs();
-        if (folder == null) return;
+        if (folder == null) {
+            return;
+        }
 
         additionalEnvs.addAll(getFiles(folder, IMAGE_HDR, IMAGE_TGA, IMAGE_PNG));
     }
@@ -342,7 +352,10 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @FromAnyThread
     private synchronized void processEvent(@NotNull final DeletedFileEvent event) {
-        if (event.isDirectory()) return;
+
+        if (event.isDirectory()) {
+            return;
+        }
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
@@ -513,7 +526,10 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @FromAnyThread
     private synchronized void handleFile(@NotNull final Path file) {
-        if (Files.isDirectory(file)) return;
+
+        if (Files.isDirectory(file)) {
+            return;
+        }
 
         final String extension = FileUtils.getExtension(file);
 
@@ -629,7 +645,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private synchronized void removeWatchKeyFor(@NotNull final Path path) {
 
         final WatchKey watchKey = findWatchKey(path);
-        if (watchKey == null) return;
+        if (watchKey == null) {
+            return;
+        }
 
         final Array<WatchKey> watchKeys = getWatchKeys();
         watchKeys.fastRemove(watchKey);

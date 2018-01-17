@@ -66,13 +66,8 @@ public class ClasspathManager {
     @Nullable
     private static ClasspathManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static ClasspathManager getInstance() {
+    @FromAnyThread
+    public static @NotNull ClasspathManager getInstance() {
         if (instance == null) instance = new ClasspathManager();
         return instance;
     }
@@ -399,7 +394,7 @@ public class ClasspathManager {
     }
 
     /**
-     * Get classes loader.
+     * Get the classes loader.
      *
      * @return the classes loader.
      */

@@ -4,7 +4,7 @@ import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -40,7 +40,7 @@ public class ChooseTextureControl extends HBox {
             type == RenameFileAction.class;
 
     @NotNull
-    private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     /**
      * The image channels preview.

@@ -2,7 +2,7 @@ package com.ss.editor.ui.tooltip;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.ImageView;
@@ -21,7 +21,7 @@ import java.nio.file.Path;
 public class ImagePreview extends CustomTooltip<BorderPane> {
 
     @NotNull
-    private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     /**
      * The file to show.

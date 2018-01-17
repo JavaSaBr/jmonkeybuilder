@@ -37,6 +37,7 @@ public class WorkspaceManager {
     @Nullable
     private static WorkspaceManager instance;
 
+    @FromAnyThread
     public static @NotNull WorkspaceManager getInstance() {
         if (instance == null) instance = new WorkspaceManager();
         return instance;
@@ -54,6 +55,8 @@ public class WorkspaceManager {
     }
 
     /**
+     * Get the table of workspaces.
+     *
      * @return the table of workspaces.
      */
     @FromAnyThread
@@ -99,7 +102,6 @@ public class WorkspaceManager {
         }
 
         Workspace workspace;
-
         try {
             workspace = EditorUtil.deserialize(notNull(get(workspaceFile, Files::readAllBytes)));
         } catch (final RuntimeException e) {

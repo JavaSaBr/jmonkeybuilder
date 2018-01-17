@@ -100,11 +100,6 @@ public class JmeFilePreviewManager extends AbstractControl {
     @Nullable
     private static volatile JmeFilePreviewManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
     @FromAnyThread
     public static @NotNull JmeFilePreviewManager getInstance() {
         if (instance == null) {

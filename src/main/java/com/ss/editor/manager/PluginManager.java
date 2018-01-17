@@ -3,6 +3,7 @@ package com.ss.editor.manager;
 import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.JmeApplication;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
@@ -189,6 +190,7 @@ public class PluginManager {
      *
      * @param consumer the consumer.
      */
+    @FromAnyThread
     public void handlePlugins(@NotNull final Consumer<EditorPlugin> consumer) {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)

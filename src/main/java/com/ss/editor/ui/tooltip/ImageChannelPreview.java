@@ -2,7 +2,7 @@ package com.ss.editor.ui.tooltip;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.*;
@@ -20,7 +20,7 @@ import java.nio.file.Path;
 public class ImageChannelPreview extends CustomTooltip<GridPane> {
 
     @NotNull
-    private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     /**
      * The red image.

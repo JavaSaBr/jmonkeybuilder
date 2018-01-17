@@ -3,7 +3,7 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
-import com.ss.editor.executor.impl.FXEditorTaskExecutor;
+import com.ss.editor.executor.impl.FxEditorTaskExecutor;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.rlib.concurrent.atomic.AtomicInteger;
 import com.ss.rlib.logging.Logger;
@@ -84,7 +84,7 @@ public class ExecutorManager {
         }
 
         this.jmeTasksExecutor = JmeThreadExecutor.getInstance();
-        this.fxEditorTaskExecutor = new FXEditorTaskExecutor();
+        this.fxEditorTaskExecutor = new FxEditorTaskExecutor();
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
 

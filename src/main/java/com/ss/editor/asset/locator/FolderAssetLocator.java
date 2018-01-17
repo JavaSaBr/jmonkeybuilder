@@ -42,7 +42,9 @@ public class FolderAssetLocator implements AssetLocator {
     @Override
     @JmeThread
     public AssetInfo locate(@NotNull final AssetManager manager, @NotNull final AssetKey key) {
-        if (IGNORE_LOCAL.get() == Boolean.TRUE) return null;
+        if (IGNORE_LOCAL.get() == Boolean.TRUE) {
+            return null;
+        }
 
         final Path absoluteFile = Paths.get(key.getName());
         if (Files.exists(absoluteFile)) {

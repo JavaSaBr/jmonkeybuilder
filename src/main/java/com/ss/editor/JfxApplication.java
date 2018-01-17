@@ -145,7 +145,7 @@ public class JfxApplication extends Application {
 
         InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
-        InitializeManager.register(JavaFXImageManager.class);
+        InitializeManager.register(JavaFxImageManager.class);
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
         InitializeManager.register(PluginManager.class);

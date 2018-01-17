@@ -6,7 +6,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -33,7 +33,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     @NotNull
-    private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFxImageManager JAVA_FX_IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     private static final int IMAGE_SIZE = 512;
 

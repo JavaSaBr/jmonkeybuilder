@@ -25,12 +25,7 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
      * The max count of task to execute in the one iteration.
      */
     private static final int PROP_EXECUTE_LIMIT = 5;
-
-    /**
-     * Instantiates a new Background editor task executor.
-     *
-     * @param order the order
-     */
+    
     public BackgroundEditorTaskExecutor(final int order) {
         setName(BackgroundEditorTaskExecutor.class.getSimpleName() + "_" + order);
         setPriority(NORM_PRIORITY - 2);

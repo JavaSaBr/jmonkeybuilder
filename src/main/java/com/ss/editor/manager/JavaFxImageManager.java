@@ -8,8 +8,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.file.reader.DdsReader;
 import com.ss.editor.file.reader.TgaReader;
@@ -51,10 +51,10 @@ import java.nio.file.attribute.FileTime;
  *
  * @author JavaSaBr
  */
-public class JavaFXImageManager {
+public class JavaFxImageManager {
 
     @NotNull
-    private static final Logger LOGGER = LoggerManager.getLogger(JavaFXImageManager.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(JavaFxImageManager.class);
 
     @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -67,7 +67,8 @@ public class JavaFXImageManager {
             FileExtensions.IMAGE_PNG,
             FileExtensions.IMAGE_JPG,
             FileExtensions.IMAGE_JPEG,
-            FileExtensions.IMAGE_GIF);
+            FileExtensions.IMAGE_GIF
+    );
 
     @NotNull
     private static final Array<String> JME_FORMATS = asArray(FileExtensions.IMAGE_BMP);
@@ -120,11 +121,11 @@ public class JavaFXImageManager {
     }
 
     @Nullable
-    private static JavaFXImageManager instance;
+    private static JavaFxImageManager instance;
 
     @FromAnyThread
-    public static @NotNull JavaFXImageManager getInstance() {
-        if (instance == null) instance = new JavaFXImageManager();
+    public static @NotNull JavaFxImageManager getInstance() {
+        if (instance == null) instance = new JavaFxImageManager();
         return instance;
     }
 
@@ -140,7 +141,7 @@ public class JavaFXImageManager {
     @NotNull
     private final Path cacheFolder;
 
-    private JavaFXImageManager() {
+    private JavaFxImageManager() {
         InitializeManager.valid(getClass());
 
         final Path appFolder = Config.getAppFolderInUserHome();
@@ -175,11 +176,15 @@ public class JavaFXImageManager {
      */
     @FxThread
     public @NotNull Image getImagePreview(@Nullable final Path file, final int width, final int height) {
-        if (file == null || !Files.exists(file)) return Icons.IMAGE_512;
+        if (file == null || !Files.exists(file)) {
+            return Icons.IMAGE_512;
+        }
 
         if (width <= CACHED_IMAGES_SIZE && height <= CACHED_IMAGES_SIZE) {
             final Image image = getFromCache(file.toString(), width, height);
-            if (image != null) return image;
+            if (image != null) {
+                return image;
+            }
         }
 
         final URL url = Utils.get(file, f -> f.toUri().toURL());
@@ -247,7 +252,9 @@ public class JavaFXImageManager {
 
         if (width <= CACHED_IMAGES_SIZE && height <= CACHED_IMAGES_SIZE) {
             final Image image = getFromCache(resourcePath, width, height);
-            if (image != null) return image;
+            if (image != null) {
+                return image;
+            }
         }
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
@@ -298,7 +305,7 @@ public class JavaFXImageManager {
         final String extension = getExtension(externalForm);
 
         if (FX_FORMATS.contains(extension)) {
-            return readFXImage(width, height, externalForm, cacheFile);
+            return readFxImage(width, height, externalForm, cacheFile);
         } else if (JME_FORMATS.contains(extension)) {
             return readJMETexture(width, height, externalForm, cacheFile);
         } else if (IMAGE_IO_FORMATS.contains(extension)) {
@@ -384,7 +391,7 @@ public class JavaFXImageManager {
     }
 
     @FxThread
-    private @NotNull Image readFXImage(final int width, final int height, @NotNull final String externalForm,
+    private @NotNull Image readFxImage(final int width, final int height, @NotNull final String externalForm,
                                        @NotNull final Path cacheFile) {
 
         Image image = new Image(externalForm);
@@ -417,8 +424,8 @@ public class JavaFXImageManager {
 
     @FxThread
     private @NotNull Image scaleAndWrite(final int targetWidth, final int targetHeight, @NotNull final Path cacheFile,
-                                @NotNull final BufferedImage textureImage, final int currentWidth,
-                                final int currentHeight) {
+                                         @NotNull final BufferedImage textureImage, final int currentWidth,
+                                         final int currentHeight) {
 
         final BufferedImage newImage = scaleImage(targetWidth, targetHeight, textureImage, currentWidth, currentHeight);
 
