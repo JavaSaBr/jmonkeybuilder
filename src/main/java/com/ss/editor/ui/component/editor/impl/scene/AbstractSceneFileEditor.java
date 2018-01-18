@@ -67,6 +67,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
@@ -330,7 +331,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
         if (geometries.isEmpty()) return;
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
 
@@ -410,7 +411,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         super.loadState();
 
         scriptingComponent.addVariable("root", getCurrentModel());
-        scriptingComponent.addVariable("assetManager", JME_APPLICATION.getAssetManager());
+        scriptingComponent.addVariable("assetManager", EditorUtil.getAssetManager());
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -1099,7 +1100,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final Object linkNode = findParent(geometry, AssetLinkNode.class::isInstance);
             if (linkNode != null) return;
 
-            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Material material = assetManager.loadAsset(materialKey);
 
             final PropertyOperation<ChangeConsumer, Geometry, Material> operation =
@@ -1149,7 +1150,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final SceneLayer defaultLayer = getDefaultLayer(this);
             final LocalObjects local = LocalObjects.get();
 
-            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
 
             final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);

@@ -8,8 +8,8 @@ import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -34,6 +34,7 @@ import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.ToggleButton;
@@ -152,7 +153,7 @@ public class SceneFileEditor extends
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         Spatial loadedScene = assetManager.loadAsset(modelKey);
 
@@ -701,14 +702,14 @@ public class SceneFileEditor extends
     @FxThread
     public void notifyHided() {
         super.notifyHided();
-        EXECUTOR_MANAGER.addJmeTask(JME_APPLICATION::enableLightProbe);
+        EXECUTOR_MANAGER.addJmeTask(EditorUtil::enableGlobalLightProbe);
     }
 
     @Override
     @FxThread
     public void notifyShowed() {
         super.notifyShowed();
-        EXECUTOR_MANAGER.addJmeTask(JME_APPLICATION::disableLightProbe);
+        EXECUTOR_MANAGER.addJmeTask(EditorUtil::disableGlobalLightProbe);
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -310,7 +311,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         final TextureKey newKey = new TextureKey(key.getName());
         newKey.setFlipY(needFlipY);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         assetManager.deleteFromCache(key);
 
         final Texture2D loadedTexture = (Texture2D) assetManager.loadTexture(newKey);
@@ -340,7 +341,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
             textureKey.setFlipY(config.isDefaultUseFlippedTexture());
 
-            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Texture2D texture = (Texture2D) assetManager.loadTexture(textureKey);
             texture.setWrap(Texture.WrapMode.Repeat);
 

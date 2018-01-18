@@ -2,17 +2,17 @@ package com.ss.editor.ui.dialog;
 
 import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.JmeApplication;
-import com.ss.editor.JfxApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFxScene;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -286,7 +286,7 @@ public class EditorDialog {
      */
     @FxThread
     public void show() {
-        show(JfxApplication.getInstance().getLastWindow());
+        show(EditorUtil.getFxLastWindow());
     }
 
     /**
@@ -314,8 +314,7 @@ public class EditorDialog {
         GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
 
-        final JfxApplication application = JfxApplication.getInstance();
-        application.addWindow(dialog);
+        EditorUtil.addFxWindow(dialog);
 
         Platform.runLater(dialog::sizeToScene);
     }
@@ -351,8 +350,7 @@ public class EditorDialog {
 
         dialog.hide();
 
-        final JfxApplication application = JfxApplication.getInstance();
-        application.removeWindow(dialog);
+        EditorUtil.removeFxWindow(window);
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, getDialogId());
         GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG, seconds, getDialogId());

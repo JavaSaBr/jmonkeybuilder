@@ -2,9 +2,8 @@ package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -50,13 +49,6 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      */
     @NotNull
     protected static final FilePreviewFactoryRegistry FILE_PREVIEW_FACTORY_REGISTRY = FilePreviewFactoryRegistry.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
-
 
     /**
      * The function to handle the choose.

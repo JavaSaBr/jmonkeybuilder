@@ -21,6 +21,7 @@ import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -70,12 +71,6 @@ public class SettingsDialog extends EditorDialog {
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
-    private static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    @NotNull
-    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     static {
         ANISOTROPYCS.add(0);
@@ -1483,16 +1478,18 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.save();
 
         if (cameraAngle != currentCameraAngle) {
-            final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+            final JfxApplication jfxApplication = JfxApplication.getInstance();
+            final FrameTransferSceneProcessor sceneProcessor = jfxApplication.getSceneProcessor();
             sceneProcessor.reshape();
         }
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
-            final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
+            final JmeApplication jmeApplication = JmeApplication.getInstance();
+            final FXAAFilter fxaaFilter = jmeApplication.getFXAAFilter();
             fxaaFilter.setEnabled(editorConfig.isFXAA());
 
-            final ToneMapFilter filter = JME_APPLICATION.getToneMapFilter();
+            final ToneMapFilter filter = jmeApplication.getToneMapFilter();
             filter.setEnabled(editorConfig.isToneMapFilter());
             filter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         });
@@ -1502,7 +1499,7 @@ public class SettingsDialog extends EditorDialog {
             final ClasspathManager classpathManager = ClasspathManager.getInstance();
             classpathManager.reload();
 
-            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             assetManager.clearCache();
         }
 

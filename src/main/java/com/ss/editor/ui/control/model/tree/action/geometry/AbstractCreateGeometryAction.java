@@ -13,6 +13,7 @@ import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,8 +36,7 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
         final ModelChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         final SceneLayer defaultLayer = getDefaultLayer(consumer);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
-
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Geometry geometry = createGeometry();
         geometry.setMaterial(new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md"));
 

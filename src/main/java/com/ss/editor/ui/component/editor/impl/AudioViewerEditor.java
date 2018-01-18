@@ -201,7 +201,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AudioKey audioKey = new AudioKey(assetPath);
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final AudioData audioData = assetManager.loadAudio(audioKey);
 
         final float duration = audioData.getDuration();

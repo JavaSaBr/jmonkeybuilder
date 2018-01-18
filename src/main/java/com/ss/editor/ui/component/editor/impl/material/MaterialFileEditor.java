@@ -26,6 +26,7 @@ import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialFileEditor;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.part3d.editor.impl.material.MaterialEditor3DPart;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -137,7 +138,7 @@ public class MaterialFileEditor extends
         final Path assetFile = notNull(getAssetFile(getEditFile()));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
 
         reload(material);
@@ -186,7 +187,7 @@ public class MaterialFileEditor extends
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
             textureKey.setFlipY(config.isDefaultUseFlippedTexture());
 
-            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Texture texture = assetManager.loadTexture(textureKey);
             texture.setWrap(Texture.WrapMode.Repeat);
 
@@ -226,7 +227,7 @@ public class MaterialFileEditor extends
         final Path assetFile = notNull(getAssetFile(file));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
 
         final MaterialEditor3DPart editor3DState = getEditor3DPart();
@@ -311,7 +312,7 @@ public class MaterialFileEditor extends
     private void processChangeTypeImpl(@Nullable final String newType) {
         if (newType == null) return;
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material newMaterial = new Material(assetManager, newType);
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());

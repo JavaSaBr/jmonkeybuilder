@@ -1,13 +1,14 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
+import com.ss.editor.util.EditorUtil;
 import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 import org.jetbrains.annotations.NotNull;
@@ -26,12 +27,6 @@ public class OpenAssetAction extends MenuItem {
     @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
-    @NotNull
-    private static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    /**
-     * Instantiates a new Open asset action.
-     */
     public OpenAssetAction() {
         super(Messages.EDITOR_MENU_FILE_OPEN_ASSET);
         setOnAction(event -> process());
@@ -40,6 +35,7 @@ public class OpenAssetAction extends MenuItem {
     /**
      * The process of selecting an asset folder.
      */
+    @FxThread
     private void process() {
 
         final EditorConfig config = EditorConfig.getInstance();
@@ -54,6 +50,7 @@ public class OpenAssetAction extends MenuItem {
     /**
      * Open asset folder using native file chooser.
      */
+    @FxThread
     private void openAssetByNative() {
 
         final DirectoryChooser chooser = new DirectoryChooser();
@@ -72,7 +69,7 @@ public class OpenAssetAction extends MenuItem {
         GAnalytics.sendPageView("AssetChooseDialog", null, "/dialog/AssetChooseDialog");
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "AssetChooseDialog");
 
-        final File folder = chooser.showDialog(JFX_APPLICATION.getLastWindow());
+        final File folder = chooser.showDialog(EditorUtil.getFxLastWindow());
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, "AssetChooseDialog");
 
@@ -86,6 +83,7 @@ public class OpenAssetAction extends MenuItem {
     /**
      * Open an asset folder using custom file chooser.
      */
+    @FxThread
     private void openAsset() {
 
         final OpenExternalFolderEditorDialog dialog = new OpenExternalFolderEditorDialog(this::openAssetFolder);
@@ -108,6 +106,7 @@ public class OpenAssetAction extends MenuItem {
      *
      * @param newAsset the asset folder.
      */
+    @FxThread
     public void openAssetFolder(@NotNull final Path newAsset) {
 
         final EditorConfig config = EditorConfig.getInstance();

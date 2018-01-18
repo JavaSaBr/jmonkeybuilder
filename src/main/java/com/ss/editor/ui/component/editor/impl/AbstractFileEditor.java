@@ -4,13 +4,12 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import com.jme3.math.Vector3f;
 import com.ss.editor.JmeApplication;
-import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.Icons;
@@ -78,18 +77,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The javaFX application.
-     */
-    @NotNull
-    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    /**
-     * The jme application.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The array of 3D parts of this editor.
@@ -364,7 +351,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             final String editorId = description.getEditorId();
 
             final Path tempFile = Utils.get(editorId, prefix -> Files.createTempFile(prefix, "toSave.tmp"));
-            final long stamp = JME_APPLICATION.asyncLock();
+            final JmeApplication jmeApplication = JmeApplication.getInstance();
+            final long stamp = jmeApplication.asyncLock();
             try {
 
                 final Path editFile = getEditFile();
@@ -380,7 +368,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
                 LOGGER.warning(this, e);
                 EXECUTOR_MANAGER.addFxTask(this::notifyFinishSaving);
             } finally {
-                JME_APPLICATION.asyncUnlock(stamp);
+                jmeApplication.asyncUnlock(stamp);
             }
 
             EXECUTOR_MANAGER.addFxTask(this::postSave);

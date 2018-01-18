@@ -8,9 +8,10 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import com.ss.editor.JmeApplication;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.editing.EditingControl;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,12 +21,6 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class AbstractEditingControl extends AbstractControl implements EditingControl {
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The current editing input.
@@ -59,12 +54,10 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
      * @param color the color
      * @return the material
      */
-    @NotNull
-    protected Material createWireframeMaterial(@NotNull final ColorRGBA color) {
-
+    @JmeThread
+    protected @NotNull Material createWireframeMaterial(@NotNull final ColorRGBA color) {
         final Material material = createMaterial(color);
         material.getAdditionalRenderState().setWireframe(true);
-
         return material;
     }
 
@@ -74,24 +67,27 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
      * @param color the color
      * @return the material
      */
-    @NotNull
-    protected Material createMaterial(@NotNull final ColorRGBA color) {
+    @JmeThread
+    protected @NotNull Material createMaterial(@NotNull final ColorRGBA color) {
 
-        final Material material = new Material(JME_APPLICATION.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        final Material material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", color);
 
         return material;
     }
 
     @Override
+    @JmeThread
     protected void controlUpdate(final float tpf) {
     }
 
     @Override
+    @JmeThread
     protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 
     @Override
+    @JmeThread
     public boolean isStartedEditing() {
         return editing;
     }
@@ -101,17 +97,20 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
      *
      * @param editing the flag of editing state.
      */
+    @JmeThread
     protected void setEditing(final boolean editing) {
         this.editing = editing;
     }
 
     @Override
+    @JmeThread
     public void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
         setEditing(true);
         setEditingInput(editingInput);
     }
 
     @Override
+    @JmeThread
     public void finishEditing(@NotNull final Vector3f contactPoint) {
         setEditing(false);
     }
@@ -119,13 +118,14 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
     /**
      * @param editingInput the current editing input.
      */
+    @JmeThread
     private void setEditingInput(@Nullable final EditingInput editingInput) {
         this.editingInput = editingInput;
     }
 
-    @Nullable
     @Override
-    public EditingInput getCurrentInput() {
+    @JmeThread
+    public @Nullable EditingInput getCurrentInput() {
         return editingInput;
     }
 
@@ -134,6 +134,7 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
      *
      * @param node the node
      */
+    @JmeThread
     protected void onAttached(@NotNull final Node node) {
     }
 
@@ -142,6 +143,7 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
      *
      * @param node the node
      */
+    @JmeThread
     protected void onDetached(@NotNull final Node node) {
     }
 }

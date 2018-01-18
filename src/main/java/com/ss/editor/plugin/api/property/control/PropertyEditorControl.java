@@ -1,8 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -32,12 +31,6 @@ public class PropertyEditorControl<T> extends HBox {
      * The constant DEFAULT_FIELD_W_PERCENT.
      */
     public static final double DEFAULT_FIELD_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_FIELD_W_PERCENT;
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The validation callback to call re-validating.

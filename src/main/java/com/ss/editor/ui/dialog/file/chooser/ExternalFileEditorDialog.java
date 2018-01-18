@@ -1,10 +1,9 @@
 package com.ss.editor.ui.dialog.file.chooser;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -43,12 +42,6 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The function to handle a selected folder.

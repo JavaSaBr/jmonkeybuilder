@@ -542,7 +542,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
 
         if (cameraMoving.get() == 0) {
 
-            final Camera camera = EditorUtil.getCamera();
+            final Camera camera = EditorUtil.getGlobalCamera();
             final Node nodeForCamera = getNodeForCamera();
             nodeForCamera.setLocalTranslation(camera.getLocation());
 
@@ -609,7 +609,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
             return;
         }
 
-        final Camera camera = EditorUtil.getCamera();
+        final Camera camera = EditorUtil.getGlobalCamera();
         final Node nodeForCamera = getNodeForCamera();
 
         final LocalObjects local = LocalObjects.get();
@@ -645,7 +645,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
             return;
         }
 
-        final Camera camera = EditorUtil.getCamera();
+        final Camera camera = EditorUtil.getGlobalCamera();
         final Node nodeForCamera = getNodeForCamera();
 
         final LocalObjects local = LocalObjects.get();
@@ -871,7 +871,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
         super.initialize(stateManager, application);
         this.stateManager = stateManager;
 
-        final Node rootNode = EditorUtil.getRootNode();
+        final Node rootNode = EditorUtil.getGlobalRootNode();
         rootNode.attachChild(getStateNode());
 
         final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
@@ -946,7 +946,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
         final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
         filterExtension.disableFilters();
 
-        final Node rootNode = EditorUtil.getRootNode();
+        final Node rootNode = EditorUtil.getGlobalRootNode();
         rootNode.detachChild(getStateNode());
 
         final EditorCamera editorCamera = getEditorCamera();
@@ -988,7 +988,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
     @JmeThread
     protected @NotNull EditorCamera createEditorCamera() {
 
-        final Camera camera = EditorUtil.getCamera();
+        final Camera camera = EditorUtil.getGlobalCamera();
         final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
         editorCamera.setMaxDistance(10000);
         editorCamera.setMinDistance(0.01F);
@@ -1149,7 +1149,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
         final EditorCamera editorCamera = getEditorCamera();
 
         if (editorCamera != null && lightForCamera != null && needUpdateCameraLight()) {
-            final Camera camera = EditorUtil.getCamera();
+            final Camera camera = EditorUtil.getGlobalCamera();
             lightForCamera.setDirection(camera.getDirection().normalize());
         }
     }

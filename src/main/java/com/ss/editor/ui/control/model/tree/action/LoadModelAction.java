@@ -22,6 +22,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -90,7 +91,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         loadedModel.setUserData(LOADED_MODEL_KEY, true);
 

@@ -14,13 +14,13 @@ import static java.nio.file.StandardWatchEventKinds.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
 import com.ss.rlib.concurrent.util.ThreadUtils;
@@ -154,8 +154,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         });
 
         initializationManager.addOnAfterCreateJmeContext(() -> {
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final AssetManager assetManager = jmeApplication.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             assetManager.addAssetEventListener(this);
         });
 
@@ -297,8 +296,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
                 return;
             }
 
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final AssetManager assetManager = jmeApplication.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             assetManager.deleteFromCache(key);
 
         } catch (final IOException e) {
@@ -372,8 +370,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final AssetManager assetManager = jmeApplication.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
 
             final URL url = toUrl(file);
             final Array<URLClassLoader> classLoaders = getClassLoaders();
@@ -486,8 +483,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         watchKeys.forEach(WatchKey::cancel);
         watchKeys.clear();
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final Array<URLClassLoader> classLoaders = getClassLoaders();
         classLoaders.forEach(assetManager, (loader, manager) -> manager.removeClassLoader(loader));
@@ -543,9 +539,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final AssetManager assetManager = jmeApplication.getAssetManager();
-
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final URL url = get(file, FileUtils::toUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();

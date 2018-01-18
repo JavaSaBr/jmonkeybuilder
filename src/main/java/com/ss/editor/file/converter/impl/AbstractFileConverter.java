@@ -1,10 +1,8 @@
 package com.ss.editor.file.converter.impl;
 
 import static com.ss.rlib.util.FileUtils.containsExtensions;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.JfxApplication;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
@@ -55,18 +53,6 @@ public abstract class AbstractFileConverter implements FileConverter {
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The javaFX application.
-     */
-    @NotNull
-    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    /**
-     * The jme application.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @Override
     public void convert(@NotNull final Path source) {

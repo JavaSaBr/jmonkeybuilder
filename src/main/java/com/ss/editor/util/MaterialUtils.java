@@ -3,9 +3,7 @@ package com.ss.editor.util;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -16,7 +14,6 @@ import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
@@ -43,9 +40,6 @@ import java.util.List;
  * @author JavaSaBr
  */
 public class MaterialUtils {
-
-    @NotNull
-    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @NotNull
     private static final String[][] TEXTURE_TYPE_PARAM_NAMES = {
@@ -134,7 +128,7 @@ public class MaterialUtils {
     @JmeThread
     public static @Nullable Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         boolean needToReload = false;
         String textureKey = null;
@@ -288,7 +282,7 @@ public class MaterialUtils {
     @JmeThread
     private static void refreshTextures(@NotNull final Material material, @NotNull final String textureKey) {
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final Collection<MatParam> params = material.getParams();
         params.forEach(matParam -> {

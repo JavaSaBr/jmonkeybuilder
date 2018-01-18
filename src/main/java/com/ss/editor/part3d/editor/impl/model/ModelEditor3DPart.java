@@ -7,12 +7,12 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
+import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -162,14 +162,10 @@ public class ModelEditor3DPart extends AbstractSceneEditor3DPart<ModelFileEditor
         super.update(tpf);
 
         if (frame == 2) {
-
             final Node customSkyNode = getCustomSkyNode();
-
             final Array<Spatial> customSky = getCustomSky();
             customSky.forEach(spatial -> customSkyNode.attachChild(spatial.clone(false)));
-
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            jmeApplication.updateLightProbe(probeHandler);
+            EditorUtil.updateGlobalLightProbe(probeHandler);
         }
 
         frame++;

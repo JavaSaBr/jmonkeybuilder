@@ -16,6 +16,7 @@ import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
 import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
 import com.ss.editor.util.AudioNodeUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         if (audioKey == null) {
             audioNode.setAudioData(null, null);

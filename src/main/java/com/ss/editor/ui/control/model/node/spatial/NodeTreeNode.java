@@ -32,6 +32,7 @@ import com.ss.editor.ui.control.model.tree.action.terrain.CreateTerrainAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.array.Array;
@@ -268,7 +269,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         final String assetPath = toAssetPath(assetFile);
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(assetPath);
         final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
         assetLinkNode.attachLinkedChild(loadedModel, modelKey);

@@ -14,6 +14,7 @@ import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.rlib.util.StringUtils;
@@ -125,7 +126,7 @@ public class MaterialFileCreator extends GenericFileCreator {
     protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final String matDef = vars.get(PROP_MAT_DEF);
 
         final Material material = new Material(assetManager, matDef);

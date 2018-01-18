@@ -11,8 +11,8 @@ import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
@@ -73,21 +73,15 @@ public class JfxApplication extends Application {
     @Nullable
     private static JfxApplication instance;
 
+    /**
+     * It's an internal method.
+     *
+     * @see EditorUtil
+     */
     @Deprecated
     @FromAnyThread
     public static @NotNull JfxApplication getInstance() {
         return notNull(instance);
-    }
-
-    /**
-     * Get the current stage of JavaFX.
-     *
-     * @return the current stage.
-     */
-    @FromAnyThread
-    private static @Nullable Stage getStage() {
-        final JfxApplication instance = JfxApplication.instance;
-        return instance == null ? null : instance.stage;
     }
 
     /**
@@ -189,7 +183,7 @@ public class JfxApplication extends Application {
         return (observable, oldValue, newValue) -> {
 
             final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final Stage stage = notNull(JfxApplication.getStage());
+            final Stage stage = EditorUtil.getFxStage();
 
             if (newValue || stage.isFocused()) {
                 jmeApplication.setPaused(false);
@@ -476,6 +470,16 @@ public class JfxApplication extends Application {
     @FromAnyThread
     public @NotNull EditorFxScene getScene() {
         return notNull(scene, "Scene can't be null.");
+    }
+
+    /**
+     * Get the current stage of JavaFX.
+     *
+     * @return the current stage.
+     */
+    @FromAnyThread
+    public @NotNull Stage getStage() {
+        return notNull(stage);
     }
 
     /**

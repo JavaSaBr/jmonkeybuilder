@@ -204,14 +204,14 @@ public class BaseMaterialEditor3DPart<T extends BaseMaterialFileEditor> extends
         final Geometry testSphere = getTestSphere();
         testSphere.setMaterial(material);
 
-        final RenderManager renderManager = JME_APPLICATION.getRenderManager();
+        final RenderManager renderManager = EditorUtil.getRenderManager();
         try {
             renderManager.preloadScene(testBox);
         } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
             handleMaterialException(e);
-            testBox.setMaterial(JME_APPLICATION.getDefaultMaterial());
-            testQuad.setMaterial(JME_APPLICATION.getDefaultMaterial());
-            testSphere.setMaterial(JME_APPLICATION.getDefaultMaterial());
+            testBox.setMaterial(EditorUtil.getDefaultMaterial());
+            testQuad.setMaterial(EditorUtil.getDefaultMaterial());
+            testSphere.setMaterial(EditorUtil.getDefaultMaterial());
         }
     }
 

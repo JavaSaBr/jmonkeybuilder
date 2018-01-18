@@ -13,6 +13,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.util.AudioNodeUtils;
+import com.ss.editor.util.EditorUtil;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +49,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
         final AudioTreeNode audioModelNode = (AudioTreeNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
 

@@ -39,6 +39,7 @@ import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
+import com.ss.editor.filter.EditorFxaaFilter;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
@@ -81,6 +82,11 @@ public class JmeApplication extends JmeToJFXApplication {
     @NotNull
     private static final JmeApplication JME_APPLICATION = new JmeApplication();
 
+    /**
+     * It's an internal method.
+     *
+     * @see EditorUtil
+     */
     @Deprecated
     @FromAnyThread
     public static @NotNull JmeApplication getInstance() {
@@ -298,7 +304,7 @@ public class JmeApplication extends JmeToJFXApplication {
 
         final FilterPostProcessor postProcessor = getPostProcessor();
 
-        fxaaFilter = new FXAAFilter();
+        fxaaFilter = new EditorFxaaFilter();
         fxaaFilter.setEnabled(editorConfig.isFXAA());
         fxaaFilter.setSubPixelShift(1.0f / 4.0f);
         fxaaFilter.setVxOffset(0.0f);
@@ -512,7 +518,6 @@ public class JmeApplication extends JmeToJFXApplication {
     public void enableLightProbe() {
 
         final LightProbe lightProbe = getLightProbe();
-
         if (lightProbe == null) {
             return;
         }

@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.JfxApplication;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -77,12 +75,6 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * The javaFX part of this editor.
-     */
-    @NotNull
-    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    /**
      * The executor manager.
      */
     @NotNull
@@ -93,12 +85,6 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      */
     @NotNull
     protected static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The change handler.

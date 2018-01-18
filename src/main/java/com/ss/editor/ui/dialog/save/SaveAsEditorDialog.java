@@ -5,10 +5,9 @@ import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -61,12 +60,6 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     @NotNull
     private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);

@@ -27,6 +27,7 @@ import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorModelEditorState;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -162,7 +163,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
@@ -316,7 +317,10 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      */
     @FxThread
     private void changeFastSky(@NotNull final String newSky) {
-        if (isIgnoreListeners()) return;
+
+        if (isIgnoreListeners()) {
+            return;
+        }
 
         final ModelEditor3DPart editor3DState = getEditor3DPart();
 
@@ -327,7 +331,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             return;
         }
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final TextureKey key = new TextureKey(newSky, true);
         key.setGenerateMips(false);
@@ -342,7 +346,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         final int selectedIndex = selectionModel.getSelectedIndex();
 
         final EditorModelEditorState editorState = getEditorState();
-        if (editorState != null) editorState.setSkyType(selectedIndex);
+        if (editorState != null) {
+            editorState.setSkyType(selectedIndex);
+        }
     }
 
     /**

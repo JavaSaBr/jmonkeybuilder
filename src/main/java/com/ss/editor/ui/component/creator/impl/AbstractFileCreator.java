@@ -3,12 +3,10 @@ package com.ss.editor.ui.component.creator.impl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
@@ -71,18 +69,6 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The constant JFX_APPLICATION.
-     */
-    @NotNull
-    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The resources tree.

@@ -18,6 +18,7 @@ import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.editor.ui.control.property.impl.DefaultPropertyControl;
 import com.ss.editor.ui.control.property.impl.LodLevelPropertyControl;
 import com.ss.editor.ui.control.property.impl.MaterialKeyPropertyControl;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -56,7 +57,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     @NotNull
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         if (materialKey == null) {
 

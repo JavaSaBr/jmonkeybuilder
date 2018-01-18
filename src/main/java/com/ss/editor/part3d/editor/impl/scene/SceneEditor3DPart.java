@@ -6,6 +6,7 @@ import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.scene.Node;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
@@ -13,6 +14,7 @@ import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,10 +73,11 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
             getModelNode().attachChild(currentModel);
         }
 
-        final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final FXAAFilter fxaaFilter = jmeApplication.getFXAAFilter();
         fxaaFilter.setEnabled(false);
 
-        final ToneMapFilter toneMapFilter = JME_APPLICATION.getToneMapFilter();
+        final ToneMapFilter toneMapFilter = jmeApplication.getToneMapFilter();
         toneMapFilter.setEnabled(false);
     }
 
@@ -90,11 +93,12 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
         }
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
 
-        final FXAAFilter fxaaFilter = JME_APPLICATION.getFXAAFilter();
+        final FXAAFilter fxaaFilter = jmeApplication.getFXAAFilter();
         fxaaFilter.setEnabled(editorConfig.isFXAA());
 
-        final ToneMapFilter toneMapFilter = JME_APPLICATION.getToneMapFilter();
+        final ToneMapFilter toneMapFilter = jmeApplication.getToneMapFilter();
         toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
     }
 
@@ -110,7 +114,7 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
 
     @JmeThread
     private void addAppStateImpl(@NotNull final SceneAppState appState) {
-        final AppStateManager stateManager = JME_APPLICATION.getStateManager();
+        final AppStateManager stateManager = EditorUtil.getStateManager();
         stateManager.attach(appState);
     }
 
@@ -126,7 +130,7 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
 
     @JmeThread
     private void removeAppStateImpl(@NotNull final SceneAppState appState) {
-        final AppStateManager stateManager = JME_APPLICATION.getStateManager();
+        final AppStateManager stateManager = EditorUtil.getStateManager();
         stateManager.detach(appState);
     }
 
@@ -142,7 +146,7 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
 
     @JmeThread
     private void addFilterImpl(@NotNull final SceneFilter sceneFilter) {
-        final FilterPostProcessor postProcessor = JME_APPLICATION.getPostProcessor();
+        final FilterPostProcessor postProcessor = EditorUtil.getGlobalFilterPostProcessor();
         postProcessor.addFilter(sceneFilter.get());
     }
 
@@ -158,7 +162,7 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
 
     @JmeThread
     private void removeFilterImpl(@NotNull final SceneFilter sceneFilter) {
-        final FilterPostProcessor postProcessor = JME_APPLICATION.getPostProcessor();
+        final FilterPostProcessor postProcessor = EditorUtil.getGlobalFilterPostProcessor();
         postProcessor.removeFilter(sceneFilter.get());
     }
 

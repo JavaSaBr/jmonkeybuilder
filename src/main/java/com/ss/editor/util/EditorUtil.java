@@ -6,8 +6,12 @@ import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
+import com.jme3.light.LightProbe;
+import com.jme3.material.Material;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
@@ -22,6 +26,7 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -45,6 +50,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -144,9 +151,29 @@ public abstract class EditorUtil {
      *
      * @return the root node.
      */
-    @FromAnyThread
-    public static @NotNull Node getRootNode() {
-        return JmeApplication.getInstance().getRootNode();
+    @JmeThread
+    public static @NotNull Node getGlobalRootNode() {
+        return jmeApplication.getRootNode();
+    }
+
+    /**
+     * Get the preview node.
+     *
+     * @return the preview node.
+     */
+    @JmeThread
+    public static @NotNull Node getPreviewNode() {
+        return jmeApplication.getPreviewNode();
+    }
+
+    /**
+     * Get the preview camera.
+     *
+     * @return the preview camera.
+     */
+    @JmeThread
+    public static @NotNull Camera getPreviewCamera() {
+        return jmeApplication.getPreviewCamera();
     }
 
     /**
@@ -155,8 +182,8 @@ public abstract class EditorUtil {
      * @return the camera.
      */
     @FromAnyThread
-    public static @NotNull Camera getCamera() {
-        return JmeApplication.getInstance().getCamera();
+    public static @NotNull Camera getGlobalCamera() {
+        return jmeApplication.getCamera();
     }
 
     /**
@@ -164,9 +191,113 @@ public abstract class EditorUtil {
      *
      * @return the global filter post processor.
      */
-    @FromAnyThread
+    @JmeThread
     public static @NotNull FilterPostProcessor getGlobalFilterPostProcessor() {
-        return JmeApplication.getInstance().getPostProcessor();
+        return jmeApplication.getPostProcessor();
+    }
+
+    /**
+     * Get the default material.
+     *
+     * @return the default material.
+     */
+    @FromAnyThread
+    public static @NotNull Material getDefaultMaterial() {
+        return jmeApplication.getDefaultMaterial();
+    }
+
+    /**
+     * Disable the global PBR light probe.
+     */
+    @JmeThread
+    public static void disableGlobalLightProbe() {
+        jmeApplication.disableLightProbe();
+    }
+
+    /**
+     * Enable the global PBR light probe.
+     */
+    @JmeThread
+    public static void enableGlobalLightProbe() {
+        jmeApplication.enableLightProbe();
+    }
+
+    /**
+     * Update the light probe.
+     *
+     * @param progressAdapter the progress adapter
+     */
+    @JmeThread
+    public static void updateGlobalLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+        jmeApplication.updateLightProbe(progressAdapter);
+    }
+
+    /**
+     * Get the state manager.
+     *
+     * @return the state manager.
+     */
+    @FromAnyThread
+    public static @NotNull AppStateManager getStateManager() {
+        return jmeApplication.getStateManager();
+    }
+
+    /**
+     * Gets the last opened window.
+     *
+     * @return the last opened window.
+     */
+    @FxThread
+    public static @NotNull Window getFxLastWindow() {
+        return jfxApplication.getLastWindow();
+    }
+
+    /**
+     * Get the current JavaFX scene.
+     *
+     * @return the JavaFX scene.
+     */
+    @FxThread
+    public static @NotNull EditorFxScene getFxScene() {
+        return jfxApplication.getScene();
+    }
+
+    /**
+     * Get the current stage of JavaFX.
+     *
+     * @return the current stage of JavaFX.
+     */
+    @FxThread
+    public static @NotNull Stage getFxStage() {
+        return jfxApplication.getStage();
+    }
+
+    /**
+     * Register the opened new window.
+     *
+     * @param window the opened new window.
+     */
+    @FromAnyThread
+    public static void addFxWindow(@NotNull final Window window) {
+        jfxApplication.addWindow(window);
+    }
+
+    /**
+     * Delete the closed window.
+     *
+     * @param window the closed window.
+     */
+    @FromAnyThread
+    public static void removeFxWindow(@NotNull final Window window) {
+        jfxApplication.removeWindow(window);
+    }
+
+    /**
+     * Request focus to FX window.
+     */
+    @FxThread
+    public static void requestFxFocus() {
+        jfxApplication.requestFocus();
     }
 
     /**
@@ -728,9 +859,7 @@ public abstract class EditorUtil {
      */
     @FxThread
     public static void incrementLoading() {
-        final JfxApplication jfxApplication = JfxApplication.getInstance();
-        final EditorFxScene scene = jfxApplication.getScene();
-        scene.incrementLoading();
+        getFxScene().incrementLoading();
     }
 
     /**
@@ -738,9 +867,7 @@ public abstract class EditorUtil {
      */
     @FxThread
     public static void decrementLoading() {
-        final JfxApplication jfxApplication = JfxApplication.getInstance();
-        final EditorFxScene scene = jfxApplication.getScene();
-        scene.decrementLoading();
+        getFxScene().decrementLoading();
     }
 
     /**

@@ -7,6 +7,7 @@ import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.StackPane;
@@ -43,7 +44,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     protected void createContent(@NotNull final StackPane root) {
         createEditorAreaPane();
 
-        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
+        mainSplitContainer = new EditorToolSplitPane(EditorUtil.getFxScene(), root);
 
         editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());

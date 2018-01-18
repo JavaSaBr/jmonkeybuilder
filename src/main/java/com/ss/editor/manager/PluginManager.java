@@ -8,6 +8,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
@@ -145,9 +146,7 @@ public class PluginManager {
 
                     final PluginContainer container = editorPlugin.getContainer();
                     final URLClassLoader classLoader = container.getClassLoader();
-
-                    final JmeApplication jmeApplication = JmeApplication.getInstance();
-                    final AssetManager assetManager = jmeApplication.getAssetManager();
+                    final AssetManager assetManager = EditorUtil.getAssetManager();
                     assetManager.addClassLoader(classLoader);
                 });
     }

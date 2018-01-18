@@ -139,7 +139,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
         if (EDITOR_CONFIG.isAutoTangentGenerating()) {
@@ -203,7 +203,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
 
         final String assetPath = toAssetPath(assetFile);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         geometry.setMaterial(assetManager.loadMaterial(assetPath));
     }
 

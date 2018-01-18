@@ -14,18 +14,15 @@ import com.jme3.scene.Node;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.util.JmbSkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
@@ -35,6 +32,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.MaterialSerializer;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -73,19 +71,6 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The constant JFX_APPLICATION.
-     */
-    @NotNull
-    protected static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
-
 
     private enum SkyType {
         /**
@@ -733,8 +718,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @FxThread
     private void createSkyInBackground() {
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
-
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
@@ -875,8 +859,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
         final Path assetFile = EditorUtil.getAssetFile(materialFile);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
-
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         return assetManager.loadMaterial(assetPath);
     }
 

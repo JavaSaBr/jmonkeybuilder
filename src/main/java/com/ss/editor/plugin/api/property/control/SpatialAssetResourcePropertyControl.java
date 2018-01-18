@@ -13,6 +13,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -52,7 +53,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     @FxThread
     protected void processSelect(@NotNull final Path file) {
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final Path assetFile = notNull(getAssetFile(file));
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));

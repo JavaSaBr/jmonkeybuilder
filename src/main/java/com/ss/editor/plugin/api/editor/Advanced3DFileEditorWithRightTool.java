@@ -8,6 +8,7 @@ import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.event.Event;
 import javafx.scene.input.DragEvent;
@@ -53,7 +54,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     protected void createContent(@NotNull final StackPane root) {
         createEditorAreaPane();
 
-        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
+        mainSplitContainer = new EditorToolSplitPane(EditorUtil.getFxScene(), root);
 
         editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());

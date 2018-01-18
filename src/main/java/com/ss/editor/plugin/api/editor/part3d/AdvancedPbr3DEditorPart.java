@@ -5,9 +5,9 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -85,8 +85,7 @@ public abstract class AdvancedPbr3DEditorPart<T extends Advanced3DFileEditor> ex
         super.update(tpf);
 
         if (frame == 2) {
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            jmeApplication.updateLightProbe(probeHandler);
+            EditorUtil.updateGlobalLightProbe(probeHandler);
         }
 
         frame++;

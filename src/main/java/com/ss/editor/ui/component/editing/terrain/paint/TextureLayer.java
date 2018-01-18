@@ -4,8 +4,8 @@ import static com.ss.editor.util.EditorUtil.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,9 +18,6 @@ import java.nio.file.Path;
  */
 public class TextureLayer implements Comparable<TextureLayer> {
 
-    @NotNull
-    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
-
     /**
      * The settings.
      */
@@ -32,12 +29,6 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     private final int layer;
 
-    /**
-     * Instantiates a new Texture layer.
-     *
-     * @param settings the settings
-     * @param layer    the layer
-     */
     public TextureLayer(@NotNull final TextureLayerSettings settings, final int layer) {
         this.settings = settings;
         this.layer = layer;
@@ -50,14 +41,19 @@ public class TextureLayer implements Comparable<TextureLayer> {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (this == o) {
+            return true;
+        } else if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         final TextureLayer that = (TextureLayer) o;
         return layer == that.layer;
     }
 
     /**
-     * Gets layer.
+     * Get the layer.
      *
      * @return the layer.
      */
@@ -67,7 +63,7 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
-     * Gets scale.
+     * Get the scale.
      *
      * @return the texture scale.
      */
@@ -77,7 +73,7 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
-     * Sets scale.
+     * Set the scale.
      *
      * @param scale the texture scale.
      */
@@ -87,16 +83,19 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
-     * Gets diffuse file.
+     * Get diffuse file.
      *
      * @return the diffuse file.
      */
-    @Nullable
     @FromAnyThread
-    public Path getDiffuseFile() {
+    public @Nullable Path getDiffuseFile() {
+
         final Texture diffuse = settings.getDiffuse(getLayer());
         final AssetKey assetKey = diffuse == null ? null : diffuse.getKey();
-        if (diffuse == null || assetKey == null) return null;
+        if (diffuse == null || assetKey == null) {
+            return null;
+        }
+
         return getRealFile(assetKey.getName());
     }
 
@@ -107,7 +106,7 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     @FromAnyThread
     public void setDiffuseFile(@Nullable final Path diffuseFile) {
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Path assetFile = diffuseFile == null ? null : getAssetFile(diffuseFile);
         final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
         final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
@@ -115,26 +114,30 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
-     * Gets normal file.
+     * Get the normal file.
      *
      * @return the normal file
      */
     @FromAnyThread
-    public Path getNormalFile() {
+    public @Nullable Path getNormalFile() {
+
         final Texture normal = settings.getNormal(getLayer());
         final AssetKey assetKey = normal == null ? null : normal.getKey();
-        if (normal == null || assetKey == null) return null;
+        if (normal == null || assetKey == null) {
+            return null;
+        }
+
         return getRealFile(assetKey.getName());
     }
 
     /**
-     * Set a new normal texture.
+     * Set the new normal texture.
      *
      * @param normalFile the file to normal texture or null.
      */
     @FromAnyThread
     public void setNormalFile(@Nullable final Path normalFile) {
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Path assetFile = normalFile == null ? null : getAssetFile(normalFile);
         final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
         final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);

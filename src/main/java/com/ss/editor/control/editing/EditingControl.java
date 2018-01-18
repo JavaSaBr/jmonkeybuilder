@@ -19,9 +19,8 @@ public interface EditingControl extends Control {
      *
      * @return the edited model.
      */
-    @Nullable
     @JmeThread
-    default Spatial getEditedModel() {
+    default @Nullable Spatial getEditedModel() {
         return null;
     }
 
@@ -40,8 +39,7 @@ public interface EditingControl extends Control {
      *
      * @return the current editing input.
      */
-    @Nullable
-    default EditingInput getCurrentInput() {
+    default @Nullable EditingInput getCurrentInput() {
         return null;
     }
 

@@ -19,6 +19,7 @@ import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.util.EditorUtil;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,8 +56,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         final SceneLayer defaultLayer = getDefaultLayer(changeConsumer);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
-
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material material = new Material(assetManager,"Common/MatDefs/Misc/Particle.j3md");
         material.setTexture("Texture", assetManager.loadTexture( "Effects/Explosion/flame.png"));
 

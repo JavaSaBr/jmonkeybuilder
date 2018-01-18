@@ -13,6 +13,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +67,7 @@ public class ScaleToolControl extends AbstractTransformControl {
 
         final LocalObjects local = LocalObjects.get();
         final Camera camera = editorControl.getCamera();
-        final InputManager inputManager = JME_APPLICATION.getInputManager();
+        final InputManager inputManager = EditorUtil.getInputManager();
         final Transform transform = notNull(editorControl.getTransformCenter());
 
         // cursor position and selected position vectors

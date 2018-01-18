@@ -102,12 +102,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @NotNull
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
-    @NotNull
-    private static final JfxApplication JFX_APPLICATION = JfxApplication.getInstance();
-
-    @NotNull
-    private static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
-
     /**
      * The table of opened editors.
      */
@@ -119,9 +113,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      */
     private boolean ignoreOpenedFiles;
 
-    /**
-     * Instantiates a new Editor area component.
-     */
     public EditorAreaComponent() {
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
@@ -376,9 +367,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @JmeThread
     private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
-        final AppStateManager stateManager = JME_APPLICATION.getStateManager();
-        final ImageView canvas = JFX_APPLICATION.getScene().getCanvas();
-        final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+        final AppStateManager stateManager = EditorUtil.getStateManager();
+        final ImageView canvas = EditorUtil.getFxScene().getCanvas();
+        final FrameTransferSceneProcessor sceneProcessor = JfxApplication.getInstance().getSceneProcessor();
 
         boolean enabled = false;
 
@@ -437,7 +428,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @BackgroundThread
     private void processOpenFileImpl(@NotNull final RequestedOpenFileEvent event, @NotNull final Path file) {
 
-        final EditorFxScene scene = JFX_APPLICATION.getScene();
+        final EditorFxScene scene = EditorUtil.getFxScene();
 
         FileEditor editor;
         try {
@@ -460,7 +451,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final FileEditor resultEditor = editor;
 
-        final long stamp = JME_APPLICATION.asyncLock();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final long stamp = jmeApplication.asyncLock();
         try {
             editor.openFile(file);
         } catch (final Throwable e) {
@@ -478,7 +470,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             return;
         } finally {
-            JME_APPLICATION.asyncUnlock(stamp);
+            jmeApplication.asyncUnlock(stamp);
         }
 
         EXECUTOR_MANAGER.addFxTask(() -> addEditor(resultEditor, event.isNeedShow()));

@@ -1,17 +1,13 @@
 package com.ss.editor.model.undo.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-
-import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The base implementation of the {@link EditorOperation} to support a generic type of an editor.
@@ -32,12 +28,6 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     public AbstractEditorOperation() {
     }

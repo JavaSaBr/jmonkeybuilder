@@ -1,6 +1,5 @@
 package com.ss.editor.remote.control.client;
 
-import com.ss.editor.JfxApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
@@ -8,6 +7,7 @@ import com.ss.editor.ui.component.bar.action.OpenAssetAction;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.AssetComponentLoadedEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.network.ConnectionOwner;
 import com.ss.rlib.network.annotation.PacketDescription;
 import javafx.event.Event;
@@ -72,6 +72,6 @@ public class OpenFileClientCommand extends ClientCommand {
      */
     private void openFile(@NotNull final Path fileToOpen) {
         FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
-        JfxApplication.getInstance().requestFocus();
+        EditorUtil.requestFxFocus();
     }
 }

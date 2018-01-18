@@ -7,7 +7,6 @@ import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.Config;
@@ -372,8 +371,7 @@ public class JavaFxImageManager {
     private @NotNull Image readJMETexture(final int width, final int height, @NotNull final String externalForm,
                                           @NotNull final Path cacheFile) {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Texture texture = assetManager.loadTexture(externalForm);
 
         final BufferedImage textureImage;

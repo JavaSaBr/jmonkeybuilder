@@ -87,7 +87,7 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
         }
 
         final Path assetFile = notNull(getAssetFile(file));
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material savedMaterial = assetManager.loadMaterial(notNull(toAssetPath(assetFile)));
 
         final PropertyOperation<ChangeConsumer, Material, AssetKey> operation =

@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -19,12 +18,6 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implements PropertyBuilder {
-
-    /**
-     * The jME part of the editor.
-     */
-    @NotNull
-    protected static final JmeApplication JME_APPLICATION = JmeApplication.getInstance();
 
     /**
      * The type of change consumer,
