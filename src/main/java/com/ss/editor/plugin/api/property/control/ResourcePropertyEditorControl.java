@@ -5,7 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
@@ -50,7 +50,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
         setOnDragExited(this::dragExited);
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_RESOURCE_PROPERTY_CONTROL);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_RESOURCE_PROPERTY_CONTROL);
     }
 
     @Override
@@ -71,9 +71,9 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
 
         FXUtils.addToPane(container, this);
 
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addClassesTo(changeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(resourceLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(changeButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(resourceLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         DynamicIconSupport.addSupport(changeButton);
     }

@@ -3,7 +3,7 @@ package com.ss.editor.ui.tooltip;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.JavaFxImageManager;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -73,7 +73,7 @@ public class ImagePreview extends CustomTooltip<BorderPane> {
     @FxThread
     protected @NotNull BorderPane createRoot() {
         final BorderPane pane = new BorderPane();
-        FXUtils.addClassesTo(pane, CSSClasses.IMAGE_PREVIEW);
+        FXUtils.addClassesTo(pane, CssClasses.IMAGE_PREVIEW);
         return pane;
     }
 

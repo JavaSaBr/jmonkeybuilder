@@ -29,10 +29,10 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.app.state.list.AppStateList;
 import com.ss.editor.ui.control.filter.list.FilterList;
 import com.ss.editor.ui.control.layer.LayerNodeTree;
-import com.ss.editor.ui.control.layer.LayersRoot;
-import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.model.node.layer.LayersRoot;
+import com.ss.editor.ui.control.model.ModelPropertyEditor;
+import com.ss.editor.ui.control.model.ModelNodeTree;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
@@ -266,7 +266,7 @@ public class SceneFileEditor extends
 
         DynamicIconSupport.addSupport(lightButton, audioButton);
 
-        FXUtils.addClassesTo(lightButton, audioButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(lightButton, audioButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         FXUtils.addToPane(lightButton, container);
         FXUtils.addToPane(audioButton, container);
@@ -313,7 +313,7 @@ public class SceneFileEditor extends
 
         super.createContent(root);
 
-        FXUtils.addClassTo(layerNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+        FXUtils.addClassTo(layerNodeTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.ColorSpace;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
@@ -128,7 +128,7 @@ public class LogView extends CodeArea {
         this.currentLog = new StringBuilder();
         this.lastLog = "";
 
-        setId(CSSIds.LOG_VIEW);
+        setId(CssIds.LOG_VIEW);
         setWrapText(true);
         setEditable(false);
         richChanges().filter(ch -> !ch.getInserted().equals(ch.getRemoved()))

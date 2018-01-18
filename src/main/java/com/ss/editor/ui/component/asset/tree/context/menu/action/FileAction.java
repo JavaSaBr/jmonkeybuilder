@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.array.Array;
@@ -28,7 +28,7 @@ public class FileAction extends MenuItem {
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The action element.

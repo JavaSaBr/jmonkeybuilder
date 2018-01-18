@@ -27,8 +27,8 @@ import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
-import com.ss.editor.ui.css.CSSRegistry;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFxScene;
@@ -309,7 +309,7 @@ public class JfxApplication extends Application {
             initializationManager.onBeforeCreateJavaFxContext();
 
             final PluginManager pluginManager = PluginManager.getInstance();
-            pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CSSRegistry.getInstance()));
+            pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CssRegistry.getInstance()));
 
             LogView.getInstance();
             SvgImageLoaderFactory.install();

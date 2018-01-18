@@ -14,7 +14,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.part3d.editor.impl.audio.AudioViewer3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
@@ -162,11 +162,11 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         FXUtils.addToPane(stopButton, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(playButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(stopButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(gridPane, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassesTo(root, CSSClasses.DEF_VBOX, CSSClasses.AUDIO_VIEW_EDITOR_CONTAINER);
+        FXUtils.addClassTo(playButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(stopButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(gridPane, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassesTo(root, CssClasses.DEF_VBOX, CssClasses.AUDIO_VIEW_EDITOR_CONTAINER);
 
         DynamicIconSupport.addSupport(playButton, stopButton);
     }

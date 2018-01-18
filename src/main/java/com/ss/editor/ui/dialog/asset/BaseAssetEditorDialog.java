@@ -5,7 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
@@ -102,8 +102,8 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(secondPart, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(root, CSSClasses.ASSET_EDITOR_DIALOG);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(root, CssClasses.ASSET_EDITOR_DIALOG);
     }
 
     /**
@@ -272,7 +272,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         final Array<FilePreview> availablePreviews = FILE_PREVIEW_FACTORY_REGISTRY.createAvailablePreviews();
         availablePreviews.forEach(previewContainer, FilePreview::initialize);
 
-        FXUtils.addClassTo(previewContainer, CSSClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
+        FXUtils.addClassTo(previewContainer, CssClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         this.previews = availablePreviews;
 
@@ -323,7 +323,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
-        FXUtils.addClassTo(warningLabel, CSSClasses.DIALOG_LABEL_WARNING);
+        FXUtils.addClassTo(warningLabel, CssClasses.DIALOG_LABEL_WARNING);
         FXUtils.addToPane(warningLabel, container);
     }
 

@@ -3,7 +3,7 @@ package com.ss.editor.ui.tooltip;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.JavaFxImageManager;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.*;
 import javafx.scene.layout.GridPane;
@@ -128,7 +128,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @FxThread
     protected @NotNull GridPane createRoot() {
         final GridPane gridPane = new GridPane();
-        FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.IMAGE_CHANNEL_PREVIEW);
+        FXUtils.addClassesTo(gridPane, CssClasses.DEF_GRID_PANE, CssClasses.IMAGE_CHANNEL_PREVIEW);
         return gridPane;
     }
 

@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.property.builder.impl;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -61,8 +61,8 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
     protected void buildSplitLine(@NotNull final Pane pane) {
         final HBox line = new HBox();
         final VBox container = new VBox(line);
-        FXUtils.addClassTo(line, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(container, CSSClasses.ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE);
+        FXUtils.addClassTo(line, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(container, CssClasses.ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE);
         FXUtils.addToPane(container, pane);
     }
 }

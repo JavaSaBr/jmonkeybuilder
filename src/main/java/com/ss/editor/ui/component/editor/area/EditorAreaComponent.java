@@ -26,9 +26,9 @@ import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 import com.ss.editor.ui.dialog.ConfirmDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
@@ -94,7 +94,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
@@ -117,7 +117,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
         setPickOnBounds(true);
-        setId(CSSIds.EDITOR_AREA_COMPONENT);
+        setId(CssIds.EDITOR_AREA_COMPONENT);
         getTabs().addListener(this::processChangeTabs);
         getSelectionModel().selectedItemProperty()
                 .addListener(this::switchEditor);

@@ -16,7 +16,7 @@ import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -234,7 +234,7 @@ public class SettingsDialog extends EditorDialog {
     private boolean ignoreListeners;
 
     public SettingsDialog() {
-        FXUtils.addClassTo(getContainer(), CSSClasses.SETTINGS_DIALOG);
+        FXUtils.addClassTo(getContainer(), CssClasses.SETTINGS_DIALOG);
     }
 
     @Override
@@ -313,8 +313,8 @@ public class SettingsDialog extends EditorDialog {
         createNativeFileChooserControl(otherRoot);
 
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty());
-        FXUtils.addClassTo(messageLabel, CSSClasses.SETTINGS_DIALOG_MESSAGE_LABEL);
-        FXUtils.addClassTo(graphicsRoot, otherRoot, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(messageLabel, CssClasses.SETTINGS_DIALOG_MESSAGE_LABEL);
+        FXUtils.addClassTo(graphicsRoot, otherRoot, CssClasses.DEF_VBOX);
 
         FXUtils.addToPane(tabPane, root);
         FXUtils.addToPane(messageLabel, root);
@@ -349,12 +349,12 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(librariesFolderField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(librariesFolderField, CSSClasses.TRANSPARENT_TEXT_FIELD);
-        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(librariesFolderField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(librariesFolderField, CssClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(librariesFolderField, fieldContainer, CssClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassesTo(addButton, removeButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -388,12 +388,12 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(classesFolderField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(classesFolderField, CSSClasses.TRANSPARENT_TEXT_FIELD);
-        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(classesFolderField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(classesFolderField, CssClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(classesFolderField, fieldContainer, CssClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassesTo(addButton, removeButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -427,12 +427,12 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(additionalEnvsField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(additionalEnvsField, CSSClasses.TRANSPARENT_TEXT_FIELD);
-        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(additionalEnvsField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(additionalEnvsField, CssClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(additionalEnvsField, fieldContainer, CssClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassesTo(addButton, removeButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -620,8 +620,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(gammaCorrectionCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(gammaCorrectionLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(gammaCorrectionCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(gammaCorrectionLabel, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(gammaCorrectionCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -642,8 +642,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(toneMapFilterCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(toneMapFilterLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(toneMapFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(toneMapFilterLabel, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(toneMapFilterCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -704,15 +704,15 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(toneMapFilterWhitePointZ, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassesTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.SETTINGS_DIALOG_SHORT_LABEL);
+        FXUtils.addClassesTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(xLabel, yLabel, zLabel, CssClasses.SETTINGS_DIALOG_SHORT_LABEL);
         FXUtils.addClassTo(fieldContainer, toneMapFilterWhitePointX, toneMapFilterWhitePointY, toneMapFilterWhitePointZ,
-                CSSClasses.SETTINGS_DIALOG_FIELD);
+                CssClasses.SETTINGS_DIALOG_FIELD);
 
         FXUtils.addClassTo(toneMapFilterWhitePointX, toneMapFilterWhitePointY,
-                toneMapFilterWhitePointZ, CSSClasses.TRANSPARENT_SPINNER);
+                toneMapFilterWhitePointZ, CssClasses.TRANSPARENT_SPINNER);
 
-        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER);
 
         UIUtils.addFocusBinding(fieldContainer, toneMapFilterWhitePointX, toneMapFilterWhitePointY,
                 toneMapFilterWhitePointZ);
@@ -752,8 +752,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(fxaaFilterCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(fxaaFilterCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -774,8 +774,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(nativeFileChooserCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(nativeFileChooserCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(nativeFileChooserCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -796,8 +796,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(stopRenderOnLostFocusCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(stopRenderOnLostFocusCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(stopRenderOnLostFocusCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -818,8 +818,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(googleAnalyticsCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(googleAnalyticsCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(googleAnalyticsCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -840,8 +840,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(autoTangentGeneratingCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(autoTangentGeneratingCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(autoTangentGeneratingCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -862,8 +862,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(defaultUseFlippedTextureCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(defaultUseFlippedTextureCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(defaultUseFlippedTextureCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -884,8 +884,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(defaultCameraLampEnabledCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(defaultCameraLampEnabledCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(defaultCameraLampEnabledCheckBox, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -909,8 +909,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(anisotropyComboBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(anisotropyComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(anisotropyComboBox, CssClasses.SETTINGS_DIALOG_FIELD);
 
         final ObservableList<Integer> items = anisotropyComboBox.getItems();
         items.addAll(ANISOTROPYCS);
@@ -937,8 +937,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(themeComboBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(themeComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(themeComboBox, CssClasses.SETTINGS_DIALOG_FIELD);
 
         final ObservableList<CssColorTheme> items = themeComboBox.getItems();
         items.addAll(THEMES);
@@ -965,8 +965,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(openGLVersionComboBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(openGLVersionComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(openGLVersionComboBox, CssClasses.SETTINGS_DIALOG_FIELD);
 
         final ObservableList<OpenGLVersion> items = openGLVersionComboBox.getItems();
         items.addAll(GL_VERSIONS);
@@ -992,8 +992,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(frameRateField, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(frameRateField, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(frameRateField, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -1016,8 +1016,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(cameraAngleField, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(cameraAngleField, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(label, CssClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(cameraAngleField, CssClasses.SETTINGS_DIALOG_FIELD);
     }
 
     /**
@@ -1360,8 +1360,8 @@ public class SettingsDialog extends EditorDialog {
         final Button cancelButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CLOSE);
         cancelButton.setOnAction(event -> hide());
 
-        FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(okButton, cancelButton, CssClasses.DIALOG_BUTTON);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
 
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);

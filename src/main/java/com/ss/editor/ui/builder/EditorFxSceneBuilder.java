@@ -13,8 +13,8 @@ import com.ss.editor.ui.component.split.pane.GlobalBottomToolSplitPane;
 import com.ss.editor.ui.component.split.pane.GlobalLeftToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSRegistry;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFxScene;
@@ -39,7 +39,7 @@ public class EditorFxSceneBuilder {
      * The CSS registry.
      */
     @NotNull
-    private static final CSSRegistry CSS_REGISTRY = CSSRegistry.getInstance();
+    private static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
 
     /**
      * The path to the base CSS styles.
@@ -138,7 +138,7 @@ public class EditorFxSceneBuilder {
         FXUtils.addToPane(new VBox(barComponent, leftSplitContainer), container);
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
-        FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CSSClasses.MAIN_SPLIT_PANEL);
+        FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CssClasses.MAIN_SPLIT_PANEL);
 
         UIUtils.overrideTooltipBehavior(1000, 5000, 100);
     }

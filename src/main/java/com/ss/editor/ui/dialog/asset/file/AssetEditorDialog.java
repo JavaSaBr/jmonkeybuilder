@@ -11,7 +11,7 @@ import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.dialog.asset.BaseAssetEditorDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
@@ -52,7 +52,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The handler created files events.

@@ -4,7 +4,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.FXConstants;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -79,8 +79,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
 
         setContent(container);
 
-        FXUtils.addClassTo(container, CSSClasses.DEF_VBOX);
-        FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_CONTAINER);
+        FXUtils.addClassTo(container, CssClasses.DEF_VBOX);
+        FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_CONTAINER);
     }
 
     /**

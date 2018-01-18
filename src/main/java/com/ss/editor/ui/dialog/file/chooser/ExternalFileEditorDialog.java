@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
@@ -80,7 +80,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
                 .addListener((observable, oldValue, newValue) -> processSelected(newValue));
 
         FXUtils.addToPane(resourceTree, root);
-        FXUtils.addClassTo(root, CSSClasses.OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG);
+        FXUtils.addClassTo(root, CssClasses.OPEN_EXTERNAL_FOLDER_EDITOR_DIALOG);
     }
 
     @FxThread

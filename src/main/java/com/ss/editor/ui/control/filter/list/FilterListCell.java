@@ -1,11 +1,12 @@
 package com.ss.editor.ui.control.filter.list;
 
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.filter.operation.DisableSceneFilterOperation;
-import com.ss.editor.ui.control.filter.operation.EnableSceneFilterOperation;
+import com.ss.editor.model.undo.impl.DisableSceneFilterOperation;
+import com.ss.editor.model.undo.impl.EnableSceneFilterOperation;
 import com.ss.editor.ui.control.list.AbstractListCell;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +31,7 @@ public class FilterListCell extends AbstractListCell<EditableSceneFilter> {
      */
     public FilterListCell(@NotNull final FilterList stateList) {
         this.stateList = stateList;
-        FXUtils.addClassTo(this, CSSClasses.SCENE_FILTER_LIST_CELL);
+        FXUtils.addClassTo(this, CssClasses.SCENE_FILTER_LIST_CELL);
     }
 
     /**
@@ -41,6 +42,7 @@ public class FilterListCell extends AbstractListCell<EditableSceneFilter> {
         return stateList;
     }
 
+    @FxThread
     @Override
     protected void processHideImpl() {
 
@@ -55,6 +57,7 @@ public class FilterListCell extends AbstractListCell<EditableSceneFilter> {
         }
     }
 
+    @FxThread
     @Override
     protected boolean isEnabled(@Nullable final EditableSceneFilter item) {
         return item != null && item.isEnabled();

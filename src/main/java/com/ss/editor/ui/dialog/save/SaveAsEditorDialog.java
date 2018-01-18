@@ -11,10 +11,10 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.EditorDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
@@ -59,7 +59,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
@@ -170,9 +170,9 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(settingsContainer, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(root, CSSClasses.SAVE_AS_DIALOG);
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(root, CssClasses.SAVE_AS_DIALOG);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(settingsContainer, CssClasses.DEF_GRID_PANE);
     }
 
     /**
@@ -194,8 +194,8 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         root.add(fileNameLabel, 0, 0);
         root.add(fileNameField, 1, 0);
 
-        FXUtils.addClassTo(fileNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(fileNameField, CSSClasses.DIALOG_FIELD);
+        FXUtils.addClassTo(fileNameLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(fileNameField, CssClasses.DIALOG_FIELD);
     }
 
     /**

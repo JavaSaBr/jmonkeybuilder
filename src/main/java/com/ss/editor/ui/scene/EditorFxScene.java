@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -95,16 +95,16 @@ public class EditorFxScene extends Scene {
         this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
-        this.container.setId(CSSIds.ROOT_CONTAINER);
+        this.container.setId(CssIds.ROOT_CONTAINER);
         this.container.setPickOnBounds(false);
         this.hideLayer = new StackPane();
         this.hideLayer.setVisible(false);
         this.loadingLayer = new VBox();
-        this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
+        this.loadingLayer.setId(CssIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
         final Pane background = new Pane();
-        background.setId(CSSIds.ROOT);
+        background.setId(CssIds.ROOT);
 
         FXUtils.addDebugBorderTo(canvas);
 
@@ -229,7 +229,7 @@ public class EditorFxScene extends Scene {
         loadingLayer.toFront();
 
         progressIndicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-        progressIndicator.setId(CSSIds.EDITOR_LOADING_PROGRESS);
+        progressIndicator.setId(CssIds.EDITOR_LOADING_PROGRESS);
 
         FXUtils.addToPane(progressIndicator, loadingLayer);
 

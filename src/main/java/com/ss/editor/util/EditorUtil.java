@@ -372,9 +372,16 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @Nullable String toExternal(@NotNull final String path, @NotNull final ClassLoader classLoader) {
-        if (!checkExists(path, classLoader)) return null;
+
+        if (!checkExists(path, classLoader)) {
+            return null;
+        }
+
         URL resource = classLoader.getResource(path);
-        if (resource == null) resource = classLoader.getResource("/" + path);
+        if (resource == null) {
+            resource = classLoader.getResource("/" + path);
+        }
+
         return resource == null ? null : resource.toExternalForm();
     }
 
@@ -627,7 +634,9 @@ public abstract class EditorUtil {
             alert.setWidth(500);
             alert.setHeight(220);
 
-            if (callback != null) alert.setOnHidden(event -> callback.run());
+            if (callback != null) {
+                alert.setOnHidden(event -> callback.run());
+            }
         });
     }
 
@@ -667,7 +676,7 @@ public abstract class EditorUtil {
      */
     @FxThread
     private static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
-                                          @Nullable final String stackTrace) {
+                                                   @Nullable final String stackTrace) {
 
         final TextArea textArea = new TextArea(stackTrace);
         textArea.setEditable(false);
@@ -832,9 +841,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static <T> @NotNull T deserialize(@NotNull final byte[] bytes) {
-
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-
         try (final ObjectInputStream in = new ExtObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
         } catch (final ClassNotFoundException | IOException e) {

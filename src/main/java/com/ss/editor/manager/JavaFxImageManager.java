@@ -13,7 +13,7 @@ import com.ss.editor.config.Config;
 import com.ss.editor.file.reader.DdsReader;
 import com.ss.editor.file.reader.TgaReader;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.util.EditorUtil;
@@ -56,7 +56,7 @@ public class JavaFxImageManager {
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFxImageManager.class);
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final String PREVIEW_CACHE_FOLDER = "preview-cache";

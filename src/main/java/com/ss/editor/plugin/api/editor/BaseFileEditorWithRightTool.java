@@ -6,7 +6,7 @@ import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorSt
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.DragEvent;
@@ -60,7 +60,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
         mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
 
         FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FXUtils.addClassTo(mainSplitContainer, CssClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
         editorAreaPane.setOnDragOver(this::handleDragOverEvent);
         editorAreaPane.setOnDragDropped(this::handleDragDroppedEvent);
 
-        FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
+        FXUtils.addClassTo(editorAreaPane, CssClasses.FILE_EDITOR_EDITOR_AREA);
     }
 
     /**

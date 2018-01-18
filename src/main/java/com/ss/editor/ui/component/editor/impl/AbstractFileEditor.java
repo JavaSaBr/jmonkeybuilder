@@ -15,8 +15,8 @@ import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
@@ -76,7 +76,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The array of 3D parts of this editor.
@@ -190,7 +190,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
             createToolbar(toolbar);
 
-            FXUtils.addClassTo(toolbar, CSSClasses.FILE_EDITOR_TOOLBAR);
+            FXUtils.addClassTo(toolbar, CssClasses.FILE_EDITOR_TOOLBAR);
             FXUtils.addToPane(toolbar, container);
         }
 
@@ -329,8 +329,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         action.setGraphic(new ImageView(Icons.SAVE_16));
         action.disableProperty().bind(dirtyProperty().not());
 
-        FXUtils.addClassesTo(action, CSSClasses.FLAT_BUTTON,
-                CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(action, CssClasses.FLAT_BUTTON,
+                CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(action);
 

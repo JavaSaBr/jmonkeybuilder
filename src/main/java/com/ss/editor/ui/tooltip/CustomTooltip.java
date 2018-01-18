@@ -1,7 +1,7 @@
 package com.ss.editor.ui.tooltip;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
@@ -31,7 +31,7 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
 
         createContent(root);
 
-        FXUtils.addClassTo(root, CSSClasses.CUSTOM_TOOLTIP);
+        FXUtils.addClassTo(root, CssClasses.CUSTOM_TOOLTIP);
     }
 
     /**

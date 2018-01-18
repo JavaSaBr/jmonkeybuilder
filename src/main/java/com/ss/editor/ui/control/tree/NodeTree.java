@@ -6,8 +6,8 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
@@ -66,7 +66,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
         createComponents();
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_NODE_TREE_CONTAINER);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CONTAINER);
     }
 
     /**
@@ -93,6 +93,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @return the abstract node tree cell
      */
+    @FxThread
     protected @NotNull NodeTreeCell<C, ?> createNodeTreeCell() {
         return new NodeTreeCell<>(this);
     }

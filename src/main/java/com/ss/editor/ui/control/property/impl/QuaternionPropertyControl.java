@@ -7,7 +7,7 @@ import com.jme3.math.Quaternion;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -84,11 +84,11 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
 
-        FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
-                CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(xLabel, yLabel, zLabel, CssClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
+        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
+                CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+        FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CssClasses.TRANSPARENT_TEXT_FIELD);
 
         UIUtils.addFocusBinding(container, xField, yField, zField);
     }

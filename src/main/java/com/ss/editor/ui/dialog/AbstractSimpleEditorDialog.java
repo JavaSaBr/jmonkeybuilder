@@ -4,7 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -145,13 +145,13 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         if (needOkButton()) {
             okButton = new Button(getButtonOkText());
             okButton.setOnAction(event -> safeProcessOk());
-            FXUtils.addClassTo(okButton, CSSClasses.DIALOG_BUTTON);
+            FXUtils.addClassTo(okButton, CssClasses.DIALOG_BUTTON);
         }
 
         if (needCloseButton()) {
             closeButton = new Button(getButtonCloseText());
             closeButton.setOnAction(event -> processClose());
-            FXUtils.addClassTo(closeButton, CSSClasses.DIALOG_BUTTON);
+            FXUtils.addClassTo(closeButton, CssClasses.DIALOG_BUTTON);
         }
 
         if (needOkButton()) {
@@ -166,7 +166,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
         if (!container.getChildren().isEmpty()) {
             FXUtils.addToPane(container, root);
-            FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+            FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
         }
     }
 

@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -71,11 +71,11 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
         FXUtils.addToPane(changeButton, container);
         FXUtils.addToPane(editButton, container);
 
-        FXUtils.addClassesTo(container, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassTo(elementLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-        FXUtils.addClassesTo(changeButton, editButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(container, CssClasses.TEXT_INPUT_CONTAINER,
+                CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+        FXUtils.addClassTo(elementLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(changeButton, editButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(changeButton, editButton);
     }

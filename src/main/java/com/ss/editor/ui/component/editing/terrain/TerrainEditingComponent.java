@@ -22,7 +22,7 @@ import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -369,7 +369,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         setToolControl(raiseLowerToolControl);
 
-        FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
+        FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
     }
 
     @Override
@@ -528,7 +528,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         buttonsContainer.add(paintButton, 5, 0);
         buttonsContainer.prefWidthProperty().bind(widthProperty());
 
-        FXUtils.addClassTo(buttonsContainer, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(buttonsContainer, CssClasses.DEF_GRID_PANE);
 
         final Label brushSizeLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_SIZE + ":");
         brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
@@ -566,12 +566,12 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         createPaintControlSettings();
 
         FXUtils.addClassesTo(raiseLowerButton, smoothButton, roughButton, levelButton, slopeButton, paintButton,
-                CSSClasses.MEDIUM_TOGGLE_BUTTON);
+                CssClasses.MEDIUM_TOGGLE_BUTTON);
 
-        FXUtils.addClassTo(brushSettingsContainer, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(controlSettings, CSSClasses.DEF_VBOX);
-        FXUtils.addClassTo(brushSizeLabel, brushPowerLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(brushSizeField, brushPowerField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(brushSettingsContainer, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(controlSettings, CssClasses.DEF_VBOX);
+        FXUtils.addClassTo(brushSizeLabel, brushPowerLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(brushSizeField, brushPowerField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -601,9 +601,9 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         slopeControlSettings.add(limitedLabel, 0, 1);
         slopeControlSettings.add(slopeControlLimited, 1, 1);
 
-        FXUtils.addClassTo(slopeControlSettings, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(smoothlyLabel, limitedLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(slopeControlSettings, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(smoothlyLabel, limitedLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     /**
@@ -646,11 +646,11 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         levelControlSettings.add(levelControlLevelField, 1, 2);
 
         FXUtils.addClassTo(smoothlyLabel, useMarkerLabel, levelLabel,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
 
-        FXUtils.addClassesTo(levelControlSettings, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(levelControlLevelField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassesTo(levelControlSettings, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(levelControlLevelField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     /**
@@ -711,12 +711,12 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         roughControlSettings.add(roughControlScaleField, 1, 4);
 
         FXUtils.addClassTo(roughnessLabel, frequencyLabel, lacunarityLabel, octavesLabel, scaleLabel,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
 
 
-        FXUtils.addClassesTo(roughControlSettings, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassesTo(roughControlSettings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(roughControlRoughnessField, roughControlFrequencyField, roughControlLacunarityField,
-                roughControlOctavesField, roughControlScaleField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+                roughControlOctavesField, roughControlScaleField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -749,10 +749,10 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         paintControlSettings.add(triPlanarCheckBox, 1, 1);
         paintControlSettings.add(textureLayerSettings, 0, 2, 2, 1);
 
-        FXUtils.addClassesTo(paintControlSettings, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(shininessLabel, triPlanarLabelLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(triPlanarCheckBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
-        FXUtils.addClassTo(shininessField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassesTo(paintControlSettings, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(shininessLabel, triPlanarLabelLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(triPlanarCheckBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(shininessField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**

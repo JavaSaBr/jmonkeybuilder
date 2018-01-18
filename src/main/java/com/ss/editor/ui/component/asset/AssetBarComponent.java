@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.asset;
 
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
  */
 public class AssetBarComponent extends HBox {
 
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * Instantiates a new Asset bar component.

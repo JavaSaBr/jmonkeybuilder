@@ -5,7 +5,7 @@ import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.beans.binding.DoubleBinding;
@@ -96,11 +96,11 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         settingContainer.add(scaleLabel, 0, 3);
         settingContainer.add(scaleField, 1, 3);
 
-        FXUtils.addClassTo(settingContainer, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(layerField, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
-        FXUtils.addClassTo(scaleLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(scaleField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER);
+        FXUtils.addClassTo(settingContainer, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(layerField, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
+        FXUtils.addClassTo(scaleLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(scaleField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER);
     }
 
     /**

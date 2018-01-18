@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.bar.action;
 
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import javafx.scene.control.MenuItem;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import java.nio.file.Path;
  */
 public class ReopenAssetAction extends MenuItem {
 
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The asset folder.

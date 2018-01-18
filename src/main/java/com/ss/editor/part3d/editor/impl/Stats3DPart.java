@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3DPart;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ArrayUtils;
 import javafx.scene.control.Label;
@@ -249,7 +249,7 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
         statsContainer.add(fpsLabel, 0, 13);
         statsContainer.add(fpsField, 1, 13);
 
-        FXUtils.addClassTo(statsContainer, CSSClasses.STATS_3D_STATE);
+        FXUtils.addClassTo(statsContainer, CssClasses.STATS_3D_STATE);
     }
 
     @Override

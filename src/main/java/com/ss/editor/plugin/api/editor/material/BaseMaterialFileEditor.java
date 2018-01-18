@@ -20,7 +20,7 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.property.PropertyEditor;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -147,7 +147,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
 
         container.addComponent(buildSplitComponent(settingsTree, propertyEditor, root), getSettingsTreeToolName());
 
-        FXUtils.addClassTo(settingsTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+        FXUtils.addClassTo(settingsTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
     }
 
     /**
@@ -295,7 +295,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
         FXUtils.addToPane(lightButton, container);
 
         DynamicIconSupport.addSupport(cubeButton, sphereButton, planeButton, lightButton);
-        FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 
     /**

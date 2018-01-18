@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -38,7 +38,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
         checkBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FXUtils.addToPane(checkBox, this);
-        FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(checkBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     /**

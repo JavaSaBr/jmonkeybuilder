@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.code.BaseCodeArea;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import javafx.scene.layout.HBox;
@@ -53,7 +53,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         codeArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(codeArea, root);
-        FXUtils.addClassTo(codeArea, CSSClasses.TEXT_EDITOR_TEXT_AREA);
+        FXUtils.addClassTo(codeArea, CssClasses.TEXT_EDITOR_TEXT_AREA);
     }
 
     /**

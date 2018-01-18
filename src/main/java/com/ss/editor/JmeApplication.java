@@ -43,7 +43,7 @@ import com.ss.editor.filter.EditorFxaaFilter;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
@@ -374,7 +374,7 @@ public class JmeApplication extends JmeToJFXApplication {
         final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
         event.setFocused(false);
 
-        final FXEventManager eventManager = FXEventManager.getInstance();
+        final FxEventManager eventManager = FxEventManager.getInstance();
         eventManager.notify(event);
     }
 
@@ -386,7 +386,7 @@ public class JmeApplication extends JmeToJFXApplication {
         final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
         event.setFocused(true);
 
-        final FXEventManager eventManager = FXEventManager.getInstance();
+        final FxEventManager eventManager = FxEventManager.getInstance();
         eventManager.notify(event);
     }
 

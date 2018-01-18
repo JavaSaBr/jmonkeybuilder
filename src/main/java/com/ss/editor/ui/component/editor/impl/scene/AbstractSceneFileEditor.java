@@ -55,15 +55,15 @@ import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.impl.BaseEditorSceneEditorState;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
-import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
+import com.ss.editor.ui.control.model.ModelPropertyEditor;
+import com.ss.editor.ui.control.model.ModelNodeTree;
+import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.RemoveChildOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.RemoveControlOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.RemoveLightOperation;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
@@ -939,7 +939,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                 scaleToolButton);
 
         FXUtils.addClassesTo(selectionButton, gridButton, statisticsButton, moveToolButton, rotationToolButton,
-                scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+                scaleToolButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         FXUtils.addToPane(selectionButton, container);
         FXUtils.addToPane(gridButton, container);
@@ -979,8 +979,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelPropertyEditor.prefHeightProperty().bind(root.heightProperty());
 
         FXUtils.addToPane(statsContainer, editorAreaPane);
-        FXUtils.addClassTo(statsContainer, CSSClasses.SCENE_EDITOR_STATS_CONTAINER);
-        FXUtils.addClassTo(modelNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+        FXUtils.addClassTo(statsContainer, CssClasses.SCENE_EDITOR_STATS_CONTAINER);
+        FXUtils.addClassTo(modelNodeTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditor
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.event.Event;
@@ -70,7 +70,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
         mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
 
         FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FXUtils.addClassTo(mainSplitContainer, CssClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
     }
 
     /**
@@ -89,7 +89,7 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
         editor3DArea.setOnKeyPressed(Event::consume);
 
         FXUtils.addToPane(editor3DArea, editorAreaPane);
-        FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
+        FXUtils.addClassTo(editorAreaPane, CssClasses.FILE_EDITOR_EDITOR_AREA);
     }
 
     /**

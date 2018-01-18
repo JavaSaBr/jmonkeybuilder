@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog.plugin;
 
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -26,7 +26,7 @@ public class PluginListCell extends ListCell<EditorPlugin> {
 
     public PluginListCell() {
         this.icon = new ImageView(Icons.PLUGIN_16);
-        FXUtils.addClassTo(this, CSSClasses.PLUGIN_LIST_CELL);
+        FXUtils.addClassTo(this, CssClasses.PLUGIN_LIST_CELL);
         DynamicIconSupport.updateListener(this, icon, selectedProperty());
     }
 

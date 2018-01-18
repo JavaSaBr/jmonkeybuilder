@@ -33,7 +33,7 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
@@ -292,8 +292,8 @@ public class MaterialFileEditor extends
         FXUtils.addToPane(materialDefinitionLabel, container);
         FXUtils.addToPane(materialDefinitionBox, container);
 
-        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.FILE_EDITOR_TOOLBAR_LABEL);
-        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.FILE_EDITOR_TOOLBAR_FIELD);
+        FXUtils.addClassTo(materialDefinitionLabel, CssClasses.FILE_EDITOR_TOOLBAR_LABEL);
+        FXUtils.addClassTo(materialDefinitionBox, CssClasses.FILE_EDITOR_TOOLBAR_FIELD);
     }
 
     /**

@@ -18,7 +18,7 @@ import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
@@ -62,7 +62,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
@@ -146,7 +146,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final InitializationManager initializationManager = InitializationManager.getInstance();
         initializationManager.addOnFinishLoading(() -> {
             prepareClasspathResources();
-            final FXEventManager fxEventManager = FXEventManager.getInstance();
+            final FxEventManager fxEventManager = FxEventManager.getInstance();
             fxEventManager.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
             fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
             fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));

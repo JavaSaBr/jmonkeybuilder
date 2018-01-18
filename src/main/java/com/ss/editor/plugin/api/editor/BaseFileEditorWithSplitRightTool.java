@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.editor;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorState;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
@@ -36,7 +36,7 @@ public abstract class BaseFileEditorWithSplitRightTool<S extends EditorWithEdito
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(splitPane));
 
-        FXUtils.addClassTo(splitPane, CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
+        FXUtils.addClassTo(splitPane, CssClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
 
         return splitPane;
     }

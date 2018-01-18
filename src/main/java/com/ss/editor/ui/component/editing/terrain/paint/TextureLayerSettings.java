@@ -17,7 +17,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editing.terrain.control.PaintTerrainToolControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -105,7 +105,7 @@ public class TextureLayerSettings extends VBox {
         this.cells = ArrayFactory.newArray(TextureLayerCell.class);
         this.editingComponent = editingComponent;
         createComponents();
-        FXUtils.addClassTo(this, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(this, CssClasses.DEF_VBOX);
     }
 
     private void createComponents() {
@@ -133,10 +133,10 @@ public class TextureLayerSettings extends VBox {
         FXUtils.addToPane(listView, this);
         FXUtils.addToPane(buttonContainer, this);
 
-        FXUtils.addClassesTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW, CSSClasses.LIST_VIEW_WITHOUT_SCROLL);
-        FXUtils.addClassTo(buttonContainer, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS);
-        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassesTo(listView, CssClasses.TRANSPARENT_LIST_VIEW, CssClasses.LIST_VIEW_WITHOUT_SCROLL);
+        FXUtils.addClassTo(buttonContainer, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS);
+        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }

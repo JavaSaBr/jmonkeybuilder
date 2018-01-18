@@ -17,7 +17,7 @@ import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
@@ -174,12 +174,12 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
                     .subtract(addButton.widthProperty()));
 
             FXUtils.addToPane(textureLabel, fieldContainer);
-            FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER,
-                    CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+            FXUtils.addClassTo(textureLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+            FXUtils.addClassesTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER,
+                    CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
 
         } else {
-            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER_WITHOUT_PADDING);
+            FXUtils.addClassesTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER_WITHOUT_PADDING);
         }
 
         FXUtils.addToPane(previewContainer, fieldContainer);
@@ -189,9 +189,9 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         FXUtils.addToPane(fieldContainer, container);
         FXUtils.addToPane(texturePreview, previewContainer);
 
-        FXUtils.addClassTo(previewContainer, CSSClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
-        FXUtils.addClassesTo(settingsButton, addButton, removeButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(previewContainer, CssClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
+        FXUtils.addClassesTo(settingsButton, addButton, removeButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
     /**

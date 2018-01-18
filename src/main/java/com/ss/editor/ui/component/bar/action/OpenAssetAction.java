@@ -6,7 +6,7 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.util.EditorUtil;
 import javafx.scene.control.MenuItem;
@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 public class OpenAssetAction extends MenuItem {
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     public OpenAssetAction() {
         super(Messages.EDITOR_MENU_FILE_OPEN_ASSET);

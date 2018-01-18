@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.beans.property.DoubleProperty;
@@ -54,7 +54,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, T> extends Propert
         checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(checkBox, container);
-        FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(checkBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     @Override

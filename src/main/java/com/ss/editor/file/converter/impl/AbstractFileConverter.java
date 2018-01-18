@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -52,7 +52,7 @@ public abstract class AbstractFileConverter implements FileConverter {
      * The FX event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @Override
     public void convert(@NotNull final Path source) {

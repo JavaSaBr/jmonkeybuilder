@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -61,8 +61,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
         root.add(nameLabel, 0, 0);
         root.add(nameField, 1, 0);
 
-        FXUtils.addClassTo(nameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(nameField, CSSClasses.DIALOG_FIELD);
+        FXUtils.addClassTo(nameLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(nameField, CssClasses.DIALOG_FIELD);
     }
 
     @Override

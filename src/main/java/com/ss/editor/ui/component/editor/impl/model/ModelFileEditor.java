@@ -25,7 +25,7 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorModelEditorState;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
@@ -308,7 +308,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
         DynamicIconSupport.addSupport(lightButton, physicsButton, debugPhysicsButton);
 
-        FXUtils.addClassTo(lightButton, physicsButton, debugPhysicsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(lightButton, physicsButton, debugPhysicsButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addToPane(lightButton, physicsButton, debugPhysicsButton, container);
     }
 

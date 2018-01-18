@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.HBox;
@@ -51,7 +51,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 

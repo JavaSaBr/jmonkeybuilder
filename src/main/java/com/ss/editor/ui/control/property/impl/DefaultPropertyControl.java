@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -74,8 +74,8 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
         propertyValueLabel = new Label();
         propertyValueLabel.prefWidthProperty().bind(container.widthProperty());
 
-        FXUtils.addClassesTo(propertyValueLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_LABEL_VALUE,
-                CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(propertyValueLabel, CssClasses.ABSTRACT_PARAM_CONTROL_LABEL_VALUE,
+                CssClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addToPane(propertyValueLabel, container);
     }
 

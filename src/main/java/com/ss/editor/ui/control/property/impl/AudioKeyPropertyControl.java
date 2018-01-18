@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
@@ -104,11 +104,11 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
         FXUtils.addToPane(changeButton, container);
         FXUtils.addToPane(openButton, container);
 
-        FXUtils.addClassesTo(container, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassTo(audioKeyLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-        FXUtils.addClassesTo(changeButton, openButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(container, CssClasses.TEXT_INPUT_CONTAINER,
+                CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+        FXUtils.addClassTo(audioKeyLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(changeButton, openButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(changeButton, openButton);
     }

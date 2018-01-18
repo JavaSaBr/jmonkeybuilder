@@ -9,7 +9,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -195,8 +195,8 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
 
         setConverter(stringConverter);
 
-        FXUtils.addClassTo(content, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_NODE_TREE_CELL);
+        FXUtils.addClassTo(content, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CELL);
     }
 
     /**

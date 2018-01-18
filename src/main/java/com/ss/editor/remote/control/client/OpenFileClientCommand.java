@@ -4,7 +4,7 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.AssetComponentLoadedEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.util.EditorUtil;
@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 public class OpenFileClientCommand extends ClientCommand {
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();

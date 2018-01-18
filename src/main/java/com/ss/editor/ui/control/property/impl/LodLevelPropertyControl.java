@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ObjectUtils;
 import javafx.collections.ObservableList;
@@ -84,7 +84,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
                 .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
 
         FXUtils.addToPane(levelComboBox, container);
-        FXUtils.addClassTo(levelComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(levelComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**

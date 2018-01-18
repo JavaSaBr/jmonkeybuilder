@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -97,7 +97,7 @@ public class PropertyEditorControl<T> extends HBox {
             setIgnoreListener(false);
         }
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_EDITOR_CONTROL);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_PARAM_EDITOR_CONTROL);
     }
 
     /**
@@ -162,7 +162,7 @@ public class PropertyEditorControl<T> extends HBox {
         propertyNameLabel = new Label(getName() + ":");
         propertyNameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         FXUtils.addToPane(propertyNameLabel, this);
     }
 

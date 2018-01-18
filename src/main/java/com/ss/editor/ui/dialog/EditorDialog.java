@@ -7,10 +7,10 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSRegistry;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
@@ -55,13 +55,13 @@ public class EditorDialog {
      * The constant FX_EVENT_MANAGER.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The CSS registry.
      */
     @NotNull
-    private static final CSSRegistry CSS_REGISTRY = CSSRegistry.getInstance();
+    private static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
 
     /**
      * The default dialog size.
@@ -93,9 +93,6 @@ public class EditorDialog {
     @Nullable
     private Node focusOwner;
 
-    /**
-     * Instantiates a new Editor dialog.
-     */
     public EditorDialog() {
         this.showedTime = LocalTime.now();
 
@@ -140,16 +137,16 @@ public class EditorDialog {
 
         final VBox actionsContainer = new VBox();
 
-        FXUtils.addClassTo(actionsContainer, CSSClasses.DIALOG_ACTIONS_ROOT);
+        FXUtils.addClassTo(actionsContainer, CssClasses.DIALOG_ACTIONS_ROOT);
 
         if (isGridStructure()) {
             final GridPane container = new GridPane();
-            FXUtils.addClassesTo(container, CSSClasses.DEF_GRID_PANE, CSSClasses.DIALOG_CONTENT_ROOT);
+            FXUtils.addClassesTo(container, CssClasses.DEF_GRID_PANE, CssClasses.DIALOG_CONTENT_ROOT);
             createContent(container);
             FXUtils.addToPane(container, root);
         } else {
             final VBox container = new VBox();
-            FXUtils.addClassesTo(container, CSSClasses.DEF_VBOX, CSSClasses.DIALOG_CONTENT_ROOT);
+            FXUtils.addClassesTo(container, CssClasses.DEF_VBOX, CssClasses.DIALOG_CONTENT_ROOT);
             createContent(container);
             FXUtils.addToPane(container, root);
         }
@@ -157,12 +154,14 @@ public class EditorDialog {
         createActions(actionsContainer);
 
         FXUtils.addToPane(actionsContainer, root);
-        FXUtils.addClassTo(root, CSSClasses.DIALOG_ROOT);
+        FXUtils.addClassTo(root, CssClasses.DIALOG_ROOT);
 
         root.addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
 
     /**
+     * Get the stage of this dialog.
+     *
      * @return the stage of this dialog.
      */
     @FromAnyThread
@@ -171,6 +170,8 @@ public class EditorDialog {
     }
 
     /**
+     * Get the width property of this dialog.
+     *
      * @return the width property of this dialog.
      */
     @FxThread
@@ -179,6 +180,8 @@ public class EditorDialog {
     }
 
     /**
+     * Get the height property of this dialog.
+     *
      * @return the height property of this dialog.
      */
     @FxThread

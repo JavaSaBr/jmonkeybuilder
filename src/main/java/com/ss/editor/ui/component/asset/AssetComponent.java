@@ -12,9 +12,9 @@ import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.css.CssIds;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -47,7 +47,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      * The event manager.
      */
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The list of waited files to select.
@@ -77,7 +77,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      */
     public AssetComponent() {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
-        setId(CSSIds.ASSET_COMPONENT);
+        setId(CssIds.ASSET_COMPONENT);
         createComponents();
         FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefresh());
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
@@ -186,7 +186,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         FXUtils.addToPane(resourceTree, this);
         FXUtils.bindFixedHeight(resourceTree, heightProperty());
-        FXUtils.addClassTo(resourceTree, CSSClasses.TRANSPARENT_LIST_VIEW);
+        FXUtils.addClassTo(resourceTree, CssClasses.TRANSPARENT_LIST_VIEW);
     }
 
     /**

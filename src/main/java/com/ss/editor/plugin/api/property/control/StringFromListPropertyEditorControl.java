@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -62,7 +62,7 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
         comboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
         comboBox.setVisibleRowCount(20);
 
-        FXUtils.addClassTo(comboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(comboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(comboBox, this);
     }
 

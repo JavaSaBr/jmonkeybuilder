@@ -11,8 +11,8 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
@@ -72,7 +72,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The FX event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The executor manager.
@@ -162,7 +162,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             setIgnoreListener(false);
         }
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_CONTROL);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_PARAM_CONTROL);
     }
 
     /**
@@ -307,9 +307,9 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
         }
 
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
-                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
+                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
 
         FXUtils.addToPane(propertyNameLabel, isSingleRow() ? container : this);
 

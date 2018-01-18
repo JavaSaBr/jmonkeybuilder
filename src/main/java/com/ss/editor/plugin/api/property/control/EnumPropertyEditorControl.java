@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.ComboBox;
@@ -46,7 +46,7 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
         enumComboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
         enumComboBox.setVisibleRowCount(20);
 
-        FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(enumComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(enumComboBox, this);
     }
 

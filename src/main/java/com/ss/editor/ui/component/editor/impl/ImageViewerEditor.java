@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.Image;
@@ -63,7 +63,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         imageView = new ImageView();
 
         FXUtils.addToPane(imageView, root);
-        FXUtils.addClassTo(root, CSSClasses.IMAGE_VIEW_EDITOR_CONTAINER);
+        FXUtils.addClassTo(root, CssClasses.IMAGE_VIEW_EDITOR_CONTAINER);
     }
 
     /**

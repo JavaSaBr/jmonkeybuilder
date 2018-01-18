@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.scripting;
 
 import static java.util.Collections.singleton;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
@@ -123,7 +123,7 @@ public class GroovyEditorComponent extends VBox {
 
 
         FXUtils.addToPane(codeArea, this);
-        FXUtils.addClassesTo(this, CSSClasses.TEXT_EDITOR_TEXT_AREA, CSSClasses.GROOVY_EDITOR_COMPONENT);
+        FXUtils.addClassesTo(this, CssClasses.TEXT_EDITOR_TEXT_AREA, CssClasses.GROOVY_EDITOR_COMPONENT);
     }
 
     @NotNull

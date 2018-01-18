@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -37,7 +37,7 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
     }
 

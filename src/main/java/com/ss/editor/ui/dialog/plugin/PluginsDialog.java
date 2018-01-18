@@ -11,7 +11,7 @@ import com.ss.editor.manager.PluginManager;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -141,11 +141,11 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         root.add(descriptionContainer, 1, 0, 1, 1);
         root.add(buttonContainer, 0, 1, 1, 1);
 
-        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(root, CSSClasses.PLUGINS_DIALOG);
-        FXUtils.addClassesTo(descriptionContainer, CSSClasses.WEBVIEW_TEXT_AREA);
+        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(root, CssClasses.PLUGINS_DIALOG);
+        FXUtils.addClassesTo(descriptionContainer, CssClasses.WEBVIEW_TEXT_AREA);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.ss.editor.ui.preview.impl;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -37,7 +37,7 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
         node.prefWidthProperty().bind(pane.widthProperty().subtract(2));
         node.prefHeightProperty().bind(pane.heightProperty().subtract(2));
 
-        FXUtils.addClassTo(node, CSSClasses.TRANSPARENT_TEXT_AREA);
+        FXUtils.addClassTo(node, CssClasses.TRANSPARENT_TEXT_AREA);
     }
 
     @Override

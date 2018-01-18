@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ArrayUtils;
@@ -65,7 +65,7 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 

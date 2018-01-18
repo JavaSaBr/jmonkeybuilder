@@ -7,7 +7,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -80,9 +80,9 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
         final VBox wrapper = new VBox(container);
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_CONTROL_CONTAINER);
-        FXUtils.addClassTo(container, CSSClasses.DEF_VBOX);
-        FXUtils.addClassTo(wrapper, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_PARAM_CONTROL_CONTAINER);
+        FXUtils.addClassTo(container, CssClasses.DEF_VBOX);
+        FXUtils.addClassTo(wrapper, CssClasses.DEF_VBOX);
 
         setContent(wrapper);
     }
