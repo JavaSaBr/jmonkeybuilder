@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -55,7 +55,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
     @FxThread
     protected void processSelect() {
         super.processSelect();
-        UIUtils.openFileAssetDialog(this::processSelect, getExtensions(), getActionTester());
+        UiUtils.openFileAssetDialog(this::processSelect, getExtensions(), getActionTester());
     }
 
     /**

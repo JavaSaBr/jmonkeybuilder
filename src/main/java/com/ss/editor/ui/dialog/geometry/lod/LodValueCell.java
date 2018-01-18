@@ -3,7 +3,7 @@ package com.ss.editor.ui.dialog.geometry.lod;
 import com.jme3.scene.Mesh;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.dialog.geometry.lod.GenerateLodLevelsDialog.ReductionMethod;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
@@ -64,6 +64,6 @@ public class LodValueCell extends TextFieldListCell<Number> {
     public void startEdit() {
         if (!isEditable()) return;
         super.startEdit();
-        UIUtils.updateEditedCell(this);
+        UiUtils.updateEditedCell(this);
     }
 }

@@ -6,7 +6,7 @@ import com.jme3.asset.MaterialKey;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
     @FxThread
     @Override
     protected void processChange() {
-        UIUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     @FxThread

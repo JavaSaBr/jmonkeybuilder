@@ -19,7 +19,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -706,7 +706,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FxThread
     protected void notifyStartSaving() {
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         setSaving(true);
     }
 
@@ -716,7 +716,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FxThread
     protected void notifyFinishSaving() {
         setSaving(false);
-        EditorUtil.decrementLoading();
+        UiUtils.decrementLoading();
         if (saveCallback != null) {
             saveCallback.accept(this);
             saveCallback = null;

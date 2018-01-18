@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.plugin;
 
-import static com.ss.editor.util.EditorUtil.toWeb;
+import static com.ss.editor.ui.util.UiUtils.toWeb;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;

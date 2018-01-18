@@ -31,6 +31,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.control.input.IntegerTextField;
@@ -636,7 +637,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @FxThread
     protected void processOk() {
         super.processOk();
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
 
             try {
@@ -645,7 +646,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
                 EditorUtil.handleException(LOGGER, this, e);
             }
 
-            EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
         });
     }
 

@@ -4,7 +4,7 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -71,7 +71,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
                 CssClasses.TRANSPARENT_TEXT_FIELD);
         FXUtils.addToPane(gridPane, this);
 
-        UIUtils.addFocusBinding(gridPane, xField, yField, zField);
+        UiUtils.addFocusBinding(gridPane, xField, yField, zField);
     }
 
     /**

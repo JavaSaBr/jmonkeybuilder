@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.layer;
 
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;

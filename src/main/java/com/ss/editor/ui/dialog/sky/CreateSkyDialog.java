@@ -30,7 +30,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -327,7 +327,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassesTo(normalScaleXField, normalScaleYField, normalScaleZField,
                 CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD, CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UIUtils.addFocusBinding(normalScaleContainer, normalScaleXField, normalScaleYField, normalScaleZField);
+        UiUtils.addFocusBinding(normalScaleContainer, normalScaleXField, normalScaleYField, normalScaleZField);
     }
 
     /**
@@ -736,7 +736,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @Override
     @FxThread
     protected void processOk() {
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
 
@@ -746,7 +746,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
                 EditorUtil.handleException(LOGGER, this, e);
             }
 
-            EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
         });
 
         super.processOk();

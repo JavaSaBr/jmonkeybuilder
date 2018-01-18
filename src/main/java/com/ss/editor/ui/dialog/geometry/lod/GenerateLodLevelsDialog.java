@@ -7,8 +7,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
@@ -18,7 +18,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -295,7 +295,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     @Override
     @FxThread
     protected void processOk() {
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processGenerate);
         super.processOk();
     }
@@ -344,7 +344,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
             consumer.execute(operation);
 
-            EditorUtil.decrementLoading();
+            UiUtils.decrementLoading();
         });
     }
 

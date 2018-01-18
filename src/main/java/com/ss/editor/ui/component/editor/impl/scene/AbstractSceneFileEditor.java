@@ -66,7 +66,7 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.MaterialUtils;
@@ -1058,10 +1058,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
 
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
+        UiUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
                 dragEvent, AbstractSceneFileEditor::addNewModel);
 
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
+        UiUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
                 dragEvent, AbstractSceneFileEditor::applyMaterial);
     }
 
@@ -1069,7 +1069,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragOverEvent(dragEvent);
-        UIUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
+        UiUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
     }
 
     /**

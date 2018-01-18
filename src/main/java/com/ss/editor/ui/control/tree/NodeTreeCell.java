@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree;
 
-import static com.ss.editor.ui.util.UIUtils.findItem;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItem;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.manager.ExecutorManager;
@@ -11,7 +11,7 @@ import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.beans.property.BooleanProperty;
@@ -235,7 +235,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
             setIgnoreUpdate(false);
         }
 
-        UIUtils.updateEditedCell(this);
+        UiUtils.updateEditedCell(this);
         editing.setValue(true);
     }
 

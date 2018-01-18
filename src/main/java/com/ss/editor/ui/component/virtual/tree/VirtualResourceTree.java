@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.virtual.tree.resource.FolderVirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -190,7 +190,7 @@ public class VirtualResourceTree<T> extends TreeView<VirtualResourceElement<?>> 
      */
     @FxThread
     public void expandAll() {
-        UIUtils.visit(getRoot(), item -> item.setExpanded(true));
+        UiUtils.visit(getRoot(), item -> item.setExpanded(true));
     }
 
     /**

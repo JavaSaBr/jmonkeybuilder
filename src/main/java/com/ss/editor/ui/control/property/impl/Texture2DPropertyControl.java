@@ -19,7 +19,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -116,7 +116,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      */
     @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
+        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
     }
 
     /**
@@ -126,7 +126,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      */
     @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
+        UiUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     @Override
@@ -249,7 +249,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      */
     @FxThread
     protected void processAdd() {
-        UIUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     /**

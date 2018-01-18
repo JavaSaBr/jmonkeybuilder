@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.asset.file;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;

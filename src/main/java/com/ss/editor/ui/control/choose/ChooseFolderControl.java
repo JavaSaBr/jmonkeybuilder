@@ -10,7 +10,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
@@ -121,7 +121,7 @@ public class ChooseFolderControl extends HBox {
      */
     @FxThread
     private void processAdd() {
-        UIUtils.openFolderAssetDialog(this::setFolder, ACTION_TESTER);
+        UiUtils.openFolderAssetDialog(this::setFolder, ACTION_TESTER);
     }
 
     /**

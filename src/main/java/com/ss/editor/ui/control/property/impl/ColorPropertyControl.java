@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.HBox;
@@ -81,7 +81,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     @FxThread
     protected void reload() {
         final ColorPicker colorPicker = getColorPicker();
-        colorPicker.setValue(UIUtils.from(getPropertyValue()));
+        colorPicker.setValue(UiUtils.from(getPropertyValue()));
     }
 
     /**
@@ -92,7 +92,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
         if (isIgnoreListener()) return;
 
         final ColorPicker colorPicker = getColorPicker();
-        final ColorRGBA newColor = UIUtils.from(colorPicker.getValue());
+        final ColorRGBA newColor = UiUtils.from(colorPicker.getValue());
         final ColorRGBA oldValue = getPropertyValue();
 
         changed(newColor, oldValue == null ? null : oldValue.clone());

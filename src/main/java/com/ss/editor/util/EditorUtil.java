@@ -36,20 +36,14 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.scene.EditorFxScene;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
-import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
@@ -563,19 +557,6 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Has file in clipboard boolean.
-     *
-     * @return true if you have a file in your system clipboard.
-     */
-    @FxThread
-    public static boolean hasFileInClipboard() {
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-        if (clipboard == null) return false;
-        final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
-        return !(files == null || files.isEmpty());
-    }
-
-    /**
      * To asset path string.
      *
      * @param path the path
@@ -629,7 +610,7 @@ public abstract class EditorUtil {
             final String localizedMessage = e.getLocalizedMessage();
             final String stackTrace = buildStackTrace(e);
 
-            final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
+            final Alert alert = UiUtils.createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
             alert.setWidth(500);
             alert.setHeight(220);
@@ -669,38 +650,6 @@ public abstract class EditorUtil {
         }
 
         return stackTrace;
-    }
-
-    /**
-     * Create a dialog for showing the exception.
-     */
-    @FxThread
-    private static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
-                                                   @Nullable final String stackTrace) {
-
-        final TextArea textArea = new TextArea(stackTrace);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        VBox.setMargin(textArea, new Insets(2, 5, 2, 5));
-
-        final Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
-
-        final DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setExpandableContent(new VBox(textArea));
-        dialogPane.expandedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (newValue == Boolean.TRUE) {
-                alert.setWidth(800);
-                alert.setHeight(400);
-            } else {
-                alert.setWidth(500);
-                alert.setHeight(220);
-            }
-        });
-
-        return alert;
     }
 
     /**
@@ -820,15 +769,12 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @NotNull byte[] serialize(@NotNull final Serializable object) {
-
         final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
         try (final ObjectOutputStream out = new ObjectOutputStream(bout)) {
             out.writeObject(object);
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
-
         return bout.toByteArray();
     }
 
@@ -859,22 +805,6 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
-    }
-
-    /**
-     * Increment the loading counter.
-     */
-    @FxThread
-    public static void incrementLoading() {
-        getFxScene().incrementLoading();
-    }
-
-    /**
-     * Decrement the loading counter.
-     */
-    @FxThread
-    public static void decrementLoading() {
-        getFxScene().decrementLoading();
     }
 
     /**
@@ -959,18 +889,5 @@ public abstract class EditorUtil {
         }
 
         return layers.get(0);
-    }
-
-    /**
-     * Convert the color to hex presentation to use in web.
-     *
-     * @param color the color.
-     * @return the web presentation.
-     */
-    public static @NotNull String toWeb(@NotNull final Color color) {
-        final int red = (int) (color.getRed() * 255);
-        final int green = (int) (color.getGreen() * 255);
-        final int blue = (int) (color.getBlue() * 255);
-        return "#" + Integer.toHexString(red) + Integer.toHexString(green) + Integer.toHexString(blue);
     }
 }

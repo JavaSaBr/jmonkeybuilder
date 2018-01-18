@@ -1,6 +1,6 @@
 package com.ss.editor.ui.scene;
 
-import static com.ss.editor.ui.util.UIUtils.fillComponents;
+import static com.ss.editor.ui.util.UiUtils.fillComponents;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3x.jfx.injfx.input.JFXMouseInput;
 import com.ss.editor.annotation.FxThread;

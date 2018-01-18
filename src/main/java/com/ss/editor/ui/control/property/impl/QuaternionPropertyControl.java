@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -90,7 +90,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
         FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
                 CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UIUtils.addFocusBinding(container, xField, yField, zField);
+        UiUtils.addFocusBinding(container, xField, yField, zField);
     }
 
     @Override

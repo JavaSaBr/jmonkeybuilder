@@ -35,7 +35,7 @@ import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -207,7 +207,7 @@ public class MaterialFileEditor extends
     @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
+        UiUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
                 dragEvent, this::applyTexture);
     }
 
@@ -215,7 +215,7 @@ public class MaterialFileEditor extends
     @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragOverEvent(dragEvent);
-        UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
+        UiUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
     }
 
 

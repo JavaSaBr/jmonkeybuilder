@@ -21,7 +21,7 @@ import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -71,7 +71,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FxThread
     protected void process() {
         super.process();
-        UIUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**

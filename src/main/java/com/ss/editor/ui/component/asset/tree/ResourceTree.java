@@ -1,8 +1,8 @@
 package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
-import static com.ss.editor.util.EditorUtil.hasFileInClipboard;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.hasFileInClipboard;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
@@ -17,7 +17,7 @@ import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.function.IntObjectConsumer;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -250,7 +250,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void lazyLoadChildren() {
 
         final Array<TreeItem<ResourceElement>> expanded = ArrayFactory.newArray(TreeItem.class);
-        final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(getRoot());
+        final Array<TreeItem<ResourceElement>> allItems = UiUtils.getAllItems(getRoot());
         allItems.stream().filter(TreeItem::isExpanded)
                 .filter(treeItem -> !treeItem.isLeaf())
                 .filter(item -> item.getChildren().size() == 1)
@@ -510,7 +510,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
             expandedElements.clear();
 
-            final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(this);
+            final Array<TreeItem<ResourceElement>> allItems = UiUtils.getAllItems(this);
             allItems.forEach(item -> {
                 if (!item.isExpanded()) return;
                 expandedElements.add(item.getValue());
@@ -741,7 +741,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         prevItem.setValue(createFor(newFile));
 
-        final Array<TreeItem<ResourceElement>> children = UIUtils.getAllItems(prevItem);
+        final Array<TreeItem<ResourceElement>> children = UiUtils.getAllItems(prevItem);
         children.fastRemove(prevItem);
 
         fillChildren(prevFile, newFile, children);
@@ -781,7 +781,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         prevItem.setValue(createFor(newFile));
 
-        final Array<TreeItem<ResourceElement>> children = UIUtils.getAllItems(prevItem);
+        final Array<TreeItem<ResourceElement>> children = UiUtils.getAllItems(prevItem);
         children.fastRemove(prevItem);
 
         fillChildren(prevFile, newFile, children);

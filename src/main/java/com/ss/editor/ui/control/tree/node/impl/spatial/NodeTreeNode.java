@@ -31,7 +31,7 @@ import com.ss.editor.ui.control.tree.action.impl.particle.emitter.CreateParticle
 import com.ss.editor.ui.control.tree.action.impl.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.tree.action.impl.terrain.CreateTerrainAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
@@ -244,13 +244,13 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     @Override
     @FxThread
     public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
-        return UIUtils.isHasFile(dragboard, FileExtensions.JME_OBJECT);
+        return UiUtils.isHasFile(dragboard, FileExtensions.JME_OBJECT);
     }
 
     @Override
     @FxThread
     public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
-        UIUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT, getElement(), consumer, this::dropExternalObject);
+        UiUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT, getElement(), consumer, this::dropExternalObject);
     }
 
     /**

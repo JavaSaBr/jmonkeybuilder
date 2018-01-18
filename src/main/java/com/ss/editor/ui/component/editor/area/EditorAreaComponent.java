@@ -31,6 +31,7 @@ import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFxScene;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.logging.Logger;
@@ -420,7 +421,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
     }
@@ -464,7 +465,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             }
 
             EXECUTOR_MANAGER.addFxTask(() -> {
-                EditorUtil.decrementLoading();
+                UiUtils.decrementLoading();
                 resultEditor.notifyClosed();
             });
 
@@ -509,7 +510,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
 
-        EditorUtil.decrementLoading();
+        UiUtils.decrementLoading();
 
         if (isIgnoreOpenedFiles()) {
             return;

@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.KeyCode;
@@ -99,7 +99,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
                 CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
         FXUtils.addClassesTo(xField, yField, zField, CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UIUtils.addFocusBinding(fieldContainer, xField, yField, zField);
+        UiUtils.addFocusBinding(fieldContainer, xField, yField, zField);
     }
 
     /**

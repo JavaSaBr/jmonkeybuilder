@@ -13,7 +13,7 @@ import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -151,8 +151,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
         this.changeConsumer = changeConsumer;
         this.changeHandler = changeHandler == null ? newChangeHandler() : changeHandler;
 
-        setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
-        setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
+        setOnKeyReleased(UiUtils::consumeIfIsNotHotKey);
+        setOnKeyPressed(UiUtils::consumeIfIsNotHotKey);
         setPropertyValue(propertyValue);
         createComponents();
         setIgnoreListener(true);

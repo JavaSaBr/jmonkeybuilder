@@ -11,7 +11,7 @@ import com.ss.editor.ui.control.tree.action.impl.RenameNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
@@ -206,7 +206,7 @@ public abstract class TreeNode<T> implements UObject {
         }
 
         final Long objectId = (Long) content;
-        final TreeItem<?> treeItem = UIUtils.findItem(nodeTree.getTreeView(), objectId);
+        final TreeItem<?> treeItem = UiUtils.findItem(nodeTree.getTreeView(), objectId);
         final TreeNode<?> treeNode = treeItem == null ? null : (TreeNode<?>) treeItem.getValue();
 
         if (treeNode != null && canAccept(treeNode, true)) {

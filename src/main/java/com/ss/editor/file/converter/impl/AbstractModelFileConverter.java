@@ -17,6 +17,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -114,13 +115,13 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
      */
     @FxThread
     private void convert(@NotNull final Path source, @NotNull final VarTable vars) {
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
                 convertImpl(source, vars);
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
             }
         });
     }

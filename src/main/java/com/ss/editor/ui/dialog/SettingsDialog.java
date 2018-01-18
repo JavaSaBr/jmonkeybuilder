@@ -20,7 +20,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.ui.control.input.IntegerTextField;
@@ -714,7 +714,7 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER);
 
-        UIUtils.addFocusBinding(fieldContainer, toneMapFilterWhitePointX, toneMapFilterWhitePointY,
+        UiUtils.addFocusBinding(fieldContainer, toneMapFilterWhitePointX, toneMapFilterWhitePointY,
                 toneMapFilterWhitePointZ);
     }
 

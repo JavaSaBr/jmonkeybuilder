@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
@@ -40,7 +40,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
         final ResourceManager resourceManager = ResourceManager.getInstance();
         final Array<String> resources = resourceManager.getAvailableResources(extension);
 
-        UIUtils.openResourceAssetDialog(this::processSelect, this::validate, resources);
+        UiUtils.openResourceAssetDialog(this::processSelect, this::validate, resources);
     }
 
     /**

@@ -25,6 +25,7 @@ import com.ss.editor.asset.locator.FileSystemAssetLocator;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.JmeFilePreviewManager;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -178,12 +179,12 @@ public class ModelImportDialog extends GenericFileCreator {
     @FxThread
     protected void processOk() {
         hide();
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
                 importModel();
             } finally {
-                EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
             }
         });
     }

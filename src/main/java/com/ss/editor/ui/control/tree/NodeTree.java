@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree;
 
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;

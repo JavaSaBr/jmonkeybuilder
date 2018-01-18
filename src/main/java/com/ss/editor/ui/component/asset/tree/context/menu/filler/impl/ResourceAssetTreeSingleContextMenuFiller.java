@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.filler.impl;
 
-import static com.ss.editor.util.EditorUtil.hasFileInClipboard;
+import static com.ss.editor.ui.util.UiUtils.hasFileInClipboard;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;

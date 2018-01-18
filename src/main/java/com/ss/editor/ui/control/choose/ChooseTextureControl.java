@@ -13,7 +13,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -92,7 +92,7 @@ public class ChooseTextureControl extends HBox {
      */
     @FxThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, ChooseTextureControl::setTextureFile);
+        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, ChooseTextureControl::setTextureFile);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ChooseTextureControl extends HBox {
      */
     @FxThread
     private void dragOver(@NotNull final DragEvent dragEvent) {
-        UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
+        UiUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     /**
@@ -202,7 +202,7 @@ public class ChooseTextureControl extends HBox {
      */
     @FxThread
     private void processAdd() {
-        UIUtils.openFileAssetDialog(this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
     }
 
     /**

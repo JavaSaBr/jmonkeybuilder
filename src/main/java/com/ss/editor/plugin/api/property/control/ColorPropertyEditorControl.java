@@ -5,7 +5,7 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.ColorPicker;
@@ -56,14 +56,14 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     protected void reload() {
         super.reload();
         final ColorPicker colorPicker = getColorPicker();
-        colorPicker.setValue(UIUtils.from(getPropertyValue()));
+        colorPicker.setValue(UiUtils.from(getPropertyValue()));
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
         final ColorPicker colorPicker = getColorPicker();
-        setPropertyValue(UIUtils.from(colorPicker.getValue()));
+        setPropertyValue(UiUtils.from(colorPicker.getValue()));
         super.changeImpl();
     }
 }

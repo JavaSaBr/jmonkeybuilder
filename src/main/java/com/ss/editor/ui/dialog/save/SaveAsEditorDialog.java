@@ -3,7 +3,7 @@ package com.ss.editor.ui.dialog.save;
 import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
 import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;

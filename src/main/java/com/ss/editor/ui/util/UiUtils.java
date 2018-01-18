@@ -1,9 +1,11 @@
 package com.ss.editor.ui.util;
 
+import static com.ss.editor.util.EditorUtil.getFxScene;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ReflectionUtils.getStaticField;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
@@ -14,6 +16,7 @@ import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
@@ -22,6 +25,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.EventTarget;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,6 +33,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +58,7 @@ import java.util.function.Predicate;
  *
  * @author JavaSaBr
  */
-public class UIUtils {
+public abstract class UiUtils {
 
     @NotNull
     private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
@@ -112,7 +117,7 @@ public class UIUtils {
     @FxThread
     public static void clear(@NotNull final Pane pane) {
         final ObservableList<Node> children = pane.getChildren();
-        children.forEach(UIUtils::unbind);
+        children.forEach(UiUtils::unbind);
         children.clear();
     }
 
@@ -902,7 +907,83 @@ public class UIUtils {
         handler.accept(firstArg, secondArg, file.toPath());
     }
 
-    private UIUtils() {
+
+    /**
+     * Convert the color to hex presentation to use in web.
+     *
+     * @param color the color.
+     * @return the web presentation.
+     */
+    @FromAnyThread
+    public static @NotNull String toWeb(@NotNull final Color color) {
+        final int red = (int) (color.getRed() * 255);
+        final int green = (int) (color.getGreen() * 255);
+        final int blue = (int) (color.getBlue() * 255);
+        return "#" + Integer.toHexString(red) + Integer.toHexString(green) + Integer.toHexString(blue);
+    }
+
+    /**
+     * Increment the loading counter.
+     */
+    @FxThread
+    public static void incrementLoading() {
+        getFxScene().incrementLoading();
+    }
+
+    /**
+     * Decrement the loading counter.
+     */
+    @FxThread
+    public static void decrementLoading() {
+        getFxScene().decrementLoading();
+    }
+
+    /**
+     * Create a dialog for showing the exception.
+     */
+    @FxThread
+    public static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
+                                                  @Nullable final String stackTrace) {
+
+        final TextArea textArea = new TextArea(stackTrace);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        VBox.setMargin(textArea, new Insets(2, 5, 2, 5));
+
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
+
+        final DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setExpandableContent(new VBox(textArea));
+        dialogPane.expandedProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue == Boolean.TRUE) {
+                alert.setWidth(800);
+                alert.setHeight(400);
+            } else {
+                alert.setWidth(500);
+                alert.setHeight(220);
+            }
+        });
+
+        return alert;
+    }
+
+    /**
+     * Check of existing a file in clipboard.
+     *
+     * @return true if you have a file in your system clipboard.
+     */
+    @FxThread
+    public static boolean hasFileInClipboard() {
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        if (clipboard == null) return false;
+        final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
+        return !(files == null || files.isEmpty());
+    }
+
+    private UiUtils() {
         throw new RuntimeException();
     }
 }

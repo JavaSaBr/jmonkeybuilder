@@ -14,7 +14,7 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
@@ -68,7 +68,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      * @param dragEvent the dropped event.
      */
     private void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, AUDIO_EXTENSIONS, this, AudioKeyPropertyControl::addAudioData);
+        UiUtils.handleDroppedFile(dragEvent, AUDIO_EXTENSIONS, this, AudioKeyPropertyControl::addAudioData);
     }
 
     /**
@@ -77,7 +77,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      * @param dragEvent the drag over events.
      */
     private void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.acceptIfHasFile(dragEvent, AUDIO_EXTENSIONS);
+        UiUtils.acceptIfHasFile(dragEvent, AUDIO_EXTENSIONS);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      */
     @FxThread
     protected void processChange() {
-        UIUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     /**

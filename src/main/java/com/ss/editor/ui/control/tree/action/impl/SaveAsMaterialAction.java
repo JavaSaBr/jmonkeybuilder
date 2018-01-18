@@ -20,7 +20,7 @@ import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
     @FxThread
     protected void process() {
         super.process();
-        UIUtils.openSaveAsDialog(this::processSave, FileExtensions.JME_MATERIAL, ACTION_TESTER);
+        UiUtils.openSaveAsDialog(this::processSave, FileExtensions.JME_MATERIAL, ACTION_TESTER);
     }
 
     /**

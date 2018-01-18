@@ -16,7 +16,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.css.CssIds;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -106,7 +106,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final ResourceTree resourceTree = getResourceTree();
         final ResourceElement element = ResourceElementFactory.createFor(file);
-        final TreeItem<ResourceElement> treeItem = UIUtils.findItemForValue(resourceTree.getRoot(), element);
+        final TreeItem<ResourceElement> treeItem = UiUtils.findItemForValue(resourceTree.getRoot(), element);
 
         if (treeItem == null) {
             getWaitedFilesToSelect().add(file);
@@ -251,7 +251,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
         if (workspace == null) return;
 
         final Array<Path> expanded = ArrayFactory.newArray(Path.class);
-        final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(tree);
+        final Array<TreeItem<ResourceElement>> allItems = UiUtils.getAllItems(tree);
         allItems.stream().filter(TreeItem::isExpanded)
                 .filter(treeItem -> !treeItem.isLeaf())
                 .map(TreeItem::getValue)

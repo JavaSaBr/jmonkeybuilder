@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.scripting;
 
 import static java.util.Collections.singleton;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
@@ -118,8 +118,8 @@ public class GroovyEditorComponent extends VBox {
         codeArea.prefHeightProperty().bind(heightProperty());
         codeArea.prefWidthProperty().bind(widthProperty());
         codeArea.setEditable(editable);
-        codeArea.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
-        codeArea.setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
+        codeArea.setOnKeyReleased(UiUtils::consumeIfIsNotHotKey);
+        codeArea.setOnKeyPressed(UiUtils::consumeIfIsNotHotKey);
 
 
         FXUtils.addToPane(codeArea, this);

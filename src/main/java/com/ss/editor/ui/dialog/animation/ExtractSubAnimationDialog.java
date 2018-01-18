@@ -6,17 +6,17 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationTreeNode;
-import com.ss.editor.ui.control.tree.action.impl.operation.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.impl.operation.animation.AddAnimationNodeOperation;
+import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationTreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.AnimationUtils;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Label;
@@ -189,7 +189,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     @Override
     @FxThread
     protected void processOk() {
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processExtract);
         super.processOk();
     }
@@ -221,7 +221,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
 
-        EXECUTOR_MANAGER.addFxTask(EditorUtil::decrementLoading);
+        EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
     }
 
     @Override
