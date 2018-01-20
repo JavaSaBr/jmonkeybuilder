@@ -1,7 +1,7 @@
 package com.ss.editor.ui.builder;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
@@ -84,7 +84,7 @@ public class EditorFxSceneBuilder {
     public static @NotNull EditorFxScene build(@NotNull final Stage stage) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
+        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
         final Group root = new Group();
         //root.getTransforms().add(new Scale(1.5, 1.5));

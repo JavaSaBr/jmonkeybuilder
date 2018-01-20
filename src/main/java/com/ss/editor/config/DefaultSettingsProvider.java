@@ -48,17 +48,17 @@ public class DefaultSettingsProvider implements SettingsProvider {
         @NotNull String PREF_FILTER_TONEMAP_WHITE_POINT = "core.graphics.filter.toneMap.whitePoint";
         @NotNull String PREF_STOP_RENDER_ON_LOST_FOCUS = "core.graphics.render.stopOnLostFocus";
 
-        @NotNull String PREF_LIBRARY_FOLDER = "core.classpath.library.folder";
-        @NotNull String PREF_CLASSES_FOLDER = "core.classpath.classes.folder";
+        @NotNull String PREF_USER_LIBRARY_FOLDER = "core.classpath.library.folder";
+        @NotNull String PREF_USER_CLASSES_FOLDER = "core.classpath.classes.folder";
 
-        @NotNull String PREF_THEME = "core.ui.theme";
+        @NotNull String PREF_UI_THEME = "core.ui.theme";
         @NotNull String PREF_ANALYTICS_GOOGLE = "core.other.analytics.google";
         @NotNull String PREF_NATIVE_FILE_CHOOSER = "core.other.native.file.chooser";
 
         @NotNull String PREF_FAST_SKY_FOLDER = "core.editor.fast.sky.folder";
         @NotNull String PREF_TANGENT_GENERATION = "core.editor.tangent.generation";
         @NotNull String PREF_FLIPPED_TEXTURES = "core.editor.texture.flipped";
-        @NotNull String PREF_CAMERA_LIGHT = "core.editor.camera.light";
+        @NotNull String PREF_CAMERA_LAMP = "core.editor.camera.lamp";
     }
 
     public interface Defaults {
@@ -95,7 +95,6 @@ public class DefaultSettingsProvider implements SettingsProvider {
     @NotNull
     private static final Set<String> REQUIRED_RESHAPE_PREFS = new HashSet<>();
 
-
     static {
         ANISOTROPYCS.add(0);
         ANISOTROPYCS.add(2);
@@ -104,11 +103,11 @@ public class DefaultSettingsProvider implements SettingsProvider {
         ANISOTROPYCS.add(16);
         REQUIRED_RESTART_PREFS.add(PREF_ANISOTROPY);
         REQUIRED_RESTART_PREFS.add(PREF_GAMMA_CORRECTION);
-        REQUIRED_RESTART_PREFS.add(PREF_THEME);
+        REQUIRED_RESTART_PREFS.add(PREF_UI_THEME);
         REQUIRED_RESTART_PREFS.add(PREF_OPEN_GL);
         REQUIRED_RESTART_PREFS.add(PREF_FRAME_RATE);
-        REQUIRED_UPDATE_CLASSPATH_PREFS.add(PREF_LIBRARY_FOLDER);
-        REQUIRED_UPDATE_CLASSPATH_PREFS.add(PREF_CLASSES_FOLDER);
+        REQUIRED_UPDATE_CLASSPATH_PREFS.add(PREF_USER_LIBRARY_FOLDER);
+        REQUIRED_UPDATE_CLASSPATH_PREFS.add(PREF_USER_CLASSES_FOLDER);
         REQUIRED_RESHAPE_PREFS.add(PREF_CAMERA_ANGLE);
     }
 
@@ -128,37 +127,37 @@ public class DefaultSettingsProvider implements SettingsProvider {
         final Vector3f toneMapWhitePoint = editorConfig.getVector3f(PREF_FILTER_TONEMAP_WHITE_POINT, PREF_DEFAULT_TONEMAP_WHITE_POINT);
 
         final Array<SettingsPropertyDefinition> result = ArrayFactory.newArray(SettingsPropertyDefinition.class);
-        result.add(new SettingsPropertyDefinition(ENUM, Messages.SETTINGS_DIALOG_OPEN_GL_LABEL, PREF_OPEN_GL, GRAPHICS, glVersion));
-        result.add(new SettingsPropertyDefinition(OBJECT_FROM_LIST, Messages.SETTINGS_DIALOG_ANISOTROPY, PREF_ANISOTROPY, GRAPHICS, anisotropy, ANISOTROPYCS));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_GAMMA_CORRECTION, PREF_GAMMA_CORRECTION, GRAPHICS, gammaCorrection));
-        result.add(new SettingsPropertyDefinition(INTEGER, Messages.SETTINGS_DIALOG_FRAME_RATE, PREF_FRAME_RATE, GRAPHICS, frameRate, 10, 120));
-        result.add(new SettingsPropertyDefinition(INTEGER, Messages.SETTINGS_DIALOG_CAMERA_ANGLE, PREF_CAMERA_ANGLE, GRAPHICS, cameraAngle, 45, 110));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_FXAA, PREF_FILTER_FXAA, GRAPHICS, fxaa));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS, PREF_STOP_RENDER_ON_LOST_FOCUS, GRAPHICS, stopRenderOnLostFocus));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_TONEMAP_FILTER, PREF_FILTER_TONEMAP, GRAPHICS, tonemapFilter));
-        result.add(new SettingsPropertyDefinition(VECTOR_3F, asArray(PREF_FILTER_TONEMAP), Messages.SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT, PREF_FILTER_TONEMAP_WHITE_POINT, GRAPHICS, toneMapWhitePoint));
+        result.add(new SettingsPropertyDefinition(ENUM, Messages.SETTINGS_PROPERTY_OPEN_GL, PREF_OPEN_GL, GRAPHICS, glVersion));
+        result.add(new SettingsPropertyDefinition(OBJECT_FROM_LIST, Messages.SETTINGS_PROPERTY_ANISOTROPY, PREF_ANISOTROPY, GRAPHICS, anisotropy, ANISOTROPYCS));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_GAMMA_CORRECTION, PREF_GAMMA_CORRECTION, GRAPHICS, gammaCorrection));
+        result.add(new SettingsPropertyDefinition(INTEGER, Messages.SETTINGS_PROPERTY_FRAME_RATE, PREF_FRAME_RATE, GRAPHICS, frameRate, 10, 120));
+        result.add(new SettingsPropertyDefinition(INTEGER, Messages.SETTINGS_PROPERTY_CAMERA_ANGLE, PREF_CAMERA_ANGLE, GRAPHICS, cameraAngle, 45, 110));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_FXAA, PREF_FILTER_FXAA, GRAPHICS, fxaa));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS, PREF_STOP_RENDER_ON_LOST_FOCUS, GRAPHICS, stopRenderOnLostFocus));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_TONEMAP_FILTER, PREF_FILTER_TONEMAP, GRAPHICS, tonemapFilter));
+        result.add(new SettingsPropertyDefinition(VECTOR_3F, asArray(PREF_FILTER_TONEMAP), Messages.SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT, PREF_FILTER_TONEMAP_WHITE_POINT, GRAPHICS, toneMapWhitePoint));
 
         final boolean tangentGeneration = editorConfig.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION);
         final boolean flippedTextures = editorConfig.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES);
-        final boolean cameraLight = editorConfig.getBoolean(PREF_CAMERA_LIGHT, PREF_DEFAULT_CAMERA_LIGHT);
-        final Path envsFolder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
+        final boolean cameraLight = editorConfig.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
+        final Path fastSkyFolder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
 
-        result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_DIALOG_ENVS_FOLDER_LABEL, PREF_FAST_SKY_FOLDER, EDITOR, envsFolder));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_AUTO_TANGENT_GENERATING, PREF_TANGENT_GENERATION, EDITOR, tangentGeneration));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE, PREF_FLIPPED_TEXTURES, EDITOR, flippedTextures));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED, PREF_CAMERA_LIGHT, EDITOR, cameraLight));
+        result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_PROPERTY_FAST_SKY_FOLDER, PREF_FAST_SKY_FOLDER, EDITOR, fastSkyFolder));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_TANGENT_GENERATION, PREF_TANGENT_GENERATION, EDITOR, tangentGeneration));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_FLIPPED_TEXTURE, PREF_FLIPPED_TEXTURES, EDITOR, flippedTextures));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP, PREF_CAMERA_LAMP, EDITOR, cameraLight));
 
-        final CssColorTheme theme = editorConfig.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
-        final Path libraryFolder = editorConfig.getFile(PREF_LIBRARY_FOLDER);
-        final Path classesFolder = editorConfig.getFile(PREF_CLASSES_FOLDER);
+        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+        final Path libraryFolder = editorConfig.getFile(PREF_USER_LIBRARY_FOLDER);
+        final Path classesFolder = editorConfig.getFile(PREF_USER_CLASSES_FOLDER);
         final boolean googleAnalytics = editorConfig.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE);
         final boolean nativeFileChooser = editorConfig.getBoolean(PREF_NATIVE_FILE_CHOOSER, PREF_DEFAULT_NATIVE_FILE_CHOOSER);
 
-        result.add(new SettingsPropertyDefinition(ENUM, Messages.SETTINGS_DIALOG_THEME_LABEL, PREF_THEME, OTHER, theme));
-        result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL, PREF_LIBRARY_FOLDER, OTHER, libraryFolder));
-        result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL, PREF_CLASSES_FOLDER, OTHER, classesFolder));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_GOOGLE_ANALYTICS, PREF_ANALYTICS_GOOGLE, OTHER, googleAnalytics));
-        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_DIALOG_NATIVE_FILE_CHOOSER, PREF_NATIVE_FILE_CHOOSER, OTHER, nativeFileChooser));
+        result.add(new SettingsPropertyDefinition(ENUM, Messages.SETTINGS_PROPERTY_THEME, PREF_UI_THEME, OTHER, theme));
+        result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER, PREF_USER_LIBRARY_FOLDER, OTHER, libraryFolder));
+        result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_PROPERTY_USER_CLASSES_FOLDER, PREF_USER_CLASSES_FOLDER, OTHER, classesFolder));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_GOOGLE_ANALYTICS, PREF_ANALYTICS_GOOGLE, OTHER, googleAnalytics));
+        result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER, PREF_NATIVE_FILE_CHOOSER, OTHER, nativeFileChooser));
 
         return result;
     }

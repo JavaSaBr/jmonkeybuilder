@@ -124,28 +124,29 @@ public class Messages {
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
 
     public static final String SETTINGS_DIALOG_TITLE;
-    public static final String SETTINGS_DIALOG_FXAA;
-    public static final String SETTINGS_DIALOG_NATIVE_FILE_CHOOSER;
-    public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
-    public static final String SETTINGS_DIALOG_FRAME_RATE;
-    public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
-    public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
-    public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
-    public static final String SETTINGS_DIALOG_ANISOTROPY;
     public static final String SETTINGS_DIALOG_MESSAGE;
-    public static final String SETTINGS_DIALOG_GOOGLE_ANALYTICS;
-    public static final String SETTINGS_DIALOG_CAMERA_ANGLE;
-    public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
-    public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
-    public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
-    public static final String SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL;
-    public static final String SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL;
-    public static final String SETTINGS_DIALOG_THEME_LABEL;
-    public static final String SETTINGS_DIALOG_OPEN_GL_LABEL;
     public static final String SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE;
     public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
-    public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
+
+    public static final String SETTINGS_PROPERTY_FXAA;
+    public static final String SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER;
+    public static final String SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS;
+    public static final String SETTINGS_PROPERTY_FRAME_RATE;
+    public static final String SETTINGS_PROPERTY_GAMMA_CORRECTION;
+    public static final String SETTINGS_PROPERTY_TONEMAP_FILTER;
+    public static final String SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT;
+    public static final String SETTINGS_PROPERTY_ANISOTROPY;
+    public static final String SETTINGS_PROPERTY_GOOGLE_ANALYTICS;
+    public static final String SETTINGS_PROPERTY_CAMERA_ANGLE;
+    public static final String SETTINGS_PROPERTY_TANGENT_GENERATION;
+    public static final String SETTINGS_PROPERTY_FLIPPED_TEXTURE;
+    public static final String SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP;
+    public static final String SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER;
+    public static final String SETTINGS_PROPERTY_USER_CLASSES_FOLDER;
+    public static final String SETTINGS_PROPERTY_THEME;
+    public static final String SETTINGS_PROPERTY_OPEN_GL;
+    public static final String SETTINGS_PROPERTY_FAST_SKY_FOLDER;
 
     public static final String SETTINGS_CATEGORY_GRAPHICS;
     public static final String SETTINGS_CATEGORY_OTHER;
@@ -808,28 +809,30 @@ public class Messages {
         SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION = bundle.getString("SingleColorTextureFileCreatorDescription");
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
-        SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
-        SETTINGS_DIALOG_NATIVE_FILE_CHOOSER = bundle.getString("SettingsDialogNativeFileChooser");
-        SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsDialogStopRenderOnLostFocus");
-        SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
-        SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
-        SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
-        SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
-        SETTINGS_DIALOG_ANISOTROPY = bundle.getString("SettingsDialogAnisotropy");
+
         SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
-        SETTINGS_DIALOG_GOOGLE_ANALYTICS = bundle.getString("SettingsDialogAnalytics");
-        SETTINGS_DIALOG_CAMERA_ANGLE = bundle.getString("SettingsDialogCameraAngle");
-        SETTINGS_DIALOG_AUTO_TANGENT_GENERATING = bundle.getString("SettingsDialogAutoTangentGenerating");
-        SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE = bundle.getString("SettingsDialogUseFlipTexture");
-        SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
-        SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL = bundle.getString("SettingsDialogUserLibrariesFolderLabel");
-        SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL = bundle.getString("SettingsDialogUserClassesFolderLabel");
-        SETTINGS_DIALOG_THEME_LABEL = bundle.getString("SettingsDialogThemeLabel");
-        SETTINGS_DIALOG_OPEN_GL_LABEL = bundle.getString("SettingsDialogOpenGLLabel");
         SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClassesFolderChooserTitle");
         SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogLibrariesFolderChooserTitle");
-        SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
+
+        SETTINGS_PROPERTY_FAST_SKY_FOLDER = bundle.getString("SettingsPropertyFastSkyFolder");
+        SETTINGS_PROPERTY_FXAA = bundle.getString("SettingsPropertyFXAA");
+        SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER = bundle.getString("SettingsPropertyNativeFileChooser");
+        SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsPropertyStopRenderOnLostFocus");
+        SETTINGS_PROPERTY_FRAME_RATE = bundle.getString("SettingsPropertyFrameRate");
+        SETTINGS_PROPERTY_GAMMA_CORRECTION = bundle.getString("SettingsPropertyGammaCorrection");
+        SETTINGS_PROPERTY_TONEMAP_FILTER = bundle.getString("SettingsPropertyToneMapFilter");
+        SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsPropertyToneMapFilterWhitePoint");
+        SETTINGS_PROPERTY_ANISOTROPY = bundle.getString("SettingsPropertyAnisotropy");
+        SETTINGS_PROPERTY_GOOGLE_ANALYTICS = bundle.getString("SettingsPropertyAnalytics");
+        SETTINGS_PROPERTY_CAMERA_ANGLE = bundle.getString("SettingsPropertyCameraAngle");
+        SETTINGS_PROPERTY_TANGENT_GENERATION = bundle.getString("SettingsPropertyTangentGeneration");
+        SETTINGS_PROPERTY_FLIPPED_TEXTURE = bundle.getString("SettingsPropertyFlippedTexture");
+        SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP = bundle.getString("SettingsPropertyEditorCameraLamp");
+        SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER = bundle.getString("SettingsPropertyUserLibrariesFolder");
+        SETTINGS_PROPERTY_USER_CLASSES_FOLDER = bundle.getString("SettingsPropertyUserClassesFolder");
+        SETTINGS_PROPERTY_THEME = bundle.getString("SettingsPropertyTheme");
+        SETTINGS_PROPERTY_OPEN_GL = bundle.getString("SettingsPropertyOpenGL");
 
         SETTINGS_CATEGORY_GRAPHICS = bundle.getString("SettingsCategoryGraphics");
         SETTINGS_CATEGORY_OTHER = bundle.getString("SettingsCategoryOther");

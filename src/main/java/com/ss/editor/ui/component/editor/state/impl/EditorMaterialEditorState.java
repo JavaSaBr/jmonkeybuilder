@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LIGHT;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LAMP;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_LIGHT;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.annotation.FxThread;
@@ -42,7 +42,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
     public EditorMaterialEditorState() {
         modelType = BaseMaterialEditor3DPart.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
-        lightEnable = EDITOR_CONFIG.getBoolean(PREF_CAMERA_LIGHT, PREF_DEFAULT_CAMERA_LIGHT);
+        lightEnable = EDITOR_CONFIG.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
     }
 
     /**

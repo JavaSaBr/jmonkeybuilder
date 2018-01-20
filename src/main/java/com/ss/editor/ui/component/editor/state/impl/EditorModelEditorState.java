@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LIGHT;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LAMP;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_LIGHT;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
@@ -39,7 +39,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
 
     public EditorModelEditorState() {
         this.skyType = 0;
-        this.enableLight = EDITOR_CONFIG.getBoolean(PREF_CAMERA_LIGHT, PREF_DEFAULT_CAMERA_LIGHT);
+        this.enableLight = EDITOR_CONFIG.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
         this.enablePhysics = false;
         this.enableDebugPhysics = false;
     }

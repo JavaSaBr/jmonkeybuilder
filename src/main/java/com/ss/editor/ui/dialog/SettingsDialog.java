@@ -52,7 +52,7 @@ import java.awt.*;
 public class SettingsDialog extends EditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(700, 480);
+    private static final Point DIALOG_SIZE = new Point(800, 480);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
