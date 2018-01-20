@@ -1,6 +1,7 @@
 package com.ss.editor.manager;
 
 import static com.ss.editor.FileExtensions.*;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FAST_SKY_FOLDER;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ArrayUtils.contains;
 import static com.ss.rlib.util.FileUtils.getFiles;
@@ -319,7 +320,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final Array<Path> additionalEnvs = getAdditionalEnvs();
         additionalEnvs.clear();
 
-        final Path folder = editorConfig.getAdditionalEnvs();
+        final Path folder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
         if (folder == null) {
             return;
         }

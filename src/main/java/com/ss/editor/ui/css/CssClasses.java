@@ -118,9 +118,7 @@ public interface CssClasses {
     @NotNull String SCENE_FILTER_LIST_CELL = "scene-filter-list-cell";
 
     @NotNull String SETTINGS_DIALOG = "settings-dialog";
-    @NotNull String SETTINGS_DIALOG_LABEL = "settings-dialog-label";
-    @NotNull String SETTINGS_DIALOG_FIELD = "settings-dialog-field";
-    @NotNull String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
+    @NotNull String SETTINGS_DIALOG_CONTAINER= "settings-dialog-container";
     @NotNull String SETTINGS_DIALOG_MESSAGE_LABEL = "settings-dialog-message-label";
 
     @NotNull String CONFIRM_DIALOG = "confirm-dialog";

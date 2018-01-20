@@ -1,5 +1,7 @@
 package com.ss.editor.ui.dialog.imports.model;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -218,7 +220,7 @@ public class ModelImportDialog extends GenericFileCreator {
             FolderAssetLocator.setIgnore(false);
         }
 
-        if (EDITOR_CONFIG.isAutoTangentGenerating()) {
+        if (EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
             TangentGenerator.useMikktspaceGenerator(model);
         }
 

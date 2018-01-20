@@ -1,5 +1,7 @@
 package com.ss.editor.file.converter.impl;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
@@ -143,7 +145,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
-        if (EDITOR_CONFIG.isAutoTangentGenerating()) {
+        if (EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
             TangentGenerator.useMikktspaceGenerator(model);
         }
 

@@ -1,5 +1,7 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_THEME;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
@@ -359,7 +361,7 @@ public class FileIconManager {
         }
 
         final EditorConfig config = EditorConfig.getInstance();
-        final CssColorTheme theme = config.getTheme();
+        final CssColorTheme theme = config.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
 
         if (theme.needRepaintIcons()) {
             try {

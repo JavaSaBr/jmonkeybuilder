@@ -52,6 +52,8 @@ public class PropertyEditorControlFactory {
                 return new FileAssetResourcePropertyControl(vars, definition, validation);
             case STRING_FROM_LIST:
                 return new StringFromListPropertyEditorControl(vars, definition, validation, definition.getOptions());
+            case OBJECT_FROM_LIST:
+                return new ObjectFromListPropertyEditorControl(vars, definition, validation, definition.getOptions());
             case AWT_FONT:
                 return new AwtFontPropertyEditorControl(vars, definition, validation);
             case RESOURCE_FROM_CLASSPATH:

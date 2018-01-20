@@ -596,49 +596,8 @@
 .settings-dialog {
 }
 
-.settings-dialog > .dialog-content-root {
-    -fx-padding: 0px 0px 0px 0px;
-}
-
-.settings-dialog > .dialog-content-root > .tab-pane  {
-    -fx-max-height: 300px;
-    -fx-min-height: -fx-max-height;
-}
-
-.settings-dialog > .dialog-content-root > .tab-pane > .tab-content-area > .vbox {
-    -fx-spacing: 2px;
-    -fx-padding: 6px 0px 0px 0px;
-    -fx-max-width: 685px;
-    -fx-min-height: 300px;
-}
-
-.settings-dialog-label {
-    -fx-alignment: center-right;
-    -fx-min-width: 290px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 26px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0px 6px 0px 0px;
-}
-
-.settings-dialog-short-label {
-    -fx-alignment: center;
-    -fx-min-height: 26px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20px;
-    -fx-max-width: -fx-min-width;
-    -fx-mpref-width: -fx-min-width;
-}
-
-.settings-dialog-field {
-    -fx-alignment: center-left;
-    -fx-min-height: 26px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20px;
+.settings-dialog-container {
+    -fx-padding: 4px 0px 4px 0px;
 }
 
 .settings-dialog-message-label {

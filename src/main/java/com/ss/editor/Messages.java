@@ -138,8 +138,6 @@ public class Messages {
     public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
     public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
     public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
-    public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
-    public static final String SETTINGS_DIALOG_TAB_OTHER;
     public static final String SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL;
     public static final String SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL;
     public static final String SETTINGS_DIALOG_THEME_LABEL;
@@ -148,6 +146,10 @@ public class Messages {
     public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
+
+    public static final String SETTINGS_CATEGORY_GRAPHICS;
+    public static final String SETTINGS_CATEGORY_OTHER;
+    public static final String SETTINGS_CATEGORY_EDITOR;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
@@ -820,8 +822,6 @@ public class Messages {
         SETTINGS_DIALOG_AUTO_TANGENT_GENERATING = bundle.getString("SettingsDialogAutoTangentGenerating");
         SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE = bundle.getString("SettingsDialogUseFlipTexture");
         SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
-        SETTINGS_DIALOG_TAB_GRAPHICS = bundle.getString("SettingsDialogTabGraphics");
-        SETTINGS_DIALOG_TAB_OTHER = bundle.getString("SettingsDialogTabOther");
         SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL = bundle.getString("SettingsDialogUserLibrariesFolderLabel");
         SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL = bundle.getString("SettingsDialogUserClassesFolderLabel");
         SETTINGS_DIALOG_THEME_LABEL = bundle.getString("SettingsDialogThemeLabel");
@@ -830,6 +830,10 @@ public class Messages {
         SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogLibrariesFolderChooserTitle");
         SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
+
+        SETTINGS_CATEGORY_GRAPHICS = bundle.getString("SettingsCategoryGraphics");
+        SETTINGS_CATEGORY_OTHER = bundle.getString("SettingsCategoryOther");
+        SETTINGS_CATEGORY_EDITOR = bundle.getString("SettingsCategoryEditor");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
         GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("GLTFToJ3oFileConverterDescription");

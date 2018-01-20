@@ -1,6 +1,8 @@
 package com.ss.editor;
 
 import static com.jme3.environment.LightProbeFactory.makeProbe;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
@@ -305,15 +307,15 @@ public class JmeApplication extends JmeToJFXApplication {
         final FilterPostProcessor postProcessor = getPostProcessor();
 
         fxaaFilter = new EditorFxaaFilter();
-        fxaaFilter.setEnabled(editorConfig.isFXAA());
+        fxaaFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER));
         fxaaFilter.setSubPixelShift(1.0f / 4.0f);
         fxaaFilter.setVxOffset(0.0f);
         fxaaFilter.setSpanMax(8.0f);
         fxaaFilter.setReduceMul(1.0f / 8.0f);
 
         toneMapFilter = new ToneMapFilter();
-        toneMapFilter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
-        toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
+        toneMapFilter.setWhitePoint(editorConfig.getVector3f(PREF_FILTER_TONEMAP_WHITE_POINT, PREF_DEFAULT_TONEMAP_WHITE_POINT));
+        toneMapFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_TONEMAP, PREF_DEFAULT_TONEMAP_FILTER));
 
         postProcessor.addFilter(fxaaFilter);
         postProcessor.addFilter(toneMapFilter);

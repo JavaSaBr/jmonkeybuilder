@@ -1,5 +1,7 @@
 package com.ss.editor.ui.dialog;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_THEME;
 import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAEvent;
@@ -100,7 +102,7 @@ public class EditorDialog {
         container.setAlignment(CENTER);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
 
         final Scene scene = new Scene(container);
         final ObservableList<String> stylesheets = scene.getStylesheets();
@@ -313,6 +315,8 @@ public class EditorDialog {
         dialog.initOwner(owner);
         dialog.show();
         dialog.requestFocus();
+        dialog.toFront();
+        dialog.setOnCloseRequest(event -> hide());
 
         GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());

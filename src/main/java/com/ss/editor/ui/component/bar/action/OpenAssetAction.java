@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.bar.action;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_NATIVE_FILE_CHOOSER;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_NATIVE_FILE_CHOOSER;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -40,7 +42,7 @@ public class OpenAssetAction extends MenuItem {
 
         final EditorConfig config = EditorConfig.getInstance();
 
-        if (config.isNativeFileChooser()) {
+        if (config.getBoolean(PREF_NATIVE_FILE_CHOOSER, PREF_DEFAULT_NATIVE_FILE_CHOOSER)) {
             openAssetByNative();
         } else {
             openAsset();

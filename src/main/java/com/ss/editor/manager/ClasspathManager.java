@@ -1,9 +1,11 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CLASSES_FOLDER;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_LIBRARY_FOLDER;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.util.EditorUtil;
@@ -210,7 +212,7 @@ public class ClasspathManager {
             setLibrariesLoader(null);
         }
 
-        final Path path = EDITOR_CONFIG.getLibrariesPath();
+        final Path path = EDITOR_CONFIG.getFile(PREF_LIBRARY_FOLDER);
         if (path == null) {
             return;
         }
@@ -240,7 +242,7 @@ public class ClasspathManager {
             setClassesLoader(null);
         }
 
-        final Path path = EDITOR_CONFIG.getClassesPath();
+        final Path path = EDITOR_CONFIG.getFile(PREF_CLASSES_FOLDER);
         if (path == null) {
             return;
         }

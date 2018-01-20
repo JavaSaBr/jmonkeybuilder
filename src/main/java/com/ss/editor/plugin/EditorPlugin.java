@@ -5,6 +5,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.FileIconManager;
+import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
@@ -110,6 +111,15 @@ public class EditorPlugin extends BasePlugin {
      */
     @FromAnyThread
     public void register(@NotNull final FilePreviewFactoryRegistry registry) {
+    }
+
+    /**
+     * Register this plugin's own settings providers.
+     *
+     * @param registry the registry of settings providers.
+     */
+    @FxThread
+    public void register(@NotNull final SettingsProviderRegistry registry) {
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FLIPPED_TEXTURES;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
@@ -17,18 +19,16 @@ import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.node.material.RootMaterialSettings;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.part3d.editor.impl.material.MaterialEditor3DPart;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialFileEditor;
-import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.MaterialSerializer;
-import com.ss.editor.part3d.editor.impl.material.MaterialEditor3DPart;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
@@ -36,6 +36,8 @@ import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -185,7 +187,7 @@ public class MaterialFileEditor extends
             final EditorConfig config = EditorConfig.getInstance();
             final Path assetFile = notNull(getAssetFile(path));
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
-            textureKey.setFlipY(config.isDefaultUseFlippedTexture());
+            textureKey.setFlipY(config.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES));
 
             final AssetManager assetManager = EditorUtil.getAssetManager();
             final Texture texture = assetManager.loadTexture(textureKey);

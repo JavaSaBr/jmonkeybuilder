@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public final class PropertyDefinition {
+public class PropertyDefinition {
 
     @NotNull
     private static final Array<Object> EMPTY_OPTIONS = ArrayFactory.asArray();
@@ -141,6 +141,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the type of the property.
+     *
      * @return the type of the property.
      */
     @FromAnyThread
@@ -149,6 +151,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the name of the property.
+     *
      * @return the name of the property.
      */
     @FromAnyThread
@@ -167,6 +171,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the id of the property.
+     *
      * @return the id of the property.
      */
     @FromAnyThread
@@ -175,6 +181,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the default value of the property.
+     *
      * @return the default value of the property.
      */
     @FromAnyThread
@@ -183,6 +191,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the max value.
+     *
      * @return the max value.
      */
     @FromAnyThread
@@ -191,6 +201,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the min value.
+     *
      * @return the min value.
      */
     @FromAnyThread
@@ -199,6 +211,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the options.
+     *
      * @return the options.
      */
     @FromAnyThread

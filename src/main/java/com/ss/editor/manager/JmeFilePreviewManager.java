@@ -2,6 +2,8 @@ package com.ss.editor.manager;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.FileUtils.getExtension;
@@ -349,9 +351,10 @@ public class JmeFilePreviewManager extends AbstractControl {
 
         FolderAssetLocator.setIgnore(external);
         try {
+
             model = assetManager.loadModel(path);
 
-            if (external && EDITOR_CONFIG.isAutoTangentGenerating()) {
+            if (external && EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
                 TangentGenerator.useMikktspaceGenerator(model);
             }
 

@@ -60,8 +60,8 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         setSyncHandler(this::getLayer);
     }
 
-    @FromAnyThread
     @Override
+    @FromAnyThread
     public @NotNull SixObjectConsumer<ModelChangeConsumer, Spatial, String, SceneLayer, SceneLayer, BiConsumer<Spatial, SceneLayer>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 

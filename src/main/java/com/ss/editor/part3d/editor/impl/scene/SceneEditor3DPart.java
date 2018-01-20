@@ -1,5 +1,9 @@
 package com.ss.editor.part3d.editor.impl.scene;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FXAA_FILTER;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TONEMAP_FILTER;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FILTER_FXAA;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FILTER_TONEMAP;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.post.FilterPostProcessor;
@@ -96,10 +100,10 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
         final JmeApplication jmeApplication = JmeApplication.getInstance();
 
         final FXAAFilter fxaaFilter = jmeApplication.getFXAAFilter();
-        fxaaFilter.setEnabled(editorConfig.isFXAA());
+        fxaaFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER));
 
         final ToneMapFilter toneMapFilter = jmeApplication.getToneMapFilter();
-        toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
+        toneMapFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_TONEMAP, PREF_DEFAULT_TONEMAP_FILTER));
     }
 
     /**

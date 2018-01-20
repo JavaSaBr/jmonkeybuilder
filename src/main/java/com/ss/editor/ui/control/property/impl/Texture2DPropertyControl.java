@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FLIPPED_TEXTURES;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetKey;
@@ -339,7 +341,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
             final EditorConfig config = EditorConfig.getInstance();
             final Path assetFile = notNull(getAssetFile(file));
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
-            textureKey.setFlipY(config.isDefaultUseFlippedTexture());
+            textureKey.setFlipY(config.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES));
 
             final AssetManager assetManager = EditorUtil.getAssetManager();
             final Texture2D texture = (Texture2D) assetManager.loadTexture(textureKey);

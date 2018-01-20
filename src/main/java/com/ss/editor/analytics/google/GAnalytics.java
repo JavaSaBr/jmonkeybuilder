@@ -1,18 +1,13 @@
 package com.ss.editor.analytics.google;
 
-import static org.apache.http.impl.client.HttpClients.createMinimal;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_ANALYTICS_GOOGLE;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_ANALYTICS_GOOGLE;
 import static com.ss.rlib.util.StringUtils.isEmpty;
+import static org.apache.http.impl.client.HttpClients.createMinimal;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.concurrent.util.ConcurrentUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -21,6 +16,13 @@ import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.linkedlist.LinkedList;
 import com.ss.rlib.util.linkedlist.LinkedListFactory;
 import com.ss.rlib.util.os.OperatingSystem;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -86,10 +88,18 @@ public class GAnalytics extends EditorThread {
      */
     @FromAnyThread
     public static void waitForSend() {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
+
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;
-        if (progressCount.get() < 1) return;
+
+        if (progressCount.get() < 1) {
+            return;
+        }
+
         ConcurrentUtils.wait(progressCount, 2000);
     }
 
@@ -101,8 +111,9 @@ public class GAnalytics extends EditorThread {
      */
     @FromAnyThread
     public static void sendEvent(@NotNull final String category, @NotNull final String action) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
-        sendEvent(category, action, null);
+        if (EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            sendEvent(category, action, null);
+        }
     }
 
     /**
@@ -115,7 +126,10 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendEvent(@NotNull final String category, @NotNull final String action,
                                  @Nullable final String label) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_EVENT_CATEGORY, category);
@@ -158,7 +172,10 @@ public class GAnalytics extends EditorThread {
      */
     @FromAnyThread
     public static void sendException(@NotNull final Throwable exception, final boolean fatal) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final StringWriter writer = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(writer);
@@ -185,7 +202,10 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendPageView(@NotNull final String title, @Nullable final String location,
                                     @Nullable final String page) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final Map<String, Object> parameters = new HashMap<>();
         if (!isEmpty(title)) parameters.put(PARAM_PAGE_VIEW_TITLE, title);
@@ -206,7 +226,10 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendTiming(@NotNull final String timingCategory, @NotNull final String timingVar,
                                   final int timingValue, @Nullable final String timingLabel) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_USER_TIMING_CATEGORY, timingCategory);
@@ -266,7 +289,7 @@ public class GAnalytics extends EditorThread {
             parameters.put(PARAM_TRACKING_ID, PROP_TRACKING_ID);
             parameters.put(PARAM_CLIENT_ID, PROP_CLIENT_ID);
 
-            if (EDITOR_CONFIG.isAnalytics()) {
+            if (EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
                 if (!StringUtils.isEmpty(userId)) parameters.put(FIELD_USER_ID, userId);
             }
 

@@ -2,6 +2,9 @@ package com.ss.editor;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_OPEN_GL;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
 import com.jme3.renderer.Renderer;
@@ -20,6 +23,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.*;
+import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.task.CheckNewVersionTask;
 import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
@@ -103,7 +107,7 @@ public class JfxApplication extends Application {
         System.setProperty("javafx.animation.fullspeed", "false");
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final OpenGLVersion openGLVersion = editorConfig.getOpenGLVersion();
+        final OpenGLVersion openGLVersion = editorConfig.getEnum(PREF_OPEN_GL, PREF_DEFAULT_OPEN_GL);
 
         // set a render if it isn't override
         if(System.getProperty("jfx.background.render") == null) {
@@ -168,7 +172,7 @@ public class JfxApplication extends Application {
 
         if (renderer == null) {
             final EditorConfig editorConfig = EditorConfig.getInstance();
-            editorConfig.setOpenGLVersion(OpenGLVersion.GL_20);
+            editorConfig.set(PREF_OPEN_GL, OpenGLVersion.GL_20);
             editorConfig.save();
         }
     }
@@ -191,7 +195,7 @@ public class JfxApplication extends Application {
             }
 
             final EditorConfig editorConfig = EditorConfig.getInstance();
-            if (!editorConfig.isStopRenderOnLostFocus()) {
+            if (!editorConfig.getBoolean(PREF_STOP_RENDER_ON_LOST_FOCUS, PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS)) {
                 jmeApplication.setPaused(false);
                 return;
             }
@@ -408,6 +412,7 @@ public class JfxApplication extends Application {
             editorPlugin.register(TreeNodeFactoryRegistry.getInstance());
             editorPlugin.register(PropertyBuilderRegistry.getInstance());
             editorPlugin.register(FilePreviewFactoryRegistry.getInstance());
+            editorPlugin.register(SettingsProviderRegistry.getInstance());
         });
 
         final EditorFxScene scene = getScene();
@@ -429,7 +434,7 @@ public class JfxApplication extends Application {
             return;
         }
 
-        editorConfig.setAnalytics(false);
+        editorConfig.set(PREF_ANALYTICS_GOOGLE, false);
         editorConfig.save();
 
         Platform.runLater(() -> {
@@ -438,7 +443,7 @@ public class JfxApplication extends Application {
             final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
 
                 editorConfig.setAnalyticsQuestion(true);
-                editorConfig.setAnalytics(Boolean.TRUE.equals(result));
+                editorConfig.set(PREF_ANALYTICS_GOOGLE, Boolean.TRUE.equals(result));
                 editorConfig.save();
 
             }, Messages.ANALYTICS_CONFIRM_DIALOG_MESSAGE);

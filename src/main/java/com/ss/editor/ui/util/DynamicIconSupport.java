@@ -1,5 +1,7 @@
 package com.ss.editor.ui.util;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_THEME;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
@@ -81,7 +83,7 @@ public class DynamicIconSupport {
     public static void addSupport(@NotNull final ToggleButton button) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
 
         if (!theme.needRepaintIcons()) {
             return;
@@ -119,7 +121,7 @@ public class DynamicIconSupport {
     public static void addSupport(@NotNull final ButtonBase button) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
 
         if (!theme.needRepaintIcons()) {
             return;
@@ -181,7 +183,7 @@ public class DynamicIconSupport {
                                        @NotNull final Object selectedKey) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_THEME, PREF_DEFAULT_THEME);
 
         if (!theme.needRepaintIcons()) {
             return;
