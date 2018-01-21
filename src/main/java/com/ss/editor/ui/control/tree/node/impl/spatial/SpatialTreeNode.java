@@ -21,9 +21,8 @@ import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.extension.scene.InvisibleObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
 import com.ss.editor.ui.control.model.ModelNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.AddUserDataAction;
 import com.ss.editor.ui.control.tree.action.impl.RemoveNodeAction;
 import com.ss.editor.ui.control.tree.action.impl.control.CreateCustomControlAction;
@@ -36,8 +35,9 @@ import com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle.CreateV
 import com.ss.editor.ui.control.tree.action.impl.operation.AddControlOperation;
 import com.ss.editor.ui.control.tree.action.impl.operation.MoveControlOperation;
 import com.ss.editor.ui.control.tree.action.impl.operation.RenameNodeOperation;
-import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -62,16 +62,32 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * The list of additional creation action factories.
      */
     @NotNull
-    private static final Array<BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem>>
+    private static final Array<BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem>>
             CREATION_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
+
+    /**
+     * The list of additional creation control action factories.
+     */
+    @NotNull
+    private static final Array<BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem>>
+            CREATION_CONTROL_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
 
     /**
      * Register the additional creation action factory.
      *
      * @param actionFactory the additional creation action factory.
      */
-    public static void registerCreationAction(@NotNull final BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem> actionFactory) {
+    public static void registerCreationAction(@NotNull final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> actionFactory) {
         CREATION_ACTION_FACTORIES.add(actionFactory);
+    }
+
+    /**
+     * Register the additional creation control action factory.
+     *
+     * @param actionFactory the additional creation control action factory.
+     */
+    public static void registerCreationControlAction(@NotNull final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> actionFactory) {
+        CREATION_CONTROL_ACTION_FACTORIES.add(actionFactory);
     }
 
     protected SpatialTreeNode(@NotNull final T element, final long objectId) {
@@ -203,6 +219,15 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         items.add(new CreateLightControlAction(nodeTree, this));
 
+        for (final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> factory : CREATION_CONTROL_ACTION_FACTORIES) {
+            final MenuItem item = factory.apply(this, nodeTree);
+            if (item != null) {
+                items.add(item);
+            }
+        }
+
+        items.sort(ACTION_COMPARATOR);
+
         //final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
         //if (skeletonControl != null) {
             //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
@@ -210,8 +235,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         menu.getItems().add(createControlsMenu);
 
-        for (final BiFunction<@NotNull SpatialTreeNode<?>, @NotNull NodeTree<?>, @Nullable MenuItem> creationAction : CREATION_ACTION_FACTORIES) {
-            final MenuItem item = creationAction.apply(this, nodeTree);
+        for (final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> factory : CREATION_ACTION_FACTORIES) {
+            final MenuItem item = factory.apply(this, nodeTree);
             if (item != null) {
                 menu.getItems().add(item);
             }

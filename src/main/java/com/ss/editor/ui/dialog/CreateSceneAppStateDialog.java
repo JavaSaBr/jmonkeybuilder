@@ -55,7 +55,13 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         register(new StaticLightProbeSceneAppState());
     }
 
-    private static void register(@NotNull final EditableSceneAppState appState) {
+    /**
+     * Register the new editable scene app state.
+     *
+     * @param appState the new editable scene app state.
+     */
+    @FxThread
+    public static void register(@NotNull final EditableSceneAppState appState) {
         BUILT_IN.put(appState.getName(), appState);
         BUILT_IN_NAMES.add(appState.getName());
     }
@@ -142,6 +148,8 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the check box to chose an option of creating state.
+     *
      * @return the check box to chose an option of creating state.
      */
     @FxThread
@@ -150,6 +158,8 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the full class name of creating state.
+     *
      * @return the full class name of creating state.
      */
     @FxThread
@@ -158,6 +168,8 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the list of built in states.
+     *
      * @return the list of built in states.
      */
     @FxThread
@@ -208,12 +220,13 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     private void check(@NotNull final List<SceneAppState> appStates, @NotNull final List<SceneFilter> filters,
                        @NotNull final SceneAppState newExample) {
 
-        if (!(newExample instanceof EditableSceneAppState)) return;
+        if (!(newExample instanceof EditableSceneAppState)) {
+            return;
+        }
 
         final EditableSceneAppState editableSceneAppState = (EditableSceneAppState) newExample;
 
         String message = editableSceneAppState.checkStates(appStates);
-
         if (message != null) {
             throw new RuntimeException(message);
         }

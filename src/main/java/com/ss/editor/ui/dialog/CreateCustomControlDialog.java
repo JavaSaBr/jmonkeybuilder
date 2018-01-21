@@ -66,7 +66,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         register(new EditableBillboardControl());
     }
 
-    private static void register(@NotNull final EditableControl editableControl) {
+    public static void register(@NotNull final EditableControl editableControl) {
         BUILT_IN.put(editableControl.getName(), editableControl);
         BUILT_IN_NAMES.add(editableControl.getName());
     }
@@ -174,10 +174,10 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
         final ObservableList<Class<? extends Control>> items = customComboBox.getItems();
 
-        CLASSPATH_MANAGER.findImplements(Control.class, Scope.CORE_AND_CUSTOM_AND_LOCAL)
-                .stream().filter(ClassUtils::hasConstructor)
+        CLASSPATH_MANAGER.findImplements(Control.class, Scope.ALL)
+                .stream().filter(ClassUtils::hasConstructor).distinct()
                 .sorted((f, s) -> StringUtils.compareIgnoreCase(f.getSimpleName(), s.getSimpleName()))
-                .distinct().forEach(items::add);
+                .forEach(items::add);
 
         final GridPane settingsContainer = new GridPane();
         root.add(builtInLabel, 0, 0);
