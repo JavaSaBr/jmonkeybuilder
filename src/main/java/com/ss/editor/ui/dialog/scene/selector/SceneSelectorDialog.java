@@ -1,11 +1,12 @@
-package com.ss.editor.ui.dialog.node.selector;
+package com.ss.editor.ui.dialog.scene.selector;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.control.model.ModelNodeTree;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.ui.control.scene.SceneNodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -19,12 +20,12 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 /**
- * The implementation of a dialog to select an object from a model.
+ * The implementation of a dialog to select an object from a scene.
  *
  * @param <T> the type of a node.
  * @author JavaSaBr
  */
-public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
+public class SceneSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(600, -1);
@@ -42,16 +43,16 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     private final Consumer<T> handler;
 
     /**
-     * The loaded model.
+     * The scene node.
      */
     @NotNull
-    private final Spatial model;
+    private final SceneNode sceneNode;
 
     /**
-     * The model tree component.
+     * The scene tree component.
      */
     @Nullable
-    private ModelNodeTree nodeTree;
+    private SceneNodeTree nodeTree;
 
     /**
      * The selected object.
@@ -59,14 +60,14 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     @Nullable
     private T selected;
 
-    public NodeSelectorDialog(@NotNull final Spatial model, @NotNull final Class<T> type,
-                              @NotNull final Consumer<T> handler) {
-        this.model = model;
+    public SceneSelectorDialog(@NotNull final SceneNode sceneNode, @NotNull final Class<T> type,
+                               @NotNull final Consumer<T> handler) {
+        this.sceneNode = sceneNode;
         this.type = type;
         this.handler = handler;
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        nodeTree.fill(getModel());
+        final SceneNodeTree nodeTree = getNodeTree();
+        nodeTree.fill(getSceneNode());
 
         final Button okButton = notNull(getOkButton());
         okButton.setDisable(true);
@@ -75,17 +76,17 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     /**
      * Get the node tree.
      *
-     * @return the model tree component.
+     * @return the node tree component.
      */
     @FxThread
-    protected @NotNull ModelNodeTree getNodeTree() {
+    protected @NotNull SceneNodeTree getNodeTree() {
         return notNull(nodeTree);
     }
 
     @Override
     @FromAnyThread
     protected @NotNull String getTitleText() {
-        return Messages.NODE_SELECTOR_DIALOG_TITLE;
+        return Messages.SCENE_ELEMENT_SELECTOR_DIALOG_TITLE;
     }
 
     @Override
@@ -93,13 +94,23 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        nodeTree = new ModelNodeTree(this::processSelect, null);
+        nodeTree = createSceneNodeTree();
         nodeTree.prefHeightProperty().bind(heightProperty());
         nodeTree.prefWidthProperty().bind(widthProperty());
 
         root.add(nodeTree, 0, 0);
 
         FXUtils.addClassTo(root, CssClasses.NODE_SELECTOR_DIALOG);
+    }
+
+    /**
+     * Create a new scene node tree.
+     *
+     * @return the new scene node tree.
+     */
+    @FxThread
+    protected @NotNull SceneNodeTree createSceneNodeTree() {
+        return new SceneNodeTree(this::processSelect, null);
     }
 
     @Override
@@ -109,13 +120,13 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Get the loaded model.
+     * Get the scene node.
      *
-     * @return the loaded model.
+     * @return the scene node.
      */
     @FxThread
-    protected @NotNull Spatial getModel() {
-        return model;
+    protected @NotNull Spatial getSceneNode() {
+        return sceneNode;
     }
 
     /**

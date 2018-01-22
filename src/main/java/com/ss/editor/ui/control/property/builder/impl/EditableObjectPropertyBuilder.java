@@ -192,14 +192,14 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
     /**
      * Add the control.
      *
-     * @param <T>             the type parameter
-     * @param container       the container
-     * @param property        the property
-     * @param propertyControl the property control
+     * @param <T>             the type parameter.
+     * @param container       the container.
+     * @param property        the property.
+     * @param propertyControl the property control.
      */
     @FxThread
     protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
-                                  @NotNull final PropertyControl<C, @NotNull EditableProperty<T, ?>, T> propertyControl) {
+                                  @NotNull final PropertyControl<? extends C, @NotNull EditableProperty<T, ?>, T> propertyControl) {
 
         propertyControl.setApplyHandler(EditableProperty::setValue);
         propertyControl.setSyncHandler(EditableProperty::getValue);

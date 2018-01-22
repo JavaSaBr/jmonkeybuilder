@@ -208,6 +208,9 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL;
 
+    public static final String SCENE_FILE_EDITOR_NODE_FILTERS;
+    public static final String SCENE_FILE_EDITOR_NODE_APP_STATES;
+
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
     public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
@@ -572,7 +575,7 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
 
     public static final String NODE_SELECTOR_DIALOG_TITLE;
-
+    public static final String SCENE_ELEMENT_SELECTOR_DIALOG_TITLE;
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
     public static final String LIGHT_SELECTOR_DIALOG_TITLE;
 
@@ -892,6 +895,9 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_WAY_POINT = bundle.getString("ModelFileEditorNodeWayPoint");
         MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER = bundle.getString("ModelFileEditorNodeVertexBuffer");
         MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL = bundle.getString("ModelFileEditorNodeLightControl");
+
+        SCENE_FILE_EDITOR_NODE_FILTERS = bundle.getString("SceneFileEditorNodeFilters");
+        SCENE_FILE_EDITOR_NODE_APP_STATES = bundle.getString("SceneFileEditorNodeAppStates");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -1256,6 +1262,7 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
 
         NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");
+        SCENE_ELEMENT_SELECTOR_DIALOG_TITLE = bundle.getString("SceneElementSelectorDialogTitle");
 
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
         LIGHT_SELECTOR_DIALOG_TITLE = bundle.getString("LightSelectorDialogTitle");

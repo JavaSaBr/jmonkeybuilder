@@ -19,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit an elements from scene.
  *
- * @param <C> the type parameter
- * @param <D> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <D> the edited object's type.
+ * @param <T> the element's type.
  * @author JavaSaBr
  */
 public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends PropertyControl<C, D, T> {

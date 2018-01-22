@@ -7,10 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link ElementPropertyControl} to edit an elements from scene.
+ * The implementation of the {@link ElementPropertyControl} to edit elements from models.
  *
- * @param <D> the type parameter
- * @param <T> the type parameter
+ * @param <D> the edited object's type.
  * @author JavaSaBr
  */
 public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyControl<ModelChangeConsumer, D, T> {

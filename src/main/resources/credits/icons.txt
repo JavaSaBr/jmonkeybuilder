@@ -82,3 +82,5 @@ ui/icons/svg/inbox.svg icon made by http://www.flaticon.com/authors/freepik from
 ui/icons/svg/debug.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
 ui/icons/filetypes/vector.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com
 ui/icons/svg/import.svg icon made by https://www.flaticon.com/authors/anatoly from www.flaticon.com
+ui/icons/svg/filter-filled-tool-symbol.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/svg/bar-chart-reload.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com

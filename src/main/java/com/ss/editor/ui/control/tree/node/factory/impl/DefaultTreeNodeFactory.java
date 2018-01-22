@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.tree.node.factory.impl;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.audio.AudioNode;
 import com.jme3.material.Material;
+import com.jme3.post.Filter;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -12,15 +13,18 @@ import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.model.node.layer.LayersRoot;
-import com.ss.editor.ui.control.tree.node.impl.layer.LayersRootTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.layer.SceneLayerTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.*;
-import com.ss.editor.ui.control.tree.node.impl.spatial.scene.SceneNodeTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.terrain.TerrainGridTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.terrain.TerrainQuadTreeNode;
+import com.ss.editor.model.scene.SceneAppStatesNode;
+import com.ss.editor.model.scene.SceneFiltersNode;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
+import com.ss.editor.ui.control.tree.node.impl.layer.LayersRootTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.layer.SceneLayerTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.scene.*;
+import com.ss.editor.ui.control.tree.node.impl.spatial.*;
+import com.ss.editor.ui.control.tree.node.impl.spatial.terrain.TerrainGridTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.spatial.terrain.TerrainQuadTreeNode;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -56,6 +60,14 @@ public class DefaultTreeNodeFactory implements TreeNodeFactory {
             return unsafeCast(new NodeTreeNode<>((Node) element, objectId));
         } else if (element instanceof Material) {
             return unsafeCast(new MaterialTreeNode((Material) element, objectId));
+        } else if (element instanceof SceneFiltersNode) {
+            return unsafeCast(new SceneFiltersTreeNode((SceneFiltersNode) element, objectId));
+        } else if (element instanceof SceneAppStatesNode) {
+            return unsafeCast(new SceneAppStatesTreeNode((SceneAppStatesNode) element, objectId));
+        } else if (element instanceof Filter) {
+            return unsafeCast(new SceneFilterTreeNode((Filter) element, objectId));
+        } else if (element instanceof SceneAppState) {
+            return unsafeCast(new SceneAppStateTreeNode((SceneAppState) element, objectId));
         }
 
         return null;

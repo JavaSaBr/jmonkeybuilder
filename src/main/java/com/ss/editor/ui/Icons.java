@@ -94,6 +94,8 @@ public interface Icons {
     @NotNull Image STATISTICS_16 = ICON_MANAGER.getImage("/ui/icons/svg/bar-chart.svg");
     @NotNull Image DOR_IN_CIRCLE_16 = ICON_MANAGER.getImage("/ui/icons/svg/dot-and-circle.svg");
     @NotNull Image PLUGIN_16 = ICON_MANAGER.getImage("/ui/icons/svg/plug-silhouette.svg");
+    @NotNull Image FILTER_16 = ICON_MANAGER.getImage("/ui/icons/svg/filter-filled-tool-symbol.svg");
+    @NotNull Image UPDATER_16 = ICON_MANAGER.getImage("/ui/icons/svg/bar-chart-reload.svg");
 
     @NotNull Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/svg/refresh-button.svg", 18);
     @NotNull Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/svg/warning.svg", 24);

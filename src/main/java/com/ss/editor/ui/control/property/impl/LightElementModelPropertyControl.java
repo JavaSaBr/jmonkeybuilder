@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link ElementModelPropertyControl} to edit light from a scene.
  *
- * @param <D> the type parameter
+ * @param <D> the edited object's type.
  * @author JavaSaBr
  */
 public class LightElementModelPropertyControl<L extends Light, D> extends ElementModelPropertyControl<D, L> {

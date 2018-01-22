@@ -1,14 +1,18 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
+import com.jme3.post.Filter;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.control.property.impl.FilterElementModelPropertyControl;
 import com.ss.editor.ui.control.property.impl.LightElementModelPropertyControl;
 import com.ss.editor.ui.control.property.impl.SpatialElementModelPropertyControl;
 import javafx.scene.layout.VBox;
@@ -41,6 +45,17 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 final LightElementModelPropertyControl<DirectionalLight, EditableProperty<DirectionalLight, ?>> propertyControl =
                         new LightElementModelPropertyControl<>(DirectionalLight.class, value, property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+            case AMBIENT_LIGHT_FROM_SCENE: {
+
+                final EditableProperty<AmbientLight, ?> property = cast(description);
+                final AmbientLight value = property.getValue();
+
+                final LightElementModelPropertyControl<AmbientLight, EditableProperty<AmbientLight, ?>> propertyControl =
+                        new LightElementModelPropertyControl<>(AmbientLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -85,6 +100,26 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 final SpatialElementModelPropertyControl<Node, EditableProperty<Node, ?>> propertyControl =
                         new SpatialElementModelPropertyControl<>(Node.class, value, property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+        }
+
+        if (!(changeConsumer instanceof SceneChangeConsumer)) {
+            return;
+        }
+
+        final SceneChangeConsumer consumer = (SceneChangeConsumer) changeConsumer;
+
+        switch (type) {
+            case FILTER_FROM_SCENE: {
+
+                final EditableProperty<Filter, ?> property = cast(description);
+                final Filter value = property.getValue();
+
+                final FilterElementModelPropertyControl<EditableProperty<Filter, ?>> propertyControl =
+                        new FilterElementModelPropertyControl<>(value, property.getName(), consumer);
 
                 addControl(container, property, propertyControl);
                 break;

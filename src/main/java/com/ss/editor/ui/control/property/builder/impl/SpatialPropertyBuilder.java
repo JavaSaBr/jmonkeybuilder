@@ -66,7 +66,9 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final ModelChangeConsumer changeConsumer) {
 
-        if (!(object instanceof Spatial)) return;
+        if (!(object instanceof Spatial)) {
+            return;
+        }
 
         final Spatial spatial = (Spatial) object;
         final CullHint cullHint = spatial.getLocalCullHint();
@@ -137,7 +139,9 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         }
 
         final Collection<String> userDataKeys = spatial.getUserDataKeys();
-        if (userDataKeys.isEmpty()) return;
+        if (userDataKeys.isEmpty()) {
+            return;
+        }
 
         int count = 0;
 
@@ -164,7 +168,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Float value = (Float) data;
 
-                final FloatPropertyControl<ModelChangeConsumer, Spatial> control = new FloatPropertyControl<>(value, key, changeConsumer);
+                final FloatPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new FloatPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -175,7 +180,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Integer value = (Integer) data;
 
-                final IntegerPropertyControl<ModelChangeConsumer, Spatial> control = new IntegerPropertyControl<>(value, key, changeConsumer);
+                final IntegerPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new IntegerPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -186,7 +192,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Boolean value = (Boolean) data;
 
-                final BooleanPropertyControl<ModelChangeConsumer, Spatial> control = new BooleanPropertyControl<>(value, key, changeConsumer);
+                final BooleanPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new BooleanPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -197,7 +204,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Vector3f value = (Vector3f) data;
 
-                final Vector3FPropertyControl<ModelChangeConsumer, Spatial> control = new Vector3FPropertyControl<>(value, key, changeConsumer);
+                final Vector3FPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new Vector3FPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -208,7 +216,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final Vector2f value = (Vector2f) data;
 
-                final Vector2FPropertyControl<ModelChangeConsumer, Spatial> control = new Vector2FPropertyControl<>(value, key, changeConsumer);
+                final Vector2FPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new Vector2FPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -219,7 +228,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final ColorRGBA value = (ColorRGBA) data;
 
-                final ColorPropertyControl<ModelChangeConsumer, Spatial> control = new ColorPropertyControl<>(value, key, changeConsumer);
+                final ColorPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new ColorPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -230,7 +240,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final String value = (String) data;
 
-                final StringPropertyControl<ModelChangeConsumer, Spatial> control = new StringPropertyControl<>(value, key, changeConsumer);
+                final StringPropertyControl<ModelChangeConsumer, Spatial> control =
+                        new StringPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
@@ -239,7 +250,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
             } else {
 
-                final DefaultSinglePropertyControl<ModelChangeConsumer, Spatial, Object> control = new DefaultSinglePropertyControl<>(data, key, changeConsumer);
+                final DefaultSinglePropertyControl<ModelChangeConsumer, Spatial, Object> control =
+                        new DefaultSinglePropertyControl<>(data, key, changeConsumer);
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);
 
@@ -250,9 +262,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
     @FxThread
     private boolean isNeedSkip(@NotNull final String key) {
-        if (SceneLayer.KEY.equals(key)) return true;
-        if (LOADED_MODEL_KEY.equals(key)) return true;
-        return false;
+        return SceneLayer.KEY.equals(key) || LOADED_MODEL_KEY.equals(key);
     }
 
     @FxThread

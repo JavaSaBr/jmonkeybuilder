@@ -69,32 +69,26 @@ public abstract class TreeNode<T> implements UObject {
     private final long objectId;
 
     /**
-     * The element of the {@link com.jme3.scene.Spatial}.
+     * The wrapped element.
      */
     @NotNull
     private final T element;
 
     /**
-     * The parent.
+     * The parent node.
      */
     @Nullable
     private TreeNode<?> parent;
 
-    /**
-     * Instantiates a new Model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
     public TreeNode(@NotNull final T element, final long objectId) {
         this.element = element;
         this.objectId = objectId;
     }
 
     /**
-     * Gets element.
+     * Get the wrapped element.
      *
-     * @return the element of the {@link com.jme3.scene.Spatial}.
+     * @return the wrapped element.
      */
     @FromAnyThread
     public @NotNull T getElement() {
@@ -102,7 +96,7 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     /**
-     * Gets name.
+     * Get the name of this node.
      *
      * @return the name of this node.
      */
@@ -112,9 +106,9 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     /**
-     * Sets name.
+     * Set the name of this node.
      *
-     * @param name the name.
+     * @param name the name of this node.
      */
     @FxThread
     public void setName(@NotNull final String name) {
@@ -142,7 +136,7 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     /**
-     * Gets children.
+     * Get the  children.
      *
      * @param nodeTree the node tree
      * @return the array of children of this node.
@@ -155,7 +149,7 @@ public abstract class TreeNode<T> implements UObject {
     /**
      * Gets parent.
      *
-     * @return the parent of this node.
+     * @return the parent of this node or null.
      */
     @FxThread
     public @Nullable TreeNode<?> getParent() {
@@ -163,9 +157,9 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     /**
-     * Sets parent.
+     * Set the parent node.
      *
-     * @param parent the parent.
+     * @param parent the parent node.
      */
     @FxThread
     protected void setParent(@Nullable final TreeNode<?> parent) {
@@ -173,9 +167,9 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     /**
-     * Gets icon.
+     * Get the icon of this node.
      *
-     * @return the icon of this node.
+     * @return the icon of this node or null.
      */
     @FxThread
     public @Nullable Image getIcon() {
