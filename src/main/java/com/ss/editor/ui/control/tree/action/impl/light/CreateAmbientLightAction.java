@@ -39,6 +39,8 @@ public class CreateAmbientLightAction extends AbstractCreateLightAction {
     @Override
     @FxThread
     protected @NotNull Light createLight() {
-        return new AmbientLight();
+        final AmbientLight ambientLight = new AmbientLight();
+        ambientLight.setName(Messages.MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT);
+        return ambientLight;
     }
 }

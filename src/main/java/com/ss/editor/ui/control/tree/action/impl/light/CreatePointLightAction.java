@@ -38,6 +38,8 @@ public class CreatePointLightAction extends AbstractCreateLightAction {
     @Override
     @FxThread
     protected @NotNull Light createLight() {
-        return new PointLight();
+        final PointLight pointLight = new PointLight();
+        pointLight.setName(Messages.MODEL_NODE_TREE_ACTION_POINT_LIGHT);
+        return pointLight;
     }
 }

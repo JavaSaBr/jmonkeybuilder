@@ -62,15 +62,34 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * The additional particle emitter finders.
      */
     @NotNull
-    private static final Array<Predicate<@NotNull Node>> PARTICLE_EMITTER_FINDERS = ArrayFactory.newArray(Predicate.class);
+    private static final Array<Predicate<Node>> PARTICLE_EMITTER_FINDERS = ArrayFactory.newArray(Predicate.class);
+
+    /**
+     * The additional filters of node children.
+     */
+    @NotNull
+    private static final Array<Predicate<Spatial>> NODE_CHILDREN_FILTERS = ArrayFactory.newArray(Predicate.class);
 
     /**
      * Register the additional particle emitter finder.
+     * The finder should return true when a node contains some particle emitter.
      *
      * @param finder the additional particle emitter finder.
      */
-    public static void registerParticleEmitterFinder(@NotNull final Predicate<@NotNull Node> finder) {
+    @FxThread
+    public static void registerParticleEmitterFinder(@NotNull final Predicate<Node> finder) {
         PARTICLE_EMITTER_FINDERS.add(finder);
+    }
+
+    /**
+     * Register the additional node children filter.
+     * The filter should return true when a child should be excluded.
+     *
+     * @param finder the additional node children filter.
+     */
+    @FxThread
+    public static void registerNodeChildrenFilter(@NotNull final Predicate<Spatial> finder) {
+        NODE_CHILDREN_FILTERS.add(finder);
     }
 
     public NodeTreeNode(@NotNull final T element, final long objectId) {
@@ -146,7 +165,13 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
-        final List<Spatial> children = getSpatials();
+        final List<Spatial> children = getSpatialChildren();
+        for (final Spatial child : children) {
+            if (NODE_CHILDREN_FILTERS.search(child, Predicate::test) == null) {
+                result.add(FACTORY_REGISTRY.createFor(child));
+            }
+        }
+
         children.forEach(spatial -> result.add(FACTORY_REGISTRY.createFor(spatial)));
         result.addAll(super.getChildren(nodeTree));
 
@@ -154,12 +179,12 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     }
 
     /**
-     * Get the spatials.
+     * Get the children spatial.
      *
-     * @return the spatials.
+     * @return the children spatial.
      */
     @FxThread
-    protected @NotNull List<Spatial> getSpatials() {
+    protected @NotNull List<Spatial> getSpatialChildren() {
         final Node element = getElement();
         return element.getChildren();
     }
@@ -167,7 +192,10 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     @Override
     @FxThread
     public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
-        if (treeNode == this) return false;
+
+        if (treeNode == this) {
+            return false;
+        }
 
         final Object element = treeNode.getElement();
         if (element instanceof Spatial) {

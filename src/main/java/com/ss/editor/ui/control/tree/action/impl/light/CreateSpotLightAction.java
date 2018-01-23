@@ -39,6 +39,8 @@ public class CreateSpotLightAction extends AbstractCreateLightAction {
     @Override
     @FxThread
     protected @NotNull Light createLight() {
-        return new SpotLight();
+        final SpotLight spotLight = new SpotLight();
+        spotLight.setName(Messages.MODEL_NODE_TREE_ACTION_SPOT_LIGHT);
+        return spotLight;
     }
 }

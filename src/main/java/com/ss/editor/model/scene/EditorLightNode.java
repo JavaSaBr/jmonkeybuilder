@@ -149,10 +149,14 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
         } else if (light instanceof DirectionalLight) {
 
             final DirectionalLight directionalLight = (DirectionalLight) light;
+            final LocalObjects local = LocalObjects.get();
+            final Quaternion lightRotation = local.nextRotation();
+            lightRotation.lookAt(directionalLight.getDirection(), Vector3f.UNIT_Y);
+
             final Quaternion rotation = getLocalRotation();
 
-            if (lastLightRotation.equals(rotation)) {
-                directionalLight.setDirection(getDirection(rotation, directionalLight.getDirection()));
+            if (lastLightRotation.equals(lightRotation)) {
+                directionalLight.setDirection(getDirection(rotation, local.nextVector()));
                 lastLightRotation.set(rotation);
             } else {
                 sync();
@@ -161,10 +165,14 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
         } else if (light instanceof SpotLight) {
 
             final SpotLight spotLight = (SpotLight) light;
+            final LocalObjects local = LocalObjects.get();
+            final Quaternion lightRotation = local.nextRotation();
+            lightRotation.lookAt(spotLight.getDirection(), Vector3f.UNIT_Y);
+
             final Quaternion rotation = getLocalRotation();
 
-            if (lastLightPosition.equals(spotLight.getPosition()) && lastLightRotation.equals(rotation)) {
-                final Vector3f direction = getDirection(rotation, spotLight.getDirection());
+            if (lastLightPosition.equals(spotLight.getPosition()) && lastLightRotation.equals(lightRotation)) {
+                final Vector3f direction = getDirection(rotation, local.nextVector());
                 spotLight.setDirection(direction);
                 spotLight.setPosition(getLocalTranslation());
             } else {
@@ -191,7 +199,7 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
             final SpotLight spotLight = (SpotLight) light;
 
             final Quaternion rotation = local.nextRotation();
-            rotation.lookAt(spotLight.getDirection(), camera.getUp(local.nextVector()));
+            rotation.lookAt(spotLight.getDirection(), Vector3f.UNIT_Y);
 
             setLocalTranslation(spotLight.getPosition());
             setLocalRotation(rotation);
@@ -206,9 +214,10 @@ public class EditorLightNode extends Node implements NoSelection, WrapperNode {
 
             final DirectionalLight directionalLight = (DirectionalLight) light;
             final Quaternion rotation = local.nextRotation();
-            rotation.lookAt(directionalLight.getDirection(), camera.getUp(local.nextVector()));
+            rotation.lookAt(directionalLight.getDirection(), Vector3f.UNIT_Y);
 
             setLocalRotation(rotation);
+
             lastLightRotation.set(getLocalRotation());
         }
     }
