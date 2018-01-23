@@ -48,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
@@ -68,7 +69,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * The additional filters of node children.
      */
     @NotNull
-    private static final Array<Predicate<Spatial>> NODE_CHILDREN_FILTERS = ArrayFactory.newArray(Predicate.class);
+    private static final Array<BiPredicate<Node, Spatial>> NODE_CHILDREN_FILTERS = ArrayFactory.newArray(BiPredicate.class);
 
     /**
      * Register the additional particle emitter finder.
@@ -88,7 +89,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * @param finder the additional node children filter.
      */
     @FxThread
-    public static void registerNodeChildrenFilter(@NotNull final Predicate<Spatial> finder) {
+    public static void registerNodeChildrenFilter(@NotNull final BiPredicate<Node, Spatial> finder) {
         NODE_CHILDREN_FILTERS.add(finder);
     }
 
@@ -98,7 +99,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @Override
     @FxThread
-    protected @Nullable Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
+    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
         return toolMenu;
@@ -164,10 +165,11 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
+        final T element = getElement();
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final List<Spatial> children = getSpatialChildren();
         for (final Spatial child : children) {
-            if (NODE_CHILDREN_FILTERS.search(child, Predicate::test) == null) {
+            if (NODE_CHILDREN_FILTERS.search(element, child, BiPredicate::test) == null) {
                 result.add(FACTORY_REGISTRY.createFor(child));
             }
         }
