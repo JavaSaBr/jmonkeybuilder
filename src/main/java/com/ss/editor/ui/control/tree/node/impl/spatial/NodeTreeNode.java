@@ -173,8 +173,6 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
                 result.add(FACTORY_REGISTRY.createFor(child));
             }
         }
-
-        children.forEach(spatial -> result.add(FACTORY_REGISTRY.createFor(spatial)));
         result.addAll(super.getChildren(nodeTree));
 
         return result;
