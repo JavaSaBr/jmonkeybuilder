@@ -1,11 +1,11 @@
-package com.ss.editor.control.editing;
+package com.ss.editor.control.painting;
 
 /**
- * The enum with list of editing inputs.
+ * The enum with list of painting inputs.
  *
  * @author JavaSaBr
  */
-public enum EditingInput {
+public enum PaintingInput {
     /**
      * Mouse primary editing input.
      */

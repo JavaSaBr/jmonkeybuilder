@@ -33,8 +33,8 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.editing.EditingControl;
-import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.control.painting.PaintingControl;
+import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.control.transform.*;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
@@ -871,7 +871,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         if (!isEditingMode()) return;
 
         final Node cursorNode = getCursorNode();
-        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
         final Spatial editedModel = EditingUtils.getEditedModel(control);
         if (editedModel == null) return;
 
@@ -1294,22 +1294,22 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the editing input.
      */
     @FromAnyThread
-    protected @NotNull EditingInput getEditingInput(@NotNull final MouseButton mouseButton) {
+    protected @NotNull PaintingInput getEditingInput(@NotNull final MouseButton mouseButton) {
         switch (mouseButton) {
             case SECONDARY: {
 
                 if(isControlDown()) {
-                    return EditingInput.MOUSE_SECONDARY_WITH_CTRL;
+                    return PaintingInput.MOUSE_SECONDARY_WITH_CTRL;
                 }
 
-                return EditingInput.MOUSE_SECONDARY;
+                return PaintingInput.MOUSE_SECONDARY;
             }
             case PRIMARY: {
-                return EditingInput.MOUSE_PRIMARY;
+                return PaintingInput.MOUSE_PRIMARY;
             }
         }
 
-        return EditingInput.MOUSE_PRIMARY;
+        return PaintingInput.MOUSE_PRIMARY;
     }
 
     /**
@@ -1550,30 +1550,30 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Start editing.
      */
     @JmeThread
-    private void startEditing(@NotNull final EditingInput editingInput) {
+    private void startEditing(@NotNull final PaintingInput paintingInput) {
         final Node cursorNode = getCursorNode();
-        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
         final Spatial editedModel = EditingUtils.getEditedModel(getCursorNode());
-        if (control == null || editedModel == null || control.isStartedEditing()) return;
-        control.startEditing(editingInput, cursorNode.getLocalTranslation());
+        if (control == null || editedModel == null || control.isStartedPainting()) return;
+        control.startPainting(paintingInput, cursorNode.getLocalTranslation());
     }
 
     /**
      * Finish editing.
      */
     @JmeThread
-    private void finishEditing(@NotNull final EditingInput editingInput) {
+    private void finishEditing(@NotNull final PaintingInput paintingInput) {
 
         final Node cursorNode = getCursorNode();
-        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
         final Spatial editedModel = EditingUtils.getEditedModel(control);
 
-        if (control == null || editedModel == null || !control.isStartedEditing() ||
-                control.getCurrentInput() != editingInput) {
+        if (control == null || editedModel == null || !control.isStartedPainting() ||
+                control.getCurrentInput() != paintingInput) {
             return;
         }
 
-        control.finishEditing(cursorNode.getLocalTranslation());
+        control.finishPainting(cursorNode.getLocalTranslation());
     }
 
     /**
@@ -1582,9 +1582,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     @JmeThread
     private void updateEditing() {
         final Node cursorNode = getCursorNode();
-        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
         final Spatial editedModel = EditingUtils.getEditedModel(control);
-        if (control == null || editedModel == null || !control.isStartedEditing()) return;
+        if (control == null || editedModel == null || !control.isStartedPainting()) return;
         control.updateEditing(cursorNode.getLocalTranslation());
     }
 

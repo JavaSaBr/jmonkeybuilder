@@ -1,4 +1,4 @@
-package com.ss.editor.control.editing.impl;
+package com.ss.editor.control.painting.impl;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -9,32 +9,33 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.editing.EditingControl;
-import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.control.painting.PaintingControl;
+import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The base implementation of an editing control.
+ * The base implementation of {@link PaintingControl}.
  *
  * @author JavaSaBr
  */
-public class AbstractEditingControl extends AbstractControl implements EditingControl {
+public class AbstractPaintingControl extends AbstractControl implements PaintingControl {
 
     /**
-     * The current editing input.
+     * The current painting input.
      */
     @Nullable
-    private EditingInput editingInput;
+    private PaintingInput paintingInput;
 
     /**
-     * The flag of editing state.
+     * The flag of painting state.
      */
-    private boolean editing;
+    private boolean painting;
 
     @Override
-    public void setSpatial(final Spatial spatial) {
+    @JmeThread
+    public void setSpatial(@Nullable final Spatial spatial) {
 
         final Spatial prev = getSpatial();
         if (prev instanceof Node) {
@@ -49,30 +50,28 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
     }
 
     /**
-     * Create wireframe material material.
+     * Create a colored wireframe material.
      *
-     * @param color the color
-     * @return the material
+     * @param color the color.
+     * @return the colored wireframe material.
      */
     @JmeThread
     protected @NotNull Material createWireframeMaterial(@NotNull final ColorRGBA color) {
-        final Material material = createMaterial(color);
+        final Material material = createColoredMaterial(color);
         material.getAdditionalRenderState().setWireframe(true);
         return material;
     }
 
     /**
-     * Create material material.
+     * Create a colored material.
      *
-     * @param color the color
-     * @return the material
+     * @param color the color.
+     * @return the colored material.
      */
     @JmeThread
-    protected @NotNull Material createMaterial(@NotNull final ColorRGBA color) {
-
+    protected @NotNull Material createColoredMaterial(@NotNull final ColorRGBA color) {
         final Material material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", color);
-
         return material;
     }
 
@@ -88,51 +87,53 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
 
     @Override
     @JmeThread
-    public boolean isStartedEditing() {
-        return editing;
+    public boolean isStartedPainting() {
+        return painting;
     }
 
     /**
-     * Sets editing.
+     * Set the painting state.
      *
-     * @param editing the flag of editing state.
+     * @param painting the flag of painting state.
      */
     @JmeThread
-    protected void setEditing(final boolean editing) {
-        this.editing = editing;
+    protected void setPainting(final boolean painting) {
+        this.painting = painting;
     }
 
     @Override
     @JmeThread
-    public void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
-        setEditing(true);
-        setEditingInput(editingInput);
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
+        setPainting(true);
+        setPaintingInput(input);
     }
 
     @Override
     @JmeThread
-    public void finishEditing(@NotNull final Vector3f contactPoint) {
-        setEditing(false);
+    public void finishPainting(@NotNull final Vector3f contactPoint) {
+        setPainting(false);
     }
 
     /**
-     * @param editingInput the current editing input.
+     * Set the painting input,
+     *
+     * @param input the current painting input.
      */
     @JmeThread
-    private void setEditingInput(@Nullable final EditingInput editingInput) {
-        this.editingInput = editingInput;
+    private void setPaintingInput(@Nullable final PaintingInput input) {
+        this.paintingInput = input;
     }
 
     @Override
     @JmeThread
-    public @Nullable EditingInput getCurrentInput() {
-        return editingInput;
+    public @Nullable PaintingInput getCurrentInput() {
+        return paintingInput;
     }
 
     /**
      * Notify about that this control was attached.
      *
-     * @param node the node
+     * @param node the node.
      */
     @JmeThread
     protected void onAttached(@NotNull final Node node) {
@@ -141,7 +142,7 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
     /**
      * Notify about that this control was detached.
      *
-     * @param node the node
+     * @param node the node.
      */
     @JmeThread
     protected void onDetached(@NotNull final Node node) {

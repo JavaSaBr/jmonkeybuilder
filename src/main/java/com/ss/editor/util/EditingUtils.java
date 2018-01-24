@@ -8,7 +8,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.control.editing.EditingControl;
+import com.ss.editor.control.painting.PaintingControl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +26,8 @@ public class EditingUtils {
      * @return the editing control or null.
      */
     @FromAnyThread
-    public static @Nullable EditingControl getEditingControl(@NotNull final Node cursorNode) {
-        return cursorNode.getControl(EditingControl.class);
+    public static @Nullable PaintingControl getEditingControl(@NotNull final Node cursorNode) {
+        return cursorNode.getControl(PaintingControl.class);
     }
 
     /**
@@ -38,8 +38,8 @@ public class EditingUtils {
      */
     @FromAnyThread
     public static @Nullable Spatial getEditedModel(@NotNull final Node cursorNode) {
-        final EditingControl control = getEditingControl(cursorNode);
-        return control == null ? null : control.getEditedModel();
+        final PaintingControl control = getEditingControl(cursorNode);
+        return control == null ? null : control.getPaintedModel();
     }
 
     /**
@@ -49,8 +49,8 @@ public class EditingUtils {
      * @return the edited model or null.
      */
     @FromAnyThread
-    public static @Nullable Spatial getEditedModel(@Nullable final EditingControl control) {
-        return control == null ? null : control.getEditedModel();
+    public static @Nullable Spatial getEditedModel(@Nullable final PaintingControl control) {
+        return control == null ? null : control.getPaintedModel();
     }
 
     /**

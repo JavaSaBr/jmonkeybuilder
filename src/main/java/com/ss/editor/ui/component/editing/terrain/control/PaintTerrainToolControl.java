@@ -9,7 +9,7 @@ import com.jme3.terrain.Terrain;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
-import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
@@ -135,18 +135,18 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     @Override
-    public void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
+    public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
 
         final Texture alphaTexture = getAlphaTexture();
         if (alphaTexture == null) return;
 
-        super.startEditing(editingInput, contactPoint);
+        super.startPainting(paintingInput, contactPoint);
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY:
             case MOUSE_SECONDARY: {
                 startChange();
-                paintTexture(editingInput, contactPoint);
+                paintTexture(paintingInput, contactPoint);
                 break;
             }
         }
@@ -155,7 +155,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     @Override
     public void updateEditing(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput currentInput = notNull(getCurrentInput());
+        final PaintingInput currentInput = notNull(getCurrentInput());
 
         switch (currentInput) {
             case MOUSE_PRIMARY:
@@ -167,9 +167,9 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     @Override
-    public void finishEditing(@NotNull final Vector3f contactPoint) {
+    public void finishPainting(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput currentInput = notNull(getCurrentInput());
+        final PaintingInput currentInput = notNull(getCurrentInput());
 
         switch (currentInput) {
             case MOUSE_PRIMARY:
@@ -180,7 +180,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
             }
         }
 
-        super.finishEditing(contactPoint);
+        super.finishPainting(contactPoint);
     }
 
     /**
@@ -387,16 +387,16 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * Paint texture.
      *
-     * @param editingInput the editing input.
+     * @param paintingInput the editing input.
      * @param contactPoint the contact point.
      */
-    private void paintTexture(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
+    private void paintTexture(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
 
         final Texture alphaTexture = getAlphaTexture();
         if (alphaTexture == null) return;
 
         final LocalObjects local = LocalObjects.get();
-        final Spatial terrainNode = notNull(getEditedModel());
+        final Spatial terrainNode = notNull(getPaintedModel());
         final Terrain terrain = (Terrain) terrainNode;
         final Image image = alphaTexture.getImage();
 
@@ -413,7 +413,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         float brushSize = getBrushSize() / (terrain.getTerrainSize() * localScale.getX());
         float brushPower = getBrushPower();
 
-        if (editingInput == EditingInput.MOUSE_SECONDARY) {
+        if (paintingInput == PaintingInput.MOUSE_SECONDARY) {
             brushPower *= -1;
         }
 

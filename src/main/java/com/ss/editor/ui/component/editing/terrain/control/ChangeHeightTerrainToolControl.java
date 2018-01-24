@@ -95,7 +95,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
         final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
         originalHeight.clear();
 
-        copiedTerrain = notNull(getEditedModel()).clone();
+        copiedTerrain = notNull(getPaintedModel()).clone();
     }
 
     /**
@@ -106,7 +106,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     protected void change(@NotNull final Vector2f point) {
 
         final Terrain terrain = (Terrain) notNull(copiedTerrain);
-        final Node terrainNode = (Node) notNull(getEditedModel());
+        final Node terrainNode = (Node) notNull(getPaintedModel());
         final Vector3f scale = terrainNode.getWorldScale();
 
         final int halfSize = terrain.getTerrainSize() / 2;
@@ -128,7 +128,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void commitChanges() {
 
-        final Terrain terrain = (Terrain) notNull(getEditedModel());
+        final Terrain terrain = (Terrain) notNull(getPaintedModel());
         final ObjectDictionary<Vector2f, Float> oldValues = DictionaryFactory.newObjectDictionary();
         final ObjectDictionary<Vector2f, Float> newValues = DictionaryFactory.newObjectDictionary();
 

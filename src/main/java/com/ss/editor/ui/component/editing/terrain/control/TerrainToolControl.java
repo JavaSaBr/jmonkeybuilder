@@ -5,7 +5,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
-import com.ss.editor.control.editing.impl.AbstractEditingControl;
+import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class TerrainToolControl extends AbstractEditingControl {
+public class TerrainToolControl extends AbstractPaintingControl {
 
     /**
      * The editing component.
@@ -75,7 +75,7 @@ public class TerrainToolControl extends AbstractEditingControl {
 
     @Nullable
     @Override
-    public Spatial getEditedModel() {
+    public Spatial getPaintedModel() {
         return component.getProcessedObject();
     }
 

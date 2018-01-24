@@ -10,7 +10,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.terrain.Terrain;
-import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
@@ -55,14 +55,14 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
         super(component);
 
         this.levelMarker = new Geometry("LevelMarker", new Sphere(8, 8, 1));
-        this.levelMarker.setMaterial(createMaterial(getBrushColor()));
+        this.levelMarker.setMaterial(createColoredMaterial(getBrushColor()));
     }
 
     @Override
     protected void onAttached(@NotNull final Node node) {
         super.onAttached(node);
 
-        final Spatial editedModel = notNull(getEditedModel());
+        final Spatial editedModel = notNull(getPaintedModel());
         final Geometry levelMarker = getLevelMarker();
 
         final Node markersNode = component.getMarkersNode();
@@ -94,10 +94,10 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
-    public void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
-        super.startEditing(editingInput, contactPoint);
+    public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
+        super.startPainting(paintingInput, contactPoint);
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY: {
                 startChange();
                 modifyHeight(contactPoint);
@@ -113,9 +113,9 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     @Override
     public void updateEditing(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput editingInput = notNull(getCurrentInput());
+        final PaintingInput paintingInput = notNull(getCurrentInput());
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
                 break;
@@ -128,12 +128,12 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
-    public void finishEditing(@NotNull final Vector3f contactPoint) {
-        super.finishEditing(contactPoint);
+    public void finishPainting(@NotNull final Vector3f contactPoint) {
+        super.finishPainting(contactPoint);
 
-        final EditingInput editingInput = notNull(getCurrentInput());
+        final PaintingInput paintingInput = notNull(getCurrentInput());
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
                 commitChanges();
@@ -154,7 +154,7 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
         final LocalObjects local = LocalObjects.get();
-        final Node terrainNode = (Node) notNull(getEditedModel());
+        final Node terrainNode = (Node) notNull(getPaintedModel());
         final Geometry levelMarker = getLevelMarker();
 
         final Vector3f markerTranslation = levelMarker.getLocalTranslation();

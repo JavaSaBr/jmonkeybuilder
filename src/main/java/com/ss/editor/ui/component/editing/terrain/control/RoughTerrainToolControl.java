@@ -19,7 +19,7 @@ import com.jme3.terrain.noise.filter.PerturbFilter;
 import com.jme3.terrain.noise.filter.SmoothFilter;
 import com.jme3.terrain.noise.fractal.FractalSum;
 import com.jme3.terrain.noise.modulator.NoiseModulator;
-import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
@@ -57,10 +57,10 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
-    public void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
-        super.startEditing(editingInput, contactPoint);
+    public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
+        super.startPainting(paintingInput, contactPoint);
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY: {
                 startChange();
                 modifyHeight(contactPoint);
@@ -71,9 +71,9 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     @Override
     public void updateEditing(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput editingInput = notNull(getCurrentInput());
+        final PaintingInput paintingInput = notNull(getCurrentInput());
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
             }
@@ -81,12 +81,12 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
-    public void finishEditing(@NotNull final Vector3f contactPoint) {
-        super.finishEditing(contactPoint);
+    public void finishPainting(@NotNull final Vector3f contactPoint) {
+        super.finishPainting(contactPoint);
 
-        final EditingInput editingInput = notNull(getCurrentInput());
+        final PaintingInput paintingInput = notNull(getCurrentInput());
 
-        switch (editingInput) {
+        switch (paintingInput) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
                 commitChanges();
@@ -102,7 +102,7 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
         final LocalObjects local = LocalObjects.get();
-        final Node terrainNode = (Node) notNull(getEditedModel());
+        final Node terrainNode = (Node) notNull(getPaintedModel());
 
         final Vector3f worldTranslation = terrainNode.getWorldTranslation();
         final Vector3f localScale = terrainNode.getLocalScale();
