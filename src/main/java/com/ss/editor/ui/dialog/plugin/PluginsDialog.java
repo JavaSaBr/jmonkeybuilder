@@ -111,6 +111,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         pluginListView.setCellFactory(param -> new PluginListCell());
         pluginListView.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
         pluginListView.prefWidthProperty().bind(root.widthProperty().divide(2));
+        pluginListView.prefHeightProperty().bind(root.heightProperty());
 
         descriptionArea = new WebView();
 

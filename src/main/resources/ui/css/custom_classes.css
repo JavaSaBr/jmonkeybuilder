@@ -1143,6 +1143,7 @@
 .plugins-dialog {
     -fx-alignment: center;
     -fx-spacing: 2px;
+    -fx-pref-height: 820px;
 }
 
 .plugins-dialog > .hbox {

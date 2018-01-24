@@ -9,6 +9,9 @@ import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.TextField;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,15 +40,18 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
             try {
 
                 //FIXME need to find more userfriendly control
-                //comboBox.setEditable(true);
+                comboBox.setEditable(true);
 
-                //final TextField editor = comboBox.getEditor();
-                //final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
-                //final AutoCompletionBinding<String> binding = TextFields.bindAutoCompletion(editor, comboBox.getItems());
-                //binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
+                final TextField editor = comboBox.getEditor();
+                final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
+                final AutoCompletionBinding<String> binding = TextFields.bindAutoCompletion(editor, comboBox.getItems());
+                binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
 
-                //FXUtils.addClassesTo(editor, CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
-                //reload();
+                FXUtils.addClassesTo(editor, CssClasses.TRANSPARENT_TEXT_FIELD,
+                        CssClasses.TEXT_FIELD_IN_COMBO_BOX);
+
+                reload();
+
             } finally {
                 setIgnoreListener(false);
             }
