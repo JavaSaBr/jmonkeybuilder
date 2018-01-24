@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.painting.terrain;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
@@ -9,17 +9,15 @@ import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.control.painting.terrain.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.container.impl.AbstractProcessingComponent;
-import com.ss.editor.ui.component.editing.EditingComponent;
-import com.ss.editor.ui.component.editing.EditingComponentContainer;
-import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.component.editor.state.EditorState;
+import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
+import com.ss.editor.ui.component.painting.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
@@ -52,7 +50,7 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer, TerrainEditingStateWithEditorTool> implements EditingComponent {
+public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQuad, TerrainEditingStateWithEditorTool> {
 
     /**
      * The constant LABEL_PERCENT.
@@ -792,7 +790,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     private void changePaintControlShininess(@NotNull final Float newValue) {
         if (isIgnoreListeners()) return;
 
-        final TerrainQuad processedObject = getProcessedObject();
+        final TerrainQuad processedObject = getPaintedObject();
         final Material mat = processedObject.getMaterial();
         final MatParam param = mat.getParam("Shininess");
         final float shininess = param == null ? 0F : (float) param.getValue();
@@ -818,7 +816,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     private void changePaintControlTriPlanar(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final TerrainQuad processedObject = getProcessedObject();
+        final TerrainQuad processedObject = getPaintedObject();
 
         final PropertyOperation<ChangeConsumer, TerrainQuad, Boolean> operation =
                 new PropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, !newValue);
@@ -1083,9 +1081,10 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         });
     }
 
+    @FxThread
     @Override
-    public void startProcessing(@NotNull final Object object) {
-        super.startProcessing(object);
+    public void startPainting(@NotNull final Object object) {
+        super.startPainting(object);
 
         final TextureLayerSettings settings = getTextureLayerSettings();
 
@@ -1113,7 +1112,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         setIgnoreListeners(true);
         try {
 
-            final Terrain terrain = getProcessedObject();
+            final Terrain terrain = getPaintedObject();
             final Material material = terrain.getMaterial();
             final FloatTextField shininessField = getShininessField();
             final CheckBox triPlanarCheckBox = getTriPlanarCheckBox();
@@ -1141,12 +1140,14 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         return object instanceof TerrainQuad;
     }
 
+    @FxThread
     @Override
     public void notifyShowed() {
         super.notifyShowed();
         EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().addControl(getToolControl()));
     }
 
+    @FxThread
     @Override
     public void notifyHided() {
         super.notifyHided();

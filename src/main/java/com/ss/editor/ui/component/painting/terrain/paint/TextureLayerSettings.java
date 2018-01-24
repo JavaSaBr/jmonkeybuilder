@@ -1,6 +1,6 @@
-package com.ss.editor.ui.component.editing.terrain.paint;
+package com.ss.editor.ui.component.painting.terrain.paint;
 
-import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.TERRAIN_PARAM;
+import static com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent.TERRAIN_PARAM;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
@@ -14,7 +14,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
 import com.ss.editor.control.painting.terrain.PaintTerrainToolControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
@@ -342,7 +342,7 @@ public class TextureLayerSettings extends VBox {
      */
     @FxThread
     private @NotNull Terrain getTerrain() {
-        return editingComponent.getProcessedObject();
+        return editingComponent.getPaintedObject();
     }
 
     /**
@@ -352,7 +352,7 @@ public class TextureLayerSettings extends VBox {
      */
     @FxThread
     private @NotNull Node getTerrainNode() {
-        return editingComponent.getProcessedObject();
+        return editingComponent.getPaintedObject();
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain.paint;
+package com.ss.editor.ui.component.painting.terrain.paint;
 
 import static com.ss.editor.util.EditorUtil.*;
 import com.jme3.asset.AssetKey;

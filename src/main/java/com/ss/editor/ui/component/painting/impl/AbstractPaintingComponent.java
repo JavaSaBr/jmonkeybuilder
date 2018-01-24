@@ -1,13 +1,16 @@
-package com.ss.editor.ui.component.container.impl;
+package com.ss.editor.ui.component.painting.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.container.ProcessingComponent;
-import com.ss.editor.ui.component.container.ProcessingComponentContainer;
+import com.ss.editor.ui.component.painting.PaintingComponent;
+import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -17,29 +20,27 @@ import org.jetbrains.annotations.Nullable;
  * The base implementation of a processing component.
  *
  * @param <T> the type parameter
- * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractProcessingComponent<T, C extends ProcessingComponentContainer,
-        S extends AdditionalEditorState> extends VBox implements ProcessingComponent {
+public abstract class AbstractPaintingComponent<T, S extends AdditionalEditorState> extends VBox implements PaintingComponent {
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executor manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The parent container.
+     * The container.
      */
     @Nullable
-    protected C container;
+    protected PaintingComponentContainer container;
 
     /**
-     * The processed object.
+     * The painted object.
      */
     @Nullable
-    protected T processedObject;
+    protected T paintedObject;
 
     /**
      * The state of this component.
@@ -52,49 +53,44 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
      */
     protected boolean showed;
 
-    /**
-     * Instantiates a new Abstract processing component.
-     */
-    public AbstractProcessingComponent() {
+    public AbstractPaintingComponent() {
         createComponents();
     }
 
     @Override
+    @FxThread
     public void initFor(@NotNull final Object container) {
         this.container = unsafeCast(container);
         prefWidthProperty().bind(widthProperty());
     }
 
-    /**
-     * Gets container.
-     *
-     * @return the parent container.
-     */
-    @NotNull
-    public C getContainer() {
+    @Override
+    @FromAnyThread
+    public @NotNull PaintingComponentContainer getContainer() {
         return notNull(container);
     }
 
     /**
-     * Gets change consumer.
+     * Get the change consumer.
      *
      * @return the change consumer.
      */
-    @NotNull
-    public ModelChangeConsumer getChangeConsumer() {
-        final C editingContainer = getContainer();
+    @FromAnyThread
+    public @NotNull ModelChangeConsumer getChangeConsumer() {
+        final PaintingComponentContainer editingContainer = getContainer();
         return editingContainer.getChangeConsumer();
     }
 
-    @NotNull
     @Override
-    public T getProcessedObject() {
-        return notNull(processedObject);
+    @FxThread
+    public @NotNull T getPaintedObject() {
+        return notNull(paintedObject);
     }
 
     @Override
-    public void startProcessing(@NotNull final Object object) {
-        this.processedObject = unsafeCast(object);
+    @FxThread
+    public void startPainting(@NotNull final Object object) {
+        this.paintedObject = unsafeCast(object);
     }
 
     /**
@@ -104,35 +100,37 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     }
 
     /**
-     * Get a cursor node.
+     * Get the cursor node.
      *
      * @return the cursor node.
      */
-    @NotNull
-    public Node getCursorNode() {
-        final C container = getContainer();
+    @JmeThread
+    public @NotNull Node getCursorNode() {
+        final PaintingComponentContainer container = getContainer();
         final Editor3DProvider provider = container.getProvider();
         return provider.getCursorNode();
     }
 
     /**
-     * Get a node to place some markers in 3D editor.
+     * Get the node to place some markers in 3D editor.
      *
      * @return the markers node.
      */
-    @NotNull
-    public Node getMarkersNode() {
-        final C container = getContainer();
+    @JmeThread
+    public @NotNull Node getMarkersNode() {
+        final PaintingComponentContainer container = getContainer();
         final Editor3DProvider provider = container.getProvider();
         return provider.getMarkersNode();
     }
 
     @Override
+    @FxThread
     public void notifyShowed() {
         setShowed(true);
     }
 
     @Override
+    @FxThread
     public void notifyHided() {
         setShowed(false);
     }
@@ -142,6 +140,7 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
      *
      * @return true if this component is showed.
      */
+    @FxThread
     protected boolean isShowed() {
         return showed;
     }
@@ -151,6 +150,7 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
      *
      * @param showed true if this component is showed.
      */
+    @FxThread
     protected void setShowed(final boolean showed) {
         this.showed = showed;
     }

@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.painting.terrain;
 
 /**
  * The enum with brush types.

@@ -9,7 +9,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,7 +75,7 @@ public class TerrainToolControl extends AbstractPaintingControl {
     @Override
     @JmeThread
     public @Nullable Spatial getPaintedModel() {
-        return component.getProcessedObject();
+        return component.getPaintedObject();
     }
 
     /**

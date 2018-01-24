@@ -14,7 +14,7 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;

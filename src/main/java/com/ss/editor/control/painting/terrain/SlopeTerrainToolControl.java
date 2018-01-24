@@ -16,7 +16,7 @@ import com.jme3.terrain.Terrain;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 

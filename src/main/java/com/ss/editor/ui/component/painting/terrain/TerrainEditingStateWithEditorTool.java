@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.painting.terrain;
 
 import static java.lang.Math.abs;
 import com.ss.editor.annotation.FxThread;
