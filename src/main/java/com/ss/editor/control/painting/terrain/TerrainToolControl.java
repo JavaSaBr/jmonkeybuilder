@@ -1,10 +1,12 @@
-package com.ss.editor.ui.component.editing.terrain.control;
+package com.ss.editor.control.painting.terrain;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
@@ -40,11 +42,6 @@ public class TerrainToolControl extends AbstractPaintingControl {
      */
     private float brushPower;
 
-    /**
-     * Instantiates a new Terrain tool control.
-     *
-     * @param component the component
-     */
     public TerrainToolControl(@NotNull final TerrainEditingComponent component) {
         this.component = component;
         this.brush = new Geometry("Brush", new Sphere(8, 8, 1));
@@ -52,86 +49,92 @@ public class TerrainToolControl extends AbstractPaintingControl {
     }
 
     /**
-     * Gets brush color.
+     * Get the brush color.
      *
      * @return the brush color.
      */
-    @NotNull
-    protected ColorRGBA getBrushColor() {
+    @FromAnyThread
+    protected @NotNull ColorRGBA getBrushColor() {
         return ColorRGBA.Black;
     }
 
     @Override
+    @JmeThread
     protected void onAttached(@NotNull final Node node) {
         super.onAttached(node);
         node.attachChild(brush);
     }
 
     @Override
+    @JmeThread
     protected void onDetached(@NotNull final Node node) {
         super.onDetached(node);
         node.detachChild(brush);
     }
 
-    @Nullable
     @Override
-    public Spatial getPaintedModel() {
+    @JmeThread
+    public @Nullable Spatial getPaintedModel() {
         return component.getProcessedObject();
     }
 
     /**
-     * Gets change consumer.
+     * Get the change consumer.
      *
      * @return the change consumer.
      */
-    @NotNull
-    protected ModelChangeConsumer getChangeConsumer() {
+    @FromAnyThread
+    protected @NotNull ModelChangeConsumer getChangeConsumer() {
         return component.getChangeConsumer();
     }
 
     /**
-     * Gets brush.
+     * Get the brush.
      *
      * @return the brush geometry.
      */
-    @NotNull
-    protected Geometry getBrush() {
+    @JmeThread
+    protected @NotNull Geometry getBrush() {
         return brush;
     }
 
     /**
-     * Sets brush size.
+     * Set the brush size.
      *
      * @param brushSize the brush size.
      */
+    @JmeThread
     public void setBrushSize(final float brushSize) {
         this.brushSize = brushSize;
         getBrush().setLocalScale(brushSize);
     }
 
     /**
-     * Gets brush size.
+     * Get the brush size.
      *
      * @return the brush size.
      */
+    @JmeThread
     public float getBrushSize() {
         return brushSize;
     }
 
     /**
-     * Sets brush power.
+     * Set the brush power.
      *
      * @param brushPower the brush power.
      */
+    @JmeThread
     public void setBrushPower(final float brushPower) {
         this.brushPower = brushPower;
     }
 
     /**
-     * Gets brush power.
+     * Get the brush power.
      *
      * @return the brush power.
      */
+    @JmeThread
     public float getBrushPower() {
         return brushPower;
     }

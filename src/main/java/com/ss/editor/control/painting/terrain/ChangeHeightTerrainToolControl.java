@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain.control;
+package com.ss.editor.control.painting.terrain;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
@@ -6,6 +6,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
@@ -70,19 +71,17 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     @Nullable
     private Spatial copiedTerrain;
 
-    /**
-     * Instantiates a new Change height terrain tool control.
-     *
-     * @param component the component
-     */
     public ChangeHeightTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
         this.originalHeight = DictionaryFactory.newObjectDictionary(0.2F, 1000);
     }
 
     /**
+     * Get the table of original heights.
+     *
      * @return the table of original heights.
      */
+    @JmeThread
     private @NotNull ObjectDictionary<HeightPoint, Float> getOriginalHeight() {
         return originalHeight;
     }
@@ -90,6 +89,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     /**
      * Start making changes.
      */
+    @JmeThread
     protected void startChange() {
 
         final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
@@ -103,6 +103,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      *
      * @param point the point.
      */
+    @JmeThread
     protected void change(@NotNull final Vector2f point) {
 
         final Terrain terrain = (Terrain) notNull(copiedTerrain);
@@ -116,7 +117,9 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
         final HeightPoint heightPoint = new HeightPoint(point.getX(), point.getY(), x, z);
 
         final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
-        if(originalHeight.containsKey(heightPoint)) return;
+        if(originalHeight.containsKey(heightPoint)) {
+            return;
+        }
 
         final float height = terrain.getHeightmapHeight(point);
 

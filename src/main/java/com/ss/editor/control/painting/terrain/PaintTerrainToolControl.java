@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain.control;
+package com.ss.editor.control.painting.terrain;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
@@ -9,6 +9,8 @@ import com.jme3.terrain.Terrain;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -129,11 +131,13 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         this.colorPoints = ArrayFactory.newArray(ColorPoint.class);
     }
 
+    @FromAnyThread
     @Override
     protected @NotNull ColorRGBA getBrushColor() {
         return ColorRGBA.Blue;
     }
 
+    @JmeThread
     @Override
     public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
 
@@ -395,7 +399,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         final Texture alphaTexture = getAlphaTexture();
         if (alphaTexture == null) return;
 
-        final LocalObjects local = LocalObjects.get();
+        final LocalObjects local = getLocalObjects();
         final Spatial terrainNode = notNull(getPaintedModel());
         final Terrain terrain = (Terrain) terrainNode;
         final Image image = alphaTexture.getImage();

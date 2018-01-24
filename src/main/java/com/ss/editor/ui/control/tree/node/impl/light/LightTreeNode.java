@@ -2,14 +2,13 @@ package com.ss.editor.ui.control.tree.node.impl.light;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.RemoveLightAction;
-import com.ss.editor.ui.control.tree.action.impl.RenameNodeAction;
-import com.ss.editor.ui.control.tree.action.impl.operation.RenameLightOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.impl.RemoveLightAction;
+import com.ss.editor.ui.control.tree.action.impl.operation.RenameLightOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
 import javafx.collections.ObservableList;
@@ -63,7 +62,6 @@ public class LightTreeNode<T extends Light> extends TreeNode<T> {
     @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveLightAction(nodeTree, this));
-        items.add(new RenameNodeAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
 }

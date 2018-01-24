@@ -1,14 +1,17 @@
-package com.ss.editor.ui.component.editing.terrain.control;
+package com.ss.editor.control.painting.terrain;
 
-import static com.ss.editor.util.EditingUtils.calculateHeight;
 import static com.ss.editor.util.EditingUtils.isContains;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.lang.Float.isNaN;
+import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
@@ -18,36 +21,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The implementation of terrain tool to raise/lowe heights.
+ * The implementation of terrain tool to smooth heights.
  *
  * @author JavaSaBr
  */
-public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl {
+public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
 
     /**
-     * Instantiates a new Raise lower terrain tool control.
+     * Instantiates a new Smooth terrain tool control.
      *
      * @param component the component
      */
-    public RaiseLowerTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public SmoothTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected ColorRGBA getBrushColor() {
-        return ColorRGBA.Green;
+        return ColorRGBA.Yellow;
     }
 
+    @JmeThread
     @Override
     public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
         super.startPainting(paintingInput, contactPoint);
 
         switch (paintingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
+            case MOUSE_PRIMARY: {
                 startChange();
-                modifyHeight(paintingInput, contactPoint);
+                modifyHeight(contactPoint);
             }
         }
     }
@@ -58,9 +62,8 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final PaintingInput paintingInput = notNull(getCurrentInput());
 
         switch (paintingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
-                modifyHeight(paintingInput, contactPoint);
+            case MOUSE_PRIMARY: {
+                modifyHeight(contactPoint);
             }
         }
     }
@@ -72,9 +75,8 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final PaintingInput paintingInput = notNull(getCurrentInput());
 
         switch (paintingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
-                modifyHeight(paintingInput, contactPoint);
+            case MOUSE_PRIMARY: {
+                modifyHeight(contactPoint);
                 commitChanges();
             }
         }
@@ -83,28 +85,31 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
     /**
      * Modify height of terrain points.
      *
-     * @param paintingInput the type of input.
      * @param contactPoint the contact point.
      */
-    private void modifyHeight(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
+    private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
-        final LocalObjects local = LocalObjects.get();
+        final LocalObjects local = getLocalObjects();
         final Node terrainNode = (Node) notNull(getPaintedModel());
 
-        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
         final Vector3f localScale = terrainNode.getLocalScale();
+        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
         final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
         final Vector2f terrainLoc = local.nextVector2f();
+        final Vector2f terrainLocLeft = local.nextVector2f();
+        final Vector2f terrainLocRight = local.nextVector2f();
+        final Vector2f terrainLocUp = local.nextVector2f();
+        final Vector2f terrainLocDown = local.nextVector2f();
         final Vector2f effectPoint = local.nextVector2f();
 
         final Terrain terrain = (Terrain) terrainNode;
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
-        final float brushPower = paintingInput == PaintingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
+        final float brushPower = getBrushPower();
 
         final int radiusStepsX = (int) (brushSize / localScale.getX());
-        final int radiusStepsZ = (int) (brushSize / localScale.getY());
+        final int radiusStepsZ = (int) (brushSize / localScale.getZ());
 
         final float xStepAmount = localScale.getX();
         final float zStepAmount = localScale.getZ();
@@ -125,21 +130,52 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
                 }
 
                 terrainLoc.set(locX, locZ);
+                terrainLocLeft.set(terrainLoc.getX() - 1, terrainLoc.getY());
+                terrainLocRight.set(terrainLoc.getX() + 1, terrainLoc.getY());
+                terrainLocUp.set(terrainLoc.getX(), terrainLoc.getY() + 1);
+                terrainLocDown.set(terrainLoc.getX(), terrainLoc.getY() - 1);
 
-                final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
                 // adjust height based on radius of the tool
-                final float newHeight = calculateHeight(brushSize, brushPower, effectPoint.getX(), effectPoint.getY());
+                final float center = terrain.getHeightmapHeight(terrainLoc);
+                final float left = terrain.getHeightmapHeight(terrainLocLeft);
+                final float right = terrain.getHeightmapHeight(terrainLocRight);
+                final float up = terrain.getHeightmapHeight(terrainLocUp);
+                final float down = terrain.getHeightmapHeight(terrainLocDown);
 
-                // increase the height
+                int count = 1;
+
+                float amount = center;
+
+                if (!isNaN(left)) {
+                    amount += left;
+                    count++;
+                }
+                if (!isNaN(right)) {
+                    amount += right;
+                    count++;
+                }
+                if (!isNaN(up)) {
+                    amount += up;
+                    count++;
+                }
+                if (!isNaN(down)) {
+                    amount += down;
+                    count++;
+                }
+
+                amount /= count; // take average
+
+                // weigh it
+                float diff = amount - center;
+                diff *= min(brushPower, 2F);
+
+                terrain.setHeight(terrainLoc, center + diff);
                 locs.add(terrainLoc.clone());
-                heights.add(currentHeight + newHeight);
             }
         }
 
         locs.forEach(this::change);
 
-        // do the actual height adjustment
-        terrain.setHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
     }
 }

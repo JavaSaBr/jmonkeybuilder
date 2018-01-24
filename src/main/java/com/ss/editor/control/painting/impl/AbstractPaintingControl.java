@@ -8,10 +8,12 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +23,9 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class AbstractPaintingControl extends AbstractControl implements PaintingControl {
+
+    @NotNull
+    private static final ThreadLocal<LocalObjects> TOOL_OBJECTS = ThreadLocal.withInitial(LocalObjects::new);
 
     /**
      * The current painting input.
@@ -32,6 +37,16 @@ public class AbstractPaintingControl extends AbstractControl implements Painting
      * The flag of painting state.
      */
     private boolean painting;
+
+    /**
+     * Get the local objects.
+     *
+     * @return the local objects.
+     */
+    @FromAnyThread
+    protected @NotNull LocalObjects getLocalObjects() {
+        return TOOL_OBJECTS.get();
+    }
 
     @Override
     @JmeThread

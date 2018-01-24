@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain.control;
+package com.ss.editor.control.painting.terrain;
 
 import static com.ss.editor.util.EditingUtils.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -13,6 +13,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.terrain.Terrain;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
@@ -72,6 +74,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         this.line.setMaterial(createColoredMaterial(ColorRGBA.White));
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected ColorRGBA getBrushColor() {
@@ -125,6 +128,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         mesh.updatePoints(firstPoint, secondPoint);
     }
 
+    @JmeThread
     @Override
     public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
         super.startPainting(paintingInput, contactPoint);
@@ -197,7 +201,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
-        final LocalObjects local = LocalObjects.get();
+        final LocalObjects local = getLocalObjects();
         final Node terrainNode = (Node) notNull(getPaintedModel());
         final Geometry baseMarker = getBaseMarker();
         final Geometry targetMarker = getTargetMarker();

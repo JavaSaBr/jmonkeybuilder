@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain.control;
+package com.ss.editor.control.painting.terrain;
 
 import static com.ss.editor.util.EditingUtils.isContains;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -19,6 +19,8 @@ import com.jme3.terrain.noise.filter.PerturbFilter;
 import com.jme3.terrain.noise.filter.SmoothFilter;
 import com.jme3.terrain.noise.fractal.FractalSum;
 import com.jme3.terrain.noise.modulator.NoiseModulator;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
@@ -50,12 +52,14 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
         super(component);
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected ColorRGBA getBrushColor() {
         return ColorRGBA.Magenta;
     }
 
+    @JmeThread
     @Override
     public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
         super.startPainting(paintingInput, contactPoint);
@@ -101,7 +105,7 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
-        final LocalObjects local = LocalObjects.get();
+        final LocalObjects local = getLocalObjects();
         final Node terrainNode = (Node) notNull(getPaintedModel());
 
         final Vector3f worldTranslation = terrainNode.getWorldTranslation();
