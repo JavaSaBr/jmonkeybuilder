@@ -16,6 +16,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.state.EditorState;
+import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
 import com.ss.editor.ui.component.painting.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.control.property.PropertyControl;
@@ -331,10 +332,9 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
      */
     private boolean ignoreListeners;
 
-    /**
-     * Instantiates a new Terrain editing component.
-     */
-    public TerrainEditingComponent() {
+    public TerrainEditingComponent(@NotNull final PaintingComponentContainer container) {
+        super(container);
+
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
         this.buttonToSettings = DictionaryFactory.newObjectDictionary();
         this.raiseLowerToolControl = new RaiseLowerTerrainToolControl(this);

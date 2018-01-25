@@ -51,7 +51,7 @@ public interface CssClasses {
     @NotNull String BUTTON_WITHOUT_LEFT_RIGHT_BORDER = "button-without-left-right-border";
     @NotNull String BUTTON_WITHOUT_RIGHT_BORDER = "button-without-right-border";
 
-    @NotNull String PROCESSING_COMPONENT_CONTAINER = "processing-component-container";
+    @NotNull String PAINTING_COMPONENT_ROOT = "painting-component-root";
     @NotNull String PROCESSING_COMPONENT_TERRAIN_EDITOR = "processing-component-terrain-editor";
     @NotNull String PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER = "processing-component-terrain-layer";
     @NotNull String PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS = "processing-component-terrain-texture-layers-settings-buttons";

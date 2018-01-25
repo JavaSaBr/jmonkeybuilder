@@ -6,13 +6,16 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +26,15 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class PaintingComponentContainer extends ScrollPane {
+
+    /**
+     * The constant LABEL_PERCENT.
+     */
+    public static final double LABEL_PERCENT = 1D - PropertyControl.CONTROL_WIDTH_PERCENT_2;
+    /**
+     * The constant FIELD_PERCENT.
+     */
+    public static final double FIELD_PERCENT = PropertyControl.CONTROL_WIDTH_PERCENT_2;
 
     /**
      * The change consumer.
@@ -49,6 +61,12 @@ public class PaintingComponentContainer extends ScrollPane {
     protected final VBox container;
 
     /**
+     * The components box.
+     */
+    @NotNull
+    protected final ComboBox<PaintingComponent> componentBox;
+
+    /**
      * The flag of showing this container.
      */
     protected boolean showed;
@@ -56,26 +74,34 @@ public class PaintingComponentContainer extends ScrollPane {
     public PaintingComponentContainer(@NotNull final ModelChangeConsumer changeConsumer, @NotNull final Editor3DProvider provider) {
         this.changeConsumer = changeConsumer;
         this.provider = provider;
-        this.components = ArrayFactory.newArray(PaintingComponent.class);
         this.container = new VBox();
         this.container.prefWidthProperty()
                 .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
 
-        setContent(container);
+        final HBox horContainer = new HBox();
+        horContainer.prefWidthProperty()
+                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
 
+        final Label label = new Label("Painting tool:");
+        label.maxWidthProperty().bind(horContainer.widthProperty()
+                .multiply(LABEL_PERCENT));
+
+        componentBox = new ComboBox<>();
+        componentBox.prefWidthProperty().bind(horContainer.widthProperty()
+                .multiply(FIELD_PERCENT));
+
+        final VBox resultContainer = new VBox();
+
+        setContent(resultContainer);
+
+        FXUtils.addToPane(label, componentBox, horContainer);
+        FXUtils.addToPane(horContainer, container, resultContainer);
         FXUtils.addClassTo(container, CssClasses.DEF_VBOX);
-        FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_CONTAINER);
-    }
+        FXUtils.addClassTo(horContainer, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(resultContainer, CssClasses.PAINTING_COMPONENT_ROOT);
 
-    /**
-     * Add the new painting component.
-     *
-     * @param component the painting component.
-     */
-    @FxThread
-    public void addComponent(@NotNull final PaintingComponent component) {
-        components.add(component);
-        component.initFor(this);
+        final PaintingComponentRegistry registry = PaintingComponentRegistry.getInstance();
+        this.components = registry.createComponents(this);
     }
 
     /**

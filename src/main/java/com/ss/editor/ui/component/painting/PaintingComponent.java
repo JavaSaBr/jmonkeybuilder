@@ -14,12 +14,14 @@ import org.jetbrains.annotations.NotNull;
 public interface PaintingComponent extends HasName {
 
     /**
-     * Init this component to process in a container.
+     * Get the name of this component.
      *
-     * @param container the container.
+     * @return the name of this component.
      */
-    @FxThread
-    default void initFor(@NotNull Object container) {
+    @Override
+    @FromAnyThread
+    default @NotNull String getName() {
+        return getClass().getSimpleName();
     }
 
     /**

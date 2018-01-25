@@ -52,7 +52,6 @@ import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.impl.BaseEditorSceneEditorState;
 import com.ss.editor.ui.component.painting.PaintingComponent;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.model.ModelPropertyEditor;
@@ -189,10 +188,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private ModelPropertyEditor modelPropertyEditor;
 
     /**
-     * The container of editing components.
+     * The container of painting components.
      */
     @Nullable
-    private PaintingComponentContainer editingComponentContainer;
+    private PaintingComponentContainer paintingComponentContainer;
 
     /**
      * The scripting component.
@@ -293,11 +292,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     /**
-     * @return the container of editing components.
+     * Get the container of painting components.
+     *
+     * @return the container of painting components.
      */
     @FxThread
-    private @NotNull PaintingComponentContainer getEditingComponentContainer() {
-        return notNull(editingComponentContainer);
+    private @NotNull PaintingComponentContainer getPaintingComponentContainer() {
+        return notNull(paintingComponentContainer);
     }
 
     /**
@@ -464,7 +465,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         transformModeComboBox.getSelectionModel()
                 .select(TransformationMode.valueOf(editorState.getTransformationMode()));
 
-        final Array<PaintingComponent> components = editingComponentContainer.getComponents();
+        final Array<PaintingComponent> components = paintingComponentContainer.getComponents();
         components.forEach(editorState, PaintingComponent::loadState);
 
         final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
@@ -591,7 +592,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             modelNodeTree.refresh(object);
         }
 
-        final PaintingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
         editingComponentContainer.notifyChangeProperty(object, propertyName);
     }
 
@@ -767,7 +768,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
 
-        final PaintingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
         editingComponentContainer.showComponentFor(element);
     }
 
@@ -996,8 +997,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 
-        editingComponentContainer = new PaintingComponentContainer(this, this);
-        editingComponentContainer.addComponent(new TerrainEditingComponent());
+        paintingComponentContainer = new PaintingComponentContainer(this, this);
 
         scriptingComponent = new EditorScriptingComponent(this::refreshTree);
         scriptingComponent.prefHeightProperty().bind(root.heightProperty());
@@ -1028,7 +1028,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         container.addComponent(buildSplitComponent(getModelNodeTreeObjectsContainer(), getPropertyEditorObjectsContainer(), root),
                 Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
-        container.addComponent(buildSplitComponent(getModelNodeTreeEditingContainer(), getEditingComponentContainer(), root),
+        container.addComponent(buildSplitComponent(getModelNodeTreeEditingContainer(), getPaintingComponentContainer(), root),
                 Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
         container.addComponent(getScriptingComponent(), Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
     }
@@ -1056,7 +1056,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        final PaintingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
 
         final VBox propertyEditorParent = (VBox) modelPropertyEditor.getParent();
         final VBox modelNodeTreeParent = (VBox) modelNodeTree.getParent();

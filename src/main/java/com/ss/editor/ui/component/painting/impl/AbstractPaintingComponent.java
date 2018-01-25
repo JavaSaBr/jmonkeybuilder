@@ -53,14 +53,9 @@ public abstract class AbstractPaintingComponent<T, S extends AdditionalEditorSta
      */
     protected boolean showed;
 
-    public AbstractPaintingComponent() {
+    public AbstractPaintingComponent(@NotNull final PaintingComponentContainer container) {
+        this.container = container;
         createComponents();
-    }
-
-    @Override
-    @FxThread
-    public void initFor(@NotNull final Object container) {
-        this.container = unsafeCast(container);
         prefWidthProperty().bind(widthProperty());
     }
 

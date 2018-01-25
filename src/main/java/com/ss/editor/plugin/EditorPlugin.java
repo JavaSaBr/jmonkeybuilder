@@ -1,7 +1,7 @@
 package com.ss.editor.plugin;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.FileIconManager;
@@ -9,6 +9,7 @@ import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.component.painting.PaintingComponentRegistry;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
@@ -120,6 +121,15 @@ public class EditorPlugin extends BasePlugin {
      */
     @FxThread
     public void register(@NotNull final SettingsProviderRegistry registry) {
+    }
+
+    /**
+     * Register this plugin's own painting component's constructors.
+     *
+     * @param registry the registry of painting component's constructors.
+     */
+    @FxThread
+    public void register(@NotNull final PaintingComponentRegistry registry) {
     }
 
     /**

@@ -950,11 +950,22 @@
 
 /*******************************************************************************
  *                                                                             *
- * Paint Processing                                                            *
+ * Painting Components                                                         *
  *                                                                             *
  ******************************************************************************/
 
-.processing-component-container {
+.painting-component-root {
+    -fx-spacing: 2px;
+}
+
+.painting-component-root > .hbox {
+    -fx-background-color: red;
+    -fx-padding: 2px 0 2px 0;
+    -fx-alignment: center-right;
+}
+
+.painting-component-root > .vbox {
+    -fx-background-color: pink;
 }
 
 .processing-component-terrain-editor {
