@@ -33,7 +33,6 @@ import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -538,22 +537,22 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         super.createComponents();
 
         raiseLowerButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_UP_32));
-        raiseLowerButton.setOnAction(this::switchMode);
+        raiseLowerButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
         smoothButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_SMOOTH_32));
-        smoothButton.setOnAction(this::switchMode);
+        smoothButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
         roughButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_ROUGH_32));
-        roughButton.setOnAction(this::switchMode);
+        roughButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
         levelButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_LEVEL_32));
-        levelButton.setOnAction(this::switchMode);
+        levelButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
         slopeButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_SLOPE_32));
-        slopeButton.setOnAction(this::switchMode);
+        slopeButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
         paintButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_PAINT_32));
-        paintButton.setOnAction(this::switchMode);
+        paintButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
         final GridPane buttonsContainer = new GridPane();
         buttonsContainer.setAlignment(Pos.CENTER);
@@ -1133,9 +1132,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
      * Switch editing mode.
      */
     @FxThread
-    private void switchMode(@NotNull final ActionEvent event) {
-
-        final ToggleButton source = (ToggleButton) event.getSource();
+    private void switchMode(@NotNull final ToggleButton source) {
 
         if (!source.isSelected()) {
             source.setSelected(true);
@@ -1161,7 +1158,9 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         setToolControl(toolControl);
 
-        if (!isShowed()) return;
+        if (!isShowed()) {
+            return;
+        }
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
             final Node cursorNode = getCursorNode();
@@ -1175,23 +1174,42 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     public void startPainting(@NotNull final Object object) {
         super.startPainting(object);
 
-        final TextureLayerSettings settings = getTextureLayerSettings();
-
-        final Terrain terrain = (Terrain) object;
-        final Material material = terrain.getMaterial();
-        final MaterialDef materialDef = material.getMaterialDef();
-
-        if (materialDef.getAssetName().equals("Common/MatDefs/Terrain/TerrainLighting.j3md")) {
-            settings.setLayerToScaleName(LAYER_TO_SCALE_NAME);
-            settings.setLayerToAlphaName(LAYER_TO_ALPHA_NAME);
-            settings.setLayerToDiffuseName(LAYER_TO_DIFFUSE_NAME);
-            settings.setLayerToNormalName(LAYER_TO_NORMAL_NAME);
-            settings.setMaxLevels(12);
-        }
-
         refreshProperties();
 
-        settings.refresh();
+        final TextureLayerSettings settings = getTextureLayerSettings();
+        final ToggleButton paintButton = getPaintButton();
+
+        if (object instanceof Terrain) {
+
+            final Terrain terrain = (Terrain) object;
+            final Material material = terrain.getMaterial();
+            final MaterialDef materialDef = material.getMaterialDef();
+
+            if (materialDef.getAssetName().equals("Common/MatDefs/Terrain/TerrainLighting.j3md")) {
+                settings.setLayerToScaleName(LAYER_TO_SCALE_NAME);
+                settings.setLayerToAlphaName(LAYER_TO_ALPHA_NAME);
+                settings.setLayerToDiffuseName(LAYER_TO_DIFFUSE_NAME);
+                settings.setLayerToNormalName(LAYER_TO_NORMAL_NAME);
+                settings.setMaxLevels(12);
+            }
+
+            settings.refresh();
+            settings.setVisible(true);
+            paintButton.setVisible(true);
+
+        } else {
+
+            settings.setVisible(false);
+            paintButton.setVisible(false);
+
+            if (paintButton.isSelected()) {
+
+                final ToggleButton raiseLowerButton = getRaiseLowerButton();
+                raiseLowerButton.setSelected(true);
+
+                switchMode(raiseLowerButton);
+            }
+        }
     }
 
     /**

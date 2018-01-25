@@ -8,14 +8,15 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.texture.Texture;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.control.painting.terrain.PaintTerrainToolControl;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
-import com.ss.editor.control.painting.terrain.PaintTerrainToolControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -50,34 +51,34 @@ public class TextureLayerSettings extends VBox {
     private final Array<TextureLayerCell> cells;
 
     /**
-     * The editing component.
+     * The painting component.
      */
     @NotNull
-    private final TerrainPaintingComponent editingComponent;
+    private final TerrainPaintingComponent paintingComponent;
 
     /**
      * The function to convert layer index to diffuse texture param name.
      */
     @Nullable
-    private Function<Integer, String> layerToDiffuseName;
+    private volatile Function<Integer, String> layerToDiffuseName;
 
     /**
      * The function to convert layer index to normal texture param name.
      */
     @Nullable
-    private Function<Integer, String> layerToNormalName;
+    private volatile Function<Integer, String> layerToNormalName;
 
     /**
      * The function to convert layer index to texture scale param name.
      */
     @Nullable
-    private Function<Integer, String> layerToScaleName;
+    private volatile Function<Integer, String> layerToScaleName;
 
     /**
      * The function to convert layer index to alpha texture param name.
      */
     @Nullable
-    private Function<Integer, String> layerToAlphaName;
+    private volatile Function<Integer, String> layerToAlphaName;
 
     /**
      * The list of layers.
@@ -96,18 +97,14 @@ public class TextureLayerSettings extends VBox {
      */
     private int maxLevels;
 
-    /**
-     * Instantiates a new Texture layer settings.
-     *
-     * @param editingComponent the editing component
-     */
-    public TextureLayerSettings(@NotNull final TerrainPaintingComponent editingComponent) {
+    public TextureLayerSettings(@NotNull final TerrainPaintingComponent paintingComponent) {
         this.cells = ArrayFactory.newArray(TextureLayerCell.class);
-        this.editingComponent = editingComponent;
+        this.paintingComponent = paintingComponent;
         createComponents();
         FXUtils.addClassTo(this, CssClasses.DEF_VBOX);
     }
 
+    @FxThread
     private void createComponents() {
 
         this.listView = new ListView<>();
@@ -146,30 +143,31 @@ public class TextureLayerSettings extends VBox {
      *
      * @param newValue the selected layer.
      */
+    @FxThread
     private void updateSelectedLayer(@Nullable final TextureLayer newValue) {
 
         final int layer = newValue == null ? -1 : newValue.getLayer();
         final Texture alphaTexture = layer == -1 ? null : getAlpha(layer);
 
-        final PaintTerrainToolControl paintToolControl = editingComponent.getPaintToolControl();
+        final PaintTerrainToolControl paintToolControl = paintingComponent.getPaintToolControl();
         paintToolControl.setAlphaTexture(alphaTexture);
         paintToolControl.setLayer(layer);
     }
 
+    @FxThread
     private @NotNull ListCell<TextureLayer> newCell() {
-
         final DoubleBinding width = widthProperty().subtract(4D);
         final TextureLayerCell cell = new TextureLayerCell(width, width);
-
         cells.add(cell);
-
         return cell;
     }
 
     /**
      * Add a new layer.
      */
+    @FxThread
     private void addLayer() {
+
         final int maxLevels = getMaxLevels() - 1;
 
         for (int i = 0; i < maxLevels; i++) {
@@ -186,6 +184,7 @@ public class TextureLayerSettings extends VBox {
     /**
      * Remove selected layer.
      */
+    @FxThread
     private void removeLayer() {
 
         final ListView<TextureLayer> listView = getListView();
@@ -196,17 +195,19 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * Sets layer to alpha name.
+     * Set the layer to alpha name function.
      *
-     * @param layerToAlphaName the function to convert layer index to alpha texture param name.
+     * @param layerToAlphaName the layer to alpha name function.
      */
-    @FxThread
+    @FromAnyThread
     public void setLayerToAlphaName(@NotNull final Function<Integer, String> layerToAlphaName) {
         this.layerToAlphaName = layerToAlphaName;
     }
 
     /**
-     * @return the function to convert layer index to alpha texture param name.
+     * Get the layer to alpha name function.
+     *
+     * @return the layer to alpha name function.
      */
     @FromAnyThread
     private @Nullable Function<Integer, String> getLayerToAlphaName() {
@@ -214,17 +215,19 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * Sets layer to diffuse name.
+     * Set the layer to diffuse name function.
      *
-     * @param layerToDiffuseName the function to convert layer index to diffuse texture param name.
+     * @param layerToDiffuseName the layer to diffuse name function.
      */
-    @FxThread
+    @FromAnyThread
     public void setLayerToDiffuseName(@NotNull final Function<Integer, String> layerToDiffuseName) {
         this.layerToDiffuseName = layerToDiffuseName;
     }
 
     /**
-     * @return the function to convert layer index to diffuse texture param name.
+     * Get the layer to diffuse name function.
+     *
+     * @return the layer to diffuse name function.
      */
     @FromAnyThread
     private @Nullable Function<Integer, String> getLayerToDiffuseName() {
@@ -232,9 +235,9 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * Sets layer to normal name.
+     * Set the layer to normal name function.
      *
-     * @param layerToNormalName the function to convert layer index to normal texture param name.
+     * @param layerToNormalName the layer to normal name function.
      */
     @FxThread
     public void setLayerToNormalName(@NotNull final Function<Integer, String> layerToNormalName) {
@@ -242,7 +245,9 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * @return the function to convert layer index to normal texture param name.
+     * Get the layer to normal name function.
+     *
+     * @return the layer to normal name function.
      */
     @FromAnyThread
     private @Nullable Function<Integer, String> getLayerToNormalName() {
@@ -250,9 +255,9 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * Sets layer to scale name.
+     * Set the layer to scale name function.
      *
-     * @param layerToScaleName the function to convert layer index to texture scale param name.
+     * @param layerToScaleName the layer to scale name function.
      */
     @FxThread
     public void setLayerToScaleName(@NotNull final Function<Integer, String> layerToScaleName) {
@@ -260,7 +265,9 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * @return the function to convert layer index to texture scale param name.
+     * Set the layer to scale name function.
+     *
+     * @return the layer to scale name function.
      */
     @FromAnyThread
     private @Nullable Function<Integer, String> getLayerToScaleName() {
@@ -268,8 +275,11 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Get the list of layers.
+     *
      * @return the list of layers.
      */
+    @FxThread
     private @NotNull ListView<TextureLayer> getListView() {
         return notNull(listView);
     }
@@ -292,7 +302,9 @@ public class TextureLayerSettings extends VBox {
         for (int i = 0; i < maxLevels; i++) {
 
             final float scale = getTextureScale(i);
-            if (scale == -1F) continue;
+            if (scale == -1F) {
+                continue;
+            }
 
             items.add(new TextureLayer(this, i));
         }
@@ -311,6 +323,7 @@ public class TextureLayerSettings extends VBox {
     /**
      * Refresh the add button.
      */
+    @FxThread
     private void refreshAddButton() {
 
         final ListView<TextureLayer> listView = getListView();
@@ -323,6 +336,7 @@ public class TextureLayerSettings extends VBox {
     /**
      * Refresh height of list view.
      */
+    @FxThread
     private void refreshHeight() {
 
         final ListView<TextureLayer> listView = getListView();
@@ -336,23 +350,29 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * Get current edited terrain.
+     * Get the current painted terrain.
      *
-     * @return the edited terrain.
+     * @return the current painted terrain.
      */
     @FxThread
     private @NotNull Terrain getTerrain() {
-        return editingComponent.getPaintedObject();
+
+        final Node paintedObject = paintingComponent.getPaintedObject();
+        if (!(paintedObject instanceof Terrain)) {
+            throw new IllegalStateException("Can't edit not terrain object.");
+        }
+
+        return (Terrain) paintedObject;
     }
 
     /**
-     * Get current edited terrain.
+     * Get the current painted terrain node.
      *
-     * @return the edited terrain.
+     * @return the current painted terrain node.
      */
     @FxThread
     private @NotNull Node getTerrainNode() {
-        return editingComponent.getPaintedObject();
+        return notNull(paintingComponent.getPaintedObject());
     }
 
     /**
@@ -365,7 +385,9 @@ public class TextureLayerSettings extends VBox {
     public @Nullable Texture getDiffuse(final int layer) {
 
         final Function<Integer, String> layerToDiffuseName = getLayerToDiffuseName();
-        if (layerToDiffuseName == null) return null;
+        if (layerToDiffuseName == null) {
+            return null;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -388,7 +410,9 @@ public class TextureLayerSettings extends VBox {
     public void setDiffuse(@Nullable final Texture texture, final int layer) {
 
         final Function<Integer, String> layerToDiffuseName = getLayerToDiffuseName();
-        if (layerToDiffuseName == null) return;
+        if (layerToDiffuseName == null) {
+            return;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -406,16 +430,19 @@ public class TextureLayerSettings extends VBox {
         operation.setApplyHandler((node, newTexture) ->
                 NodeUtils.visitGeometry(node, geometry -> updateTexture(newTexture, paramName, geometry)));
 
-        final ModelChangeConsumer changeConsumer = editingComponent.getChangeConsumer();
+        final ModelChangeConsumer changeConsumer = paintingComponent.getChangeConsumer();
         changeConsumer.execute(operation);
     }
 
+    @JmeThread
     private void updateTexture(@Nullable final Texture texture, @NotNull final String paramName,
                                @NotNull final Geometry geometry) {
 
         final Material material = geometry.getMaterial();
         final MatParam matParam = material.getParam(paramName);
-        if (matParam == null && texture == null) return;
+        if (matParam == null && texture == null) {
+            return;
+        }
 
         if (texture == null) {
             material.clearParam(matParam.getName());
@@ -434,7 +461,9 @@ public class TextureLayerSettings extends VBox {
     public @Nullable Texture getNormal(final int layer) {
 
         final Function<Integer, String> layerToNormalName = getLayerToNormalName();
-        if (layerToNormalName == null) return null;
+        if (layerToNormalName == null) {
+            return null;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -457,7 +486,9 @@ public class TextureLayerSettings extends VBox {
     public void setNormal(@Nullable final Texture texture, final int layer) {
 
         final Function<Integer, String> layerToNormalName = getLayerToNormalName();
-        if (layerToNormalName == null) return;
+        if (layerToNormalName == null) {
+            return;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -475,7 +506,7 @@ public class TextureLayerSettings extends VBox {
         operation.setApplyHandler((node, newTexture) ->
                 NodeUtils.visitGeometry(node, geometry -> updateTexture(newTexture, paramName, geometry)));
 
-        final ModelChangeConsumer changeConsumer = editingComponent.getChangeConsumer();
+        final ModelChangeConsumer changeConsumer = paintingComponent.getChangeConsumer();
         changeConsumer.execute(operation);
     }
 
@@ -489,7 +520,9 @@ public class TextureLayerSettings extends VBox {
     public float getTextureScale(final int layer) {
 
         final Function<Integer, String> layerToScaleName = getLayerToScaleName();
-        if (layerToScaleName == null) return -1F;
+        if (layerToScaleName == null) {
+            return -1F;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -507,7 +540,9 @@ public class TextureLayerSettings extends VBox {
     public void setTextureScale(final float scale, final int layer) {
 
         final Function<Integer, String> layerToScaleName = getLayerToScaleName();
-        if (layerToScaleName == null) return;
+        if (layerToScaleName == null) {
+            return;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -520,9 +555,14 @@ public class TextureLayerSettings extends VBox {
 
         operation.setApplyHandler((node, newScale) -> {
             NodeUtils.visitGeometry(getTerrainNode(), geometry -> {
+
                 final Material geometryMaterial = geometry.getMaterial();
                 final MatParam param = geometryMaterial.getParam(paramName);
-                if (param == null && (newScale == null || newScale == -1F)) return;
+
+                if (param == null && (newScale == null || newScale == -1F)) {
+                    return;
+                }
+
                 if (newScale == null || newScale == -1F) {
                     geometryMaterial.clearParam(paramName);
                 } else {
@@ -531,7 +571,7 @@ public class TextureLayerSettings extends VBox {
             });
         });
 
-        final ModelChangeConsumer changeConsumer = editingComponent.getChangeConsumer();
+        final ModelChangeConsumer changeConsumer = paintingComponent.getChangeConsumer();
         changeConsumer.execute(operation);
     }
 
@@ -545,7 +585,9 @@ public class TextureLayerSettings extends VBox {
     public @Nullable Texture getAlpha(final int layer) {
 
         final Function<Integer, String> layerToAlphaName = getLayerToAlphaName();
-        if (layerToAlphaName == null) return null;
+        if (layerToAlphaName == null) {
+            return null;
+        }
 
         final Terrain terrain = getTerrain();
         final Material material = terrain.getMaterial();
@@ -559,7 +601,7 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
-     * Sets max levels.
+     * Set  the max count of texture levels.
      *
      * @param maxLevels the max count of texture levels.
      */
@@ -569,22 +611,31 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Get the max count of texture levels.
+     *
      * @return the max count of texture levels.
      */
+    @FxThread
     private int getMaxLevels() {
         return maxLevels;
     }
 
     /**
+     * Get the list of cells.
+     *
      * @return the list of cells.
      */
+    @FxThread
     private @NotNull Array<TextureLayerCell> getCells() {
         return cells;
     }
 
     /**
+     * Get the button to add a new layer.
+     *
      * @return the button to add a new layer.
      */
+    @FxThread
     private @NotNull Button getAddButton() {
         return notNull(addButton);
     }
@@ -602,8 +653,12 @@ public class TextureLayerSettings extends VBox {
         int newCount = 0;
 
         for (int i = 0; i < maxLevels; i++) {
+
             final float scale = getTextureScale(i);
-            if (scale == -1F) continue;
+            if (scale == -1F) {
+                continue;
+            }
+
             newCount++;
         }
 
