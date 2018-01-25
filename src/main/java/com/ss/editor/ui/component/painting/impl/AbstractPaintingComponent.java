@@ -40,7 +40,7 @@ public abstract class AbstractPaintingComponent<T, S extends AdditionalEditorSta
      * The painted object.
      */
     @Nullable
-    protected T paintedObject;
+    protected volatile T paintedObject;
 
     /**
      * The state of this component.
@@ -78,8 +78,8 @@ public abstract class AbstractPaintingComponent<T, S extends AdditionalEditorSta
 
     @Override
     @FxThread
-    public @NotNull T getPaintedObject() {
-        return notNull(paintedObject);
+    public @Nullable T getPaintedObject() {
+        return paintedObject;
     }
 
     @Override

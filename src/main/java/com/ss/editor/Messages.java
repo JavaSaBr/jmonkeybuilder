@@ -213,7 +213,7 @@ public class Messages {
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
-    public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
+    public static final String SCENE_FILE_EDITOR_TOOL_PAINTING;
     public static final String SCENE_FILE_EDITOR_TOOL_SCRIPTING;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
@@ -901,7 +901,7 @@ public class Messages {
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
-        SCENE_FILE_EDITOR_TOOL_EDITING = bundle.getString("SceneFileEditorToolEditing");
+        SCENE_FILE_EDITOR_TOOL_PAINTING = bundle.getString("SceneFileEditorToolPainting");
         SCENE_FILE_EDITOR_TOOL_SCRIPTING = bundle.getString("SceneFileEditorToolScripting");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
         SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");

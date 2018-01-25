@@ -657,10 +657,11 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final MA editor3DPart = getEditor3DPart();
         final Spatial currentModel = getCurrentModel();
 
-        if (currentModel == oldChild && newChild != null) {
+        if (currentModel == oldChild && newChild instanceof Spatial) {
             handleRemovedObject(currentModel);
             editor3DPart.openModel(unsafeCast(newChild));
             handleAddedObject((Spatial) newChild);
+            setCurrentModel(unsafeCast(newChild));
         } else {
 
             if (oldChild instanceof Spatial) {
@@ -769,7 +770,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelPropertyEditor.buildFor(element, parent);
 
         final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
-        editingComponentContainer.showComponentFor(element);
+        editingComponentContainer.prepareFor(element);
     }
 
     @FxThread
@@ -1029,7 +1030,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         container.addComponent(buildSplitComponent(getModelNodeTreeObjectsContainer(), getPropertyEditorObjectsContainer(), root),
                 Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
         container.addComponent(buildSplitComponent(getModelNodeTreeEditingContainer(), getPaintingComponentContainer(), root),
-                Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
+                Messages.SCENE_FILE_EDITOR_TOOL_PAINTING);
         container.addComponent(getScriptingComponent(), Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
     }
 

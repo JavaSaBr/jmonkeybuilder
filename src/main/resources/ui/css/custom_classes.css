@@ -959,13 +959,15 @@
 }
 
 .painting-component-root > .hbox {
-    -fx-background-color: red;
     -fx-padding: 2px 0 2px 0;
     -fx-alignment: center-right;
 }
 
+.painting-component-root > .hbox > .combo-box {
+    -fx-max-height: -fx-control-height;
+}
+
 .painting-component-root > .vbox {
-    -fx-background-color: pink;
 }
 
 .processing-component-terrain-editor {

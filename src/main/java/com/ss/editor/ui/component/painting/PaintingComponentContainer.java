@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -67,6 +68,18 @@ public class PaintingComponentContainer extends ScrollPane {
     protected final ComboBox<PaintingComponent> componentBox;
 
     /**
+     * The painted object.
+     */
+    @Nullable
+    private Object paintedObject;
+
+    /**
+     * The current component.
+     */
+    @Nullable
+    private PaintingComponent currentComponent;
+
+    /**
      * The flag of showing this container.
      */
     protected boolean showed;
@@ -87,8 +100,14 @@ public class PaintingComponentContainer extends ScrollPane {
                 .multiply(LABEL_PERCENT));
 
         componentBox = new ComboBox<>();
+        componentBox.setCellFactory(PaintingComponentListCell::new);
+        componentBox.setButtonCell(new PaintingComponentListCell(null));
+        componentBox.setPromptText("No tools");
         componentBox.prefWidthProperty().bind(horContainer.widthProperty()
                 .multiply(FIELD_PERCENT));
+        componentBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(this::activate);
 
         final VBox resultContainer = new VBox();
 
@@ -102,6 +121,81 @@ public class PaintingComponentContainer extends ScrollPane {
 
         final PaintingComponentRegistry registry = PaintingComponentRegistry.getInstance();
         this.components = registry.createComponents(this);
+    }
+
+    /**
+     * Get the painted object.
+     *
+     * @return the painted object.
+     */
+    @FxThread
+    private @Nullable Object getPaintedObject() {
+        return paintedObject;
+    }
+
+    /**
+     * Set the painted object.
+     *
+     * @param paintedObject the painted object.
+     */
+    @FxThread
+    private void setPaintedObject(@Nullable final Object paintedObject) {
+        this.paintedObject = paintedObject;
+    }
+
+    /**
+     * Get the current painting component.
+     *
+     * @return the current painting component.
+     */
+    @FxThread
+    private @Nullable PaintingComponent getCurrentComponent() {
+        return currentComponent;
+    }
+
+    /**
+     * Set the current painting component.
+     *
+     * @param currentComponent the current painting component.
+     */
+    @FxThread
+    private void setCurrentComponent(@Nullable final PaintingComponent currentComponent) {
+        this.currentComponent = currentComponent;
+    }
+
+    /**
+     * Activate the selected painting component.
+     *
+     * @param observable the component box's property.
+     * @param oldValue   the previous component.
+     * @param newValue   the new component.
+     */
+    @FxThread
+    private void activate(@NotNull final ObservableValue<? extends PaintingComponent> observable,
+                          @Nullable final PaintingComponent oldValue, @Nullable final PaintingComponent newValue) {
+
+        final ObservableList<Node> items = getContainer()
+                .getChildren();
+
+        if (oldValue != null) {
+            oldValue.notifyHided();
+            oldValue.stopPainting();
+            items.remove(oldValue);
+        }
+
+        final Object paintedObject = getPaintedObject();
+
+        if (newValue != null) {
+            if (paintedObject != null) {
+                newValue.startPainting(paintedObject);
+            }
+            if (isShowed()) {
+                newValue.notifyShowed();
+            }
+            items.add((Node) newValue);
+        }
+
+        setCurrentComponent(newValue);
     }
 
     /**
@@ -125,33 +219,35 @@ public class PaintingComponentContainer extends ScrollPane {
     }
 
     /**
-     * Show a painting component to process with the element.
+     * Get the component box.
      *
-     * @param element the element to process.
+     * @return the component box.
      */
     @FxThread
-    public void showComponentFor(@Nullable final Object element) {
+    private @NotNull ComboBox<PaintingComponent> getComponentBox() {
+        return componentBox;
+    }
 
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
-        children.stream().filter(PaintingComponent.class::isInstance)
-                .map(PaintingComponent.class::cast)
-                .peek(PaintingComponent::notifyHided)
-                .forEach(PaintingComponent::stopProcessing);
+    /**
+     * Prepare painting components to work with the element
+     *
+     * @param element the element.
+     */
+    @FxThread
+    public void prepareFor(@Nullable final Object element) {
+        setPaintedObject(element);
 
-        children.clear();
+        final ComboBox<PaintingComponent> componentBox = getComponentBox();
+        final ObservableList<PaintingComponent> items = componentBox.getItems();
+        items.clear();
 
-        if (element == null) return;
+        if (element != null) {
+            getComponents().forEach(toCheck -> toCheck.isSupport(element),
+                    toAdd -> items.add(toAdd));
+        }
 
-        final PaintingComponent processingComponent = getComponents().search(element, PaintingComponent::isSupport);
-        if (processingComponent == null) return;
-
-        children.add((Node) processingComponent);
-
-        processingComponent.startPainting(element);
-
-        if (isShowed()) {
-            processingComponent.notifyShowed();
+        if (!items.isEmpty()) {
+            componentBox.getSelectionModel().select(0);
         }
     }
 
@@ -161,12 +257,10 @@ public class PaintingComponentContainer extends ScrollPane {
     @FxThread
     public void notifyShowed() {
         setShowed(true);
-
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
-        children.stream().filter(PaintingComponent.class::isInstance)
-                .map(PaintingComponent.class::cast)
-                .forEach(PaintingComponent::notifyShowed);
+        final PaintingComponent currentComponent = getCurrentComponent();
+        if (currentComponent != null) {
+            currentComponent.notifyShowed();
+        }
     }
 
     /**
@@ -175,12 +269,10 @@ public class PaintingComponentContainer extends ScrollPane {
     @FxThread
     public void notifyHided() {
         setShowed(false);
-
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
-        children.stream().filter(PaintingComponent.class::isInstance)
-                .map(PaintingComponent.class::cast)
-                .forEach(PaintingComponent::notifyHided);
+        final PaintingComponent currentComponent = getCurrentComponent();
+        if (currentComponent != null) {
+            currentComponent.notifyHided();
+        }
     }
 
     /**
@@ -204,7 +296,7 @@ public class PaintingComponentContainer extends ScrollPane {
     }
 
     /**
-     * Is showed boolean.
+     * Return the showed state.
      *
      * @return true if this component is showed.
      */
@@ -214,7 +306,7 @@ public class PaintingComponentContainer extends ScrollPane {
     }
 
     /**
-     * Sets showed.
+     * Set the showed state.
      *
      * @param showed true if this component is showed.
      */
@@ -226,20 +318,14 @@ public class PaintingComponentContainer extends ScrollPane {
     /**
      * Notify about changed property.
      *
-     * @param object       the object
-     * @param propertyName the property name
+     * @param object       the object.
+     * @param propertyName the property name.
      */
     @FxThread
     public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
-        if (children.isEmpty()) {
-            return;
+        final PaintingComponent currentComponent = getCurrentComponent();
+        if (currentComponent != null) {
+            currentComponent.notifyChangeProperty(object, propertyName);
         }
-
-        children.stream().map(PaintingComponent.class::cast)
-                .filter(component -> component.getPaintedObject() == object)
-                .forEach(c -> c.notifyChangeProperty(object, propertyName));
     }
 }

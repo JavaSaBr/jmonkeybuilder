@@ -4,6 +4,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.rlib.util.HasName;
+import com.sun.istack.internal.Nullable;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,6 +24,16 @@ public interface PaintingComponent extends HasName {
     @FromAnyThread
     default @NotNull String getName() {
         return getClass().getSimpleName();
+    }
+
+    /**
+     * Get the icon of this component.
+     *
+     * @return the icon.
+     */
+    @FxThread
+    default @Nullable Image getIcon() {
+        return null;
     }
 
     /**
@@ -67,7 +79,7 @@ public interface PaintingComponent extends HasName {
      * @return the painted object.
      */
     @FxThread
-    default @NotNull Object getPaintedObject() {
+    default @Nullable Object getPaintedObject() {
         throw new RuntimeException("not implemented");
     }
 
@@ -75,7 +87,7 @@ public interface PaintingComponent extends HasName {
      * Stop painting of the last object.
      */
     @FxThread
-    default void stopProcessing() {
+    default void stopPainting() {
     }
 
     /**
