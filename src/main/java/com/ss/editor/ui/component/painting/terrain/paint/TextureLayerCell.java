@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.painting.terrain.paint;
 
-import static com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent.FIELD_PERCENT;
-import static com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent.LABEL_PERCENT;
+import static com.ss.editor.ui.component.painting.PaintingComponentContainer.FIELD_PERCENT;
+import static com.ss.editor.ui.component.painting.PaintingComponentContainer.LABEL_PERCENT;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
 import com.ss.editor.ui.control.property.PropertyControl;

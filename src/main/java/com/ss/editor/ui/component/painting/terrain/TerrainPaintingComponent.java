@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.painting.terrain;
 
+import static com.ss.editor.ui.component.painting.PaintingComponentContainer.FIELD_PERCENT;
+import static com.ss.editor.ui.component.painting.PaintingComponentContainer.LABEL_PERCENT;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import com.jme3.material.MatParam;
@@ -19,9 +21,9 @@ import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
 import com.ss.editor.ui.component.painting.terrain.paint.TextureLayerSettings;
-import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -37,6 +39,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -47,20 +50,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 /**
- * The implementation of a terrain editor.
+ * The painting component to edit terrain.
  *
  * @author JavaSaBr
  */
-public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQuad, TerrainEditingStateWithEditorTool> {
-
-    /**
-     * The constant LABEL_PERCENT.
-     */
-    public static final double LABEL_PERCENT = 1D - PropertyControl.CONTROL_WIDTH_PERCENT_2;
-    /**
-     * The constant FIELD_PERCENT.
-     */
-    public static final double FIELD_PERCENT = PropertyControl.CONTROL_WIDTH_PERCENT_2;
+public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, TerrainPaintingStateWithEditorTool> {
 
     /**
      * The constant TERRAIN_PARAM.
@@ -332,7 +326,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
      */
     private boolean ignoreListeners;
 
-    public TerrainEditingComponent(@NotNull final PaintingComponentContainer container) {
+    public TerrainPaintingComponent(@NotNull final PaintingComponentContainer container) {
         super(container);
 
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
@@ -373,7 +367,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     @Override
     @FxThread
     public void loadState(@NotNull final EditorState editorState) {
-        this.state = editorState.getOrCreateAdditionalState(TerrainEditingStateWithEditorTool.class, TerrainEditingStateWithEditorTool::new);
+        this.state = editorState.getOrCreateAdditionalState(TerrainPaintingStateWithEditorTool.class, TerrainPaintingStateWithEditorTool::new);
         getLevelControlLevelField().setValue(state.getLevelValue());
         getLevelControlUseMarker().setSelected(state.isLevelUseMarker());
         getLevelControlSmoothly().setSelected(state.isLevelSmoothly());
@@ -389,111 +383,157 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     }
 
     /**
+     * Get the list of all tool controls.
+     *
      * @return the list of all tool controls.
      */
+    @FxThread
     private @NotNull Array<TerrainToolControl> getToolControls() {
         return toolControls;
     }
 
     /**
+     * Get the list of all toggle buttons.
+     *
      * @return the list of all toggle buttons.
      */
+    @FxThread
     private @NotNull Array<ToggleButton> getToggleButtons() {
         return toggleButtons;
     }
 
     /**
+     * Get the map with mapping toggle button to terrain control.
+     *
      * @return the map with mapping toggle button to terrain control.
      */
+    @FxThread
     private @NotNull ObjectDictionary<ToggleButton, TerrainToolControl> getButtonToControl() {
         return buttonToControl;
     }
 
     /**
+     * Get the map with mapping toggle button to its settings.
+     *
      * @return the map with mapping toggle button to its settings.
      */
+    @FxThread
     private @NotNull ObjectDictionary<ToggleButton, Pane> getButtonToSettings() {
         return buttonToSettings;
     }
 
     /**
+     * Get the current tool control.
+     *
      * @return the current tool control.
      */
+    @FxThread
     private @Nullable TerrainToolControl getToolControl() {
         return toolControl;
     }
 
     /**
+     * Get the current tool control.
+     *
      * @param toolControl the current tool control.
      */
+    @FxThread
     private void setToolControl(@Nullable final TerrainToolControl toolControl) {
         this.toolControl = toolControl;
     }
 
     /**
+     * Get the container of control settings.
+     *
      * @return the container of control settings.
      */
+    @FxThread
     private @NotNull VBox getControlSettings() {
         return notNull(controlSettings);
     }
 
     /**
+     * Get the button to change height of terrain by level.
+     *
      * @return the button to change height of terrain by level.
      */
+    @FxThread
     private @NotNull ToggleButton getLevelButton() {
         return notNull(levelButton);
     }
 
     /**
+     * Get the button to paint on terrain.
+     *
      * @return the button to paint on terrain.
      */
+    @FxThread
     private @NotNull ToggleButton getPaintButton() {
         return notNull(paintButton);
     }
 
     /**
+     * Get the button to make slopes on terrain.
+     *
      * @return the button to make slopes on terrain.
      */
+    @FxThread
     private @NotNull ToggleButton getSlopeButton() {
         return notNull(slopeButton);
     }
 
     /**
+     * Get the button to make rough terrain.
+     *
      * @return the button to make rough terrain.
      */
+    @FxThread
     private @NotNull ToggleButton getRoughButton() {
         return notNull(roughButton);
     }
 
     /**
+     * Get the button to smooth terrain.
+     *
      * @return the button to smooth terrain.
      */
+    @FxThread
     private @NotNull ToggleButton getSmoothButton() {
         return notNull(smoothButton);
     }
 
     /**
-     * @return The button to raise/lower terrain.
+     * Get the button to raise/lower terrain.
+     *
+     * @return the button to raise/lower terrain.
      */
+    @FxThread
     private @NotNull ToggleButton getRaiseLowerButton() {
         return notNull(raiseLowerButton);
     }
 
     /**
+     * Get the brush power field.
+     *
      * @return the brush power field.
      */
+    @FxThread
     private @NotNull FloatTextField getBrushPowerField() {
         return notNull(brushPowerField);
     }
 
     /**
+     * Get the brush size field.
+     *
      * @return the brush size field.
      */
+    @FxThread
     private @NotNull FloatTextField getBrushSizeField() {
         return notNull(brushSizeField);
     }
 
     @Override
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -575,6 +615,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * Create settings of slope control.
      */
+    @FxThread
     private void createSlopeControlSettings() {
 
         final Label smoothlyLabel = new Label(Messages.EDITING_COMPONENT_SMOOTHLY + ":");
@@ -607,6 +648,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * Create settings of level control.
      */
+    @FxThread
     private void createLevelControlSettings() {
 
         final Label smoothlyLabel = new Label(Messages.EDITING_COMPONENT_SMOOTHLY + ":");
@@ -654,6 +696,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * Create settings of rough control.
      */
+    @FxThread
     private void createRoughControlSettings() {
 
         final Label roughnessLabel = new Label(Messages.EDITING_COMPONENT_ROUGHNESS + ":");
@@ -720,6 +763,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * Create settings of paint control.
      */
+    @FxThread
     private void createPaintControlSettings() {
 
         final Label triPlanarLabelLabel = new Label(Messages.EDITING_COMPONENT_TRI_PLANAR + ":");
@@ -754,31 +798,41 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     }
 
     /**
+     * Get the control to make some levels terrain.
+     *
      * @return the control to make some levels terrain.
      */
+    @FxThread
     private @NotNull LevelTerrainToolControl getLevelToolControl() {
         return levelToolControl;
     }
 
     /**
+     * Get the control to make slopes on terrain.
+     *
      * @return the control to make slopes on terrain.
      */
+    @FxThread
     private @NotNull SlopeTerrainToolControl getSlopeToolControl() {
         return slopeToolControl;
     }
 
     /**
+     * Get the control to make rough surface terrain.
+     *
      * @return the control to make rough surface terrain.
      */
+    @FxThread
     private @NotNull RoughTerrainToolControl getRoughToolControl() {
         return roughToolControl;
     }
 
     /**
-     * Gets paint tool control.
+     * Get the paint tool control.
      *
      * @return the control to paint textures.
      */
+    @FxThread
     public @NotNull PaintTerrainToolControl getPaintToolControl() {
         return paintToolControl;
     }
@@ -788,22 +842,22 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
      */
     @FromAnyThread
     private void changePaintControlShininess(@NotNull final Float newValue) {
-        if (isIgnoreListeners()) return;
 
-        final TerrainQuad processedObject = getPaintedObject();
-        final Material mat = processedObject.getMaterial();
-        final MatParam param = mat.getParam("Shininess");
+        if (isIgnoreListeners()) {
+            return;
+        }
+
+        final Node paintedObject = notNull(getPaintedObject());
+        final Material material = NodeUtils.findMateial(paintedObject, mat -> mat.getParam("Shininess") != null);
+        final MatParam param = material == null ? null : material.getParam("Shininess");
         final float shininess = param == null ? 0F : (float) param.getValue();
 
-        final PropertyOperation<ChangeConsumer, TerrainQuad, Float> operation =
-                new PropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, shininess);
+        final PropertyOperation<ChangeConsumer, Node, Float> operation =
+                new PropertyOperation<>(paintedObject, TERRAIN_PARAM, newValue, shininess);
 
-        operation.setApplyHandler((terrainQuad, value) -> {
-            NodeUtils.visitGeometry(terrainQuad, geometry -> {
-                final Material material = geometry.getMaterial();
-                material.setFloat("Shininess", value);
-            });
-        });
+        operation.setApplyHandler((terrainQuad, value) ->
+                NodeUtils.visitMetarials(terrainQuad, mat ->
+                        MaterialUtils.safeSet(mat, "Shininess", value)));
 
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         changeConsumer.execute(operation);
@@ -814,19 +868,18 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
      */
     @FromAnyThread
     private void changePaintControlTriPlanar(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
 
-        final TerrainQuad processedObject = getPaintedObject();
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        final PropertyOperation<ChangeConsumer, TerrainQuad, Boolean> operation =
-                new PropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, !newValue);
+        final Node paintedObject = notNull(getPaintedObject());
+        final PropertyOperation<ChangeConsumer, Node, Boolean> operation =
+                new PropertyOperation<>(paintedObject, TERRAIN_PARAM, newValue, !newValue);
 
-        operation.setApplyHandler((terrainQuad, value) -> {
-            NodeUtils.visitGeometry(terrainQuad, geometry -> {
-                final Material material = geometry.getMaterial();
-                material.setBoolean("useTriPlanarMapping", value);
-            });
-        });
+        operation.setApplyHandler((terrainQuad, value) ->
+                NodeUtils.visitMetarials(terrainQuad, mat ->
+                        MaterialUtils.safeSet(mat, "useTriPlanarMapping", value)));
 
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         changeConsumer.execute(operation);
@@ -947,96 +1000,131 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     }
 
     /**
-     * Gets tri planar check box.
+     * Get the box to use tri-planar.
      *
      * @return the box to use tri-planar.
      */
+    @FxThread
     protected @NotNull CheckBox getTriPlanarCheckBox() {
         return notNull(triPlanarCheckBox);
     }
 
     /**
-     * Gets shininess field.
+     * Get the the shininess field.
      *
      * @return the shininess field.
      */
+    @FxThread
     protected @NotNull FloatTextField getShininessField() {
         return notNull(shininessField);
     }
 
     /**
+     * Get the setting of using smoothly changing of terrain height.
+     *
      * @return the setting of using smoothly changing of terrain height.
      */
+    @FxThread
     private @NotNull CheckBox getLevelControlSmoothly() {
         return notNull(levelControlSmoothly);
     }
 
     /**
+     * Get the setting of using marker to detect a level.
+     *
      * @return the setting of using marker to detect a level.
      */
+    @FxThread
     private @NotNull CheckBox getLevelControlUseMarker() {
         return notNull(levelControlUseMarker);
     }
 
     /**
+     * Get the setting of target level.
+     *
      * @return the setting of target level.
      */
+    @FxThread
     private @NotNull FloatTextField getLevelControlLevelField() {
         return notNull(levelControlLevelField);
     }
 
     /**
+     * Get the setting of using limited between markers.
+     *
      * @return the setting of using limited between markers.
      */
+    @FxThread
     private @NotNull CheckBox getSlopeControlLimited() {
         return notNull(slopeControlLimited);
     }
 
     /**
+     * Get the setting of using smoothly changing of terrain height.
+     *
      * @return the setting of using smoothly changing of terrain height.
      */
+    @FxThread
     private @NotNull CheckBox getSlopeControlSmoothly() {
         return notNull(slopeControlSmoothly);
     }
 
     /**
+     * Get the settings of frequency.
+     *
      * @return the settings of frequency.
      */
+    @FxThread
     private @NotNull FloatTextField getRoughControlFrequencyField() {
         return notNull(roughControlFrequencyField);
     }
 
     /**
+     * Get the settings of lacunarity.
+     *
      * @return the settings of lacunarity.
      */
+    @FxThread
     private @NotNull FloatTextField getRoughControlLacunarityField() {
         return notNull(roughControlLacunarityField);
     }
 
     /**
+     * Get the settings of octaves.
+     *
      * @return the settings of octaves.
      */
+    @FxThread
     private @NotNull FloatTextField getRoughControlOctavesField() {
         return notNull(roughControlOctavesField);
     }
 
     /**
+     * Get the settings of roughness.
+     *
      * @return the settings of roughness.
      */
+    @FxThread
     private @NotNull FloatTextField getRoughControlRoughnessField() {
         return notNull(roughControlRoughnessField);
     }
 
     /**
+     * Get the settings of scale.
+     *
      * @return the settings of scale.
      */
+    @FxThread
     private @NotNull FloatTextField getRoughControlScaleField() {
         return notNull(roughControlScaleField);
     }
 
     /**
+     * Get the settings of painting control.
+     *
      * @return the settings of painting control.
      */
+    @FxThread
     private @NotNull TextureLayerSettings getTextureLayerSettings() {
         return notNull(textureLayerSettings);
     }
@@ -1044,6 +1132,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * Switch editing mode.
      */
+    @FxThread
     private void switchMode(@NotNull final ActionEvent event) {
 
         final ToggleButton source = (ToggleButton) event.getSource();
@@ -1081,8 +1170,8 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
         });
     }
 
-    @FxThread
     @Override
+    @FxThread
     public void startPainting(@NotNull final Object object) {
         super.startPainting(object);
 
@@ -1108,19 +1197,23 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * Refresh terrain properties.
      */
+    @FxThread
     private void refreshProperties() {
         setIgnoreListeners(true);
         try {
 
-            final Terrain terrain = getPaintedObject();
-            final Material material = terrain.getMaterial();
-            final FloatTextField shininessField = getShininessField();
-            final CheckBox triPlanarCheckBox = getTriPlanarCheckBox();
-            final MatParam shininess = material.getParam("Shininess");
-            final MatParam useTriPlanarMapping = material.getParam("useTriPlanarMapping");
+            final Node paintedObject = notNull(getPaintedObject());
+            final Material material = NodeUtils.findMateial(paintedObject, mat -> mat.getParam("Shininess") != null);
+            final MatParam shininessParam = material == null ? null : material.getParam("Shininess");
+            final MatParam triPlanarMappingParam = material == null ? null : material.getParam("useTriPlanarMapping");
+            final float shininess = shininessParam == null ? 0F : (float) shininessParam.getValue();
+            final boolean triPlanarMapping = triPlanarMappingParam != null && (boolean) triPlanarMappingParam.getValue();
 
-            shininessField.setValue(shininess == null ? 0F : (float) shininess.getValue());
-            triPlanarCheckBox.setSelected(useTriPlanarMapping != null && (boolean) useTriPlanarMapping.getValue());
+            final FloatTextField shininessField = getShininessField();
+            shininessField.setValue(shininess);
+
+            final CheckBox triPlanarCheckBox = getTriPlanarCheckBox();
+            triPlanarCheckBox.setSelected(triPlanarMapping);
 
         } finally {
             setIgnoreListeners(false);
@@ -1128,6 +1221,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     }
 
     @Override
+    @FxThread
     public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
         refreshProperties();
 
@@ -1136,19 +1230,21 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     }
 
     @Override
+    @FxThread
     public boolean isSupport(@NotNull final Object object) {
-        return object instanceof TerrainQuad;
+        return object instanceof Node &&
+                NodeUtils.findSpatial((Node) object, TerrainQuad.class::isInstance) != null;
     }
 
-    @FxThread
     @Override
+    @FxThread
     public void notifyShowed() {
         super.notifyShowed();
         EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().addControl(getToolControl()));
     }
 
-    @FxThread
     @Override
+    @FxThread
     public void notifyHided() {
         super.notifyHided();
         EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().removeControl(TerrainToolControl.class));
@@ -1157,6 +1253,7 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * @param ignoreListeners the flag of ignoring listeners.
      */
+    @FxThread
     private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
@@ -1164,12 +1261,19 @@ public class TerrainEditingComponent extends AbstractPaintingComponent<TerrainQu
     /**
      * @return the flag of ignoring listeners.
      */
+    @FxThread
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     @Override
+    @FromAnyThread
     public @NotNull String getName() {
         return "Terrain editor";
+    }
+
+    @Override
+    public @NotNull Image getIcon() {
+        return Icons.TERRAIN_16;
     }
 }

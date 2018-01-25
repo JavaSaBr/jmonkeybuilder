@@ -16,7 +16,7 @@ import com.jme3.terrain.Terrain;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +63,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
      *
      * @param component the component
      */
-    public SlopeTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public SlopeTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
 
         this.baseMarker = new Geometry("BaseMarker", new Sphere(8, 8, 1));

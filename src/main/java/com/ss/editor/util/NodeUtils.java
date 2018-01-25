@@ -76,7 +76,9 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial) {
-        if (!(spatial instanceof Node)) return null;
+        if (!(spatial instanceof Node)) {
+            return null;
+        }
 
         final Node node = (Node) spatial;
 
@@ -101,7 +103,10 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
-        if (!(spatial instanceof Node)) return null;
+
+        if (!(spatial instanceof Node)) {
+            return null;
+        }
 
         final Node node = (Node) spatial;
 
@@ -110,6 +115,70 @@ public class NodeUtils {
             if (geometry != null) return geometry;
             if (children instanceof Geometry && StringUtils.equals(children.getName(), name)) {
                 return (Geometry) children;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find a first geometry in the {@link Spatial}.
+     *
+     * @param spatial   the spatial.
+     * @param condition the condition.
+     * @return the geometry or null.
+     */
+    @FromAnyThread
+    public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial,
+                                                  @NotNull final Predicate<Geometry> condition) {
+
+        if (!(spatial instanceof Node)) {
+            return null;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial child : node.getChildren()) {
+
+            final Geometry geometry = findGeometry(child, condition);
+            if (geometry != null) {
+                return geometry;
+            }
+
+            if (child instanceof Geometry && condition.test((Geometry) child)) {
+                return (Geometry) child;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find a material in the {@link Spatial}.
+     *
+     * @param spatial   the spatial.
+     * @param condition the condition.
+     * @return the material or null.
+     */
+    @FromAnyThread
+    public static @Nullable Material findMateial(@NotNull final Spatial spatial,
+                                                 @NotNull final Predicate<Material> condition) {
+
+        if (!(spatial instanceof Node)) {
+            return null;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial child : node.getChildren()) {
+
+            final Material material = findMateial(child, condition);
+            if (material != null) {
+                return material;
+            }
+
+            if (child instanceof Geometry && condition.test(((Geometry) child).getMaterial())) {
+                return ((Geometry) child).getMaterial();
             }
         }
 
@@ -138,14 +207,20 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static @Nullable Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
-        if (condition.test(spatial)) return spatial;
-        if (!(spatial instanceof Node)) return null;
+
+        if (condition.test(spatial)) {
+            return spatial;
+        } else if (!(spatial instanceof Node)) {
+            return null;
+        }
 
         final Node node = (Node) spatial;
 
         for (final Spatial children : node.getChildren()) {
-            final Spatial subSpatial = findSpatial(children, condition);
-            if (subSpatial != null) return subSpatial;
+            final Spatial child = findSpatial(children, condition);
+            if (child != null) {
+                return child;
+            }
         }
 
         return null;
@@ -235,6 +310,29 @@ public class NodeUtils {
 
         for (final Spatial children : node.getChildren()) {
             visitGeometry(children, consumer);
+        }
+    }
+
+    /**
+     * Visit all materials in the spatial.
+     *
+     * @param spatial  the spatial.
+     * @param consumer the consumer.
+     */
+    @FromAnyThread
+    public static void visitMetarials(@NotNull final Spatial spatial, @NotNull final Consumer<Material> consumer) {
+
+        if (spatial instanceof Geometry) {
+            consumer.accept(((Geometry) spatial).getMaterial());
+            return;
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            visitMetarials(children, consumer);
         }
     }
 

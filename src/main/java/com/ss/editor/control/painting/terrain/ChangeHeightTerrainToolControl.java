@@ -9,7 +9,7 @@ import com.jme3.terrain.Terrain;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
@@ -71,7 +71,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     @Nullable
     private Spatial copiedTerrain;
 
-    public ChangeHeightTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public ChangeHeightTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
         this.originalHeight = DictionaryFactory.newObjectDictionary(0.2F, 1000);
     }

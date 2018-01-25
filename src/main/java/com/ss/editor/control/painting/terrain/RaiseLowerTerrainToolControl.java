@@ -12,7 +12,7 @@ import com.jme3.terrain.Terrain;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl {
 
-    public RaiseLowerTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public RaiseLowerTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
     }
 

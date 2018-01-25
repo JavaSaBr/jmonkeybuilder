@@ -426,4 +426,42 @@ public class MaterialUtils {
 
         image.clearChanges();
     }
+
+    /**
+     * Set the material parameter with check of existing this parameter in the material's definition.
+     *
+     * @param material the material.
+     * @param name     the parameter's name.
+     * @param value    the value.
+     */
+    @FromAnyThread
+    public static void safeSet(@Nullable final Material material, @NotNull final String name, final float value) {
+        if (material == null) {
+            return;
+        }
+
+        final MatParam materialParam = material.getMaterialDef().getMaterialParam(name);
+        if (materialParam != null) {
+            material.setFloat(name, value);
+        }
+    }
+
+    /**
+     * Set the material parameter with check of existing this parameter in the material's definition.
+     *
+     * @param material the material.
+     * @param name     the parameter's name.
+     * @param value    the value.
+     */
+    @FromAnyThread
+    public static void safeSet(@Nullable final Material material, @NotNull final String name, final boolean value) {
+        if (material == null) {
+            return;
+        }
+
+        final MatParam materialParam = material.getMaterialDef().getMaterialParam(name);
+        if (materialParam != null) {
+            material.setBoolean(name, value);
+        }
+    }
 }

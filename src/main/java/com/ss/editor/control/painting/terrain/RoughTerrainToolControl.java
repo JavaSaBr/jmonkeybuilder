@@ -22,7 +22,7 @@ import com.jme3.terrain.noise.modulator.NoiseModulator;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
      *
      * @param component the component
      */
-    public RoughTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public RoughTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
     }
 

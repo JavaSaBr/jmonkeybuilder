@@ -9,7 +9,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class TerrainToolControl extends AbstractPaintingControl {
      * The editing component.
      */
     @NotNull
-    protected final TerrainEditingComponent component;
+    protected final TerrainPaintingComponent component;
 
     /**
      * The brush geometry.
@@ -42,7 +42,7 @@ public class TerrainToolControl extends AbstractPaintingControl {
      */
     private float brushPower;
 
-    public TerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public TerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         this.component = component;
         this.brush = new Geometry("Brush", new Sphere(8, 8, 1));
         this.brush.setMaterial(createWireframeMaterial(getBrushColor()));

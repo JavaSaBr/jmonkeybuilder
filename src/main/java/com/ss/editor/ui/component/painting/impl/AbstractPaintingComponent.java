@@ -91,6 +91,7 @@ public abstract class AbstractPaintingComponent<T, S extends AdditionalEditorSta
     /**
      * Create components.
      */
+    @FxThread
     protected void createComponents() {
     }
 

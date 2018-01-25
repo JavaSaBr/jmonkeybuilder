@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.painting.terrain.paint;
 
-import static com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent.TERRAIN_PARAM;
+import static com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent.TERRAIN_PARAM;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
@@ -14,7 +14,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.control.painting.terrain.PaintTerrainToolControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
@@ -53,7 +53,7 @@ public class TextureLayerSettings extends VBox {
      * The editing component.
      */
     @NotNull
-    private final TerrainEditingComponent editingComponent;
+    private final TerrainPaintingComponent editingComponent;
 
     /**
      * The function to convert layer index to diffuse texture param name.
@@ -101,7 +101,7 @@ public class TextureLayerSettings extends VBox {
      *
      * @param editingComponent the editing component
      */
-    public TextureLayerSettings(@NotNull final TerrainEditingComponent editingComponent) {
+    public TextureLayerSettings(@NotNull final TerrainPaintingComponent editingComponent) {
         this.cells = ArrayFactory.newArray(TextureLayerCell.class);
         this.editingComponent = editingComponent;
         createComponents();

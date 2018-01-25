@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.painting;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.painting.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class PaintingComponentRegistry {
 
     private PaintingComponentRegistry() {
         this.constructors = ArrayFactory.newArray(Function.class);
-        register(TerrainEditingComponent::new);
+        register(TerrainPaintingComponent::new);
     }
 
     /**
