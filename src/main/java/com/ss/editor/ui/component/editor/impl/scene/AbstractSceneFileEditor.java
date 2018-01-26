@@ -109,7 +109,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         Advanced3DFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
-    private static final int EDITING_TOOL = 1;
+    private static final int PAINTING_TOOL = 1;
 
     @NotNull
     private static final Array<String> ACCEPTED_FILES = ArrayFactory.asArray(
@@ -152,10 +152,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     /**
-     * The stats app state.
+     * The stats 3D part.
      */
     @NotNull
-    private final Stats3DPart statsAppState;
+    private final Stats3DPart stats3DPart;
 
     /**
      * The opened model.
@@ -265,9 +265,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private boolean ignoreCameraMove;
 
     public AbstractSceneFileEditor() {
-        this.statsAppState = new Stats3DPart(statsContainer);
-        addEditor3DPart(statsAppState);
-        statsAppState.setEnabled(true);
+        this.stats3DPart = new Stats3DPart(notNull(statsContainer));
+        addEditor3DPart(stats3DPart);
+        stats3DPart.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
     }
 
@@ -1079,17 +1079,17 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             FXUtils.addToPane(modelPropertyEditor, propertyContainer);
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
             modelPropertyEditor.rebuild();
-        } else if (newIndex == EDITING_TOOL) {
+        } else if (newIndex == PAINTING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
             editingComponentContainer.notifyShowed();
         }
 
-        if (oldIndex == EDITING_TOOL) {
+        if (oldIndex == PAINTING_TOOL) {
             editingComponentContainer.notifyHided();
         }
 
         final MA editor3DState = getEditor3DPart();
-        editor3DState.changeEditingMode(newIndex == EDITING_TOOL);
+        editor3DState.changePaintingMode(newIndex == PAINTING_TOOL);
     }
 
     @Override
@@ -1259,7 +1259,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        statsAppState.setEnabled(newValue);
+        stats3DPart.setEnabled(newValue);
 
         final ES editorState = getEditorState();
         if (editorState != null) {

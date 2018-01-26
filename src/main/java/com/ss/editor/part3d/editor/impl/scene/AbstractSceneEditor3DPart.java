@@ -42,6 +42,7 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.scene.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.part3d.editor.impl.scene.handler.DisableControlsTransformationHandler;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
@@ -58,6 +59,7 @@ import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -114,14 +116,49 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     @NotNull
     private static final Array<Function<@NotNull Object, @Nullable Spatial>> SELECTION_FINDERS = ArrayFactory.newArray(Function.class);
 
+    @NotNull
+    private static final Array<Consumer<Spatial>> PRE_TRANSFORM_HANDLERS = ArrayFactory.newArray(Consumer.class);
+
+    @NotNull
+    private static final Array<Consumer<Spatial>> POST_TRANSFORM_HANDLERS = ArrayFactory.newArray(Consumer.class);
+
     /**
      * Register the additional selection object finder.
      *
      * @param finder the additional selection object finder.
      */
     @JmeThread
-    public static void registerSelectionFinder(@NotNull final Function<@NotNull Object, @Nullable Spatial> finder) {
+    public static void registerSelectionFinder(@NotNull final Function<Object, Spatial> finder) {
         SELECTION_FINDERS.add(finder);
+    }
+
+    /**
+     * Register the pre transform handler.
+     *
+     * @param handler the pre transform handler.
+     */
+    @JmeThread
+    public static void registerPreTransformHandler(@NotNull final Consumer<Spatial> handler) {
+        PRE_TRANSFORM_HANDLERS.add(handler);
+    }
+
+    /**
+     * Register the post transform handler.
+     *
+     * @param handler the post transform handler.
+     */
+    @JmeThread
+    public static void registerPostTransformHandler(@NotNull final Consumer<Spatial> handler) {
+        POST_TRANSFORM_HANDLERS.add(handler);
+    }
+
+    static {
+
+        // default handlers
+        final DisableControlsTransformationHandler transformationHandler = new DisableControlsTransformationHandler();
+
+        registerPreTransformHandler(transformationHandler::onPreTransform);
+        registerPostTransformHandler(transformationHandler::onPostTransform);
     }
 
     /**
@@ -314,9 +351,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     private boolean activeEditing;
 
     /**
-     * The flag of editing mode.
+     * The flag of painting mode.
      */
-    private boolean editingMode;
+    private boolean paintingMode;
 
     public AbstractSceneEditor3DPart(@NotNull final T fileEditor) {
         super(fileEditor);
@@ -853,11 +890,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         if (selected.isEmpty()) {
             toolNode.detachChild(transformToolNode);
-        } else if (!isEditingMode()) {
+        } else if (!isPaintingMode()) {
             toolNode.attachChild(transformToolNode);
         }
 
-        if (isEditingMode()) {
+        if (isPaintingMode()) {
             updateEditingNodes();
             updatePainting();
         }
@@ -868,7 +905,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private void updateEditingNodes() {
-        if (!isEditingMode()) return;
+        if (!isPaintingMode()) return;
 
         final Node cursorNode = getCursorNode();
         final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
@@ -1130,8 +1167,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         setToTransform(null);
 
         final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
+
         final Spatial shape = selectionShape.remove(spatial);
-        if (shape != null) shape.removeFromParent();
+        if (shape != null) {
+            shape.removeFromParent();
+        }
 
         if (spatial instanceof VisibleOnlyWhenSelected) {
             spatial.setCullHint(Spatial.CullHint.Always);
@@ -1270,35 +1310,41 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     protected void onActionImpl(@NotNull final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
         if (MOUSE_RIGHT_CLICK.equals(name)) {
-            if(isEditingMode()) {
-                if (isPressed) startPainting(getEditingInput(MouseButton.SECONDARY));
-                else finishPainting(getEditingInput(MouseButton.SECONDARY));
+            if(isPaintingMode()) {
+                if (isPressed) startPainting(getPaintingInput(MouseButton.SECONDARY));
+                else finishPainting(getPaintingInput(MouseButton.SECONDARY));
             } else if(!isPressed) {
                 processSelect();
             }
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
-            if(isEditingMode()) {
-                if (isPressed) startPainting(getEditingInput(MouseButton.PRIMARY));
-                else finishPainting(getEditingInput(MouseButton.PRIMARY));
+            if (isPaintingMode()) {
+                if (isPressed) {
+                    startPainting(getPaintingInput(MouseButton.PRIMARY));
+                } else {
+                    finishPainting(getPaintingInput(MouseButton.PRIMARY));
+                }
             } else {
-                if (isPressed) startTransform();
-                else endTransform();
+                if (isPressed) {
+                    startTransform();
+                } else {
+                    endTransform();
+                }
             }
         }
     }
 
     /**
-     * Get the editing input.
+     * Get the painting input.
      *
      * @param mouseButton the mouse button.
-     * @return the editing input.
+     * @return the painting input.
      */
     @FromAnyThread
-    protected @NotNull PaintingInput getEditingInput(@NotNull final MouseButton mouseButton) {
+    protected @NotNull PaintingInput getPaintingInput(@NotNull final MouseButton mouseButton) {
         switch (mouseButton) {
             case SECONDARY: {
 
-                if(isControlDown()) {
+                if (isControlDown()) {
                     return PaintingInput.MOUSE_SECONDARY_WITH_CTRL;
                 }
 
@@ -1317,7 +1363,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private void processSelect() {
-        if (isEditingMode()) return;
+
+        if (isPaintingMode()) {
+            return;
+        }
 
         final Geometry anyGeometry = GeomUtils.getGeometryFromCursor(notNull(getModelNode()), getCamera());
 
@@ -1356,16 +1405,24 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             Spatial parent = NodeUtils.findParent(spatial, 2);
 
             final EditorLightNode lightNode = parent == null ? null : getLightNode(parent);
-            if (lightNode != null) return lightNode;
+            if (lightNode != null) {
+                return lightNode;
+            }
 
             final EditorAudioNode audioNode = parent == null ? null : getAudioNode(parent);
-            if (audioNode != null) return audioNode;
+            if (audioNode != null) {
+                return audioNode;
+            }
 
             parent = NodeUtils.findParent(spatial, AssetLinkNode.class::isInstance);
-            if (parent != null) return parent;
+            if (parent != null) {
+                return parent;
+            }
 
             parent = NodeUtils.findParent(spatial, p -> Boolean.TRUE.equals(p.getUserData(LOADED_MODEL_KEY)));
-            if (parent != null) return parent;
+            if (parent != null) {
+                return parent;
+            }
         }
 
         if (object instanceof Spatial) {
@@ -1415,7 +1472,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final M currentModel = notNull(getCurrentModel());
 
         Vector3f result = GeomUtils.getContactPointFromScreenPos(currentModel, camera, screenX, screenY);
-
         if (result != null) {
             return result;
         }
@@ -1468,7 +1524,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private void endTransform() {
-        if (!isActiveTransform()) return;
+        if (!isActiveTransform()) {
+            return;
+        }
 
         final Transform originalTransform = getOriginalTransform();
         final Spatial toTransform = getToTransform();
@@ -1482,13 +1540,22 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
+        POST_TRANSFORM_HANDLERS.forEach(toTransform, Consumer::accept);
+
         final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
         final PropertyOperation<ChangeConsumer, Spatial, Transform> operation =
                 new PropertyOperation<>(toTransform, "transform", newValue, oldValue);
 
-        operation.setApplyHandler(Spatial::setLocalTransform);
+        operation.setApplyHandler((spatial, transform) -> {
+            PRE_TRANSFORM_HANDLERS.forEach(spatial, Consumer::accept);
+            try {
+                spatial.setLocalTransform(transform);
+            } finally {
+                POST_TRANSFORM_HANDLERS.forEach(spatial, Consumer::accept);
+            }
+        });
 
         final T fileEditor = getFileEditor();
         fileEditor.execute(operation);
@@ -1525,6 +1592,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         if (collisionResults.size() < 1) {
             return false;
+        }
+
+        final Spatial toTransform = getToTransform();
+        if (toTransform != null) {
+            PRE_TRANSFORM_HANDLERS.forEach(toTransform, Consumer::accept);
         }
 
         final CollisionResult collisionResult = collisionResults.getClosestCollision();
@@ -1670,11 +1742,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             try {
                 renderManager.preloadScene(geometry);
             } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-
                 EditorUtil.handleException(LOGGER, this,
                         new RuntimeException("Found invalid material in the geometry: [" + geometry.getName() + "]. " +
                                 "The material will be removed from the geometry.", e));
-
                 geometry.setMaterial(EditorUtil.getDefaultMaterial());
             }
         });
@@ -2057,44 +2127,50 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * @param editingMode the flag of editing mode.
-     */
-    private void setEditingMode(final boolean editingMode) {
-        this.editingMode = editingMode;
-    }
-
-    /**
-     * @return true if editing mode is enabled.
-     */
-    private boolean isEditingMode() {
-        return editingMode;
-    }
-
-    /**
-     * Change enabling of editing mode.
+     * Set the flag of painting mode.
      *
-     * @param editingMode true if editing mode is enabled.
-     */
-    @FromAnyThread
-    public void changeEditingMode(final boolean editingMode) {
-        EXECUTOR_MANAGER.addJmeTask(() -> changeEditingModeImpl(editingMode));
-    }
-
-    /**
-     * Change enabling of editing mode.
-     *
-     * @param editingMode true if editing mode is enabled.
+     * @param paintingMode the flag of painting mode.
      */
     @JmeThread
-    private void changeEditingModeImpl(final boolean editingMode) {
-        setEditingMode(editingMode);
+    private void setPaintingMode(final boolean paintingMode) {
+        this.paintingMode = paintingMode;
+    }
+
+    /**
+     * Return the flag of painting mode.
+     *
+     * @return true if painting mode is enabled.
+     */
+    @JmeThread
+    private boolean isPaintingMode() {
+        return paintingMode;
+    }
+
+    /**
+     * Change enabling of painting mode.
+     *
+     * @param paintingMode true if painting mode is enabled.
+     */
+    @FromAnyThread
+    public void changePaintingMode(final boolean paintingMode) {
+        EXECUTOR_MANAGER.addJmeTask(() -> changePaintingModeImpl(paintingMode));
+    }
+
+    /**
+     * Change enabling of painting mode.
+     *
+     * @param paintingMode true if painting mode is enabled.
+     */
+    @JmeThread
+    private void changePaintingModeImpl(final boolean paintingMode) {
+        setPaintingMode(paintingMode);
 
         final Node cursorNode = getCursorNode();
         final Node markersNode = getMarkersNode();
         final Node toolNode = getToolNode();
         final Node transformToolNode = getTransformToolNode();
 
-        if (isEditingMode()) {
+        if (isPaintingMode()) {
             toolNode.attachChild(cursorNode);
             toolNode.attachChild(markersNode);
             toolNode.detachChild(transformToolNode);
