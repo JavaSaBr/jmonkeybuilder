@@ -68,6 +68,7 @@ public class SceneSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
         final SceneNodeTree nodeTree = getNodeTree();
         nodeTree.fill(getSceneNode());
+        nodeTree.getTreeView().setEditable(false);
 
         final Button okButton = notNull(getOkButton());
         okButton.setDisable(true);
