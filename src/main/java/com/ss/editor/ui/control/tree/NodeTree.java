@@ -1,13 +1,13 @@
 package com.ss.editor.ui.control.tree;
 
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
@@ -66,7 +66,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
         createComponents();
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_NODE_TREE_CONTAINER);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CONTAINER);
     }
 
     /**
@@ -93,6 +93,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @return the abstract node tree cell
      */
+    @FxThread
     protected @NotNull NodeTreeCell<C, ?> createNodeTreeCell() {
         return new NodeTreeCell<>(this);
     }
@@ -124,7 +125,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @param object the object.
      */
-    @FXThread
+    @FxThread
     public void fill(@NotNull final Object object) {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
@@ -146,7 +147,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Fill the item.
      */
-    @FXThread
+    @FxThread
     private void fill(@NotNull final TreeItem<TreeNode<?>> treeItem, final boolean expanded, final int level) {
         treeItem.setExpanded(expanded || level == 1);
 
@@ -170,7 +171,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @param level the level.
      */
-    @FXThread
+    @FxThread
     public void expandToLevel(final int level) {
         expandToLevel(getTreeView().getRoot(), 0, level);
     }
@@ -182,7 +183,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param currentLevel the current level.
      * @param level        the level.
      */
-    @FXThread
+    @FxThread
     private void expandToLevel(final TreeItem<TreeNode<?>> item, final int currentLevel, final int level) {
         item.setExpanded(currentLevel <= level);
         item.getChildren().forEach(child -> expandToLevel(child, currentLevel + 1, level));
@@ -193,7 +194,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @param object the object.
      */
-    @FXThread
+    @FxThread
     public void refresh(@NotNull final Object object) {
 
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), object);
@@ -225,11 +226,13 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @param treeNode the model node
      */
-    @FXThread
+    @FxThread
     public void update(@NotNull final TreeNode<?> treeNode) {
 
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), treeNode);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         treeItem.setValue(null);
         treeItem.setValue(treeNode);
@@ -241,16 +244,23 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param treeNode the model node
      * @return the context menu
      */
-    @FXThread
+    @FxThread
     public ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
 
         final C changeConsumer = getChangeConsumer();
-        if (changeConsumer == null) return null;
+        if (changeConsumer == null) {
+            return null;
+        }
 
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
         treeNode.fillContextMenu(this, items);
-        if (items.isEmpty()) return null;
+
+        if (items.isEmpty()) {
+            return null;
+        }
+
+        treeNode.handleResultContextMenu(this, items);
 
         return contextMenu;
     }
@@ -263,7 +273,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param node       the node
      * @param index      the index
      */
-    @FXThread
+    @FxThread
     public void notifyMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
                             @NotNull final Object node, final int index) {
         notifyMoved(FACTORY_REGISTRY.createFor(prevParent), FACTORY_REGISTRY.createFor(newParent),
@@ -273,7 +283,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Notify about moving the element.
      */
-    @FXThread
+    @FxThread
     private void notifyMoved(@Nullable final TreeNode<?> prevParent, @Nullable final TreeNode<?> newParent,
                              @Nullable final TreeNode<?> node, final int index) {
 
@@ -302,7 +312,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         newParentTreeNode.notifyChildAdded(node);
 
-        EXECUTOR_MANAGER.addFXTask(() -> select(node.getElement()));
+        EXECUTOR_MANAGER.addFxTask(() -> select(node.getElement()));
     }
 
     /**
@@ -311,7 +321,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param parent the parent
      * @param object the object
      */
-    @FXThread
+    @FxThread
     public void notifyChanged(@Nullable Object parent, @NotNull final Object object) {
 
         final TreeItem<TreeNode<?>> treeItem = tryToFindItem(parent, object);
@@ -346,7 +356,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param needExpand     true if need to expand new node.
      * @param needDeepExpand true if need to expand new node deeply.
      */
-    @FXThread
+    @FxThread
     public void notifyReplace(@Nullable final Object parent, @Nullable final Object oldChild,
                               @Nullable final Object newChild, final boolean needExpand, final boolean needDeepExpand) {
 
@@ -401,7 +411,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param child  the child
      * @param index  the index
      */
-    @FXThread
+    @FxThread
     public void notifyAdded(@Nullable final Object parent, @Nullable final Object child, final int index) {
         if (child == null || parent == null) return;
 
@@ -433,7 +443,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param parent the parent
      * @param child  the child
      */
-    @FXThread
+    @FxThread
     public void notifyRemoved(@Nullable final Object parent, @NotNull final Object child) {
 
         final TreeItem<TreeNode<?>> treeItem = tryToFindItem(parent, child);
@@ -482,7 +492,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param treeNode the model node
      * @return the parent or null.
      */
-    @FXThread
+    @FxThread
     public @Nullable TreeNode<?> findParent(@NotNull final TreeNode<?> treeNode) {
 
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), treeNode);
@@ -497,7 +507,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @param treeNode the model node
      */
-    @FXThread
+    @FxThread
     public void startEdit(@NotNull final TreeNode<?> treeNode) {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
@@ -512,7 +522,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @param object the object
      */
-    @FXThread
+    @FxThread
     public void select(@Nullable final Object object) {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
@@ -539,7 +549,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @return the selected
      */
-    @FXThread
+    @FxThread
     public @Nullable TreeNode<?> getSelected() {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
@@ -558,7 +568,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @return the selected object
      */
-    @FXThread
+    @FxThread
     public @Nullable Object getSelectedObject() {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
@@ -578,7 +588,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @return the consumer of changes of the model.
      */
-    @FXThread
+    @FxThread
     public @Nullable C getChangeConsumer() {
         return changeConsumer;
     }

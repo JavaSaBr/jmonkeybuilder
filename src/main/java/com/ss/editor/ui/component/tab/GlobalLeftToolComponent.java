@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.tab;
 
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
@@ -20,7 +20,7 @@ public class GlobalLeftToolComponent extends TabToolComponent {
      */
     public GlobalLeftToolComponent(@NotNull final SplitPane pane) {
         super(pane);
-        setId(CSSIds.GLOBAL_LEFT_TOOL_COMPONENT);
+        setId(CssIds.GLOBAL_LEFT_TOOL_COMPONENT);
         setSide(Side.LEFT);
     }
 }

@@ -1,9 +1,9 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
@@ -59,7 +59,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -78,21 +78,21 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
                         SuggestionProvider.create(comboBox.getItems()), STRING_CONVERTER);
         binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
 
-        FXUtils.addClassesTo(comboBox.getEditor(), CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
-        FXUtils.addClassTo(comboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassesTo(comboBox.getEditor(), CssClasses.TRANSPARENT_TEXT_FIELD, CssClasses.TEXT_FIELD_IN_COMBO_BOX);
+        FXUtils.addClassTo(comboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(comboBox, this);
     }
 
     /**
      * @return The list of available options of the string value.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<Font> getComboBox() {
         return notNull(comboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final Font value = getPropertyValue();
@@ -101,7 +101,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         final ComboBox<Font> comboBox = getComboBox();
         final SingleSelectionModel<Font> selectionModel = comboBox.getSelectionModel();

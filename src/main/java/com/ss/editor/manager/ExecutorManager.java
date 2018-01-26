@@ -3,8 +3,8 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
-import com.ss.editor.executor.impl.FXEditorTaskExecutor;
-import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.executor.impl.FxEditorTaskExecutor;
+import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.rlib.concurrent.atomic.AtomicInteger;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -60,7 +60,7 @@ public class ExecutorManager {
      * The executor of editor tasks.
      */
     @NotNull
-    private final JMEThreadExecutor jmeTasksExecutor;
+    private final JmeThreadExecutor jmeTasksExecutor;
 
     /**
      * The executor of javaFX tasks.
@@ -83,8 +83,8 @@ public class ExecutorManager {
             backgroundTaskExecutors[i] = new BackgroundEditorTaskExecutor(i + 1);
         }
 
-        this.jmeTasksExecutor = JMEThreadExecutor.getInstance();
-        this.fxEditorTaskExecutor = new FXEditorTaskExecutor();
+        this.jmeTasksExecutor = JmeThreadExecutor.getInstance();
+        this.fxEditorTaskExecutor = new FxEditorTaskExecutor();
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
 
@@ -118,7 +118,7 @@ public class ExecutorManager {
      * @param task the javaFX task.
      */
     @FromAnyThread
-    public void addFXTask(@NotNull final Runnable task) {
+    public void addFxTask(@NotNull final Runnable task) {
         final EditorTaskExecutor executor = getFxTaskExecutor();
         executor.execute(task);
     }
@@ -129,8 +129,8 @@ public class ExecutorManager {
      * @param task the editor task.
      */
     @FromAnyThread
-    public void addJMETask(@NotNull final Runnable task) {
-        final JMEThreadExecutor executor = getJmeTasksExecutor();
+    public void addJmeTask(@NotNull final Runnable task) {
+        final JmeThreadExecutor executor = getJmeTasksExecutor();
         executor.addToExecute(task);
     }
 
@@ -162,7 +162,7 @@ public class ExecutorManager {
      * @return the executor of editor tasks.
      */
     @FromAnyThread
-    private @NotNull JMEThreadExecutor getJmeTasksExecutor() {
+    private @NotNull JmeThreadExecutor getJmeTasksExecutor() {
         return jmeTasksExecutor;
     }
 

@@ -3,19 +3,18 @@ package com.ss.editor.ui.dialog.save;
 import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
 import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.EditorDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
@@ -60,13 +59,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
@@ -117,7 +110,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the title of filename field.
      */
-    @FXThread
+    @FxThread
     protected @NotNull String getFileNameLabelText() {
         return SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
     }
@@ -127,7 +120,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param extension the target file extension.
      */
-    @FXThread
+    @FxThread
     public void setExtension(@NotNull final String extension) {
         this.extension = extension;
         getResourceTree().setExtensionFilter(ArrayFactory.asArray(extension));
@@ -138,7 +131,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the target file extension.
      */
-    @FXThread
+    @FxThread
     private @NotNull String getExtension() {
         return extension == null ? "" : extension;
     }
@@ -148,13 +141,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param actionTester the action tester.
      */
-    @FXThread
+    @FxThread
     public void setActionTester(@NotNull final Predicate<@NotNull Class<?>> actionTester) {
         getResourceTree().setActionTester(actionTester);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -177,9 +170,9 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(settingsContainer, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(root, CSSClasses.SAVE_AS_DIALOG);
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(root, CssClasses.SAVE_AS_DIALOG);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(settingsContainer, CssClasses.DEF_GRID_PANE);
     }
 
     /**
@@ -187,7 +180,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param root the root
      */
-    @FXThread
+    @FxThread
     protected void createSettings(@NotNull final GridPane root) {
 
         final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
@@ -201,8 +194,8 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
         root.add(fileNameLabel, 0, 0);
         root.add(fileNameField, 1, 0);
 
-        FXUtils.addClassTo(fileNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(fileNameField, CSSClasses.DIALOG_FIELD);
+        FXUtils.addClassTo(fileNameLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(fileNameField, CssClasses.DIALOG_FIELD);
     }
 
     /**
@@ -210,7 +203,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @param newValue the new selected item.
      */
-    @FXThread
+    @FxThread
     protected void processSelection(@Nullable final TreeItem<ResourceElement> newValue) {
 
         if (newValue != null) {
@@ -231,7 +224,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate the inputted name.
      */
-    @FXThread
+    @FxThread
     protected void validateFileName() {
 
         final Button okButton = getOkButton();
@@ -290,13 +283,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the filename field.
      */
-    @FXThread
+    @FxThread
     protected @NotNull TextField getFileNameField() {
         return notNull(fileNameField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -313,10 +306,10 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
 
         validateFileName();
 
-        EXECUTOR_MANAGER.addFXTask(getFileNameField()::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(getFileNameField()::requestFocus);
     }
 
-    @FXThread
+    @FxThread
     private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
                         @NotNull final Boolean finished) {
         if (finished) resourceTree.expandTo(file, true);
@@ -325,7 +318,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle creating file event.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
@@ -343,7 +336,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle deleting file event.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
@@ -355,7 +348,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle selecting file event.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final RequestSelectFileEvent event) {
 
         final Path file = event.getFile();
@@ -375,13 +368,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of waited files to select.
      */
-    @FXThread
+    @FxThread
     private @NotNull Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
         FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
         FX_EVENT_MANAGER.removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
@@ -394,7 +387,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      *
      * @return the function for handling the choose.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Consumer<@NotNull Path> getConsumer() {
         return consumer;
     }
@@ -402,7 +395,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the tree with all resources.
      */
-    @FXThread
+    @FxThread
     private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
@@ -426,7 +419,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
         consumer.accept(notNull(getFileToSave()));

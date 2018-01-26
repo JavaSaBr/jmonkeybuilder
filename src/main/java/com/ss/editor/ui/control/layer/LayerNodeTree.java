@@ -1,7 +1,8 @@
 package com.ss.editor.ui.control.layer;
 
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -20,19 +21,13 @@ import java.util.function.Consumer;
  */
 public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
 
-    /**
-     * Instantiates a new Layer node tree.
-     *
-     * @param selectionHandler the selection handler
-     * @param consumer         the consumer
-     */
     public LayerNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final SceneChangeConsumer consumer) {
         super(selectionHandler, consumer);
     }
 
-    @NotNull
     @Override
-    protected NodeTreeCell<SceneChangeConsumer, ?> createNodeTreeCell() {
+    @FxThread
+    protected @NotNull NodeTreeCell<SceneChangeConsumer, ?> createNodeTreeCell() {
         return new LayerNodeTreeCell(this);
     }
 
@@ -41,6 +36,7 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
      *
      * @param spatial the spatial.
      */
+    @FxThread
     public void notifyAdded(@NotNull final Spatial spatial) {
         spatial.depthFirstTraversal(child -> {
 
@@ -63,6 +59,7 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
      *
      * @param spatial the spatial.
      */
+    @FxThread
     public void notifyRemoved(@NotNull final Spatial spatial) {
         spatial.depthFirstTraversal(child -> {
 
@@ -85,6 +82,7 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
      * @param object   the object.
      * @param newLayer the new layer.
      */
+    @FxThread
     public void notifyChangedLayer(@NotNull final Spatial object, @Nullable final SceneLayer newLayer) {
 
         final TreeNode<?> objectNode = FACTORY_REGISTRY.createFor(object);

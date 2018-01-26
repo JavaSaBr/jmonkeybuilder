@@ -1,21 +1,24 @@
 package com.ss.editor.config;
 
-import static com.ss.editor.util.OpenGLVersion.GL_32;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.Utils.get;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.dictionary.ConcurrentObjectDictionary;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.DictionaryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,64 +44,37 @@ public final class EditorConfig implements AssetEventListener {
     @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorConfig.class);
 
-    private static final String GRAPHICS_ALIAS = "Graphics";
-    private static final String SCREEN_ALIAS = "Screen";
-    private static final String ASSET_ALIAS = "Asset";
-    private static final String OTHER_ALIAS = "Other";
-    private static final String EDITING_ALIAS = "Editing";
+    private static final String SCREEN_ALIAS = "screen";
+    private static final String ASSET_ALIAS = "asset";
+    private static final String OTHER_ALIAS = "other";
 
-    private static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
-    private static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
-    private static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
+    private static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "width";
+    private static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "height";
+    private static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "maximized";
 
-    private static final String PREF_GRAPHIC_OPEN_GL = GRAPHICS_ALIAS + "." + "openGL";
-    private static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
-    private static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
-    private static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
-    private static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
-    private static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
-    private static final String PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS = GRAPHICS_ALIAS + "." + "stopRenderOnLostFocus";
-    private static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
-    private static final String PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT = GRAPHICS_ALIAS + "." + "toneMapFilterWhitePoint";
+    private static final String PREF_ASSET_CURRENT_ASSET = ASSET_ALIAS + "." + "current";
+    private static final String PREF_ASSET_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpened";
 
-    private static final String PREF_ASSET_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
-    private static final String PREF_ASSET_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
-
-    private static final String PREF_OTHER_LIBRARIES_FOLDER = OTHER_ALIAS + "." + "librariesFolder";
-    private static final String PREF_OTHER_CLASSES_FOLDER = OTHER_ALIAS + "." + "classesFolder";
-    private static final String PREF_OTHER_ADDITIONAL_ENVS = OTHER_ALIAS + "." + "additionalEnvs";
-    private static final String PREF_OTHER_THEME = OTHER_ALIAS + "." + "theme";
-    private static final String PREF_OTHER_ANALYTICS = OTHER_ALIAS + "." + "analytics";
-    private static final String PREF_OTHER_NATIVE_FILE_CHOOSER = OTHER_ALIAS + "." + "nativeFileChooser";
     private static final String PREF_OTHER_ANALYTICS_QUESTION = OTHER_ALIAS + "." + "analyticsQuestion" + Config.STRING_VERSION;
 
-    private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_WIDTH = OTHER_ALIAS + "." + "globalLeftToolWidth";
-    private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED = OTHER_ALIAS + "." + "globalLeftToolCollapsed";
-    private static final String PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH = OTHER_ALIAS + "." + "globalBottomToolHeight";
-    private static final String PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED = OTHER_ALIAS + "." + "globalBottomToolCollapsed";
-    
-    private static final String PREF_EDITING_AUTO_TANGENT_GENERATING = EDITING_ALIAS + "." + "autoTangentGenerating";
-    private static final String PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE = EDITING_ALIAS + "." + "defaultUseFlippedTexture";
-    private static final String PREF_EDITING_CAMERA_LAMP_ENABLED = EDITING_ALIAS + "." + "defaultCameraLampEnabled";
+    private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_WIDTH = OTHER_ALIAS + "." + "global.leftTool.width";
+    private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED = OTHER_ALIAS + "." + "global.leftTool.collapsed";
+    private static final String PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH = OTHER_ALIAS + "." + "global.bottomTool.height";
+    private static final String PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED = OTHER_ALIAS + "." + "global.bottomTool.collapsed";
 
     @Nullable
     private static volatile EditorConfig instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
+    @FromAnyThread
     public static @NotNull EditorConfig getInstance() {
-
         if (instance == null) {
-
-            final EditorConfig config = new EditorConfig();
-            config.init();
-
-            instance = config;
+            synchronized (EditorConfig.class) {
+                if (instance == null) {
+                    final EditorConfig config = new EditorConfig();
+                    instance = config;
+                }
+            }
         }
-
         return instance;
     }
 
@@ -109,55 +85,16 @@ public final class EditorConfig implements AssetEventListener {
     private final List<String> lastOpenedAssets;
 
     /**
-     * The current white point for the tone map filter.
+     * The all settings.
      */
-    @Nullable
-    private volatile Vector3f toneMapFilterWhitePoint;
+    @NotNull
+    private final ConcurrentObjectDictionary<String, Object> settings;
 
     /**
      * The current asset folder.
      */
     @Nullable
     private volatile Path currentAsset;
-
-    /**
-     * The current open GL version.
-     */
-    @Nullable
-    private volatile OpenGLVersion openGLVersion;
-
-    /**
-     * The path to the folder with libraries.
-     */
-    @Nullable
-    private volatile Path librariesPath;
-
-    /**
-     * The path to the folder with compiled classes.
-     */
-    @Nullable
-    private volatile Path classesPath;
-
-    /**
-     * The path to the folder with additional envs.
-     */
-    @Nullable
-    private volatile Path additionalEnvs;
-
-    /**
-     * The current level of the anisotropy.
-     */
-    private volatile int anisotropy;
-
-    /**
-     * The current frame rate.
-     */
-    private volatile int frameRate;
-
-    /**
-     * The current camera angle.
-     */
-    private volatile int cameraAngle;
 
     /**
      * The width of this screen.
@@ -180,11 +117,6 @@ public final class EditorConfig implements AssetEventListener {
     private volatile int globalBottomToolHeight;
 
     /**
-     * The current theme.
-     */
-    private volatile int theme;
-
-    /**
      * Flag is for collapsing the global left tool.
      */
     private volatile boolean globalLeftToolCollapsed;
@@ -195,69 +127,148 @@ public final class EditorConfig implements AssetEventListener {
     private volatile boolean globalBottomToolCollapsed;
 
     /**
-     * Flag is for enabling the FXAA.
-     */
-    private volatile boolean fxaa;
-
-    /**
-     * Flag is for enabling the gamma correction.
-     */
-    private volatile boolean gammaCorrection;
-
-    /**
-     * Flag of using native file choosers.
-     */
-    private volatile boolean nativeFileChooser;
-
-    /**
-     * Flag is for enabling stopping render on lost focus.
-     */
-    private volatile boolean stopRenderOnLostFocus;
-
-    /**
-     * Flag is for enabling the tone map filter.
-     */
-    private volatile boolean toneMapFilter;
-
-    /**
      * Flag is for maximizing a window.
      */
     private volatile boolean maximized;
-
-    /**
-     * Flag is of enabling analytics.
-     */
-    private volatile boolean analytics;
-
-    /**
-     * Flag is of enabling auto tangent generating.
-     */
-    private volatile boolean autoTangentGenerating;
-
-    /**
-     * Flag is of enabling using flip textures by default.
-     */
-    private volatile boolean defaultUseFlippedTexture;
-
-    /**
-     * Flag is of enabling camera lamp in editors by default.
-     */
-    private volatile boolean defaultEditorCameraEnabled;
 
     /**
      * Flag is of showing analytics question.
      */
     private volatile boolean analyticsQuestion;
 
-    /**
-     * Instantiates a new Editor config.
-     */
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
+        this.settings = DictionaryFactory.newConcurrentAtomicObjectDictionary();
+        init();
     }
 
     /**
-     * Gets last opened assets.
+     * Get the generic method to get generic values from settings.
+     *
+     * @param id   the setting id.
+     * @param type the type.
+     * @param def  the default value.
+     * @param <T>  the setting's type.
+     * @return the setting's value or default.
+     */
+    @FromAnyThread
+    private <T> @Nullable T get(@NotNull final String id, @NotNull final Class<T> type, @Nullable T def) {
+
+        final Object value = DictionaryUtils.getInReadLock(settings, id, (objects, s) -> objects.get(id));
+        if (value == null) {
+            return def;
+        } else if (type.isInstance(value)) {
+            return unsafeCast(value);
+        }
+
+        T result = null;
+
+        if (type == Boolean.class) {
+            if (value instanceof String) {
+                result = unsafeCast(Boolean.valueOf(value.toString()));
+            }
+        } else if (type == Integer.class) {
+            if (value instanceof String) {
+                result = unsafeCast(Integer.valueOf(value.toString()));
+            }
+        } else if (type == Vector3f.class) {
+            if (value instanceof String) {
+                final String[] values = value.toString().split(",");
+                final float x = Float.parseFloat(values[0]);
+                final float y = Float.parseFloat(values[1]);
+                final float z = Float.parseFloat(values[2]);
+                result = unsafeCast(new Vector3f(x, y, z));
+            }
+        } else if (Enum.class.isAssignableFrom(type)) {
+            final Class<Enum> enumType = unsafeCast(type);
+            if (value instanceof String) {
+                final Enum enumValue = Enum.valueOf(enumType, value.toString());
+                result = unsafeCast(enumValue);
+            }
+        } else if (Path.class.isAssignableFrom(type)) {
+            if (value instanceof String) {
+                final URI uri = Utils.get(value.toString(), URI::new);
+                result = unsafeCast(Paths.get(uri));
+            }
+        }
+
+        if (result != null) {
+            set(id, result);
+            return result;
+        }
+
+        throw new IllegalArgumentException("Can't convert the value " + value + " to the type " + type);
+    }
+
+    /**
+     * Set the new value of the setting by the id.
+     *
+     * @param id    the setting's id.
+     * @param value the setting's value.
+     */
+    @FromAnyThread
+    public void set(@NotNull final String id, @Nullable final Object value) {
+        final long stamp = settings.writeLock();
+        try {
+
+            if (value == null) {
+                settings.remove(id);
+            } else {
+                settings.put(id, value);
+            }
+
+        } finally {
+            settings.writeUnlock(stamp);
+        }
+    }
+
+    @FromAnyThread
+    public boolean getBoolean(@NotNull final String id, final boolean def) {
+        return Boolean.TRUE.equals(get(id, Boolean.class, def));
+    }
+
+    @FromAnyThread
+    public @Nullable Boolean getBoolean(@NotNull final String id) {
+        return get(id, Boolean.class, null);
+    }
+
+    @FromAnyThread
+    public int getInteger(@NotNull final String id, final int def) {
+        return notNull(get(id, Integer.class, def));
+    }
+
+    @FromAnyThread
+    public @Nullable Integer getInteger(@NotNull final String id) {
+        return get(id, Integer.class, null);
+    }
+
+    @FromAnyThread
+    public <T extends Enum<T>> @Nullable T getEnum(@NotNull final String id, @NotNull final Class<T> type) {
+        return get(id, type, null);
+    }
+
+    @FromAnyThread
+    public <T extends Enum<T>> @NotNull T getEnum(@NotNull final String id, @NotNull final T def) {
+        return notNull(get(id, unsafeCast(def.getClass()), def));
+    }
+
+    @FromAnyThread
+    public @NotNull Vector3f getVector3f(@NotNull final String id, @NotNull final Vector3f def) {
+        return notNull(get(id, Vector3f.class, def));
+    }
+
+    @FromAnyThread
+    public @Nullable Path getFile(@NotNull final String id) {
+        return get(id, Path.class, null);
+    }
+
+    @FromAnyThread
+    public @Nullable String getString(@NotNull final String id) {
+        return get(id, String.class, null);
+    }
+
+    /**
+     * Get the last opened assets.
      *
      * @return The list of last opened asset folders.
      */
@@ -275,12 +286,13 @@ public final class EditorConfig implements AssetEventListener {
     public synchronized void addOpenedAsset(@NotNull final Path currentAsset) {
 
         final String filePath = currentAsset.toString();
-
         final List<String> lastOpenedAssets = getLastOpenedAssets();
         lastOpenedAssets.remove(filePath);
         lastOpenedAssets.add(0, filePath);
 
-        if (lastOpenedAssets.size() > 10) lastOpenedAssets.remove(lastOpenedAssets.size() - 1);
+        if (lastOpenedAssets.size() > 10) {
+            lastOpenedAssets.remove(lastOpenedAssets.size() - 1);
+        }
     }
 
     @Override
@@ -294,48 +306,8 @@ public final class EditorConfig implements AssetEventListener {
     @Override
     public void assetRequested(@NotNull final AssetKey key) {
         if (key instanceof TextureKey) {
-            ((TextureKey) key).setAnisotropy(getAnisotropy());
+            ((TextureKey) key).setAnisotropy(getInteger(PREF_ANISOTROPY, PREF_DEFAULT_ANISOTROPY));
         }
-    }
-
-    /**
-     * Set the anisotropy level.
-     *
-     * @param anisotropy the new level of the anisotropy.
-     */
-    @FromAnyThread
-    public void setAnisotropy(final int anisotropy) {
-        this.anisotropy = anisotropy;
-    }
-
-    /**
-     * Get the anisotropy level.
-     *
-     * @return the current level of the anisotropy.
-     */
-    @FromAnyThread
-    public int getAnisotropy() {
-        return anisotropy;
-    }
-
-    /**
-     * Set the enabling of FXAA.
-     *
-     * @param fxaa true if need to enable FXAA.
-     */
-    @FromAnyThread
-    public void setFXAA(final boolean fxaa) {
-        this.fxaa = fxaa;
-    }
-
-    /**
-     * Get the flag of enabling FXAA.
-     *
-     * @return true if FXAA is enabled.
-     */
-    @FromAnyThread
-    public boolean isFXAA() {
-        return fxaa;
     }
 
     /**
@@ -359,146 +331,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Get the path to the folder with libraries.
-     *
-     * @return the path to the folder with libraries.
-     */
-    @FromAnyThread
-    public @Nullable Path getLibrariesPath() {
-        return librariesPath;
-    }
-
-    /**
-     * Set the path to the folder with libraries.
-     *
-     * @param librariesPath the path to the folder with libraries.
-     */
-    @FromAnyThread
-    public void setLibrariesPath(@Nullable final Path librariesPath) {
-        this.librariesPath = librariesPath;
-    }
-
-    /**
-     * Get the path to the folder with compiled classes.
-     *
-     * @return the path to the folder with compiled classes.
-     */
-    @FromAnyThread
-    public @Nullable Path getClassesPath() {
-        return classesPath;
-    }
-
-    /**
-     * Set the path to the folder with compiled classes.
-     *
-     * @param classesPath  the path to the folder with compiled classes.
-     */
-    public void setClassesPath(@Nullable final Path classesPath) {
-        this.classesPath = classesPath;
-    }
-
-    /**
-     * Get the additional envs folder.
-     *
-     * @return the path to the folder with additional envs.
-     */
-    @FromAnyThread
-    public @Nullable Path getAdditionalEnvs() {
-        return additionalEnvs;
-    }
-
-    /**
-     * Set the additional envs folder.
-     *
-     * @param additionalEnvs the path to the folder with additional envs.
-     */
-    @FromAnyThread
-    public void setAdditionalEnvs(@Nullable final Path additionalEnvs) {
-        this.additionalEnvs = additionalEnvs;
-    }
-
-    /**
-     * Is gamma correction boolean.
-     *
-     * @return flag is for enabling the gamma correction.
-     */
-    @FromAnyThread
-    public boolean isGammaCorrection() {
-        return gammaCorrection;
-    }
-
-    /**
-     * Sets gamma correction.
-     *
-     * @param gammaCorrection flag is for enabling the gamma correction.
-     */
-    @FromAnyThread
-    public void setGammaCorrection(final boolean gammaCorrection) {
-        this.gammaCorrection = gammaCorrection;
-    }
-
-    /**
-     * Is stop render on lost focus boolean.
-     *
-     * @return true if need to stop render on lost focus.
-     */
-    @FromAnyThread
-    public boolean isStopRenderOnLostFocus() {
-        return stopRenderOnLostFocus;
-    }
-
-    /**
-     * Sets stop render on lost focus.
-     *
-     * @param stopRenderOnLostFocus true if need to stop render on lost focus.
-     */
-    @FromAnyThread
-    public void setStopRenderOnLostFocus(final boolean stopRenderOnLostFocus) {
-        this.stopRenderOnLostFocus = stopRenderOnLostFocus;
-    }
-
-    /**
-     * Is tone map filter boolean.
-     *
-     * @return flag is for enabling the tone map filter.
-     */
-    @FromAnyThread
-    public boolean isToneMapFilter() {
-        return toneMapFilter;
-    }
-
-    /**
-     * Sets tone map filter.
-     *
-     * @param toneMapFilter flag is for enabling the tone map filter.
-     */
-    @FromAnyThread
-    public void setToneMapFilter(final boolean toneMapFilter) {
-        this.toneMapFilter = toneMapFilter;
-    }
-
-    /**
-     * Gets tone map filter white point.
-     *
-     * @return the current white point for the tone map filter.
-     */
-    @FromAnyThread
-    public @NotNull Vector3f getToneMapFilterWhitePoint() {
-        return notNull(toneMapFilterWhitePoint);
-    }
-
-    /**
-     * Sets tone map filter white point.
-     *
-     * @param toneMapFilterWhitePoint the new white point for the tone map filter.
-     */
-    @FromAnyThread
-    public void setToneMapFilterWhitePoint(@NotNull final Vector3f toneMapFilterWhitePoint) {
-        this.toneMapFilterWhitePoint = toneMapFilterWhitePoint;
-    }
-
-    /**
-     * Sets screen height.
+     * Set the screen height.
      *
      * @param screenHeight the height of this screen.
      */
@@ -508,7 +341,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets screen width.
+     * Set the screen width.
      *
      * @param screenWidth the width of this screen.
      */
@@ -518,7 +351,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets screen height.
+     * Get the screen height.
      *
      * @return the height of this screen.
      */
@@ -528,7 +361,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets screen width.
+     * Get the screen width.
      *
      * @return the width of this screen.
      */
@@ -538,9 +371,9 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Is maximized boolean.
+     * Return the maximized state of editor's window.
      *
-     * @return true is a window is maximized.
+     * @return true is the editor's window is maximized.
      */
     @FromAnyThread
     public boolean isMaximized() {
@@ -548,9 +381,9 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets maximized.
+     * Set the maximized state of editor's window.
      *
-     * @param maximized flag is for maximizing a window.
+     * @param maximized true is the editor's window is maximized.
      */
     @FromAnyThread
     public void setMaximized(final boolean maximized) {
@@ -558,23 +391,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @return true if need to use native file choosers.
-     */
-    @FromAnyThread
-    public boolean isNativeFileChooser() {
-        return nativeFileChooser;
-    }
-
-    /**
-     * @param nativeFileChooser true if need to use native file choosers.
-     */
-    @FromAnyThread
-    public void setNativeFileChooser(final boolean nativeFileChooser) {
-        this.nativeFileChooser = nativeFileChooser;
-    }
-
-    /**
-     * Gets global left tool width.
+     * Get the global left tool width.
      *
      * @return the global left tool width.
      */
@@ -584,7 +401,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets global bottom tool height.
+     * Get the global bottom tool height.
      *
      * @return the global bottom tool height.
      */
@@ -594,7 +411,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets global left tool width.
+     * Set the global left tool width.
      *
      * @param globalLeftToolWidth the global left tool width.
      */
@@ -604,7 +421,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets global bottom tool height.
+     * Set the global bottom tool height.
      *
      * @param globalBottomToolHeight the global bottom tool height.
      */
@@ -614,7 +431,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets global left tool collapsed.
+     * Set the global left tool collapsed.
      *
      * @param globalLeftToolCollapsed flag is for collapsing the global left tool.
      */
@@ -624,7 +441,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets global bottom tool collapsed.
+     * Set the global bottom tool collapsed.
      *
      * @param globalBottomToolCollapsed flag is for collapsing the global bottom tool.
      */
@@ -654,122 +471,6 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Sets analytics.
-     *
-     * @param analytics true if you want to enable analytics.
-     */
-    @FromAnyThread
-    public void setAnalytics(final boolean analytics) {
-        this.analytics = analytics;
-    }
-
-    /**
-     * Is analytics boolean.
-     *
-     * @return true if analytics is enabled.
-     */
-    @FromAnyThread
-    public boolean isAnalytics() {
-        return analytics;
-    }
-
-    /**
-     * Is auto tangent generating boolean.
-     *
-     * @return true if enabled auto tangent generating.
-     */
-    @FromAnyThread
-    public boolean isAutoTangentGenerating() {
-        return autoTangentGenerating;
-    }
-
-    /**
-     * Sets auto tangent generating.
-     *
-     * @param autoTangentGenerating flag is of enabling auto tangent generating.
-     */
-    @FromAnyThread
-    public void setAutoTangentGenerating(final boolean autoTangentGenerating) {
-        this.autoTangentGenerating = autoTangentGenerating;
-    }
-
-    /**
-     * Is default use flipped texture boolean.
-     *
-     * @return true if use flip textures by default.
-     */
-    public boolean isDefaultUseFlippedTexture() {
-        return defaultUseFlippedTexture;
-    }
-
-    /**
-     * Sets default use flipped texture.
-     *
-     * @param defaultUseFlippedTexture flag is of enabling using flip textures by default.
-     */
-    public void setDefaultUseFlippedTexture(final boolean defaultUseFlippedTexture) {
-        this.defaultUseFlippedTexture = defaultUseFlippedTexture;
-    }
-
-    /**
-     * Is default editor camera enabled boolean.
-     *
-     * @return true if enable camera lamp by default.
-     */
-    public boolean isDefaultEditorCameraEnabled() {
-        return defaultEditorCameraEnabled;
-    }
-
-    /**
-     * Sets default editor camera enabled.
-     *
-     * @param defaultEditorCameraEnabled Flag is of enabling camera lamp in editors by default.
-     */
-    public void setDefaultEditorCameraEnabled(final boolean defaultEditorCameraEnabled) {
-        this.defaultEditorCameraEnabled = defaultEditorCameraEnabled;
-    }
-
-    /**
-     * Gets frame rate.
-     *
-     * @return the current frameRate.
-     */
-    @FromAnyThread
-    public int getFrameRate() {
-        return frameRate;
-    }
-
-    /**
-     * Sets frame rate.
-     *
-     * @param frameRate the current frameRate.
-     */
-    @FromAnyThread
-    public void setFrameRate(final int frameRate) {
-        this.frameRate = frameRate;
-    }
-
-    /**
-     * Sets camera angle.
-     *
-     * @param cameraAngle the camera angle.
-     */
-    @FromAnyThread
-    public void setCameraAngle(final int cameraAngle) {
-        this.cameraAngle = cameraAngle;
-    }
-
-    /**
-     * Gets camera angle.
-     *
-     * @return the camera angle.
-     */
-    @FromAnyThread
-    public int getCameraAngle() {
-        return cameraAngle;
-    }
-
-    /**
      * Is analytics question boolean.
      *
      * @return true if the question was showed.
@@ -788,49 +489,9 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets the current theme.
+     * Get the jME settings.
      *
-     * @return the current theme.
-     */
-    @FromAnyThread
-    public @NotNull CssColorTheme getTheme() {
-        return CssColorTheme.valueOf(theme);
-    }
-
-    /**
-     * Sets the current theme.
-     *
-     * @param theme the current theme.
-     */
-    @FromAnyThread
-    public void setTheme(@NotNull final CssColorTheme theme) {
-        this.theme = theme.ordinal();
-    }
-
-    /**
-     * Gets open gl version.
-     *
-     * @return the current open GL version.
-     */
-    @FromAnyThread
-    public @NotNull OpenGLVersion getOpenGLVersion() {
-        return notNull(openGLVersion);
-    }
-
-    /**
-     * Sets open gl version.
-     *
-     * @param openGLVersion the current open GL version.
-     */
-    @FromAnyThread
-    public void setOpenGLVersion(@NotNull final OpenGLVersion openGLVersion) {
-        this.openGLVersion = openGLVersion;
-    }
-
-    /**
-     * Gets settings.
-     *
-     * @return the settings for JME.
+     * @return the the jME settings.
      */
     @FromAnyThread
     public AppSettings getSettings() {
@@ -841,11 +502,11 @@ public final class EditorConfig implements AssetEventListener {
 
         final AppSettings settings = new AppSettings(true);
         settings.setFrequency(displayMode.getRefreshRate());
-        settings.setGammaCorrection(isGammaCorrection());
+        settings.setGammaCorrection(getBoolean(PREF_GAMMA_CORRECTION, PREF_DEFAULT_GAMMA_CORRECTION));
         settings.setResizable(true);
         // settings.putBoolean("GraphicsDebug", true);
 
-        JmeToJFXIntegrator.prepareSettings(settings, getFrameRate());
+        JmeToJFXIntegrator.prepareSettings(settings, getInteger(PREF_FRAME_RATE, PREF_DEFAULT_FRAME_RATE));
 
         return settings;
     }
@@ -855,13 +516,20 @@ public final class EditorConfig implements AssetEventListener {
      */
     private void init() {
 
-        final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
+        final Preferences prefs = Preferences.userNodeForPackage(JmeApplication.class);
+        final long stamp = settings.writeLock();
+        try {
 
-        this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
-        this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
-        this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, false);
-        this.stopRenderOnLostFocus = prefs.getBoolean(PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS, true);
-        this.toneMapFilter = prefs.getBoolean(PREF_GRAPHIC_TONEMAP_FILTER, false);
+            for (final String key : prefs.keys()) {
+                settings.put(key, prefs.get(key, null));
+            }
+
+        } catch (final BackingStoreException e) {
+            throw new RuntimeException(e);
+        } finally {
+            settings.writeUnlock(stamp);
+        }
+
         this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);
         this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 800);
         this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 1200);
@@ -869,62 +537,26 @@ public final class EditorConfig implements AssetEventListener {
         this.globalLeftToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED, false);
         this.globalBottomToolHeight = prefs.getInt(PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
         this.globalBottomToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
-        this.nativeFileChooser = prefs.getBoolean(PREF_OTHER_NATIVE_FILE_CHOOSER, true);
-        this.analytics = prefs.getBoolean(PREF_OTHER_ANALYTICS, true);
-        this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
-        this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
-        this.autoTangentGenerating = prefs.getBoolean(PREF_EDITING_AUTO_TANGENT_GENERATING, false);
-        this.defaultUseFlippedTexture = prefs.getBoolean(PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE, true);
-        this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_EDITING_CAMERA_LAMP_ENABLED, true);
         this.analyticsQuestion = prefs.getBoolean(PREF_OTHER_ANALYTICS_QUESTION, false);
-        this.theme = prefs.getInt(PREF_OTHER_THEME, CssColorTheme.DARK.ordinal());
-        this.openGLVersion = OpenGLVersion.valueOf(prefs.getInt(PREF_GRAPHIC_OPEN_GL, GL_32.ordinal()));
 
-        final String currentAssetURI = prefs.get(PREF_ASSET_CURRENT_ASSET, null);
+        final String currentAssetUri = prefs.get(PREF_ASSET_CURRENT_ASSET, null);
 
-        if (currentAssetURI != null) {
-            this.currentAsset = get(currentAssetURI, uri -> Paths.get(new URI(uri)));
+        if (currentAssetUri != null) {
+            this.currentAsset = Utils.get(currentAssetUri, uri -> Paths.get(new URI(uri)));
         }
 
         if (currentAsset != null && !Files.exists(currentAsset)) {
             this.currentAsset = null;
         }
 
-        final String librariesFolderPath = prefs.get(PREF_OTHER_LIBRARIES_FOLDER, null);
+        final int cameraAngle = getInteger(PREF_CAMERA_ANGLE, PREF_DEFAULT_CAMERA_ANGLE);
 
-        if (librariesFolderPath != null) {
-            this.librariesPath = get(librariesFolderPath, uri -> Paths.get(new URI(uri)));
-        }
-
-        final String classesFolderPath = prefs.get(PREF_OTHER_CLASSES_FOLDER, null);
-
-        if (classesFolderPath != null) {
-            this.classesPath = get(classesFolderPath, uri -> Paths.get(new URI(uri)));
-        }
-
-        final String envsURI = prefs.get(PREF_OTHER_ADDITIONAL_ENVS, null);
-
-        if (envsURI != null) {
-            this.additionalEnvs = get(envsURI, uri -> Paths.get(new URI(uri)));
-        }
-
-        this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
-
-        final String whitePoint = prefs.get(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, null);
-        final String[] coords = whitePoint == null ? null : whitePoint.split(",", 3);
-
-        if (coords != null && coords.length > 2) {
-            try {
-                toneMapFilterWhitePoint.setX(Float.parseFloat(coords[0]));
-                toneMapFilterWhitePoint.setY(Float.parseFloat(coords[1]));
-                toneMapFilterWhitePoint.setZ(Float.parseFloat(coords[2]));
-            } catch (NumberFormatException e) {
-                LOGGER.error(e);
-            }
-        }
+        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(cameraAngle));
 
         final byte[] byteArray = prefs.getByteArray(PREF_ASSET_LAST_OPENED_ASSETS, null);
-        if (byteArray == null) return;
+        if (byteArray == null) {
+            return;
+        }
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
         try {
@@ -934,7 +566,7 @@ public final class EditorConfig implements AssetEventListener {
             for (Iterator<String> iterator = lastOpenedAssets.iterator(); iterator.hasNext(); ) {
 
                 final String assetUrl = iterator.next();
-                final Path assetPath = get(assetUrl, uri -> Paths.get(uri));
+                final Path assetPath = Utils.get(assetUrl, uri -> Paths.get(uri));
 
                 if (!Files.exists(assetPath)) {
                     iterator.remove();
@@ -944,8 +576,6 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final RuntimeException e) {
             LOGGER.warning(e);
         }
-
-        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(getCameraAngle()));
     }
 
     /**
@@ -954,12 +584,32 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public synchronized void save() {
 
-        final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
-        prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
-        prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
-        prefs.putBoolean(PREF_GRAPHIC_GAMA_CORRECTION, isGammaCorrection());
-        prefs.putBoolean(PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS, isStopRenderOnLostFocus());
-        prefs.putBoolean(PREF_GRAPHIC_TONEMAP_FILTER, isToneMapFilter());
+        final Preferences prefs = Preferences.userNodeForPackage(JmeApplication.class);
+
+        final long stamp = settings.readLock();
+        try {
+
+            settings.forEach((key, value) -> {
+                if (value instanceof Boolean) {
+                    prefs.putBoolean(key, (Boolean) value);
+                } else if (value instanceof Integer) {
+                    prefs.putInt(key, (Integer) value);
+                }  else if (value instanceof Enum<?>) {
+                    prefs.put(key, (((Enum) value).name()));
+                } else if (value instanceof Path) {
+                    prefs.put(key, ((Path) value).toUri().toString());
+                } else if (value instanceof Vector3f) {
+                    final Vector3f vector = (Vector3f) value;
+                    prefs.put(key, vector.getX() + "," + vector.getY() + "," + vector.getZ());
+                } else {
+                    prefs.put(key, value.toString());
+                }
+            });
+
+        } finally {
+            settings.readUnlock(stamp);
+        }
+
         prefs.putInt(PREF_SCREEN_HEIGHT, getScreenHeight());
         prefs.putInt(PREF_SCREEN_WIDTH, getScreenWidth());
         prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
@@ -967,51 +617,16 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED, isGlobalLeftToolCollapsed());
         prefs.putInt(PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolHeight());
         prefs.putBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, isGlobalBottomToolCollapsed());
-        prefs.putBoolean(PREF_OTHER_ANALYTICS, isAnalytics());
-        prefs.putBoolean(PREF_OTHER_NATIVE_FILE_CHOOSER, isNativeFileChooser());
-        prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
-        prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
-        prefs.putBoolean(PREF_EDITING_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
-        prefs.putBoolean(PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
-        prefs.putBoolean(PREF_EDITING_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
         prefs.putBoolean(PREF_OTHER_ANALYTICS_QUESTION, isAnalyticsQuestion());
-        prefs.putInt(PREF_OTHER_THEME, getTheme().ordinal());
-        prefs.putInt(PREF_GRAPHIC_OPEN_GL, getOpenGLVersion().ordinal());
-
-        final Vector3f whitePoint = getToneMapFilterWhitePoint();
-
-        prefs.put(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, whitePoint.getX() + "," + whitePoint.getY() + "," + whitePoint.getZ());
 
         if (currentAsset != null && !Files.exists(currentAsset)) {
             currentAsset = null;
-        }
-
-        if (librariesPath != null && !Files.exists(librariesPath)) {
-            librariesPath = null;
         }
 
         if (currentAsset != null) {
             prefs.put(PREF_ASSET_CURRENT_ASSET, currentAsset.toUri().toString());
         } else {
             prefs.remove(PREF_ASSET_CURRENT_ASSET);
-        }
-
-        if (librariesPath != null) {
-            prefs.put(PREF_OTHER_LIBRARIES_FOLDER, librariesPath.toUri().toString());
-        } else {
-            prefs.remove(PREF_OTHER_LIBRARIES_FOLDER);
-        }
-
-        if (classesPath != null) {
-            prefs.put(PREF_OTHER_CLASSES_FOLDER, classesPath.toUri().toString());
-        } else {
-            prefs.remove(PREF_OTHER_CLASSES_FOLDER);
-        }
-
-        if (additionalEnvs != null) {
-            prefs.put(PREF_OTHER_ADDITIONAL_ENVS, additionalEnvs.toUri().toString());
-        } else {
-            prefs.remove(PREF_OTHER_ADDITIONAL_ENVS);
         }
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
@@ -1022,7 +637,5 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final BackingStoreException e) {
             throw new RuntimeException(e);
         }
-
-        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(getCameraAngle()));
     }
 }

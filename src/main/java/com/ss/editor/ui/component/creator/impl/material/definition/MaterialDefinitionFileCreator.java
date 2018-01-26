@@ -11,7 +11,7 @@ import com.jme3.renderer.Caps;
 import com.jme3.renderer.Renderer;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.property.EditablePropertyType;
@@ -61,8 +61,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     static {
         AVAILABLE_GLSL = ArrayFactory.newArray(String.class);
 
-        final Renderer renderer = EDITOR.getRenderer();
-
+        final Renderer renderer = EditorUtil.getRenderer();
         final EnumSet<Caps> caps = renderer.getCaps();
         caps.stream().filter(cap -> cap.name().startsWith("GLSL"))
                 .map(Enum::name)
@@ -101,7 +100,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean validate(@NotNull final VarTable vars) {
 
         final String glslVersion = vars.get(PROP_GLSL_VERSION, String.class, StringUtils.EMPTY);
@@ -125,7 +124,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.hide();
 

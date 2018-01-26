@@ -4,11 +4,11 @@ import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
 import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Quaternion;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -52,7 +52,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -84,17 +84,17 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
 
-        FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
-                CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(xLabel, yLabel, zLabel, CssClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
+        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
+                CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+        FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UIUtils.addFocusBinding(container, xField, yField, zField);
+        UiUtils.addFocusBinding(container, xField, yField, zField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final Quaternion quaternion) {
         super.setPropertyValue(quaternion == null ? null : quaternion.clone());
     }
@@ -102,7 +102,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the field X.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getXField() {
         return notNull(xField);
     }
@@ -110,7 +110,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the field Y.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getYFiled() {
         return notNull(yField);
     }
@@ -118,13 +118,13 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the field Z.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getZField() {
         return notNull(zField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final float[] angles = new float[3];
@@ -150,7 +150,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * Updating rotation.
      */
-    @FXThread
+    @FxThread
     private void updateRotation(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

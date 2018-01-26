@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.bar.action;
 
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ReopenAssetMenu extends Menu {
 
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * Instantiates a new Reopen asset menu.

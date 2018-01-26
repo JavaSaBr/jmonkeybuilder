@@ -1,9 +1,9 @@
 package com.ss.editor;
 
-import static java.util.ResourceBundle.getBundle;
 import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import static java.util.ResourceBundle.getBundle;
 import com.ss.rlib.util.PropertyLoader;
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
 import java.util.Locale;
 import java.util.Map;
@@ -124,30 +124,33 @@ public class Messages {
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
 
     public static final String SETTINGS_DIALOG_TITLE;
-    public static final String SETTINGS_DIALOG_FXAA;
-    public static final String SETTINGS_DIALOG_NATIVE_FILE_CHOOSER;
-    public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
-    public static final String SETTINGS_DIALOG_FRAME_RATE;
-    public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
-    public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
-    public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
-    public static final String SETTINGS_DIALOG_ANISOTROPY;
     public static final String SETTINGS_DIALOG_MESSAGE;
-    public static final String SETTINGS_DIALOG_GOOGLE_ANALYTICS;
-    public static final String SETTINGS_DIALOG_CAMERA_ANGLE;
-    public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
-    public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
-    public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
-    public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
-    public static final String SETTINGS_DIALOG_TAB_OTHER;
-    public static final String SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL;
-    public static final String SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL;
-    public static final String SETTINGS_DIALOG_THEME_LABEL;
-    public static final String SETTINGS_DIALOG_OPEN_GL_LABEL;
     public static final String SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE;
     public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
-    public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
+
+    public static final String SETTINGS_PROPERTY_FXAA;
+    public static final String SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER;
+    public static final String SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS;
+    public static final String SETTINGS_PROPERTY_FRAME_RATE;
+    public static final String SETTINGS_PROPERTY_GAMMA_CORRECTION;
+    public static final String SETTINGS_PROPERTY_TONEMAP_FILTER;
+    public static final String SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT;
+    public static final String SETTINGS_PROPERTY_ANISOTROPY;
+    public static final String SETTINGS_PROPERTY_GOOGLE_ANALYTICS;
+    public static final String SETTINGS_PROPERTY_CAMERA_ANGLE;
+    public static final String SETTINGS_PROPERTY_TANGENT_GENERATION;
+    public static final String SETTINGS_PROPERTY_FLIPPED_TEXTURE;
+    public static final String SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP;
+    public static final String SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER;
+    public static final String SETTINGS_PROPERTY_USER_CLASSES_FOLDER;
+    public static final String SETTINGS_PROPERTY_THEME;
+    public static final String SETTINGS_PROPERTY_OPEN_GL;
+    public static final String SETTINGS_PROPERTY_FAST_SKY_FOLDER;
+
+    public static final String SETTINGS_CATEGORY_GRAPHICS;
+    public static final String SETTINGS_CATEGORY_OTHER;
+    public static final String SETTINGS_CATEGORY_EDITOR;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
@@ -205,9 +208,12 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL;
 
+    public static final String SCENE_FILE_EDITOR_NODE_FILTERS;
+    public static final String SCENE_FILE_EDITOR_NODE_APP_STATES;
+
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
-    public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
+    public static final String SCENE_FILE_EDITOR_TOOL_PAINTING;
     public static final String SCENE_FILE_EDITOR_TOOL_SCRIPTING;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
@@ -246,8 +252,6 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     public static final String MODEL_NODE_TREE_ACTION_COPY;
     public static final String MODEL_NODE_TREE_ACTION_PASTE;
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
@@ -571,7 +575,7 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
 
     public static final String NODE_SELECTOR_DIALOG_TITLE;
-
+    public static final String SCENE_ELEMENT_SELECTOR_DIALOG_TITLE;
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
     public static final String LIGHT_SELECTOR_DIALOG_TITLE;
 
@@ -681,6 +685,13 @@ public class Messages {
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_TITLE;
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_FILTER;
     public static final String PLUGINS_DIALOG_QUESTION;
+    public static final String PLUGINS_DIALOG_VERSION;
+    public static final String PLUGINS_DIALOG_HOME_PAGE;
+    public static final String PLUGINS_DIALOG_USED_DEPENDENCIES;
+
+    public static final String PAINTING_COMPONENT_CONTAINER_TOOL;
+    public static final String PAINTING_COMPONENT_CONTAINER_NO_TOOLS;
+    public static final String PAINTING_COMPONENT_TERRAIN_EDITOR;
 
     static {
 
@@ -805,30 +816,34 @@ public class Messages {
         SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION = bundle.getString("SingleColorTextureFileCreatorDescription");
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
-        SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
-        SETTINGS_DIALOG_NATIVE_FILE_CHOOSER = bundle.getString("SettingsDialogNativeFileChooser");
-        SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsDialogStopRenderOnLostFocus");
-        SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
-        SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
-        SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
-        SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
-        SETTINGS_DIALOG_ANISOTROPY = bundle.getString("SettingsDialogAnisotropy");
+
         SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
-        SETTINGS_DIALOG_GOOGLE_ANALYTICS = bundle.getString("SettingsDialogAnalytics");
-        SETTINGS_DIALOG_CAMERA_ANGLE = bundle.getString("SettingsDialogCameraAngle");
-        SETTINGS_DIALOG_AUTO_TANGENT_GENERATING = bundle.getString("SettingsDialogAutoTangentGenerating");
-        SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE = bundle.getString("SettingsDialogUseFlipTexture");
-        SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
-        SETTINGS_DIALOG_TAB_GRAPHICS = bundle.getString("SettingsDialogTabGraphics");
-        SETTINGS_DIALOG_TAB_OTHER = bundle.getString("SettingsDialogTabOther");
-        SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL = bundle.getString("SettingsDialogUserLibrariesFolderLabel");
-        SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL = bundle.getString("SettingsDialogUserClassesFolderLabel");
-        SETTINGS_DIALOG_THEME_LABEL = bundle.getString("SettingsDialogThemeLabel");
-        SETTINGS_DIALOG_OPEN_GL_LABEL = bundle.getString("SettingsDialogOpenGLLabel");
         SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClassesFolderChooserTitle");
         SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogLibrariesFolderChooserTitle");
-        SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
+
+        SETTINGS_PROPERTY_FAST_SKY_FOLDER = bundle.getString("SettingsPropertyFastSkyFolder");
+        SETTINGS_PROPERTY_FXAA = bundle.getString("SettingsPropertyFXAA");
+        SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER = bundle.getString("SettingsPropertyNativeFileChooser");
+        SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsPropertyStopRenderOnLostFocus");
+        SETTINGS_PROPERTY_FRAME_RATE = bundle.getString("SettingsPropertyFrameRate");
+        SETTINGS_PROPERTY_GAMMA_CORRECTION = bundle.getString("SettingsPropertyGammaCorrection");
+        SETTINGS_PROPERTY_TONEMAP_FILTER = bundle.getString("SettingsPropertyToneMapFilter");
+        SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsPropertyToneMapFilterWhitePoint");
+        SETTINGS_PROPERTY_ANISOTROPY = bundle.getString("SettingsPropertyAnisotropy");
+        SETTINGS_PROPERTY_GOOGLE_ANALYTICS = bundle.getString("SettingsPropertyAnalytics");
+        SETTINGS_PROPERTY_CAMERA_ANGLE = bundle.getString("SettingsPropertyCameraAngle");
+        SETTINGS_PROPERTY_TANGENT_GENERATION = bundle.getString("SettingsPropertyTangentGeneration");
+        SETTINGS_PROPERTY_FLIPPED_TEXTURE = bundle.getString("SettingsPropertyFlippedTexture");
+        SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP = bundle.getString("SettingsPropertyEditorCameraLamp");
+        SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER = bundle.getString("SettingsPropertyUserLibrariesFolder");
+        SETTINGS_PROPERTY_USER_CLASSES_FOLDER = bundle.getString("SettingsPropertyUserClassesFolder");
+        SETTINGS_PROPERTY_THEME = bundle.getString("SettingsPropertyTheme");
+        SETTINGS_PROPERTY_OPEN_GL = bundle.getString("SettingsPropertyOpenGL");
+
+        SETTINGS_CATEGORY_GRAPHICS = bundle.getString("SettingsCategoryGraphics");
+        SETTINGS_CATEGORY_OTHER = bundle.getString("SettingsCategoryOther");
+        SETTINGS_CATEGORY_EDITOR = bundle.getString("SettingsCategoryEditor");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
         GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("GLTFToJ3oFileConverterDescription");
@@ -885,9 +900,12 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER = bundle.getString("ModelFileEditorNodeVertexBuffer");
         MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL = bundle.getString("ModelFileEditorNodeLightControl");
 
+        SCENE_FILE_EDITOR_NODE_FILTERS = bundle.getString("SceneFileEditorNodeFilters");
+        SCENE_FILE_EDITOR_NODE_APP_STATES = bundle.getString("SceneFileEditorNodeAppStates");
+
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
-        SCENE_FILE_EDITOR_TOOL_EDITING = bundle.getString("SceneFileEditorToolEditing");
+        SCENE_FILE_EDITOR_TOOL_PAINTING = bundle.getString("SceneFileEditorToolPainting");
         SCENE_FILE_EDITOR_TOOL_SCRIPTING = bundle.getString("SceneFileEditorToolScripting");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
         SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
@@ -926,8 +944,6 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_COPY = bundle.getString("ModelNodeTreeActionCopy");
         MODEL_NODE_TREE_ACTION_PASTE = bundle.getString("ModelNodeTreeActionPaste");
-        MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateToneg0dParticleEmitter");
-        MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");
         MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS = bundle.getString("ModelNodeTreeActionResetParticleEmitters");
         MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterChangeShape");
@@ -1250,6 +1266,7 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
 
         NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");
+        SCENE_ELEMENT_SELECTOR_DIALOG_TITLE = bundle.getString("SceneElementSelectorDialogTitle");
 
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
         LIGHT_SELECTOR_DIALOG_TITLE = bundle.getString("LightSelectorDialogTitle");
@@ -1360,5 +1377,12 @@ public class Messages {
         PLUGINS_DIALOG_FILE_CHOOSER_TITLE = bundle.getString("PluginsDialogFileChooserTitle");
         PLUGINS_DIALOG_FILE_CHOOSER_FILTER = bundle.getString("PluginsDialogFileChooserFilter");
         PLUGINS_DIALOG_QUESTION = bundle.getString("PluginsDialogQuestion");
+        PLUGINS_DIALOG_VERSION = bundle.getString("PluginsDialogVersion");
+        PLUGINS_DIALOG_HOME_PAGE = bundle.getString("PluginsDialogHomePage");
+        PLUGINS_DIALOG_USED_DEPENDENCIES = bundle.getString("PluginsDialogUsedDependencies");
+
+        PAINTING_COMPONENT_CONTAINER_TOOL = bundle.getString("PaintingComponentContainerTool");
+        PAINTING_COMPONENT_CONTAINER_NO_TOOLS = bundle.getString("PaintingComponentContainerNoTools");
+        PAINTING_COMPONENT_TERRAIN_EDITOR = bundle.getString("PaintingComponentTerrainEditor");
     }
 }

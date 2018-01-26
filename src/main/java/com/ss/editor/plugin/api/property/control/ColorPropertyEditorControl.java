@@ -2,10 +2,10 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.ColorPicker;
@@ -31,7 +31,7 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -39,31 +39,31 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> change());
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(colorPicker, CSSClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
+        FXUtils.addClassTo(colorPicker, CssClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
         FXUtils.addToPane(colorPicker, this);
     }
 
     /**
      * @return the color picker.
      */
-    @FXThread
+    @FxThread
     private @NotNull ColorPicker getColorPicker() {
         return notNull(colorPicker);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final ColorPicker colorPicker = getColorPicker();
-        colorPicker.setValue(UIUtils.from(getPropertyValue()));
+        colorPicker.setValue(UiUtils.from(getPropertyValue()));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         final ColorPicker colorPicker = getColorPicker();
-        setPropertyValue(UIUtils.from(colorPicker.getValue()));
+        setPropertyValue(UiUtils.from(colorPicker.getValue()));
         super.changeImpl();
     }
 }

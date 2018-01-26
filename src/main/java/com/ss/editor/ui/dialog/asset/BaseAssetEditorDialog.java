@@ -2,11 +2,10 @@ package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
@@ -52,13 +51,6 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     protected static final FilePreviewFactoryRegistry FILE_PREVIEW_FACTORY_REGISTRY = FilePreviewFactoryRegistry.getInstance();
 
     /**
-     * The editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
-
-
-    /**
      * The function to handle the choose.
      */
     @NotNull
@@ -93,7 +85,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
 
         final HBox container = new HBox();
@@ -110,8 +102,8 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(secondPart, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(root, CSSClasses.ASSET_EDITOR_DIALOG);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(root, CssClasses.ASSET_EDITOR_DIALOG);
     }
 
     /**
@@ -120,7 +112,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param container the horizontal container.
      * @return the built component.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Region buildFirstPart(@NotNull final HBox container) {
         throw new RuntimeException("unsupported");
     }
@@ -131,7 +123,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param element the asset element.
      * @return the target object.
      */
-    @FXThread
+    @FxThread
     protected @Nullable C getObject(@NotNull final T element) {
         throw new RuntimeException("unsupported");
     }
@@ -151,7 +143,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @param newValue the new selected item.
      */
-    @FXThread
+    @FxThread
     protected void processSelected(@Nullable final TreeItem<T> newValue) {
 
         final T element = newValue == null ? null : newValue.getValue();
@@ -180,7 +172,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param element the element.
      * @return the asset path or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable String getAssetPath(@NotNull final T element) {
         return null;
     }
@@ -191,7 +183,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param element the element.
      * @return the real file or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Path getRealFile(@NotNull final T element) {
         return null;
     }
@@ -201,7 +193,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @param file the file.
      */
-    @FXThread
+    @FxThread
     private void updatePreview(@NotNull final Path file) {
 
         final Array<FilePreview> previews = getPreviews();
@@ -221,7 +213,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @param assetPath the asset path of the object.
      */
-    @FXThread
+    @FxThread
     private void updatePreview(@Nullable final String assetPath) {
 
         final Array<FilePreview> previews = getPreviews();
@@ -248,7 +240,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param warningLabel the warning label
      * @param element      the element.
      */
-    @FXThread
+    @FxThread
     protected void validate(@NotNull final Label warningLabel, @Nullable final T element) {
 
         final Function<@NotNull C, @Nullable String> validator = getValidator();
@@ -272,7 +264,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param container the container
      * @return the parent
      */
-    @FXThread
+    @FxThread
     protected @NotNull Region buildSecondPart(@NotNull final HBox container) {
 
         final StackPane previewContainer = new StackPane();
@@ -280,7 +272,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         final Array<FilePreview> availablePreviews = FILE_PREVIEW_FACTORY_REGISTRY.createAvailablePreviews();
         availablePreviews.forEach(previewContainer, FilePreview::initialize);
 
-        FXUtils.addClassTo(previewContainer, CSSClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
+        FXUtils.addClassTo(previewContainer, CssClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         this.previews = availablePreviews;
 
@@ -292,7 +284,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @return the function for validating the choose.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Function<@NotNull C, @Nullable String> getValidator() {
         return validator;
     }
@@ -300,7 +292,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
     /**
      * @return the label with any warning.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Label getWarningLabel() {
         return notNull(warningLabel);
     }
@@ -310,20 +302,20 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @return the list of available file previews.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Array<FilePreview> getPreviews() {
         return notNull(previews);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
         getPreviews().forEach(FilePreview::release);
         super.hide();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createBeforeActions(@NotNull final HBox container) {
         super.createBeforeActions(container);
 
@@ -331,12 +323,12 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
-        FXUtils.addClassTo(warningLabel, CSSClasses.DIALOG_LABEL_WARNING);
+        FXUtils.addClassTo(warningLabel, CssClasses.DIALOG_LABEL_WARNING);
         FXUtils.addToPane(warningLabel, container);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
@@ -349,7 +341,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @return the disable condition.
      */
-    @FXThread
+    @FxThread
     protected @NotNull BooleanBinding buildDisableCondition() {
         final Label warningLabel = getWarningLabel();
         return warningLabel.visibleProperty().or(buildAdditionalDisableCondition());
@@ -360,7 +352,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      *
      * @return the additional condition.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
         throw new RuntimeException("unsupported");
     }

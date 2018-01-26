@@ -1,10 +1,10 @@
 package com.ss.editor.plugin.api.property.control;
 
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -43,7 +43,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -66,18 +66,18 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         gridPane.add(yField, 1, 0);
         gridPane.add(zField, 2, 0);
 
-        FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
-                CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassesTo(gridPane, CssClasses.DEF_GRID_PANE, CssClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CssClasses.TRANSPARENT_TEXT_FIELD);
         FXUtils.addToPane(gridPane, this);
 
-        UIUtils.addFocusBinding(gridPane, xField, yField, zField);
+        UiUtils.addFocusBinding(gridPane, xField, yField, zField);
     }
 
     /**
      * @return the field X.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getXField() {
         return xField;
     }
@@ -85,7 +85,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     /**
      * @return the field Y.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getYField() {
         return yField;
     }
@@ -93,13 +93,13 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     /**
      * @return the field Z.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getZField() {
         return zField;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
 
@@ -116,7 +116,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         final FloatTextField xField = getXField();
         final FloatTextField yField = getYField();

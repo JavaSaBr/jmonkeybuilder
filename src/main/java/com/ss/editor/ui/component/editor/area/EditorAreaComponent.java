@@ -4,13 +4,13 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppStateManager;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
@@ -18,7 +18,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.workspace.Workspace;
-import com.ss.editor.state.editor.Editor3DState;
+import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -26,11 +26,12 @@ import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 import com.ss.editor.ui.dialog.ConfirmDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.scene.EditorFxScene;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.logging.Logger;
@@ -94,19 +95,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
 
     @NotNull
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
-
-    @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The table of opened editors.
@@ -119,14 +114,11 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      */
     private boolean ignoreOpenedFiles;
 
-    /**
-     * Instantiates a new Editor area component.
-     */
     public EditorAreaComponent() {
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
         setPickOnBounds(true);
-        setId(CSSIds.EDITOR_AREA_COMPONENT);
+        setId(CssIds.EDITOR_AREA_COMPONENT);
         getTabs().addListener(this::processChangeTabs);
         getSelectionModel().selectedItemProperty()
                 .addListener(this::switchEditor);
@@ -139,7 +131,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processEvent((ChangedCurrentAssetFolderEvent) event));
     }
 
-    @FXThread
+    @FxThread
     private void switchEditor(@NotNull final ObservableValue<? extends Tab> observable, @Nullable final Tab oldValue,
                               @Nullable final Tab newValue) {
 
@@ -165,7 +157,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             current3DArea = fileEditor.get3DArea();
         }
 
-        final EditorFXScene scene = (EditorFXScene) getScene();
+        final EditorFxScene scene = (EditorFxScene) getScene();
         final ImageView canvas = scene.getCanvas();
 
         if (new3DArea != null) {
@@ -178,13 +170,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Workspace workspace = notNull(WORKSPACE_MANAGER.getCurrentWorkspace());
         workspace.updateCurrentEditedFile(newCurrentFile);
 
-        EXECUTOR_MANAGER.addJMETask(() -> processShowEditor(oldValue, newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> processShowEditor(oldValue, newValue));
     }
 
     /**
      * Handle changing the current asset folder.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final ChangedCurrentAssetFolderEvent event) {
         setIgnoreOpenedFiles(true);
         try {
@@ -218,7 +210,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle a renamed file.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final RenamedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
@@ -230,7 +222,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle a moved file.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final MovedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
@@ -245,7 +237,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param prevFile the prev version of the file.
      * @param newFile  the new version of the file.
      */
-    @FXThread
+    @FxThread
     private void handleMovedFiles(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
         final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
@@ -291,7 +283,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request to convert a file.
      */
-    @FXThread
+    @FxThread
     private void processConvertFile(@NotNull final RequestedConvertFileEvent event) {
 
         final Path file = event.getFile();
@@ -315,7 +307,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request to create a file.
      */
-    @FXThread
+    @FxThread
     private void processCreateFile(@NotNull final RequestedCreateFileEvent event) {
 
         final Path file = event.getFile();
@@ -330,7 +322,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request to close a file editor.
      */
-    @FXThread
+    @FxThread
     private void processChangeTabs(@NotNull final ListChangeListener.Change<? extends Tab> change) {
         if (!change.next()) return;
 
@@ -359,7 +351,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      *
      * @return the current editor.
      */
-    @FXThread
+    @FxThread
     public @Nullable FileEditor getCurrentEditor() {
         final Tab selectedTab = getSelectionModel().getSelectedItem();
         if (selectedTab == null) return null;
@@ -373,12 +365,12 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param prevTab the previous editor.
      * @param newTab  the new editor.
      */
-    @JMEThread
+    @JmeThread
     private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
-        final AppStateManager stateManager = EDITOR.getStateManager();
-        final ImageView canvas = JFX_APPLICATION.getScene().getCanvas();
-        final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+        final AppStateManager stateManager = EditorUtil.getStateManager();
+        final ImageView canvas = EditorUtil.getFxScene().getCanvas();
+        final FrameTransferSceneProcessor sceneProcessor = JfxApplication.getInstance().getSceneProcessor();
 
         boolean enabled = false;
 
@@ -387,7 +379,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = prevTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<Editor3DState> states = fileEditor.get3DStates();
+            final Array<Editor3DPart> states = fileEditor.get3DStates();
             states.forEach(stateManager::detach);
         }
 
@@ -396,7 +388,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = newTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<Editor3DState> states = fileEditor.get3DStates();
+            final Array<Editor3DPart> states = fileEditor.get3DStates();
             states.forEach(stateManager::attach);
 
             enabled = states.size() > 0;
@@ -404,7 +396,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         if (sceneProcessor.isEnabled() != enabled) {
             final boolean result = enabled;
-            EXECUTOR_MANAGER.addFXTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> {
                 ThreadUtils.sleep(100);
                 canvas.setOpacity(result ? 1D : 0D);
                 sceneProcessor.setEnabled(result);
@@ -415,7 +407,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request to open a file.
      */
-    @FXThread
+    @FxThread
     private void processOpenFile(@NotNull final RequestedOpenFileEvent event) {
 
         final Path file = event.getFile();
@@ -429,7 +421,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
     }
@@ -437,7 +429,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @BackgroundThread
     private void processOpenFileImpl(@NotNull final RequestedOpenFileEvent event, @NotNull final Path file) {
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final EditorFxScene scene = EditorUtil.getFxScene();
 
         FileEditor editor;
         try {
@@ -449,18 +441,19 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
-            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
             return;
         }
 
         if (editor == null) {
-            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
             return;
         }
 
         final FileEditor resultEditor = editor;
 
-        final long stamp = EDITOR.asyncLock();
+        final JmeApplication jmeApplication = JmeApplication.getInstance();
+        final long stamp = jmeApplication.asyncLock();
         try {
             editor.openFile(file);
         } catch (final Throwable e) {
@@ -471,17 +464,17 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 workspace.removeOpenedFile(file);
             }
 
-            EXECUTOR_MANAGER.addFXTask(() -> {
-                EditorUtil.decrementLoading();
+            EXECUTOR_MANAGER.addFxTask(() -> {
+                UiUtils.decrementLoading();
                 resultEditor.notifyClosed();
             });
 
             return;
         } finally {
-            EDITOR.asyncUnlock(stamp);
+            jmeApplication.asyncUnlock(stamp);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> addEditor(resultEditor, event.isNeedShow()));
+        EXECUTOR_MANAGER.addFxTask(() -> addEditor(resultEditor, event.isNeedShow()));
     }
 
     /**
@@ -490,7 +483,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param editor   the editor
      * @param needShow the need show
      */
-    @FXThread
+    @FxThread
     private void addEditor(@NotNull final FileEditor editor, final boolean needShow) {
 
         final Path editFile = editor.getEditFile();
@@ -517,7 +510,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
 
-        EditorUtil.decrementLoading();
+        UiUtils.decrementLoading();
 
         if (isIgnoreOpenedFiles()) {
             return;
@@ -530,7 +523,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
     }
 
-    @FXThread
+    @FxThread
     private void handleRequestToCloseEditor(@NotNull final FileEditor editor, @NotNull final Tab tab,
                                             @NotNull final Event event) {
         if (!editor.isDirty()) {
@@ -561,7 +554,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void notifyFinishBuild() {
         setIgnoreOpenedFiles(true);
         try {
@@ -574,7 +567,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Load all opened files.
      */
-    @FXThread
+    @FxThread
     private void loadOpenedFiles() {
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();

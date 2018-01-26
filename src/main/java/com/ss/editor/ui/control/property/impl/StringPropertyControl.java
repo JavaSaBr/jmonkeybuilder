@@ -1,11 +1,11 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -35,7 +35,7 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -43,7 +43,7 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
         valueField.setOnKeyReleased(this::updateValue);
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 
@@ -56,13 +56,13 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     /**
      * @return the filed with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         final String value = getPropertyValue();
         final TextField valueField = getValueField();
@@ -74,7 +74,7 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     /**
      * Update the value.
      */
-    @FXThread
+    @FxThread
     private void updateValue(@NotNull final KeyEvent event) {
         if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) return;
 

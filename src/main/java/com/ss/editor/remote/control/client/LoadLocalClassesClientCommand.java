@@ -1,9 +1,9 @@
 package com.ss.editor.remote.control.client;
 
-import com.ss.editor.Editor;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.network.ConnectionOwner;
 import com.ss.rlib.network.annotation.PacketDescription;
 import com.ss.rlib.util.StringUtils;
@@ -24,9 +24,6 @@ public class LoadLocalClassesClientCommand extends ClientCommand {
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
-    @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
-
     @Override
     @BackgroundThread
     protected void readImpl(@NotNull final ConnectionOwner owner, @NotNull final ByteBuffer buffer) {
@@ -36,6 +33,6 @@ public class LoadLocalClassesClientCommand extends ClientCommand {
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
         classpathManager.loadLocalClasses(output);
 
-        EXECUTOR_MANAGER.addJMETask(() -> EDITOR.getAssetManager().clearCache());
+        EXECUTOR_MANAGER.addJmeTask(() -> EditorUtil.getAssetManager().clearCache());
     }
 }

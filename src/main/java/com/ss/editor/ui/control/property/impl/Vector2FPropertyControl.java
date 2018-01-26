@@ -2,12 +2,12 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.KeyCode;
@@ -49,7 +49,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
@@ -59,7 +59,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -83,24 +83,24 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
         FXUtils.addToPane(yField, fieldContainer);
         FXUtils.addToPane(fieldContainer, container);
 
-        FXUtils.addClassesTo(fieldContainer, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(fieldContainer, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
+                CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
 
-        FXUtils.addClassesTo(xField, yField, CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassesTo(xField, yField, CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UIUtils.addFocusBinding(fieldContainer, xField, yField);
+        UiUtils.addFocusBinding(fieldContainer, xField, yField);
     }
 
     /**
      * @return the field container.
      */
-    @FXThread
+    @FxThread
     private @NotNull HBox getFieldContainer() {
         return notNull(fieldContainer);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final Vector2f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
@@ -118,7 +118,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      * @param y the y
      * @return the float
      */
-    @FXThread
+    @FxThread
     protected float checkResultXValue(final float x, final float y) {
         return x;
     }
@@ -130,7 +130,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      * @param y the y
      * @return the float
      */
-    @FXThread
+    @FxThread
     protected float checkResultYValue(final float x, final float y) {
         return y;
     }
@@ -140,7 +140,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field X.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getXField() {
         return notNull(xField);
     }
@@ -150,13 +150,13 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @return the field Y.
      */
-    @FXThread
+    @FxThread
     protected @NotNull FloatTextField getYField() {
         return notNull(yField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final Vector2f vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
@@ -175,7 +175,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      *
      * @param event the event
      */
-    @FXThread
+    @FxThread
     private void updateVector(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

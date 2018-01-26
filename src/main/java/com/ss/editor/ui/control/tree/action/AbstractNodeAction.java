@@ -1,11 +1,9 @@
 package com.ss.editor.ui.control.tree.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -24,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem {
+public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem implements Comparable<MenuItem> {
 
     /**
      * The logger.
@@ -37,18 +35,6 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The FX application of this Editor.
-     */
-    @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * The Editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The component of the node tree.
@@ -80,13 +66,13 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the name of this action.
      */
-    @FXThread
+    @FxThread
     protected abstract @NotNull String getName();
 
     /**
      * Execute this action.
      */
-    @FXThread
+    @FxThread
     protected void process() {
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EXECUTE_NODE_ACTION, getClass().getSimpleName());
     }
@@ -96,17 +82,17 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return he icon or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return null;
     }
 
     /**
-     * Gets node tree.
+     * Get the node tree.
      *
      * @return the component of the model three.
      */
-    @FXThread
+    @FxThread
     protected @NotNull NodeTree<C> getNodeTree() {
         return nodeTree;
     }
@@ -116,9 +102,28 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      *
      * @return the node of the model.
      */
-    @FXThread
+    @FxThread
     protected @NotNull TreeNode<?> getNode() {
         return node;
+    }
+
+    /**
+     * Get the order.
+     *
+     * @return the order.
+     */
+    @FxThread
+    protected int getOrder() {
+        return 0;
+    }
+
+    @Override
+    public int compareTo(@NotNull final MenuItem item) {
+        if (!(item instanceof AbstractNodeAction)) {
+            return 0;
+        } else {
+            return ((AbstractNodeAction) item).getOrder() - getOrder();
+        }
     }
 
     @Override

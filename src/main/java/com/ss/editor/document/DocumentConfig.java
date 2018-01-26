@@ -1,13 +1,12 @@
 package com.ss.editor.document;
 
+import com.ss.rlib.data.AbstractStreamDocument;
+import com.ss.rlib.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.io.InputStream;
-
-import com.ss.rlib.data.AbstractStreamDocument;
-import com.ss.rlib.util.VarTable;
 
 /**
  * The config reader.
@@ -22,11 +21,6 @@ public final class DocumentConfig extends AbstractStreamDocument<VarTable> {
     private static final String ATTR_NAME = "name";
     private static final String ATTR_VALUE = "value";
 
-    /**
-     * Instantiates a new Document config.
-     *
-     * @param stream the stream
-     */
     public DocumentConfig(@NotNull final InputStream stream) {
         super(stream);
     }

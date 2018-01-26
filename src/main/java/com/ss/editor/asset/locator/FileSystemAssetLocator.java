@@ -1,10 +1,10 @@
 package com.ss.editor.asset.locator;
 
+import static com.ss.editor.util.EditorUtil.getAssetManager;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.ArrayUtils;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -33,12 +33,7 @@ public class FileSystemAssetLocator implements AssetLocator {
     public static void clear() {
         final long stamp = LOCATED_KEYS.writeLock();
         try {
-
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
-
-            LOCATED_KEYS.forEach(assetManager, (assetKey, manager) -> manager.deleteFromCache(assetKey));
-
+            LOCATED_KEYS.forEach(getAssetManager(), (assetKey, manager) -> manager.deleteFromCache(assetKey));
         } finally {
             LOCATED_KEYS.writeUnlock(stamp);
         }
@@ -52,7 +47,9 @@ public class FileSystemAssetLocator implements AssetLocator {
     public AssetInfo locate(@NotNull final AssetManager manager, @NotNull final AssetKey key) {
 
         final Path absoluteFile = Paths.get(key.getName());
-        if (!Files.exists(absoluteFile)) return null;
+        if (!Files.exists(absoluteFile)) {
+            return null;
+        }
 
         ArrayUtils.runInWriteLock(LOCATED_KEYS, key, Collection::add);
 

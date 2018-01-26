@@ -1,6 +1,6 @@
 package com.ss.editor.ui.preview;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +16,6 @@ public interface FilePreviewFactory {
      *
      * @param result the list to store new implementations.
      */
-    @FXThread
+    @FxThread
     void createFilePreviews(@NotNull Array<FilePreview> result);
 }

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.preview.impl;
 
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.JavaFxImageManager;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -19,16 +19,16 @@ public class ImageFilePreview extends AbstractFilePreview<ImageView> {
      * The image manager.
      */
     @NotNull
-    protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    protected static final JavaFxImageManager JAVA_FX_IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ImageView createGraphicsNode() {
         return new ImageView();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void initialize(@NotNull final ImageView node, @NotNull final StackPane pane) {
         super.initialize(node, pane);
 
@@ -37,14 +37,14 @@ public class ImageFilePreview extends AbstractFilePreview<ImageView> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
         super.hide();
         getGraphicsNode().setImage(null);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Path file) {
         super.show(file);
 
@@ -56,7 +56,7 @@ public class ImageFilePreview extends AbstractFilePreview<ImageView> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final String resource) {
         super.show(resource);
 
@@ -68,25 +68,25 @@ public class ImageFilePreview extends AbstractFilePreview<ImageView> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isSupport(@NotNull final String resource) {
-        return JavaFXImageManager.isImage(resource);
+        return JavaFxImageManager.isImage(resource);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isSupport(@NotNull final Path file) {
-        return JavaFXImageManager.isImage(file);
+        return JavaFxImageManager.isImage(file);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public int getOrder() {
         return 10;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void release() {
         getGraphicsNode().setImage(null);
     }

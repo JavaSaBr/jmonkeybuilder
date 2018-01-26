@@ -14,19 +14,20 @@ import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.state.editor.impl.model.ModelEditor3DState;
-import com.ss.editor.state.editor.impl.model.ModelEditorBulletState;
+import com.ss.editor.part3d.editor.impl.model.ModelEditor3DPart;
+import com.ss.editor.part3d.editor.impl.model.ModelEditorBulletPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorModelEditorState;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -48,7 +49,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DState, EditorModelEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DPart, EditorModelEditorState> {
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -81,7 +82,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @NotNull
-    private final ModelEditorBulletState bulletState;
+    private final ModelEditorBulletPart bulletState;
 
     /**
      * The list of fast skies.
@@ -109,23 +110,23 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     private ModelFileEditor() {
         super();
-        this.bulletState = new ModelEditorBulletState(getEditor3DState());
+        this.bulletState = new ModelEditorBulletPart(getEditor3DPart());
         this.bulletState.setEnabled(false);
         this.bulletState.setDebugEnabled(false);
         this.bulletState.setSpeed(1F);
-        addEditorState(bulletState);
+        addEditor3DPart(bulletState);
     }
 
     @Override
-    @FXThread
-    protected @NotNull ModelEditor3DState create3DEditorState() {
-        return new ModelEditor3DState(this);
+    @FxThread
+    protected @NotNull ModelEditor3DPart create3DEditorPart() {
+        return new ModelEditor3DPart(this);
     }
 
     /**
      * @return the list of fast skies.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<String> getFastSkyComboBox() {
         return notNull(fastSkyComboBox);
     }
@@ -133,7 +134,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     /**
      * @return the light toggle.
      */
-    @FXThread
+    @FxThread
     private @NotNull ToggleButton getLightButton() {
         return notNull(lightButton);
     }
@@ -141,7 +142,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     /**
      * @return the physics toggle.
      */
-    @FXThread
+    @FxThread
     private @NotNull ToggleButton getPhysicsButton() {
         return notNull(physicsButton);
     }
@@ -149,25 +150,25 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     /**
      * @return the debug physics button.
      */
-    @FXThread
+    @FxThread
     private @NotNull ToggleButton getDebugPhysicsButton() {
         return notNull(debugPhysicsButton);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void doOpenFile(@NotNull final Path file) throws IOException {
         super.doOpenFile(file);
 
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         editor3DState.openModel(model);
 
         handleAddedObject(model);
@@ -187,7 +188,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void loadState() {
         super.loadState();
 
@@ -207,17 +208,17 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorModelEditorState::new;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleAddedObject(@NotNull final Spatial model) {
         super.handleAddedObject(model);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -232,11 +233,11 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleRemovedObject(@NotNull final Spatial model) {
         super.handleRemovedObject(model);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -257,7 +258,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
 
@@ -280,7 +281,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createActions(@NotNull final HBox container) {
         super.createActions(container);
 
@@ -307,18 +308,21 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
         DynamicIconSupport.addSupport(lightButton, physicsButton, debugPhysicsButton);
 
-        FXUtils.addClassTo(lightButton, physicsButton, debugPhysicsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(lightButton, physicsButton, debugPhysicsButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addToPane(lightButton, physicsButton, debugPhysicsButton, container);
     }
 
     /**
      * Handle changing a sky.
      */
-    @FXThread
+    @FxThread
     private void changeFastSky(@NotNull final String newSky) {
-        if (isIgnoreListeners()) return;
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        if (isIgnoreListeners()) {
+            return;
+        }
+
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
 
         if (NO_FAST_SKY.equals(newSky)) {
             editor3DState.changeFastSky(null);
@@ -327,7 +331,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             return;
         }
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final TextureKey key = new TextureKey(newSky, true);
         key.setGenerateMips(false);
@@ -342,25 +346,27 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         final int selectedIndex = selectionModel.getSelectedIndex();
 
         final EditorModelEditorState editorState = getEditorState();
-        if (editorState != null) editorState.setSkyType(selectedIndex);
+        if (editorState != null) {
+            editorState.setSkyType(selectedIndex);
+        }
     }
 
     /**
      * @return the bullet state.
      */
-    @FXThread
-    private @NotNull ModelEditorBulletState getBulletState() {
+    @FxThread
+    private @NotNull ModelEditorBulletPart getBulletState() {
         return bulletState;
     }
 
     /**
      * Handle to change enabling of physics.
      */
-    @FXThread
+    @FxThread
     private void changePhysics(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setEnabled(newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getBulletState().setEnabled(newValue));
 
         if (editorState != null) editorState.setEnablePhysics(newValue);
     }
@@ -368,11 +374,11 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     /**
      * Handle to change enabling of physics.
      */
-    @FXThread
+    @FxThread
     private void changeDebugPhysics(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        EXECUTOR_MANAGER.addJMETask(() -> getBulletState().setDebugEnabled(newValue));
+        EXECUTOR_MANAGER.addJmeTask(() -> getBulletState().setDebugEnabled(newValue));
 
         if (editorState != null) editorState.setEnableDebugPhysics(newValue);
     }
@@ -380,23 +386,23 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     /**
      * Handle changing camera light visibility.
      */
-    @FXThread
+    @FxThread
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
         editor3DState.updateLightEnabled(newValue);
 
         if (editorState != null) editorState.setEnableLight(newValue);
     }
 
     @Override
-    @FXThread
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+    @FxThread
+    public void notifyFxAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
                                    final boolean needSelect) {
-        super.notifyFXAddedChild(parent, added, index, needSelect);
+        super.notifyFxAddedChild(parent, added, index, needSelect);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
 
         if (added instanceof Spatial) {
 
@@ -409,15 +415,15 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             }
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyAdded(added));
+        EXECUTOR_MANAGER.addFxTask(() -> getBulletState().notifyAdded(added));
     }
 
     @Override
-    @FXThread
-    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
-        super.notifyFXRemovedChild(parent, removed);
+    @FxThread
+    public void notifyFxRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+        super.notifyFxRemovedChild(parent, removed);
 
-        final ModelEditor3DState editor3DState = getEditor3DState();
+        final ModelEditor3DPart editor3DState = getEditor3DPart();
 
         if (removed instanceof Spatial) {
 
@@ -430,7 +436,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             }
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> getBulletState().notifyRemoved(removed));
+        EXECUTOR_MANAGER.addFxTask(() -> getBulletState().notifyRemoved(removed));
     }
 
     @Override

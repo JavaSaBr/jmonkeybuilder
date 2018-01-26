@@ -4,6 +4,7 @@ import static java.lang.Thread.currentThread;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.*;
 import com.ss.editor.EditorThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.CycleBuffer;
 import com.ss.rlib.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +19,11 @@ public class LocalObjects {
     private static final int SIZE = 50;
 
     /**
-     * Get local objects.
+     * Get the local objects.
      *
      * @return the local objects
      */
-    @NotNull
-    public static LocalObjects get() {
+    public static @NotNull LocalObjects get() {
         return ((EditorThread) currentThread()).getLocal();
     }
 
@@ -70,7 +70,7 @@ public class LocalObjects {
     private final CycleBuffer<ReusableCollisionResults> collisionResultsBuffer;
 
     /**
-     * The buffer of matrixes.
+     * The buffer of matrix.
      */
     @NotNull
     private final CycleBuffer<Matrix3f> matrix3fBuffer;
@@ -81,9 +81,6 @@ public class LocalObjects {
     @NotNull
     private final CycleBuffer<float[]> matrixFloatBuffer;
 
-    /**
-     * Instantiates a new Local objects.
-     */
     @SuppressWarnings("unchecked")
     public LocalObjects() {
         this.vectorBuffer = new CycleBuffer<>(Vector3f.class, SIZE, Vector3f::new);
@@ -99,128 +96,128 @@ public class LocalObjects {
     }
 
     /**
-     * Next matrix 3 f matrix 3 f.
+     * Get next free matrix.
      *
      * @return the next free matrix.
      */
-    @NotNull
-    public Matrix3f nextMatrix3f() {
+    @FromAnyThread
+    public @NotNull Matrix3f nextMatrix3f() {
         return matrix3fBuffer.next();
     }
 
     /**
-     * Next matrix float float [ ].
+     * Get the next free matrix float array.
      *
      * @return the next free matrix float array.
      */
-    @NotNull
-    public float[] nextMatrixFloat() {
+    @FromAnyThread
+    public @NotNull float[] nextMatrixFloat() {
         return matrixFloatBuffer.next();
     }
 
     /**
-     * Next free ray.
+     * Get the next free ray.
      *
      * @return the next free ray.
      */
-    @NotNull
-    public Ray nextRay() {
+    @FromAnyThread
+    public @NotNull Ray nextRay() {
         return rayBuffer.next();
     }
 
     /**
-     * Next free collision results.
+     * Get the next free collision results.
      *
      * @return the next free collision results.
      */
-    @NotNull
-    public CollisionResults nextCollisionResults() {
+    @FromAnyThread
+    public @NotNull CollisionResults nextCollisionResults() {
         return collisionResultsBuffer.next();
     }
 
     /**
-     * Next rotation quaternion.
+     * Get the next free rotation.
      *
      * @return the next free rotation.
      */
-    @NotNull
-    public Quaternion nextRotation() {
+    @FromAnyThread
+    public @NotNull Quaternion nextRotation() {
         return rotationBuffer.next();
     }
 
     /**
-     * Gets the next free vector.
+     * Get the next free vector.
      *
      * @return the next free vector.
      */
-    @NotNull
-    public Vector3f nextVector() {
+    @FromAnyThread
+    public @NotNull Vector3f nextVector() {
         return vectorBuffer.next();
     }
 
     /**
-     * Gets the next free vector.
+     * Get the next free vector with values from the source vector.
      *
-     * @param vector3f to copy vector.
-     * @return the next free vector.
+     * @param vector3f the source vector.
+     * @return the next free vector with values from the source vector.
      */
-    @NotNull
-    public Vector3f nextVector(@NotNull final Vector3f vector3f) {
+    @FromAnyThread
+    public @NotNull Vector3f nextVector(@NotNull final Vector3f vector3f) {
         return vectorBuffer.next().set(vector3f);
     }
 
     /**
-     * Gets the next free vector.
+     * Get the next free vector with the values.
      *
      * @param x the X value.
      * @param y the Y value.
      * @param z the Z value.
-     * @return the next free vector.
+     * @return the next free vector with the values.
      */
-    @NotNull
-    public Vector3f nextVector(final float x, final float y, final float z) {
+    @FromAnyThread
+    public @NotNull Vector3f nextVector(final float x, final float y, final float z) {
         return vectorBuffer.next().set(x, y, z);
     }
 
     /**
-     * Next vector 2 f vector 2 f.
+     * Get the next free vector.
      *
      * @return the next free vector.
      */
-    @NotNull
-    public Vector2f nextVector2f() {
+    @FromAnyThread
+    public @NotNull Vector2f nextVector2f() {
         return vector2fBuffer.next();
     }
 
     /**
-     * Gets the next free vector.
+     * Get the next free vector with the values.
      *
      * @param x the X value.
      * @param y the Y value.
-     * @return the next free vector.
+     * @return the next free vector with the values.
      */
-    @NotNull
-    public Vector2f nextVector(final float x, final float y) {
+    @FromAnyThread
+    public @NotNull Vector2f nextVector(final float x, final float y) {
         return vector2fBuffer.next().set(x, y);
     }
 
     /**
-     * Next plane plane.
+     * Get the next free plane.
      *
      * @return the next free plane.
      */
-    @NotNull
-    public Plane nextPlane() {
+    @FromAnyThread
+    public @NotNull Plane nextPlane() {
         return planeBuffer.next();
     }
 
     /**
-     * Next color color rgba.
+     * Get the next color.
      *
      * @return the next color.
      */
-    @NotNull
-    public ColorRGBA nextColor() {
+    @FromAnyThread
+    public @NotNull ColorRGBA nextColor() {
         return colorBuffer.next();
     }
 }

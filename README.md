@@ -1,4 +1,4 @@
-# jMonkeyBuilder 1.4.0 #
+# jMonkeyBuilder 1.6.0 #
 ### It's 3D Editor to prepare/work/create graphics content for jMonkeyEngine 3.2 ###
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

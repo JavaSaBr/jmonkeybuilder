@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -39,7 +39,7 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
      *
      * @return the tooltip.
      */
-    @FXThread
+    @FxThread
     public @Nullable Tooltip createToolTip() {
         return null;
     }

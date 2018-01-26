@@ -1,9 +1,9 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.TextField;
@@ -29,7 +29,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -37,20 +37,20 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
         valueField.textProperty().addListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
     }
 
     /**
      * @return the value field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final String value = getPropertyValue();
@@ -58,7 +58,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getValueField().getText());
         super.changeImpl();

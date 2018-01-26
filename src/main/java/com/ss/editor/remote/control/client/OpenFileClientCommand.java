@@ -1,13 +1,13 @@
 package com.ss.editor.remote.control.client;
 
-import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.AssetComponentLoadedEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.network.ConnectionOwner;
 import com.ss.rlib.network.annotation.PacketDescription;
 import javafx.event.Event;
@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 public class OpenFileClientCommand extends ClientCommand {
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -43,9 +43,9 @@ public class OpenFileClientCommand extends ClientCommand {
         final Path currentAsset = editorConfig.getCurrentAsset();
 
         if (currentAsset != null && assetPath.equals(currentAsset)) {
-            EXECUTOR_MANAGER.addFXTask(() -> openFile(fileToOpen));
+            EXECUTOR_MANAGER.addFxTask(() -> openFile(fileToOpen));
         } else {
-            EXECUTOR_MANAGER.addFXTask(() -> {
+            EXECUTOR_MANAGER.addFxTask(() -> {
 
                 final OpenAssetAction action = new OpenAssetAction();
                 action.openAssetFolder(assetPath);
@@ -72,6 +72,6 @@ public class OpenFileClientCommand extends ClientCommand {
      */
     private void openFile(@NotNull final Path fileToOpen) {
         FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
-        JFXApplication.getInstance().requestFocus();
+        EditorUtil.requestFxFocus();
     }
 }

@@ -3,7 +3,7 @@ package com.ss.editor.util;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.annotation.FromAnyThread;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,10 @@ import java.lang.reflect.Field;
  */
 public class AudioNodeUtils {
 
+    @NotNull
     private static final Field AUDIO_DATA_FIELD;
+
+    @NotNull
     private static final Field AUDIO_KEY_FIELD;
 
     static {
@@ -42,7 +45,7 @@ public class AudioNodeUtils {
      * @param audioData the audio data.
      * @param audioKey  the audio key.
      */
-    @JMEThread
+    @JmeThread
     public static void updateData(@NotNull final AudioNode audioNode, @Nullable final AudioData audioData,
                                   @Nullable final AudioKey audioKey) {
         try {
@@ -59,9 +62,8 @@ public class AudioNodeUtils {
      * @param audioNode the audio node.
      * @return the audio key.
      */
-    @Nullable
     @FromAnyThread
-    public static AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
+    public static @Nullable AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
         try {
             return (AudioKey) AUDIO_KEY_FIELD.get(audioNode);
         } catch (final IllegalAccessException e) {

@@ -1,21 +1,19 @@
 package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -74,13 +72,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The FX event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The javaFX part of this editor.
-     */
-    @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The executor manager.
@@ -92,13 +84,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The image preview manager.
      */
     @NotNull
-    protected static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     /**
      * The change handler.
@@ -165,8 +151,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
         this.changeConsumer = changeConsumer;
         this.changeHandler = changeHandler == null ? newChangeHandler() : changeHandler;
 
-        setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
-        setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
+        setOnKeyReleased(UiUtils::consumeIfIsNotHotKey);
+        setOnKeyPressed(UiUtils::consumeIfIsNotHotKey);
         setPropertyValue(propertyValue);
         createComponents();
         setIgnoreListener(true);
@@ -176,7 +162,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             setIgnoreListener(false);
         }
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_CONTROL);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_PARAM_CONTROL);
     }
 
     /**
@@ -200,7 +186,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param editObject the edit object.
      */
-    @FXThread
+    @FxThread
     public void setEditObject(@NotNull final D editObject) {
         this.editObject = editObject;
     }
@@ -211,7 +197,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @param editObject the edit object.
      * @param needReload the true if need to reload.
      */
-    @FXThread
+    @FxThread
     public void setEditObject(@NotNull final D editObject, final boolean needReload) {
         setEditObject(editObject);
         if (!needReload) return;
@@ -228,7 +214,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param applyHandler the handler for handling new value.
      */
-    @FXThread
+    @FxThread
     public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
@@ -248,7 +234,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param syncHandler the handler for getting actual value.
      */
-    @FXThread
+    @FxThread
     public void setSyncHandler(@Nullable final Function<D, T> syncHandler) {
         this.syncHandler = syncHandler;
     }
@@ -276,7 +262,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     /**
      * Initializing control.
      */
-    @FXThread
+    @FxThread
     protected void reload() {
     }
 
@@ -284,7 +270,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * Synchronize value from the edit object.
      */
     @Override
-    @FXThread
+    @FxThread
     public void sync() {
         setIgnoreListener(true);
         try {
@@ -308,7 +294,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     /**
      * Create this control.
      */
-    @FXThread
+    @FxThread
     protected void createComponents() {
         setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
@@ -321,9 +307,9 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
         }
 
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
-                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
+                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
 
         FXUtils.addToPane(propertyNameLabel, isSingleRow() ? container : this);
 
@@ -337,7 +323,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return the property name label.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Label getPropertyNameLabel() {
         return propertyNameLabel;
     }
@@ -347,7 +333,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param controlWidthPercent the control width percent.
      */
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
 
         if (!isSingleRow()) {
@@ -374,7 +360,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param container the container
      */
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
     }
 
@@ -404,7 +390,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @param newValue the new value
      * @param oldValue the old value
      */
-    @FXThread
+    @FxThread
     protected void changed(@Nullable final T newValue, @Nullable final T oldValue) {
         changeHandler.accept(getChangeConsumer(), getEditObject(), getPropertyName(), newValue, oldValue, getApplyHandler());
     }
@@ -414,7 +400,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return the value of the property.
      */
-    @FXThread
+    @FxThread
     public @Nullable T getPropertyValue() {
         return propertyValue;
     }
@@ -434,7 +420,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param propertyValue the value of the property.
      */
-    @FXThread
+    @FxThread
     protected void setPropertyValue(@Nullable final T propertyValue) {
         this.propertyValue = propertyValue;
     }
@@ -444,7 +430,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @param ignoreListener the flag for ignoring listeners.
      */
-    @FXThread
+    @FxThread
     protected void setIgnoreListener(final boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
@@ -454,7 +440,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return true if need to ignore listeners.
      */
-    @FXThread
+    @FxThread
     protected boolean isIgnoreListener() {
         return ignoreListener;
     }

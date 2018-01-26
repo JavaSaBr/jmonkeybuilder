@@ -1,7 +1,7 @@
 package com.ss.editor.model.editor;
 
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,16 +16,14 @@ public interface Editor3DProvider {
      *
      * @return the cursor node.
      */
-    @NotNull
-    @JMEThread
-    Node getCursorNode();
+    @JmeThread
+    @NotNull Node getCursorNode();
 
     /**
      * Get a node to place some markers in 3D editor.
      *
      * @return the markers node.
      */
-    @NotNull
-    @JMEThread
-    Node getMarkersNode();
+    @JmeThread
+    @NotNull Node getMarkersNode();
 }

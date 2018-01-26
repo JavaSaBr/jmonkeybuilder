@@ -11,12 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LayerNodeTreeCell extends NodeTreeCell<SceneChangeConsumer, LayerNodeTree> {
 
-    /**
-     * Instantiates a new Layer node tree cell.
-     *
-     * @param nodeTree the node tree
-     */
-    LayerNodeTreeCell(@NotNull final LayerNodeTree nodeTree) {
+    public LayerNodeTreeCell(@NotNull final LayerNodeTree nodeTree) {
         super(nodeTree);
     }
 }

@@ -16,6 +16,6 @@ public class DevelopPluginStarter {
     public static void main(@NotNull final String[] args) throws IOException {
         final Path embeddedFolder = Paths.get("./embedded-plugins");
         System.setProperty("editor.embedded.plugins.path", embeddedFolder.toAbsolutePath().toString());
-        JFXApplication.main(args);
+        JfxApplication.main(args);
     }
 }

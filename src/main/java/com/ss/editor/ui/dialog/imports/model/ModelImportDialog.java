@@ -1,5 +1,7 @@
 package com.ss.editor.ui.dialog.imports.model;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -19,16 +21,17 @@ import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.asset.locator.FileSystemAssetLocator;
 import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.JMEFilePreviewManager;
-import com.ss.editor.model.tool.TangentGenerator;
+import com.ss.editor.manager.JmeFilePreviewManager;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.serializer.MaterialSerializer;
+import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.StringUtils;
@@ -111,7 +114,7 @@ public class ModelImportDialog extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createPreview(@NotNull final BorderPane container) {
         super.createPreview(container);
         imageView = new ImageView();
@@ -131,13 +134,13 @@ public class ModelImportDialog extends GenericFileCreator {
      *
      * @return the image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean validate(@NotNull final VarTable vars) {
 
         final ImageView imageView = getImageView();
@@ -149,7 +152,7 @@ public class ModelImportDialog extends GenericFileCreator {
 
         final Path file = vars.get(PROP_FILE);
 
-        if (!JMEFilePreviewManager.isModelFile(file)) {
+        if (!JmeFilePreviewManager.isModelFile(file)) {
             imageView.setImage(null);
             return false;
         }
@@ -162,7 +165,7 @@ public class ModelImportDialog extends GenericFileCreator {
         final int width = (int) imageView.getFitWidth();
         final int height = (int) imageView.getFitHeight();
 
-        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+        final JmeFilePreviewManager previewManager = JmeFilePreviewManager.getInstance();
         previewManager.showExternal(file, width, height);
 
         final ImageView sourceView = previewManager.getImageView();
@@ -175,15 +178,15 @@ public class ModelImportDialog extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         hide();
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
                 importModel();
             } finally {
-                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
             }
         });
     }
@@ -207,7 +210,7 @@ public class ModelImportDialog extends GenericFileCreator {
 
         final Path importedFile = vars.get(PROP_FILE);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial model;
 
         FolderAssetLocator.setIgnore(true);
@@ -217,7 +220,7 @@ public class ModelImportDialog extends GenericFileCreator {
             FolderAssetLocator.setIgnore(false);
         }
 
-        if (EDITOR_CONFIG.isAutoTangentGenerating()) {
+        if (EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
             TangentGenerator.useMikktspaceGenerator(model);
         }
 
@@ -387,7 +390,7 @@ public class ModelImportDialog extends GenericFileCreator {
      *
      * @param renderedFile the rendered file.
      */
-    @FXThread
+    @FxThread
     private void setRenderedFile(@Nullable final Path renderedFile) {
         this.renderedFile = renderedFile;
     }
@@ -397,16 +400,16 @@ public class ModelImportDialog extends GenericFileCreator {
      *
      * @return the rendered file.
      */
-    @FXThread
+    @FxThread
     private @Nullable Path getRenderedFile() {
         return renderedFile;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
 
-        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+        final JmeFilePreviewManager previewManager = JmeFilePreviewManager.getInstance();
         previewManager.clear();
 
         FileSystemAssetLocator.clear();

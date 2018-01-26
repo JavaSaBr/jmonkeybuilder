@@ -1,11 +1,11 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ArrayUtils;
@@ -46,7 +46,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
@@ -56,7 +56,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, T> extends Prop
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -65,7 +65,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, T> extends Prop
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 
@@ -78,13 +78,13 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * @return the filed with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final float[] element = getPropertyValue();
@@ -104,7 +104,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, T> extends Prop
     /**
      * Update the value.
      */
-    @FXThread
+    @FxThread
     private void updateValue(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 

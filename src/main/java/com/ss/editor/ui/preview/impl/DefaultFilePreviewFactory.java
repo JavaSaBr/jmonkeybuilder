@@ -1,6 +1,6 @@
 package com.ss.editor.ui.preview.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactory;
 import com.ss.rlib.util.array.Array;
@@ -20,7 +20,7 @@ public class DefaultFilePreviewFactory implements FilePreviewFactory {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void createFilePreviews(@NotNull final Array<FilePreview> result) {
         result.add(new TextFilePreview());
         result.add(new ImageFilePreview());

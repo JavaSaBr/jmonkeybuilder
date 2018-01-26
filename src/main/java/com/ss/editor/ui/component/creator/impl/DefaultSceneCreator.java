@@ -10,6 +10,7 @@ import com.ss.editor.extension.scene.app.state.impl.EditableSkySceneAppState;
 import com.ss.editor.extension.scene.filter.impl.EditableFXAAFilter;
 import com.ss.editor.extension.scene.filter.impl.EditableLightingStateShadowFilter;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -55,7 +56,7 @@ public class DefaultSceneCreator extends EmptySceneCreator {
 
         final EditableSkySceneAppState skyState = new EditableSkySceneAppState();
         skyState.setFlatShaded(false);
-        skyState.init(lightingState.getLightDirRef(), EDITOR.getAssetManager());
+        skyState.init(lightingState.getLightDirRef(), EditorUtil.getAssetManager());
 
         sceneNode.addAppState(lightingState);
         sceneNode.addAppState(skyState);

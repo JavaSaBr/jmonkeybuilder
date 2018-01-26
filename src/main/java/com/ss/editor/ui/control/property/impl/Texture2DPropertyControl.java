@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FLIPPED_TEXTURES;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetKey;
@@ -9,7 +11,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -17,9 +19,10 @@ import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -104,7 +107,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
     }
 
@@ -113,9 +116,9 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param dragEvent the drag dropped event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
+        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
     }
 
     /**
@@ -123,13 +126,13 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param dragEvent the drag over event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
+        UiUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -173,12 +176,12 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
                     .subtract(addButton.widthProperty()));
 
             FXUtils.addToPane(textureLabel, fieldContainer);
-            FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER,
-                    CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+            FXUtils.addClassTo(textureLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+            FXUtils.addClassesTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER,
+                    CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
 
         } else {
-            FXUtils.addClassesTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER_WITHOUT_PADDING);
+            FXUtils.addClassesTo(fieldContainer, CssClasses.TEXT_INPUT_CONTAINER_WITHOUT_PADDING);
         }
 
         FXUtils.addToPane(previewContainer, fieldContainer);
@@ -188,15 +191,15 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         FXUtils.addToPane(fieldContainer, container);
         FXUtils.addToPane(texturePreview, previewContainer);
 
-        FXUtils.addClassTo(previewContainer, CSSClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
-        FXUtils.addClassesTo(settingsButton, addButton, removeButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(previewContainer, CssClasses.ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER);
+        FXUtils.addClassesTo(settingsButton, addButton, removeButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
     /**
      * @return the disable|remove condition.
      */
-    @FXThread
+    @FxThread
     protected @NotNull BooleanBinding buildDisableRemoveCondition() {
         return getTexturePreview().imageProperty().isNull();
     }
@@ -204,7 +207,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * @return the texture label.
      */
-    @FXThread
+    @FxThread
     private @NotNull Label getTextureLabel() {
         return notNull(textureLabel);
     }
@@ -214,7 +217,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @return the field container.
      */
-    @FXThread
+    @FxThread
     protected @NotNull HBox getFieldContainer() {
         return notNull(fieldContainer);
     }
@@ -222,7 +225,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * @return the texture preview.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getTexturePreview() {
         return notNull(texturePreview);
     }
@@ -230,7 +233,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * @return the image channels preview.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageChannelPreview getTextureTooltip() {
         return notNull(textureTooltip);
     }
@@ -238,7 +241,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to remove the current texture.
      */
-    @FXThread
+    @FxThread
     protected void processRemove() {
         setTexture(null);
     }
@@ -246,15 +249,15 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     /**
      * Process to add a new texture.
      */
-    @FXThread
+    @FxThread
     protected void processAdd() {
-        UIUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     /**
      * Process to open texture's settings.
      */
-    @FXThread
+    @FxThread
     protected void openSettings() {
 
         final Texture2D texture = notNull(getPropertyValue());
@@ -285,7 +288,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param varTable the var table.
      */
-    @FXThread
+    @FxThread
     private void applyChanges(@NotNull final VarTable varTable) {
 
         final Texture2D texture = notNull(getPropertyValue());
@@ -310,7 +313,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         final TextureKey newKey = new TextureKey(key.getName());
         newKey.setFlipY(needFlipY);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         assetManager.deleteFromCache(key);
 
         final Texture2D loadedTexture = (Texture2D) assetManager.loadTexture(newKey);
@@ -328,7 +331,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      *
      * @param file the file to new texture.
      */
-    @FXThread
+    @FxThread
     protected void setTexture(@Nullable final Path file) {
 
         if (file == null) {
@@ -338,9 +341,9 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
             final EditorConfig config = EditorConfig.getInstance();
             final Path assetFile = notNull(getAssetFile(file));
             final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
-            textureKey.setFlipY(config.isDefaultUseFlippedTexture());
+            textureKey.setFlipY(config.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES));
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Texture2D texture = (Texture2D) assetManager.loadTexture(textureKey);
             texture.setWrap(Texture.WrapMode.Repeat);
 
@@ -349,7 +352,7 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
         final Texture2D texture2D = getPropertyValue();

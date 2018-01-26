@@ -1,9 +1,9 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -29,7 +29,7 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -37,7 +37,7 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
     }
 
@@ -47,7 +47,7 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
      * @param min the min value.
      * @param max the max value.
      */
-    @FXThread
+    @FxThread
     public void setMinMax(final float min, final float max) {
         if (Float.isNaN(min) || Float.isNaN(max)) return;
         getValueField().setMinMax((int) min, (int) max);
@@ -56,13 +56,13 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
     /**
      * @return the value field.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         super.reload();
         final Integer value = getPropertyValue();
@@ -70,7 +70,7 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getValueField().getValue());
         super.changeImpl();

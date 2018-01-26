@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.tab;
 
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
@@ -22,7 +22,7 @@ public class EditorToolComponent extends TabToolComponent {
     public EditorToolComponent(@NotNull final SplitPane pane, final int index) {
         super(pane);
         setSide(Side.RIGHT);
-        FXUtils.addClassTo(this, CSSClasses.FILE_EDITOR_TOOL_COMPONENT);
+        FXUtils.addClassTo(this, CssClasses.FILE_EDITOR_TOOL_COMPONENT);
     }
 
     @Override

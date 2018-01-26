@@ -1,12 +1,12 @@
 package com.ss.editor.ui.component.virtual.tree;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.virtual.tree.resource.FolderVirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -175,7 +175,7 @@ public class VirtualResourceTree<T> extends TreeView<VirtualResourceElement<?>> 
      *
      * @param element the root element.
      */
-    @FXThread
+    @FxThread
     public void fill(@NotNull final VirtualResourceElement<?> element) {
 
         final TreeItem<VirtualResourceElement<?>> newRoot = new TreeItem<>(element);
@@ -188,9 +188,9 @@ public class VirtualResourceTree<T> extends TreeView<VirtualResourceElement<?>> 
     /**
      * Expand all nodes.
      */
-    @FXThread
+    @FxThread
     public void expandAll() {
-        UIUtils.visit(getRoot(), item -> item.setExpanded(true));
+        UiUtils.visit(getRoot(), item -> item.setExpanded(true));
     }
 
     /**
@@ -198,7 +198,7 @@ public class VirtualResourceTree<T> extends TreeView<VirtualResourceElement<?>> 
      *
      * @param item the tree item.
      */
-    @FXThread
+    @FxThread
     private void fill(@NotNull final TreeItem<VirtualResourceElement<?>> item) {
 
         final VirtualResourceElement<?> element = item.getValue();

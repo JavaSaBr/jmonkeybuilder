@@ -1,5 +1,7 @@
 package com.ss.editor.config;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -9,6 +11,15 @@ import java.util.Map;
  * @author JavaSaBr
  */
 public class CommandLineConfig {
+
+    @NotNull
+    public static final String PREF_SERVER_API_PORT = "Server.api.port";
+
+    @NotNull
+    public static final String PREF_SERVER_API_VERSION = "Server.api.version";
+
+    @NotNull
+    public static final String PREF_EDITOR_ASSET_FOLDER = "Editor.assetFolder";
 
     /**
      * @param args the args
@@ -45,15 +56,17 @@ public class CommandLineConfig {
                 Config.DEV_DEBUG_JFX = Boolean.parseBoolean(value);
             } else if ("Graphics.enablePBR".equals(name)) {
                 Config.ENABLE_PBR = Boolean.parseBoolean(value);
-            } else if ("Server.api.port".equals(name)) {
+            } else if (PREF_SERVER_API_PORT.equals(name)) {
                 Config.REMOTE_CONTROL_PORT = Integer.parseInt(value);
+            } else if (PREF_EDITOR_ASSET_FOLDER.equals(name)) {
+                editorConfig.setCurrentAsset(Paths.get(value));
             }
         }
 
         final Map<String, String> env = System.getenv();
 
-        if (env.containsKey("Server.api.version")) {
-            final int version = Integer.parseInt(env.get("Server.api.version"));
+        if (env.containsKey(PREF_SERVER_API_VERSION)) {
+            final int version = Integer.parseInt(env.get(PREF_SERVER_API_VERSION));
             if (version == Config.SERVER_API_VERSION) {
                 System.exit(100);
             } else {
@@ -61,11 +74,11 @@ public class CommandLineConfig {
             }
         }
 
-        if (env.containsKey("Server.api.port")) {
-            Config.REMOTE_CONTROL_PORT = Integer.parseInt(env.get("Server.api.port"));
+        if (env.containsKey(PREF_SERVER_API_PORT)) {
+            Config.REMOTE_CONTROL_PORT = Integer.parseInt(env.get(PREF_SERVER_API_PORT));
         }
-        if (env.containsKey("Editor.assetFolder")) {
-            editorConfig.setCurrentAsset(Paths.get(env.get("Editor.assetFolder")));
+        if (env.containsKey(PREF_EDITOR_ASSET_FOLDER)) {
+            editorConfig.setCurrentAsset(Paths.get(env.get(PREF_EDITOR_ASSET_FOLDER)));
         }
     }
 }

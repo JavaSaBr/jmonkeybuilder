@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
@@ -29,43 +29,43 @@ import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.editor.ModelEditingProvider;
+import com.ss.editor.model.scene.EditorAudioNode;
+import com.ss.editor.model.scene.EditorLightNode;
+import com.ss.editor.model.scene.EditorPresentableNode;
+import com.ss.editor.model.scene.WrapperNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.part3d.editor.impl.Stats3DPart;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
+import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
-import com.ss.editor.scene.EditorAudioNode;
-import com.ss.editor.scene.EditorLightNode;
-import com.ss.editor.scene.EditorPresentableNode;
-import com.ss.editor.scene.WrapperNode;
-import com.ss.editor.state.editor.impl.Stats3DState;
-import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.container.ProcessingComponent;
-import com.ss.editor.ui.component.editing.EditingComponent;
-import com.ss.editor.ui.component.editing.EditingComponentContainer;
-import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.impl.BaseEditorSceneEditorState;
+import com.ss.editor.ui.component.painting.PaintingComponent;
+import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
-import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
+import com.ss.editor.ui.control.model.ModelNodeTree;
+import com.ss.editor.ui.control.model.ModelPropertyEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.RemoveChildOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.RemoveControlOperation;
+import com.ss.editor.ui.control.tree.action.impl.operation.RemoveLightOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
@@ -89,7 +89,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -102,11 +101,11 @@ import java.util.function.Consumer;
  * The base implementation of a model file editor.
  *
  * @param <M>  the type edited object.
- * @param <MA> the type of {@link AbstractSceneEditor3DState}
+ * @param <MA> the type of {@link AbstractSceneEditor3DPart}
  * @param <ES> the type of an editor state.
  * @author JavaSaBr
  */
-public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DState, ES extends BaseEditorSceneEditorState> extends
+public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DPart, ES extends BaseEditorSceneEditorState> extends
         Advanced3DFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
@@ -121,10 +120,42 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
 
     /**
+     * The list of pre-save handlers.
+     */
+    @NotNull
+    private static final Array<Consumer<Spatial>> PRE_SAVE_HANDLERS = ArrayFactory.newArray(Consumer.class);
+
+    /**
+     * The list of post-save handlers.
+     */
+    @NotNull
+    private static final Array<Consumer<Spatial>> POST_SAVE_HANDLERS = ArrayFactory.newArray(Consumer.class);
+
+    /**
+     * Register the new pre-save handler.
+     *
+     * @param handler the new pre-save handler.
+     */
+    @FxThread
+    public static void registerPreSaveHandler(@NotNull Consumer<Spatial> handler) {
+        PRE_SAVE_HANDLERS.add(handler);
+    }
+
+    /**
+     * Register the new post-save handler.
+     *
+     * @param handler the new post-save handler.
+     */
+    @FxThread
+    public static void registerPostSaveHandler(@NotNull Consumer<Spatial> handler) {
+        PRE_SAVE_HANDLERS.add(handler);
+    }
+
+    /**
      * The stats app state.
      */
     @NotNull
-    private final Stats3DState statsAppState;
+    private final Stats3DPart statsAppState;
 
     /**
      * The opened model.
@@ -157,10 +188,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private ModelPropertyEditor modelPropertyEditor;
 
     /**
-     * The container of editing components.
+     * The container of painting components.
      */
     @Nullable
-    private EditingComponentContainer editingComponentContainer;
+    private PaintingComponentContainer paintingComponentContainer;
 
     /**
      * The scripting component.
@@ -234,8 +265,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private boolean ignoreCameraMove;
 
     public AbstractSceneFileEditor() {
-        this.statsAppState = new Stats3DState(statsContainer);
-        addEditorState(statsAppState);
+        this.statsAppState = new Stats3DPart(statsContainer);
+        addEditor3DPart(statsAppState);
         statsAppState.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
     }
@@ -245,7 +276,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @return the model tree.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ModelNodeTree getModelNodeTree() {
         return notNull(modelNodeTree);
     }
@@ -255,23 +286,25 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @return the model property editor.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ModelPropertyEditor getModelPropertyEditor() {
         return notNull(modelPropertyEditor);
     }
 
     /**
-     * @return the container of editing components.
+     * Get the container of painting components.
+     *
+     * @return the container of painting components.
      */
-    @FXThread
-    private @NotNull EditingComponentContainer getEditingComponentContainer() {
-        return notNull(editingComponentContainer);
+    @FxThread
+    private @NotNull PaintingComponentContainer getPaintingComponentContainer() {
+        return notNull(paintingComponentContainer);
     }
 
     /**
      * @return the container of property editor in objects tool.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getPropertyEditorObjectsContainer() {
         return notNull(propertyEditorObjectsContainer);
     }
@@ -279,7 +312,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return the container of model node tree in editing tool.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getModelNodeTreeEditingContainer() {
         return notNull(modelNodeTreeEditingContainer);
     }
@@ -287,7 +320,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return the container of model node tree in objects tool.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getModelNodeTreeObjectsContainer() {
         return notNull(modelNodeTreeObjectsContainer);
     }
@@ -295,13 +328,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return the scripting component.
      */
-    @FXThread
+    @FxThread
     private @NotNull EditorScriptingComponent getScriptingComponent() {
         return notNull(scriptingComponent);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         super.processChangedFile(event);
 
@@ -309,16 +342,16 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            EXECUTOR_MANAGER.addJMETask(() -> updateMaterial(file));
+            EXECUTOR_MANAGER.addJmeTask(() -> updateMaterial(file));
         } else if (MaterialUtils.isShaderFile(file) || MaterialUtils.isTextureFile(file)) {
-            EXECUTOR_MANAGER.addJMETask(() -> updateMaterials(file));
+            EXECUTOR_MANAGER.addJmeTask(() -> updateMaterials(file));
         }
     }
 
     /**
      * Updating a material from the file.
      */
-    @FXThread
+    @FxThread
     private void updateMaterial(@NotNull final Path file) {
 
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
@@ -330,18 +363,18 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
         if (geometries.isEmpty()) return;
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
-        translucentBucketFilter.refresh();
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.refreshFilters();
     }
 
     /**
      * Updating materials.
      */
-    @FXThread
+    @FxThread
     private void updateMaterials(@NotNull final Path file) {
 
         final M currentModel = getCurrentModel();
@@ -362,8 +395,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
-        translucentBucketFilter.refresh();
+        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        filterExtension.refreshFilters();
     }
 
     /**
@@ -371,10 +404,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param model the model
      */
-    @FXThread
+    @FxThread
     protected void handleAddedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
@@ -390,10 +423,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param model the model
      */
-    @FXThread
+    @FxThread
     protected void handleRemovedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
@@ -405,12 +438,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void loadState() {
         super.loadState();
 
         scriptingComponent.addVariable("root", getCurrentModel());
-        scriptingComponent.addVariable("assetManager", EDITOR.getAssetManager());
+        scriptingComponent.addVariable("assetManager", EditorUtil.getAssetManager());
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -432,8 +465,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         transformModeComboBox.getSelectionModel()
                 .select(TransformationMode.valueOf(editorState.getTransformationMode()));
 
-        final Array<EditingComponent> components = editingComponentContainer.getComponents();
-        components.forEach(editorState, ProcessingComponent::loadState);
+        final Array<PaintingComponent> components = paintingComponentContainer.getComponents();
+        components.forEach(editorState, PaintingComponent::loadState);
 
         final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
 
@@ -457,12 +490,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isShiftDown,
                                           final boolean isButtonMiddleDown) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         if (editor3DState.isCameraMoving()) {
             return false;
         }
@@ -515,7 +548,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return true if need to ignore moving camera.
      */
-    @FXThread
+    @FxThread
     private boolean isIgnoreCameraMove() {
         return ignoreCameraMove;
     }
@@ -523,7 +556,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @param ignoreCameraMove true if need to ignore moving camera.
      */
-    @FXThread
+    @FxThread
     private void setIgnoreCameraMove(final boolean ignoreCameraMove) {
         this.ignoreCameraMove = ignoreCameraMove;
     }
@@ -533,20 +566,20 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param currentModel the opened model.
      */
-    @FXThread
+    @FxThread
     protected void setCurrentModel(@NotNull final M currentModel) {
         this.currentModel = currentModel;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull M getCurrentModel() {
         return notNull(currentModel);
     }
 
     @Override
-    @FXThread
-    public void notifyFXChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+    @FxThread
+    public void notifyFxChangeProperty(@Nullable final Object parent, @NotNull final Object object,
                                        @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
@@ -559,50 +592,50 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             modelNodeTree.refresh(object);
         }
 
-        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
         editingComponentContainer.notifyChangeProperty(object, propertyName);
     }
 
     @Override
-    @FXThread
-    public void notifyJMEChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-        getEditor3DState().notifyPropertyChanged(object);
+    @FxThread
+    public void notifyJmeChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+        getEditor3DPart().notifyPropertyChanged(object);
     }
 
     @Override
-    @FXThread
-    public void notifyFXChangePropertyCount(@NotNull final Object object) {
+    @FxThread
+    public void notifyFxChangePropertyCount(@NotNull final Object object) {
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.rebuildFor(object, null);
     }
 
     @Override
-    @FXThread
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+    @FxThread
+    public void notifyFxAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
                                    final boolean needSelect) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DPart = getEditor3DPart();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);
 
         if (added instanceof Light) {
-            editor3DState.addLight((Light) added);
+            editor3DPart.addLight((Light) added);
         } else if (added instanceof AudioNode) {
-            editor3DState.addAudioNode((AudioNode) added);
+            editor3DPart.addAudioNode((AudioNode) added);
         } else if (added instanceof Spatial) {
             handleAddedObject((Spatial) added);
         }
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addJMETask(() -> EXECUTOR_MANAGER.addFXTask(() -> modelNodeTree.select(added)));
+            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.select(added)));
         }
     }
 
     @Override
-    @FXThread
-    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+    @FxThread
+    public void notifyFxRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
 
@@ -616,18 +649,19 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FXThread
-    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
+    @FxThread
+    public void notifyFxReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
                                  @Nullable final Object newChild, final boolean needExpand,
                                  final boolean needDeepExpand) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DPart = getEditor3DPart();
         final Spatial currentModel = getCurrentModel();
 
-        if (currentModel == oldChild && newChild != null) {
+        if (currentModel == oldChild && newChild instanceof Spatial) {
             handleRemovedObject(currentModel);
-            editor3DState.openModel(unsafeCast(newChild));
+            editor3DPart.openModel(unsafeCast(newChild));
             handleAddedObject((Spatial) newChild);
+            setCurrentModel(unsafeCast(newChild));
         } else {
 
             if (oldChild instanceof Spatial) {
@@ -644,15 +678,15 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FXThread
-    public void notifyFXMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
+    @FxThread
+    public void notifyFxMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
                               @NotNull final Object child, final int index, final boolean needSelect) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addJMETask(() -> EXECUTOR_MANAGER.addFXTask(() -> modelNodeTree.select(child)));
+            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.select(child)));
         }
     }
 
@@ -661,7 +695,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param object the object
      */
-    @FXThread
+    @FxThread
     public void notifySelected(@Nullable Object object) {
 
         if (object instanceof EditorLightNode) {
@@ -686,10 +720,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param object the object
      */
-    @FXThread
+    @FxThread
     public void selectNodeFromTree(@Nullable final Object object) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DPart = getEditor3DPart();
 
         Object parent = null;
         Object element;
@@ -710,15 +744,15 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         Spatial spatial = null;
 
         if (element instanceof AudioNode) {
-            final EditorAudioNode audioNode = editor3DState.getAudioNode((AudioNode) element);
+            final EditorAudioNode audioNode = editor3DPart.getAudioNode((AudioNode) element);
             spatial = audioNode == null ? null : audioNode.getEditedNode();
         } else if (element instanceof Spatial) {
             spatial = (Spatial) element;
             parent = spatial.getParent();
         } else if (element instanceof Light) {
-            spatial = editor3DState.getLightNode((Light) element);
+            spatial = editor3DPart.getLightNode((Light) element);
         } else if(object instanceof ScenePresentable) {
-            final EditorPresentableNode presentableNode = editor3DState.getPresentableNode((ScenePresentable) object);
+            final EditorPresentableNode presentableNode = editor3DPart.getPresentableNode((ScenePresentable) object);
             spatial = presentableNode == null? null : presentableNode.getEditedNode();
         }
 
@@ -729,21 +763,21 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         updateSelection(spatial);
 
         if (spatial != null && !isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
-            editor3DState.cameraLookAt(spatial.getWorldTranslation());
+            editor3DPart.cameraLookAt(spatial.getWorldTranslation());
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
 
-        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
-        editingComponentContainer.showComponentFor(element);
+        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
+        editingComponentContainer.prepareFor(element);
     }
 
-    @FXThread
+    @FxThread
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
 
-        final MA editor3DState = getEditor3DState();
-        final Camera camera = editor3DState.getCamera();
+        final MA editor3DPart = getEditor3DPart();
+        final Camera camera = editor3DPart.getCamera();
 
         final Vector3f position = spatial.getWorldTranslation();
         final Vector3f coordinates = camera.getScreenCoordinates(position, new Vector3f());
@@ -759,13 +793,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param spatial the new selected object.
      */
-    @FXThread
+    @FxThread
     protected void updateSelection(@Nullable final Spatial spatial) {
 
         final Array<Spatial> selection = ArrayFactory.newArray(Spatial.class);
         if (spatial != null) selection.add(spatial);
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.updateSelection(selection);
     }
 
@@ -778,15 +812,22 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
 
-        final BinaryExporter exporter = BinaryExporter.getInstance();
+        PRE_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
+        try {
 
-        try (final OutputStream out = Files.newOutputStream(toStore)) {
-            exporter.save(currentModel, out);
+            final BinaryExporter exporter = BinaryExporter.getInstance();
+
+            try (final OutputStream out = Files.newOutputStream(toStore)) {
+                exporter.save(currentModel, out);
+            }
+
+        } finally {
+            POST_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         }
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean needToolbar() {
         return true;
     }
@@ -794,7 +835,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return the scaling tool toggle.
      */
-    @FXThread
+    @FxThread
     private @NotNull ToggleButton getScaleToolButton() {
         return notNull(scaleToolButton);
     }
@@ -802,7 +843,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return the move tool toggle.
      */
-    @FXThread
+    @FxThread
     private @NotNull ToggleButton getMoveToolButton() {
         return notNull(moveToolButton);
     }
@@ -810,7 +851,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * @return the rotation tool toggle.
      */
-    @FXThread
+    @FxThread
     private @NotNull ToggleButton getRotationToolButton() {
         return notNull(rotationToolButton);
     }
@@ -818,11 +859,11 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * Switch transformation mode.
      */
-    @FXThread
+    @FxThread
     private void changeTransformMode(@NotNull final TransformationMode transformationMode) {
 
-        final MA editor3DState = getEditor3DState();
-        editor3DState.setTransformMode(transformationMode);
+        final MA editor3DPart = getEditor3DPart();
+        editor3DPart.setTransformMode(transformationMode);
 
         final ES editorState = getEditorState();
 
@@ -834,16 +875,16 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * Switch transformation type.
      */
-    @FXThread
+    @FxThread
     private void updateTransformTool(@NotNull final TransformType transformType, @NotNull final Boolean newValue) {
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DPart = getEditor3DPart();
         final ToggleButton scaleToolButton = getScaleToolButton();
         final ToggleButton moveToolButton = getMoveToolButton();
         final ToggleButton rotationToolButton = getRotationToolButton();
 
         if (newValue != Boolean.TRUE) {
-            if (editor3DState.getTransformType() == transformType) {
+            if (editor3DPart.getTransformType() == transformType) {
                 if (transformType == TransformType.MOVE_TOOL) {
                     moveToolButton.setSelected(true);
                 } else if (transformType == TransformType.ROTATE_TOOL) {
@@ -856,7 +897,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         }
 
         final ES editorState = getEditorState();
-        editor3DState.setTransformType(transformType);
+        editor3DPart.setTransformType(transformType);
 
         if (transformType == TransformType.MOVE_TOOL) {
             rotationToolButton.setSelected(false);
@@ -875,7 +916,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolbar(@NotNull final HBox container) {
         createActions(container);
 
@@ -890,7 +931,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         FXUtils.addToPane(transformModeComboBox, container);
     }
 
-    @FXThread
+    @FxThread
     protected void createActions(@NotNull final HBox container) {
         FXUtils.addToPane(createSaveAction(), container);
 
@@ -938,7 +979,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                 scaleToolButton);
 
         FXUtils.addClassesTo(selectionButton, gridButton, statisticsButton, moveToolButton, rotationToolButton,
-                scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+                scaleToolButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         FXUtils.addToPane(selectionButton, container);
         FXUtils.addToPane(gridButton, container);
@@ -949,7 +990,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final StackPane root) {
         this.selectionNodeHandler = this::selectNodeFromTree;
 
@@ -957,8 +998,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 
-        editingComponentContainer = new EditingComponentContainer(this, this);
-        editingComponentContainer.addComponent(new TerrainEditingComponent());
+        paintingComponentContainer = new PaintingComponentContainer(this, this);
 
         scriptingComponent = new EditorScriptingComponent(this::refreshTree);
         scriptingComponent.prefHeightProperty().bind(root.heightProperty());
@@ -978,26 +1018,26 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelPropertyEditor.prefHeightProperty().bind(root.heightProperty());
 
         FXUtils.addToPane(statsContainer, editorAreaPane);
-        FXUtils.addClassTo(statsContainer, CSSClasses.SCENE_EDITOR_STATS_CONTAINER);
-        FXUtils.addClassTo(modelNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+        FXUtils.addClassTo(statsContainer, CssClasses.SCENE_EDITOR_STATS_CONTAINER);
+        FXUtils.addClassTo(modelNodeTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
         container.addComponent(buildSplitComponent(getModelNodeTreeObjectsContainer(), getPropertyEditorObjectsContainer(), root),
                 Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
-        container.addComponent(buildSplitComponent(getModelNodeTreeEditingContainer(), getEditingComponentContainer(), root),
-                Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
+        container.addComponent(buildSplitComponent(getModelNodeTreeEditingContainer(), getPaintingComponentContainer(), root),
+                Messages.SCENE_FILE_EDITOR_TOOL_PAINTING);
         container.addComponent(getScriptingComponent(), Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
     }
 
     /**
      * Refresh tree.
      */
-    @FXThread
+    @FxThread
     protected void refreshTree() {
 
         final M currentModel = getCurrentModel();
@@ -1012,12 +1052,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param oldValue the old value
      * @param newValue the new value
      */
-    @FXThread
+    @FxThread
     protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
 
         final VBox propertyEditorParent = (VBox) modelPropertyEditor.getParent();
         final VBox modelNodeTreeParent = (VBox) modelNodeTree.getParent();
@@ -1048,27 +1088,27 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             editingComponentContainer.notifyHided();
         }
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         editor3DState.changeEditingMode(newIndex == EDITING_TOOL);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
 
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
+        UiUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
                 dragEvent, AbstractSceneFileEditor::addNewModel);
 
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
+        UiUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
                 dragEvent, AbstractSceneFileEditor::applyMaterial);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
         super.handleDragOverEvent(dragEvent);
-        UIUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
+        UiUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
     }
 
     /**
@@ -1077,20 +1117,20 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param dragEvent the drag event.
      * @param file      the file.
      */
-    @FXThread
+    @FxThread
     private void applyMaterial(@NotNull final DragEvent dragEvent, @NotNull final Path file) {
 
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final MaterialKey materialKey = new MaterialKey(assetPath);
         final Camera camera = editor3DState.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final Geometry geometry = editor3DState.getGeometryByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
@@ -1099,7 +1139,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final Object linkNode = findParent(geometry, AssetLinkNode.class::isInstance);
             if (linkNode != null) return;
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Material material = assetManager.loadAsset(materialKey);
 
             final PropertyOperation<ChangeConsumer, Geometry, Material> operation =
@@ -1117,11 +1157,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param dragEvent the drag event.
      * @param file      the file.
      */
-    @FXThread
+    @FxThread
     private void addNewModel(@NotNull final DragEvent dragEvent, @NotNull final Path file) {
 
         final M currentModel = getCurrentModel();
-        if (!(currentModel instanceof Node)) return;
+        if (!(currentModel instanceof Node)) {
+            return;
+        }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         final Object selected = modelNodeTree.getSelectedObject();
@@ -1137,19 +1179,19 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final MA editor3DState = getEditor3DState();
+        final MA editor3DState = getEditor3DPart();
         final ModelKey modelKey = new ModelKey(assetPath);
         final Camera camera = editor3DState.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final SceneLayer defaultLayer = getDefaultLayer(this);
             final LocalObjects local = LocalObjects.get();
 
-            final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
 
             final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
@@ -1175,42 +1217,54 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * Handle changing select visibility.
      */
-    @FXThread
+    @FxThread
     private void changeSelectionVisible(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        final MA editor3DState = getEditor3DState();
-        editor3DState.updateShowSelection(newValue);
+        final MA editor3DPart = getEditor3DPart();
+        editor3DPart.updateShowSelection(newValue);
 
         final ES editorState = getEditorState();
-        if (editorState != null) editorState.setEnableSelection(newValue);
+        if (editorState != null) {
+            editorState.setEnableSelection(newValue);
+        }
     }
 
     /**
      * Handle changing grid visibility.
      */
-    @FXThread
+    @FxThread
     private void changeGridVisible(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        final MA editor3DState = getEditor3DState();
-        editor3DState.updateShowGrid(newValue);
+        final MA editor3DPart = getEditor3DPart();
+        editor3DPart.updateShowGrid(newValue);
 
         final ES editorState = getEditorState();
-        if (editorState != null) editorState.setEnableGrid(newValue);
+        if (editorState != null) {
+            editorState.setEnableGrid(newValue);
+        }
     }
 
     /**
      * Handle changing statistics visibility.
      */
-    @FXThread
+    @FxThread
     private void changeStatisticsVisible(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
+        if (isIgnoreListeners()) {
+            return;
+        }
 
         statsAppState.setEnabled(newValue);
 
         final ES editorState = getEditorState();
-        if (editorState != null) editorState.setShowStatistics(newValue);
+        if (editorState != null) {
+            editorState.setShowStatistics(newValue);
+        }
     }
 
     /**
@@ -1220,13 +1274,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      */
     @FromAnyThread
     public void notifyTransformed(@NotNull final Spatial spatial) {
-        EXECUTOR_MANAGER.addFXTask(() -> notifyTransformedImpl(spatial));
+        EXECUTOR_MANAGER.addFxTask(() -> notifyTransformedImpl(spatial));
     }
 
     /**
      * Notify about transformed the object.
      */
-    @FXThread
+    @FxThread
     private void notifyTransformedImpl(@NotNull final Spatial spatial) {
 
         Object toUpdate = spatial;
@@ -1235,20 +1289,20 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             toUpdate = ((WrapperNode) spatial).getWrappedObject();
         }
 
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.syncFor(toUpdate);
+        final ModelPropertyEditor propertyEditor = getModelPropertyEditor();
+        propertyEditor.syncFor(toUpdate);
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public @NotNull Node getCursorNode() {
-        return getEditor3DState().getCursorNode();
+        return getEditor3DPart().getCursorNode();
     }
 
     @Override
-    @JMEThread
+    @JmeThread
     public  @NotNull Node getMarkersNode() {
-        return getEditor3DState().getMarkersNode();
+        return getEditor3DPart().getMarkersNode();
     }
 }
 

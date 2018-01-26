@@ -42,20 +42,26 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     public void preDelete(@NotNull final Path file) {
         super.preDelete(file);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 
         final Spatial model = assetManager.loadModel(assetPath);
 
         NodeUtils.visitGeometry(model, geometry -> {
+
             final Material material = geometry.getMaterial();
             final String assetName = material.getAssetName();
-            if (!StringUtils.isEmpty(assetName)) assetKeys.add(assetName);
+
+            if (!StringUtils.isEmpty(assetName)) {
+                assetKeys.add(assetName);
+            }
         });
     }
 
     /**
+     * Get the list of used materials.
+     *
      * @return the list of used materials.
      */
     private @NotNull Array<String> getAssetKeys() {
@@ -77,7 +83,11 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     }
 
     private void handle(@Nullable final Boolean result) {
-        if (!Boolean.TRUE.equals(result)) return;
+
+        if (!Boolean.TRUE.equals(result)) {
+            return;
+        }
+
         getAssetKeys().stream().map(EditorUtil::getRealFile)
                 .filter(Files::exists)
                 .forEach(FileUtils::delete);
