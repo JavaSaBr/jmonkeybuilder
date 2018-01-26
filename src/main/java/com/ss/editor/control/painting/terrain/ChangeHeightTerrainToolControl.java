@@ -195,7 +195,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
         });
 
         originalHeight.forEach((terrain, floats) -> {
-            final ObjectDictionary<Vector2f, Float> values = oldValues.get(terrain, () -> createValuesDictionary(floats));
+            final ObjectDictionary<Vector2f, Float> values = newValues.get(terrain, () -> createValuesDictionary(floats));
             floats.forEach((heightPoint, height) -> {
                 final Vector2f point = new Vector2f(heightPoint.x, heightPoint.y);
                 values.put(point, terrain.getHeightmapHeight(point));

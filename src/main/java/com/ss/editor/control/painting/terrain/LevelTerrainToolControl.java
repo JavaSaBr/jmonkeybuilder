@@ -157,7 +157,6 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     @JmeThread
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
-
         final LocalObjects local = getLocalObjects();
         final Spatial paintedModel = notNull(getPaintedModel());
         final Geometry brush = getBrush();
@@ -165,6 +164,9 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
 
         final float brushSize = getBrushSize();
         final float brushPower = getBrushPower();
+
+        final List<Vector2f> locs = new ArrayList<>();
+        final List<Float> heights = new ArrayList<>();
 
         for (final Terrain terrain : getTerrains()) {
 
@@ -186,8 +188,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
             final float xStepAmount = localScale.getX();
             final float zStepAmount = localScale.getZ();
 
-            final List<Vector2f> locs = new ArrayList<>();
-            final List<Float> heights = new ArrayList<>();
+            locs.clear();
+            heights.clear();
 
             for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
                 for (int x = -radiusStepsX; x < radiusStepsX; x++) {

@@ -111,10 +111,15 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
         final int twoBrushSize = (int) (brushSize * 2);
 
         final Basis fractalFilter = createFractalGenerator();
+        final List<Vector2f> locs = new ArrayList<>();
+        final List<Float> heights = new ArrayList<>();
 
         for (final Terrain terrain : getTerrains()) {
 
             final Node terrainNode = (Node) terrain;
+
+            locs.clear();
+            heights.clear();
 
             final Vector3f worldTranslation = terrainNode.getWorldTranslation();
             final Vector3f localScale = terrainNode.getLocalScale();
@@ -129,9 +134,6 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
 
             final float xStepAmount = localScale.getX();
             final float zStepAmount = localScale.getZ();
-
-            final List<Vector2f> locs = new ArrayList<>();
-            final List<Float> heights = new ArrayList<>();
 
             for (int z = -radiusStepsZ, yfb = 0; z < radiusStepsZ; z++, yfb++) {
                 for (int x = -radiusStepsX, xfb = 0; x < radiusStepsX; x++, xfb++) {
@@ -149,7 +151,12 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
 
                     terrainLoc.set(locX, locZ);
 
-                    final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
+                    final float heightmapHeight = terrain.getHeightmapHeight(terrainLoc);
+                    if (Float.isNaN(heightmapHeight)) {
+                        continue;
+                    }
+
+                    final float currentHeight = heightmapHeight * localScale.getY();
                     // see if it is in the radius of the tool
                     final float newHeight = calculateHeight(brushSize, height, effectPoint);
 

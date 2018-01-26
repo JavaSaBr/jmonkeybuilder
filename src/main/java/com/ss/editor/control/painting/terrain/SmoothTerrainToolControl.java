@@ -94,6 +94,8 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
         final float brushSize = getBrushSize();
         final float brushPower = getBrushPower();
 
+        final List<Vector2f> locs = new ArrayList<>();
+
         for (final Terrain terrain : getTerrains()) {
 
             final Node terrainNode = (Node) terrain;
@@ -114,7 +116,7 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
             final float xStepAmount = localScale.getX();
             final float zStepAmount = localScale.getZ();
 
-            final List<Vector2f> locs = new ArrayList<>();
+            locs.clear();
 
             for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
                 for (int x = -radiusStepsX; x < radiusStepsX; x++) {

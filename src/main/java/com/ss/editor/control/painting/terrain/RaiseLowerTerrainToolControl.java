@@ -97,9 +97,15 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final float brushSize = getBrushSize();
         final float brushPower = input == PaintingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
 
+        final List<Vector2f> locs = new ArrayList<>();
+        final List<Float> heights = new ArrayList<>();
+
         for (final Terrain terrain : getTerrains()) {
 
             final Node terrainNode = (Node) terrain;
+
+            locs.clear();
+            heights.clear();
 
             final Vector3f worldTranslation = terrainNode.getWorldTranslation();
             final Vector3f localScale = terrainNode.getLocalScale();
@@ -112,9 +118,6 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
 
             final float xStepAmount = localScale.getX();
             final float zStepAmount = localScale.getZ();
-
-            final List<Vector2f> locs = new ArrayList<>();
-            final List<Float> heights = new ArrayList<>();
 
             for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
                 for (int x = -radiusStepsX; x < radiusStepsX; x++) {

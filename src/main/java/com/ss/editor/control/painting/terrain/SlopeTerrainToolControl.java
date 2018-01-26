@@ -211,9 +211,15 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         final float brushSize = getBrushSize();
         final float brushPower = getBrushPower();
 
+        final List<Vector2f> locs = new ArrayList<>();
+        final List<Float> heights = new ArrayList<>();
+
         for (final Terrain terrain : getTerrains()) {
 
             final Node terrainNode = (Node) terrain;
+
+            locs.clear();
+            heights.clear();
 
             final Vector3f worldTranslation = terrainNode.getWorldTranslation();
             final Vector3f localScale = terrainNode.getLocalScale();
@@ -252,9 +258,6 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
             final Plane secondPlane = local.nextPlane();
             secondPlane.setOriginNormal(higher, normal);
 
-            final List<Vector2f> locs = new ArrayList<>();
-            final List<Float> heights = new ArrayList<>();
-
             for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
                 for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
@@ -270,7 +273,12 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
                     terrainLoc.set(locX, locZ);
 
                     // adjust height based on radius of the tool
-                    float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
+                    final float heightmapHeight = terrain.getHeightmapHeight(terrainLoc);
+                    if (Float.isNaN(heightmapHeight)) {
+                        continue;
+                    }
+
+                    float currentHeight = heightmapHeight * localScale.getY();
 
                     targetPoint.set(locX, currentHeight, locZ)
                             .subtractLocal(lower)
