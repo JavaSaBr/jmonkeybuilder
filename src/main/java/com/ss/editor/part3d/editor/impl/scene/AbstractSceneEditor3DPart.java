@@ -43,6 +43,7 @@ import com.ss.editor.model.scene.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.part3d.editor.impl.scene.handler.DisableControlsTransformationHandler;
+import com.ss.editor.part3d.editor.impl.scene.handler.ReactivatePhysicsControlsTransformationHandler;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
@@ -159,6 +160,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         registerPreTransformHandler(transformationHandler::onPreTransform);
         registerPostTransformHandler(transformationHandler::onPostTransform);
+        registerPostTransformHandler(new ReactivatePhysicsControlsTransformationHandler());
     }
 
     /**
