@@ -54,7 +54,7 @@
 
         <mkdir dir="${basedir}/embedded-plugins"/>
         <copy todir="${basedir}/embedded-plugins">
-            <fileset dir="/embedded-plugins2" />
+            <fileset dir="${basedir}/../embedded-plugins" />
         </copy>
 
         <mkdir dir="${basedir}/projectRefs"/>

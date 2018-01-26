@@ -24,11 +24,11 @@ compileTestJava {
     options.compilerArgs += '-parameters'
 }
 
-ext.applicationMainClass = "com.ss.editor.JFXApplication"
+ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
 ext.jmeVersion = "v3.3.dev-SNAPSHOT"
-ext.jmbExtVersion = "1.9.6"
+ext.jmbExtVersion = "1.9.7"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
@@ -62,7 +62,7 @@ dependencies {
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
     compile 'com.github.JavaSaBr:RLib:6.7.4'
-    compile "com.github.JavaSaBr:JME3-JFX:1.7.2"
+    compile "com.github.JavaSaBr:JME3-JFX:1.7.3"
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
@@ -106,7 +106,6 @@ dependencies {
 
     compile ("org.xbuf.jme3_xbuf:jme3_xbuf_loader:${jme3_xbuf_version}") {
         exclude group: 'org.jmonkeyengine'
-        exclude group: 'com.github.JavaSaB'
     }
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
