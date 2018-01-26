@@ -4,9 +4,9 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.rlib.util.HasName;
-import com.sun.istack.internal.Nullable;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The interface to implement a component to paint something.
