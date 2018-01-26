@@ -6,18 +6,23 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
+import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.Dictionary;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * The base implementation of tool control to change height of terrain.
@@ -25,6 +30,10 @@ import java.util.List;
  * @author JavaSaBr
  */
 public class ChangeHeightTerrainToolControl extends TerrainToolControl {
+
+    @NotNull
+    private static final Supplier<ObjectDictionary<HeightPoint, Float>> DICTIONARY_FACTORY = () ->
+            DictionaryFactory.newObjectDictionary(0.2F, 10000);
 
     private static class HeightPoint {
 
@@ -63,17 +72,25 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      * The table of original heights.
      */
     @NotNull
-    private final ObjectDictionary<HeightPoint, Float> originalHeight;
+    private final ObjectDictionary<Terrain, ObjectDictionary<HeightPoint, Float>> originalHeight;
 
     /**
-     * The copy of an original terrain.
+     * The table with copied of original terrains.
      */
-    @Nullable
-    private Spatial copiedTerrain;
+    @NotNull
+    private final ObjectDictionary<Terrain, Spatial> copiedTerrains;
+
+    /**
+     * The current terrains.
+     */
+    @NotNull
+    private final Array<Terrain> terrains;
 
     public ChangeHeightTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
-        this.originalHeight = DictionaryFactory.newObjectDictionary(0.2F, 1000);
+        this.originalHeight = DictionaryFactory.newObjectDictionary();
+        this.copiedTerrains = DictionaryFactory.newObjectDictionary();
+        this.terrains = ArrayFactory.newArray(Terrain.class);
     }
 
     /**
@@ -82,8 +99,28 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      * @return the table of original heights.
      */
     @JmeThread
-    private @NotNull ObjectDictionary<HeightPoint, Float> getOriginalHeight() {
+    private @NotNull ObjectDictionary<Terrain, ObjectDictionary<HeightPoint, Float>> getOriginalHeight() {
         return originalHeight;
+    }
+
+    /**
+     * Get the table with copied of original terrains.
+     *
+     * @return the table with copied of original terrains.
+     */
+    @JmeThread
+    private @NotNull ObjectDictionary<Terrain, Spatial> getCopiedTerrains() {
+        return copiedTerrains;
+    }
+
+    /**
+     * Get the current terrains.
+     *
+     * @return the current terrains.
+     */
+    @JmeThread
+    protected @NotNull Array<Terrain> getTerrains() {
+        return terrains;
     }
 
     /**
@@ -92,22 +129,44 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     @JmeThread
     protected void startChange() {
 
-        final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
+        final ObjectDictionary<Terrain, ObjectDictionary<HeightPoint, Float>> originalHeight = getOriginalHeight();
+        originalHeight.forEach(Dictionary::clear);
         originalHeight.clear();
 
-        copiedTerrain = notNull(getPaintedModel()).clone();
+        final Array<Terrain> terrains = getTerrains();
+        terrains.clear();
+
+        NodeUtils.visitSpatial(notNull(getPaintedModel()), spatial -> {
+            if (spatial instanceof Terrain) {
+                terrains.add((Terrain) spatial);
+                return false;
+            }
+            return true;
+        });
+
+        final ObjectDictionary<Terrain, Spatial> copiedTerrains = getCopiedTerrains();
+        copiedTerrains.clear();
+
+        terrains.forEach(copiedTerrains, (terrain, toStore) ->
+                toStore.put(terrain, ((Spatial) terrain).clone()));
+    }
+
+    @JmeThread
+    @Deprecated
+    protected void change(@NotNull final Vector2f point) {
+        change(null, point);
     }
 
     /**
-     * Notify about wanting to change height of a point.
+     * Notify about changing height by the point in the terrain.
      *
-     * @param point the point.
+     * @param terrain the terrain.
+     * @param point   the point.
      */
     @JmeThread
-    protected void change(@NotNull final Vector2f point) {
+    protected void change(@NotNull final Terrain terrain, @NotNull final Vector2f point) {
 
-        final Terrain terrain = (Terrain) notNull(copiedTerrain);
-        final Node terrainNode = (Node) notNull(getPaintedModel());
+        final Node terrainNode = (Node) terrain;
         final Vector3f scale = terrainNode.getWorldScale();
 
         final int halfSize = terrain.getTerrainSize() / 2;
@@ -116,14 +175,14 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
 
         final HeightPoint heightPoint = new HeightPoint(point.getX(), point.getY(), x, z);
 
-        final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
-        if(originalHeight.containsKey(heightPoint)) {
+        final ObjectDictionary<Terrain, ObjectDictionary<HeightPoint, Float>> originalHeight = getOriginalHeight();
+        final ObjectDictionary<HeightPoint, Float> terrainHeights = originalHeight.get(terrain, DICTIONARY_FACTORY);
+        if (terrainHeights.containsKey(heightPoint)) {
             return;
         }
 
         final float height = terrain.getHeightmapHeight(point);
-
-        originalHeight.put(heightPoint, height);
+        terrainHeights.put(heightPoint, height);
     }
 
     /**
@@ -131,39 +190,65 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void commitChanges() {
 
-        final Terrain terrain = (Terrain) notNull(getPaintedModel());
-        final ObjectDictionary<Vector2f, Float> oldValues = DictionaryFactory.newObjectDictionary();
-        final ObjectDictionary<Vector2f, Float> newValues = DictionaryFactory.newObjectDictionary();
+        final Spatial paintedModel = getPaintedModel();
+        final ObjectDictionary<Terrain, ObjectDictionary<Vector2f, Float>> oldValues = DictionaryFactory.newObjectDictionary();
+        final ObjectDictionary<Terrain, ObjectDictionary<Vector2f, Float>> newValues = DictionaryFactory.newObjectDictionary();
 
-        final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
-        originalHeight.forEach((heightPoint, height) -> oldValues.put(new Vector2f(heightPoint.x, heightPoint.y), height));
-        originalHeight.forEach((heightPoint, value) -> {
-            final Vector2f point = new Vector2f(heightPoint.x, heightPoint.y);
-            newValues.put(point, terrain.getHeightmapHeight(point));
+        final ObjectDictionary<Terrain, ObjectDictionary<HeightPoint, Float>> originalHeight = getOriginalHeight();
+        originalHeight.forEach((terrain, floats) -> {
+            final ObjectDictionary<Vector2f, Float> values = oldValues.get(terrain, () -> createValuesDictionary(floats));
+            floats.forEach((heightPoint, height) -> values.put(new Vector2f(heightPoint.x, heightPoint.y), height));
         });
 
-        final PropertyOperation<ChangeConsumer, Terrain, ObjectDictionary<Vector2f, Float>> operation =
-                new PropertyOperation<>(terrain, "Heightmap", newValues, oldValues);
-
-        operation.setApplyHandler((toChange, heightMap) -> {
-
-            final List<Vector2f> points = new ArrayList<>(heightMap.size());
-            final List<Float> heights = new ArrayList<>(heightMap.size());
-
-            heightMap.forEach((point, height) -> {
-                points.add(point);
-                heights.add(height);
+        originalHeight.forEach((terrain, floats) -> {
+            final ObjectDictionary<Vector2f, Float> values = oldValues.get(terrain, () -> createValuesDictionary(floats));
+            floats.forEach((heightPoint, height) -> {
+                final Vector2f point = new Vector2f(heightPoint.x, heightPoint.y);
+                values.put(point, terrain.getHeightmapHeight(point));
             });
-
-            toChange.setHeight(points, heights);
-            ((Node) toChange).updateModelBound();
         });
 
+        final Array<Terrain> toApply = ArrayFactory.newArray(Terrain.class);
+        toApply.addAll(getTerrains());
+
+        final PropertyOperation<ChangeConsumer, Spatial, ObjectDictionary<Terrain, ObjectDictionary<Vector2f, Float>>> operation =
+                new PropertyOperation<>(paintedModel, "Heightmap", newValues, oldValues);
+
+        operation.setApplyHandler((node, heightMaps) -> {
+
+            for (final Terrain terrain : toApply) {
+
+                final ObjectDictionary<Vector2f, Float> heightData = heightMaps.get(terrain);
+                if (heightData == null || heightData.isEmpty()) {
+                    continue;
+                }
+
+                final List<Vector2f> points = new ArrayList<>(heightMaps.size());
+                final List<Float> heights = new ArrayList<>(heightMaps.size());
+
+                heightData.forEach((point, height) -> {
+                    points.add(point);
+                    heights.add(height);
+                });
+
+                terrain.setHeight(points, heights);
+            }
+
+            node.updateModelBound();
+        });
+
+        originalHeight.forEach(Dictionary::clear);
         originalHeight.clear();
 
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         changeConsumer.execute(operation);
 
-        copiedTerrain = null;
+        getTerrains().clear();
+        getCopiedTerrains().clear();
+    }
+
+    @FromAnyThread
+    private @NotNull ObjectDictionary<Vector2f, Float> createValuesDictionary(@NotNull final ObjectDictionary<HeightPoint, Float> floats) {
+        return DictionaryFactory.newObjectDictionary(0.2F, floats.size());
     }
 }

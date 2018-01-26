@@ -157,7 +157,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     @Override
-    public void updateEditing(@NotNull final Vector3f contactPoint) {
+    public void updatePainting(@NotNull final Vector3f contactPoint) {
 
         final PaintingInput currentInput = notNull(getCurrentInput());
 

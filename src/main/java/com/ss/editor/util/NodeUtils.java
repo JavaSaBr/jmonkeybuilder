@@ -314,13 +314,35 @@ public class NodeUtils {
     }
 
     /**
+     * Visit all spatial.
+     *
+     * @param spatial the spatial.
+     * @param handler the handler which should return true if need to visit children of a spatial.
+     */
+    @FromAnyThread
+    public static void visitSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> handler) {
+
+        if (!handler.test(spatial)) {
+            return;
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial child : node.getChildren()) {
+            visitSpatial(child, handler);
+        }
+    }
+
+    /**
      * Visit all materials in the spatial.
      *
      * @param spatial  the spatial.
      * @param consumer the consumer.
      */
     @FromAnyThread
-    public static void visitMetarials(@NotNull final Spatial spatial, @NotNull final Consumer<Material> consumer) {
+    public static void visitMaterials(@NotNull final Spatial spatial, @NotNull final Consumer<Material> consumer) {
 
         if (spatial instanceof Geometry) {
             consumer.accept(((Geometry) spatial).getMaterial());
@@ -332,7 +354,7 @@ public class NodeUtils {
         final Node node = (Node) spatial;
 
         for (final Spatial children : node.getChildren()) {
-            visitMetarials(children, consumer);
+            visitMaterials(children, consumer);
         }
     }
 

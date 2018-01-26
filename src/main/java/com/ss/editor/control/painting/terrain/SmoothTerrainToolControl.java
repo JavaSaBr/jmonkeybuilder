@@ -1,6 +1,6 @@
 package com.ss.editor.control.painting.terrain;
 
-import static com.ss.editor.util.EditingUtils.isContains;
+import static com.ss.editor.util.PaintingUtils.isContains;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Float.isNaN;
 import static java.lang.Math.min;
@@ -57,7 +57,7 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
-    public void updateEditing(@NotNull final Vector3f contactPoint) {
+    public void updatePainting(@NotNull final Vector3f contactPoint) {
 
         final PaintingInput paintingInput = notNull(getCurrentInput());
 

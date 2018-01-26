@@ -59,7 +59,7 @@ public interface PaintingControl extends Control {
      * @param contactPoint the contact point.
      */
     @JmeThread
-    default void updateEditing(@NotNull final Vector3f contactPoint) {
+    default void updatePainting(@NotNull final Vector3f contactPoint) {
     }
 
     /**

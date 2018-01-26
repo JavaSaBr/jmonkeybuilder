@@ -855,7 +855,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
                 new PropertyOperation<>(paintedObject, TERRAIN_PARAM, newValue, shininess);
 
         operation.setApplyHandler((terrainQuad, value) ->
-                NodeUtils.visitMetarials(terrainQuad, mat ->
+                NodeUtils.visitMaterials(terrainQuad, mat ->
                         MaterialUtils.safeSet(mat, "Shininess", value)));
 
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
@@ -877,7 +877,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
                 new PropertyOperation<>(paintedObject, TERRAIN_PARAM, newValue, !newValue);
 
         operation.setApplyHandler((terrainQuad, value) ->
-                NodeUtils.visitMetarials(terrainQuad, mat ->
+                NodeUtils.visitMaterials(terrainQuad, mat ->
                         MaterialUtils.safeSet(mat, "useTriPlanarMapping", value)));
 
         final ModelChangeConsumer changeConsumer = getChangeConsumer();

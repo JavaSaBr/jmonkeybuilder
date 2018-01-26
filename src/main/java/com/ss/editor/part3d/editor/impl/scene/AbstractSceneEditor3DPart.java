@@ -39,10 +39,10 @@ import com.ss.editor.control.transform.*;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.EditorCamera;
+import com.ss.editor.model.scene.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
-import com.ss.editor.model.scene.*;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
@@ -859,7 +859,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         if (isEditingMode()) {
             updateEditingNodes();
-            updateEditing();
+            updatePainting();
         }
     }
 
@@ -871,8 +871,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         if (!isEditingMode()) return;
 
         final Node cursorNode = getCursorNode();
-        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
-        final Spatial editedModel = EditingUtils.getEditedModel(control);
+        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
+        final Spatial editedModel = PaintingUtils.getPaintedModel(control);
         if (editedModel == null) return;
 
         final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel, getCamera());
@@ -1271,15 +1271,15 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         super.onActionImpl(name, isPressed, tpf);
         if (MOUSE_RIGHT_CLICK.equals(name)) {
             if(isEditingMode()) {
-                if (isPressed) startEditing(getEditingInput(MouseButton.SECONDARY));
-                else finishEditing(getEditingInput(MouseButton.SECONDARY));
+                if (isPressed) startPainting(getEditingInput(MouseButton.SECONDARY));
+                else finishPainting(getEditingInput(MouseButton.SECONDARY));
             } else if(!isPressed) {
                 processSelect();
             }
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
             if(isEditingMode()) {
-                if (isPressed) startEditing(getEditingInput(MouseButton.PRIMARY));
-                else finishEditing(getEditingInput(MouseButton.PRIMARY));
+                if (isPressed) startPainting(getEditingInput(MouseButton.PRIMARY));
+                else finishPainting(getEditingInput(MouseButton.PRIMARY));
             } else {
                 if (isPressed) startTransform();
                 else endTransform();
@@ -1523,7 +1523,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final Node transformToolNode = getTransformToolNode();
         transformToolNode.collideWith(ray, collisionResults);
 
-        if (collisionResults.size() < 1) return false;
+        if (collisionResults.size() < 1) {
+            return false;
+        }
 
         final CollisionResult collisionResult = collisionResults.getClosestCollision();
         final TransformType transformType = getTransformType();
@@ -1547,29 +1549,35 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Start editing.
+     * Start painting.
      */
     @JmeThread
-    private void startEditing(@NotNull final PaintingInput paintingInput) {
+    private void startPainting(@NotNull final PaintingInput input) {
+
         final Node cursorNode = getCursorNode();
-        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
-        final Spatial editedModel = EditingUtils.getEditedModel(getCursorNode());
-        if (control == null || editedModel == null || control.isStartedPainting()) return;
-        control.startPainting(paintingInput, cursorNode.getLocalTranslation());
+        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
+        final Spatial paintedModel = PaintingUtils.getPaintedModel(getCursorNode());
+
+        if (control == null || paintedModel == null || control.isStartedPainting()) {
+            return;
+        }
+
+        control.startPainting(input, cursorNode.getLocalTranslation());
     }
 
     /**
-     * Finish editing.
+     * Finish painting.
      */
     @JmeThread
-    private void finishEditing(@NotNull final PaintingInput paintingInput) {
+    private void finishPainting(@NotNull final PaintingInput input) {
 
         final Node cursorNode = getCursorNode();
-        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
-        final Spatial editedModel = EditingUtils.getEditedModel(control);
+        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
+        final Spatial paintedModel = PaintingUtils.getPaintedModel(control);
 
-        if (control == null || editedModel == null || !control.isStartedPainting() ||
-                control.getCurrentInput() != paintingInput) {
+        if (control == null || paintedModel == null) {
+            return;
+        } else if (!control.isStartedPainting() || control.getCurrentInput() != input) {
             return;
         }
 
@@ -1577,15 +1585,20 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Update editing.
+     * Update painting.
      */
     @JmeThread
-    private void updateEditing() {
+    private void updatePainting() {
+
         final Node cursorNode = getCursorNode();
-        final PaintingControl control = EditingUtils.getEditingControl(cursorNode);
-        final Spatial editedModel = EditingUtils.getEditedModel(control);
-        if (control == null || editedModel == null || !control.isStartedPainting()) return;
-        control.updateEditing(cursorNode.getLocalTranslation());
+        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
+        final Spatial model = PaintingUtils.getPaintedModel(control);
+
+        if (control == null || model == null || !control.isStartedPainting()) {
+            return;
+        }
+
+        control.updatePainting(cursorNode.getLocalTranslation());
     }
 
     /**

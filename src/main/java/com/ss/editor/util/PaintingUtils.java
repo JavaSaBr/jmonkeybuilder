@@ -17,16 +17,16 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class EditingUtils {
+public class PaintingUtils {
 
     /**
-     * Get an editing control of the cursor node.
+     * Get a painting control of the cursor node.
      *
      * @param cursorNode the cursor node.
-     * @return the editing control or null.
+     * @return the painting control or null.
      */
     @FromAnyThread
-    public static @Nullable PaintingControl getEditingControl(@NotNull final Node cursorNode) {
+    public static @Nullable PaintingControl getPaintingControl(@NotNull final Node cursorNode) {
         return cursorNode.getControl(PaintingControl.class);
     }
 
@@ -37,19 +37,19 @@ public class EditingUtils {
      * @return the edited model or null.
      */
     @FromAnyThread
-    public static @Nullable Spatial getEditedModel(@NotNull final Node cursorNode) {
-        final PaintingControl control = getEditingControl(cursorNode);
+    public static @Nullable Spatial getPaintedModel(@NotNull final Node cursorNode) {
+        final PaintingControl control = getPaintingControl(cursorNode);
         return control == null ? null : control.getPaintedModel();
     }
 
     /**
-     * Get an edit model.
+     * Get a painted model.
      *
-     * @param control the editing control.
-     * @return the edited model or null.
+     * @param control the painting control.
+     * @return the painted model or null.
      */
     @FromAnyThread
-    public static @Nullable Spatial getEditedModel(@Nullable final PaintingControl control) {
+    public static @Nullable Spatial getPaintedModel(@Nullable final PaintingControl control) {
         return control == null ? null : control.getPaintedModel();
     }
 

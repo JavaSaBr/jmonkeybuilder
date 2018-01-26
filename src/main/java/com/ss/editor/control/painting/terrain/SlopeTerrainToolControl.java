@@ -1,6 +1,6 @@
 package com.ss.editor.control.painting.terrain;
 
-import static com.ss.editor.util.EditingUtils.*;
+import static com.ss.editor.util.PaintingUtils.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import com.jme3.math.ColorRGBA;
@@ -151,7 +151,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
-    public void updateEditing(@NotNull final Vector3f contactPoint) {
+    public void updatePainting(@NotNull final Vector3f contactPoint) {
 
         final PaintingInput paintingInput = notNull(getCurrentInput());
 
