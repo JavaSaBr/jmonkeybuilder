@@ -151,12 +151,6 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
                 toStore.put(terrain, ((Spatial) terrain).clone()));
     }
 
-    @JmeThread
-    @Deprecated
-    protected void change(@NotNull final Vector2f point) {
-        change(null, point);
-    }
-
     /**
      * Notify about changing height by the point in the terrain.
      *

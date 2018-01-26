@@ -1243,8 +1243,9 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
         refreshProperties();
 
-        final TextureLayerSettings textureLayerSettings = getTextureLayerSettings();
-        textureLayerSettings.notifyChangeProperty();
+        if (object instanceof Terrain) {
+            getTextureLayerSettings().notifyChangeProperty();
+        }
     }
 
     @Override

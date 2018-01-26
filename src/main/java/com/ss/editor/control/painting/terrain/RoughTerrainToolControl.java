@@ -9,6 +9,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.noise.Basis;
 import com.jme3.terrain.noise.ShaderUtils;
@@ -43,28 +44,22 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     private float octaves;
     private float scale;
 
-    /**
-     * Instantiates a new Rough terrain tool control.
-     *
-     * @param component the component
-     */
     public RoughTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
     }
 
-    @FromAnyThread
-    @NotNull
     @Override
-    protected ColorRGBA getBrushColor() {
+    @FromAnyThread
+    protected @NotNull ColorRGBA getBrushColor() {
         return ColorRGBA.Magenta;
     }
 
-    @JmeThread
     @Override
-    public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
-        super.startPainting(paintingInput, contactPoint);
+    @JmeThread
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
+        super.startPainting(input, contactPoint);
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY: {
                 startChange();
                 modifyHeight(contactPoint);
@@ -73,11 +68,12 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     public void updatePainting(@NotNull final Vector3f contactPoint) {
 
-        final PaintingInput paintingInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
             }
@@ -85,12 +81,13 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     public void finishPainting(@NotNull final Vector3f contactPoint) {
         super.finishPainting(contactPoint);
 
-        final PaintingInput paintingInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
                 commitChanges();
@@ -103,80 +100,89 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
      *
      * @param contactPoint the contact point.
      */
+    @JmeThread
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
         final LocalObjects local = getLocalObjects();
-        final Node terrainNode = (Node) notNull(getPaintedModel());
-
-        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
-        final Vector3f localScale = terrainNode.getLocalScale();
-        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
-        final Vector2f terrainLoc = local.nextVector2f();
-        final Vector2f effectPoint = local.nextVector2f();
-
-        final Terrain terrain = (Terrain) terrainNode;
+        final Spatial paintedModel = notNull(getPaintedModel());
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
         final int twoBrushSize = (int) (brushSize * 2);
 
         final Basis fractalFilter = createFractalGenerator();
-        final FloatBuffer buffer = fractalFilter.getBuffer(terrainLoc.getX(), terrainLoc.getY(), 0, twoBrushSize);
 
-        final int radiusStepsX = (int) (brushSize / localScale.getX());
-        final int radiusStepsZ = (int) (brushSize / localScale.getY());
+        for (final Terrain terrain : getTerrains()) {
 
-        final float xStepAmount = localScale.getX();
-        final float zStepAmount = localScale.getZ();
+            final Node terrainNode = (Node) terrain;
 
-        final List<Vector2f> locs = new ArrayList<>();
-        final List<Float> heights = new ArrayList<>();
+            final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+            final Vector3f localScale = terrainNode.getLocalScale();
+            final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+            final Vector2f terrainLoc = local.nextVector2f();
+            final Vector2f effectPoint = local.nextVector2f();
 
-        for (int z = -radiusStepsZ, yfb = 0; z < radiusStepsZ; z++, yfb++) {
-            for (int x = -radiusStepsX, xfb = 0; x < radiusStepsX; x++, xfb++) {
+            final FloatBuffer buffer = fractalFilter.getBuffer(terrainLoc.getX(), terrainLoc.getY(), 0, twoBrushSize);
 
-                final float locX = localPoint.getX() + (x * xStepAmount);
-                final float locZ = localPoint.getZ() + (z * zStepAmount);
+            final int radiusStepsX = (int) (brushSize / localScale.getX());
+            final int radiusStepsZ = (int) (brushSize / localScale.getY());
 
-                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+            final float xStepAmount = localScale.getX();
+            final float zStepAmount = localScale.getZ();
 
-                if (!isContains(brush, effectPoint.getX(), effectPoint.getX())) {
-                    continue;
+            final List<Vector2f> locs = new ArrayList<>();
+            final List<Float> heights = new ArrayList<>();
+
+            for (int z = -radiusStepsZ, yfb = 0; z < radiusStepsZ; z++, yfb++) {
+                for (int x = -radiusStepsX, xfb = 0; x < radiusStepsX; x++, xfb++) {
+
+                    final float locX = localPoint.getX() + (x * xStepAmount);
+                    final float locZ = localPoint.getZ() + (z * zStepAmount);
+
+                    effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+
+                    if (!isContains(brush, effectPoint.getX(), effectPoint.getX())) {
+                        continue;
+                    }
+
+                    final float height = buffer.get(yfb * twoBrushSize + xfb);
+
+                    terrainLoc.set(locX, locZ);
+
+                    final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
+                    // see if it is in the radius of the tool
+                    final float newHeight = calculateHeight(brushSize, height, effectPoint);
+
+                    locs.add(terrainLoc.clone());
+                    heights.add(currentHeight + newHeight);
                 }
-
-                final float height = buffer.get(yfb * twoBrushSize + xfb);
-
-                terrainLoc.set(locX, locZ);
-
-                final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
-                // see if it is in the radius of the tool
-                final float newHeight = calculateHeight(brushSize, height, effectPoint);
-
-                locs.add(terrainLoc.clone());
-                heights.add(currentHeight + newHeight);
             }
+
+            locs.forEach(location -> change(terrain, location));
+
+            // do the actual height adjustment
+            terrain.setHeight(locs, heights);
         }
 
-        locs.forEach(this::change);
-
-        // do the actual height adjustment
-        terrain.setHeight(locs, heights);
-        terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
+        // or else we won't collide with it where we just edited
+        paintedModel.updateModelBound();
     }
 
+    @JmeThread
     private float calculateHeight(final float radius, final float heightFactor, @NotNull final Vector2f point) {
 
         // find percentage for each 'unit' in radius
-
         float val = point.length() / radius;
         val = 1 - val;
 
         if (val <= 0) val = 0;
 
-        return heightFactor * val * 0.1f; // 0.1 scales it down a bit to lower the impact of the tool
+        // 0.1 scales it down a bit to lower the impact of the tool
+        return heightFactor * val * 0.1f;
     }
 
-    private Basis createFractalGenerator() {
+    @JmeThread
+    private @NotNull Basis createFractalGenerator() {
 
         final FractalSum fractalSum = new FractalSum();
         fractalSum.setRoughness(getRoughness());

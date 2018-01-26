@@ -48,11 +48,6 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private boolean precision;
 
-    /**
-     * Instantiates a new Level terrain tool control.
-     *
-     * @param component the component
-     */
     public LevelTerrainToolControl(@NotNull final TerrainPaintingComponent component) {
         super(component);
 
@@ -61,6 +56,7 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     protected void onAttached(@NotNull final Node node) {
         super.onAttached(node);
 
@@ -74,6 +70,7 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     protected void onDetached(@NotNull final Node node) {
         super.onDetached(node);
 
@@ -82,6 +79,7 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     protected void controlUpdate(final float tpf) {
         super.controlUpdate(tpf);
 
@@ -89,19 +87,18 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
         levelMarker.setCullHint(isUseMarker() ? Spatial.CullHint.Never : Spatial.CullHint.Always);
     }
 
-    @FromAnyThread
-    @NotNull
     @Override
-    protected ColorRGBA getBrushColor() {
+    @FromAnyThread
+    protected @NotNull ColorRGBA getBrushColor() {
         return ColorRGBA.Red;
     }
 
-    @JmeThread
     @Override
-    public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
-        super.startPainting(paintingInput, contactPoint);
+    @JmeThread
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
+        super.startPainting(input, contactPoint);
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY: {
                 startChange();
                 modifyHeight(contactPoint);
@@ -115,11 +112,12 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     public void updatePainting(@NotNull final Vector3f contactPoint) {
 
-        final PaintingInput paintingInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
                 break;
@@ -132,12 +130,13 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    @JmeThread
     public void finishPainting(@NotNull final Vector3f contactPoint) {
         super.finishPainting(contactPoint);
 
-        final PaintingInput paintingInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY: {
                 modifyHeight(contactPoint);
                 commitChanges();
@@ -155,150 +154,164 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
      *
      * @param contactPoint the contact point.
      */
+    @JmeThread
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
+
         final LocalObjects local = getLocalObjects();
-        final Node terrainNode = (Node) notNull(getPaintedModel());
-        final Geometry levelMarker = getLevelMarker();
-
-        final Vector3f markerTranslation = levelMarker.getLocalTranslation();
-        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
-        final Vector3f localScale = terrainNode.getLocalScale();
-        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
-        final Vector2f terrainLoc = local.nextVector2f();
-        final Vector2f effectPoint = local.nextVector2f();
-
-        final Terrain terrain = (Terrain) terrainNode;
+        final Spatial paintedModel = notNull(getPaintedModel());
         final Geometry brush = getBrush();
+        final Geometry levelMarker = getLevelMarker();
 
         final float brushSize = getBrushSize();
         final float brushPower = getBrushPower();
 
-        final float markerHeight = markerTranslation.getY() - worldTranslation.getY();
-        final float desiredHeight = isUseMarker() ? markerHeight : getLevel();
+        for (final Terrain terrain : getTerrains()) {
 
-        final int radiusStepsX = (int) (brushSize / localScale.getX());
-        final int radiusStepsZ = (int) (brushSize / localScale.getZ());
+            final Node terrainNode = (Node) terrain;
 
-        final float xStepAmount = localScale.getX();
-        final float zStepAmount = localScale.getZ();
+            final Vector3f markerTranslation = levelMarker.getLocalTranslation();
+            final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+            final Vector3f localScale = terrainNode.getLocalScale();
+            final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+            final Vector2f terrainLoc = local.nextVector2f();
+            final Vector2f effectPoint = local.nextVector2f();
 
-        final List<Vector2f> locs = new ArrayList<>();
-        final List<Float> heights = new ArrayList<>();
+            final float markerHeight = markerTranslation.getY() - worldTranslation.getY();
+            final float desiredHeight = isUseMarker() ? markerHeight : getLevel();
 
-        for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
-            for (int x = -radiusStepsX; x < radiusStepsX; x++) {
+            final int radiusStepsX = (int) (brushSize / localScale.getX());
+            final int radiusStepsZ = (int) (brushSize / localScale.getZ());
 
-                float locX = localPoint.getX() + (x * xStepAmount);
-                float locZ = localPoint.getZ() + (z * zStepAmount);
+            final float xStepAmount = localScale.getX();
+            final float zStepAmount = localScale.getZ();
 
-                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+            final List<Vector2f> locs = new ArrayList<>();
+            final List<Float> heights = new ArrayList<>();
 
-                if (!isContains(brush, effectPoint.getX(), effectPoint.getY())) {
-                    continue;
-                }
+            for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
+                for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
-                terrainLoc.set(locX, locZ);
+                    float locX = localPoint.getX() + (x * xStepAmount);
+                    float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                // adjust height based on radius of the tool
-                final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
+                    effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
 
-                if (isPrecision()) {
-                    locs.add(terrainLoc.clone());
-                    heights.add(desiredHeight / localScale.getY());
-                } else {
-
-                    float epsilon = 0.0001f * brushPower; // rounding error for snapping
-                    float adj = 0;
-
-                    if (currentHeight < desiredHeight) adj = 1;
-                    else if (currentHeight > desiredHeight) adj = -1;
-
-                    adj *= brushPower;
-                    adj *= calculateRadiusPercent(brushSize, effectPoint.getX(), effectPoint.getY());
-
-                    // test if adjusting too far and then cap it
-                    if (adj > 0 && floatGreaterThan((currentHeight + adj), desiredHeight, epsilon)) {
-                        adj = desiredHeight - currentHeight;
-                    } else if (adj < 0 && floatLessThan((currentHeight + adj), desiredHeight, epsilon)) {
-                        adj = desiredHeight - currentHeight;
+                    if (!isContains(brush, effectPoint.getX(), effectPoint.getY())) {
+                        continue;
                     }
 
-                    if (!floatEquals(adj, 0, 0.001f)) {
+                    terrainLoc.set(locX, locZ);
+
+                    // adjust height based on radius of the tool
+                    final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
+
+                    if (isPrecision()) {
                         locs.add(terrainLoc.clone());
-                        heights.add(currentHeight + adj);
+                        heights.add(desiredHeight / localScale.getY());
+                    } else {
+
+                        float epsilon = 0.0001f * brushPower; // rounding error for snapping
+                        float adj = 0;
+
+                        if (currentHeight < desiredHeight) adj = 1;
+                        else if (currentHeight > desiredHeight) adj = -1;
+
+                        adj *= brushPower;
+                        adj *= calculateRadiusPercent(brushSize, effectPoint.getX(), effectPoint.getY());
+
+                        // test if adjusting too far and then cap it
+                        if (adj > 0 && floatGreaterThan((currentHeight + adj), desiredHeight, epsilon)) {
+                            adj = desiredHeight - currentHeight;
+                        } else if (adj < 0 && floatLessThan((currentHeight + adj), desiredHeight, epsilon)) {
+                            adj = desiredHeight - currentHeight;
+                        }
+
+                        if (!floatEquals(adj, 0, 0.001f)) {
+                            locs.add(terrainLoc.clone());
+                            heights.add(currentHeight + adj);
+                        }
                     }
                 }
             }
+
+            locs.forEach(location -> change(terrain, location));
+
+            // do the actual height adjustment
+            terrain.setHeight(locs, heights);
         }
 
-        locs.forEach(this::change);
-
-        // do the actual height adjustment
-        terrain.setHeight(locs, heights);
-
-        terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
+        // or else we won't collide with it where we just edited
+        paintedModel.updateModelBound();
     }
 
     /**
-     * Sets level.
+     * Set the target level.
      *
      * @param level the target level.
      */
+    @JmeThread
     public void setLevel(final float level) {
         this.level = level;
     }
 
     /**
-     * Gets level.
+     * Get the target level.
      *
      * @return the target level.
      */
+    @JmeThread
     public float getLevel() {
         return level;
     }
 
     /**
-     * Is precision boolean.
+     * Return true if using precision changing.
      *
      * @return true if using precision changing.
      */
-    public boolean isPrecision() {
+    @JmeThread
+    private boolean isPrecision() {
         return precision;
     }
 
     /**
-     * Sets precision.
+     * Set the flag of using precision changing.
      *
      * @param precision the flag of using precision changing.
      */
+    @JmeThread
     public void setPrecision(final boolean precision) {
         this.precision = precision;
     }
 
     /**
-     * Sets use marker.
+     * Set the flag of using marker.
      *
      * @param useMarker the flag of using marker.
      */
+    @JmeThread
     public void setUseMarker(final boolean useMarker) {
         this.useMarker = useMarker;
     }
 
     /**
-     * Is use marker boolean.
+     * Return the flag of using marker.
      *
      * @return the flag of using marker.
      */
-    public boolean isUseMarker() {
+    @JmeThread
+    private boolean isUseMarker() {
         return useMarker;
     }
 
     /**
+     * Get the level marker.
+     *
      * @return the level marker.
      */
-    @NotNull
-    private Geometry getLevelMarker() {
+    @JmeThread
+    private @NotNull Geometry getLevelMarker() {
         return levelMarker;
     }
 }

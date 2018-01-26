@@ -52,28 +52,30 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
     }
 
     @Override
+    @JmeThread
     public void updatePainting(@NotNull final Vector3f contactPoint) {
 
-        final PaintingInput paintingInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY:
             case MOUSE_SECONDARY: {
-                modifyHeight(paintingInput, contactPoint);
+                modifyHeight(input, contactPoint);
             }
         }
     }
 
     @Override
+    @JmeThread
     public void finishPainting(@NotNull final Vector3f contactPoint) {
         super.finishPainting(contactPoint);
 
-        final PaintingInput paintingInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY:
             case MOUSE_SECONDARY: {
-                modifyHeight(paintingInput, contactPoint);
+                modifyHeight(input, contactPoint);
                 commitChanges();
             }
         }
@@ -90,6 +92,7 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
 
         final LocalObjects local = getLocalObjects();
         final Spatial paintedModel = notNull(getPaintedModel());
+        final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
         final float brushPower = input == PaintingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
@@ -103,8 +106,6 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
             final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
             final Vector2f terrainLoc = local.nextVector2f();
             final Vector2f effectPoint = local.nextVector2f();
-
-            final Geometry brush = getBrush();
 
             final int radiusStepsX = (int) (brushSize / localScale.getX());
             final int radiusStepsZ = (int) (brushSize / localScale.getY());

@@ -17,11 +17,11 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.LocalObjects;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.function.ObjectFloatObjectConsumer;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
@@ -131,54 +131,58 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         this.colorPoints = ArrayFactory.newArray(ColorPoint.class);
     }
 
-    @FromAnyThread
     @Override
+    @FromAnyThread
     protected @NotNull ColorRGBA getBrushColor() {
         return ColorRGBA.Blue;
     }
 
-    @JmeThread
     @Override
-    public void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
+    @JmeThread
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
 
         final Texture alphaTexture = getAlphaTexture();
-        if (alphaTexture == null) return;
+        if (alphaTexture == null) {
+            return;
+        }
 
-        super.startPainting(paintingInput, contactPoint);
+        super.startPainting(input, contactPoint);
 
-        switch (paintingInput) {
+        switch (input) {
             case MOUSE_PRIMARY:
             case MOUSE_SECONDARY: {
                 startChange();
-                paintTexture(paintingInput, contactPoint);
+                paintTexture(input, contactPoint);
                 break;
             }
         }
     }
 
     @Override
+    @JmeThread
     public void updatePainting(@NotNull final Vector3f contactPoint) {
 
-        final PaintingInput currentInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (currentInput) {
+        switch (input) {
             case MOUSE_PRIMARY:
             case MOUSE_SECONDARY: {
-                paintTexture(currentInput, contactPoint);
+                paintTexture(input, contactPoint);
                 break;
             }
         }
     }
 
     @Override
+    @JmeThread
     public void finishPainting(@NotNull final Vector3f contactPoint) {
 
-        final PaintingInput currentInput = notNull(getCurrentInput());
+        final PaintingInput input = notNull(getCurrentInput());
 
-        switch (currentInput) {
+        switch (input) {
             case MOUSE_PRIMARY:
             case MOUSE_SECONDARY: {
-                paintTexture(currentInput, contactPoint);
+                paintTexture(input, contactPoint);
                 commitChanges();
                 break;
             }
@@ -188,8 +192,11 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     /**
+     * Get the list of color points.
+     *
      * @return the list of color points.
      */
+    @JmeThread
     private @NotNull Array<ColorPoint> getColorPoints() {
         return colorPoints;
     }
@@ -197,6 +204,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * Start making changes.
      */
+    @JmeThread
     private void startChange() {
 
         final Array<ColorPoint> colorPoints = getColorPoints();
@@ -227,6 +235,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      * @param index the index
      * @param color the color
      */
+    @JmeThread
     protected void change(final int index, @NotNull final ColorRGBA color) {
 
         final Array<ColorPoint> colorPoints = getColorPoints();
@@ -244,8 +253,11 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     /**
+     * Get the previous image buffer.
+     *
      * @return the previous image buffer.
      */
+    @JmeThread
     private @NotNull ByteBuffer getPrevBuffer() {
         return notNull(prevBuffer);
     }
@@ -253,6 +265,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * Commit all changes.
      */
+    @JmeThread
     private void commitChanges() {
 
         final ByteBuffer prevBuffer = getPrevBuffer();
@@ -279,6 +292,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * Apply color points to an image.
      */
+    @JmeThread
     private static void applyColorPoints(@NotNull final Image image, @NotNull final Array<ColorPoint> colorPoints,
                                          final boolean isRedo) {
 
@@ -326,6 +340,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      * @param colorPoints     the list of changes color points.
      * @param prevColorPoints the list to fill original color points.
      */
+    @JmeThread
     private void fillPrevColorPoints(@NotNull final ByteBuffer prevBuffer, @NotNull final Image image,
                                      @NotNull final Array<ColorPoint> colorPoints,
                                      @NotNull final Array<ColorPoint> prevColorPoints) {
@@ -357,33 +372,41 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     /**
-     * Sets alpha texture.
+     * Set the alpha texture.
      *
      * @param alphaTexture the alpha texture to paint.
      */
+    @JmeThread
     public void setAlphaTexture(@Nullable final Texture alphaTexture) {
         this.alphaTexture = alphaTexture;
     }
 
     /**
+     * Get the alpha texture to paint.
+     *
      * @return the alpha texture to paint.
      */
+    @JmeThread
     private @Nullable Texture getAlphaTexture() {
         return alphaTexture;
     }
 
     /**
-     * Sets layer.
+     * Set the edited layer.
      *
      * @param layer the edited layer.
      */
+    @JmeThread
     public void setLayer(final int layer) {
         this.layer = layer;
     }
 
     /**
+     * Get the edited layer.
+     *
      * @return the edited layer.
      */
+    @JmeThread
     private int getLayer() {
         return layer;
     }
@@ -391,13 +414,16 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     /**
      * Paint texture.
      *
-     * @param paintingInput the editing input.
+     * @param input the editing input.
      * @param contactPoint the contact point.
      */
-    private void paintTexture(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
+    @JmeThread
+    private void paintTexture(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
 
         final Texture alphaTexture = getAlphaTexture();
-        if (alphaTexture == null) return;
+        if (alphaTexture == null) {
+            return;
+        }
 
         final LocalObjects local = getLocalObjects();
         final Spatial terrainNode = notNull(getPaintedModel());
@@ -417,7 +443,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         float brushSize = getBrushSize() / (terrain.getTerrainSize() * localScale.getX());
         float brushPower = getBrushPower();
 
-        if (paintingInput == PaintingInput.MOUSE_SECONDARY) {
+        if (input == PaintingInput.MOUSE_SECONDARY) {
             brushPower *= -1;
         }
 
@@ -429,8 +455,11 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         image.setUpdateNeeded();
     }
 
-    private @NotNull Vector2f getPointPercentagePosition(@NotNull final Terrain terrain, @NotNull final Vector3f localPoint,
-                                                @NotNull final Vector3f localScale, @NotNull final Vector2f result) {
+    @JmeThread
+    private @NotNull Vector2f getPointPercentagePosition(@NotNull final Terrain terrain,
+                                                         @NotNull final Vector3f localPoint,
+                                                         @NotNull final Vector3f localScale,
+                                                         @NotNull final Vector2f result) {
         result.set(localPoint.x, -localPoint.z);
 
         float scale = localScale.getX();
@@ -462,6 +491,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      * @param erase         true if the tool should remove the paint instead of add it
      * @param fadeFalloff   the percentage of the radius when the paint begins to start fading
      */
+    @JmeThread
     private void doPaintAction(@NotNull final ObjectFloatObjectConsumer<ColorRGBA, Boolean> colorFunction,
                                @NotNull final Image image, @NotNull final Vector2f uv, @NotNull final Vector2f temp,
                                @NotNull final ColorRGBA color, final float radius, final boolean erase,
@@ -526,6 +556,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      * @param position position in the buffer.
      * @param write    to write the color or not
      */
+    @JmeThread
     private void manipulatePixel(@NotNull final Image image, @NotNull final ByteBuffer buffer,
                                  @NotNull final ColorRGBA color, final int position, final boolean write) {
 
@@ -578,10 +609,12 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         }
     }
 
+    @FromAnyThread
     private static float byte2float(byte b) {
         return ((float) (b & 0xFF)) / 255f;
     }
 
+    @FromAnyThread
     private static byte float2byte(float f) {
         return (byte) (f * 255f);
     }
