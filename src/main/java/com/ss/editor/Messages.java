@@ -1,9 +1,9 @@
 package com.ss.editor;
 
-import static java.util.ResourceBundle.getBundle;
 import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import static java.util.ResourceBundle.getBundle;
 import com.ss.rlib.util.PropertyLoader;
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
 import java.util.Locale;
 import java.util.Map;
@@ -688,6 +688,10 @@ public class Messages {
     public static final String PLUGINS_DIALOG_VERSION;
     public static final String PLUGINS_DIALOG_HOME_PAGE;
     public static final String PLUGINS_DIALOG_USED_DEPENDENCIES;
+
+    public static final String PAINTING_COMPONENT_CONTAINER_TOOL;
+    public static final String PAINTING_COMPONENT_CONTAINER_NO_TOOLS;
+    public static final String PAINTING_COMPONENT_TERRAIN_EDITOR;
 
     static {
 
@@ -1375,6 +1379,10 @@ public class Messages {
         PLUGINS_DIALOG_QUESTION = bundle.getString("PluginsDialogQuestion");
         PLUGINS_DIALOG_VERSION = bundle.getString("PluginsDialogVersion");
         PLUGINS_DIALOG_HOME_PAGE = bundle.getString("PluginsDialogHomePage");
-        PLUGINS_DIALOG_USED_DEPENDENCIES= bundle.getString("PluginsDialogUsedDependencies");
+        PLUGINS_DIALOG_USED_DEPENDENCIES = bundle.getString("PluginsDialogUsedDependencies");
+
+        PAINTING_COMPONENT_CONTAINER_TOOL = bundle.getString("PaintingComponentContainerTool");
+        PAINTING_COMPONENT_CONTAINER_NO_TOOLS = bundle.getString("PaintingComponentContainerNoTools");
+        PAINTING_COMPONENT_TERRAIN_EDITOR = bundle.getString("PaintingComponentTerrainEditor");
     }
 }

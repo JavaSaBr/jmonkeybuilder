@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.painting;
 
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
@@ -95,7 +96,7 @@ public class PaintingComponentContainer extends ScrollPane {
         horContainer.prefWidthProperty()
                 .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
 
-        final Label label = new Label("Painting tool:");
+        final Label label = new Label(Messages.PAINTING_COMPONENT_CONTAINER_TOOL + ":");
         label.maxWidthProperty().bind(horContainer.widthProperty()
                 .multiply(LABEL_PERCENT));
 

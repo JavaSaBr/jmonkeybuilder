@@ -1288,7 +1288,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @Override
     @FromAnyThread
     public @NotNull String getName() {
-        return "Terrain editor";
+        return Messages.PAINTING_COMPONENT_TERRAIN_EDITOR;
     }
 
     @Override
