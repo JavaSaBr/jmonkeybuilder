@@ -156,10 +156,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     static {
 
         // default handlers
-        final DisableControlsTransformationHandler transformationHandler = new DisableControlsTransformationHandler();
+        final DisableControlsTransformationHandler disableControlsHandler = new DisableControlsTransformationHandler();
 
-        registerPreTransformHandler(transformationHandler::onPreTransform);
-        registerPostTransformHandler(transformationHandler::onPostTransform);
+        registerPreTransformHandler(disableControlsHandler::onPreTransform);
+        registerPostTransformHandler(disableControlsHandler::onPostTransform);
         registerPostTransformHandler(new ReactivatePhysicsControlsTransformationHandler());
     }
 
