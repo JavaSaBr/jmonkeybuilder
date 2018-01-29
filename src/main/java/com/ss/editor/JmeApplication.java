@@ -266,7 +266,7 @@ public class JmeApplication extends JmeToJFXApplication {
         super.simpleInitApp();
 
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
-        renderManager.setSinglePassLightBatchSize(15);
+        renderManager.setSinglePassLightBatchSize(10);
 
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
