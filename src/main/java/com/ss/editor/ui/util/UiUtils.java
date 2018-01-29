@@ -375,9 +375,10 @@ public abstract class UiUtils {
      */
     @FxThread
     public @Nullable static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
-        if (object == null) return null;
 
-        if (Objects.equals(root.getValue(), object)) {
+        if (object == null) {
+            return null;
+        } else if (Objects.equals(root.getValue(), object)) {
             return root;
         }
 
@@ -386,7 +387,9 @@ public abstract class UiUtils {
         if (!children.isEmpty()) {
             for (final TreeItem<T> treeItem : children) {
                 final TreeItem<T> result = findItemForValue(treeItem, object);
-                if (result != null) return result;
+                if (result != null) {
+                    return result;
+                }
             }
         }
 
