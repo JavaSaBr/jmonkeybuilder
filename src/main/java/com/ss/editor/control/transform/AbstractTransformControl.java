@@ -7,6 +7,8 @@ import com.jme3.math.Transform;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -49,11 +51,6 @@ public abstract class AbstractTransformControl extends AbstractControl implement
     @NotNull
     private final Node childNode;
 
-    /**
-     * Instantiates a new Rotation tool control.
-     *
-     * @param editorControl the editor control
-     */
     public AbstractTransformControl(@NotNull final EditorTransformSupport editorControl) {
         this.editorControl = editorControl;
         this.collisionPlane = notNull(editorControl.getCollisionPlane());
@@ -63,38 +60,47 @@ public abstract class AbstractTransformControl extends AbstractControl implement
     }
 
     /**
+     * Get the collision plane.
+     *
      * @return the collision plane.
      */
-    @NotNull
-    protected Node getCollisionPlane() {
+    @JmeThread
+    protected @NotNull Node getCollisionPlane() {
         return collisionPlane;
     }
 
     /**
+     * Get the scene editor controller.
+     *
      * @return the scene editor controller.
      */
-    @NotNull
-    protected EditorTransformSupport getEditorControl() {
+    @JmeThread
+    protected @NotNull EditorTransformSupport getEditorControl() {
         return editorControl;
     }
 
     /**
+     * Get the parent node.
+     *
      * @return the parent node.
      */
-    @NotNull
-    protected Node getParentNode() {
+    @JmeThread
+    protected @NotNull Node getParentNode() {
         return parentNode;
     }
 
     /**
+     * Get the child node.
+     *
      * @return the child node.
      */
-    @NotNull
-    protected Node getChildNode() {
+    @JmeThread
+    protected @NotNull Node getChildNode() {
         return childNode;
     }
 
     @Override
+    @JmeThread
     public void setCollisionPlane(@NotNull final CollisionResult collisionResult) {
 
         final EditorTransformSupport editorControl = getEditorControl();
@@ -113,6 +119,7 @@ public abstract class AbstractTransformControl extends AbstractControl implement
         collisionPlane.setLocalRotation(Quaternion.IDENTITY);
     }
 
+    @JmeThread
     protected void detectPickedAxis(@NotNull final EditorTransformSupport editorControl,
                                     @NotNull final CollisionResult collisionResult) {
 
@@ -128,18 +135,33 @@ public abstract class AbstractTransformControl extends AbstractControl implement
         }
     }
 
-    @NotNull
-    protected String getNodeX() {
+    /**
+     * Get the name of node X.
+     *
+     * @return the name of node X.
+     */
+    @FromAnyThread
+    protected @NotNull String getNodeX() {
         throw new RuntimeException();
     }
 
-    @NotNull
-    protected String getNodeY() {
+    /**
+     * Get the name of node Y.
+     *
+     * @return the name of node Y.
+     */
+    @FromAnyThread
+    protected @NotNull String getNodeY() {
         throw new RuntimeException();
     }
 
-    @NotNull
-    protected String getNodeZ() {
+    /**
+     * Get the name of node Z.
+     *
+     * @return the name of node Z.
+     */
+    @FromAnyThread
+    protected @NotNull String getNodeZ() {
         throw new RuntimeException();
     }
 }

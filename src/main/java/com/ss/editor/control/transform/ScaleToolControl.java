@@ -11,6 +11,8 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.util.EditorUtil;
@@ -42,24 +44,28 @@ public class ScaleToolControl extends AbstractTransformControl {
         super(editorControl);
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected String getNodeY() {
         return NODE_SCALE_Y;
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected String getNodeX() {
         return NODE_SCALE_X;
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected String getNodeZ() {
         return NODE_SCALE_Z;
     }
 
+    @JmeThread
     @Override
     public void processTransform() {
 

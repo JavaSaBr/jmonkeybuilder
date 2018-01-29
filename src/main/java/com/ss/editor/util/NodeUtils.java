@@ -9,14 +9,18 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * The class with utility methods for working with {@link Node}.
@@ -439,7 +443,10 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static void addAudioNodes(@NotNull final Spatial spatial, @NotNull final Array<AudioNode> container) {
-        if (!(spatial instanceof Node)) return;
+
+        if (!(spatial instanceof Node)) {
+            return;
+        }
 
         final Node node = (Node) spatial;
 
@@ -450,4 +457,25 @@ public class NodeUtils {
             addAudioNodes(children, container);
         }
     }
+
+    /**
+     * Create spatial's stream by the spatial.
+     *
+     * @param spatial the spatial.
+     * @return the spatial's stream.
+     */
+    @FromAnyThread
+    public static Stream<Spatial> children(@NotNull final Spatial spatial) {
+
+        final Array<Spatial> result = ArrayFactory.newArray(Spatial.class);
+
+        visitSpatial(spatial, sp -> {
+            result.add(sp);
+            return true;
+        });
+
+        return result.stream();
+    }
+
+
 }

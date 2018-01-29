@@ -19,32 +19,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Reactivate physics control.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public ReactivatePhysicsControl(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FxThread
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FxThread
+    protected @Nullable Image getIcon() {
         return Icons.REPLAY_16;
     }
 
-    @FxThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FxThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REACTIVATE;
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected void process() {
 
         final Object element = getNode().getElement();

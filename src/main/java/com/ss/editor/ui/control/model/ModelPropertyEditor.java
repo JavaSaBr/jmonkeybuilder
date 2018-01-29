@@ -4,6 +4,7 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyEditor;
@@ -70,7 +71,9 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
     @FxThread
     protected boolean canEdit(@NotNull final Object object, @Nullable final Object parent) {
 
-        if (object instanceof Material) {
+        if (object instanceof Control) {
+            return true;
+        } else if (object instanceof Material) {
             final Material material = (Material) object;
             if (material.getKey() != null) return false;
         } else if (object instanceof Spatial) {

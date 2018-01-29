@@ -11,6 +11,8 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
@@ -34,34 +36,30 @@ public class MoveToolControl extends AbstractTransformControl {
     @NotNull
     private static final String NODE_MOVE_Z = "move_z";
 
-    /**
-     * Instantiates a new Move tool control.
-     *
-     * @param editorControl the editor control
-     */
     public MoveToolControl(@NotNull final EditorTransformSupport editorControl) {
         super(editorControl);
     }
 
-    @NotNull
     @Override
-    protected String getNodeX() {
+    @FromAnyThread
+    protected @NotNull String getNodeX() {
         return NODE_MOVE_X;
     }
 
-    @NotNull
     @Override
-    protected String getNodeY() {
+    @FromAnyThread
+    protected @NotNull String getNodeY() {
         return NODE_MOVE_Y;
     }
 
-    @NotNull
     @Override
-    protected String getNodeZ() {
+    @FromAnyThread
+    protected @NotNull String getNodeZ() {
         return NODE_MOVE_Z;
     }
 
     @Override
+    @JmeThread
     public void setCollisionPlane(@NotNull final CollisionResult collisionResult) {
 
         final EditorTransformSupport editorControl = getEditorControl();
@@ -162,6 +160,7 @@ public class MoveToolControl extends AbstractTransformControl {
     }
 
     @Override
+    @JmeThread
     public void processTransform() {
 
         final EditorTransformSupport editorControl = getEditorControl();
