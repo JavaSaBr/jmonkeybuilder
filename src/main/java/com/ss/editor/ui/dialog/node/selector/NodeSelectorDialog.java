@@ -67,6 +67,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
         final ModelNodeTree nodeTree = getNodeTree();
         nodeTree.fill(getModel());
+        nodeTree.getTreeView().setEditable(false);
 
         final Button okButton = notNull(getOkButton());
         okButton.setDisable(true);

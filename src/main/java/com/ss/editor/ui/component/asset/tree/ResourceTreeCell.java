@@ -141,7 +141,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         icon.setImage(ICON_MANAGER.getIcon(file, folder, true, DEFAULT_FILE_ICON_SIZE));
 
-        setText(fileName.toString());
+        setText(fileName == null ? file.toString() : fileName.toString());
         setGraphic(icon);
         createToolTip();
     }

@@ -11,6 +11,8 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
@@ -19,9 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.function.Consumer;
 
 /**
@@ -119,15 +119,23 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
         }
 
         final Path toExpand = initDirectory;
-        final Path root = initDirectory.getRoot();
+        final Array<Path> rootFolders = ArrayFactory.newArray(Path.class);
+
+        final FileSystem fileSystem = FileSystems.getDefault();
+        fileSystem.getRootDirectories().forEach(rootFolders::add);
 
         final ResourceTree resourceTree = getResourceTree();
-        resourceTree.fill(root);
         resourceTree.setOnLoadHandler(finished -> {
             if (finished) {
                 resourceTree.expandTo(toExpand, true);
             }
         });
+
+        if (rootFolders.size() < 2) {
+            resourceTree.fill(notNull(rootFolders.first()));
+        } else {
+            resourceTree.fill(rootFolders);
+        }
 
         EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
     }

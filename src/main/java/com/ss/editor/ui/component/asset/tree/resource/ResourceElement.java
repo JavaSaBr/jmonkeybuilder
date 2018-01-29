@@ -81,10 +81,8 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     @Override
     public int compareTo(@Nullable final ResourceElement other) {
         if (other == null) return -1;
-
         final Path file = getFile();
         final Path otherFile = other.getFile();
-
         return file.getNameCount() - otherFile.getNameCount();
     }
 

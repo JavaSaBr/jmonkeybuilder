@@ -56,12 +56,6 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     @Nullable
     private TreeView<TreeNode<?>> treeView;
 
-    /**
-     * Instantiates a new Abstract node tree.
-     *
-     * @param selectionHandler the selection handler
-     * @param consumer         the consumer
-     */
     public NodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final C consumer) {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
@@ -72,6 +66,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Create components of this component.
      */
+    @FxThread
     protected void createComponents() {
 
         treeView = new TreeView<>();
@@ -101,6 +96,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Select the item.
      */
+    @FxThread
     private void processSelect(@Nullable final TreeItem<TreeNode<?>> treeItem) {
 
         if (treeItem == null) {
@@ -116,6 +112,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      *
      * @return the tree of this model.
      */
+    @FxThread
     public @NotNull TreeView<TreeNode<?>> getTreeView() {
         return notNull(treeView);
     }
