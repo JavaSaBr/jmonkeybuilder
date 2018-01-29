@@ -413,7 +413,9 @@ public class JmeApplication extends JmeToJFXApplication {
             //System.out.println(cam.getRotation());
             //System.out.println(cam.getLocation());
 
-            super.update();
+            if (Config.ENABLE_3D) {
+                super.update();
+            }
 
         } catch (final AssetNotFoundException | RendererException | AssertionError | ArrayIndexOutOfBoundsException |
                 NullPointerException | StackOverflowError | IllegalStateException | UnsupportedOperationException e) {

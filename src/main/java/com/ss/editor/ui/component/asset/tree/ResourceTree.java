@@ -13,10 +13,7 @@ import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.component.asset.tree.resource.*;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.function.IntObjectConsumer;
 import com.ss.rlib.util.StringUtils;
@@ -24,6 +21,7 @@ import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayComparator;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,13 +65,17 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final int firstLevel = getLevel(first);
         final int secondLevel = getLevel(second);
 
-        if (firstLevel != secondLevel) return firstLevel - secondLevel;
+        if (firstLevel != secondLevel) {
+            return firstLevel - secondLevel;
+        }
 
         final Path firstFile = notNull(first).getFile();
-        final String firstName = firstFile.getFileName().toString();
+        final Path firstFileFileName = firstFile.getFileName();
+        final String firstName = firstFileFileName == null ? firstFile.toString() : firstFileFileName.toString();
 
         final Path secondFile = notNull(second).getFile();
-        final String secondName = secondFile.getFileName().toString();
+        final Path secondFileName = secondFile.getFileName();
+        final String secondName = secondFileName == null ? secondFile.toString() : secondFileName.toString();
 
         return StringUtils.compareIgnoreCase(firstName, secondName);
     };
@@ -239,7 +241,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
 
         final IntObjectConsumer<ResourceTree> expandHandler = getExpandHandler();
-        if (expandHandler == null) return;
+        if (expandHandler == null) {
+            return;
+        }
+
         expandHandler.accept(newValue.intValue(), this);
     }
 
@@ -269,7 +274,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @BackgroundThread
     private void lazyLoadChildren(@NotNull final TreeItem<ResourceElement> treeItem,
-                                  @Nullable final Consumer<@NotNull TreeItem<ResourceElement>> callback) {
+                                  @Nullable final Consumer<TreeItem<ResourceElement>> callback) {
 
         final ResourceElement element = treeItem.getValue();
         final Array<ResourceElement> children = element.getChildren(extensionFilter, isOnlyFolders());
@@ -288,10 +293,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
     @FxThread
     private void lazyLoadChildren(@NotNull final TreeItem<ResourceElement> treeItem,
                                   @NotNull final Array<ResourceElement> children,
-                                  @Nullable final Consumer<@NotNull TreeItem<ResourceElement>> callback) {
+                                  @Nullable final Consumer<TreeItem<ResourceElement>> callback) {
 
         final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
         if (items.size() != 1 || items.get(0).getValue() != LoadingResourceElement.getInstance()) {
+            if (callback != null) callback.accept(treeItem);
             return;
         }
 
@@ -438,22 +444,49 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Fill the tree using the asset folder.
+     * Fill the tree using the root folder.
      *
-     * @param assetFolder the asset folder.
+     * @param rootFolder the root folder.
      */
     @FxThread
-    public void fill(@NotNull final Path assetFolder) {
+    public void fill(@NotNull final Path rootFolder) {
 
         final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
-        if (onLoadHandler != null) onLoadHandler.accept(Boolean.FALSE);
+        if (onLoadHandler != null) {
+            onLoadHandler.accept(Boolean.FALSE);
+        }
 
         final TreeItem<ResourceElement> currentRoot = getRoot();
-        if (currentRoot != null) setRoot(null);
+        if (currentRoot != null) {
+            setRoot(null);
+        }
 
         showLoading();
 
-        EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(assetFolder));
+        EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(rootFolder));
+    }
+
+    /**
+     * Fill the tree using the list of root folders.
+     *
+     * @param rootFolders the list of root folder.
+     */
+    @FxThread
+    public void fill(@NotNull final Array<Path> rootFolders) {
+
+        final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
+        if (onLoadHandler != null) {
+            onLoadHandler.accept(Boolean.FALSE);
+        }
+
+        final TreeItem<ResourceElement> currentRoot = getRoot();
+        if (currentRoot != null) {
+            setRoot(null);
+        }
+
+        showLoading();
+
+        EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(rootFolders));
     }
 
     /**
@@ -554,9 +587,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * Start the background process of filling.
      */
     @BackgroundThread
-    private void startBackgroundFill(@NotNull final Path assetFolder) {
+    private void startBackgroundFill(@NotNull final Path path) {
 
-        final ResourceElement rootElement = createFor(assetFolder);
+        final ResourceElement rootElement = createFor(path);
         final TreeItem<ResourceElement> newRoot = new TreeItem<>(rootElement);
         newRoot.setExpanded(true);
 
@@ -570,7 +603,34 @@ public class ResourceTree extends TreeView<ResourceElement> {
             setRoot(newRoot);
 
             final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
-            if (onLoadHandler != null) onLoadHandler.accept(Boolean.TRUE);
+            if (onLoadHandler != null) {
+                onLoadHandler.accept(Boolean.TRUE);
+            }
+        });
+    }
+
+    /**
+     * Start the background process of filling.
+     */
+    @BackgroundThread
+    private void startBackgroundFill(@NotNull final Array<Path> paths) {
+
+        final ResourceElement rootElement = new FoldersResourceElement(paths);
+        final TreeItem<ResourceElement> newRoot = new TreeItem<>(rootElement);
+        newRoot.setExpanded(true);
+
+        fill(newRoot);
+
+        if (!isLazyMode() && isNeedCleanup()) {
+            cleanup(newRoot);
+        }
+
+        EXECUTOR_MANAGER.addFxTask(() -> {
+            setRoot(newRoot);
+            final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
+            if (onLoadHandler != null) {
+                Platform.runLater(() -> onLoadHandler.accept(Boolean.TRUE));
+            }
         });
     }
 
@@ -649,7 +709,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement element = treeItem.getValue();
         final Array<String> extensionFilter = getExtensionFilter();
-        if (!element.hasChildren(extensionFilter, isOnlyFolders())) return;
+        if (!element.hasChildren(extensionFilter, isOnlyFolders())) {
+            return;
+        }
 
         final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
 
@@ -957,7 +1019,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (isLazyMode()) {
 
             final TreeItem<ResourceElement> targetItem = findItemForValue(getRoot(), file);
-
             if (targetItem == null) {
 
                 TreeItem<ResourceElement> parentItem = null;
@@ -968,11 +1029,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
                     if (parentItem != null) {
                         break;
                     }
+
                     parent = parent.getParent();
                 }
 
                 if (parentItem == null) {
-                    return;
+                    parentItem = getRoot();
                 }
 
                 final TreeItem<ResourceElement> toLoad = parentItem;

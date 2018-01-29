@@ -19,10 +19,6 @@
  ******************************************************************************/
 
 #EditorMenuBarComponent {
-    -fx-padding: 0px;
-    -fx-min-height: 30px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
     -fx-border-width: 0px 0px 1px 0px;
     -fx-border-color: -var-split-line-color;
 }

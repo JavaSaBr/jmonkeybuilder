@@ -114,6 +114,11 @@ public final class Config {
      */
     public static boolean ENABLE_PBR;
 
+    /**
+     * The flag to enable 3D part of this editor.
+     */
+    public static boolean ENABLE_3D;
+
     static {
 
         final GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -128,6 +133,7 @@ public final class Config {
         DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
+        ENABLE_3D = vars.getBoolean("Graphics.enable3D", true);
 
         GRAPHICS_DEVICE = device;
         OPERATING_SYSTEM = new OperatingSystem();
