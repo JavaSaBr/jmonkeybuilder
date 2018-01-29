@@ -81,6 +81,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         FAST_SKY_LIST.add("graphics/textures/sky/inside.hdr");
     }
 
+    /**
+     * The bullet state.
+     */
     @NotNull
     private final ModelEditorBulletPart bulletState;
 
@@ -124,6 +127,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     /**
+     * Get the list of fast skies.
+     *
      * @return the list of fast skies.
      */
     @FxThread
@@ -132,6 +137,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     /**
+     * Get the light toggle.
+     *
      * @return the light toggle.
      */
     @FxThread
@@ -140,6 +147,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     /**
+     * Get the physics toggle.
+     *
      * @return the physics toggle.
      */
     @FxThread
@@ -148,6 +157,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     /**
+     * Get the debug physics button.
+     *
      * @return the debug physics button.
      */
     @FxThread
@@ -317,7 +328,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      */
     @FxThread
     private void changeFastSky(@NotNull final String newSky) {
-
         if (isIgnoreListeners()) {
             return;
         }
@@ -352,6 +362,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     /**
+     * Get the bullet state.
+     *
      * @return the bullet state.
      */
     @FxThread
@@ -364,11 +376,15 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      */
     @FxThread
     private void changePhysics(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
+        if (isIgnoreListeners()) {
+            return;
+        }
 
         EXECUTOR_MANAGER.addJmeTask(() -> getBulletState().setEnabled(newValue));
 
-        if (editorState != null) editorState.setEnablePhysics(newValue);
+        if (editorState != null) {
+            editorState.setEnablePhysics(newValue);
+        }
     }
 
     /**
@@ -376,11 +392,15 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      */
     @FxThread
     private void changeDebugPhysics(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
+        if (isIgnoreListeners()) {
+            return;
+        }
 
         EXECUTOR_MANAGER.addJmeTask(() -> getBulletState().setDebugEnabled(newValue));
 
-        if (editorState != null) editorState.setEnableDebugPhysics(newValue);
+        if (editorState != null) {
+            editorState.setEnableDebugPhysics(newValue);
+        }
     }
 
     /**
@@ -388,12 +408,16 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
      */
     @FxThread
     private void changeLight(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
+        if (isIgnoreListeners()) {
+            return;
+        }
 
         final ModelEditor3DPart editor3DState = getEditor3DPart();
         editor3DState.updateLightEnabled(newValue);
 
-        if (editorState != null) editorState.setEnableLight(newValue);
+        if (editorState != null) {
+            editorState.setEnableLight(newValue);
+        }
     }
 
     @Override
