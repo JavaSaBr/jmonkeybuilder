@@ -384,8 +384,6 @@ public abstract class UiUtils {
 
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
-        System.out.println(root + ":" + children);
-
         if (!children.isEmpty()) {
             for (final TreeItem<T> treeItem : children) {
                 final TreeItem<T> result = findItemForValue(treeItem, object);

@@ -5,8 +5,8 @@ import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.editor.ui.util.UiUtils.hasFileInClipboard;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.FXConstants;
@@ -21,7 +21,6 @@ import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayComparator;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -403,7 +402,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FxThread
     protected @Nullable ContextMenu getContextMenu(@NotNull final ResourceElement element) {
-        if (isReadOnly()) return null;
+
+        if (isReadOnly()) {
+            return null;
+        }
 
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
@@ -438,7 +440,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
             }
         }
 
-        if (items.isEmpty()) return null;
+        if (items.isEmpty()) {
+            return null;
+        }
 
         return contextMenu;
     }
@@ -629,7 +633,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             setRoot(newRoot);
             final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
             if (onLoadHandler != null) {
-                Platform.runLater(() -> onLoadHandler.accept(Boolean.TRUE));
+                onLoadHandler.accept(Boolean.TRUE);
             }
         });
     }
@@ -654,7 +658,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
             expandedElements.forEach(element -> {
 
                 final TreeItem<ResourceElement> item = findItemForValue(newRoot, element);
-                if (item == null) return;
+                if (item == null) {
+                    return;
+                }
 
                 item.setExpanded(true);
             });
@@ -670,7 +676,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
             restoreSelection();
 
             final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
-            if (onLoadHandler != null) onLoadHandler.accept(Boolean.TRUE);
+            if (onLoadHandler != null) {
+                onLoadHandler.accept(Boolean.TRUE);
+            }
         });
     }
 
