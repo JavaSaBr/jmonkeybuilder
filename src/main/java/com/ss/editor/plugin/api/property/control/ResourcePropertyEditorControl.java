@@ -107,7 +107,9 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         }
 
         final File file = files.get(0);
-        if (!canAccept(file)) return;
+        if (!canAccept(file)) {
+            return;
+        }
 
         handleFile(file);
     }
@@ -135,7 +137,9 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         }
 
         final File file = files.get(0);
-        if (!canAccept(file)) return;
+        if (!canAccept(file)) {
+            return;
+        }
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);

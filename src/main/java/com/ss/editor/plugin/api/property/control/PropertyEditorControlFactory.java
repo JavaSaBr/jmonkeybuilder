@@ -48,6 +48,8 @@ public class PropertyEditorControlFactory {
                 return new StringPropertyEditorControl(vars, definition, validation);
             case GEOMETRY_FROM_ASSET_FOLDER:
                 return new GeometryAssetResourcePropertyControl(vars, definition, validation);
+            case SPATIAL_FROM_ASSET_FOLDER:
+                return new SpatialAssetResourcePropertyControl<>(vars, definition, validation);
             case FILE_FROM_ASSET_FOLDER:
                 return new FileAssetResourcePropertyControl(vars, definition, validation);
             case STRING_FROM_LIST:

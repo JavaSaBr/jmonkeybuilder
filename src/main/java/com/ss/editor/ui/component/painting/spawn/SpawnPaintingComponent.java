@@ -5,11 +5,14 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.control.painting.spawn.SpawnToolControl;
+import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
+import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
+import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,18 +24,31 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class SpawnPaintingComponent extends AbstractPaintingComponent<Node, SpawnPaintingStateWithEditorTool, SpawnToolControl> {
+public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Node, SpawnPaintingStateWithEditorTool, SpawnToolControl> {
+
+    private static final String CATEGORY_DEFAULT = "Default";
+    private static final String PROPERTY_MODEL = "model";
 
     public SpawnPaintingComponent(@NotNull final PaintingComponentContainer container) {
         super(container);
         setToolControl(new SpawnToolControl(this));
+        showCategory(CATEGORY_DEFAULT);
     }
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
-        FXUtils.addToPane(createBrushSettings(), this);
+    protected @NotNull Array<PaintingPropertyDefinition> getPaintingProperties() {
+
+        final Array<PaintingPropertyDefinition> result = ArrayFactory.newArray(PaintingPropertyDefinition.class);
+        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, EditablePropertyType.SPATIAL_FROM_ASSET_FOLDER,
+                "Model", PROPERTY_MODEL, null));
+
+        return result;
+    }
+
+    @Override
+    protected void syncValues() {
+        super.syncValues();
     }
 
     @Override
