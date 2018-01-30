@@ -4,7 +4,6 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory;
-import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
 import com.ss.editor.ui.component.painting.impl.AbstractPaintingStateWithEditorTool;
@@ -71,8 +70,9 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
     }
 
     @Override
-    public void loadState(@NotNull final EditorState editorState) {
-        super.loadState(editorState);
+    @FxThread
+    protected void readState(@NotNull final S state) {
+        super.readState(state);
         refreshPropertyControls();
     }
 

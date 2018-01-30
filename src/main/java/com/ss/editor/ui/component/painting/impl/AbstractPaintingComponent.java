@@ -131,7 +131,28 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
 
     @Override
     public void loadState(@NotNull final EditorState editorState) {
-        this.state = editorState.getOrCreateAdditionalState(getStateType(), getStateConstructor());
+        final S state = editorState.getOrCreateAdditionalState(getStateType(), getStateConstructor());
+        this.state = state;
+        readState(state);
+    }
+
+    /**
+     * Get the component's state.
+     *
+     * @return the component's state.
+     */
+    @FxThread
+    protected @NotNull S getState() {
+        return notNull(state);
+    }
+
+    /**
+     * Read the saved component's state.
+     *
+     * @param state the saved component's state.
+     */
+    @FxThread
+    protected void readState(@NotNull final S state) {
         getBrushSizeField().setValue(state.getBrushSize());
         getBrushPowerField().setValue(state.getBrushPower());
     }

@@ -71,6 +71,12 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     private final Array<Spatial> examples;
 
     /**
+     * The models scale.
+     */
+    @NotNull
+    private final Vector3f scale;
+
+    /**
      * The spawn method.
      */
     @NotNull
@@ -86,6 +92,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
         this.spawnedModels = ArrayFactory.newArray(Spatial.class);
         this.examples = ArrayFactory.newArray(Spatial.class);
         this.method = SpawnMethod.BATCHED;
+        this.scale = new Vector3f(1F, 1F, 1F);
     }
 
     /**
@@ -106,6 +113,26 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     @JmeThread
     public void setMethod(@NotNull final SpawnMethod method) {
         this.method = method;
+    }
+
+    /**
+     * Get the models scale.
+     *
+     * @return the models scale.
+     */
+    @JmeThread
+    private @NotNull Vector3f getScale() {
+        return scale;
+    }
+
+    /**
+     * Set the models scale.
+     *
+     * @param scale the models scale.
+     */
+    @JmeThread
+    public void setScale(@NotNull final Vector3f scale) {
+        this.scale.set(scale);
     }
 
     @Override
@@ -222,6 +249,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
         final Ray ray = local.nextRay();
         ray.setOrigin(sourcePoint);
 
+        final Vector3f scale = getScale();
         final Vector3f resultPosition = local.nextVector();
         final CollisionResults collisions = local.nextCollisionResults();
         final CollisionResults spawnedCollisions = local.nextCollisionResults();
@@ -257,6 +285,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
                 final Spatial clone = examples.get(random.nextInt(0, examples.size())).clone();
                 clone.setUserData(KEY_IGNORE_RAY_CAST, Boolean.TRUE);
                 clone.setLocalTranslation(resultPosition);
+                clone.setLocalScale(scale);
                 clone.updateModelBound();
 
                 if (paintedModel.collideWith(clone.getWorldBound(), spawnedCollisions) > 1) {
@@ -295,13 +324,14 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
 
         final Node paintedModel = notNull(getPaintedModel());
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
+        final Vector3f scale = getScale();
 
         final SpawnMethod method = getMethod();
         switch (method) {
             case AS_IS: {
                 final Node spawnedNode = new Node("Spawned");
                 spawnedModels.forEach(spawnedNode::attachChild);
-                changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel));
+                changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel, false));
                 break;
             }
             case LINKED: {
@@ -310,7 +340,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
                 spawnedModels.stream().map(this::linkSpatial)
                         .forEach(spawnedNode::attachChild);
 
-                changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel));
+                changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel, false));
                 break;
             }
             case BATCHED: {
@@ -325,7 +355,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
                 GeometryBatchFactory.makeBatches(geometries)
                         .forEach(spawnedNode::attachChild);
 
-                changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel));
+                changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel, false));
                 break;
             }
         }
@@ -341,6 +371,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     protected @NotNull AssetLinkNode linkSpatial(@NotNull final Spatial spatial) {
         final AssetLinkNode linkNode = new AssetLinkNode();
         linkNode.setName(spatial.getName());
+        linkNode.setLocalScale(getScale());
         linkNode.attachLinkedChild(getAssetManager(), (ModelKey) spatial.getKey());
         linkNode.setLocalTranslation(spatial.getLocalTranslation());
         return linkNode;
