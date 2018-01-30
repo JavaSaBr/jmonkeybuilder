@@ -1,22 +1,22 @@
-package com.ss.editor.control.painting.terrain;
+package com.ss.editor.control.painting.spawn;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The base implementation of terrain tool.
+ * The implementation of spawn tool.
  *
  * @author JavaSaBr
  */
-public class TerrainToolControl extends AbstractPaintingControl<TerrainPaintingComponent> {
+public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingComponent> {
 
-    public TerrainToolControl(@NotNull final TerrainPaintingComponent component) {
+    public SpawnToolControl(@NotNull final SpawnPaintingComponent component) {
         super(component);
     }
 

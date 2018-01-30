@@ -2,23 +2,20 @@ package com.ss.editor.ui.component.painting.terrain;
 
 import static java.lang.Math.abs;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
-import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
+import com.ss.editor.ui.component.painting.impl.AbstractPaintingStateWithEditorTool;
 
 /**
- * The state of terrain editing component.
+ * The state of terrain painting component.
  *
  * @author JavaSaBr
  */
-public class TerrainPaintingStateWithEditorTool extends AbstractEditorState implements AdditionalEditorState {
+public class TerrainPaintingStateWithEditorTool extends AbstractPaintingStateWithEditorTool {
 
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 1;
+    public static final long serialVersionUID = 2;
 
-    private volatile float brushSize;
-    private volatile float brushPower;
     private volatile float levelValue;
     private volatile float roughtFrequency;
     private volatile float roughtLacunarity;
@@ -32,8 +29,6 @@ public class TerrainPaintingStateWithEditorTool extends AbstractEditorState impl
     private volatile boolean slopeSmoothly;
 
     public TerrainPaintingStateWithEditorTool() {
-        this.brushSize = 10;
-        this.brushPower = 1;
         this.levelValue = 1;
         this.roughtFrequency = 0.2f;
         this.roughtLacunarity = 2.12f;
@@ -44,30 +39,6 @@ public class TerrainPaintingStateWithEditorTool extends AbstractEditorState impl
         this.levelSmoothly = true;
         this.slopeLimited = true;
         this.slopeSmoothly = true;
-    }
-
-    @FxThread
-    public float getBrushSize() {
-        return brushSize;
-    }
-
-    @FxThread
-    public void setBrushSize(final float brushSize) {
-        final boolean changed = abs(getBrushSize() - brushSize) > 0.001f;
-        this.brushSize = brushSize;
-        if (changed) notifyChange();
-    }
-
-    @FxThread
-    public float getBrushPower() {
-        return brushPower;
-    }
-
-    @FxThread
-    public void setBrushPower(final float brushPower) {
-        final boolean changed = abs(getBrushPower() - brushPower) > 0.001f;
-        this.brushPower = brushPower;
-        if (changed) notifyChange();
     }
 
     @FxThread

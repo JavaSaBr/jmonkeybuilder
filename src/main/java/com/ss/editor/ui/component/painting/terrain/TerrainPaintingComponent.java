@@ -13,6 +13,7 @@ import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.terrain.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -47,13 +48,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * The painting component to edit terrain.
  *
  * @author JavaSaBr
  */
-public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, TerrainPaintingStateWithEditorTool> {
+public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, TerrainPaintingStateWithEditorTool, TerrainToolControl> {
 
     /**
      * The constant TERRAIN_PARAM.
@@ -195,18 +197,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     private ToggleButton paintButton;
 
     /**
-     * The brush size field.
-     */
-    @Nullable
-    private FloatTextField brushSizeField;
-
-    /**
-     * The brush power field.
-     */
-    @Nullable
-    private FloatTextField brushPowerField;
-
-    /**
      * The container of control settings.
      */
     @Nullable
@@ -314,17 +304,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @Nullable
     private FloatTextField shininessField;
 
-    /**
-     * The current tool control.
-     */
-    @Nullable
-    private TerrainToolControl toolControl;
-
-    /**
-     * The flag of ignoring listeners.
-     */
-    private boolean ignoreListeners;
-
     public TerrainPaintingComponent(@NotNull final PaintingComponentContainer container) {
         super(container);
 
@@ -364,9 +343,21 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     }
 
     @Override
+    @FromAnyThread
+    protected @NotNull Class<TerrainPaintingStateWithEditorTool> getStateType() {
+        return TerrainPaintingStateWithEditorTool.class;
+    }
+
+    @Override
+    @FromAnyThread
+    protected @NotNull Supplier<TerrainPaintingStateWithEditorTool> getStateConstructor() {
+        return TerrainPaintingStateWithEditorTool::new;
+    }
+
+    @Override
     @FxThread
     public void loadState(@NotNull final EditorState editorState) {
-        this.state = editorState.getOrCreateAdditionalState(TerrainPaintingStateWithEditorTool.class, TerrainPaintingStateWithEditorTool::new);
+        super.loadState(editorState);
         getLevelControlLevelField().setValue(state.getLevelValue());
         getLevelControlUseMarker().setSelected(state.isLevelUseMarker());
         getLevelControlSmoothly().setSelected(state.isLevelSmoothly());
@@ -377,8 +368,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         getRoughControlOctavesField().setValue(state.getRoughtOctaves());
         getRoughControlRoughnessField().setValue(state.getRoughtRoughness());
         getRoughControlScaleField().setValue(state.getRoughtScale());
-        getBrushSizeField().setValue(state.getBrushSize());
-        getBrushPowerField().setValue(state.getBrushPower());
     }
 
     /**
@@ -419,26 +408,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private @NotNull ObjectDictionary<ToggleButton, Pane> getButtonToSettings() {
         return buttonToSettings;
-    }
-
-    /**
-     * Get the current tool control.
-     *
-     * @return the current tool control.
-     */
-    @FxThread
-    private @Nullable TerrainToolControl getToolControl() {
-        return toolControl;
-    }
-
-    /**
-     * Get the current tool control.
-     *
-     * @param toolControl the current tool control.
-     */
-    @FxThread
-    private void setToolControl(@Nullable final TerrainToolControl toolControl) {
-        this.toolControl = toolControl;
     }
 
     /**
@@ -511,26 +480,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         return notNull(raiseLowerButton);
     }
 
-    /**
-     * Get the brush power field.
-     *
-     * @return the brush power field.
-     */
-    @FxThread
-    private @NotNull FloatTextField getBrushPowerField() {
-        return notNull(brushPowerField);
-    }
-
-    /**
-     * Get the brush size field.
-     *
-     * @return the brush size field.
-     */
-    @FxThread
-    private @NotNull FloatTextField getBrushSizeField() {
-        return notNull(brushSizeField);
-    }
-
     @Override
     @FxThread
     protected void createComponents() {
@@ -567,34 +516,11 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         FXUtils.addClassTo(buttonsContainer, CssClasses.DEF_GRID_PANE);
 
-        final Label brushSizeLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_SIZE + ":");
-        brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        brushSizeField = new FloatTextField();
-        brushSizeField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        brushSizeField.setMinMax(0.0001F, Integer.MAX_VALUE);
-        brushSizeField.addChangeListener((observable, oldValue, newValue) -> changeBrushSize(newValue));
-
-        final Label brushPowerLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_POWER + ":");
-        brushPowerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        brushPowerField = new FloatTextField();
-        brushPowerField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        brushPowerField.setScrollPower(3F);
-        brushPowerField.setMinMax(0.0001F, Integer.MAX_VALUE);
-        brushPowerField.addChangeListener((observable, oldValue, newValue) -> changeBrushPower(newValue));
-
-        final GridPane brushSettingsContainer = new GridPane();
-        brushSettingsContainer.add(brushSizeLabel, 0, 0);
-        brushSettingsContainer.add(brushSizeField, 1, 0);
-        brushSettingsContainer.add(brushPowerLabel, 0, 1);
-        brushSettingsContainer.add(brushPowerField, 1, 1);
-
         controlSettings = new VBox();
         controlSettings.prefWidthProperty().bind(widthProperty());
 
         FXUtils.addToPane(buttonsContainer, this);
-        FXUtils.addToPane(brushSettingsContainer, this);
+        FXUtils.addToPane(createBrushSettings(), this);
         FXUtils.addToPane(controlSettings, this);
 
         createLevelControlSettings();
@@ -605,10 +531,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         FXUtils.addClassesTo(raiseLowerButton, smoothButton, roughButton, levelButton, slopeButton, paintButton,
                 CssClasses.MEDIUM_TOGGLE_BUTTON);
 
-        FXUtils.addClassTo(brushSettingsContainer, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(controlSettings, CssClasses.DEF_VBOX);
-        FXUtils.addClassTo(brushSizeLabel, brushPowerLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(brushSizeField, brushPowerField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -974,28 +897,18 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setRoughness(newRoughness));
     }
 
-    /**
-     * Change brush sizes.
-     */
-    @FromAnyThread
-    private void changeBrushSize(@NotNull final Float size) {
-        if (state != null) state.setBrushSize(size);
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Array<TerrainToolControl> toolControls = getToolControls();
-            toolControls.forEach(size, TerrainToolControl::setBrushSize);
-        });
+    @Override
+    @JmeThread
+    protected void setBrushSize(@NotNull final Float size) {
+        final Array<TerrainToolControl> toolControls = getToolControls();
+        toolControls.forEach(size, TerrainToolControl::setBrushSize);
     }
 
-    /**
-     * Change brush powers.
-     */
-    @FromAnyThread
-    private void changeBrushPower(@NotNull final Float power) {
-        if (state != null) state.setBrushPower(power);
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Array<TerrainToolControl> toolControls = getToolControls();
-            toolControls.forEach(power, TerrainToolControl::setBrushPower);
-        });
+    @Override
+    @JmeThread
+    protected void setBrushPower(@NotNull final Float power) {
+        final Array<TerrainToolControl> toolControls = getToolControls();
+        toolControls.forEach(power, TerrainToolControl::setBrushPower);
     }
 
     /**
@@ -1253,36 +1166,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     public boolean isSupport(@NotNull final Object object) {
         return object instanceof Node &&
                 NodeUtils.findSpatial((Node) object, TerrainQuad.class::isInstance) != null;
-    }
-
-    @Override
-    @FxThread
-    public void notifyShowed() {
-        super.notifyShowed();
-        EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().addControl(getToolControl()));
-    }
-
-    @Override
-    @FxThread
-    public void notifyHided() {
-        super.notifyHided();
-        EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().removeControl(TerrainToolControl.class));
-    }
-
-    /**
-     * @param ignoreListeners the flag of ignoring listeners.
-     */
-    @FxThread
-    private void setIgnoreListeners(final boolean ignoreListeners) {
-        this.ignoreListeners = ignoreListeners;
-    }
-
-    /**
-     * @return the flag of ignoring listeners.
-     */
-    @FxThread
-    private boolean isIgnoreListeners() {
-        return ignoreListeners;
     }
 
     @Override

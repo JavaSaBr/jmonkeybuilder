@@ -9,7 +9,6 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -17,7 +16,6 @@ import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -80,7 +78,10 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial) {
-        if (!(spatial instanceof Node)) {
+
+        if (spatial instanceof Geometry) {
+            return (Geometry) spatial;
+        } else if (!(spatial instanceof Node)) {
             return null;
         }
 

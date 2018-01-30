@@ -1,7 +1,6 @@
 package com.ss.editor.control.painting;
 
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
@@ -20,18 +19,34 @@ public interface PaintingControl extends Control {
      * @return the painted model.
      */
     @JmeThread
-    default @Nullable Spatial getPaintedModel() {
+    default @Nullable Object getPaintedModel() {
         return null;
     }
 
     /**
+     * Set the brush size.
+     *
+     * @param brushSize the brush size.
+     */
+    @JmeThread
+    void setBrushSize(float brushSize);
+
+    /**
+     * Set the brush power.
+     *
+     * @param brushPower the brush power.
+     */
+    @JmeThread
+    void setBrushPower(float brushPower);
+
+    /**
      * Start painting.
      *
-     * @param paintingInput the type of input.
+     * @param input the type of input.
      * @param contactPoint  the contact point.
      */
     @JmeThread
-    default void startPainting(@NotNull final PaintingInput paintingInput, @NotNull final Vector3f contactPoint) {
+    default void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
     }
 
     /**
