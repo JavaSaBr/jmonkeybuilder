@@ -2,6 +2,7 @@ package com.ss.editor.control.painting.impl;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -202,14 +203,15 @@ public abstract class AbstractPaintingControl<T extends PaintingComponent> exten
 
     @Override
     @JmeThread
-    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Quaternion brushRotation,
+                              @NotNull final Vector3f contactPoint) {
         setPainting(true);
         setPaintingInput(input);
     }
 
     @Override
     @JmeThread
-    public void finishPainting(@NotNull final Vector3f contactPoint) {
+    public void finishPainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint) {
         setPainting(false);
     }
 

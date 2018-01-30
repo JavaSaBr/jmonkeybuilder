@@ -214,7 +214,7 @@ public class GeomUtils {
     }
 
     /**
-     * Get a context point on spatial from cursor position.
+     * Get a contact point on the spatial from cursor position.
      *
      * @param spatial the spatial.
      * @param camera  the camera.
@@ -225,6 +225,36 @@ public class GeomUtils {
         final InputManager inputManager = EditorUtil.getInputManager();
         final Vector2f cursor = inputManager.getCursorPosition();
         return getContactPointFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
+    }
+
+    /**
+     * Get a collision result on the spatial from cursor position.
+     *
+     * @param spatial the spatial.
+     * @param camera  the camera.
+     * @return the collision result or null.
+     */
+    @FromAnyThread
+    public static @Nullable CollisionResult getCollisionFromCursor(@NotNull final Spatial spatial,
+                                                                   @NotNull final Camera camera) {
+        final InputManager inputManager = EditorUtil.getInputManager();
+        final Vector2f cursor = inputManager.getCursorPosition();
+        return getCollisionFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
+    }
+
+    /**
+     * Get a collisions result on the spatial from cursor position.
+     *
+     * @param spatial the spatial.
+     * @param camera  the camera.
+     * @return the collisions result.
+     */
+    @FromAnyThread
+    public static @NotNull CollisionResults getCollisionsFromCursor(@NotNull final Spatial spatial,
+                                                                    @NotNull final Camera camera) {
+        final InputManager inputManager = EditorUtil.getInputManager();
+        final Vector2f cursor = inputManager.getCursorPosition();
+        return getCollisionsFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
     /**
@@ -289,6 +319,28 @@ public class GeomUtils {
                                                                       @NotNull final Camera camera, final float screenX,
                                                                       final float screenY) {
 
+        final CollisionResults results = getCollisionsFromScreenPos(spatial, camera, screenX, screenY);
+        if (results.size() < 1) {
+            return null;
+        }
+
+        return results.getClosestCollision();
+    }
+
+    /**
+     * Get a collision on spatial from screen position.
+     *
+     * @param spatial the spatial.
+     * @param camera  the camera.
+     * @param screenX the screen X coord.
+     * @param screenY the screen Y coord.
+     * @return the collisions .
+     */
+    @FromAnyThread
+    public static @NotNull CollisionResults getCollisionsFromScreenPos(@NotNull final Spatial spatial,
+                                                                       @NotNull final Camera camera,
+                                                                       final float screenX, final float screenY) {
+
         final LocalObjects local = LocalObjects.get();
 
         final Vector2f cursor = local.nextVector(screenX, screenY);
@@ -306,10 +358,6 @@ public class GeomUtils {
         spatial.updateModelBound();
         spatial.collideWith(ray, results);
 
-        if (results.size() < 1) {
-            return null;
-        }
-
-        return results.getClosestCollision();
+        return results;
     }
 }

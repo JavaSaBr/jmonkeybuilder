@@ -5,6 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -56,8 +57,9 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
 
     @Override
     @JmeThread
-    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
-        super.startPainting(input, contactPoint);
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Quaternion brushRotation,
+                              @NotNull final Vector3f contactPoint) {
+        super.startPainting(input, brushRotation, contactPoint);
 
         switch (input) {
             case MOUSE_PRIMARY: {
@@ -69,7 +71,8 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
 
     @Override
     @JmeThread
-    public void updatePainting(@NotNull final Vector3f contactPoint) {
+    public void updatePainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint,
+                               final float tpf) {
 
         final PaintingInput input = notNull(getCurrentInput());
 
@@ -82,8 +85,8 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
 
     @Override
     @JmeThread
-    public void finishPainting(@NotNull final Vector3f contactPoint) {
-        super.finishPainting(contactPoint);
+    public void finishPainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint) {
+        super.finishPainting(brushRotation, contactPoint);
 
         final PaintingInput input = notNull(getCurrentInput());
 

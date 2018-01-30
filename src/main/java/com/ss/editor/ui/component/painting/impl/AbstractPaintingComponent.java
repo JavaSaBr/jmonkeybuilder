@@ -99,7 +99,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     @FxThread
     protected @NotNull GridPane createBrushSettings() {
 
-        final Label brushSizeLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_SIZE + ":");
+        final Label brushSizeLabel = new Label(Messages.PAINTING_COMPONENT_BRUSH_SIZE + ":");
         brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         brushSizeField = new FloatTextField();
@@ -107,7 +107,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
         brushSizeField.setMinMax(0.0001F, Integer.MAX_VALUE);
         brushSizeField.addChangeListener((observable, oldValue, newValue) -> changeBrushSize(newValue));
 
-        final Label brushPowerLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_POWER + ":");
+        final Label brushPowerLabel = new Label(Messages.PAINTING_COMPONENT_BRUSH_POWER + ":");
         brushPowerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         brushPowerField = new FloatTextField();

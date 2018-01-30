@@ -73,11 +73,8 @@ import java.util.function.Function;
 public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends Advanced3DEditorPart<T> implements EditorTransformSupport {
 
-    /**
-     * The constant LOADED_MODEL_KEY.
-     */
-    @NotNull
-    public static String LOADED_MODEL_KEY = EditorTransformSupport.class.getName() + ".loadedModel";
+    public static final String LOADED_MODEL_KEY = "jMB.sceneEditor.loadedModel";
+    public static final String KEY_IGNORE_RAY_CAST = "jMB.sceneEditor.ignoreRayCast";
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -871,7 +868,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
             final ObjectDictionary<Spatial, Spatial> selectionShape = state.getSelectionShape();
             final Spatial shape = selectionShape.get(spatial);
-            if (shape == null) return;
+            if (shape == null) {
+                return;
+            }
 
             shape.setLocalTranslation(spatial.getWorldTranslation());
             shape.setLocalRotation(spatial.getWorldRotation());
@@ -897,8 +896,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         }
 
         if (isPaintingMode()) {
-            updateEditingNodes();
-            updatePainting();
+            updatePaintingNodes();
+            updatePainting(tpf);
         }
     }
 
@@ -906,19 +905,50 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Update editing nodes.
      */
     @JmeThread
-    private void updateEditingNodes() {
-        if (!isPaintingMode()) return;
+    private void updatePaintingNodes() {
+
+        if (!isPaintingMode()) {
+            return;
+        }
 
         final Node cursorNode = getCursorNode();
         final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
-        final Spatial editedModel = PaintingUtils.getPaintedModel(control);
-        if (editedModel == null) return;
-
-        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel, getCamera());
-
-        if (contactPoint != null) {
-            cursorNode.setLocalTranslation(contactPoint);
+        final Spatial paintedModel = PaintingUtils.getPaintedModel(control);
+        if (paintedModel == null) {
+            return;
         }
+
+        final CollisionResults collisions = GeomUtils.getCollisionsFromCursor(paintedModel, getCamera());
+        if (collisions.size() < 1) {
+            return;
+        }
+
+        CollisionResult result = null;
+
+        for (final CollisionResult collision : collisions) {
+
+            final Geometry geometry = collision.getGeometry();
+            final Object parent = NodeUtils.findParent(geometry, spatial -> spatial.getUserData(KEY_IGNORE_RAY_CAST) == Boolean.TRUE);
+
+            if (parent == null) {
+                result = collision;
+                break;
+            }
+        }
+
+        if (result == null) {
+            result = collisions.getClosestCollision();
+        }
+
+        final Vector3f contactPoint = result.getContactPoint();
+        final Vector3f contactNormal = result.getContactNormal();
+
+        final LocalObjects local = LocalObjects.get();
+        final Quaternion rotation = local.nextRotation();
+        rotation.lookAt(contactNormal, Vector3f.UNIT_Y);
+
+        cursorNode.setLocalRotation(rotation);
+        cursorNode.setLocalTranslation(contactPoint);
     }
 
     /**
@@ -926,7 +956,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private void updateTransformNode(@Nullable final Transform transform) {
-        if (transform == null) return;
+
+        if (transform == null) {
+            return;
+        }
 
         final TransformationMode transformationMode = getTransformationMode();
         final Vector3f location = transform.getTranslation();
@@ -1636,7 +1669,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        control.startPainting(input, cursorNode.getLocalTranslation());
+        control.startPainting(input, cursorNode.getLocalRotation(), cursorNode.getLocalTranslation());
     }
 
     /**
@@ -1655,14 +1688,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        control.finishPainting(cursorNode.getLocalTranslation());
+        control.finishPainting(cursorNode.getLocalRotation(), cursorNode.getLocalTranslation());
     }
 
     /**
      * Update painting.
      */
     @JmeThread
-    private void updatePainting() {
+    private void updatePainting(final float tpf) {
 
         final Node cursorNode = getCursorNode();
         final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
@@ -1672,7 +1705,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        control.updatePainting(cursorNode.getLocalTranslation());
+        control.updatePainting(cursorNode.getLocalRotation(), cursorNode.getLocalTranslation(), tpf);
     }
 
     /**
@@ -1810,7 +1843,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final EditorLightNode lightModel = notNull(cachedLights.get(light, () -> {
 
             final Node model = (Node) node.clone();
-            model.setLocalScale(0.01F);
+            model.setLocalScale(0.03F);
 
             final EditorLightNode result = new EditorLightNode(camera);
             result.setModel(model);
@@ -1879,11 +1912,15 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     private void removeLightImpl(@NotNull final Light light) {
 
         final Node node = LIGHT_MODEL_TABLE.get(light.getType());
-        if (node == null) return;
+        if (node == null) {
+            return;
+        }
 
         final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
         final EditorLightNode lightModel = cachedLights.get(light);
-        if (lightModel == null) return;
+        if (lightModel == null) {
+            return;
+        }
 
         lightModel.setLight(null);
 
@@ -1915,7 +1952,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final EditorAudioNode audioModel = notNull(cachedAudioNodes.get(audio, () -> {
 
             final Node model = (Node) AUDIO_NODE_MODEL.clone();
-            model.setLocalScale(0.005F);
+            model.setLocalScale(0.01F);
 
             final EditorAudioNode result = new EditorAudioNode(getCamera());
             result.setModel(model);
@@ -1951,7 +1988,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
         final EditorAudioNode audioModel = cachedAudioNodes.get(audio);
-        if (audioModel == null) return;
+        if (audioModel == null) {
+            return;
+        }
 
         audioModel.setAudioNode(null);
 

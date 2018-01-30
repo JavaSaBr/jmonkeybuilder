@@ -11,6 +11,7 @@ import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
 import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -49,6 +50,10 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
     @Override
     protected void syncValues() {
         super.syncValues();
+
+        final VarTable vars = getVars();
+        final SpawnToolControl toolControl = getToolControl();
+        toolControl.setSpawnedModel(vars.has(PROPERTY_MODEL) ? vars.get(PROPERTY_MODEL) : null);
     }
 
     @Override

@@ -81,7 +81,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         normalTextureControl.setChangeHandler(this::updateNormal);
         normalTextureControl.setControlWidthPercent(PropertyControl.CONTROL_WIDTH_PERCENT_2);
 
-        final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
+        final Label scaleLabel = new Label(Messages.PAINTING_COMPONENT_SCALE + ":");
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
 
         scaleField = new FloatTextField();
@@ -222,7 +222,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
             diffuseTextureControl.setTextureFile(item.getDiffuseFile());
 
             final Label layerField = getLayerField();
-            layerField.setText(Messages.EDITING_COMPONENT_LAYER + " #" + (item.getLayer() + 1));
+            layerField.setText(Messages.PAINTING_COMPONENT_LAYER + " #" + (item.getLayer() + 1));
 
         } finally {
             setIgnoreListeners(false);
