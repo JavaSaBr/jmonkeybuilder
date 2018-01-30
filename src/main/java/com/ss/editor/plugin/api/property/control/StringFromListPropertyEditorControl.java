@@ -82,7 +82,7 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final String value = getPropertyValue();
         final ComboBox<String> comboBox = getComboBox();

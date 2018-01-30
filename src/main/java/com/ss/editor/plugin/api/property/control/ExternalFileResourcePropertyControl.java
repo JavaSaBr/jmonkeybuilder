@@ -58,7 +58,7 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
 
         final Path resource = getPropertyValue();
         final Label resourceLabel = getResourceLabel();

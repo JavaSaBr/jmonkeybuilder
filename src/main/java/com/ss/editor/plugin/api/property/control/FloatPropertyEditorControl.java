@@ -63,7 +63,7 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final Float value = getPropertyValue();
         getValueField().setValue(value == null ? 0 : value);

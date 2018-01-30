@@ -78,7 +78,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
 
         final T model = getPropertyValue();
         final Spatial root = model == null ? null : findParent(model, spatial -> spatial.getKey() != null);

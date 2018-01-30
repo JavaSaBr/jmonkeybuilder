@@ -928,7 +928,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         for (final CollisionResult collision : collisions) {
 
             final Geometry geometry = collision.getGeometry();
-            final Object parent = NodeUtils.findParent(geometry, spatial -> spatial.getUserData(KEY_IGNORE_RAY_CAST) == Boolean.TRUE);
+            final Object parent = NodeUtils.findParent(geometry, spatial ->
+                    spatial.getUserData(KEY_IGNORE_RAY_CAST) == Boolean.TRUE);
 
             if (parent == null) {
                 result = collision;

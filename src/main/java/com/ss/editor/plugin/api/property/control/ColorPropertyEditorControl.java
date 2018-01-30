@@ -53,7 +53,7 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final ColorPicker colorPicker = getColorPicker();
         colorPicker.setValue(UiUtils.from(getPropertyValue()));

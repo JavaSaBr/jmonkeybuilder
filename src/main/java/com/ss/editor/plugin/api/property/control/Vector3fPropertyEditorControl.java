@@ -100,7 +100,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
 
         final Vector3f value = getPropertyValue();

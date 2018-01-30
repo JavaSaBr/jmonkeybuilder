@@ -74,7 +74,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
 
         final String resource = getPropertyValue();
         final Label resourceLabel = getResourceLabel();

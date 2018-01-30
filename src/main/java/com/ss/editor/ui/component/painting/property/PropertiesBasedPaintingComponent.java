@@ -4,6 +4,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory;
+import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
 import com.ss.editor.ui.component.painting.impl.AbstractPaintingStateWithEditorTool;
@@ -61,14 +62,28 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
         final GridPane settings = createBrushSettings();
 
         for (final PaintingPropertyDefinition definition : getPaintingProperties()) {
-
-            final PropertyEditorControl<?> control = buildControl(definition, callback);
+            final PropertyEditorControl<?> control = PropertyEditorControlFactory.build(vars, definition, callback);
             final VBox container = propertyContainers.get(definition.getCategory(), this::createContainer);
-
             FXUtils.addToPane(control, container);
         }
 
         FXUtils.addToPane(settings, this);
+    }
+
+    @Override
+    public void loadState(@NotNull final EditorState editorState) {
+        super.loadState(editorState);
+        refreshPropertyControls();
+    }
+
+    /**
+     * Refresh property controls.
+     */
+    @FxThread
+    protected void refreshPropertyControls() {
+        propertyContainers.forEach(container -> container.getChildren()
+                .stream().map(node -> (PropertyEditorControl<?>) node)
+                .forEach(PropertyEditorControl::reload));
     }
 
     /**
@@ -108,24 +123,7 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
      */
     @FxThread
     private VBox createContainer(@NotNull final String category) {
-        final VBox container = new VBox();
-        return container;
-    }
-
-    /**
-     * Build a property control for the definition.
-     *
-     * @param definition the property definition.
-     * @return the property control.
-     */
-    @FxThread
-    protected @NotNull PropertyEditorControl<?> buildControl(@NotNull final PaintingPropertyDefinition definition,
-                                                             @NotNull final Runnable callback) {
-        switch (definition.getPropertyType()) {
-            default: {
-                return PropertyEditorControlFactory.build(vars, definition, callback);
-            }
-        }
+        return new VBox();
     }
 
     /**

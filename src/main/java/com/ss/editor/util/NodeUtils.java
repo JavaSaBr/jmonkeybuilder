@@ -393,6 +393,19 @@ public class NodeUtils {
     /**
      * Collect all geometries.
      *
+     * @param spatial the spatial.
+     * @return the list of all geometries.
+     */
+    @FromAnyThread
+    public static @NotNull Array<Geometry> getGeometries(@NotNull final Spatial spatial) {
+        final Array<Geometry> result = ArrayFactory.newArray(Geometry.class);
+        addGeometry(spatial, result);
+        return result;
+    }
+
+    /**
+     * Collect all geometries.
+     *
      * @param spatial   the spatial.
      * @param container the container.
      */

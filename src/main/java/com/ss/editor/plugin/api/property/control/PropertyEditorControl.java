@@ -187,8 +187,11 @@ public class PropertyEditorControl<T> extends HBox {
         return propertyType;
     }
 
+    /**
+     * Reload value of this control.
+     */
     @FxThread
-    protected void reload() {
+    public void reload() {
     }
 
     @FxThread

@@ -60,7 +60,7 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final T value = getPropertyValue();
         final ComboBox<T> enumComboBox = getEnumComboBox();

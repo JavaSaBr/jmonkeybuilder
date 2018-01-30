@@ -51,7 +51,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final String value = getPropertyValue();
         getValueField().setText(value == null ? "" : value);

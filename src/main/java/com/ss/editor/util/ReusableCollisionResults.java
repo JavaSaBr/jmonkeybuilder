@@ -44,7 +44,7 @@ public class ReusableCollisionResults extends CollisionResults implements Reusab
 
     @Override
     public Iterator<CollisionResult> iterator() {
-        return original.iterator();
+        return collisions.iterator();
     }
 
     @Override
