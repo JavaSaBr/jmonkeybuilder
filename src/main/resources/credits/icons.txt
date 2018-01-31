@@ -84,3 +84,4 @@ ui/icons/filetypes/vector.svg icon made by https://www.flaticon.com/authors/free
 ui/icons/svg/import.svg icon made by https://www.flaticon.com/authors/anatoly from www.flaticon.com
 ui/icons/svg/filter-filled-tool-symbol.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com
 ui/icons/svg/bar-chart-reload.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/svg/forest.svg icon made by https://www.flaticon.com/authors/freepik from www.flaticon.com

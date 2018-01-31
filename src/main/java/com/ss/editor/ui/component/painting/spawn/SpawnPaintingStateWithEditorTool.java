@@ -38,7 +38,7 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
     private int method;
 
     public SpawnPaintingStateWithEditorTool() {
-        this.method = SpawnMethod.BATCHED.ordinal();
+        this.method = SpawnMethod.BATCH.ordinal();
         this.selectedModels = new String[SpawnPaintingComponent.AVAILABLE_MODELS];
         this.scale = new Vector3f(Vector3f.UNIT_XYZ);
     }

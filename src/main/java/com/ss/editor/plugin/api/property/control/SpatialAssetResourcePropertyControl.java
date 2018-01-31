@@ -14,6 +14,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -21,6 +22,7 @@ import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.nio.file.Path;
 
 /**
@@ -74,6 +76,18 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     @FxThread
     protected @Nullable T findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
         return unsafeCast(assetManager.loadModel(modelKey));
+    }
+
+    @Override
+    @FxThread
+    protected boolean canAccept(@NotNull final File file) {
+        return EXTENSIONS.contains(FileUtils.getExtension(file.getName()));
+    }
+
+    @Override
+    @FxThread
+    protected void handleFile(@NotNull final File file) {
+        processSelect(file.toPath());
     }
 
     @Override

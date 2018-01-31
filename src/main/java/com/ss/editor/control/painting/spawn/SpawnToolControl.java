@@ -15,6 +15,7 @@ import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
@@ -41,9 +42,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingComponent> {
 
     public enum SpawnMethod {
-        AS_IS("As is"),
-        BATCHED("Batched"),
-        LINKED("Linked");
+        AS_IS(Messages.PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS),
+        BATCH(Messages.PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH),
+        LINK(Messages.PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK);
 
         @NotNull
         private final String label;
@@ -91,7 +92,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
         super(component);
         this.spawnedModels = ArrayFactory.newArray(Spatial.class);
         this.examples = ArrayFactory.newArray(Spatial.class);
-        this.method = SpawnMethod.BATCHED;
+        this.method = SpawnMethod.BATCH;
         this.scale = new Vector3f(1F, 1F, 1F);
     }
 
@@ -288,7 +289,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
                 clone.setLocalScale(scale);
                 clone.updateModelBound();
 
-                if (paintedModel.collideWith(clone.getWorldBound(), spawnedCollisions) > 1) {
+                if (paintedModel.collideWith(clone.getWorldBound(), spawnedCollisions) > 2) {
                     continue;
                 }
 
@@ -319,33 +320,45 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
         super.finishPainting(brushRotation, contactPoint);
 
         final Array<Spatial> spawnedModels = getSpawnedModels();
+        if (spawnedModels.isEmpty()) {
+            return;
+        }
+
+        final LocalObjects local = getLocalObjects();
+        final Vector3f location = local.nextVector();
+
         spawnedModels.stream().peek(Spatial::removeFromParent)
                 .forEach(sp -> sp.setUserData(KEY_IGNORE_RAY_CAST, null));
 
         final Node paintedModel = notNull(getPaintedModel());
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        final Vector3f scale = getScale();
 
         final SpawnMethod method = getMethod();
         switch (method) {
             case AS_IS: {
                 final Node spawnedNode = new Node("Spawned");
-                spawnedModels.forEach(spawnedNode::attachChild);
+                spawnedNode.setLocalTranslation(contactPoint);
+                spawnedModels.forEach(geom -> updatePositionAndAttach(contactPoint, location, spawnedNode, geom));
+                spawnedNode.updateModelBound();
                 changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel, false));
                 break;
             }
-            case LINKED: {
+            case LINK: {
 
                 final Node spawnedNode = new Node("Spawned");
+                spawnedNode.setLocalTranslation(contactPoint);
                 spawnedModels.stream().map(this::linkSpatial)
-                        .forEach(spawnedNode::attachChild);
+                        .forEach(geom -> updatePositionAndAttach(contactPoint, location, spawnedNode, geom));
+
+                spawnedNode.updateModelBound();
 
                 changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel, false));
                 break;
             }
-            case BATCHED: {
+            case BATCH: {
 
                 final Node spawnedNode = new Node("Spawned");
+                spawnedNode.setLocalTranslation(contactPoint);
                 final Array<Geometry> geometries = spawnedModels.stream()
                         .flatMap(NodeUtils::children)
                         .filter(Geometry.class::isInstance)
@@ -353,12 +366,25 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
                         .collect(toArray(Geometry.class));
 
                 GeometryBatchFactory.makeBatches(geometries)
-                        .forEach(spawnedNode::attachChild);
+                        .forEach(geom -> updatePositionAndAttach(contactPoint, location, spawnedNode, geom));
+
+                spawnedNode.updateModelBound();
 
                 changeConsumer.execute(new AddChildOperation(spawnedNode, paintedModel, false));
                 break;
             }
         }
+    }
+
+    @JmeThread
+    protected void updatePositionAndAttach(@NotNull final Vector3f contactPoint, @NotNull final Vector3f location,
+                                           @NotNull final Node spawnedNode, @NotNull final Spatial geom) {
+
+        final Vector3f newPosition = location.set(geom.getLocalTranslation())
+                .subtractLocal(contactPoint);
+
+        geom.setLocalTranslation(newPosition);
+        spawnedNode.attachChild(geom);
     }
 
     /**
@@ -370,10 +396,10 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     @JmeThread
     protected @NotNull AssetLinkNode linkSpatial(@NotNull final Spatial spatial) {
         final AssetLinkNode linkNode = new AssetLinkNode();
+        linkNode.setLocalTranslation(spatial.getLocalTranslation());
         linkNode.setName(spatial.getName());
         linkNode.setLocalScale(getScale());
         linkNode.attachLinkedChild(getAssetManager(), (ModelKey) spatial.getKey());
-        linkNode.setLocalTranslation(spatial.getLocalTranslation());
         return linkNode;
     }
 }

@@ -50,6 +50,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBoxBase;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -305,6 +306,9 @@ public class JfxApplication extends Application {
 
         addWindow(stage);
         try {
+
+            // initialize javaFX events in javaFX thread.
+            ArrayFactory.asArray(ComboBoxBase.ON_SHOWN);
 
             final ResourceManager resourceManager = ResourceManager.getInstance();
             resourceManager.reload();

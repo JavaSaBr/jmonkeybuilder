@@ -1,14 +1,15 @@
 package com.ss.editor.ui.component.painting.spawn;
 
+import static com.ss.editor.extension.property.EditablePropertyType.*;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.control.painting.spawn.SpawnToolControl;
 import com.ss.editor.control.painting.spawn.SpawnToolControl.SpawnMethod;
-import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
@@ -50,14 +51,14 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
     protected @NotNull Array<PaintingPropertyDefinition> getPaintingProperties() {
 
         final Array<PaintingPropertyDefinition> result = ArrayFactory.newArray(PaintingPropertyDefinition.class);
-        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, EditablePropertyType.ENUM,
-                "Method", PROPERTY_METHOD, SpawnMethod.BATCHED));
-        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, EditablePropertyType.VECTOR_3F,
-                "Scale", PROPERTY_SCALE, new Vector3f(1F, 1F, 1F)));
+        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, ENUM,
+                Messages.PAINTING_COMPONENT_METHOD, PROPERTY_METHOD, SpawnMethod.BATCH));
+        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, VECTOR_3F,
+                Messages.PAINTING_COMPONENT_SCALE, PROPERTY_SCALE, new Vector3f(1F, 1F, 1F)));
 
         for (int i = 1; i <= AVAILABLE_MODELS; i++) {
-            result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, EditablePropertyType.SPATIAL_FROM_ASSET_FOLDER,
-                    "Model " + "#" + i, PROPERTY_MODEL + "_" + i, null));
+            result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, SPATIAL_FROM_ASSET_FOLDER,
+                    Messages.PAINTING_COMPONENT_MODEL + " " + "#" + i, PROPERTY_MODEL + "_" + i, null));
         }
 
         return result;
@@ -139,12 +140,6 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
 
     @Override
     @FxThread
-    public void stopPainting() {
-
-    }
-
-    @Override
-    @FxThread
     public boolean isSupport(@NotNull final Object object) {
         return object instanceof Node &&
                 NodeUtils.findGeometry((Spatial) object) != null;
@@ -153,13 +148,13 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
     @Override
     @FromAnyThread
     public @NotNull String getName() {
-        return "Spawn";
+        return Messages.PAINTING_COMPONENT_SPAWN_MODELS;
     }
 
     @Override
     @FxThread
     public @Nullable Image getIcon() {
-        return Icons.SCENE_16;
+        return Icons.FOREST_16;
     }
 
     @Override

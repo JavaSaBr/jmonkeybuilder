@@ -74,6 +74,7 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
     protected void readState(@NotNull final S state) {
         super.readState(state);
         refreshPropertyControls();
+        syncValues();
     }
 
     /**

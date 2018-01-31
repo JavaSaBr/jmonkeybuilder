@@ -649,6 +649,8 @@ public class Messages {
     public static final String PAINTING_COMPONENT_TRI_PLANAR;
     public static final String PAINTING_COMPONENT_SHININESS;
     public static final String PAINTING_COMPONENT_LAYER;
+    public static final String PAINTING_COMPONENT_MODEL;
+    public static final String PAINTING_COMPONENT_METHOD;
 
     public static final String MODEL_CONVERTER_DIALOG_TITLE;
     public static final String MODEL_CONVERTER_DIALOG_RESULT_NAME;
@@ -692,6 +694,10 @@ public class Messages {
     public static final String PAINTING_COMPONENT_CONTAINER_TOOL;
     public static final String PAINTING_COMPONENT_CONTAINER_NO_TOOLS;
     public static final String PAINTING_COMPONENT_TERRAIN_EDITOR;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH;
 
     static {
 
@@ -1341,6 +1347,8 @@ public class Messages {
         PAINTING_COMPONENT_TRI_PLANAR = bundle.getString("PaintingComponentTriPlanar");
         PAINTING_COMPONENT_SHININESS = bundle.getString("PaintingComponentShininess");
         PAINTING_COMPONENT_LAYER = bundle.getString("PaintingComponentLayer");
+        PAINTING_COMPONENT_MODEL = bundle.getString("PaintingComponentModel");
+        PAINTING_COMPONENT_METHOD = bundle.getString("PaintingComponentMethod");
 
         MODEL_CONVERTER_DIALOG_TITLE = bundle.getString("ModelConverterDialogTitle");
         MODEL_CONVERTER_DIALOG_RESULT_NAME = bundle.getString("ModelConverterDialogResultName");
@@ -1384,5 +1392,9 @@ public class Messages {
         PAINTING_COMPONENT_CONTAINER_TOOL = bundle.getString("PaintingComponentContainerTool");
         PAINTING_COMPONENT_CONTAINER_NO_TOOLS = bundle.getString("PaintingComponentContainerNoTools");
         PAINTING_COMPONENT_TERRAIN_EDITOR = bundle.getString("PaintingComponentTerrainEditor");
+        PAINTING_COMPONENT_SPAWN_MODELS = bundle.getString("PaintingComponentSpawnModels");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS = bundle.getString("PaintingComponentSpawnModelsMethodAsIs");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK = bundle.getString("PaintingComponentSpawnModelsMethodLink");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH = bundle.getString("PaintingComponentSpawnModelsMethodBatch");
     }
 }
