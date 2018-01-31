@@ -9,8 +9,6 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
-import com.ss.editor.extension.scene.app.state.impl.EditableLightingSceneAppState;
-import com.ss.editor.extension.scene.app.state.impl.EditableSkySceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.pbr.StaticLightProbeSceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
@@ -49,8 +47,6 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
 
     static {
-        register(new EditableLightingSceneAppState());
-        register(new EditableSkySceneAppState());
         register(new EditableBulletSceneAppState());
         register(new StaticLightProbeSceneAppState());
     }

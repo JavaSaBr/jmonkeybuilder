@@ -47,6 +47,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
 
     static {
         register(new EditableDirectionLightFromSceneShadowFilter());
+        register(new EditableHqDirectionalLightFromSceneShadowFilter());
         register(new EditablePointLightFromSceneShadowFilter());
         register(new EditableCartoonEdgeFilter());
         register(new EditableColorOverlayFilter());
@@ -59,13 +60,10 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableSceneBloomFilter());
         register(new EditableObjectsBloomFilter());
         register(new EditableSceneAndObjectsBloomFilter());
-        register(new EditableLightingStateShadowFilter());
         register(new EditableWaterFilter());
         register(new EditableWaterWithDirectionLightFilter());
-        register(new EditableWaterWithLightingStateFilter());
         register(new EditableLocalWaterFilter());
         register(new EditableLocalWaterWithDirectionLightFilter());
-        register(new EditableLocalWaterWithLightingStateFilter());
     }
 
     private static void register(@NotNull final SceneFilter sceneFilter) {
