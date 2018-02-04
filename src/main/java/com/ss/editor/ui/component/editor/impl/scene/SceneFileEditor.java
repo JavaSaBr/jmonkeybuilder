@@ -37,6 +37,7 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -497,7 +498,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
             final FilterList filterList = getFilterList();
             filterList.clearSelection();
 
-            super.selectNodeFromTree(object);
+            selectNodeFromTree(object);
 
         } finally {
             setNeedSyncSelection(true);
@@ -506,7 +507,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
     @Override
     @FxThread
-    public void selectNodeFromTree(@Nullable final Object object) {
+    public void selectNodesFromTree(@NotNull final Array<Object> objects) {
 
         if (!isNeedSyncSelection()) {
             return;
@@ -515,8 +516,10 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
         setNeedSyncSelection(false);
         try {
 
+            final Object toSelect = objects.size() == 1 ? objects.first() : null;
+
             final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(object);
+            layerNodeTree.select(toSelect);
 
             final AppStateList appStateList = getAppStateList();
             appStateList.clearSelection();
@@ -524,7 +527,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
             final FilterList filterList = getFilterList();
             filterList.clearSelection();
 
-            super.selectNodeFromTree(object);
+            super.selectNodesFromTree(objects);
 
         } finally {
             setNeedSyncSelection(true);
@@ -558,14 +561,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
     }
 
     @Override
-    @FxThread
-    protected void updateSelection(@Nullable Spatial spatial) {
-
-        if (spatial instanceof SceneNode || spatial instanceof SceneLayer) {
-            spatial = null;
-        }
-
-        super.updateSelection(spatial);
+    protected boolean canSelect(@NotNull final Spatial spatial) {
+        return !(spatial instanceof SceneNode) && !(spatial instanceof SceneLayer) && super.canSelect(spatial);
     }
 
     @Override

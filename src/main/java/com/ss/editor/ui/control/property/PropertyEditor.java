@@ -135,7 +135,10 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      */
     @FxThread
     public void buildFor(@Nullable final Object object, @Nullable final Object parent) {
-        if (getCurrentObject() == object) return;
+
+        if (getCurrentObject() == object) {
+            return;
+        }
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();

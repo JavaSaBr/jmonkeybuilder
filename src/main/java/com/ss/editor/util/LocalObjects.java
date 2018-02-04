@@ -3,6 +3,7 @@ package com.ss.editor.util;
 import static java.lang.Thread.currentThread;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.*;
+import com.jme3.scene.Spatial;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.CycleBuffer;
@@ -91,6 +92,12 @@ public class LocalObjects {
     @NotNull
     private final CycleBuffer<Array<Object>> objectArrayBuffer;
 
+    /**
+     * The buffer of spatial's arrays.
+     */
+    @NotNull
+    private final CycleBuffer<Array<Spatial>> spatialArrayBuffer;
+
     @SuppressWarnings("unchecked")
     public LocalObjects() {
         this.vectorBuffer = new CycleBuffer<>(Vector3f.class, SIZE, Vector3f::new);
@@ -102,6 +109,7 @@ public class LocalObjects {
         this.matrixFloatBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[16]);
         this.colorBuffer = new CycleBuffer<>(ColorRGBA.class, SIZE, ColorRGBA::new);
         this.objectArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Object.class), Collection::clear);
+        this.spatialArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Spatial.class), Collection::clear);
         this.collisionResultsBuffer = new CycleBuffer<>(ReusableCollisionResults.class, SIZE,
                 ReusableCollisionResults::new, Reusable::free);
     }
@@ -114,6 +122,16 @@ public class LocalObjects {
     @FromAnyThread
     public @NotNull Array<Object> nextObjectArray() {
         return objectArrayBuffer.next();
+    }
+
+    /**
+     * Get the next free spatial's array.
+     *
+     * @return the next free spatial's array.
+     */
+    @FromAnyThread
+    public @NotNull Array<Spatial> nextSpatialArray() {
+        return spatialArrayBuffer.next();
     }
 
     /**

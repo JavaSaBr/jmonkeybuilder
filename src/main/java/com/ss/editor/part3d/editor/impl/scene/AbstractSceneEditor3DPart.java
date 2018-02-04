@@ -1077,27 +1077,45 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Update selected models.
+     * Select the objects.
      *
-     * @param spatials the spatials
+     * @param objects the objects.
      */
     @FromAnyThread
-    public void updateSelection(@NotNull final Array<Spatial> spatials) {
-        EXECUTOR_MANAGER.addJmeTask(() -> updateSelectionImpl(spatials));
+    public void select(@NotNull final Array<Spatial> objects) {
+        EXECUTOR_MANAGER.addJmeTask(() -> selectImpl(objects));
     }
 
     /**
-     * The process of updating selected models.
+     * Select the object.
+     *
+     * @param object the object.
+     */
+    @FromAnyThread
+    public void select(@NotNull final Spatial object) {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
+
+            final Array<Spatial> toSelect = LocalObjects.get().nextSpatialArray();
+            toSelect.add(object);
+
+            selectImpl(toSelect);
+        });
+    }
+
+    /**
+     * The process of selecting the objects.
+     *
+     * @param objects the objects.
      */
     @JmeThread
-    private void updateSelectionImpl(@NotNull final Array<Spatial> spatials) {
+    private void selectImpl(@NotNull final Array<Spatial> objects) {
 
         final Array<Spatial> selected = getSelected();
 
         for (final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext(); ) {
 
             final Spatial spatial = iterator.next();
-            if (spatials.contains(spatial)) {
+            if (objects.contains(spatial)) {
                 continue;
             }
 
@@ -1105,7 +1123,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             iterator.fastRemove();
         }
 
-        for (final Spatial spatial : spatials) {
+        for (final Spatial spatial : objects) {
             if (!selected.contains(spatial)) {
                 addToSelection(spatial);
             }
@@ -1183,7 +1201,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             shape = buildBoxSelection(spatial);
         }
 
-        if (shape == null) return;
+        if (shape == null) {
+            return;
+        }
 
         if (isShowSelection()) {
             final Node toolNode = getToolNode();
