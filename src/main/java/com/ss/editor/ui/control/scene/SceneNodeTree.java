@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.scene;
 
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
  */
 public class SceneNodeTree extends NodeTree<SceneChangeConsumer> {
 
-    public SceneNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final SceneChangeConsumer consumer) {
+    public SceneNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final SceneChangeConsumer consumer) {
         super(selectionHandler, consumer);
     }
 }

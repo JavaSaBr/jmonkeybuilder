@@ -126,6 +126,8 @@ public class AppStateList extends VBox {
     }
 
     /**
+     * Get the list view with created scene app states.
+     *
      * @return the list view with created scene app states.
      */
     @FxThread

@@ -143,7 +143,10 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
-        if (!(nodeTree instanceof ModelNodeTree)) return;
+
+        if (!(nodeTree instanceof ModelNodeTree)) {
+            return;
+        }
 
         final T element = getElement();
         final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitter.class::isInstance);

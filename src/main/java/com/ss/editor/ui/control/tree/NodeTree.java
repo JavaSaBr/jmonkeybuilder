@@ -8,8 +8,10 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -30,7 +32,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * The executor manager.
      */
     @NotNull
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The tree node factory.
@@ -42,7 +44,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * The handler of selected objects.
      */
     @NotNull
-    private final Consumer<Object> selectionHandler;
+    private final Consumer<Array<Object>> selectionHandler;
 
     /**
      * The consumer of changes of the model.
@@ -56,7 +58,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     @Nullable
     private TreeView<TreeNode<?>> treeView;
 
-    public NodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final C consumer) {
+    public NodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer) {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
         createComponents();
@@ -78,7 +80,8 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         treeView.prefWidthProperty().bind(widthProperty());
 
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
+        selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+        selectionModel.selectedItemProperty().addListener(this::updateSelection);
 
         FXUtils.addToPane(treeView, this);
     }
@@ -97,18 +100,26 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * Select the item.
      */
     @FxThread
-    private void processSelect(@Nullable final TreeItem<TreeNode<?>> treeItem) {
+    private void updateSelection(@NotNull final ObservableValue<? extends TreeItem<TreeNode<?>>> observable,
+                                 @Nullable final TreeItem<TreeNode<?>> oldValue,
+                                 @Nullable final TreeItem<TreeNode<?>> treeItem) {
 
-        if (treeItem == null) {
-            selectionHandler.accept(null);
-            return;
+        final ObservableList<TreeItem<TreeNode<?>>> selectedItems = getTreeView()
+                .getSelectionModel()
+                .getSelectedItems();
+
+        final Array<Object> objects = LocalObjects.get().nextObjectArray();
+        objects.clear();
+
+        for (final TreeItem<TreeNode<?>> selectedItem : selectedItems) {
+            objects.add(selectedItem.getValue());
         }
 
-        selectionHandler.accept(treeItem.getValue());
+        selectionHandler.accept(objects);
     }
 
     /**
-     * Gets tree view.
+     * Get the tree view.
      *
      * @return the tree of this model.
      */
@@ -149,10 +160,11 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         treeItem.setExpanded(expanded || level == 1);
 
         final TreeNode<?> element = treeItem.getValue();
-        if (!element.hasChildren(this)) return;
+        if (!element.hasChildren(this)) {
+            return;
+        }
 
         final ObservableList<TreeItem<TreeNode<?>>> items = treeItem.getChildren();
-
         final Array<TreeNode<?>> children = element.getChildren(this);
         children.forEach(child -> {
             element.notifyChildPreAdd(child);
@@ -195,7 +207,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     public void refresh(@NotNull final Object object) {
 
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), object);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         final TreeNode<?> treeNode = treeItem.getValue();
         final ObservableList<TreeItem<TreeNode<?>>> items = treeItem.getChildren();
@@ -205,7 +219,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final TreeNode<?> selected = getSelected();
 
         final TreeNode<?> element = treeItem.getValue();
-        if (!element.hasChildren(this)) return;
+        if (!element.hasChildren(this)) {
+            return;
+        }
 
         final Array<TreeNode<?>> children = element.getChildren(this);
         children.forEach(child -> items.add(new TreeItem<>(child)));
@@ -322,10 +338,11 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     public void notifyChanged(@Nullable Object parent, @NotNull final Object object) {
 
         final TreeItem<TreeNode<?>> treeItem = tryToFindItem(parent, object);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         final TreeItem<TreeNode<?>> parentItem = treeItem.getParent();
-
         if (parentItem == null) {
             final TreeNode<?> node = treeItem.getValue();
             treeItem.setValue(null);
@@ -387,7 +404,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
             parentNode.notifyChildRemoved(oldChildNode);
         }
 
-        if (newChild == null) return;
+        if (newChild == null) {
+            return;
+        }
 
         final TreeItem<TreeNode<?>> childItem = new TreeItem<>(FACTORY_REGISTRY.createFor(newChild));
         final TreeNode<?> newChildNode = childItem.getValue();
@@ -398,7 +417,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         children.add(index, childItem);
         parentNode.notifyChildAdded(newChildNode);
 
-        if (needSelect) selectionModel.select(childItem);
+        if (needSelect) {
+            selectionModel.select(childItem);
+        }
     }
 
     /**
@@ -410,23 +431,33 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      */
     @FxThread
     public void notifyAdded(@Nullable final Object parent, @Nullable final Object child, final int index) {
-        if (child == null || parent == null) return;
+
+        if (child == null || parent == null) {
+            return;
+        }
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
         final TreeItem<TreeNode<?>> parentItem = findItemForValue(treeView, parent);
-        if (parentItem == null) return;
+        if (parentItem == null) {
+            return;
+        }
 
         final TreeNode<?> childNode = FACTORY_REGISTRY.createFor(child);
-        if (childNode == null) return;
+        if (childNode == null) {
+            return;
+        }
 
         final TreeNode<?> parentNode = parentItem.getValue();
         parentNode.notifyChildPreAdd(childNode);
 
         final TreeItem<TreeNode<?>> childItem = new TreeItem<>(childNode);
-
         final ObservableList<TreeItem<TreeNode<?>>> children = parentItem.getChildren();
-        if (index == -1) children.add(childItem);
-        else children.add(index, childItem);
+
+        if (index == -1) {
+            children.add(childItem);
+        } else {
+            children.add(index, childItem);
+        }
 
         parentItem.setExpanded(true);
         parentNode.notifyChildAdded(childNode);
@@ -444,7 +475,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     public void notifyRemoved(@Nullable final Object parent, @NotNull final Object child) {
 
         final TreeItem<TreeNode<?>> treeItem = tryToFindItem(parent, child);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         final TreeItem<TreeNode<?>> parentItem = treeItem.getParent();
         final TreeNode<?> parentNode = parentItem.getValue();
@@ -493,7 +526,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     public @Nullable TreeNode<?> findParent(@NotNull final TreeNode<?> treeNode) {
 
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), treeNode);
-        if (treeItem == null) return null;
+        if (treeItem == null) {
+            return null;
+        }
 
         final TreeItem<TreeNode<?>> parent = treeItem.getParent();
         return parent == null ? null : parent.getValue();
@@ -509,7 +544,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(treeView, treeNode);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         treeView.edit(treeItem);
     }

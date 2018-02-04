@@ -8,6 +8,7 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.NodeTreeCell;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.rlib.util.array.Array;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +22,7 @@ import java.util.function.Consumer;
  */
 public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
 
-    public LayerNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final SceneChangeConsumer consumer) {
+    public LayerNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final SceneChangeConsumer consumer) {
         super(selectionHandler, consumer);
     }
 

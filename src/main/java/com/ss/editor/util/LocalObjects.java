@@ -6,8 +6,12 @@ import com.jme3.math.*;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.CycleBuffer;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * The container with local objects.
@@ -81,6 +85,12 @@ public class LocalObjects {
     @NotNull
     private final CycleBuffer<float[]> matrixFloatBuffer;
 
+    /**
+     * The buffer of object arrays.
+     */
+    @NotNull
+    private final CycleBuffer<Array<Object>> objectArrayBuffer;
+
     @SuppressWarnings("unchecked")
     public LocalObjects() {
         this.vectorBuffer = new CycleBuffer<>(Vector3f.class, SIZE, Vector3f::new);
@@ -91,8 +101,19 @@ public class LocalObjects {
         this.matrix3fBuffer = new CycleBuffer<>(Matrix3f.class, SIZE, Matrix3f::new);
         this.matrixFloatBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[16]);
         this.colorBuffer = new CycleBuffer<>(ColorRGBA.class, SIZE, ColorRGBA::new);
+        this.objectArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Object.class), Collection::clear);
         this.collisionResultsBuffer = new CycleBuffer<>(ReusableCollisionResults.class, SIZE,
                 ReusableCollisionResults::new, Reusable::free);
+    }
+
+    /**
+     * Get the next free objects array.
+     *
+     * @return the next free objects array.
+     */
+    @FromAnyThread
+    public @NotNull Array<Object> nextObjectArray() {
+        return objectArrayBuffer.next();
     }
 
     /**

@@ -167,7 +167,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * The selection handler.
      */
     @Nullable
-    private Consumer<Object> selectionNodeHandler;
+    private Consumer<Array<Object>> selectionNodeHandler;
 
     /**
      * The list of transform modes.
@@ -715,13 +715,28 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         }
     }
 
+
     /**
-     * Handle the selected object from the Tree.
+     * Handle the selected object from the tree.
      *
-     * @param object the object
+     * @param object the selected object.
      */
     @FxThread
     public void selectNodeFromTree(@Nullable final Object object) {
+
+        final Array<Object> objects = LocalObjects.get().nextObjectArray();
+        objects.add(object);
+
+        selectNodeFromTree(objects);
+    }
+
+    /**
+     * Handle the selected objects from the tree.
+     *
+     * @param objects the selected objects.
+     */
+    @FxThread
+    public void selectNodeFromTree(@NotNull final Array<Object> objects) {
 
         final MA editor3DPart = getEditor3DPart();
 
