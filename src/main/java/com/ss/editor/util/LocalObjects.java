@@ -23,13 +23,22 @@ public class LocalObjects {
 
     private static final int SIZE = 50;
 
+    @NotNull
+    private static final ThreadLocal<LocalObjects> THREAD_LOCAL = ThreadLocal.withInitial(LocalObjects::new);
+
     /**
      * Get the local objects.
      *
      * @return the local objects
      */
     public static @NotNull LocalObjects get() {
-        return ((EditorThread) currentThread()).getLocal();
+
+        final Thread currentThread = currentThread();
+        if (currentThread instanceof EditorThread) {
+            ((EditorThread) currentThread).getLocal();
+        }
+
+        return THREAD_LOCAL.get();
     }
 
     /**

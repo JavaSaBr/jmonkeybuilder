@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree;
 
 import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.util.stream.Collectors.toList;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -9,15 +10,19 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.LocalObjects;
+import com.ss.rlib.function.TripleConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.reactfx.util.TriConsumer;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -39,6 +44,23 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      */
     @NotNull
     protected static final TreeNodeFactoryRegistry FACTORY_REGISTRY = TreeNodeFactoryRegistry.getInstance();
+
+    /**
+     * The list of action fillers.
+     */
+    @NotNull
+    private static final Array<TripleConsumer<NodeTree<?>, List<MenuItem>, List<TreeNode<?>>>> MULTI_ITEMS_ACTION_FILLERS =
+            ArrayFactory.newArray(TriConsumer.class);
+
+    /**
+     * Register the new multi items action filler.
+     *
+     * @param actionFiller the new multi items action filler.
+     */
+    @FxThread
+    public static void register(@NotNull TripleConsumer<NodeTree<?>, List<MenuItem>, List<TreeNode<?>>> actionFiller) {
+        MULTI_ITEMS_ACTION_FILLERS.add(actionFiller);
+    }
 
     /**
      * The handler of selected objects.
@@ -112,6 +134,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         objects.clear();
 
         for (final TreeItem<TreeNode<?>> selectedItem : selectedItems) {
+            if (selectedItem == null) continue;
             objects.add(selectedItem.getValue());
         }
 
@@ -254,26 +277,46 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Get the context menu for the element.
      *
-     * @param treeNode the model node
-     * @return the context menu
+     * @param requestedNode the requested node.
+     * @return the context menu.
      */
     @FxThread
-    public ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
+    public ContextMenu getContextMenu(@NotNull final TreeNode<?> requestedNode) {
 
         final C changeConsumer = getChangeConsumer();
         if (changeConsumer == null) {
             return null;
         }
 
-        final ContextMenu contextMenu = new ContextMenu();
-        final ObservableList<MenuItem> items = contextMenu.getItems();
-        treeNode.fillContextMenu(this, items);
+        final ObservableList<TreeItem<TreeNode<?>>> selectedItems = getTreeView()
+                .getSelectionModel()
+                .getSelectedItems();
 
-        if (items.isEmpty()) {
+        if (selectedItems.isEmpty()) {
             return null;
         }
 
-        treeNode.handleResultContextMenu(this, items);
+        final ContextMenu contextMenu = new ContextMenu();
+        final ObservableList<MenuItem> items = contextMenu.getItems();
+
+        if (selectedItems.size() == 1) {
+
+            requestedNode.fillContextMenu(this, items);
+
+            if (items.isEmpty()) {
+                return null;
+            }
+
+            requestedNode.handleResultContextMenu(this, items);
+
+        } else {
+
+            final List<TreeNode<?>> treeNodes = selectedItems.stream()
+                    .map(TreeItem::getValue)
+                    .collect(toList());
+
+            MULTI_ITEMS_ACTION_FILLERS.forEach(filler -> filler.accept(this, items, treeNodes));
+        }
 
         return contextMenu;
     }
@@ -563,7 +606,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
 
         if (object == null) {
-            selectionModel.select(null);
+            selectionModel.clearSelection();
             return;
         }
 
@@ -571,10 +614,11 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(treeView, treeNode);
 
         if (treeItem == null) {
-            selectionModel.select(null);
+            selectionModel.clearSelection();
             return;
         }
 
+        selectionModel.clearSelection();
         selectionModel.select(treeItem);
     }
 

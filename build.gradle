@@ -27,7 +27,7 @@ compileTestJava {
 ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
-ext.jmeVersion = "v3.3.dev-SNAPSHOT"
+ext.jmeVersion = "added_new_var_type-SNAPSHOT"
 ext.jmbExtVersion = "2.0.2"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
@@ -61,7 +61,7 @@ dependencies {
     compile 'org.controlsfx:controlsfx:8.40.14'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.7.4'
+    compile 'com.github.JavaSaBr:RLib:6.7.5'
     compile "com.github.JavaSaBr:JME3-JFX:1.7.4"
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3

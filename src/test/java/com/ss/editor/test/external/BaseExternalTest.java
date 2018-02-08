@@ -21,7 +21,7 @@ public class BaseExternalTest extends SimpleApplication {
         settings.setHeight(768);
         settings.setWidth(1024);
         settings.setGammaCorrection(true);
-        settings.setRenderer(AppSettings.LWJGL_OPENGL33);
+        settings.setRenderer(AppSettings.LWJGL_OPENGL43);
         return settings;
     }
 

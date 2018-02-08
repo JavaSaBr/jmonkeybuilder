@@ -1112,20 +1112,26 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         final Array<Spatial> selected = getSelected();
 
-        for (final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext(); ) {
+        if (objects.isEmpty()) {
+            selected.forEach(this, (spatial, ed) -> ed.removeFromSelection(spatial));
+            selected.clear();
+        } else {
 
-            final Spatial spatial = iterator.next();
-            if (objects.contains(spatial)) {
-                continue;
+            for (final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext(); ) {
+
+                final Spatial spatial = iterator.next();
+                if (objects.contains(spatial)) {
+                    continue;
+                }
+
+                removeFromSelection(spatial);
+                iterator.fastRemove();
             }
 
-            removeFromSelection(spatial);
-            iterator.fastRemove();
-        }
-
-        for (final Spatial spatial : objects) {
-            if (!selected.contains(spatial)) {
-                addToSelection(spatial);
+            for (final Spatial spatial : objects) {
+                if (!selected.contains(spatial)) {
+                    addToSelection(spatial);
+                }
             }
         }
 
@@ -1424,12 +1430,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        final Geometry anyGeometry = GeomUtils.getGeometryFromCursor(notNull(getModelNode()), getCamera());
+        final Node modelNode = notNull(getModelNode());
+        final Geometry anyGeometry = GeomUtils.getGeometryFromCursor(modelNode, getCamera());
+        final M currentModel = notNull(getCurrentModel());
 
         Object toSelect = anyGeometry == null ? null : findToSelect(anyGeometry);
 
         if (toSelect == null && anyGeometry != null) {
-            final Geometry modelGeometry = GeomUtils.getGeometryFromCursor(notNull(getCurrentModel()), getCamera());
+            final Geometry modelGeometry = GeomUtils.getGeometryFromCursor(currentModel, getCamera());
             toSelect = modelGeometry == null ? null : findToSelect(modelGeometry);
         }
 

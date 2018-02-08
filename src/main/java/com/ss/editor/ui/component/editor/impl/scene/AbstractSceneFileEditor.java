@@ -117,6 +117,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             FileExtensions.JME_OBJECT);
 
     @NotNull
+    private static final Array<Spatial> EMPTY_SELECTION = ArrayFactory.newArray(Spatial.class);
+
+    @NotNull
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
 
     /**
@@ -755,6 +758,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         } else if (objects.size() == 1) {
             singleSelectNodesFromTree(objects, editor3DPart);
             return;
+        } else {
+            editor3DPart.select(EMPTY_SELECTION);
         }
 
         getModelPropertyEditor().buildFor(null, null);
