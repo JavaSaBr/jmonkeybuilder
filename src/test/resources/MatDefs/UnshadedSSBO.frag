@@ -12,7 +12,7 @@ uniform vec4 m_Color;
 uniform sampler2D m_ColorMap;
 uniform sampler2D m_LightMap;
 
-layout (std430, binding = 2) buffer m_TestSSBO
+layout (std140, binding = 3) buffer m_TestSSBO
 {
   vec4 light_1;
   vec4 light_2;

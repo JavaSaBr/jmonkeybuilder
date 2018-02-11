@@ -59,8 +59,8 @@ MaterialDef Unshaded {
     }
 
     Technique {
-        VertexShader GLSL430:   MatDefs/Unshaded.vert
-        FragmentShader GLSL430: MatDefs/Unshaded.frag
+        VertexShader GLSL430:   Common/MatDefs/Misc/Unshaded.vert
+        FragmentShader GLSL430: MatDefs/UnshadedSSBO.frag
 
         WorldParameters {
             WorldViewProjectionMatrix

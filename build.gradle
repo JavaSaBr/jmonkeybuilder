@@ -162,7 +162,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
+    gradleVersion = '4.5.1'
 }
 
 artifacts {
