@@ -62,7 +62,9 @@ dependencies {
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.3'
     compile 'com.github.JavaSaBr:RLib:6.7.5'
-    compile "com.github.JavaSaBr:JME3-JFX:1.7.4"
+    compile ("com.github.JavaSaBr:JME3-JFX:1.7.4") {
+        exclude group: 'org.jmonkeyengine'
+    }
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'

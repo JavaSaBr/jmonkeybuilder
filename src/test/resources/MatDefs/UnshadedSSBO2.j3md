@@ -49,7 +49,7 @@ MaterialDef Unshaded {
         Vector3 LightPos
         Vector3 LightDir
 
-        BufferObject TestUBO
+        BufferObject TestSSBO
 
         Float PCFEdge
 
@@ -60,7 +60,7 @@ MaterialDef Unshaded {
 
     Technique {
         VertexShader GLSL430:   Common/MatDefs/Misc/Unshaded.vert
-        FragmentShader GLSL430: MatDefs/UnshadedUBO.frag
+        FragmentShader GLSL430: MatDefs/UnshadedSSBO2.frag
 
         WorldParameters {
             WorldViewProjectionMatrix

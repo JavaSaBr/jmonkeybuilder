@@ -1,15 +1,13 @@
 package com.ss.editor.test.external;
 
-import static com.jme3.shader.BufferObjectField.field;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
+import com.jme3.math.*;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.shader.BufferObject;
-import com.jme3.shader.VarType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,7 +23,7 @@ public class BOSceneTest extends BaseExternalTest {
     }
 
     private BufferObject ssbo;
-
+    private BufferObject ssbo2;
     private BufferObject ubo;
 
     @Override
@@ -39,19 +37,33 @@ public class BOSceneTest extends BaseExternalTest {
 
         Geometry geometry = new Geometry("Geom", box);
 
-        ssbo = new BufferObject(3,
-                field("light_1", VarType.Vector4),
-                field("light_2", VarType.Vector4)
-        );
+        ssbo = new BufferObject(3);
         ssbo.setValue("light_1", ColorRGBA.Red);
         ssbo.setValue("light_2", ColorRGBA.Green);
 
-        ubo = new BufferObject(2,
-                field("light_1", VarType.Vector4),
-                field("light_2", VarType.Vector4)
-        );
+        ubo = new BufferObject(2);
         ubo.setValue("light_1", ColorRGBA.Yellow);
         ubo.setValue("light_2", ColorRGBA.Red);
+
+        final Matrix3f matrix3f = new Matrix3f();
+        matrix3f.setColumn(0, new Vector3f(0, 0, 1));
+        matrix3f.setColumn(1, new Vector3f(0, 1, 0));
+        matrix3f.setColumn(2, new Vector3f(0, 1, 0));
+
+        final Matrix4f matrix4f = new Matrix4f();
+        matrix4f.setColumn(1, new float[]{0, 1, 0, 0});
+
+        ssbo2 = new BufferObject(4);
+        ssbo2.setValue("index", 1);
+        ssbo2.setValue("colors", new ColorRGBA[]{ColorRGBA.Green, ColorRGBA.Red, ColorRGBA.Blue});
+        ssbo2.setValue("alp", 1F);
+        ssbo2.setValue("matrix3", matrix3f);
+        ssbo2.setValue("matrix4", matrix4f);
+        ssbo2.setValue("positions", new Vector3f[]{Vector3f.UNIT_X, new Vector3f(0.3F, 0.3f, 0.3F), Vector3f.UNIT_Z});
+        ssbo2.setValue("index2", 1);
+        ssbo2.setValue("matrixes", new Matrix3f[] {new Matrix3f(), matrix3f});
+        ssbo2.setValue("vector2", new Vector2f(0, 0));
+        ssbo2.setValue("fvalue", 0.4F);
 
         final Material materialSSBO = new Material(assetManager, "MatDefs/UnshadedSSBO.j3md");
         materialSSBO.setShaderStorageBufferObject("TestSSBO", ssbo);
@@ -69,6 +81,16 @@ public class BOSceneTest extends BaseExternalTest {
         geometry = geometry.clone();
         geometry.setMaterial(materialUBO);
         geometry.setLocalTranslation(-1, 0, 0);
+
+        rootNode.attachChild(geometry);
+
+        final Material materialSSBO2 = new Material(assetManager, "MatDefs/UnshadedSSBO2.j3md");
+        materialSSBO2.setShaderStorageBufferObject("TestSSBO", ssbo2);
+        materialSSBO2.setColor("Color", ColorRGBA.DarkGray);
+
+        geometry = geometry.clone();
+        geometry.setMaterial(materialSSBO2);
+        geometry.setLocalTranslation(-3, 0, 0);
 
         rootNode.attachChild(geometry);
 
