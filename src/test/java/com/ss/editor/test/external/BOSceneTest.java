@@ -38,12 +38,12 @@ public class BOSceneTest extends BaseExternalTest {
         Geometry geometry = new Geometry("Geom", box);
 
         ssbo = new BufferObject(3);
-        ssbo.setValue("light_1", ColorRGBA.Red);
-        ssbo.setValue("light_2", ColorRGBA.Green);
+        ssbo.setFieldValue("light_1", ColorRGBA.Red);
+        ssbo.setFieldValue("light_2", ColorRGBA.Green);
 
         ubo = new BufferObject(2);
-        ubo.setValue("light_1", ColorRGBA.Yellow);
-        ubo.setValue("light_2", ColorRGBA.Red);
+        ubo.setFieldValue("light_1", ColorRGBA.Yellow);
+        ubo.setFieldValue("light_2", ColorRGBA.Red);
 
         final Matrix3f matrix3f = new Matrix3f();
         matrix3f.setColumn(0, new Vector3f(0, 0, 1));
@@ -54,16 +54,16 @@ public class BOSceneTest extends BaseExternalTest {
         matrix4f.setColumn(1, new float[]{0, 1, 0, 0});
 
         ssbo2 = new BufferObject(4);
-        ssbo2.setValue("index", 1);
-        ssbo2.setValue("colors", new ColorRGBA[]{ColorRGBA.Green, ColorRGBA.Red, ColorRGBA.Blue});
-        ssbo2.setValue("alp", 1F);
-        ssbo2.setValue("matrix3", matrix3f);
-        ssbo2.setValue("matrix4", matrix4f);
-        ssbo2.setValue("positions", new Vector3f[]{Vector3f.UNIT_X, new Vector3f(0.3F, 0.3f, 0.3F), Vector3f.UNIT_Z});
-        ssbo2.setValue("index2", 1);
-        ssbo2.setValue("matrixes", new Matrix3f[] {new Matrix3f(), matrix3f});
-        ssbo2.setValue("vector2", new Vector2f(0, 0));
-        ssbo2.setValue("fvalue", 0.4F);
+        ssbo2.setFieldValue("index", 1);
+        ssbo2.setFieldValue("colors", new ColorRGBA[]{ColorRGBA.Green, ColorRGBA.Red, ColorRGBA.Blue});
+        ssbo2.setFieldValue("alp", 1F);
+        ssbo2.setFieldValue("matrix3", matrix3f);
+        ssbo2.setFieldValue("matrix4", matrix4f);
+        ssbo2.setFieldValue("positions", new Vector3f[]{Vector3f.UNIT_X, new Vector3f(0.3F, 0.3f, 0.3F), Vector3f.UNIT_Z});
+        ssbo2.setFieldValue("index2", 1);
+        ssbo2.setFieldValue("matrixes", new Matrix3f[] {new Matrix3f(), matrix3f});
+        ssbo2.setFieldValue("vector2", new Vector2f(0, 0));
+        ssbo2.setFieldValue("fvalue", 0.4F);
 
         final Material materialSSBO = new Material(assetManager, "MatDefs/UnshadedSSBO.j3md");
         materialSSBO.setShaderStorageBufferObject("TestSSBO", ssbo);
@@ -114,13 +114,13 @@ public class BOSceneTest extends BaseExternalTest {
                 random.nextFloat(),
                 1F);
 
-        ssbo.setValue("light_2", randomColor);
+        ssbo.setFieldValue("light_2", randomColor);
 
         randomColor = new ColorRGBA(random.nextFloat(),
                 random.nextFloat(),
                 random.nextFloat(),
                 1F);
 
-        ubo.setValue("light_2", randomColor);
+        ubo.setFieldValue("light_2", randomColor);
     }
 }

@@ -345,11 +345,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     private boolean activeTransform;
 
     /**
-     * The flag of existing active editing.
-     */
-    private boolean activeEditing;
-
-    /**
      * The flag of painting mode.
      */
     private boolean paintingMode;
@@ -797,22 +792,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         return activeTransform;
     }
 
-    /**
-     * @return true if we have active editing.
-     */
-    @FromAnyThread
-    private boolean isActiveEditing() {
-        return activeEditing;
-    }
-
-    /**
-     * @param activeEditing true of we have active editing.
-     */
-    @FromAnyThread
-    private void setActiveEditing(final boolean activeEditing) {
-        this.activeEditing = activeEditing;
-    }
-
     @Override
     protected void preCameraUpdate(final float tpf) {
         super.preCameraUpdate(tpf);
@@ -889,7 +868,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         final Node toolNode = getToolNode();
 
-        if (selected.isEmpty()) {
+        // FIXME change when will support transform multi-nodes
+        if (selected.size() != 1) {
             toolNode.detachChild(transformToolNode);
         } else if (!isPaintingMode()) {
             toolNode.attachChild(transformToolNode);
