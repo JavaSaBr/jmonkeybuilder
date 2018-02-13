@@ -344,6 +344,7 @@ public class JfxApplication extends Application {
             stage.setTitle(Config.TITLE);
             stage.show();
 
+
             if (!stage.isMaximized()) {
                 stage.centerOnScreen();
             }

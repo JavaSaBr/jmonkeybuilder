@@ -27,7 +27,7 @@ compileTestJava {
 ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
-ext.jmeVersion = "added_new_var_type-SNAPSHOT"
+ext.jmeVersion = "v3.3.dev-SNAPSHOT"
 ext.jmbExtVersion = "2.0.2"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"

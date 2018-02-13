@@ -4,12 +4,12 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppStateManager;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.JfxApplication;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.file.converter.FileConverterDescription;
@@ -36,8 +36,11 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.ArrayUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.ConcurrentArray;
 import com.ss.rlib.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.DictionaryUtils;
@@ -110,12 +113,19 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private final ConcurrentObjectDictionary<Path, Tab> openedEditors;
 
     /**
+     * The list of opening files now.
+     */
+    @NotNull
+    private final ConcurrentArray<Path> openingFiles;
+
+    /**
      * The flag for ignoring changing the list of opened editors.
      */
     private boolean ignoreOpenedFiles;
 
     public EditorAreaComponent() {
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
+        this.openingFiles = ArrayFactory.newConcurrentStampedLockArray(Path.class);
 
         setPickOnBounds(true);
         setId(CssIds.EDITOR_AREA_COMPONENT);
@@ -290,18 +300,31 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final FileConverterDescription description = event.getDescription();
 
         final FileConverter converter = FILE_CONVERTER_REGISTRY.newCreator(description, file);
-        if (converter == null) return;
+        if (converter == null) {
+            return;
+        }
 
         converter.convert(file);
     }
 
     /**
+     * Get the tale of opened editors.
+     *
      * @return the tale of opened editors.
      */
-    @NotNull
     @FromAnyThread
-    private ConcurrentObjectDictionary<Path, Tab> getOpenedEditors() {
+    private @NotNull ConcurrentObjectDictionary<Path, Tab> getOpenedEditors() {
         return openedEditors;
+    }
+
+    /**
+     * Get the list of opening files now.
+     *
+     * @return the list of opening files now.
+     */
+    @FromAnyThread
+    private @NotNull ConcurrentArray<Path> getOpeningFiles() {
+        return openingFiles;
     }
 
     /**
@@ -314,7 +337,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final FileCreatorDescription description = event.getDescription();
 
         final FileCreator fileCreator = CREATOR_REGISTRY.newCreator(description, file);
-        if (fileCreator == null) return;
+        if (fileCreator == null) {
+            return;
+        }
 
         fileCreator.start(file);
     }
@@ -324,10 +349,15 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      */
     @FxThread
     private void processChangeTabs(@NotNull final ListChangeListener.Change<? extends Tab> change) {
-        if (!change.next()) return;
+
+        if (!change.next()) {
+            return;
+        }
 
         final List<? extends Tab> removed = change.getRemoved();
-        if (removed == null || removed.isEmpty()) return;
+        if (removed == null || removed.isEmpty()) {
+            return;
+        }
 
         removed.forEach(tab -> {
 
@@ -339,10 +369,14 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             fileEditor.notifyClosed();
 
-            if (isIgnoreOpenedFiles()) return;
+            if (isIgnoreOpenedFiles()) {
+                return;
+            }
 
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-            if (workspace != null) workspace.removeOpenedFile(editFile);
+            if (workspace != null) {
+                workspace.removeOpenedFile(editFile);
+            }
         });
     }
 
@@ -421,9 +455,23 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        UiUtils.incrementLoading();
+        final ConcurrentArray<Path> openingFiles = getOpeningFiles();
+        final long stamp = openingFiles.writeLock();
+        try {
 
-        EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
+            if (openingFiles.contains(file)) {
+                return;
+            }
+
+            openingFiles.add(file);
+
+            UiUtils.incrementLoading();
+
+            EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
+
+        } finally {
+            openingFiles.writeUnlock(stamp);
+        }
     }
 
     @BackgroundThread
@@ -442,11 +490,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
             EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
+            ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
             return;
         }
 
         if (editor == null) {
             EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
+            ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
             return;
         }
 
@@ -458,6 +508,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             editor.openFile(file);
         } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
+            ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
 
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
             if (workspace != null) {
@@ -470,6 +521,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             });
 
             return;
+
         } finally {
             jmeApplication.asyncUnlock(stamp);
         }
@@ -509,6 +561,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
 
         DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
+        ArrayUtils.runInWriteLock(getOpeningFiles(), editFile, Array::fastRemove);
 
         UiUtils.decrementLoading();
 
@@ -571,7 +624,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void loadOpenedFiles() {
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-        if (workspace == null) return;
+        if (workspace == null) {
+            return;
+        }
 
         final Path assetFolder = workspace.getAssetFolder();
         final String editFile = workspace.getCurrentEditedFile();
@@ -580,10 +635,14 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         openedFiles.forEach((assetPath, editorId) -> {
 
             final EditorDescription description = EDITOR_REGISTRY.getDescription(editorId);
-            if (description == null) return;
+            if (description == null) {
+                return;
+            }
 
             final Path file = assetFolder.resolve(assetPath);
-            if (!Files.exists(file)) return;
+            if (!Files.exists(file)) {
+                return;
+            }
 
             final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
             event.setFile(file);
