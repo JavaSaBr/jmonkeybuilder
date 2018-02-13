@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.tree;
 
 import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.stream.Collectors.toList;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -13,6 +12,7 @@ import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.function.TripleConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayCollectors;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -20,7 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reactfx.util.TriConsumer;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -49,8 +48,8 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * The list of action fillers.
      */
     @NotNull
-    private static final Array<TripleConsumer<NodeTree<?>, List<MenuItem>, List<TreeNode<?>>>> MULTI_ITEMS_ACTION_FILLERS =
-            ArrayFactory.newArray(TriConsumer.class);
+    private static final Array<TripleConsumer<NodeTree<?>, List<MenuItem>, Array<TreeNode<?>>>> MULTI_ITEMS_ACTION_FILLERS =
+            ArrayFactory.newArray(TripleConsumer.class);
 
     /**
      * Register the new multi items action filler.
@@ -58,7 +57,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param actionFiller the new multi items action filler.
      */
     @FxThread
-    public static void register(@NotNull TripleConsumer<NodeTree<?>, List<MenuItem>, List<TreeNode<?>>> actionFiller) {
+    public static void register(@NotNull final TripleConsumer<NodeTree<?>, List<MenuItem>, Array<TreeNode<?>>> actionFiller) {
         MULTI_ITEMS_ACTION_FILLERS.add(actionFiller);
     }
 
@@ -311,9 +310,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         } else {
 
-            final List<TreeNode<?>> treeNodes = selectedItems.stream()
+            final Array<TreeNode<?>> treeNodes = selectedItems.stream()
                     .map(TreeItem::getValue)
-                    .collect(toList());
+                    .collect(ArrayCollectors.toArray(TreeNode.class));
 
             MULTI_ITEMS_ACTION_FILLERS.forEach(filler -> filler.accept(this, items, treeNodes));
         }

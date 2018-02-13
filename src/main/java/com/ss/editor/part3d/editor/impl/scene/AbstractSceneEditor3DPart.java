@@ -31,6 +31,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingControl;
@@ -1721,9 +1722,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Notify about property changes.
      *
      * @param object the object with changes.
+     * @param name   the property name.
      */
     @JmeThread
-    public void notifyPropertyChanged(@NotNull Object object) {
+    public void notifyPropertyChanged(@NotNull Object object, @NotNull final String name) {
 
         if (object instanceof SimpleProperty) {
             object = ((SimpleProperty) object).getObject();
@@ -1738,6 +1740,12 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         } else if (object instanceof ScenePresentable) {
             final EditorPresentableNode node = getPresentableNode((ScenePresentable) object);
             if (node != null) node.sync();
+        }
+
+        if (object instanceof Spatial) {
+            if (Messages.MODEL_PROPERTY_LOCATION.equals(name) || Messages.MODEL_PROPERTY_SCALE.equals(name)) {
+                updateModelBoundImpl();
+            }
         }
     }
 
@@ -2089,7 +2097,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         final ObjectDictionary<ScenePresentable, EditorPresentableNode> presentableNodes = getCachedPresentableObjects();
         final EditorPresentableNode node = presentableNodes.get(presentable);
-        if (node == null) return;
+        if (node == null) {
+            return;
+        }
 
         node.setObject(null);
 
@@ -2256,4 +2266,21 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     public @NotNull Camera getCamera() {
         return EditorUtil.getGlobalCamera();
     }
+
+    /**
+     * Update all model bounds in the opened scene/model.
+     */
+    @FromAnyThread
+    public void updateModelBound() {
+        EXECUTOR_MANAGER.addJmeTask(this::updateModelBoundImpl);
+    }
+
+    /**
+     * Update all model bounds in the current scene.
+     */
+    @JmeThread
+    protected void updateModelBoundImpl() {
+        getModelNode().updateModelBound();
+    }
+
 }

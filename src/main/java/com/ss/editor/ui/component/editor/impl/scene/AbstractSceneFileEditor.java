@@ -410,15 +410,16 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleAddedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editor3DState, (light, state) -> state.addLight(light));
-        audioNodes.forEach(editor3DState, (audioNode, state) -> state.addAudioNode(audioNode));
+        lights.forEach(editor3DPart, (light, state) -> state.addLight(light));
+        audioNodes.forEach(editor3DPart, (audioNode, state) -> state.addAudioNode(audioNode));
+        editor3DPart.updateModelBound();
     }
 
     /**
@@ -429,15 +430,16 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleRemovedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editor3DState, (light, state) -> state.removeLight(light));
-        audioNodes.forEach(editor3DState, (audioNode, state) -> state.removeAudioNode(audioNode));
+        lights.forEach(editor3DPart, (light, state) -> state.removeLight(light));
+        audioNodes.forEach(editor3DPart, (audioNode, state) -> state.removeAudioNode(audioNode));
+        editor3DPart.updateModelBound();
     }
 
     @Override
@@ -602,7 +604,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @FxThread
     public void notifyJmeChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-        getEditor3DPart().notifyPropertyChanged(object);
+        getEditor3DPart().notifyPropertyChanged(object, propertyName);
     }
 
     @Override
@@ -638,14 +640,14 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     public void notifyFxRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
 
         if (removed instanceof Light) {
-            editor3DState.removeLight((Light) removed);
+            editor3DPart.removeLight((Light) removed);
         } else if (removed instanceof AudioNode) {
-            editor3DState.removeAudioNode((AudioNode) removed);
+            editor3DPart.removeAudioNode((AudioNode) removed);
         } else if (removed instanceof Spatial) {
             handleRemovedObject((Spatial) removed);
         }

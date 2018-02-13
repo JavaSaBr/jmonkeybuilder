@@ -19,10 +19,6 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * The base implementation of an action for an element in a node tree.
  *
@@ -44,7 +40,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final List<TreeNode<?>> EMPTY_NODES = Collections.emptyList();
+    private static final Array<TreeNode<?>> EMPTY_NODES = ArrayFactory.newArray(TreeNode.class);
 
     /**
      * The component of the node tree.
@@ -62,17 +58,17 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * The nodes.
      */
     @NotNull
-    private final List<TreeNode<?>> nodes;
+    private final Array<TreeNode<?>> nodes;
 
     public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         this(nodeTree, node, EMPTY_NODES);
     }
 
-    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final List<TreeNode<?>> nodes) {
-        this(nodeTree, notNull(nodes.get(0)), nodes);
+    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final Array<TreeNode<?>> nodes) {
+        this(nodeTree, notNull(nodes.first()), nodes);
     }
 
-    AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node, @NotNull final List<TreeNode<?>> nodes) {
+    AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node, @NotNull final Array<TreeNode<?>> nodes) {
         this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
         this.nodes = nodes;
@@ -138,7 +134,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * @return the nodes.
      */
     @FxThread
-    protected @NotNull List<TreeNode<?>> getNodes() {
+    protected @NotNull Array<TreeNode<?>> getNodes() {
         return nodes;
     }
 

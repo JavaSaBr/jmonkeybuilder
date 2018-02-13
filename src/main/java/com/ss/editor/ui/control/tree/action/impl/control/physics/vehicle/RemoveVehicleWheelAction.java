@@ -23,32 +23,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RemoveVehicleWheelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    /**
-     * Instantiates a new Remove vehicle wheel action.
-     *
-     * @param nodeTree the node tree
-     * @param node     the node
-     */
     public RemoveVehicleWheelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
-    @FxThread
-    @NotNull
     @Override
-    protected String getName() {
+    @FxThread
+    protected @NotNull String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;
     }
 
-    @FxThread
-    @Nullable
     @Override
-    protected Image getIcon() {
+    @FxThread
+    protected @Nullable Image getIcon() {
         return Icons.REMOVE_12;
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected void process() {
 
         final TreeNode<?> node = getNode();
