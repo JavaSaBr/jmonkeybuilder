@@ -385,8 +385,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
                 break;
             }
             case FILTERS_TOOL: {
+                final FilterList filterList = getFilterList();
                 FXUtils.addToPane(modelPropertyEditor, filtersContainer);
-                modelPropertyEditor.rebuild();
+                selectFilterFromList(filterList.getSelected());
                 break;
             }
         }
@@ -474,12 +475,6 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
             final ModelNodeTree modelNodeTree = getModelNodeTree();
             modelNodeTree.selectSingle(object);
 
-            final AppStateList appStateList = getAppStateList();
-            appStateList.clearSelection();
-
-            final FilterList filterList = getFilterList();
-            filterList.clearSelection();
-
             selectNodeFromTree(object);
 
         } finally {
@@ -499,10 +494,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
         setNeedSyncSelection(false);
         try {
 
-            final Object toSelect = objects.size() == 1 ? objects.first() : null;
-
             final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.selectSingle(toSelect);
+            layerNodeTree.selects(objects);
 
             super.selectNodesFromTree(objects);
 

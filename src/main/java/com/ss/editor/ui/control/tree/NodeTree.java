@@ -644,15 +644,11 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
         selectionModel.clearSelection();
 
-        final Array<TreeItem<TreeNode<?>>> treeItems = objects.stream()
-                .map(FACTORY_REGISTRY::createFor)
-                .filter(Objects::nonNull)
-                .map(node -> findItemForValue(treeView, node))
-                .filter(Objects::nonNull)
-                .collect(ArrayCollectors.toArray(TreeItem.class));
-
-        selectionModel.getSelectedItems()
-                .addAll(treeItems);
+        objects.stream().map(FACTORY_REGISTRY::createFor)
+            .filter(Objects::nonNull)
+            .map(node -> findItemForValue(treeView, node))
+            .filter(Objects::nonNull)
+            .forEach(selectionModel::select);
     }
 
     /**
@@ -672,6 +668,18 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         }
 
         return selectedItem.getValue();
+    }
+
+    /**
+     * Get the current selected items count.
+     *
+     * @return the current selected items count.
+     */
+    @FxThread
+    public int getSelectedCount() {
+        final TreeView<TreeNode<?>> treeView = getTreeView();
+        return treeView.getSelectionModel()
+            .getSelectedItems().size();
     }
 
     /**

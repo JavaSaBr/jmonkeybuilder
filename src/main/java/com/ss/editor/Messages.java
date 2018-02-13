@@ -305,6 +305,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_LOCATION;
     public static final String MODEL_PROPERTY_SCALE;
     public static final String MODEL_PROPERTY_ROTATION;
+    public static final String MODEL_PROPERTY_TRANSFORMATION;
     public static final String MODEL_PROPERTY_MATERIAL;
     public static final String MODEL_PROPERTY_DIRECTION;
     public static final String MODEL_PROPERTY_RADIUS;
@@ -1002,6 +1003,7 @@ public class Messages {
         MODEL_PROPERTY_LOCATION = bundle.getString("ModelPropertyLocation");
         MODEL_PROPERTY_SCALE = bundle.getString("ModelPropertyScale");
         MODEL_PROPERTY_ROTATION = bundle.getString("ModelPropertyRotation");
+        MODEL_PROPERTY_TRANSFORMATION = bundle.getString("ModelPropertyTransformation");
         MODEL_PROPERTY_MATERIAL = bundle.getString("ModelPropertyMaterial");
         MODEL_PROPERTY_DIRECTION = bundle.getString("ModelPropertyDirection");
         MODEL_PROPERTY_RADIUS = bundle.getString("ModelPropertyRadius");

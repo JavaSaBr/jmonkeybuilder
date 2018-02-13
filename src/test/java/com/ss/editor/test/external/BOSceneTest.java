@@ -7,7 +7,6 @@ import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
-import com.jme3.shader.BufferObject;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,10 +21,9 @@ public class BOSceneTest extends BaseExternalTest {
         run(BOSceneTest.class);
     }
 
-    private BufferObject ssbo;
+    /*private BufferObject ssbo;
     private BufferObject ssbo2;
     private BufferObject ubo;
-
     @Override
     public void simpleInitApp() {
         super.simpleInitApp();
@@ -123,4 +121,5 @@ public class BOSceneTest extends BaseExternalTest {
 
         ubo.setFieldValue("light_2", randomColor);
     }
+*/
 }

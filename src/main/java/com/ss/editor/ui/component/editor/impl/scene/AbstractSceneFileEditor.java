@@ -12,12 +12,17 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.audio.AudioNode;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingSphere;
+import com.jme3.bounding.BoundingVolume;
+import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.AssetLinkNode;
@@ -63,10 +68,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.LocalObjects;
-import com.ss.editor.util.MaterialUtils;
-import com.ss.editor.util.NodeUtils;
+import com.ss.editor.util.*;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
@@ -412,9 +414,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editor3DPart, (light, state) -> state.addLight(light));
-        audioNodes.forEach(editor3DPart, (audioNode, state) -> state.addAudioNode(audioNode));
-        editor3DPart.updateModelBound();
+        lights.forEach(editor3DPart, (light, part) -> part.addLight(light));
+        audioNodes.forEach(editor3DPart, (audioNode, part) -> part.addAudioNode(audioNode));
     }
 
     /**
@@ -432,9 +433,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editor3DPart, (light, state) -> state.removeLight(light));
-        audioNodes.forEach(editor3DPart, (audioNode, state) -> state.removeAudioNode(audioNode));
-        editor3DPart.updateModelBound();
+        lights.forEach(editor3DPart, (light, part) -> part.removeLight(light));
+        audioNodes.forEach(editor3DPart, (audioNode, part) -> part.removeAudioNode(audioNode));
     }
 
     @Override
@@ -610,8 +610,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
+    public void notifyJmePreChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+        getEditor3DPart().notifyPropertyPreChanged(object, propertyName);
+    }
+
+    @Override
     @FxThread
-    public void notifyJmeChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyJmeChangedProperty(@NotNull final Object object, @NotNull final String propertyName) {
         getEditor3DPart().notifyPropertyChanged(object, propertyName);
     }
 
@@ -911,7 +916,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         final M currentModel = getCurrentModel();
 
-        NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
+        try {
+            NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            return;
+        }
 
         PRE_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         try {
@@ -922,6 +932,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                 exporter.save(currentModel, out);
             }
 
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
         } finally {
             POST_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         }
@@ -1266,12 +1278,14 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        final Object selected = modelNodeTree.getSelectedObject();
+        final ModelNodeTree nodeTree = getModelNodeTree();
+        final Object selected = nodeTree.getSelectedObject();
 
         final Node parent;
 
-        if (selected instanceof Node && findParent((Spatial) selected, AssetLinkNode.class::isInstance) == null) {
+        if (selected instanceof Node &&
+            nodeTree.getSelectedCount() == 1 &&
+            findParent((Spatial) selected, AssetLinkNode.class::isInstance) == null) {
             parent = (Node) selected;
         } else {
             parent = (Node) currentModel;
@@ -1280,9 +1294,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final ModelKey modelKey = new ModelKey(assetPath);
-        final Camera camera = editor3DState.getCamera();
+        final Camera camera = editor3DPart.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
@@ -1303,10 +1317,35 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            final Vector3f scenePoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
+            final Vector3f scenePoint = editor3DPart.getScenePosByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
             final Vector3f result = local.nextVector(scenePoint)
                     .subtractLocal(parent.getWorldTranslation());
+
+            final boolean isPhysics = NodeUtils.children(loadedModel)
+                .flatMap(ControlUtils::controls)
+                .anyMatch(control -> control instanceof PhysicsControl);
+
+            if (isPhysics) {
+
+                loadedModel.updateModelBound();
+
+                final BoundingVolume worldBound = loadedModel.getWorldBound();
+
+                float height = 0;
+
+                if (worldBound instanceof BoundingBox) {
+                    height = ((BoundingBox) worldBound).getYExtent();
+                } else if (worldBound instanceof BoundingSphere) {
+                    height = ((BoundingSphere) worldBound).getRadius();
+                }
+
+                final Quaternion localRotation = parent.getLocalRotation();
+                final Vector3f up = GeomUtils.getUp(localRotation, local.nextVector());
+                up.multLocal(height);
+
+                result.addLocal(up);
+            }
 
             assetLinkNode.setLocalTranslation(result);
 

@@ -1,14 +1,29 @@
 package com.ss.editor.util;
 
+import com.jme3.bullet.collision.PhysicsCollisionObject;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.HullCollisionShape;
+import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.PhysicsControl;
+import com.jme3.bullet.objects.PhysicsRigidBody;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Sphere;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
+
+import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
+import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
 
 /**
  * The utility class to work with controls.
@@ -69,5 +84,56 @@ public class ControlUtils {
         } else if (control instanceof PhysicsControl) {
             ((PhysicsControl) control).setEnabled(enabled);
         }
+    }
+
+    /**
+     * Apply the new scale.
+     *
+     * @param spatial      the spatial.
+     * @param currentScale the current scale.
+     * @param object       the collision object.
+     */
+    @JmeThread
+    public static void applyScale(@NotNull Spatial spatial,
+                                  @NotNull final Vector3f currentScale,
+                                  @NotNull final PhysicsCollisionObject object) {
+
+        final float mass = object instanceof PhysicsRigidBody ? ((PhysicsRigidBody) object).getMass() : 1F;
+
+        CollisionShape shape = null;
+
+        if (spatial instanceof Geometry) {
+
+            final Geometry geom = (Geometry) spatial;
+            final Mesh mesh = geom.getMesh();
+
+            if (mesh instanceof Sphere) {
+                if (Vector3f.UNIT_XYZ.equals(currentScale)) {
+                    shape = new SphereCollisionShape(((Sphere) mesh).getRadius());
+                }
+            } else if (mesh instanceof Box) {
+
+                final Box box = (Box) mesh;
+                final Vector3f halfExtents = new Vector3f(box.getXExtent(), box.getYExtent(), box.getZExtent());
+                halfExtents.multLocal(currentScale);
+
+                shape = new BoxCollisionShape(halfExtents);
+            }
+        }
+
+        if (shape == null) {
+            if (mass > 0) {
+
+                shape = createDynamicMeshShape(spatial);
+                if (shape instanceof HullCollisionShape) {
+                    shape.setScale(currentScale);
+                }
+
+            } else {
+                shape = createMeshShape(spatial);
+            }
+        }
+
+        object.setCollisionShape(shape);
     }
 }

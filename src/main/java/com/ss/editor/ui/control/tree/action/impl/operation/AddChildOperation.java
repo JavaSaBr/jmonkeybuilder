@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree.action.impl.operation;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.plugin.api.RenderFilterExtension;
@@ -44,7 +45,10 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
+
+            editor.notifyJmePreChangeProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
             parent.attachChildAt(newChild, 0);
+            editor.notifyJmeChangedProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
 
             final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
             filterExtension.refreshFilters();

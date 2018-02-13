@@ -746,7 +746,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         final Path folder = file.getParent();
-        if (!folder.startsWith(currentAsset)) return;
+        if (!folder.startsWith(currentAsset)) {
+            return;
+        }
+
+        final ResourceElement fileElement = createFor(file);
+        final TreeItem<ResourceElement> fileItem = findItemForValue(getRoot(), fileElement);
+        if (fileItem != null) {
+            return;
+        }
 
         final ResourceElement element = createFor(folder);
 
@@ -757,7 +765,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
             folderItem = findItemForValue(getRoot(), folder);
         }
 
-        if (folderItem == null) return;
+        if (folderItem == null) {
+            return;
+        }
 
         final TreeItem<ResourceElement> newItem = new TreeItem<>(createFor(file));
 
@@ -779,10 +789,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement element = createFor(file);
         final TreeItem<ResourceElement> treeItem = findItemForValue(getRoot(), element);
-        if (treeItem == null) return;
+        if (treeItem == null) {
+            return;
+        }
 
         final TreeItem<ResourceElement> parent = treeItem.getParent();
-        if (parent == null) return;
+        if (parent == null) {
+            return;
+        }
 
         final ObservableList<TreeItem<ResourceElement>> children = parent.getChildren();
         children.remove(treeItem);
@@ -799,11 +813,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement prevElement = createFor(prevFile);
         final TreeItem<ResourceElement> prevItem = findItemForValue(getRoot(), prevElement);
-        if (prevItem == null) return;
+        if (prevItem == null) {
+            return;
+        }
 
         final ResourceElement newParentElement = createFor(newFile.getParent());
         final TreeItem<ResourceElement> newParentItem = findItemForValue(getRoot(), newParentElement);
-        if (newParentItem == null) return;
+        if (newParentItem == null) {
+            return;
+        }
 
         final TreeItem<ResourceElement> prevParentItem = prevItem.getParent();
         final ObservableList<TreeItem<ResourceElement>> prevParentChildren = prevParentItem.getChildren();
@@ -847,7 +865,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement prevElement = createFor(prevFile);
         final TreeItem<ResourceElement> prevItem = findItemForValue(getRoot(), prevElement);
-        if (prevItem == null) return;
+        if (prevItem == null) {
+            return;
+        }
 
         prevItem.setValue(createFor(newFile));
 
@@ -862,11 +882,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FxThread
     private void processKey(@NotNull final KeyEvent event) {
-        if (isReadOnly()) return;
+        if (isReadOnly()) {
+            return;
+        }
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return;
+        if (currentAsset == null) {
+            return;
+        }
 
         updateSelectedElements();
 
@@ -874,14 +898,18 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (selectedElements.isEmpty()) return;
 
         final ResourceElement firstElement = selectedElements.first();
-        if (firstElement instanceof LoadingResourceElement) return;
+        if (firstElement instanceof LoadingResourceElement) {
+            return;
+        }
 
         boolean onlyFiles = true;
         boolean onlyFolders = true;
         boolean selectedAsset = false;
 
         for (final ResourceElement element : selectedElements.array()) {
-            if (element == null) break;
+            if (element == null) {
+                break;
+            }
 
             if (element instanceof FileResourceElement) {
                 onlyFolders = false;
@@ -946,7 +974,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void cleanup(@NotNull final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
-        if (element instanceof FileResourceElement || element instanceof LoadingResourceElement) return;
+        if (element instanceof FileResourceElement || element instanceof LoadingResourceElement) {
+            return;
+        }
 
         final ObservableList<TreeItem<ResourceElement>> children = treeItem.getChildren();
 

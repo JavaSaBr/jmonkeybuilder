@@ -46,7 +46,14 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 
-        final Spatial model = assetManager.loadModel(assetPath);
+        final Spatial model;
+
+        try {
+            model = assetManager.loadModel(assetPath);
+        } catch (final Exception e) {
+            LOGGER.warning(this, e);
+            return;
+        }
 
         NodeUtils.visitGeometry(model, geometry -> {
 
@@ -73,7 +80,9 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         super.postDelete(file);
 
         final Array<String> assetKeys = getAssetKeys();
-        if (assetKeys.isEmpty()) return;
+        if (assetKeys.isEmpty()) {
+            return;
+        }
 
         String question = Messages.FILE_DELETE_HANDLER_DELETE_MATERIALS;
         question = question.replace("%file_name%", file.getFileName().toString());

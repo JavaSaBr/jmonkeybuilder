@@ -1,6 +1,9 @@
 package com.ss.editor.part3d.editor.impl.scene.handler;
 
 import static com.ss.rlib.util.array.ArrayCollectors.toArray;
+
+import com.jme3.bullet.control.PhysicsControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.JmeThread;

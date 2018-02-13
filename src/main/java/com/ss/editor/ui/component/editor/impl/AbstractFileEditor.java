@@ -61,7 +61,7 @@ import java.util.function.Consumer;
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
-     * The logger.
+     * The loggerA.
      */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);

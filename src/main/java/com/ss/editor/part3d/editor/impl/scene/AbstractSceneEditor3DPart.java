@@ -2,6 +2,8 @@ package com.ss.editor.part3d.editor.impl.scene;
 
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.util.stream.Collectors.toMap;
+
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
@@ -43,7 +45,9 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.scene.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.part3d.editor.impl.scene.handler.ApplyScaleToPhysicsControlsHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.DisableControlsTransformationHandler;
+import com.ss.editor.part3d.editor.impl.scene.handler.PhysicsControlTransformationHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.ReactivatePhysicsControlsTransformationHandler;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
@@ -156,10 +160,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         // default handlers
         final DisableControlsTransformationHandler disableControlsHandler = new DisableControlsTransformationHandler();
+        final ApplyScaleToPhysicsControlsHandler applyScaleToPhysicsControlsHandler = new ApplyScaleToPhysicsControlsHandler();
 
         registerPreTransformHandler(disableControlsHandler::onPreTransform);
         registerPostTransformHandler(disableControlsHandler::onPostTransform);
         registerPostTransformHandler(new ReactivatePhysicsControlsTransformationHandler());
+        registerPostTransformHandler(new PhysicsControlTransformationHandler());
+        registerPreTransformHandler(applyScaleToPhysicsControlsHandler::onPreTransform);
+        registerPostTransformHandler(applyScaleToPhysicsControlsHandler::onPostTransform);
     }
 
     /**
@@ -510,7 +518,17 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         grid.setCullHint(Spatial.CullHint.Never);
         grid.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
 
+        final Quad quad = new Quad(gridSize, gridSize);
+        final Geometry gridCollision = new Geometry("collision", quad);
+        gridCollision.setMaterial(createColorMaterial(gridColor));
+        gridCollision.setQueueBucket(RenderQueue.Bucket.Transparent);
+        gridCollision.setShadowMode(RenderQueue.ShadowMode.Off);
+        gridCollision.setCullHint(Spatial.CullHint.Always);
+        gridCollision.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
+        gridCollision.setLocalRotation(new Quaternion().fromAngles(AngleUtils.degreeToRadians(90), 0, 0));
+
         gridNode.attachChild(grid);
+        gridNode.attachChild(gridCollision);
 
         // Red line for X axis
         final Line xAxis = new Line(new Vector3f(-gridSize / 2, 0f, 0f), new Vector3f(gridSize / 2 - 1, 0f, 0f));
@@ -1245,7 +1263,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             final Geometry geometry = WireBox.makeGeometry(boundingBox);
             geometry.setName("SelectionShape");
             geometry.setMaterial(getSelectionMaterial());
-            geometry.setLocalTranslation(boundingBox.getCenter().subtract(spatial.getWorldTranslation()));
+            geometry.setLocalTranslation(spatial.getWorldTranslation());
 
             return geometry;
 
@@ -1258,7 +1276,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
             final Geometry geometry = new Geometry("SelectionShape", wire);
             geometry.setMaterial(getSelectionMaterial());
-            geometry.setLocalTranslation(boundingSphere.getCenter().subtract(spatial.getWorldTranslation()));
+            geometry.setLocalTranslation(spatial.getWorldTranslation());
 
             return geometry;
         }
@@ -1342,7 +1360,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private void updateShowSelectionImpl(final boolean showSelection) {
-        if (isShowSelection() == showSelection) return;
+
+        if (isShowSelection() == showSelection) {
+            return;
+        }
 
         final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
         final Node toolNode = getToolNode();
@@ -1524,14 +1545,22 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final Camera camera = getCamera();
         final M currentModel = notNull(getCurrentModel());
 
-        Vector3f result = GeomUtils.getContactPointFromScreenPos(currentModel, camera, screenX, screenY);
-        if (result != null) {
-            return result;
+        final Vector3f modelPoint = GeomUtils.getContactPointFromScreenPos(currentModel, camera, screenX, screenY);
+        final Vector3f gridPoint = GeomUtils.getContactPointFromScreenPos(getGrid(), camera, screenX, screenY);
+
+        if (modelPoint == null) {
+            return gridPoint == null ? Vector3f.ZERO : gridPoint;
+        } else if (gridPoint == null) {
+            return modelPoint;
         }
 
-        result = GeomUtils.getContactPointFromScreenPos(getGrid(), camera, screenX, screenY);
+        final float distance = modelPoint.distance(camera.getLocation());
 
-        return result == null ? Vector3f.ZERO : result;
+        if (gridPoint.distance(camera.getLocation()) < distance) {
+            return gridPoint;
+        } else {
+            return modelPoint;
+        }
     }
 
     /**
@@ -1599,7 +1628,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final Transform newValue = toTransform.getLocalTransform().clone();
 
         final PropertyOperation<ChangeConsumer, Spatial, Transform> operation =
-                new PropertyOperation<>(toTransform, "transform", newValue, oldValue);
+                new PropertyOperation<>(toTransform, "internal_transformation", newValue, oldValue);
 
         operation.setApplyHandler((spatial, transform) -> {
             PRE_TRANSFORM_HANDLERS.forEach(spatial, Consumer::accept);
@@ -1727,6 +1756,21 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
+     * Notify about an attempt to change the property from jME thread.
+     *
+     * @param object the object.
+     * @param name   the property name.
+     */
+    @JmeThread
+    public void notifyPropertyPreChanged(@NotNull final Object object, @NotNull final String name) {
+        if (object instanceof Spatial) {
+            if (isTransformationProperty(name)) {
+                PRE_TRANSFORM_HANDLERS.forEach((Spatial) object, Consumer::accept);
+            }
+        }
+    }
+
+    /**
      * Notify about property changes.
      *
      * @param object the object with changes.
@@ -1751,10 +1795,17 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         }
 
         if (object instanceof Spatial) {
-            if (Messages.MODEL_PROPERTY_LOCATION.equals(name) || Messages.MODEL_PROPERTY_SCALE.equals(name)) {
-                updateModelBoundImpl();
+            if (isTransformationProperty(name)) {
+                POST_TRANSFORM_HANDLERS.forEach((Spatial) object, Consumer::accept);
             }
         }
+    }
+
+    protected boolean isTransformationProperty(@NotNull final String name) {
+        return Messages.MODEL_PROPERTY_LOCATION.equals(name) ||
+            Messages.MODEL_PROPERTY_SCALE.equals(name) ||
+            Messages.MODEL_PROPERTY_ROTATION.equals(name) ||
+            Messages.MODEL_PROPERTY_TRANSFORMATION.equals(name);
     }
 
     /**
@@ -2274,21 +2325,4 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     public @NotNull Camera getCamera() {
         return EditorUtil.getGlobalCamera();
     }
-
-    /**
-     * Update all model bounds in the opened scene/model.
-     */
-    @FromAnyThread
-    public void updateModelBound() {
-        EXECUTOR_MANAGER.addJmeTask(this::updateModelBoundImpl);
-    }
-
-    /**
-     * Update all model bounds in the current scene.
-     */
-    @JmeThread
-    protected void updateModelBoundImpl() {
-        getModelNode().updateModelBound();
-    }
-
 }

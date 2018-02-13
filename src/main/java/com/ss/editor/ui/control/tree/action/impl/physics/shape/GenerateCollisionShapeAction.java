@@ -75,7 +75,6 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
                 final Box box = (Box) mesh;
                 shape = new BoxCollisionShape(new Vector3f(box.getXExtent(), box.getYExtent(), box.getZExtent()));
             }
-
         }
 
         if (shape == null) {
