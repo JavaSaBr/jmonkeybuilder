@@ -70,7 +70,7 @@ public class RemoveElementsAction extends AbstractNodeAction<ModelChangeConsumer
 
     @Override
     @FxThread
-    protected void process() {
+    public void process() {
         super.process();
 
         final Array<TreeNode<?>> nodes = getNodes();

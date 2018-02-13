@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -262,7 +263,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         treeItem.setExpanded(expanded);
 
         if (selected == treeNode) {
-            select(treeNode);
+            selectSingle(treeNode);
         }
     }
 
@@ -290,7 +291,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @return the context menu.
      */
     @FxThread
-    public ContextMenu getContextMenu(@NotNull final TreeNode<?> requestedNode) {
+    public ContextMenu getContextMenu(@Nullable final TreeNode<?> requestedNode) {
 
         final C changeConsumer = getChangeConsumer();
         if (changeConsumer == null) {
@@ -308,7 +309,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
 
-        if (selectedItems.size() == 1) {
+        if (selectedItems.size() == 1 && requestedNode != null) {
 
             requestedNode.fillContextMenu(this, items);
 
@@ -377,7 +378,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         newParentTreeNode.notifyChildAdded(node);
 
-        EXECUTOR_MANAGER.addFxTask(() -> select(node.getElement()));
+        EXECUTOR_MANAGER.addFxTask(() -> selectSingle(node.getElement()));
     }
 
     /**
@@ -606,10 +607,10 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Select the object in the tree.
      *
-     * @param object the object
+     * @param object the object.
      */
     @FxThread
-    public void select(@Nullable final Object object) {
+    public void selectSingle(@Nullable final Object object) {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
@@ -632,9 +633,32 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     }
 
     /**
-     * Gets selected.
+     * Select the objects in the tree.
      *
-     * @return the selected
+     * @param objects the objects.
+     */
+    @FxThread
+    public void selects(@NotNull final Array<?> objects) {
+
+        final TreeView<TreeNode<?>> treeView = getTreeView();
+        final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
+        selectionModel.clearSelection();
+
+        final Array<TreeItem<TreeNode<?>>> treeItems = objects.stream()
+                .map(FACTORY_REGISTRY::createFor)
+                .filter(Objects::nonNull)
+                .map(node -> findItemForValue(treeView, node))
+                .filter(Objects::nonNull)
+                .collect(ArrayCollectors.toArray(TreeItem.class));
+
+        selectionModel.getSelectedItems()
+                .addAll(treeItems);
+    }
+
+    /**
+     * Get the selected item.
+     *
+     * @return the selected item or null.
      */
     @FxThread
     public @Nullable TreeNode<?> getSelected() {
@@ -648,6 +672,21 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         }
 
         return selectedItem.getValue();
+    }
+
+    /**
+     * Get the selected nodes.
+     *
+     * @return the selected nodes.
+     */
+    @FxThread
+    public @NotNull Array<TreeNode<?>> getSelectedItems() {
+        final TreeView<TreeNode<?>> treeView = getTreeView();
+        return treeView.getSelectionModel()
+                .getSelectedItems()
+                .stream()
+                .map(TreeItem::getValue)
+                .collect(ArrayCollectors.toArray(TreeNode.class));
     }
 
     /**

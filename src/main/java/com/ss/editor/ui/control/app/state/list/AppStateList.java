@@ -145,6 +145,17 @@ public class AppStateList extends VBox {
     }
 
     /**
+     * Get the current selected item.
+     *
+     * @return the current selected item.
+     */
+    @FxThread
+    public @Nullable EditableSceneAppState getSelected() {
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
+        return selectionModel.getSelectedItem();
+    }
+
+    /**
      * Handle adding a new app state.
      */
     @FxThread

@@ -32,6 +32,7 @@ import com.ss.editor.ui.control.filter.list.FilterList;
 import com.ss.editor.ui.control.layer.LayerNodeTree;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.model.ModelPropertyEditor;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
@@ -371,13 +372,16 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
         switch (newIndex) {
             case LAYERS_TOOL: {
+                final LayerNodeTree layerNodeTree = getLayerNodeTree();
+                final TreeNode<?> selected = layerNodeTree.getSelected();
                 FXUtils.addToPane(modelPropertyEditor, layersContainer);
-                modelPropertyEditor.rebuild();
+                selectNodeFromLayersTree(selected);
                 break;
             }
             case APP_STATES_TOOL: {
+                final AppStateList appStateList = getAppStateList();
                 FXUtils.addToPane(modelPropertyEditor, appStateContainer);
-                modelPropertyEditor.rebuild();
+                selectAppStateFromList(appStateList.getSelected());
                 break;
             }
             case FILTERS_TOOL: {
@@ -430,18 +434,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
         setNeedSyncSelection(false);
         try {
-
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(null);
-
-            final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(null);
-
-            final FilterList filterList = getFilterList();
-            filterList.clearSelection();
-
             super.selectNodeFromTree(appState);
-
         } finally {
             setNeedSyncSelection(true);
         }
@@ -459,18 +452,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
         setNeedSyncSelection(false);
         try {
-
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(null);
-
-            final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(null);
-
-            final AppStateList appStateList = getAppStateList();
-            appStateList.clearSelection();
-
             super.selectNodeFromTree(sceneFilter);
-
         } finally {
             setNeedSyncSelection(true);
         }
@@ -490,7 +472,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
         try {
 
             final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(object);
+            modelNodeTree.selectSingle(object);
 
             final AppStateList appStateList = getAppStateList();
             appStateList.clearSelection();
@@ -507,9 +489,10 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
     @Override
     @FxThread
-    public void selectNodesFromTree(@NotNull final Array<Object> objects) {
+    public void selectNodesFromTree(@NotNull final Array<?> objects) {
 
         if (!isNeedSyncSelection()) {
+            super.selectNodesFromTree(objects);
             return;
         }
 
@@ -519,13 +502,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
             final Object toSelect = objects.size() == 1 ? objects.first() : null;
 
             final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(toSelect);
-
-            final AppStateList appStateList = getAppStateList();
-            appStateList.clearSelection();
-
-            final FilterList filterList = getFilterList();
-            filterList.clearSelection();
+            layerNodeTree.selectSingle(toSelect);
 
             super.selectNodesFromTree(objects);
 
