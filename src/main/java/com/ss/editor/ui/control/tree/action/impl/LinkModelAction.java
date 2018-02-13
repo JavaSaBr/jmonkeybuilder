@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -98,7 +98,7 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
         assetLinkNode.attachLinkedChild(loadedModel, modelKey);
-        assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
+        assetLinkNode.setUserData(KEY_LOADED_MODEL, true);
 
         if (defaultLayer != null) {
             SceneLayer.setLayer(defaultLayer, assetLinkNode);

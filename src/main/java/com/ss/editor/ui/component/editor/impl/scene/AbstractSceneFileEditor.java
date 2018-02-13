@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
@@ -1288,7 +1288,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
             final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
             assetLinkNode.attachLinkedChild(loadedModel, modelKey);
-            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
+            assetLinkNode.setUserData(KEY_LOADED_MODEL, true);
 
             if (defaultLayer != null) {
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);

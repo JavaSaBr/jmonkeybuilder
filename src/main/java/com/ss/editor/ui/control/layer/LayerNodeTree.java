@@ -9,6 +9,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.NodeTreeCell;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.array.Array;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,12 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
 
     @Override
     @FxThread
+    protected @NotNull SelectionMode getSelectionMode() {
+        return SelectionMode.SINGLE;
+    }
+
+    @Override
+    @FxThread
     protected @NotNull NodeTreeCell<SceneChangeConsumer, ?> createNodeTreeCell() {
         return new LayerNodeTreeCell(this);
     }
@@ -42,7 +49,9 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
         spatial.depthFirstTraversal(child -> {
 
             final SceneLayer layer = SceneLayer.getLayer(child);
-            if (layer == SceneLayer.NO_LAYER) return;
+            if (layer == SceneLayer.NO_LAYER) {
+                return;
+            }
 
             final TreeItem<TreeNode<?>> newLayerItem = findItemForValue(getTreeView(), layer);
             final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), child);
@@ -65,7 +74,9 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
         spatial.depthFirstTraversal(child -> {
 
             final SceneLayer layer = SceneLayer.getLayer(child);
-            if (layer == SceneLayer.NO_LAYER) return;
+            if (layer == SceneLayer.NO_LAYER) {
+                return;
+            }
 
             final TreeItem<TreeNode<?>> newLayerItem = findItemForValue(getTreeView(), layer);
             final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), child);

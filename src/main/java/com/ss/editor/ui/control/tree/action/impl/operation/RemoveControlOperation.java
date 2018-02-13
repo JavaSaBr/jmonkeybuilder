@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree.action.impl.operation;
 
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
@@ -26,18 +27,13 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
     @NotNull
     private final Spatial parent;
 
-    /**
-     * Instantiates a new Remove control operation.
-     *
-     * @param control the control
-     * @param parent  the parent
-     */
     public RemoveControlOperation(@NotNull final Control control, @NotNull final Spatial parent) {
         this.control = control;
         this.parent = parent;
     }
 
     @Override
+    @JmeThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.removeControl(control);
@@ -46,6 +42,7 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
     }
 
     @Override
+    @JmeThread
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.addControl(control);

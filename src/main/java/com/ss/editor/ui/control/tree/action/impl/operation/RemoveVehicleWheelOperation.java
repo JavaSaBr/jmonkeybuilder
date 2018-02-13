@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -61,12 +62,6 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
      */
     private final boolean isFrontWheel;
 
-    /**
-     * Instantiates a new Remove vehicle wheel operation.
-     *
-     * @param control the control
-     * @param wheel   the wheel
-     */
     public RemoveVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final VehicleWheel wheel) {
         this.control = control;
         this.connectionPoint = wheel.getLocation();
@@ -79,6 +74,7 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
     }
 
     @Override
+    @JmeThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
@@ -99,6 +95,7 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
     }
 
     @Override
+    @JmeThread
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 

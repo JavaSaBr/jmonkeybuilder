@@ -74,8 +74,9 @@ import java.util.function.Function;
 public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends Advanced3DEditorPart<T> implements EditorTransformSupport {
 
-    public static final String LOADED_MODEL_KEY = "jMB.sceneEditor.loadedModel";
+    public static final String KEY_LOADED_MODEL = "jMB.sceneEditor.loadedModel";
     public static final String KEY_IGNORE_RAY_CAST = "jMB.sceneEditor.ignoreRayCast";
+    public static final String KEY_MODEL_NODE = "jMB.sceneEditor.modelNode";
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -356,7 +357,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
         this.cachedPresentableObjects = DictionaryFactory.newObjectDictionary();
         this.modelNode = new Node("TreeNode");
-        this.modelNode.setUserData(EditorTransformSupport.class.getName(), true);
+        this.modelNode.setUserData(KEY_MODEL_NODE, true);
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();
         this.toolNode = new Node("ToolNode");
@@ -573,7 +574,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         moveTool.getChild("move_z").setMaterial(greenMaterial);
         moveTool.getChild("collision_move_z").setMaterial(greenMaterial);
         moveTool.getChild("collision_move_z").setCullHint(Spatial.CullHint.Always);
-        moveTool.scale(0.1f);
+        moveTool.scale(0.2f);
         moveTool.addControl(new MoveToolControl(this));
 
         rotateTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_rotate.j3o");
@@ -586,7 +587,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         rotateTool.getChild("rot_z").setMaterial(greenMaterial);
         rotateTool.getChild("collision_rot_z").setMaterial(greenMaterial);
         rotateTool.getChild("collision_rot_z").setCullHint(Spatial.CullHint.Always);
-        rotateTool.scale(0.1f);
+        rotateTool.scale(0.2f);
         rotateTool.addControl(new RotationToolControl(this));
 
         scaleTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_scale.j3o");
@@ -599,7 +600,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         scaleTool.getChild("scale_z").setMaterial(greenMaterial);
         scaleTool.getChild("collision_scale_z").setMaterial(greenMaterial);
         scaleTool.getChild("collision_scale_z").setCullHint(Spatial.CullHint.Always);
-        scaleTool.scale(0.1f);
+        scaleTool.scale(0.2f);
         scaleTool.addControl(new ScaleToolControl(this));
     }
 
@@ -778,6 +779,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
+     * Set true of we have active transformation.
+     *
      * @param activeTransform true of we have active transformation.
      */
     @FromAnyThread
@@ -786,6 +789,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
+     * Return true of we have active transformation.
+     *
      * @return true of we have active transformation.
      */
     @FromAnyThread
@@ -834,7 +839,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         final Array<Spatial> selected = getSelected();
         selected.forEach(this, (spatial, state) -> {
-            if (spatial == null) return;
 
             if (spatial instanceof EditorLightNode) {
                 spatial = ((EditorLightNode) spatial).getModel();
@@ -842,6 +846,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
                 spatial = ((EditorAudioNode) spatial).getModel();
             } else if (spatial instanceof EditorPresentableNode) {
                 spatial = ((EditorPresentableNode) spatial).getModel();
+            }
+
+            if (spatial == null) {
+                return;
             }
 
             state.updateTransformNode(spatial.getWorldTransform());
@@ -1464,7 +1472,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
                 return parent;
             }
 
-            parent = NodeUtils.findParent(spatial, p -> Boolean.TRUE.equals(p.getUserData(LOADED_MODEL_KEY)));
+            parent = NodeUtils.findParent(spatial, p -> Boolean.TRUE.equals(p.getUserData(KEY_LOADED_MODEL)));
             if (parent != null) {
                 return parent;
             }

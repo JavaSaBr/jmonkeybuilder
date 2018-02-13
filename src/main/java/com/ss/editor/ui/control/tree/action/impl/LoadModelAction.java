@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
@@ -93,7 +93,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
-        loadedModel.setUserData(LOADED_MODEL_KEY, true);
+        loadedModel.setUserData(KEY_LOADED_MODEL, true);
 
         if (defaultLayer != null) {
             SceneLayer.setLayer(defaultLayer, loadedModel);

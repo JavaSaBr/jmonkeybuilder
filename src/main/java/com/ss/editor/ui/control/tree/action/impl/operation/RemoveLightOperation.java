@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.tree.action.impl.operation;
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
@@ -27,18 +28,13 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     @NotNull
     private final Node parent;
 
-    /**
-     * Instantiates a new Remove light operation.
-     *
-     * @param light  the light
-     * @param parent the parent
-     */
     public RemoveLightOperation(@NotNull final Light light, @NotNull final Node parent) {
         this.light = light;
         this.parent = parent;
     }
 
     @Override
+    @JmeThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.removeLight(light);
@@ -47,6 +43,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     }
 
     @Override
+    @JmeThread
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.addLight(light);

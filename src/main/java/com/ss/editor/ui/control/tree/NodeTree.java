@@ -101,10 +101,20 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         treeView.prefWidthProperty().bind(widthProperty());
 
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
-        selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+        selectionModel.setSelectionMode(getSelectionMode());
         selectionModel.selectedItemProperty().addListener(this::updateSelection);
 
         FXUtils.addToPane(treeView, this);
+    }
+
+    /**
+     * Get the selection mode.
+     *
+     * @return the selection mode.
+     */
+    @FxThread
+    protected @NotNull SelectionMode getSelectionMode() {
+        return SelectionMode.MULTIPLE;
     }
 
     /**
@@ -467,9 +477,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Notify about adding the element.
      *
-     * @param parent the parent
-     * @param child  the child
-     * @param index  the index
+     * @param parent the parent.
+     * @param child  the child.
+     * @param index  the index.
      */
     @FxThread
     public void notifyAdded(@Nullable final Object parent, @Nullable final Object child, final int index) {
@@ -480,7 +490,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
         final TreeItem<TreeNode<?>> parentItem = findItemForValue(treeView, parent);
-        if (parentItem == null) {
+        if (parentItem == null || findItemForValue(parentItem, child) != null) {
             return;
         }
 

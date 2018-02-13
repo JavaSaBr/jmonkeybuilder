@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_MODEL_NODE;
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
@@ -17,7 +18,6 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.extension.scene.InvisibleObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -180,7 +180,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @FxThread
     public boolean canRemove() {
         final Node parent = getElement().getParent();
-        return parent != null && parent.getUserData(EditorTransformSupport.class.getName()) != Boolean.TRUE;
+        return parent != null && parent.getUserData(KEY_MODEL_NODE) != Boolean.TRUE;
     }
 
     /**

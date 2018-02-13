@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.terrain;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -807,7 +807,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         terrainMaterial.setBoolean("WardIso", true);
 
         final com.jme3.scene.Node terrainNode = (com.jme3.scene.Node) terrain;
-        terrainNode.setUserData(LOADED_MODEL_KEY, true);
+        terrainNode.setUserData(KEY_LOADED_MODEL, true);
         terrainNode.setMaterial(terrainMaterial);
         terrainNode.setModelBound(new BoundingBox());
         terrainNode.updateModelBound();

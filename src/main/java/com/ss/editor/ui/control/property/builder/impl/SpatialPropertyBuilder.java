@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -262,7 +262,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
     @FxThread
     private boolean isNeedSkip(@NotNull final String key) {
-        return SceneLayer.KEY.equals(key) || LOADED_MODEL_KEY.equals(key);
+        return SceneLayer.KEY.equals(key) || KEY_LOADED_MODEL.equals(key);
     }
 
     @FxThread
