@@ -8,6 +8,8 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
+
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -937,6 +939,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         } finally {
             POST_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         }
+    }
+
+    @Override
+    @FromAnyThread
+    protected @NotNull AssetKey<?> getFileKey(@NotNull final String assetPath) {
+        return new ModelKey(assetPath);
     }
 
     @Override

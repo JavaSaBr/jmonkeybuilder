@@ -7,6 +7,8 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.TextureKey;
@@ -130,6 +132,12 @@ public class MaterialFileEditor extends
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(content);
         }
+    }
+
+    @Override
+    @FromAnyThread
+    protected @NotNull AssetKey<?> getFileKey(@NotNull final String assetPath) {
+        return new MaterialKey(assetPath);
     }
 
     @Override
