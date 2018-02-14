@@ -1,9 +1,10 @@
 package com.ss.editor.util;
 
+import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
+import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.HullCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
@@ -21,9 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
-
-import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
-import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
 
 /**
  * The utility class to work with controls.
@@ -108,9 +106,12 @@ public class ControlUtils {
             final Mesh mesh = geom.getMesh();
 
             if (mesh instanceof Sphere) {
-                if (Vector3f.UNIT_XYZ.equals(currentScale)) {
-                    shape = new SphereCollisionShape(((Sphere) mesh).getRadius());
+
+                final float x = currentScale.getX();
+                if (Float.compare(x, currentScale.getY()) == 0 && Float.compare(x, currentScale.getZ()) == 0) {
+                    shape = new SphereCollisionShape(((Sphere) mesh).getRadius() * x);
                 }
+
             } else if (mesh instanceof Box) {
 
                 final Box box = (Box) mesh;
@@ -123,15 +124,11 @@ public class ControlUtils {
 
         if (shape == null) {
             if (mass > 0) {
-
                 shape = createDynamicMeshShape(spatial);
-                if (shape instanceof HullCollisionShape) {
-                    shape.setScale(currentScale);
-                }
-
             } else {
                 shape = createMeshShape(spatial);
             }
+            shape.setScale(currentScale);
         }
 
         object.setCollisionShape(shape);
