@@ -81,6 +81,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     public static final String KEY_LOADED_MODEL = "jMB.sceneEditor.loadedModel";
     public static final String KEY_IGNORE_RAY_CAST = "jMB.sceneEditor.ignoreRayCast";
     public static final String KEY_MODEL_NODE = "jMB.sceneEditor.modelNode";
+    public static final String KEY_SHAPE_CENTER = "jMB.sceneEditor.shapeCenter";
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -878,9 +879,17 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
                 return;
             }
 
-            shape.setLocalTranslation(spatial.getWorldTranslation());
+            final Vector3f position = shape.getLocalTranslation();
+            position.set(spatial.getWorldTranslation());
+
+            final Vector3f center = shape.getUserData(KEY_SHAPE_CENTER);
+
+            if (center != null) {
+                position.addLocal(center);
+            }
+
+            shape.setLocalTranslation(position);
             shape.setLocalRotation(spatial.getWorldRotation());
-            shape.setLocalScale(spatial.getWorldScale());
         });
 
         transformToolNode.detachAllChildren();
@@ -1252,18 +1261,24 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private Spatial buildBoxSelection(@NotNull final Spatial spatial) {
-        spatial.updateModelBound();
+        NodeUtils.updateWorldBound(spatial);
 
         final BoundingVolume bound = spatial.getWorldBound();
 
         if (bound instanceof BoundingBox) {
 
             final BoundingBox boundingBox = (BoundingBox) bound;
+            final Vector3f center = boundingBox.getCenter().subtract(spatial.getWorldTranslation());
 
             final Geometry geometry = WireBox.makeGeometry(boundingBox);
             geometry.setName("SelectionShape");
             geometry.setMaterial(getSelectionMaterial());
-            geometry.setLocalTranslation(spatial.getWorldTranslation());
+            geometry.setUserData(KEY_SHAPE_CENTER, center);
+
+            final Vector3f position = geometry.getLocalTranslation();
+            position.addLocal(center);
+
+            geometry.setLocalTranslation(position);
 
             return geometry;
 

@@ -23,6 +23,7 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -32,6 +33,7 @@ import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -41,6 +43,19 @@ import java.util.function.Supplier;
  */
 public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
         Advanced3DFileEditorWithSplitRightTool<T, S> {
+
+    private static class MaterialSettingsNodeTree<C extends ChangeConsumer> extends NodeTree<C> {
+
+        public MaterialSettingsNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer) {
+            super(selectionHandler, consumer);
+        }
+
+        @Override
+        @FxThread
+        protected @NotNull SelectionMode getSelectionMode() {
+            return SelectionMode.SINGLE;
+        }
+    }
 
     /**
      * The default state of editor light.
@@ -141,7 +156,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
-        settingsTree = new NodeTree<>(this::selectedFromTree, getChangeConsumer());
+        settingsTree = new MaterialSettingsNodeTree<>(this::selectedFromTree, getChangeConsumer());
         propertyEditor = new PropertyEditor<>(getChangeConsumer());
         propertyEditor.prefHeightProperty().bind(root.heightProperty());
 
@@ -177,12 +192,14 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     }
 
     /**
-     * Handle selected object from tree.
+     * Handle selected objects from tree.
      *
-     * @param object the selected object.
+     * @param objects the selected objects.
      */
     @FxThread
-    private void selectedFromTree(@Nullable final Object object) {
+    private void selectedFromTree(@NotNull final Array<Object> objects) {
+
+        final Object object = objects.first();
 
         Object parent = null;
         Object element;

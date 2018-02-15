@@ -72,7 +72,10 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     @Override
     @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
-        if(!(object instanceof Material)) return null;
+
+        if(!(object instanceof Material)) {
+            return null;
+        }
 
         final Material material = (Material) object;
         final MaterialDef definition = material.getMaterialDef();
