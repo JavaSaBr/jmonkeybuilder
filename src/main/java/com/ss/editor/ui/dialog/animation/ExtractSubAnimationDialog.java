@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.action.impl.operation.animation.AddAnimationNodeOperation;
+import com.ss.editor.model.undo.impl.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationTreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;

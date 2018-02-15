@@ -9,7 +9,7 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.model.node.layer.LayersRoot;
 import com.ss.editor.ui.control.tree.node.impl.layer.SceneLayerTreeNode;
-import com.ss.editor.ui.control.tree.action.impl.operation.scene.RemoveSceneLayerOperation;
+import com.ss.editor.model.undo.impl.scene.RemoveSceneLayerOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;

@@ -1,14 +1,17 @@
-package com.ss.editor.ui.control.tree.action.impl.operation;
+package com.ss.editor.model.undo.impl;
 
-import com.jme3.light.Light;
+import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The operation to rename light.
+ * The operation to rename a node.
+ *
+ * @author JavaSaBr
  */
-public class RenameLightOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
      * The constant PROPERTY_NAME.
@@ -31,27 +34,27 @@ public class RenameLightOperation extends AbstractEditorOperation<ModelChangeCon
      * The node.
      */
     @NotNull
-    private final Light light;
+    private final Spatial spatial;
 
-    public RenameLightOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Light light) {
+    public RenameNodeOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Spatial spatial) {
         this.oldName = oldName;
         this.newName = newName;
-        this.light = light;
+        this.spatial = spatial;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
-            light.setName(newName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(light, PROPERTY_NAME));
+            spatial.setName(newName);
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(spatial, PROPERTY_NAME));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
-            light.setName(oldName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(light, PROPERTY_NAME));
+            spatial.setName(oldName);
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(spatial, PROPERTY_NAME));
         });
     }
 }

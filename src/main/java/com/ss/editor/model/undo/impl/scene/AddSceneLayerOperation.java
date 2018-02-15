@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.action.impl.operation.scene;
+package com.ss.editor.model.undo.impl.scene;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;

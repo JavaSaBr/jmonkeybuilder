@@ -298,6 +298,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
+    public static final String MODEL_NODE_TREE_ACTION_ENABLE_ALL_CONTROLS;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -998,6 +999,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
         MODEL_NODE_TREE_ACTION_ADD_WHEEL = bundle.getString("ModelNodeTreeActionAddWheel");
         MODEL_NODE_TREE_ACTION_ADD_TERRAIN = bundle.getString("ModelNodeTreeActionAddTerrain");
+        MODEL_NODE_TREE_ACTION_ENABLE_ALL_CONTROLS = bundle.getString("ModelNodeTreeActionEnableAllControls");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

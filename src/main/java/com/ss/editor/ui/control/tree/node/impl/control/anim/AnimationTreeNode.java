@@ -11,7 +11,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.action.impl.RenameNodeAction;
 import com.ss.editor.ui.control.tree.action.impl.animation.*;
-import com.ss.editor.ui.control.tree.action.impl.operation.animation.RenameAnimationNodeOperation;
+import com.ss.editor.model.undo.impl.animation.RenameAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.util.AnimationUtils;

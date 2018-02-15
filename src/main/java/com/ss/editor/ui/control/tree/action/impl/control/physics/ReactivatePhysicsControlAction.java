@@ -17,9 +17,9 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeConsumer> {
+public class ReactivatePhysicsControlAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public ReactivatePhysicsControl(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public ReactivatePhysicsControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

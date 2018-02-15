@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.action.impl.operation.particle.emitter;
+package com.ss.editor.model.undo.impl.emitter;
 
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterShape;

@@ -1,21 +1,20 @@
-package com.ss.editor.ui.control.tree.action.impl.operation;
+package com.ss.editor.model.undo.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The operation to remove a wheel from a vehicle control.
+ * The operation to add a wheel to a vehicle control.
  *
  * @author JavaSaBr
  */
-public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
      * The vehicle control.
@@ -62,20 +61,44 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
      */
     private final boolean isFrontWheel;
 
-    public RemoveVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final VehicleWheel wheel) {
+    /**
+     * Instantiates a new Add vehicle wheel operation.
+     *
+     * @param control         the control
+     * @param connectionPoint the connection point
+     * @param direction       the direction
+     * @param axle            the axle
+     * @param restLength      the rest length
+     * @param wheelRadius     the wheel radius
+     * @param isFrontWheel    the is front wheel
+     */
+    public AddVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final Vector3f connectionPoint,
+                                    @NotNull final Vector3f direction, @NotNull final Vector3f axle,
+                                    final float restLength, final float wheelRadius, final boolean isFrontWheel) {
         this.control = control;
-        this.connectionPoint = wheel.getLocation();
-        this.direction = wheel.getDirection();
-        this.axle = wheel.getAxle();
-        this.restLength = wheel.getRestLength();
-        this.wheelRadius = wheel.getRadius();
-        this.isFrontWheel = wheel.isFrontWheel();
-        this.createdWheel = wheel;
+        this.connectionPoint = connectionPoint;
+        this.direction = direction;
+        this.axle = axle;
+        this.restLength = restLength;
+        this.wheelRadius = wheelRadius;
+        this.isFrontWheel = isFrontWheel;
     }
 
     @Override
-    @JmeThread
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+        EXECUTOR_MANAGER.addJmeTask(() -> {
+
+            final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
+                    wheelRadius, isFrontWheel);
+
+            this.createdWheel = vehicleWheel;
+
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, vehicleWheel, -1, true));
+        });
+    }
+
+    @Override
+    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             for (int i = 0, length = control.getNumWheels(); i < length; i++) {
@@ -91,20 +114,6 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
             this.createdWheel = null;
 
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, toRemove));
-        });
-    }
-
-    @Override
-    @JmeThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-
-            final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
-                    wheelRadius, isFrontWheel);
-
-            this.createdWheel = vehicleWheel;
-
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, vehicleWheel, -1, false));
         });
     }
 }

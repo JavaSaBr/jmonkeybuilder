@@ -167,9 +167,7 @@ public class JfxApplication extends Application {
     private static void configureLogger() {
 
         // disable the standard logger
-        if (!Config.DEV_DEBUG) {
-            java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
-        }
+        java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
 
         // configure our logger
         LoggerLevel.DEBUG.setEnabled(Config.DEV_DEBUG);

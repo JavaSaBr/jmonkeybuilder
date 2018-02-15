@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.action.impl.operation;
+package com.ss.editor.model.undo.impl;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
@@ -10,10 +10,11 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for removing a {@link Spatial} from the {@link Node}.
+ * The implementation of the {@link AbstractEditorOperation} to remove elements from a scene.
  *
  * @author JavaSaBr.
  */

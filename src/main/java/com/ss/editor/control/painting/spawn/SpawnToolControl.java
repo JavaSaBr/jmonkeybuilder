@@ -23,7 +23,7 @@ import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
+import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.NodeUtils;

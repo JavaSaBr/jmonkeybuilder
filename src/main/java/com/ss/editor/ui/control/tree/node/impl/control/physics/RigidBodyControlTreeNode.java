@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.control.physics.ReactivatePhysicsControl;
+import com.ss.editor.ui.control.tree.action.impl.control.physics.ReactivatePhysicsControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
@@ -58,7 +58,7 @@ public class RigidBodyControlTreeNode extends PhysicsControlTreeNode<RigidBodyCo
         final RigidBodyControl element = getElement();
 
         if (!element.isActive()) {
-            items.add(new ReactivatePhysicsControl(nodeTree, this));
+            items.add(new ReactivatePhysicsControlAction(nodeTree, this));
         }
 
         super.fillContextMenu(nodeTree, items);

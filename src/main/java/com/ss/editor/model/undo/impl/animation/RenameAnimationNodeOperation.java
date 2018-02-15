@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.action.impl.operation.animation;
+package com.ss.editor.model.undo.impl.animation;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;

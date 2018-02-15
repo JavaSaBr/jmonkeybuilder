@@ -24,6 +24,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.AddUserDataAction;
+import com.ss.editor.ui.control.tree.action.impl.EnableAllControlsAction;
 import com.ss.editor.ui.control.tree.action.impl.RemoveNodeAction;
 import com.ss.editor.ui.control.tree.action.impl.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.CreateLightControlAction;
@@ -32,12 +33,14 @@ import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateCharacter
 import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateRigidBodyControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateStaticRigidBodyControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle.CreateVehicleControlAction;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddControlOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.MoveControlOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.RenameNodeOperation;
+import com.ss.editor.model.undo.impl.AddControlOperation;
+import com.ss.editor.model.undo.impl.MoveControlOperation;
+import com.ss.editor.model.undo.impl.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
+import com.ss.editor.util.ControlUtils;
+import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -129,6 +132,12 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         if (canRemove()) {
             items.add(new RemoveNodeAction(nodeTree, this));
         }
+
+        NodeUtils.children(element)
+            .flatMap(ControlUtils::controls)
+            .filter(control -> !ControlUtils.isEnabled(control))
+            .findAny()
+            .ifPresent(c -> items.add(new EnableAllControlsAction(nodeTree, this)));
 
         super.fillContextMenu(nodeTree, items);
     }
@@ -278,7 +287,10 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @Override
     @FxThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
-        if (StringUtils.equals(getName(), newName)) return;
+
+        if (StringUtils.equals(getName(), newName)){
+            return;
+        }
 
         super.changeName(nodeTree, newName);
 
