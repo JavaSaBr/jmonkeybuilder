@@ -353,6 +353,8 @@ public class Messages {
     public static final String MODEL_PROPERTY_FALL_SPEED;
     public static final String MODEL_PROPERTY_GRAVITY;
     public static final String MODEL_PROPERTY_JUMP_SPEED;
+    public static final String MODEL_PROPERTY_JUMP_FORCE;
+    public static final String MODEL_PROPERTY_PHYSICS_DAMPING;
     public static final String MODEL_PROPERTY_MAX_SLOPE;
     public static final String MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL;
     public static final String MODEL_PROPERTY_IS_USE_VIEW_DIRECTION;
@@ -1051,6 +1053,8 @@ public class Messages {
         MODEL_PROPERTY_FALL_SPEED = bundle.getString("ModelPropertyFallSpeed");
         MODEL_PROPERTY_GRAVITY = bundle.getString("ModelPropertyGravity");
         MODEL_PROPERTY_JUMP_SPEED = bundle.getString("ModelPropertyJumpSpeed");
+        MODEL_PROPERTY_JUMP_FORCE = bundle.getString("ModelPropertyJumpForce");
+        MODEL_PROPERTY_PHYSICS_DAMPING = bundle.getString("ModelPropertyPhysicsDamping");
         MODEL_PROPERTY_MAX_SLOPE = bundle.getString("ModelPropertyMaxSlope");
         MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL = bundle.getString("ModelPropertyIsApplyPhysicsLocal");
         MODEL_PROPERTY_IS_USE_VIEW_DIRECTION = bundle.getString("ModelPropertyIsUseViewDirection");

@@ -39,7 +39,9 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                                 @NotNull final VBox container, @NotNull final C changeConsumer) {
 
         final List<EditableProperty<?, ?>> properties = getProperties(object, parent, changeConsumer);
-        if (properties == null || properties.isEmpty()) return;
+        if (properties == null || properties.isEmpty()) {
+            return;
+        }
 
         for (final EditableProperty<?, ?> description : properties) {
             buildFor(container, changeConsumer, description);
@@ -199,11 +201,12 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      */
     @FxThread
     protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
-                                  @NotNull final PropertyControl<? extends C, @NotNull EditableProperty<T, ?>, T> propertyControl) {
+                                  @NotNull final PropertyControl<? extends C, EditableProperty<T, ?>, T> propertyControl) {
 
         propertyControl.setApplyHandler(EditableProperty::setValue);
         propertyControl.setSyncHandler(EditableProperty::getValue);
         propertyControl.setEditObject(property);
+        propertyControl.setDisable(property.isReadOnly());
 
         FXUtils.addToPane(propertyControl, container);
     }

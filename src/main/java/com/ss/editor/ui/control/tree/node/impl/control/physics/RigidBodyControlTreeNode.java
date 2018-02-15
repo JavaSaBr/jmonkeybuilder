@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class RigidBodyControlTreeNode extends PhysicsObjectTreeNode<RigidBodyControl> {
+public class RigidBodyControlTreeNode extends PhysicsControlTreeNode<RigidBodyControl> {
 
     public RigidBodyControlTreeNode(@NotNull final RigidBodyControl element, final long objectId) {
         super(element, objectId);

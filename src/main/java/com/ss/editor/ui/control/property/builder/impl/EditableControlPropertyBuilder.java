@@ -20,11 +20,6 @@ public class EditableControlPropertyBuilder extends EditableModelObjectPropertyB
     @NotNull
     private static final EditableControlPropertyBuilder INSTANCE = new EditableControlPropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
     @FromAnyThread
     public static @NotNull EditableControlPropertyBuilder getInstance() {
         return INSTANCE;

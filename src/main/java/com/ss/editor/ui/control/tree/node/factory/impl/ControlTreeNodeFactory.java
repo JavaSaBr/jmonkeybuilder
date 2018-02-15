@@ -2,10 +2,7 @@ package com.ss.editor.ui.control.tree.node.factory.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.SkeletonControl;
-import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.KinematicRagdollControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.control.VehicleControl;
+import com.jme3.bullet.control.*;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LightControl;
@@ -14,7 +11,7 @@ import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.LightControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.SkeletonControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.motion.MotionEventTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.control.physics.CharacterControlTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.control.physics.BetterCharacterControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.physics.RagdollControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.physics.RigidBodyControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.physics.vehicle.VehicleControlTreeNode;
@@ -41,8 +38,8 @@ public class ControlTreeNodeFactory implements TreeNodeFactory {
             return unsafeCast(new VehicleControlTreeNode((VehicleControl) element, objectId));
         } else if (element instanceof SkeletonControl) {
             return unsafeCast(new SkeletonControlTreeNode((SkeletonControl) element, objectId));
-        } else if (element instanceof CharacterControl) {
-            return unsafeCast(new CharacterControlTreeNode((CharacterControl) element, objectId));
+        } else if (element instanceof BetterCharacterControl) {
+            return unsafeCast(new BetterCharacterControlTreeNode((BetterCharacterControl) element, objectId));
         } else if (element instanceof RigidBodyControl) {
             return unsafeCast(new RigidBodyControlTreeNode((RigidBodyControl) element, objectId));
         }  else if (element instanceof LightControl) {
