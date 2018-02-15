@@ -189,8 +189,6 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
             final RigidBodyControl control = (RigidBodyControl) object;
 
-            properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_ENABLED, control,
-                    RigidBodyControl::isEnabled, RigidBodyControl::setEnabled));
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_KINEMATIC_SPATIAL, control,
                     RigidBodyControl::isKinematicSpatial, RigidBodyControl::setKinematicSpatial));
 
