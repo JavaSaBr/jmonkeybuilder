@@ -388,23 +388,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @BackgroundThread
     protected void doSave(@NotNull final Path toStore) throws IOException {
-
-        final Path assetFile = notNull(EditorUtil.getAssetFile(getEditFile()));
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
-
-        EditorUtil.getAssetManager()
-            .deleteFromCache(getFileKey(assetPath));
-    }
-
-    /**
-     * Get an asset key to remove cache of this file.
-     *
-     * @param assetPath the asset path.
-     * @return the asset key.
-     */
-    @FromAnyThread
-    protected @NotNull AssetKey<?> getFileKey(@NotNull final String assetPath) {
-        return new ModelKey(assetPath);
     }
 
     /**

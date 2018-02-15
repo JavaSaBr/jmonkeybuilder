@@ -942,12 +942,6 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
-    @FromAnyThread
-    protected @NotNull AssetKey<?> getFileKey(@NotNull final String assetPath) {
-        return new ModelKey(assetPath);
-    }
-
-    @Override
     @FxThread
     protected boolean needToolbar() {
         return true;

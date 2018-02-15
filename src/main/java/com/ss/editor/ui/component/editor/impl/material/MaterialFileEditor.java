@@ -135,12 +135,6 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    @FromAnyThread
-    protected @NotNull AssetKey<?> getFileKey(@NotNull final String assetPath) {
-        return new MaterialKey(assetPath);
-    }
-
-    @Override
     @FxThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();

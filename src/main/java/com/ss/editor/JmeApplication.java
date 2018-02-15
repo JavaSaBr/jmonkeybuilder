@@ -9,6 +9,7 @@ import static java.nio.file.Files.createDirectories;
 import com.jme3.app.DebugKeysAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
+import com.jme3.asset.plugins.ClasspathLocator;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
 import com.jme3.bounding.BoundingSphere;
@@ -276,8 +277,11 @@ public class JmeApplication extends JmeToJFXApplication {
         LOGGER.debug(this, "OS: " + system.getDistribution());
 
         final AssetManager assetManager = getAssetManager();
+        assetManager.unregisterLocator("", ClasspathLocator.class);
+        assetManager.unregisterLocator("/", ClasspathLocator.class);
         assetManager.registerLocator("", FolderAssetLocator.class);
         assetManager.registerLocator("", FileSystemAssetLocator.class);
+        assetManager.registerLocator("", ClasspathLocator.class);
         assetManager.addAssetEventListener(EditorConfig.getInstance());
 
         final AudioRenderer audioRenderer = getAudioRenderer();
