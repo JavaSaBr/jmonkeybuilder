@@ -40,13 +40,13 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * The list of all definitions.
      */
     @NotNull
-    private final Array<@NotNull PropertyDefinition> definitions;
+    private final Array<PropertyDefinition> definitions;
 
     /**
      * The handler to handle result properties.
      */
     @NotNull
-    private final Consumer<@NotNull VarTable> handler;
+    private final Consumer<VarTable> handler;
 
     /**
      * THe callback to call re-validating.
@@ -58,7 +58,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * The validator of all properties.
      */
     @NotNull
-    private Predicate<@NotNull VarTable> validator;
+    private Predicate<VarTable> validator;
 
     /**
      * The root content container.
@@ -66,14 +66,14 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private VBox root;
 
-    public GenericFactoryDialog(@NotNull final Array<@NotNull PropertyDefinition> definitions,
-                                @NotNull final Consumer<@NotNull VarTable> handler) {
+    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
+                                @NotNull final Consumer<VarTable> handler) {
         this(definitions, handler, varTable -> true);
     }
 
-    public GenericFactoryDialog(@NotNull final Array<@NotNull PropertyDefinition> definitions,
-                                @NotNull final Consumer<@NotNull VarTable> handler,
-                                @NotNull final Predicate<@NotNull VarTable> validator) {
+    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
+                                @NotNull final Consumer<VarTable> handler,
+                                @NotNull final Predicate<VarTable> validator) {
         this.definitions = definitions;
         this.handler = handler;
         this.validator = validator;
@@ -84,7 +84,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets the title.
+     * Set the title.
      *
      * @param title the new title.
      */
@@ -94,7 +94,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets the text to the OK button.
+     * Set the text to the OK button.
      *
      * @param text the new text.
      */
@@ -104,7 +104,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets the text to the Close button.
+     * Set the text to the close button.
      *
      * @param text the new text.
      */
@@ -127,7 +127,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Gets the root to place controls.
+     * Get the root to place controls.
      *
      * @return the root.
      */
@@ -159,6 +159,8 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the list of all definitions.
+     * 
      * @return the list of all definitions.
      */
     @FxThread

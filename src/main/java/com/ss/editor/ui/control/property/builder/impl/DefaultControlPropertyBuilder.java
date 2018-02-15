@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.property.builder.impl;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import com.jme3.animation.Animation;
-import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.PhysicsControl;
@@ -12,9 +11,6 @@ import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.cinematic.events.AbstractCinematicEvent;
 import com.jme3.cinematic.events.MotionEvent;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LightControl;
@@ -24,9 +20,6 @@ import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.control.property.impl.*;
-import com.ss.rlib.ui.util.FXUtils;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +71,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         final List<EditableProperty<?, ?>> properties = new ArrayList<>();
 
-        if(object instanceof VehicleWheel) {
+        if (object instanceof VehicleWheel) {
 
             final VehicleWheel control = (VehicleWheel) object;
 
@@ -140,7 +133,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
                 Animation::getLength));
         }
 
-        if(object instanceof MotionEvent) {
+        if (object instanceof MotionEvent) {
 
             final MotionEvent control = (MotionEvent) object;
 
@@ -173,7 +166,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             properties.add(new SimpleProperty<>(LIGHT_FROM_SCENE, Messages.MODEL_PROPERTY_LIGHT, control,
                     LightControl::getLight, LightControl::setLight));
 
-        } else if(object instanceof BetterCharacterControl) {
+        } else if (object instanceof BetterCharacterControl) {
 
             final BetterCharacterControl control = (BetterCharacterControl) object;
 
@@ -201,14 +194,14 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_KINEMATIC_SPATIAL, control,
                     RigidBodyControl::isKinematicSpatial, RigidBodyControl::setKinematicSpatial));
 
-        } else if(object instanceof SkeletonControl) {
+        } else if (object instanceof SkeletonControl) {
 
             final SkeletonControl control = (SkeletonControl) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED, control,
                 SkeletonControl::isHardwareSkinningPreferred, SkeletonControl::setHardwareSkinningPreferred));
 
-        } else if(object instanceof VehicleControl) {
+        } else if (object instanceof VehicleControl) {
 
             final VehicleControl control = (VehicleControl) object;
 
