@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.node.impl.control.physics.PhysicsObjectTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.control.physics.PhysicsControlTreeNode;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle.CreateVehicleWheelAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import javafx.collections.ObservableList;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class VehicleControlTreeNode extends PhysicsObjectTreeNode<VehicleControl> {
+public class VehicleControlTreeNode extends PhysicsControlTreeNode<VehicleControl> {
 
     public VehicleControlTreeNode(@NotNull final VehicleControl element, final long objectId) {
         super(element, objectId);

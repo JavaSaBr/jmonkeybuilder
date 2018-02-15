@@ -1,14 +1,14 @@
 package com.ss.editor.ui.control.tree.action.impl.control.physics;
 
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.action.impl.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +41,6 @@ public class CreateCharacterControlAction extends AbstractCreateControlAction {
     @Override
     @FxThread
     protected @NotNull Control createControl(@NotNull final Spatial parent) {
-        return new CharacterControl(new CapsuleCollisionShape(0.6f, 1.8f), 0.03f);
+        return new BetterCharacterControl(1F, 1F, 1F);
     }
 }

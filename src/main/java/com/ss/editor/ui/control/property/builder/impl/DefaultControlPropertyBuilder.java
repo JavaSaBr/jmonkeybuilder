@@ -1,11 +1,10 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.editor.extension.property.EditablePropertyType.ENUM;
-import static com.ss.editor.extension.property.EditablePropertyType.LIGHT_FROM_SCENE;
+import static com.ss.editor.extension.property.EditablePropertyType.*;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
-import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
@@ -23,7 +22,6 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.property.impl.WheelElementModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.*;
 import com.ss.rlib.ui.util.FXUtils;
@@ -50,11 +48,6 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
     @NotNull
     private static final LoopMode[] LOOP_MODES = LoopMode.values();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
     @FxThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -77,7 +70,9 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             build((Animation) object, container, changeConsumer);
         }
 
-        if (!(object instanceof Control)) return;
+        if (!(object instanceof Control)) {
+            return;
+        }
 
         if (object instanceof AbstractControl) {
             build((AbstractControl) object, container, changeConsumer);
@@ -87,8 +82,6 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         if (object instanceof SkeletonControl) {
             build((SkeletonControl) object, container, changeConsumer);
-        } else if (object instanceof CharacterControl) {
-            build((CharacterControl) object, container, changeConsumer);
         } else if (object instanceof RigidBodyControl) {
             build((RigidBodyControl) object, container, changeConsumer);
         } else if (object instanceof VehicleControl) {
@@ -118,6 +111,29 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
                     LightControl::getLight, LightControl::setLight));
 
             return result;
+
+        } else if(object instanceof BetterCharacterControl) {
+
+            final BetterCharacterControl control = (BetterCharacterControl) object;
+
+            final List<EditableProperty<?, ?>> result = new ArrayList<>(2);
+            result.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_GRAVITY, control,
+                    BetterCharacterControl::getGravity, BetterCharacterControl::setGravity));
+            result.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_VELOCITY, control,
+                    BetterCharacterControl::getVelocity));
+            result.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_GRAVITY, control,
+                    BetterCharacterControl::getViewDirection, BetterCharacterControl::setViewDirection));
+            result.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_WALK_DIRECTION, control,
+                    BetterCharacterControl::getWalkDirection, BetterCharacterControl::setWalkDirection));
+            result.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_JUMP_FORCE, control,
+                    BetterCharacterControl::getJumpForce, BetterCharacterControl::setJumpForce));
+            result.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_WALK_DIRECTION, control,
+                    BetterCharacterControl::getDuckedFactor, BetterCharacterControl::setDuckedFactor));
+            result.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_PHYSICS_DAMPING, control,
+                    BetterCharacterControl::getPhysicsDamping, BetterCharacterControl::setPhysicsDamping));
+
+            return result;
+
         }
 
         return super.getProperties(object);
@@ -219,99 +235,6 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         FXUtils.addToPane(directionControl, container);
         FXUtils.addToPane(rotationControl, container);
-    }
-
-    @FxThread
-    private void build(@NotNull final CharacterControl control, @NotNull final VBox container,
-                       @NotNull final ModelChangeConsumer changeConsumer) {
-
-        final Vector3f viewDirection = control.getViewDirection();
-        final Vector3f walkDirection = control.getWalkDirection();
-
-        final float fallSpeed = control.getFallSpeed();
-        final float gravity = control.getGravity();
-        final float jumpSpeed = control.getJumpSpeed();
-        final float maxSlope = control.getMaxSlope();
-
-        final boolean applyPhysicsLocal = control.isApplyPhysicsLocal();
-        final boolean useViewDirection = control.isUseViewDirection();
-        final boolean enabled = control.isEnabled();
-
-        final BooleanPropertyControl<ModelChangeConsumer, CharacterControl> enabledControl =
-                new BooleanPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
-
-        enabledControl.setApplyHandler(CharacterControl::setEnabled);
-        enabledControl.setSyncHandler(CharacterControl::isEnabled);
-        enabledControl.setEditObject(control);
-
-        final Vector3FPropertyControl<ModelChangeConsumer, CharacterControl> viewDirectionControl =
-                new Vector3FPropertyControl<>(viewDirection, Messages.MODEL_PROPERTY_VIEW_DIRECTION, changeConsumer);
-
-        viewDirectionControl.setApplyHandler(CharacterControl::setViewDirection);
-        viewDirectionControl.setSyncHandler(CharacterControl::getViewDirection);
-        viewDirectionControl.setEditObject(control);
-
-        final Vector3FPropertyControl<ModelChangeConsumer, CharacterControl> walkDirectionControl =
-                new Vector3FPropertyControl<>(walkDirection, Messages.MODEL_PROPERTY_WALK_DIRECTION, changeConsumer);
-
-        walkDirectionControl.setApplyHandler(CharacterControl::setWalkDirection);
-        walkDirectionControl.setSyncHandler(CharacterControl::getWalkDirection);
-        walkDirectionControl.setEditObject(control);
-
-        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> fallSpeedControl =
-                new FloatPropertyControl<>(fallSpeed, Messages.MODEL_PROPERTY_FALL_SPEED, changeConsumer);
-
-        fallSpeedControl.setApplyHandler(CharacterControl::setFallSpeed);
-        fallSpeedControl.setSyncHandler(CharacterControl::getFallSpeed);
-        fallSpeedControl.setEditObject(control);
-
-        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> gravityControl =
-                new FloatPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
-
-        gravityControl.setApplyHandler(CharacterControl::setGravity);
-        gravityControl.setSyncHandler(CharacterControl::getGravity);
-        gravityControl.setEditObject(control);
-
-        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> jumpSpeedControl =
-                new FloatPropertyControl<>(jumpSpeed, Messages.MODEL_PROPERTY_JUMP_SPEED, changeConsumer);
-
-        jumpSpeedControl.setApplyHandler(CharacterControl::setJumpSpeed);
-        jumpSpeedControl.setSyncHandler(CharacterControl::getJumpSpeed);
-        jumpSpeedControl.setEditObject(control);
-
-        final FloatPropertyControl<ModelChangeConsumer, CharacterControl> maxSlopeControl =
-                new FloatPropertyControl<>(maxSlope, Messages.MODEL_PROPERTY_MAX_SLOPE, changeConsumer);
-
-        maxSlopeControl.setApplyHandler(CharacterControl::setMaxSlope);
-        maxSlopeControl.setSyncHandler(CharacterControl::getMaxSlope);
-        maxSlopeControl.setEditObject(control);
-
-        final BooleanPropertyControl<ModelChangeConsumer, CharacterControl> applyPhysicsLocalControl =
-                new BooleanPropertyControl<>(applyPhysicsLocal, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, changeConsumer);
-
-        applyPhysicsLocalControl.setApplyHandler(CharacterControl::setApplyPhysicsLocal);
-        applyPhysicsLocalControl.setSyncHandler(CharacterControl::isApplyPhysicsLocal);
-        applyPhysicsLocalControl.setEditObject(control);
-
-        final BooleanPropertyControl<ModelChangeConsumer, CharacterControl> useViewDirectionControl =
-                new BooleanPropertyControl<>(useViewDirection, Messages.MODEL_PROPERTY_IS_USE_VIEW_DIRECTION, changeConsumer);
-
-        useViewDirectionControl.setApplyHandler(CharacterControl::setUseViewDirection);
-        useViewDirectionControl.setSyncHandler(CharacterControl::isUseViewDirection);
-        useViewDirectionControl.setEditObject(control);
-
-        FXUtils.addToPane(enabledControl, container);
-        FXUtils.addToPane(applyPhysicsLocalControl, container);
-        FXUtils.addToPane(useViewDirectionControl, container);
-        FXUtils.addToPane(fallSpeedControl, container);
-        FXUtils.addToPane(gravityControl, container);
-        FXUtils.addToPane(jumpSpeedControl, container);
-        FXUtils.addToPane(maxSlopeControl, container);
-
-        buildSplitLine(container);
-
-        FXUtils.addToPane(viewDirectionControl, container);
-        FXUtils.addToPane(walkDirectionControl, container);
     }
 
     @FxThread

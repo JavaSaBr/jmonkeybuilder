@@ -6,6 +6,8 @@ import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.util.Utils.run;
+import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.newOutputStream;
 import com.jme3.renderer.Renderer;
 import com.jme3.system.JmeContext;
@@ -40,7 +42,9 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.svg.SvgImageLoaderFactory;
 import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.logging.impl.FolderFileListener;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.util.ArrayUtils;
 import com.ss.rlib.util.array.Array;
@@ -62,8 +66,11 @@ import org.lwjgl.system.Configuration;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.logging.Level;
 
 /**
  * The starter of the JavaFX application.
@@ -96,6 +103,7 @@ public class JfxApplication extends Application {
      * @throws IOException the io exception
      */
     public static void main(final String[] args) {
+        configureLogger();
 
         // need to disable to work on macos
         Configuration.GLFW_CHECK_THREAD0.set(false);
@@ -153,6 +161,31 @@ public class JfxApplication extends Application {
 
         new EditorThread(new ThreadGroup("LWJGL"),
                 () -> startJmeApplication(application), "LWJGL Render").start();
+    }
+
+    @FxThread
+    private static void configureLogger() {
+
+        // disable the standard logger
+        if (!Config.DEV_DEBUG) {
+            java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
+        }
+
+        // configure our logger
+        LoggerLevel.DEBUG.setEnabled(Config.DEV_DEBUG);
+        LoggerLevel.INFO.setEnabled(true);
+        LoggerLevel.ERROR.setEnabled(true);
+        LoggerLevel.WARNING.setEnabled(true);
+
+        final Path logFolder = Config.getFolderForLog();
+
+        if (!Files.exists(logFolder)) {
+            run(() -> createDirectories(logFolder));
+        }
+
+        if (!LoggerLevel.DEBUG.isEnabled()) {
+            LoggerManager.addListener(new FolderFileListener(logFolder));
+        }
     }
 
     /**

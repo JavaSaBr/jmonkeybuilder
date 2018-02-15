@@ -26,11 +26,6 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
     @NotNull
     private static final PropertyBuilder INSTANCE = new CollisionShapePropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -49,7 +44,9 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
             build((ChildCollisionShape) object, container, changeConsumer);
         }
 
-        if (!(object instanceof CollisionShape)) return;
+        if (!(object instanceof CollisionShape)) {
+            return;
+        }
 
         if (object instanceof BoxCollisionShape) {
             build((BoxCollisionShape) object, container, changeConsumer);
