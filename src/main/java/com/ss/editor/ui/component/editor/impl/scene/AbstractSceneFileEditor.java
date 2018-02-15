@@ -1324,31 +1324,6 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             final Vector3f result = local.nextVector(scenePoint)
                     .subtractLocal(parent.getWorldTranslation());
 
-            final boolean isPhysics = NodeUtils.children(loadedModel)
-                .flatMap(ControlUtils::controls)
-                .anyMatch(control -> control instanceof PhysicsControl);
-
-            if (isPhysics) {
-
-                loadedModel.updateModelBound();
-
-                final BoundingVolume worldBound = loadedModel.getWorldBound();
-
-                float height = 0;
-
-                if (worldBound instanceof BoundingBox) {
-                    height = ((BoundingBox) worldBound).getYExtent();
-                } else if (worldBound instanceof BoundingSphere) {
-                    height = ((BoundingSphere) worldBound).getRadius();
-                }
-
-                final Quaternion localRotation = parent.getLocalRotation();
-                final Vector3f up = GeomUtils.getUp(localRotation, local.nextVector());
-                up.multLocal(height);
-
-                result.addLocal(up);
-            }
-
             assetLinkNode.setLocalTranslation(result);
 
             execute(new AddChildOperation(assetLinkNode, parent, false));
