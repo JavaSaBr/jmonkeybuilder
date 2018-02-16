@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 /**
  * The implementation of the {@link PropertyControl} to edit the {@link AudioData}.
  *
+ * @param <C> the change consumer's type.
  * @author JavaSaBr
  */
 public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyControl<C, AudioNode, AudioKey> {
@@ -148,14 +149,18 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     protected void processOpen() {
 
         final AudioKey element = getPropertyValue();
-        if (element == null) return;
+        if (element == null) {
+            return;
+        }
 
         final String assetPath = element.getName();
         if (StringUtils.isEmpty(assetPath)) return;
 
         final Path assetFile = Paths.get(assetPath);
         final Path realFile = notNull(getRealFile(assetFile));
-        if (!Files.exists(realFile)) return;
+        if (!Files.exists(realFile)) {
+            return;
+        }
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
         event.setFile(realFile);

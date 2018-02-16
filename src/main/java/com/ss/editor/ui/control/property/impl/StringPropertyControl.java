@@ -76,7 +76,10 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
      */
     @FxThread
     private void updateValue(@NotNull final KeyEvent event) {
-        if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) return;
+
+        if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) {
+            return;
+        }
 
         final TextField valueField = getValueField();
 

@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit {@link Quaternion} values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <T> the edited object's type.
  * @author JavaSaBr
  */
 public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Quaternion> {
@@ -152,7 +152,10 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, T> extends Prop
      */
     @FxThread
     private void updateRotation(@Nullable final KeyEvent event) {
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+
+        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
+            return;
+        }
 
         final Quaternion oldValue = notNull(getPropertyValue());
 

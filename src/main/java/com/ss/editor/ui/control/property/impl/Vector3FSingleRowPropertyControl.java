@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit {@link com.jme3.math.Vector3f} values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <T> the edited object's type.
  * @author JavaSaBr.
  */
 public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector3f> {
@@ -217,7 +217,10 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      */
     @FxThread
     private void updateVector(@Nullable final KeyEvent event) {
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+
+        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
+            return;
+        }
 
         final FloatTextField xField = getXField();
         final float x = xField.getValue();

@@ -39,9 +39,9 @@ public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyC
     }
 
     /**
-     * Process add.
+     * Process of adding the new element.
      *
-     * @param newElement the new element
+     * @param newElement the new element.
      */
     @FxThread
     protected void processAdd(@NotNull final T newElement) {

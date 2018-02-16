@@ -33,9 +33,9 @@ import java.util.function.Predicate;
 /**
  * The base implementation of the property control.
  *
- * @param <C> the type of a change consumer
- * @param <D> the type of an editing object
- * @param <T> the type of an editing property
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implements UpdatableControl {
@@ -171,10 +171,11 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @return the six object consumer
      */
     @FromAnyThread
-    public @NotNull SixObjectConsumer<@NotNull C, @NotNull D, @NotNull String, @Nullable T, @Nullable T, @NotNull BiConsumer<D, T>> newChangeHandler() {
+    public @NotNull SixObjectConsumer<C, D, String, T,  T, BiConsumer<D, T>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
-            final PropertyOperation<ChangeConsumer, D, T> operation = new PropertyOperation<>(object, propName, newValue, oldValue);
+            final PropertyOperation<ChangeConsumer, D, T> operation =
+                new PropertyOperation<>(object, propName, newValue, oldValue);
             operation.setApplyHandler(handler);
 
             changeConsumer.execute(operation);
@@ -200,7 +201,11 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     @FxThread
     public void setEditObject(@NotNull final D editObject, final boolean needReload) {
         setEditObject(editObject);
-        if (!needReload) return;
+
+        if (!needReload) {
+            return;
+        }
+
         setIgnoreListener(true);
         try {
             reload();

@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link Vector2FPropertyControl} to edit min-max value range.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <T> the edited object's type.
  * @author JavaSaBr
  */
 public class MinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial> extends Vector2FPropertyControl<C, T> {

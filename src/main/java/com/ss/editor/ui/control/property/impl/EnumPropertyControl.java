@@ -83,7 +83,10 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
      */
     @FxThread
     private void change() {
-        if (isIgnoreListener()) return;
+
+        if (isIgnoreListener()) {
+            return;
+        }
 
         final ComboBox<E> enumComboBox = getEnumComboBox();
         final SingleSelectionModel<E> selectionModel = enumComboBox.getSelectionModel();
@@ -95,9 +98,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     @Override
     @FxThread
     protected void reload() {
-
         final E element = getPropertyValue();
-
         final ComboBox<E> enumComboBox = getEnumComboBox();
         final SingleSelectionModel<E> selectionModel = enumComboBox.getSelectionModel();
         selectionModel.select(element);
