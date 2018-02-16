@@ -3,18 +3,11 @@ package com.ss.editor.part3d.editor.impl.scene.handler;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
-
-import static com.ss.rlib.util.array.ArrayCollectors.toArray;
 
 /**
  * The handler to updated positions for physics controls on spatial transformations.
@@ -36,6 +29,7 @@ public class PhysicsControlTransformationHandler implements Consumer<Spatial> {
                     final boolean kinematicSpatial = bodyControl.isKinematicSpatial();
                     bodyControl.setKinematic(true);
                     bodyControl.setKinematicSpatial(true);
+                    bodyControl.clearForces();
                     bodyControl.update(0);
                     bodyControl.setKinematic(kinematic);
                     bodyControl.setKinematicSpatial(kinematicSpatial);

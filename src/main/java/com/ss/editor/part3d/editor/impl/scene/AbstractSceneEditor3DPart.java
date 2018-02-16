@@ -1569,7 +1569,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Get a position on a scene for a cursor position on a screen.
+     * Get a position on a scene for a cursor position.
      *
      * @param screenX the x position on screen.
      * @param screenY the y position on screen.
@@ -1597,6 +1597,20 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         } else {
             return modelPoint;
         }
+    }
+
+    /**
+     * Get a normal on a scene for a cursor position.
+     *
+     * @param screenX the x position on screen.
+     * @param screenY the y position on screen.
+     * @return the normal on the current scene or null.
+     */
+    @JmeThread
+    public @Nullable Vector3f getSceneNormalByScreenPos(final float screenX, final float screenY) {
+        final Camera camera = getCamera();
+        final M currentModel = notNull(getCurrentModel());
+        return GeomUtils.getContactNormalFromScreenPos(currentModel, camera, screenX, screenY);
     }
 
     /**
@@ -1896,7 +1910,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             }
         });
 
+        PRE_TRANSFORM_HANDLERS.forEach(model, Consumer::accept);
         attachModel(model, modelNode);
+        POST_TRANSFORM_HANDLERS.forEach(model, Consumer::accept);
         setCurrentModel(model);
     }
 

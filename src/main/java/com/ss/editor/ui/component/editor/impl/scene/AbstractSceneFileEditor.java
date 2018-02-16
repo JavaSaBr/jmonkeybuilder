@@ -8,17 +8,21 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.audio.AudioNode;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingSphere;
+import com.jme3.bounding.BoundingVolume;
+import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.AssetLinkNode;
@@ -44,6 +48,7 @@ import com.ss.editor.model.scene.EditorPresentableNode;
 import com.ss.editor.model.scene.WrapperNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.part3d.editor.impl.Stats3DPart;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.plugin.api.RenderFilterExtension;
@@ -58,12 +63,12 @@ import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.model.ModelPropertyEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.action.impl.multi.RemoveElementsAction;
-import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.*;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -1317,6 +1322,36 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                     camera.getHeight() - (float) areaPoint.getY());
             final Vector3f result = local.nextVector(scenePoint)
                     .subtractLocal(parent.getWorldTranslation());
+            
+            final boolean isPhysics = NodeUtils.children(loadedModel)
+                    .flatMap(ControlUtils::controls)
+                    .anyMatch(PhysicsControl.class::isInstance);
+
+            if (isPhysics) {
+
+                NodeUtils.updateWorldBound(loadedModel);
+
+                final BoundingVolume worldBound = loadedModel.getWorldBound();
+
+                float height = 0;
+
+                if (worldBound instanceof BoundingBox) {
+                    height = ((BoundingBox) worldBound).getYExtent();
+                    height = Math.min(((BoundingBox) worldBound).getXExtent(), height);
+                    height = Math.min(((BoundingBox) worldBound).getZExtent(), height);
+                } else if (worldBound instanceof BoundingSphere) {
+                    height = ((BoundingSphere) worldBound).getRadius();
+                }
+
+                height /= 2F;
+
+                final Quaternion localRotation = assetLinkNode.getLocalRotation();
+                final Vector3f up = GeomUtils.getUp(localRotation, local.nextVector());
+                up.multLocal(height);
+
+                result.addLocal(up);
+            }
+
 
             assetLinkNode.setLocalTranslation(result);
 
