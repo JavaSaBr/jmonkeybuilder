@@ -29,12 +29,6 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
 
     @Override
     @FxThread
-    protected @NotNull SelectionMode getSelectionMode() {
-        return SelectionMode.SINGLE;
-    }
-
-    @Override
-    @FxThread
     protected @NotNull NodeTreeCell<SceneChangeConsumer, ?> createNodeTreeCell() {
         return new LayerNodeTreeCell(this);
     }

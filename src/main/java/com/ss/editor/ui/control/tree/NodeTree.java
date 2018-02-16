@@ -75,14 +75,26 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     private final C changeConsumer;
 
     /**
+     * The selection mode.
+     */
+    @NotNull
+    private final SelectionMode selectionMode;
+
+    /**
      * The tree with structure of the model.
      */
     @Nullable
     private TreeView<TreeNode<?>> treeView;
 
     public NodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer) {
+        this(selectionHandler, consumer, SelectionMode.SINGLE);
+    }
+
+    public NodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer,
+                    @NotNull final SelectionMode selectionMode) {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
+        this.selectionMode = selectionMode;
         createComponents();
         FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CONTAINER);
     }
@@ -102,20 +114,10 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         treeView.prefWidthProperty().bind(widthProperty());
 
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
-        selectionModel.setSelectionMode(getSelectionMode());
+        selectionModel.setSelectionMode(selectionMode);
         selectionModel.selectedItemProperty().addListener(this::updateSelection);
 
         FXUtils.addToPane(treeView, this);
-    }
-
-    /**
-     * Get the selection mode.
-     *
-     * @return the selection mode.
-     */
-    @FxThread
-    protected @NotNull SelectionMode getSelectionMode() {
-        return SelectionMode.MULTIPLE;
     }
 
     /**
