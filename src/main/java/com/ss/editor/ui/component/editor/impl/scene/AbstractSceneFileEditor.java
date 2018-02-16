@@ -106,8 +106,9 @@ import java.util.function.Consumer;
 public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DPart, ES extends BaseEditorSceneEditorState> extends
         Advanced3DFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
-    private static final int OBJECTS_TOOL = 0;
-    private static final int PAINTING_TOOL = 1;
+    protected static final int OBJECTS_TOOL = 0;
+    protected static final int PAINTING_TOOL = 1;
+    protected static final int SCRIPTING_TOOL = 2;
 
     @NotNull
     private static final Array<String> ACCEPTED_FILES = ArrayFactory.asArray(
@@ -727,11 +728,29 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         setIgnoreCameraMove(true);
         try {
+
             final ModelNodeTree modelNodeTree = getModelNodeTree();
             modelNodeTree.selectSingle(object);
+
+            final SingleSelectionModel<Tab> selectionModel = getEditorToolComponent().getSelectionModel();
+            if (isNeedToOpenObjectsTool(selectionModel.getSelectedIndex())) {
+                selectionModel.select(OBJECTS_TOOL);
+            }
+
         } finally {
             setIgnoreCameraMove(false);
         }
+    }
+
+    /**
+     * Return true if need to open objects tool.
+     *
+     * @param current the current opened tool.
+     * @return true if need to open objects tool.
+     */
+    @FxThread
+    protected boolean isNeedToOpenObjectsTool(final int current) {
+        return !(current == OBJECTS_TOOL || current == SCRIPTING_TOOL);
     }
 
     /**
@@ -880,14 +899,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             spatial = null;
         }
 
-        if (spatial != null) {
+        if (spatial != null && canSelect(spatial)) {
 
-            if (canSelect(spatial)) {
-                editor3DPart.select(spatial);
-            }
+            editor3DPart.select(spatial);
 
             if (!isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
-                editor3DPart.cameraLookAt(spatial.getWorldTranslation());
+                editor3DPart.cameraLookAt(spatial);
             }
         }
 
@@ -1322,7 +1339,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                     camera.getHeight() - (float) areaPoint.getY());
             final Vector3f result = local.nextVector(scenePoint)
                     .subtractLocal(parent.getWorldTranslation());
-            
+
             final boolean isPhysics = NodeUtils.children(loadedModel)
                     .flatMap(ControlUtils::controls)
                     .anyMatch(PhysicsControl.class::isInstance);

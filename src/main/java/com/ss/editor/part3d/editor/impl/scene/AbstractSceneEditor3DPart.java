@@ -2010,16 +2010,46 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Look at the position from the camera.
+     * Look at the spatial.
      *
-     * @param location the location.
+     * @param spatial the spatial.
      */
     @FromAnyThread
-    public void cameraLookAt(@NotNull final Vector3f location) {
+    public void cameraLookAt(@NotNull final Spatial spatial) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
+
             final EditorCamera editorCamera = notNull(getEditorCamera());
-            editorCamera.setTargetDistance(location.distance(getCamera().getLocation()));
-            getNodeForCamera().setLocalTranslation(location);
+
+            final LocalObjects local = LocalObjects.get();
+            float distance;
+
+            final BoundingVolume worldBound = spatial.getWorldBound();
+
+            if (worldBound != null) {
+                distance = worldBound.getVolume();
+
+                if (worldBound instanceof BoundingBox) {
+                    final BoundingBox boundingBox = (BoundingBox) worldBound;
+                    distance = boundingBox.getXExtent();
+                    distance = Math.max(distance, boundingBox.getYExtent());
+                    distance = Math.max(distance, boundingBox.getZExtent());
+                    distance *= 2F;
+                } else if (worldBound instanceof BoundingSphere) {
+                    distance = ((BoundingSphere) worldBound).getRadius() * 2F;
+                }
+
+            } else {
+
+               distance = getCamera().getLocation()
+                       .distance(spatial.getWorldTranslation());
+            }
+
+            editorCamera.setTargetDistance(distance);
+
+            final Vector3f position = local.nextVector()
+                    .set(spatial.getWorldTranslation());
+
+            getNodeForCamera().setLocalTranslation(position);
         });
     }
 

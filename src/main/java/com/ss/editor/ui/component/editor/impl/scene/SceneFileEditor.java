@@ -253,6 +253,12 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
         return notNull(propertyEditorFiltersContainer);
     }
 
+    @Override
+    @FxThread
+    protected boolean isNeedToOpenObjectsTool(final int current) {
+        return !(current == OBJECTS_TOOL || current == LAYERS_TOOL || current == SCRIPTING_TOOL);
+    }
+
     /**
      * Get the container of property editor in app states tool.
      *
