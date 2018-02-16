@@ -37,6 +37,29 @@ public class ControlUtils {
      * @return the control's stream.
      */
     @FromAnyThread
+    public static boolean has(@NotNull final Spatial spatial, @NotNull final Class<?> type) {
+
+        final int numControls = spatial.getNumControls();
+        if (numControls < 1) {
+            return false;
+        }
+
+        for (int i = 0; i < numControls; i++) {
+            if (type.isInstance(spatial.getControl(i))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Create control's stream by the spatial.
+     *
+     * @param spatial the spatial.
+     * @return the control's stream.
+     */
+    @FromAnyThread
     public static @NotNull Stream<Control> controls(@NotNull final Spatial spatial) {
 
         final int numControls = spatial.getNumControls();
@@ -45,7 +68,7 @@ public class ControlUtils {
         }
 
         final Control[] controls = new Control[numControls];
-        for (int i = 0; i < controls.length; i++) {
+        for (int i = 0; i < numControls; i++) {
             controls[i] = spatial.getControl(i);
         }
 
@@ -128,7 +151,6 @@ public class ControlUtils {
             } else {
                 shape = createMeshShape(spatial);
             }
-            shape.setScale(currentScale);
         }
 
         object.setCollisionShape(shape);

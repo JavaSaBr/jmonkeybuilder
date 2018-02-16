@@ -275,6 +275,23 @@ public class GeomUtils {
     }
 
     /**
+     * Get a contact normal on spatial from screen position.
+     *
+     * @param spatial the spatial.
+     * @param camera  the camera.
+     * @param screenX the screen X coord.
+     * @param screenY the screen Y coord.
+     * @return the contact normal or null.
+     */
+    @FromAnyThread
+    public static @Nullable Vector3f getContactNormalFromScreenPos(@NotNull final Spatial spatial,
+                                                                   @NotNull final Camera camera, final float screenX,
+                                                                   final float screenY) {
+        final CollisionResult collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
+        return collision == null ? null : collision.getContactNormal();
+    }
+
+    /**
      * Get a geometry on spatial from cursor position.
      *
      * @param spatial the spatial.

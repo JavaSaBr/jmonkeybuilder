@@ -10,8 +10,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
+import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
@@ -24,6 +24,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -117,6 +118,10 @@ public class EditorDialog {
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.setResizable(isResizable());
         dialog.setScene(scene);
+
+        final Stage fxStage = EditorUtil.getFxStage();
+        final ObservableList<Image> icons = dialog.getIcons();
+        icons.addAll(fxStage.getIcons());
 
         configureSize(container);
     }

@@ -2,8 +2,6 @@ package com.ss.editor.part3d.editor.impl.scene;
 
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.stream.Collectors.toMap;
-
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
@@ -82,6 +80,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     public static final String KEY_IGNORE_RAY_CAST = "jMB.sceneEditor.ignoreRayCast";
     public static final String KEY_MODEL_NODE = "jMB.sceneEditor.modelNode";
     public static final String KEY_SHAPE_CENTER = "jMB.sceneEditor.shapeCenter";
+    public static final String KEY_SHAPE_INIT_SCALE = "jMB.sceneEditor.initScale";
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -211,7 +210,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * The selection models of selected models.
      */
     @NotNull
-    private final ObjectDictionary<Spatial, Spatial> selectionShape;
+    private final ObjectDictionary<Spatial, Geometry> selectionShape;
 
     /**
      * The array of selected models.
@@ -873,8 +872,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
             state.updateTransformNode(spatial.getWorldTransform());
 
-            final ObjectDictionary<Spatial, Spatial> selectionShape = state.getSelectionShape();
-            final Spatial shape = selectionShape.get(spatial);
+            final ObjectDictionary<Spatial, Geometry> selectionShape = state.getSelectionShape();
+            final Geometry shape = selectionShape.get(spatial);
             if (shape == null) {
                 return;
             }
@@ -883,13 +882,31 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             position.set(spatial.getWorldTranslation());
 
             final Vector3f center = shape.getUserData(KEY_SHAPE_CENTER);
+            final Vector3f initScale = shape.getUserData(KEY_SHAPE_INIT_SCALE);
 
             if (center != null) {
+
+                if (!initScale.equals(spatial.getLocalScale())) {
+
+                    initScale.set(spatial.getLocalScale());
+
+                    NodeUtils.updateWorldBound(spatial);
+
+                    final BoundingBox bound = (BoundingBox) spatial.getWorldBound();
+                    bound.getCenter().subtract(spatial.getWorldTranslation(), center);
+
+                    final WireBox mesh = (WireBox) shape.getMesh();
+                    mesh.updatePositions(bound.getXExtent(), bound.getYExtent(), bound.getZExtent());
+                }
+
                 position.addLocal(center);
+
+            } else {
+                shape.setLocalRotation(spatial.getWorldRotation());
+                shape.setLocalScale(spatial.getWorldScale());
             }
 
             shape.setLocalTranslation(position);
-            shape.setLocalRotation(spatial.getWorldRotation());
         });
 
         transformToolNode.detachAllChildren();
@@ -1028,7 +1045,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the selection models of selected models.
      */
     @FromAnyThread
-    private @NotNull ObjectDictionary<Spatial, Spatial> getSelectionShape() {
+    private @NotNull ObjectDictionary<Spatial, Geometry> getSelectionShape() {
         return selectionShape;
     }
 
@@ -1213,7 +1230,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        Spatial shape;
+        Geometry shape;
 
         if (spatial instanceof ParticleEmitter) {
             shape = buildBoxSelection(spatial);
@@ -1232,7 +1249,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             toolNode.attachChild(shape);
         }
 
-        final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
+        final ObjectDictionary<Spatial, Geometry> selectionShape = getSelectionShape();
         selectionShape.put(spatial, shape);
     }
 
@@ -1244,7 +1261,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         setTransformCenter(null);
         setToTransform(null);
 
-        final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
+        final ObjectDictionary<Spatial, Geometry> selectionShape = getSelectionShape();
 
         final Spatial shape = selectionShape.remove(spatial);
         if (shape != null) {
@@ -1260,7 +1277,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Build the selection box for the spatial.
      */
     @JmeThread
-    private Spatial buildBoxSelection(@NotNull final Spatial spatial) {
+    private Geometry buildBoxSelection(@NotNull final Spatial spatial) {
         NodeUtils.updateWorldBound(spatial);
 
         final BoundingVolume bound = spatial.getWorldBound();
@@ -1269,11 +1286,13 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
             final BoundingBox boundingBox = (BoundingBox) bound;
             final Vector3f center = boundingBox.getCenter().subtract(spatial.getWorldTranslation());
+            final Vector3f initScale = spatial.getLocalScale().clone();
 
             final Geometry geometry = WireBox.makeGeometry(boundingBox);
             geometry.setName("SelectionShape");
             geometry.setMaterial(getSelectionMaterial());
             geometry.setUserData(KEY_SHAPE_CENTER, center);
+            geometry.setUserData(KEY_SHAPE_INIT_SCALE, initScale);
 
             final Vector3f position = geometry.getLocalTranslation();
             position.addLocal(center);
@@ -1308,10 +1327,12 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Build selection grid for the geometry.
      */
     @JmeThread
-    private Spatial buildGeometrySelection(@NotNull final Geometry geom) {
+    private Geometry buildGeometrySelection(@NotNull final Geometry geom) {
 
         final Mesh mesh = geom.getMesh();
-        if (mesh == null) return null;
+        if (mesh == null) {
+            return null;
+        }
 
         final Geometry geometry = new Geometry("SelectionShape", mesh);
         geometry.setMaterial(getSelectionMaterial());
@@ -1380,7 +1401,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
+        final ObjectDictionary<Spatial, Geometry> selectionShape = getSelectionShape();
         final Node toolNode = getToolNode();
 
         if (showSelection && !selectionShape.isEmpty()) {
@@ -1548,7 +1569,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Get a position on a scene for a cursor position on a screen.
+     * Get a position on a scene for a cursor position.
      *
      * @param screenX the x position on screen.
      * @param screenY the y position on screen.
@@ -1576,6 +1597,20 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         } else {
             return modelPoint;
         }
+    }
+
+    /**
+     * Get a normal on a scene for a cursor position.
+     *
+     * @param screenX the x position on screen.
+     * @param screenY the y position on screen.
+     * @return the normal on the current scene or null.
+     */
+    @JmeThread
+    public @Nullable Vector3f getSceneNormalByScreenPos(final float screenX, final float screenY) {
+        final Camera camera = getCamera();
+        final M currentModel = notNull(getCurrentModel());
+        return GeomUtils.getContactNormalFromScreenPos(currentModel, camera, screenX, screenY);
     }
 
     /**
@@ -1875,7 +1910,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             }
         });
 
+        PRE_TRANSFORM_HANDLERS.forEach(model, Consumer::accept);
         attachModel(model, modelNode);
+        POST_TRANSFORM_HANDLERS.forEach(model, Consumer::accept);
         setCurrentModel(model);
     }
 
@@ -1973,16 +2010,46 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Look at the position from the camera.
+     * Look at the spatial.
      *
-     * @param location the location.
+     * @param spatial the spatial.
      */
     @FromAnyThread
-    public void cameraLookAt(@NotNull final Vector3f location) {
+    public void cameraLookAt(@NotNull final Spatial spatial) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
+
             final EditorCamera editorCamera = notNull(getEditorCamera());
-            editorCamera.setTargetDistance(location.distance(getCamera().getLocation()));
-            getNodeForCamera().setLocalTranslation(location);
+
+            final LocalObjects local = LocalObjects.get();
+            float distance;
+
+            final BoundingVolume worldBound = spatial.getWorldBound();
+
+            if (worldBound != null) {
+                distance = worldBound.getVolume();
+
+                if (worldBound instanceof BoundingBox) {
+                    final BoundingBox boundingBox = (BoundingBox) worldBound;
+                    distance = boundingBox.getXExtent();
+                    distance = Math.max(distance, boundingBox.getYExtent());
+                    distance = Math.max(distance, boundingBox.getZExtent());
+                    distance *= 2F;
+                } else if (worldBound instanceof BoundingSphere) {
+                    distance = ((BoundingSphere) worldBound).getRadius() * 2F;
+                }
+
+            } else {
+
+               distance = getCamera().getLocation()
+                       .distance(spatial.getWorldTranslation());
+            }
+
+            editorCamera.setTargetDistance(distance);
+
+            final Vector3f position = local.nextVector()
+                    .set(spatial.getWorldTranslation());
+
+            getNodeForCamera().setLocalTranslation(position);
         });
     }
 

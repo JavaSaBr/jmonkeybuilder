@@ -3,19 +3,14 @@ package com.ss.editor.util;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetKey;
 import com.jme3.audio.AudioNode;
-import com.jme3.bounding.BoundingBox;
-import com.jme3.bounding.BoundingSphere;
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.material.Material;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.rlib.util.ReflectionUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -510,9 +505,14 @@ public class NodeUtils {
         return result.stream();
     }
 
+    /**
+     * Force update world bound of the spatial.
+     *
+     * @param spatial the spatial.
+     */
     @JmeThread
-    public static void updateWorldBound(@NotNull final Spatial node) {
-        children(node).forEach(spatial -> spatial.forceRefresh(true, true, false));
-        children(node).forEach(Spatial::getWorldBound);
+    public static void updateWorldBound(@NotNull final Spatial spatial) {
+        children(spatial).forEach(sp -> sp.forceRefresh(true, true, false));
+        children(spatial).forEach(Spatial::getWorldBound);
     }
 }

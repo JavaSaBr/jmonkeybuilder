@@ -1,31 +1,17 @@
 package com.ss.editor.part3d.editor.impl.scene.handler;
 
 import com.jme3.bullet.collision.PhysicsCollisionObject;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.SphereCollisionShape;
-import com.jme3.bullet.control.PhysicsControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
-import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
-import static com.ss.rlib.util.array.ArrayCollectors.toArray;
 
 /**
  * The handler to disable all controls during transforming spatial.
@@ -35,13 +21,25 @@ import static com.ss.rlib.util.array.ArrayCollectors.toArray;
 public class ApplyScaleToPhysicsControlsHandler {
 
     /**
+     * The condition to find a model root.
+     *
+     * @param spatial the model.
+     * @return true if the node is model root.
+     */
+    @FromAnyThread
+    protected static boolean isModelRoot(@NotNull final Spatial spatial) {
+        final Node parent = spatial.getParent();
+        return parent == null || parent.getUserData(AbstractSceneEditor3DPart.KEY_MODEL_NODE) != null;
+    }
+
+    /**
      * The saved previous scales.
      */
     @NotNull
-    private final ObjectDictionary<Spatial, Vector3f> enabledControls;
+    private final ObjectDictionary<Spatial, Vector3f> previousScales;
 
     public ApplyScaleToPhysicsControlsHandler() {
-        this.enabledControls = DictionaryFactory.newObjectDictionary();
+        this.previousScales = DictionaryFactory.newObjectDictionary();
     }
 
     /**
@@ -51,12 +49,14 @@ public class ApplyScaleToPhysicsControlsHandler {
      */
     @JmeThread
     public void onPreTransform(@NotNull final Spatial spatial) {
-        NodeUtils.children(spatial).forEach(sp -> {
-            if (ControlUtils.controls(sp).anyMatch(PhysicsCollisionObject.class::isInstance)) {
-                enabledControls.put(sp, sp.getWorldScale().clone());
-            }
-        });
+        NodeUtils.children(NodeUtils.findParent(spatial, ApplyScaleToPhysicsControlsHandler::isModelRoot))
+                .filter(sp -> ControlUtils.has(sp, PhysicsCollisionObject.class))
+                .peek(sp -> previousScales.put(sp, sp.getWorldScale().clone()))
+                .flatMap(NodeUtils::children)
+                .filter(ch -> !previousScales.containsKey(ch))
+                .forEach(ch -> previousScales.put(ch, ch.getWorldScale().clone()));
     }
+
 
     /**
      * Enable disabled controls before transform.
@@ -65,23 +65,22 @@ public class ApplyScaleToPhysicsControlsHandler {
      */
     @JmeThread
     public void onPostTransform(@NotNull final Spatial spatial) {
-        NodeUtils.children(spatial).forEach(sp -> {
 
-            final Vector3f prevScale = enabledControls.remove(sp);
-            if (prevScale == null) {
-                return;
-            }
+        NodeUtils.children(NodeUtils.findParent(spatial, ApplyScaleToPhysicsControlsHandler::isModelRoot))
+                .filter(sp -> ControlUtils.has(sp, PhysicsCollisionObject.class))
+                .filter(previousScales::containsKey)
+                .filter(sp -> isChanged(sp) || NodeUtils.children(sp).anyMatch(this::isChanged))
+                .forEach(sp -> ControlUtils.controls(sp)
+                        .filter(PhysicsCollisionObject.class::isInstance)
+                        .map(PhysicsCollisionObject.class::cast)
+                        .forEach(object -> ControlUtils.applyScale(sp, sp.getWorldScale(), object)));
 
-            final Vector3f currentScale = sp.getWorldScale();
-            if (prevScale.equals(currentScale)) {
-                return;
-            }
-
-            ControlUtils.controls(sp)
-                .filter(PhysicsCollisionObject.class::isInstance)
-                .map(PhysicsCollisionObject.class::cast)
-                .forEach(object -> ControlUtils.applyScale(sp, currentScale, object));
-        });
+        previousScales.clear();
     }
 
+    @JmeThread
+    protected boolean isChanged(@NotNull final Spatial sp) {
+        final Vector3f prevScale = previousScales.remove(sp);
+        return prevScale != null && !prevScale.equals(sp.getWorldScale());
+    }
 }
