@@ -118,7 +118,10 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     @Override
     @FxThread
     protected void reload() {
-        if (!hasEditObject()) return;
+
+        if (!hasEditObject()) {
+            return;
+        }
 
         final Geometry geometry = getEditObject();
         final Mesh mesh = geometry.getMesh();

@@ -174,7 +174,10 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
      */
     @FxThread
     protected void updateVector(@Nullable final KeyEvent event) {
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+
+        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
+            return;
+        }
 
         final FloatTextField xField = getXField();
         final float x = xField.getValue();

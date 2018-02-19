@@ -23,6 +23,7 @@ public class ReactivatePhysicsControlsTransformationHandler implements Consumer<
                 .filter(RigidBodyControl.class::isInstance)
                 .map(RigidBodyControl.class::cast)
                 .filter(RigidBodyControl::isEnabled)
+                .filter(control -> Float.compare(control.getMass(), 0.0F) != 0)
                 .filter(control -> !control.isActive())
                 .forEach(PhysicsRigidBody::activate);
     }

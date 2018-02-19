@@ -44,19 +44,6 @@ import java.util.function.Supplier;
 public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
         Advanced3DFileEditorWithSplitRightTool<T, S> {
 
-    private static class MaterialSettingsNodeTree<C extends ChangeConsumer> extends NodeTree<C> {
-
-        public MaterialSettingsNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer) {
-            super(selectionHandler, consumer);
-        }
-
-        @Override
-        @FxThread
-        protected @NotNull SelectionMode getSelectionMode() {
-            return SelectionMode.SINGLE;
-        }
-    }
-
     /**
      * The default state of editor light.
      */
@@ -156,7 +143,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
-        settingsTree = new MaterialSettingsNodeTree<>(this::selectedFromTree, getChangeConsumer());
+        settingsTree = new NodeTree<>(this::selectedFromTree, getChangeConsumer(), SelectionMode.SINGLE);
         propertyEditor = new PropertyEditor<>(getChangeConsumer());
         propertyEditor.prefHeightProperty().bind(root.heightProperty());
 

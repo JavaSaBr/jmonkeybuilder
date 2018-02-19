@@ -4,6 +4,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.multi.RemoveElementsAction;
 import com.ss.rlib.util.array.Array;
+import javafx.scene.control.SelectionMode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,6 @@ public class ModelNodeTree extends NodeTree<ModelChangeConsumer> {
 
     public ModelNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler,
                          @Nullable final ModelChangeConsumer consumer) {
-        super(selectionHandler, consumer);
+        super(selectionHandler, consumer, SelectionMode.MULTIPLE);
     }
 }
