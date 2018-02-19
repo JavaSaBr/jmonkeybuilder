@@ -8,26 +8,26 @@ import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of {@link AbstractEditorOperation} to enable {@link com.jme3.scene.control.AbstractControl} in {@link Node}.
+ * The implementation of {@link AbstractEditorOperation} to disable {@link com.jme3.scene.control.AbstractControl} in {@link Node}.
  *
  * @author JavaSaBr.
  */
-public class EnableControlsOperation extends ChangeControlsOperation {
+public class DisableControlsOperation extends ChangeControlsOperation {
 
-    public EnableControlsOperation(@NotNull final Array<Control> controls) {
+    public DisableControlsOperation(@NotNull final Array<Control> controls) {
         super(controls);
     }
 
     @Override
     protected void redoChange(final @NotNull Control control) {
         super.redoChange(control);
-        ControlUtils.setEnabled(control, true);
+        ControlUtils.setEnabled(control, false);
     }
 
     @Override
     protected void undoChange(final @NotNull Control control) {
         super.undoChange(control);
-        ControlUtils.setEnabled(control, false);
+        ControlUtils.setEnabled(control, true);
     }
 
     @Override

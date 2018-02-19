@@ -24,6 +24,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.AddUserDataAction;
+import com.ss.editor.ui.control.tree.action.impl.DisableAllControlsAction;
 import com.ss.editor.ui.control.tree.action.impl.EnableAllControlsAction;
 import com.ss.editor.ui.control.tree.action.impl.RemoveNodeAction;
 import com.ss.editor.ui.control.tree.action.impl.control.CreateCustomControlAction;
@@ -138,6 +139,12 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             .filter(control -> !ControlUtils.isEnabled(control))
             .findAny()
             .ifPresent(c -> items.add(new EnableAllControlsAction(nodeTree, this)));
+
+        NodeUtils.children(element)
+                .flatMap(ControlUtils::controls)
+                .filter(ControlUtils::isEnabled)
+                .findAny()
+                .ifPresent(c -> items.add(new DisableAllControlsAction(nodeTree, this)));
 
         super.fillContextMenu(nodeTree, items);
     }
