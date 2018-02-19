@@ -40,23 +40,22 @@ public class PropertyBuilderRegistry {
     private PropertyBuilderRegistry() {
         builders = ArrayFactory.newArray(PropertyBuilder.class);
         filters = ArrayFactory.newArray(PropertyBuilderFilter.class);
-        builders.add(AudioNodePropertyBuilder.getInstance());
-        builders.add(ParticleEmitterPropertyBuilder.getInstance());
-        builders.add(GeometryPropertyBuilder.getInstance());
-        builders.add(LightPropertyBuilder.getInstance());
-        builders.add(SpatialPropertyBuilder.getInstance());
-        builders.add(SceneAppStatePropertyBuilder.getInstance());
-        builders.add(SceneFilterPropertyBuilder.getInstance());
-        builders.add(DefaultControlPropertyBuilder.getInstance());
-        builders.add(EditableControlPropertyBuilder.getInstance());
-        builders.add(CollisionShapePropertyBuilder.getInstance());
-        builders.add(PrimitivePropertyBuilder.getInstance());
-        builders.add(MeshPropertyBuilder.getInstance());
-        builders.add(MaterialPropertyBuilder.getInstance());
-        builders.add(ParticleInfluencerPropertyBuilder.getInstance());
-        builders.add(EmitterShapePropertyBuilder.getInstance());
-        builders.add(MaterialSettingsPropertyBuilder.getInstance());
-        builders.sort((first, second) -> second.getPriority() - first.getPriority());
+        register(AudioNodePropertyBuilder.getInstance());
+        register(ParticleEmitterPropertyBuilder.getInstance());
+        register(GeometryPropertyBuilder.getInstance());
+        register(LightPropertyBuilder.getInstance());
+        register(SpatialPropertyBuilder.getInstance());
+        register(SceneAppStatePropertyBuilder.getInstance());
+        register(SceneFilterPropertyBuilder.getInstance());
+        register(DefaultControlPropertyBuilder.getInstance());
+        register(EditableControlPropertyBuilder.getInstance());
+        register(CollisionShapePropertyBuilder.getInstance());
+        register(PrimitivePropertyBuilder.getInstance());
+        register(MeshPropertyBuilder.getInstance());
+        register(MaterialPropertyBuilder.getInstance());
+        register(ParticleInfluencerPropertyBuilder.getInstance());
+        register(EmitterShapePropertyBuilder.getInstance());
+        register(MaterialSettingsPropertyBuilder.getInstance());
     }
 
     /**
@@ -67,7 +66,7 @@ public class PropertyBuilderRegistry {
     @FromAnyThread
     public void register(@NotNull final PropertyBuilder builder) {
         builders.add(builder);
-        builders.sort((first, second) -> second.getPriority() - first.getPriority());
+        builders.sort(PropertyBuilder::compareTo);
     }
 
     /**
