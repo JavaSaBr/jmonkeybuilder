@@ -33,7 +33,6 @@ import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -143,7 +142,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
-        settingsTree = new NodeTree<>(this::selectedFromTree, getChangeConsumer(), SelectionMode.SINGLE);
+        settingsTree = new NodeTree<>(this::selectFromTree, getChangeConsumer(), SelectionMode.SINGLE);
         propertyEditor = new PropertyEditor<>(getChangeConsumer());
         propertyEditor.prefHeightProperty().bind(root.heightProperty());
 
@@ -184,7 +183,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
      * @param objects the selected objects.
      */
     @FxThread
-    private void selectedFromTree(@NotNull final Array<Object> objects) {
+    private void selectFromTree(@NotNull final Array<Object> objects) {
 
         final Object object = objects.first();
 
