@@ -26,4 +26,13 @@ public interface PropertyBuilder {
     @FxThread
     void buildFor(@NotNull Object object, @Nullable Object parent, @NotNull VBox container,
                   @NotNull ChangeConsumer changeConsumer);
+
+    /**
+     * Get the priority of this builder.
+     *
+     * @return the priority of this builder.
+     */
+    default int getPriority() {
+        return 0;
+    }
 }

@@ -56,6 +56,7 @@ public class PropertyBuilderRegistry {
         builders.add(ParticleInfluencerPropertyBuilder.getInstance());
         builders.add(EmitterShapePropertyBuilder.getInstance());
         builders.add(MaterialSettingsPropertyBuilder.getInstance());
+        builders.sort((first, second) -> second.getPriority() - first.getPriority());
     }
 
     /**
@@ -66,6 +67,7 @@ public class PropertyBuilderRegistry {
     @FromAnyThread
     public void register(@NotNull final PropertyBuilder builder) {
         builders.add(builder);
+        builders.sort((first, second) -> second.getPriority() - first.getPriority());
     }
 
     /**

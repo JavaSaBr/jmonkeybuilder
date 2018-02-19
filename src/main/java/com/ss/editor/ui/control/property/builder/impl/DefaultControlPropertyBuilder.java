@@ -33,6 +33,8 @@ import java.util.List;
  */
 public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
+    public static final int PRIORITY = 0;
+
     @NotNull
     private static final PropertyBuilder INSTANCE = new DefaultControlPropertyBuilder();
 
@@ -237,5 +239,10 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
         }
 
         return properties;
+    }
+
+    @Override
+    public int getPriority() {
+        return PRIORITY;
     }
 }
