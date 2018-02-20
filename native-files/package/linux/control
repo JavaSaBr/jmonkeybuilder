@@ -1,6 +1,6 @@
 Package: jmonkeybuilder
-Version: @version@
-Section: graphics
+Version: 1.7.0
+Section: Graphics
 Maintainer: Java Developer <javasabr@gmail.com>
 Priority: optional
 Architecture: amd64
