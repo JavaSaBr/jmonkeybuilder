@@ -13,6 +13,15 @@
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
 
+##### java compiler options
+```bash
+--add-exports javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED 
+--add-exports javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED 
+--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED 
+--add-exports javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED
+```
+
+
 Model Editor:
 
 ![Model Editor](https://i.imgur.com/9VsdT9u.jpg)

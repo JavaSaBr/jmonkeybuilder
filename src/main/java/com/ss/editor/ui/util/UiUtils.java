@@ -275,7 +275,7 @@ public abstract class UiUtils {
      * @param tooltip the tooltip.
      * @return the updated tooltip.
      */
-    @FXThread
+    @FxThread
     public static <T extends Tooltip> T updateTooltip(final T tooltip) {
         tooltip.setHideDelay(TOOLTIP_HIDE_DELAY);
         tooltip.setShowDelay(TOOLTIP_SHOW_DELAY);
