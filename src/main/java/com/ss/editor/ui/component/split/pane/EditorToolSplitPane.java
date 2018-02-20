@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.split.pane;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorToolConfig;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.component.tab.TabToolComponent;
@@ -30,69 +30,69 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void initFor(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
         super.initFor(toolComponent, other);
         root.widthProperty().addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneSize()));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleSceneChanged(@NotNull final Number newSize) {
         super.handleSceneChanged(newSize);
         Platform.runLater(this::requestLayout);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void bindToScene() {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void addElements(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
         getItems().setAll(other, toolComponent);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean loadCollapsed() {
         return getConfig().isToolCollapsed();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected int loadSize() {
         return getConfig().getToolWidth();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void saveCollapsed(final boolean collapsed) {
         getConfig().setToolCollapsed(collapsed);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void saveSize(final int size) {
         getConfig().setToolWidth(size);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected double getCollapsedPosition() {
         return 1;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected double getSceneSize() {
         final double width = root.getWidth();
         return width == 0 ? scene.getWidth() : width;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected double getExpandPosition(final double toolSize, final double sceneSize) {
         return 1D - super.getExpandPosition(toolSize, sceneSize);
     }

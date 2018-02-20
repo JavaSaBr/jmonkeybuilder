@@ -8,11 +8,11 @@ import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.material.Material;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DState.ModelType;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
@@ -20,9 +20,10 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.property.PropertyEditor;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -39,7 +40,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
+public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
         Advanced3DFileEditorWithSplitRightTool<T, S> {
 
     /**
@@ -110,7 +111,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isShiftDown,
                                           final boolean isButtonMiddleDown) {
@@ -137,17 +138,17 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
-        settingsTree = new NodeTree<>(this::selectedFromTree, getChangeConsumer());
+        settingsTree = new NodeTree<>(this::selectFromTree, getChangeConsumer(), SelectionMode.SINGLE);
         propertyEditor = new PropertyEditor<>(getChangeConsumer());
         propertyEditor.prefHeightProperty().bind(root.heightProperty());
 
         container.addComponent(buildSplitComponent(settingsTree, propertyEditor, root), getSettingsTreeToolName());
 
-        FXUtils.addClassTo(settingsTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+        FXUtils.addClassTo(settingsTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
     }
 
     /**
@@ -177,12 +178,14 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     }
 
     /**
-     * Handle selected object from tree.
+     * Handle selected objects from tree.
      *
-     * @param object the selected object.
+     * @param objects the selected objects.
      */
-    @FXThread
-    private void selectedFromTree(@Nullable final Object object) {
+    @FxThread
+    private void selectFromTree(@NotNull final Array<Object> objects) {
+
+        final Object object = objects.first();
 
         Object parent = null;
         Object element;
@@ -200,7 +203,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void loadState() {
         super.loadState();
 
@@ -221,25 +224,25 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorMaterialEditorState::new;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void calcVSplitSize(@NotNull final SplitPane splitPane) {
         splitPane.setDividerPosition(0, 0.2);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         createActions(container);
@@ -261,7 +264,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
      *
      * @param container the container.
      */
-    @FXThread
+    @FxThread
     protected void createActions(@NotNull final HBox container) {
 
         cubeButton = new ToggleButton();
@@ -295,16 +298,16 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
         FXUtils.addToPane(lightButton, container);
 
         DynamicIconSupport.addSupport(cubeButton, sphereButton, planeButton, lightButton);
-        FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 
     /**
      * Handle changing the bucket type.
      */
-    @FXThread
+    @FxThread
     private void changeBucketType(@NotNull final RenderQueue.Bucket newValue) {
 
-        final T editor3DState = getEditor3DState();
+        final T editor3DState = getEditor3DPart();
         editor3DState.changeBucketType(newValue);
 
         final EditorMaterialEditorState editorState = getEditorState();
@@ -314,10 +317,10 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     /**
      * Handle changing the light enabling.
      */
-    @FXThread
+    @FxThread
     private void changeLight(@NotNull final Boolean newValue) {
 
-        final T editor3DState = getEditor3DState();
+        final T editor3DState = getEditor3DPart();
         editor3DState.updateLightEnabled(newValue);
 
         final EditorMaterialEditorState editorState = getEditorState();
@@ -367,11 +370,11 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     /**
      * Handle the changed model type.
      */
-    @FXThread
+    @FxThread
     private void changeModelType(@NotNull final ModelType modelType, @NotNull final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
-        final T editor3DState = getEditor3DState();
+        final T editor3DState = getEditor3DPart();
 
         final ToggleButton cubeButton = getCubeButton();
         final ToggleButton sphereButton = getSphereButton();
@@ -408,8 +411,8 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DState
     }
 
     @Override
-    @FXThread
-    public void notifyFXChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+    @FxThread
+    public void notifyFxChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
         if (object instanceof Material) {
             getPropertyEditor().refresh();
         } else {

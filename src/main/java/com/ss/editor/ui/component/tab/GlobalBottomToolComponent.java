@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.tab;
 
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class GlobalBottomToolComponent extends TabToolComponent {
      */
     public GlobalBottomToolComponent(@NotNull final SplitPane pane) {
         super(pane);
-        setId(CSSIds.GLOBAL_BOTTOM_TOOL_COMPONENT);
+        setId(CssIds.GLOBAL_BOTTOM_TOOL_COMPONENT);
         setSide(Side.BOTTOM);
     }
 

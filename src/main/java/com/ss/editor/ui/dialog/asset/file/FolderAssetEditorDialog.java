@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.asset.file;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ public class FolderAssetEditorDialog extends AssetEditorDialog<Path> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOpen(@NotNull final ResourceElement element) {
         super.processOpen(element);
         final Consumer<Path> consumer = getConsumer();
@@ -36,7 +36,7 @@ public class FolderAssetEditorDialog extends AssetEditorDialog<Path> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Path getObject(@NotNull final ResourceElement element) {
         return element.getFile();
     }

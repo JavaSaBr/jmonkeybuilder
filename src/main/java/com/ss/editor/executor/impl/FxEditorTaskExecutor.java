@@ -1,0 +1,124 @@
+package com.ss.editor.executor.impl;
+
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.concurrent.util.ThreadUtils;
+import com.ss.rlib.util.array.Array;
+import javafx.application.Platform;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * The executor to execute tasks in the FX UI Thread.
+ *
+ * @author JavaSaBr
+ */
+public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
+
+    private static final int EXECUTE_LIMIT = 300;
+
+    /**
+     * The task for executing editor tasks in the FX UI Thread.
+     */
+    @NotNull
+    private final Runnable fxTask = () -> doExecute(execute, executed);
+
+    public FxEditorTaskExecutor() {
+        setName(FxEditorTaskExecutor.class.getSimpleName());
+        setPriority(NORM_PRIORITY);
+        start();
+    }
+
+    @Override
+    @FxThread
+    protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
+
+        final Runnable[] array = execute.array();
+
+        for (int i = 0, length = execute.size(); i < length; ) {
+            try {
+
+                for (int count = 0; count < EXECUTE_LIMIT && i < length; count++, i++) {
+
+                    final Runnable task = array[i];
+                    try {
+                        task.run();
+                    } catch (final Exception e) {
+                        EditorUtil.handleException(LOGGER, this, e);
+                    }
+
+                    executed.add(task);
+                }
+
+            } catch (final Exception e) {
+                LOGGER.warning(e);
+            }
+        }
+
+        ConcurrentUtils.notifyAll(this);
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+
+            executed.clear();
+            execute.clear();
+
+            lock();
+            try {
+
+                if (waitTasks.isEmpty()) {
+                    wait.getAndSet(true);
+                } else {
+                    execute.addAll(waitTasks);
+                }
+
+            } finally {
+                unlock();
+            }
+
+            if (wait.get()) {
+                synchronized (wait) {
+                    if (wait.get()) {
+                        ConcurrentUtils.waitInSynchronize(wait);
+                    }
+                }
+            }
+
+            if (execute.isEmpty()) {
+                continue;
+            }
+
+            executeInFxUiThread();
+
+            if (executed.isEmpty()) {
+                continue;
+            }
+
+            lock();
+            try {
+                waitTasks.removeAll(executed);
+            } finally {
+                unlock();
+            }
+        }
+    }
+
+    @FromAnyThread
+    private void executeInFxUiThread() {
+        while (true) {
+            try {
+                synchronized (this) {
+                    Platform.runLater(fxTask);
+                    ConcurrentUtils.waitInSynchronize(this);
+                }
+                break;
+            } catch (final IllegalStateException e) {
+                LOGGER.warning(this, e);
+                ThreadUtils.sleep(1000);
+            }
+        }
+    }
+}

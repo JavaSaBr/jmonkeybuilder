@@ -2,9 +2,9 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.code.BaseCodeArea;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import javafx.scene.layout.HBox;
@@ -38,13 +38,13 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     private BaseCodeArea codeArea;
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
 
         codeArea = createCodeArea();
@@ -53,7 +53,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         codeArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(codeArea, root);
-        FXUtils.addClassTo(codeArea, CSSClasses.TEXT_EDITOR_TEXT_AREA);
+        FXUtils.addClassTo(codeArea, CssClasses.TEXT_EDITOR_TEXT_AREA);
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
      *
      * @return the code area.
      */
-    @FXThread
+    @FxThread
     protected @NotNull BaseCodeArea createCodeArea() {
         throw new RuntimeException();
     }
@@ -69,19 +69,19 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * Update dirty state.
      */
-    @FXThread
+    @FxThread
     private void updateDirty(final String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         FXUtils.addToPane(createSaveAction(), container);
@@ -90,13 +90,13 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the code area.
      */
-    @FXThread
+    @FxThread
     private @NotNull BaseCodeArea getCodeArea() {
         return notNull(codeArea);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
@@ -112,7 +112,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
-    @FXThread
+    @FxThread
     private @NotNull String getOriginalContent() {
         return notNull(originalContent);
     }
@@ -120,7 +120,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @param originalContent the original content of the opened file.
      */
-    @FXThread
+    @FxThread
     private void setOriginalContent(@NotNull final String originalContent) {
         this.originalContent = originalContent;
     }
@@ -139,7 +139,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void postSave() {
         super.postSave();
 
@@ -151,7 +151,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 

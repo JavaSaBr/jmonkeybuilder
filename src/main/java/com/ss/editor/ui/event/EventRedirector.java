@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import javafx.event.Event;
@@ -60,13 +60,6 @@ public class EventRedirector {
      */
     private double sceneY;
 
-    /**
-     * Instantiates a new Event redirector.
-     *
-     * @param editorAreaComponent the editor area component
-     * @param destination         the destination
-     * @param stage               the stage
-     */
     public EventRedirector(@NotNull final EditorAreaComponent editorAreaComponent, @NotNull final Node destination,
                            @NotNull final Stage stage) {
         this.editorAreaComponent = editorAreaComponent;
@@ -172,7 +165,7 @@ public class EventRedirector {
         if (target == destination) {
             return;
         } else if (target instanceof TextInputControl) {
-            if (event instanceof KeyEvent && UIUtils.isNotHotKey((KeyEvent) event)) {
+            if (event instanceof KeyEvent && UiUtils.isNotHotKey((KeyEvent) event)) {
                 if (Config.DEV_DEBUG_JFX_KEY_INPUT) {
                     LOGGER.debug(this, target, ev -> "Key event was skipped because it was from " + ev);
                 }

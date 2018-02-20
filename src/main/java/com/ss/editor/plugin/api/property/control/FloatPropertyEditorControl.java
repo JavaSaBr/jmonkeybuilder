@@ -1,9 +1,9 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -29,7 +29,7 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -37,14 +37,14 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
     }
 
     /**
      * @return the value field.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getValueField() {
         return notNull(valueField);
     }
@@ -55,22 +55,22 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
      * @param min the min value.
      * @param max the max value.
      */
-    @FXThread
+    @FxThread
     public void setMinMax(final float min, final float max) {
         if (Float.isNaN(min) || Float.isNaN(max)) return;
         getValueField().setMinMax(min, max);
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
         super.reload();
         final Float value = getPropertyValue();
         getValueField().setValue(value == null ? 0 : value);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getValueField().getValue());
         super.changeImpl();

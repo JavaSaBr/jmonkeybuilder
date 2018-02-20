@@ -2,11 +2,13 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.JmeApplication;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
@@ -45,6 +47,9 @@ public class PluginManager {
         return instance;
     }
 
+    /**
+     * The plugin system.
+     */
     @NotNull
     private final ConfigurablePluginSystem pluginSystem;
 
@@ -62,7 +67,7 @@ public class PluginManager {
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
         } else {
-            final Path rootFolder = Utils.getRootFolderFromClass(Editor.class);
+            final Path rootFolder = Utils.getRootFolderFromClass(JmeApplication.class);
             final Path embeddedPluginPath = rootFolder.resolve("embedded-plugins");
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             if (Files.exists(embeddedPluginPath)) {
@@ -92,10 +97,10 @@ public class PluginManager {
         pluginSystem.initialize();
 
         final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnBeforeCreateJMEContext(this::onBeforeCreateJMEContext);
-        initializationManager.addOnAfterCreateJMEContext(this::onAfterCreateJMEContext);
-        initializationManager.addOnBeforeCreateJavaFXContext(this::onBeforeCreateJavaFXContext);
-        initializationManager.addOnAfterCreateJavaFXContext(this::onAfterCreateJavaFXContext);
+        initializationManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
+        initializationManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
+        initializationManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
+        initializationManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
         initializationManager.addOnFinishLoading(this::onFinishLoading);
     }
 
@@ -120,30 +125,28 @@ public class PluginManager {
     /**
      * Do some things before when JME context will be created.
      */
-    @JMEThread
-    private void onBeforeCreateJMEContext() {
+    @JmeThread
+    private void onBeforeCreateJmeContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJMEContext(pluginSystem));
+                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJmeContext(pluginSystem));
     }
 
     /**
      * Do some things after when JME context was created.
      */
-    @JMEThread
-    private void onAfterCreateJMEContext() {
+    @JmeThread
+    private void onAfterCreateJmeContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> {
-                    editorPlugin.onAfterCreateJMEContext(pluginSystem);
+                    editorPlugin.onAfterCreateJmeContext(pluginSystem);
 
                     final PluginContainer container = editorPlugin.getContainer();
                     final URLClassLoader classLoader = container.getClassLoader();
-
-                    final Editor editor = Editor.getInstance();
-                    final AssetManager assetManager = editor.getAssetManager();
+                    final AssetManager assetManager = EditorUtil.getAssetManager();
                     assetManager.addClassLoader(classLoader);
                 });
     }
@@ -151,29 +154,29 @@ public class PluginManager {
     /**
      * Do some things before when JavaFX context will be created.
      */
-    @FXThread
-    private void onBeforeCreateJavaFXContext() {
+    @FxThread
+    private void onBeforeCreateJavaFxContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFXContext(pluginSystem));
+                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFxContext(pluginSystem));
     }
 
     /**
      * Do some things after when JavaFX context was created.
      */
-    @FXThread
-    private void onAfterCreateJavaFXContext() {
+    @FxThread
+    private void onAfterCreateJavaFxContext() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFXContext(pluginSystem));
+                .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFxContext(pluginSystem));
     }
 
     /**
      * Do some things before when the editor is ready to work.
      */
-    @FXThread
+    @FxThread
     private void onFinishLoading() {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
@@ -186,6 +189,7 @@ public class PluginManager {
      *
      * @param consumer the consumer.
      */
+    @FromAnyThread
     public void handlePlugins(@NotNull final Consumer<EditorPlugin> consumer) {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)

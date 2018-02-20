@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MaterialSettings {
 
+    /**
+     * The material.
+     */
     @NotNull
     private final Material material;
 
@@ -19,6 +22,8 @@ public class MaterialSettings {
     }
 
     /**
+     * Get the material.
+     *
      * @return the material.
      */
     @FromAnyThread

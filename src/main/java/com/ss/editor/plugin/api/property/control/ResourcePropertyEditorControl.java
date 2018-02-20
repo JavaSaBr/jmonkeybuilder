@@ -3,9 +3,9 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
@@ -50,11 +50,11 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
         setOnDragExited(this::dragExited);
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_RESOURCE_PROPERTY_CONTROL);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_RESOURCE_PROPERTY_CONTROL);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
@@ -71,9 +71,9 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
 
         FXUtils.addToPane(container, this);
 
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addClassesTo(changeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(resourceLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(changeButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(resourceLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         DynamicIconSupport.addSupport(changeButton);
     }
@@ -81,7 +81,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * Process select a resource.
      */
-    @FXThread
+    @FxThread
     protected void processSelect() {
 
     }
@@ -89,14 +89,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * Handle grad exiting.
      */
-    @FXThread
+    @FxThread
     private void dragExited(@NotNull final DragEvent dragEvent) {
     }
 
     /**
      * Handle dropped files to editor.
      */
-    @FXThread
+    @FxThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -107,7 +107,9 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         }
 
         final File file = files.get(0);
-        if (!canAccept(file)) return;
+        if (!canAccept(file)) {
+            return;
+        }
 
         handleFile(file);
     }
@@ -117,14 +119,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      *
      * @param file the dropped file.
      */
-    @FXThread
+    @FxThread
     protected void handleFile(@NotNull final File file) {
     }
 
     /**
      * Handle drag over.
      */
-    @FXThread
+    @FxThread
     private void dragOver(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -135,7 +137,9 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         }
 
         final File file = files.get(0);
-        if (!canAccept(file)) return;
+        if (!canAccept(file)) {
+            return;
+        }
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);
@@ -144,7 +148,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         dragEvent.consume();
     }
 
-    @FXThread
+    @FxThread
     protected boolean canAccept(@NotNull final File file) {
         return false;
     }
@@ -152,7 +156,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * @return the label with name of the resource.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Label getResourceLabel() {
         return notNull(resourceLabel);
     }

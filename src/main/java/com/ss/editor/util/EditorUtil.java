@@ -6,15 +6,27 @@ import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
+import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.input.InputManager;
+import com.jme3.light.LightProbe;
+import com.jme3.material.Material;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.Renderer;
+import com.jme3.scene.Node;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
@@ -23,20 +35,17 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.scene.EditorFxScene;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
-import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +78,7 @@ public abstract class EditorUtil {
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
     /**
-     * Represents a List of Files.
+     * Represents a list of files.
      */
     public static final DataFormat GNOME_FILES = new DataFormat("x-special/gnome-copied-files");
 
@@ -77,13 +86,221 @@ public abstract class EditorUtil {
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
             new SimpleDateFormat("HH:mm:ss:SSS"));
 
+    @NotNull
+    private static JmeApplication jmeApplication;
+
+    @NotNull
+    private static JfxApplication jfxApplication;
+
+    public static void setJmeApplication(@NotNull final JmeApplication jmeApplication) {
+        EditorUtil.jmeApplication = jmeApplication;
+    }
+
+    public static void setJfxApplication(@NotNull final JfxApplication jfxApplication) {
+        EditorUtil.jfxApplication = jfxApplication;
+    }
+
+    /**
+     * Get the asset manager.
+     *
+     * @return the asset manager.
+     */
+    @FromAnyThread
+    public static @NotNull AssetManager getAssetManager() {
+        return jmeApplication.getAssetManager();
+    }
+
+    /**
+     * Get the input manager.
+     *
+     * @return the input manager.
+     */
+    @FromAnyThread
+    public static @NotNull InputManager getInputManager() {
+        return jmeApplication.getInputManager();
+    }
+
+    /**
+     * Get the render manager.
+     *
+     * @return the render manager.
+     */
+    @FromAnyThread
+    public static @NotNull RenderManager getRenderManager() {
+        return jmeApplication.getRenderManager();
+    }
+
+    /**
+     * Get the renderer.
+     *
+     * @return the renderer.
+     */
+    @FromAnyThread
+    public static @NotNull Renderer getRenderer() {
+        return jmeApplication.getRenderer();
+    }
+
+    /**
+     * Get the root node.
+     *
+     * @return the root node.
+     */
+    @JmeThread
+    public static @NotNull Node getGlobalRootNode() {
+        return jmeApplication.getRootNode();
+    }
+
+    /**
+     * Get the preview node.
+     *
+     * @return the preview node.
+     */
+    @JmeThread
+    public static @NotNull Node getPreviewNode() {
+        return jmeApplication.getPreviewNode();
+    }
+
+    /**
+     * Get the preview camera.
+     *
+     * @return the preview camera.
+     */
+    @JmeThread
+    public static @NotNull Camera getPreviewCamera() {
+        return jmeApplication.getPreviewCamera();
+    }
+
+    /**
+     * Get the camera.
+     *
+     * @return the camera.
+     */
+    @FromAnyThread
+    public static @NotNull Camera getGlobalCamera() {
+        return jmeApplication.getCamera();
+    }
+
+    /**
+     * Get the global filter post processor.
+     *
+     * @return the global filter post processor.
+     */
+    @JmeThread
+    public static @NotNull FilterPostProcessor getGlobalFilterPostProcessor() {
+        return jmeApplication.getPostProcessor();
+    }
+
+    /**
+     * Get the default material.
+     *
+     * @return the default material.
+     */
+    @FromAnyThread
+    public static @NotNull Material getDefaultMaterial() {
+        return jmeApplication.getDefaultMaterial();
+    }
+
+    /**
+     * Disable the global PBR light probe.
+     */
+    @JmeThread
+    public static void disableGlobalLightProbe() {
+        jmeApplication.disableLightProbe();
+    }
+
+    /**
+     * Enable the global PBR light probe.
+     */
+    @JmeThread
+    public static void enableGlobalLightProbe() {
+        jmeApplication.enableLightProbe();
+    }
+
+    /**
+     * Update the light probe.
+     *
+     * @param progressAdapter the progress adapter
+     */
+    @JmeThread
+    public static void updateGlobalLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+        jmeApplication.updateLightProbe(progressAdapter);
+    }
+
+    /**
+     * Get the state manager.
+     *
+     * @return the state manager.
+     */
+    @FromAnyThread
+    public static @NotNull AppStateManager getStateManager() {
+        return jmeApplication.getStateManager();
+    }
+
+    /**
+     * Gets the last opened window.
+     *
+     * @return the last opened window.
+     */
+    @FxThread
+    public static @NotNull Window getFxLastWindow() {
+        return jfxApplication.getLastWindow();
+    }
+
+    /**
+     * Get the current JavaFX scene.
+     *
+     * @return the JavaFX scene.
+     */
+    @FxThread
+    public static @NotNull EditorFxScene getFxScene() {
+        return jfxApplication.getScene();
+    }
+
+    /**
+     * Get the current stage of JavaFX.
+     *
+     * @return the current stage of JavaFX.
+     */
+    @FxThread
+    public static @NotNull Stage getFxStage() {
+        return jfxApplication.getStage();
+    }
+
+    /**
+     * Register the opened new window.
+     *
+     * @param window the opened new window.
+     */
+    @FromAnyThread
+    public static void addFxWindow(@NotNull final Window window) {
+        jfxApplication.addWindow(window);
+    }
+
+    /**
+     * Delete the closed window.
+     *
+     * @param window the closed window.
+     */
+    @FromAnyThread
+    public static void removeFxWindow(@NotNull final Window window) {
+        jfxApplication.removeWindow(window);
+    }
+
+    /**
+     * Request focus to FX window.
+     */
+    @FxThread
+    public static void requestFxFocus() {
+        jfxApplication.requestFocus();
+    }
+
     /**
      * Added files like files to copy to clipboard content.
      *
      * @param paths   the list of files.
      * @param content the content to store.
      */
-    @FXThread
+    @FxThread
     public static void addCopiedFile(@NotNull final Array<Path> paths, @NotNull final ClipboardContent content) {
 
         final List<File> files = paths.stream()
@@ -149,9 +366,16 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @Nullable String toExternal(@NotNull final String path, @NotNull final ClassLoader classLoader) {
-        if (!checkExists(path, classLoader)) return null;
+
+        if (!checkExists(path, classLoader)) {
+            return null;
+        }
+
         URL resource = classLoader.getResource(path);
-        if (resource == null) resource = classLoader.getResource("/" + path);
+        if (resource == null) {
+            resource = classLoader.getResource("/" + path);
+        }
+
         return resource == null ? null : resource.toExternalForm();
     }
 
@@ -194,7 +418,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @Nullable InputStream getInputStream(@NotNull final String path) {
-        return JFXApplication.class.getResourceAsStream(path);
+        return JfxApplication.class.getResourceAsStream(path);
     }
 
     /**
@@ -333,19 +557,6 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Has file in clipboard boolean.
-     *
-     * @return true if you have a file in your system clipboard.
-     */
-    @FXThread
-    public static boolean hasFileInClipboard() {
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-        if (clipboard == null) return false;
-        final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
-        return !(files == null || files.isEmpty());
-    }
-
-    /**
      * To asset path string.
      *
      * @param path the path
@@ -392,19 +603,21 @@ public abstract class EditorUtil {
         }
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> {
+        executorManager.addFxTask(() -> {
 
             GAnalytics.sendException(e, false);
 
             final String localizedMessage = e.getLocalizedMessage();
             final String stackTrace = buildStackTrace(e);
 
-            final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
+            final Alert alert = UiUtils.createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
             alert.setWidth(500);
             alert.setHeight(220);
 
-            if (callback != null) alert.setOnHidden(event -> callback.run());
+            if (callback != null) {
+                alert.setOnHidden(event -> callback.run());
+            }
         });
     }
 
@@ -437,38 +650,6 @@ public abstract class EditorUtil {
         }
 
         return stackTrace;
-    }
-
-    /**
-     * Create a dialog for showing the exception.
-     */
-    @FXThread
-    private static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
-                                          @Nullable final String stackTrace) {
-
-        final TextArea textArea = new TextArea(stackTrace);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        VBox.setMargin(textArea, new Insets(2, 5, 2, 5));
-
-        final Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
-
-        final DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setExpandableContent(new VBox(textArea));
-        dialogPane.expandedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (newValue == Boolean.TRUE) {
-                alert.setWidth(800);
-                alert.setHeight(400);
-            } else {
-                alert.setWidth(500);
-                alert.setHeight(220);
-            }
-        });
-
-        return alert;
     }
 
     /**
@@ -536,6 +717,7 @@ public abstract class EditorUtil {
                 commands.add("nautilus");
             } else if (isAppExists("dolphin -v")) {
                 commands.add("dolphin");
+                commands.add("--select");
             } else {
                 commands.add("xdg-open");
                 if (!Files.isDirectory(path)) {
@@ -544,7 +726,9 @@ public abstract class EditorUtil {
             }
         }
 
-        if (commands.isEmpty()) return;
+        if (commands.isEmpty()) {
+            return;
+        }
 
         final String url;
         try {
@@ -588,15 +772,12 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static @NotNull byte[] serialize(@NotNull final Serializable object) {
-
         final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
         try (final ObjectOutputStream out = new ObjectOutputStream(bout)) {
             out.writeObject(object);
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
-
         return bout.toByteArray();
     }
 
@@ -609,10 +790,8 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static <T> @NotNull T deserialize(@NotNull final byte[] bytes) {
-
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-
-        try (final ObjectInputStream in = new SSObjectInputStream(bin)) {
+        try (final ObjectInputStream in = new ExtObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
         } catch (final ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
@@ -629,26 +808,6 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
-    }
-
-    /**
-     * Increment the loading counter.
-     */
-    @FXThread
-    public static void incrementLoading() {
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
-        scene.incrementLoading();
-    }
-
-    /**
-     * Decrement the loading counter.
-     */
-    @FXThread
-    public static void decrementLoading() {
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
-        scene.decrementLoading();
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.ss.editor.ui.preview.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -22,7 +22,7 @@ import java.nio.file.Path;
 public class TextFilePreview extends AbstractFilePreview<TextArea> {
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull TextArea createGraphicsNode() {
         final TextArea textArea = new TextArea();
         textArea.setEditable(false);
@@ -30,18 +30,18 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void initialize(@NotNull final TextArea node, @NotNull final StackPane pane) {
         super.initialize(node, pane);
 
         node.prefWidthProperty().bind(pane.widthProperty().subtract(2));
         node.prefHeightProperty().bind(pane.heightProperty().subtract(2));
 
-        FXUtils.addClassTo(node, CSSClasses.TRANSPARENT_TEXT_AREA);
+        FXUtils.addClassTo(node, CssClasses.TRANSPARENT_TEXT_AREA);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Path file) {
         super.show(file);
 
@@ -50,7 +50,7 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final String resource) {
         super.show(resource);
 

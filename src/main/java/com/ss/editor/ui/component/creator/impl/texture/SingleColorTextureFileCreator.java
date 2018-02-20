@@ -7,12 +7,12 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -72,7 +72,7 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     private ImageView imageView;
 
     @Override
-    @FXThread
+    @FxThread
     protected void createPreview(@NotNull final BorderPane container) {
         super.createPreview(container);
         imageView = new ImageView();
@@ -82,7 +82,7 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     /**
      * @return the image view to show preview of texture.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
@@ -112,10 +112,10 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean validate(@NotNull final VarTable vars) {
 
-        final Color color = UIUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
+        final Color color = UiUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
 
         final int width = vars.getInteger(PROP_WIDTH);
         final int height = vars.getInteger(PROP_HEIGHT);
@@ -138,7 +138,7 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
     protected void writeData(@NotNull final VarTable vars, final @NotNull Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
-        final Color color = UIUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
+        final Color color = UiUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
 
         final int width = vars.getInteger(PROP_WIDTH);
         final int height = vars.getInteger(PROP_HEIGHT);

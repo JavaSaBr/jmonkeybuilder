@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public interface ScreenComponent {
     /**
      * Notify about finishing building the result scene.
      */
-    @FXThread
+    @FxThread
     default void notifyFinishBuild() {
     }
 }

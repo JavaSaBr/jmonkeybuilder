@@ -1,5 +1,7 @@
 package com.ss.editor.file.converter.impl;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
@@ -16,11 +18,12 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.model.tool.TangentGenerator;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.serializer.MaterialSerializer;
+import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.FileUtils;
@@ -93,7 +96,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
      * @param vars the variables.
      * @return true if all are ok.
      */
-    @FXThread
+    @FxThread
     private boolean validate(@NotNull final VarTable vars) {
 
         if (!vars.has(PROP_RESULT_NAME) || !vars.has(PROP_DESTINATION)) {
@@ -101,29 +104,26 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         }
 
         final String resultName = vars.getString(PROP_RESULT_NAME);
-        if (StringUtils.isEmpty(resultName)) return false;
-
-        final boolean exportMaterials = vars.getBoolean(PROP_EXPORT_MATERIALS);
-
-        if (exportMaterials && !vars.has(PROP_MATERIALS_FOLDER)) {
+        if (StringUtils.isEmpty(resultName)) {
             return false;
         }
 
-        return true;
+        final boolean exportMaterials = vars.getBoolean(PROP_EXPORT_MATERIALS);
+        return !exportMaterials || vars.has(PROP_MATERIALS_FOLDER);
     }
 
     /**
      * Convert a file using settings from the dialog.
      */
-    @FXThread
+    @FxThread
     private void convert(@NotNull final Path source, @NotNull final VarTable vars) {
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
                 convertImpl(source, vars);
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+                EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
             }
         });
     }
@@ -142,10 +142,10 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
-        if (EDITOR_CONFIG.isAutoTangentGenerating()) {
+        if (EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
             TangentGenerator.useMikktspaceGenerator(model);
         }
 
@@ -176,7 +176,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     }
 
     /**
-     * Store embedded materials.
+     * Store the embedded materials.
      *
      * @param materialsFolder the materials destination folder.
      * @param canOverwrite    can we overwrite exists materials.
@@ -206,12 +206,12 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
 
         final String assetPath = toAssetPath(assetFile);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         geometry.setMaterial(assetManager.loadMaterial(assetPath));
     }
 
     /**
-     * Generate names for materials.
+     * Generate names for the materials.
      */
     private void generateNames(@NotNull final ObjectDictionary<String, Geometry> mapping,
                                @NotNull final Geometry geometry) {
@@ -233,8 +233,12 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     }
 
     private void checkAndAdd(@NotNull final Array<Geometry> geometries, @NotNull final Geometry geometry) {
+
         final Material material = geometry.getMaterial();
         final AssetKey key = material.getKey();
-        if (key == null) geometries.add(geometry);
+
+        if (key == null) {
+            geometries.add(geometry);
+        }
     }
 }

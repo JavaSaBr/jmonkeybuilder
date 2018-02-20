@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import com.ss.editor.annotation.FXThread;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LAMP;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_LIGHT;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 
 /**
@@ -37,7 +39,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
 
     public EditorModelEditorState() {
         this.skyType = 0;
-        this.enableLight = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
+        this.enableLight = EDITOR_CONFIG.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
         this.enablePhysics = false;
         this.enableDebugPhysics = false;
     }
@@ -47,7 +49,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
      *
      * @return the sky type.
      */
-    @FXThread
+    @FxThread
     public int getSkyType() {
         return skyType;
     }
@@ -57,7 +59,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
      *
      * @param skyType the sky type.
      */
-    @FXThread
+    @FxThread
     public void setSkyType(final int skyType) {
         final boolean changed = getSkyType() != skyType;
         this.skyType = skyType;
@@ -69,7 +71,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
      *
      * @param enableLight true if the light is enabled.
      */
-    @FXThread
+    @FxThread
     public void setEnableLight(final boolean enableLight) {
         final boolean changed = isEnableLight() != enableLight;
         this.enableLight = enableLight;
@@ -81,7 +83,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
      *
      * @return true if the light is enabled.
      */
-    @FXThread
+    @FxThread
     public boolean isEnableLight() {
         return enableLight;
     }
@@ -89,7 +91,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
     /**
      * @return true if physics is enabled.
      */
-    @FXThread
+    @FxThread
     public boolean isEnablePhysics() {
         return enablePhysics;
     }
@@ -97,7 +99,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
     /**
      * @param enablePhysics true if physics is enabled.
      */
-    @FXThread
+    @FxThread
     public void setEnablePhysics(final boolean enablePhysics) {
         final boolean changed = isEnablePhysics() != enablePhysics;
         this.enablePhysics = enablePhysics;
@@ -107,7 +109,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
     /**
      * @return true if debug physics is enabled.
      */
-    @FXThread
+    @FxThread
     public boolean isEnableDebugPhysics() {
         return enableDebugPhysics;
     }
@@ -115,7 +117,7 @@ public class EditorModelEditorState extends BaseEditorSceneEditorState {
     /**
      * @param enableDebugPhysics true if debug physics is enabled.
      */
-    @FXThread
+    @FxThread
     public void setEnableDebugPhysics(final boolean enableDebugPhysics) {
         final boolean changed = isEnableDebugPhysics() != enableDebugPhysics;
         this.enableDebugPhysics = enableDebugPhysics;

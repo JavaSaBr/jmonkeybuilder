@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.bar;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.*;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssIds;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -27,7 +27,7 @@ public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
      */
     public EditorMenuBarComponent() {
         super();
-        setId(CSSIds.EDITOR_MENU_BAR_COMPONENT);
+        setId(CssIds.EDITOR_MENU_BAR_COMPONENT);
         createComponents();
     }
 

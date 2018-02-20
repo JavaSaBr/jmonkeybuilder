@@ -600,8 +600,11 @@
  ******************************************************************************/
 
 .menu-bar {
-    -fx-padding: 0.0em 0.666667em 0.0em 0.666667em; /* 0 8 0 8 */
-    -fx-spacing: 0.166667em; /* 2 */
+    -fx-padding: 0px; /* 0 8 0 8 */
+    -fx-spacing: 0px; /* 2 */
+    -fx-min-height: 30px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
     -fx-background-color: -var-menu-bar-background-color;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
@@ -644,6 +647,9 @@
     -fx-background-color: -fx-body-color;
     -fx-padding: 6 14 6 14; /* 4 5 4 5 */
     -fx-cursor: hand;
+    -fx-min-height: 30px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
 }
 
 .menu-item > .left-container {
@@ -688,6 +694,9 @@
 
 .menu {
     -fx-cursor: hand;
+    -fx-min-height: 30px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
 }
 
 .menu > .right-container > .arrow {

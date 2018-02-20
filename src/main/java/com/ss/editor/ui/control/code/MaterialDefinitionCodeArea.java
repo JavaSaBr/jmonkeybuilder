@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.code;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +68,7 @@ public class MaterialDefinitionCodeArea extends BaseCodeArea {
     );
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull StyleSpans<? extends Collection<String>> calculateStyleSpans(@NotNull final String text) {
         return computeHighlighting(PATTERN, text);
     }

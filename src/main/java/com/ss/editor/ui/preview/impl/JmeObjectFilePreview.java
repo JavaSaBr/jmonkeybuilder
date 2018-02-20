@@ -1,7 +1,7 @@
 package com.ss.editor.ui.preview.impl;
 
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.manager.JMEFilePreviewManager;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.JmeFilePreviewManager;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -16,13 +16,13 @@ import java.nio.file.Path;
 public class JmeObjectFilePreview extends AbstractFilePreview<ImageView> {
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ImageView createGraphicsNode() {
         return new ImageView();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void initialize(@NotNull final ImageView node, @NotNull final StackPane pane) {
         super.initialize(node, pane);
 
@@ -31,14 +31,14 @@ public class JmeObjectFilePreview extends AbstractFilePreview<ImageView> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
         super.hide();
         getGraphicsNode().imageProperty().unbind();
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Path file) {
         super.show(file);
 
@@ -46,7 +46,7 @@ public class JmeObjectFilePreview extends AbstractFilePreview<ImageView> {
         final int width = (int) imageView.getFitWidth();
         final int height = (int) imageView.getFitHeight();
 
-        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+        final JmeFilePreviewManager previewManager = JmeFilePreviewManager.getInstance();
         previewManager.show(file, width, height);
 
         final ImageView sourceView = previewManager.getImageView();
@@ -54,7 +54,7 @@ public class JmeObjectFilePreview extends AbstractFilePreview<ImageView> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final String resource) {
         super.show(resource);
 
@@ -62,7 +62,7 @@ public class JmeObjectFilePreview extends AbstractFilePreview<ImageView> {
         final int width = (int) imageView.getFitWidth();
         final int height = (int) imageView.getFitHeight();
 
-        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+        final JmeFilePreviewManager previewManager = JmeFilePreviewManager.getInstance();
         previewManager.show(resource, width, height);
 
         final ImageView sourceView = previewManager.getImageView();
@@ -70,27 +70,27 @@ public class JmeObjectFilePreview extends AbstractFilePreview<ImageView> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isSupport(@NotNull final String resource) {
-        return JMEFilePreviewManager.isJmeFile(resource);
+        return JmeFilePreviewManager.isJmeFile(resource);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isSupport(@NotNull final Path file) {
-        return JMEFilePreviewManager.isJmeFile(file);
+        return JmeFilePreviewManager.isJmeFile(file);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public int getOrder() {
         return 10;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void release() {
-        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+        final JmeFilePreviewManager previewManager = JmeFilePreviewManager.getInstance();
         previewManager.clear();
     }
 }

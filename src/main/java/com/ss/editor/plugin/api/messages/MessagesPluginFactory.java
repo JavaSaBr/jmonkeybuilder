@@ -43,9 +43,8 @@ public class MessagesPluginFactory {
      * @param pluginClass the plugin class.
      * @return the resource bundle.
      */
-    @NotNull
     @FromAnyThread
-    public static ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass) {
+    public static @NotNull ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass) {
         return getResourceBundle(pluginClass, Messages.BUNDLE_NAME);
     }
 
@@ -56,10 +55,9 @@ public class MessagesPluginFactory {
      * @param bundleName  the bundle name.
      * @return the resource bundle.
      */
-    @NotNull
     @FromAnyThread
-    public static ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass,
-                                                   @NotNull final String bundleName) {
+    public static @NotNull ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass,
+                                                            @NotNull final String bundleName) {
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = pluginClass.getClassLoader();
         final ResourceBundle resourceBundle = getBundle(bundleName, locale, classLoader, PropertyLoader.getInstance());

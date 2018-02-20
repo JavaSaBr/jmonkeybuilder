@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.code;
 
 import static java.util.Collections.singleton;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.rlib.util.StringUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -88,7 +88,7 @@ public class BaseCodeArea extends CodeArea {
      *
      * @return the list of available classes.
      */
-    @FXThread
+    @FxThread
     protected @NotNull String[][] createAvailableClasses() {
         return AVAILABLE_CLASSES;
     }
@@ -98,7 +98,7 @@ public class BaseCodeArea extends CodeArea {
      *
      * @return the list of available classes.
      */
-    @FXThread
+    @FxThread
     protected @NotNull String[][] getAvailableClasses() {
         return AVAILABLE_CLASSES;
     }
@@ -110,7 +110,7 @@ public class BaseCodeArea extends CodeArea {
      * @param text    the text.
      * @return the highlight styles.
      */
-    @FXThread
+    @FxThread
     protected @NotNull StyleSpans<Collection<String>> computeHighlighting(@NotNull final Pattern pattern,
                                                                           @NotNull final String text) {
 
@@ -155,7 +155,7 @@ public class BaseCodeArea extends CodeArea {
      * @param text the text
      * @return the style spans
      */
-    @FXThread
+    @FxThread
     protected @NotNull StyleSpans<? extends Collection<String>> calculateStyleSpans(@NotNull final String text) {
         throw new RuntimeException("unsupported");
     }
@@ -165,7 +165,7 @@ public class BaseCodeArea extends CodeArea {
      *
      * @param content the content.
      */
-    @FXThread
+    @FxThread
     public void loadContent(@NotNull final String content) {
         appendText(content);
 
@@ -178,7 +178,7 @@ public class BaseCodeArea extends CodeArea {
      *
      * @param content the content.
      */
-    @FXThread
+    @FxThread
     public void reloadContent(@NotNull final String content) {
         reloadContent(content, false);
     }
@@ -189,7 +189,7 @@ public class BaseCodeArea extends CodeArea {
      * @param content      the content.
      * @param clearHistory true if need to clear history.
      */
-    @FXThread
+    @FxThread
     public void reloadContent(@NotNull final String content, final boolean clearHistory) {
 
         final String currentContent = getText();

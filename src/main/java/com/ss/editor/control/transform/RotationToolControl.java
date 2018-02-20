@@ -8,8 +8,10 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.Editor;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,42 +31,35 @@ public class RotationToolControl extends AbstractTransformControl {
     @NotNull
     private static final String NODE_ROTATION_Z = "rot_z";
 
-    @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
-
-    /**
-     * Instantiates a new Rotation tool control.
-     *
-     * @param editorControl the editor control
-     */
     public RotationToolControl(@NotNull final EditorTransformSupport editorControl) {
         super(editorControl);
     }
 
-    @NotNull
     @Override
-    protected String getNodeX() {
+    @FromAnyThread
+    protected @NotNull String getNodeX() {
         return NODE_ROTATION_X;
     }
 
-    @NotNull
     @Override
-    protected String getNodeY() {
+    @FromAnyThread
+    protected @NotNull String getNodeY() {
         return NODE_ROTATION_Y;
     }
 
-    @NotNull
     @Override
-    protected String getNodeZ() {
+    @FromAnyThread
+    protected @NotNull String getNodeZ() {
         return NODE_ROTATION_Z;
     }
 
     @Override
+    @JmeThread
     public void processTransform() {
 
         final LocalObjects local = LocalObjects.get();
         final EditorTransformSupport editorControl = getEditorControl();
-        final InputManager inputManager = EDITOR.getInputManager();
+        final InputManager inputManager = EditorUtil.getInputManager();
         final Camera camera = editorControl.getCamera();
 
         final Transform transform = notNull(editorControl.getTransformCenter());
@@ -116,10 +111,12 @@ public class RotationToolControl extends AbstractTransformControl {
     }
 
     @Override
+    @JmeThread
     protected void controlUpdate(final float tpf) {
     }
 
     @Override
+    @JmeThread
     protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 }

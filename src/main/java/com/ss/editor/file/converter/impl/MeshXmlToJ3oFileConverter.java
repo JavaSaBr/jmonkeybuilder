@@ -26,7 +26,7 @@ public class MeshXmlToJ3oFileConverter extends AbstractModelFileConverter {
     }
 
     /**
-     * The constant DESCRIPTION.
+     * The description.
      */
     @NotNull
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
@@ -52,15 +52,13 @@ public class MeshXmlToJ3oFileConverter extends AbstractModelFileConverter {
         convert(source, targetFile);
     }
 
-    @NotNull
     @Override
-    protected Array<String> getAvailableExtensions() {
+    protected @NotNull Array<String> getAvailableExtensions() {
         return EXTENSIONS;
     }
 
-    @NotNull
     @Override
-    public String getTargetExtension() {
+    public @NotNull String getTargetExtension() {
         return FileExtensions.JME_OBJECT;
     }
 }

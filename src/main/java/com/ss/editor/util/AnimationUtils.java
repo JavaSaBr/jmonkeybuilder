@@ -48,10 +48,9 @@ public class AnimationUtils {
      * @param endFrame   the end frame.
      * @return the new sub animation.
      */
-    @NotNull
     @FromAnyThread
-    public static Animation extractAnimation(@NotNull final Animation source, @NotNull final String newName,
-                                             final int startFrame, final int endFrame) {
+    public static @NotNull Animation extractAnimation(@NotNull final Animation source, @NotNull final String newName,
+                                                      final int startFrame, final int endFrame) {
 
         final Track[] sourceTracks = source.getTracks();
         final BoneTrack firstSourceTrack = (BoneTrack) sourceTracks[0];
@@ -73,16 +72,15 @@ public class AnimationUtils {
     }
 
     /**
-     * Extract a bone track from a source animation to sub animation.
+     * Extract a bone track from the source animation to sub animation.
      *
      * @param boneTrack  the source bone track.
      * @param startFrame the start frame.
      * @param endFrame   the end frame.
      * @return the extracted bone track.
      */
-    @NotNull
-    private static BoneTrack extractBoneTrack(@NotNull final BoneTrack boneTrack, final int startFrame,
-                                              final int endFrame) {
+    private static @NotNull BoneTrack extractBoneTrack(@NotNull final BoneTrack boneTrack, final int startFrame,
+                                                       final int endFrame) {
 
         final float[] sourceTimes = boneTrack.getTimes();
 
@@ -94,7 +92,6 @@ public class AnimationUtils {
         for (int i = startFrame; i < endFrame; i++) {
 
             final int newFrame = i - startFrame;
-
             final Vector3f sourceTranslation = boneTrack.getTranslations()[i];
             final Vector3f sourceScale = boneTrack.getScales()[i];
             final Quaternion sourceRotation = boneTrack.getRotations()[i];
@@ -109,7 +106,7 @@ public class AnimationUtils {
     }
 
     /**
-     * Chane a name of an animation.
+     * Change the name of the animation.
      *
      * @param control   the animation control.
      * @param animation the animation.
@@ -142,7 +139,7 @@ public class AnimationUtils {
     }
 
     /**
-     * Get frame count of an animation/
+     * Get frame count of the animation.
      *
      * @param animation the animation.
      * @return the frame count or -1.
@@ -169,10 +166,12 @@ public class AnimationUtils {
      * @param base    the base name.
      * @return the free name.
      */
-    @NotNull
     @FromAnyThread
-    public static String findFreeName(@NotNull final AnimControl control, @NotNull final String base) {
-        if (control.getAnim(base) == null) return base;
+    public static @NotNull String findFreeName(@NotNull final AnimControl control, @NotNull final String base) {
+
+        if (control.getAnim(base) == null) {
+            return base;
+        }
 
         int i = 1;
 
