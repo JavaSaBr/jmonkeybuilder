@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.RemoveLightAction;
-import com.ss.editor.ui.control.tree.action.impl.operation.RenameLightOperation;
+import com.ss.editor.model.undo.impl.RenameLightOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
 import javafx.collections.ObservableList;

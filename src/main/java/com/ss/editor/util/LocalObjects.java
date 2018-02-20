@@ -3,11 +3,16 @@ package com.ss.editor.util;
 import static java.lang.Thread.currentThread;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.*;
+import com.jme3.scene.Spatial;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.CycleBuffer;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * The container with local objects.
@@ -18,13 +23,22 @@ public class LocalObjects {
 
     private static final int SIZE = 50;
 
+    @NotNull
+    private static final ThreadLocal<LocalObjects> THREAD_LOCAL = ThreadLocal.withInitial(LocalObjects::new);
+
     /**
      * Get the local objects.
      *
      * @return the local objects
      */
     public static @NotNull LocalObjects get() {
-        return ((EditorThread) currentThread()).getLocal();
+
+        final Thread currentThread = currentThread();
+        if (currentThread instanceof EditorThread) {
+            ((EditorThread) currentThread).getLocal();
+        }
+
+        return THREAD_LOCAL.get();
     }
 
     /**
@@ -81,6 +95,18 @@ public class LocalObjects {
     @NotNull
     private final CycleBuffer<float[]> matrixFloatBuffer;
 
+    /**
+     * The buffer of object arrays.
+     */
+    @NotNull
+    private final CycleBuffer<Array<Object>> objectArrayBuffer;
+
+    /**
+     * The buffer of spatial's arrays.
+     */
+    @NotNull
+    private final CycleBuffer<Array<Spatial>> spatialArrayBuffer;
+
     @SuppressWarnings("unchecked")
     public LocalObjects() {
         this.vectorBuffer = new CycleBuffer<>(Vector3f.class, SIZE, Vector3f::new);
@@ -91,8 +117,30 @@ public class LocalObjects {
         this.matrix3fBuffer = new CycleBuffer<>(Matrix3f.class, SIZE, Matrix3f::new);
         this.matrixFloatBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[16]);
         this.colorBuffer = new CycleBuffer<>(ColorRGBA.class, SIZE, ColorRGBA::new);
+        this.objectArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Object.class), Collection::clear);
+        this.spatialArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Spatial.class), Collection::clear);
         this.collisionResultsBuffer = new CycleBuffer<>(ReusableCollisionResults.class, SIZE,
                 ReusableCollisionResults::new, Reusable::free);
+    }
+
+    /**
+     * Get the next free objects array.
+     *
+     * @return the next free objects array.
+     */
+    @FromAnyThread
+    public @NotNull Array<Object> nextObjectArray() {
+        return objectArrayBuffer.next();
+    }
+
+    /**
+     * Get the next free spatial's array.
+     *
+     * @return the next free spatial's array.
+     */
+    @FromAnyThread
+    public @NotNull Array<Spatial> nextSpatialArray() {
+        return spatialArrayBuffer.next();
     }
 
     /**

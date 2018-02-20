@@ -2,7 +2,11 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+
+import com.jme3.asset.AssetKey;
+import com.jme3.asset.ModelKey;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
@@ -20,6 +24,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -61,7 +66,7 @@ import java.util.function.Consumer;
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
-     * The logger.
+     * The loggerA.
      */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);

@@ -8,6 +8,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.action.impl.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.util.ControlUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,7 @@ public class CreateRigidBodyControlAction extends AbstractCreateControlAction {
     protected @NotNull RigidBodyControl createControl(@NotNull final Spatial parent) {
         final RigidBodyControl rigidBodyControl = new RigidBodyControl();
         rigidBodyControl.setEnabled(false);
+        ControlUtils.applyScale(parent, parent.getWorldScale(), rigidBodyControl);
         return rigidBodyControl;
     }
 }

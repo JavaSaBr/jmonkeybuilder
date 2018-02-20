@@ -22,8 +22,8 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of the {@link PropertyControl} to edit int array values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <T> the edited object's type.
  * @author JavaSaBr
  */
 public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, int[]> {
@@ -106,7 +106,10 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
      */
     @FxThread
     private void updateValue(@Nullable final KeyEvent event) {
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+
+        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
+            return;
+        }
 
         final String textValue = getValueField().getText();
         int[] newValue = null;

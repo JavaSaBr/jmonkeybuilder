@@ -59,7 +59,7 @@ public class FileAssetResourcePropertyControl extends AssetResourcePropertyEdito
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
 
         final Path file = getPropertyValue();
 

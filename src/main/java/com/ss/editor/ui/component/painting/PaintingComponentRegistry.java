@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.painting;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
 import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -32,6 +33,7 @@ public class PaintingComponentRegistry {
     private PaintingComponentRegistry() {
         this.constructors = ArrayFactory.newArray(Function.class);
         register(TerrainPaintingComponent::new);
+        register(SpawnPaintingComponent::new);
     }
 
     /**

@@ -51,7 +51,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final Boolean value = getPropertyValue();
         getCheckBox().setSelected(value == null ? false : value);

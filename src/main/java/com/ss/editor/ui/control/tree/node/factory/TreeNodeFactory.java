@@ -30,12 +30,12 @@ public interface TreeNodeFactory extends Comparable<TreeNodeFactory> {
      * @return the order.
      */
     @FxThread
-    default int getOrder() {
+    default int getPriority() {
         return 0;
     }
 
     @Override
     default int compareTo(@NotNull final TreeNodeFactory another) {
-        return getOrder() - another.getOrder();
+        return another.getPriority() - getPriority();
     }
 }

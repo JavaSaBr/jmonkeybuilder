@@ -452,9 +452,13 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param tpf the tpf
      */
     public void updateCamera(float tpf) {
-        if (!enabled) return;
 
-        targetLocation.set(target.getWorldTranslation()).addLocal(lookAtOffset);
+        if (!enabled) {
+            return;
+        }
+
+        targetLocation.set(target.getWorldTranslation())
+                .addLocal(lookAtOffset);
 
         if (smoothMotion) {
 

@@ -18,8 +18,8 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of the {@link PropertyControl} to edit float values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <T> the edited object's type.
  * @author JavaSaBr
  */
 public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Float> {
@@ -125,7 +125,10 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
      */
     @FxThread
     private void updateValue() {
-        if (isIgnoreListener()) return;
+
+        if (isIgnoreListener()) {
+            return;
+        }
 
         final FloatTextField valueField = getValueField();
         final float value = valueField.getValue();

@@ -2,6 +2,7 @@ package com.ss.editor.control.painting.terrain;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
@@ -139,14 +140,15 @@ public class PaintTerrainToolControl extends TerrainToolControl {
 
     @Override
     @JmeThread
-    public void startPainting(@NotNull final PaintingInput input, @NotNull final Vector3f contactPoint) {
+    public void startPainting(@NotNull final PaintingInput input, @NotNull final Quaternion brushRotation,
+                              @NotNull final Vector3f contactPoint) {
 
         final Texture alphaTexture = getAlphaTexture();
         if (alphaTexture == null) {
             return;
         }
 
-        super.startPainting(input, contactPoint);
+        super.startPainting(input, brushRotation, contactPoint);
 
         switch (input) {
             case MOUSE_PRIMARY:
@@ -160,7 +162,8 @@ public class PaintTerrainToolControl extends TerrainToolControl {
 
     @Override
     @JmeThread
-    public void updatePainting(@NotNull final Vector3f contactPoint) {
+    public void updatePainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint,
+                               final float tpf) {
 
         final PaintingInput input = notNull(getCurrentInput());
 
@@ -175,7 +178,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
 
     @Override
     @JmeThread
-    public void finishPainting(@NotNull final Vector3f contactPoint) {
+    public void finishPainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint) {
 
         final PaintingInput input = notNull(getCurrentInput());
 
@@ -188,7 +191,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
             }
         }
 
-        super.finishPainting(contactPoint);
+        super.finishPainting(brushRotation, contactPoint);
     }
 
     /**

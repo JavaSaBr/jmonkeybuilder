@@ -59,7 +59,7 @@ public class TreeNodeFactoryRegistry {
     @FxThread
     public void register(@NotNull final TreeNodeFactory factory) {
         this.factories.add(factory);
-        this.factories.sort((first, second) -> second.getOrder() - first.getOrder());
+        this.factories.sort(TreeNodeFactory::compareTo);
     }
 
     /**

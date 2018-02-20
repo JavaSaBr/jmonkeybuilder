@@ -179,8 +179,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.openModel(model);
+        final ModelEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.openModel(model);
 
         handleAddedObject(model);
 

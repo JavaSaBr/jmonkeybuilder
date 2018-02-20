@@ -986,6 +986,34 @@ public abstract class UiUtils {
         return !(files == null || files.isEmpty());
     }
 
+    /**
+     * Find a menu item by the item's type.
+     *
+     * @param items the item list.
+     * @param type  the item's type.
+     * @param <T>   the item's type.
+     * @return the found item or null.
+     */
+    @FxThread
+    public static <T extends MenuItem> @Nullable T findMenuItem(@NotNull final List<? extends MenuItem> items,
+                                                                @NotNull final Class<T> type) {
+        for (final MenuItem item : items) {
+
+            if (type.isInstance(item)) {
+                return type.cast(item);
+            }
+
+            if (item instanceof Menu) {
+                final T result = findMenuItem(((Menu) item).getItems(), type);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private UiUtils() {
         throw new RuntimeException();
     }

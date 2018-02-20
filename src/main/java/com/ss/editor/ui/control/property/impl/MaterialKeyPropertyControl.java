@@ -56,14 +56,20 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
     protected void processEdit() {
 
         final MaterialKey element = getPropertyValue();
-        if (element == null) return;
+        if (element == null) {
+            return;
+        }
 
         final String assetPath = element.getName();
-        if (StringUtils.isEmpty(assetPath)) return;
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
 
         final Path assetFile = Paths.get(assetPath);
         final Path realFile = notNull(getRealFile(assetFile));
-        if (!Files.exists(realFile)) return;
+        if (!Files.exists(realFile)) {
+            return;
+        }
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
         event.setFile(realFile);

@@ -19,7 +19,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.operation.ChangeCollisionShapeOperation;
+import com.ss.editor.model.undo.impl.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.VarTable;
@@ -75,7 +75,6 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
                 final Box box = (Box) mesh;
                 shape = new BoxCollisionShape(new Vector3f(box.getXExtent(), box.getYExtent(), box.getZExtent()));
             }
-
         }
 
         if (shape == null) {

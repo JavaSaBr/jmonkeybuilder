@@ -91,7 +91,10 @@ public class DeleteFileAction extends FileAction {
      * Handle the answer.
      */
     private void handle(@NotNull final Array<ResourceElement> elements, @Nullable final Boolean result) {
-        if (!Boolean.TRUE.equals(result)) return;
+
+        if (!Boolean.TRUE.equals(result)) {
+            return;
+        }
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();

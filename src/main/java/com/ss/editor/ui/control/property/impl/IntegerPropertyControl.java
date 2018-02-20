@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit integer values.
  *
- * @param <C> the type of {@link ChangeConsumer}
- * @param <T> the type of edited object
+ * @param <C> the type of {@link ChangeConsumer}.
+ * @param <T> the type of edited object.
  * @author JavaSaBr
  */
 public class IntegerPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Integer> {
@@ -115,7 +115,10 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
      */
     @FxThread
     private void updateValue() {
-        if (isIgnoreListener()) return;
+
+        if (isIgnoreListener()) {
+            return;
+        }
 
         final IntegerTextField valueField = getValueField();
         final int value = valueField.getValue();

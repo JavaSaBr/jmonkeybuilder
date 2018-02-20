@@ -1,5 +1,8 @@
 package com.ss.editor.test.external;
 
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.ss.editor.extension.loader.SceneLoader;
 
 /**
@@ -19,5 +22,14 @@ public class PbrSceneTest extends BaseExternalTest {
         SceneLoader.install(this, postProcessor);
         rootNode.attachChild(assetManager.loadModel("Scene/TestPbrScene.j3s"));
         getFlyByCamera().setMoveSpeed(5);
+        getInputManager().addMapping("mouse", new KeyTrigger(KeyInput.KEY_SPACE));
+        getInputManager().addListener(new ActionListener() {
+            @Override
+            public void onAction(final String name, final boolean isPressed, final float tpf) {
+                if (isPressed) {
+                    getFlyByCamera().setEnabled(!getFlyByCamera().isEnabled());
+                }
+            }
+        }, "mouse");
     }
 }

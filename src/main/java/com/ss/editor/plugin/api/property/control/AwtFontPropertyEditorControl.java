@@ -93,7 +93,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final Font value = getPropertyValue();
         final ComboBox<Font> enumComboBox = getComboBox();

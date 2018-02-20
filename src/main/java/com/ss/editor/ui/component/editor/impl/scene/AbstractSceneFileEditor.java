@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
@@ -12,12 +12,17 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.audio.AudioNode;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingSphere;
+import com.jme3.bounding.BoundingVolume;
+import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.AssetLinkNode;
@@ -43,6 +48,7 @@ import com.ss.editor.model.scene.EditorPresentableNode;
 import com.ss.editor.model.scene.WrapperNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.part3d.editor.impl.Stats3DPart;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.plugin.api.RenderFilterExtension;
@@ -56,19 +62,14 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.model.ModelPropertyEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.RemoveChildOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.RemoveControlOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.RemoveLightOperation;
+import com.ss.editor.ui.control.tree.action.impl.multi.RemoveElementsAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.LocalObjects;
-import com.ss.editor.util.MaterialUtils;
-import com.ss.editor.util.NodeUtils;
+import com.ss.editor.util.ControlUtils;
+import com.ss.editor.util.*;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
@@ -76,10 +77,7 @@ import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
@@ -108,13 +106,17 @@ import java.util.function.Consumer;
 public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DPart, ES extends BaseEditorSceneEditorState> extends
         Advanced3DFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
-    private static final int OBJECTS_TOOL = 0;
-    private static final int PAINTING_TOOL = 1;
+    protected static final int OBJECTS_TOOL = 0;
+    protected static final int PAINTING_TOOL = 1;
+    protected static final int SCRIPTING_TOOL = 2;
 
     @NotNull
     private static final Array<String> ACCEPTED_FILES = ArrayFactory.asArray(
             FileExtensions.JME_MATERIAL,
             FileExtensions.JME_OBJECT);
+
+    @NotNull
+    private static final Array<Spatial> EMPTY_SELECTION = ArrayFactory.newArray(Spatial.class);
 
     @NotNull
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
@@ -167,7 +169,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * The selection handler.
      */
     @Nullable
-    private Consumer<Object> selectionNodeHandler;
+    private Consumer<Array<Object>> selectionNodeHandler;
 
     /**
      * The list of transform modes.
@@ -407,15 +409,15 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleAddedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editor3DState, (light, state) -> state.addLight(light));
-        audioNodes.forEach(editor3DState, (audioNode, state) -> state.addAudioNode(audioNode));
+        lights.forEach(editor3DPart, (light, part) -> part.addLight(light));
+        audioNodes.forEach(editor3DPart, (audioNode, part) -> part.addAudioNode(audioNode));
     }
 
     /**
@@ -426,15 +428,15 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void handleRemovedObject(@NotNull final Spatial model) {
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editor3DState, (light, state) -> state.removeLight(light));
-        audioNodes.forEach(editor3DState, (audioNode, state) -> state.removeAudioNode(audioNode));
+        lights.forEach(editor3DPart, (light, part) -> part.removeLight(light));
+        audioNodes.forEach(editor3DPart, (audioNode, part) -> part.removeAudioNode(audioNode));
     }
 
     @Override
@@ -495,8 +497,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                                           final boolean isControlDown, final boolean isShiftDown,
                                           final boolean isButtonMiddleDown) {
 
-        final MA editor3DState = getEditor3DPart();
-        if (editor3DState.isCameraMoving()) {
+        final MA editor3DPart = getEditor3DPart();
+        if (editor3DPart.isCameraMoving()) {
             return false;
         }
 
@@ -520,29 +522,42 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return true;
         } else if (isPressed && keyCode == KeyCode.DELETE) {
 
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            final TreeNode<?> selected = modelNodeTree.getSelected();
-            if (selected == null || !selected.canRemove()) return false;
+            final RemoveElementsAction removeAction = findTreeAction(RemoveElementsAction.class);
 
-            final Object element = selected.getElement();
-            final TreeNode<?> parent = selected.getParent();
-            final Object parentElement = parent == null ? null : parent.getElement();
-
-            if (element instanceof Spatial) {
-                final Spatial spatial = (Spatial) element;
-                execute(new RemoveChildOperation(spatial, spatial.getParent()));
-            } else if (element instanceof Light && parentElement instanceof Node) {
-                final Light light = (Light) element;
-                execute(new RemoveLightOperation(light, (Node) parentElement));
-            } else if (element instanceof Control && parentElement instanceof Spatial) {
-                final Control control = (Control) element;
-                execute(new RemoveControlOperation(control, (Spatial) parentElement));
+            if (removeAction == null) {
+                return false;
             }
 
+            removeAction.process();
             return true;
+
+        } else if (isPressed && isControlDown && keyCode == KeyCode.C) {
+            //TODO
+        } else if (isPressed && isControlDown && keyCode == KeyCode.V) {
+            //TODO
         }
 
         return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
+    }
+
+    /**
+     * Find a tree action for the current selected items.
+     *
+     * @param type the action's type.
+     * @param <T>  the action's type.
+     * @return the found action or null.
+     */
+    @FxThread
+    protected <T extends MenuItem> @Nullable T findTreeAction(@NotNull final Class<T> type) {
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        final TreeNode<?> selected = modelNodeTree.getSelected();
+        if (selected == null || !selected.canRemove()) {
+            return null;
+        }
+
+        final ContextMenu contextMenu = modelNodeTree.getContextMenu(null);
+        return UiUtils.findMenuItem(contextMenu.getItems(), type);
     }
 
     /**
@@ -597,9 +612,14 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     }
 
     @Override
+    public void notifyJmePreChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+        getEditor3DPart().notifyPropertyPreChanged(object, propertyName);
+    }
+
+    @Override
     @FxThread
-    public void notifyJmeChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-        getEditor3DPart().notifyPropertyChanged(object);
+    public void notifyJmeChangedProperty(@NotNull final Object object, @NotNull final String propertyName) {
+        getEditor3DPart().notifyPropertyChanged(object, propertyName);
     }
 
     @Override
@@ -627,7 +647,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         }
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.select(added)));
+            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.selectSingle(added)));
         }
     }
 
@@ -635,14 +655,14 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     public void notifyFxRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
 
         if (removed instanceof Light) {
-            editor3DState.removeLight((Light) removed);
+            editor3DPart.removeLight((Light) removed);
         } else if (removed instanceof AudioNode) {
-            editor3DState.removeAudioNode((AudioNode) removed);
+            editor3DPart.removeAudioNode((AudioNode) removed);
         } else if (removed instanceof Spatial) {
             handleRemovedObject((Spatial) removed);
         }
@@ -686,7 +706,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.select(child)));
+            EXECUTOR_MANAGER.addJmeTask(() -> EXECUTOR_MANAGER.addFxTask(() -> modelNodeTree.selectSingle(child)));
         }
     }
 
@@ -708,33 +728,152 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         setIgnoreCameraMove(true);
         try {
+
             final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(object);
+            modelNodeTree.selectSingle(object);
+
+            final SingleSelectionModel<Tab> selectionModel = getEditorToolComponent().getSelectionModel();
+            if (isNeedToOpenObjectsTool(selectionModel.getSelectedIndex())) {
+                selectionModel.select(OBJECTS_TOOL);
+            }
+
         } finally {
             setIgnoreCameraMove(false);
         }
     }
 
     /**
-     * Handle the selected object from the Tree.
+     * Return true if need to open objects tool.
      *
-     * @param object the object
+     * @param current the current opened tool.
+     * @return true if need to open objects tool.
+     */
+    @FxThread
+    protected boolean isNeedToOpenObjectsTool(final int current) {
+        return !(current == OBJECTS_TOOL || current == SCRIPTING_TOOL);
+    }
+
+    /**
+     * Return true of the spatial can be selected.
+     *
+     * @param spatial the spatial.
+     * @return true if the spatial can be selected.
+     */
+    @FxThread
+    protected boolean canSelect(@NotNull final Spatial spatial) {
+        return true;
+    }
+
+    /**
+     * Handle the selected object from the tree.
+     *
+     * @param object the selected object.
      */
     @FxThread
     public void selectNodeFromTree(@Nullable final Object object) {
 
+        final Array<Object> objects = LocalObjects.get().nextObjectArray();
+        objects.add(object);
+
+        selectNodesFromTree(objects);
+    }
+
+    /**
+     * Handle the selected objects from the tree.
+     *
+     * @param objects the selected objects.
+     */
+    @FxThread
+    public void selectNodesFromTree(@NotNull final Array<?> objects) {
+
         final MA editor3DPart = getEditor3DPart();
+        editor3DPart.select(EMPTY_SELECTION);
+
+        if (objects.size() > 1) {
+            multiSelectNodesFromTree(objects, editor3DPart);
+        } else if (objects.size() == 1) {
+            singleSelectNodesFromTree(objects, editor3DPart);
+            return;
+        } else {
+            editor3DPart.select(EMPTY_SELECTION);
+        }
+
+        getModelPropertyEditor().buildFor(null, null);
+        getPaintingComponentContainer().prepareFor(null);
+    }
+
+    /**
+     * Handle multi select nodes from tree.
+     *
+     * @param objects the selected objects.
+     * @param editor3DPart the 3D part of this editor.
+     */
+    @FxThread
+    protected void multiSelectNodesFromTree(@NotNull final Array<?> objects, @NotNull final MA editor3DPart) {
+
+        final Array<Spatial> toSelect = ArrayFactory.newArray(Spatial.class);
+
+        for (final Object object : objects) {
+
+            Object element;
+
+            if (object instanceof TreeNode<?>) {
+                element = ((TreeNode) object).getElement();
+            } else {
+                element = object;
+            }
+
+            if (element instanceof SceneLayer) {
+                element = null;
+            }
+
+            Spatial spatial = null;
+
+            if (element instanceof AudioNode) {
+                final EditorAudioNode audioNode = editor3DPart.getAudioNode((AudioNode) element);
+                spatial = audioNode == null ? null : audioNode.getEditedNode();
+            } else if (element instanceof Spatial) {
+                spatial = (Spatial) element;
+            } else if (element instanceof Light) {
+                spatial = editor3DPart.getLightNode((Light) element);
+            } else if(element instanceof ScenePresentable) {
+                final EditorPresentableNode presentableNode = editor3DPart.getPresentableNode((ScenePresentable) element);
+                spatial = presentableNode == null? null : presentableNode.getEditedNode();
+            }
+
+            if (spatial != null && !spatial.isVisible()) {
+                spatial = null;
+            }
+
+            if(spatial != null && canSelect(spatial)) {
+                toSelect.add(spatial);
+            }
+        }
+
+        editor3DPart.select(toSelect);
+    }
+
+    /**
+     * Handle single select nodes from tree.
+     *
+     * @param objects the selected objects.
+     * @param editor3DPart the 3D part of this editor.
+     */
+    @FxThread
+    protected void singleSelectNodesFromTree(@NotNull final Array<?> objects, @NotNull final MA editor3DPart) {
 
         Object parent = null;
         Object element;
 
-        if (object instanceof TreeNode<?>) {
-            final TreeNode treeNode = (TreeNode) object;
+        final Object first = objects.first();
+
+        if (first instanceof TreeNode<?>) {
+            final TreeNode treeNode = (TreeNode) first;
             final TreeNode parentNode = treeNode.getParent();
             parent = parentNode == null ? null : parentNode.getElement();
             element = treeNode.getElement();
         } else {
-            element = object;
+            element = first;
         }
 
         if (element instanceof SceneLayer) {
@@ -751,8 +890,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             parent = spatial.getParent();
         } else if (element instanceof Light) {
             spatial = editor3DPart.getLightNode((Light) element);
-        } else if(object instanceof ScenePresentable) {
-            final EditorPresentableNode presentableNode = editor3DPart.getPresentableNode((ScenePresentable) object);
+        } else if(element instanceof ScenePresentable) {
+            final EditorPresentableNode presentableNode = editor3DPart.getPresentableNode((ScenePresentable) element);
             spatial = presentableNode == null? null : presentableNode.getEditedNode();
         }
 
@@ -760,17 +899,17 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             spatial = null;
         }
 
-        updateSelection(spatial);
+        if (spatial != null && canSelect(spatial)) {
 
-        if (spatial != null && !isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
-            editor3DPart.cameraLookAt(spatial.getWorldTranslation());
+            editor3DPart.select(spatial);
+
+            if (!isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
+                editor3DPart.cameraLookAt(spatial);
+            }
         }
 
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.buildFor(element, parent);
-
-        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
-        editingComponentContainer.prepareFor(element);
+        getModelPropertyEditor().buildFor(element, parent);
+        getPaintingComponentContainer().prepareFor(element);
     }
 
     @FxThread
@@ -788,21 +927,6 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         return !invisible;
     }
 
-    /**
-     * Update selection to 3D state.
-     *
-     * @param spatial the new selected object.
-     */
-    @FxThread
-    protected void updateSelection(@Nullable final Spatial spatial) {
-
-        final Array<Spatial> selection = ArrayFactory.newArray(Spatial.class);
-        if (spatial != null) selection.add(spatial);
-
-        final MA editor3DState = getEditor3DPart();
-        editor3DState.updateSelection(selection);
-    }
-
     @Override
     @BackgroundThread
     public void doSave(@NotNull final Path toStore) throws IOException {
@@ -810,7 +934,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         final M currentModel = getCurrentModel();
 
-        NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
+        try {
+            NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            return;
+        }
 
         PRE_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         try {
@@ -821,6 +950,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                 exporter.save(currentModel, out);
             }
 
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
         } finally {
             POST_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         }
@@ -992,7 +1123,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @FxThread
     protected void createContent(@NotNull final StackPane root) {
-        this.selectionNodeHandler = this::selectNodeFromTree;
+        this.selectionNodeHandler = this::selectNodesFromTree;
 
         propertyEditorObjectsContainer = new VBox();
         modelNodeTreeEditingContainer = new VBox();
@@ -1078,7 +1209,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         if (newIndex == OBJECTS_TOOL) {
             FXUtils.addToPane(modelPropertyEditor, propertyContainer);
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
-            modelPropertyEditor.rebuild();
+            selectNodesFromTree(modelNodeTree.getSelectedItems());
         } else if (newIndex == PAINTING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
             editingComponentContainer.notifyShowed();
@@ -1088,8 +1219,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             editingComponentContainer.notifyHided();
         }
 
-        final MA editor3DState = getEditor3DPart();
-        editor3DState.changePaintingMode(newIndex == PAINTING_TOOL);
+        final MA editor3DPart = getEditor3DPart();
+        editor3DPart.changePaintingMode(newIndex == PAINTING_TOOL);
     }
 
     @Override
@@ -1165,12 +1296,14 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        final Object selected = modelNodeTree.getSelectedObject();
+        final ModelNodeTree nodeTree = getModelNodeTree();
+        final Object selected = nodeTree.getSelectedObject();
 
         final Node parent;
 
-        if (selected instanceof Node && findParent((Spatial) selected, AssetLinkNode.class::isInstance) == null) {
+        if (selected instanceof Node &&
+            nodeTree.getSelectedCount() == 1 &&
+            findParent((Spatial) selected, AssetLinkNode.class::isInstance) == null) {
             parent = (Node) selected;
         } else {
             parent = (Node) currentModel;
@@ -1179,9 +1312,9 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
-        final MA editor3DState = getEditor3DPart();
+        final MA editor3DPart = getEditor3DPart();
         final ModelKey modelKey = new ModelKey(assetPath);
-        final Camera camera = editor3DState.getCamera();
+        final Camera camera = editor3DPart.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
@@ -1196,16 +1329,46 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
             final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
             assetLinkNode.attachLinkedChild(loadedModel, modelKey);
-            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
+            assetLinkNode.setUserData(KEY_LOADED_MODEL, true);
 
             if (defaultLayer != null) {
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            final Vector3f scenePoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
+            final Vector3f scenePoint = editor3DPart.getScenePosByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
             final Vector3f result = local.nextVector(scenePoint)
                     .subtractLocal(parent.getWorldTranslation());
+
+            final boolean isPhysics = NodeUtils.children(loadedModel)
+                    .flatMap(ControlUtils::controls)
+                    .anyMatch(PhysicsControl.class::isInstance);
+
+            if (isPhysics) {
+
+                NodeUtils.updateWorldBound(loadedModel);
+
+                final BoundingVolume worldBound = loadedModel.getWorldBound();
+
+                float height = 0;
+
+                if (worldBound instanceof BoundingBox) {
+                    height = ((BoundingBox) worldBound).getYExtent();
+                    height = Math.min(((BoundingBox) worldBound).getXExtent(), height);
+                    height = Math.min(((BoundingBox) worldBound).getZExtent(), height);
+                } else if (worldBound instanceof BoundingSphere) {
+                    height = ((BoundingSphere) worldBound).getRadius();
+                }
+
+                height /= 2F;
+
+                final Quaternion localRotation = assetLinkNode.getLocalRotation();
+                final Vector3f up = GeomUtils.getUp(localRotation, local.nextVector());
+                up.multLocal(height);
+
+                result.addLocal(up);
+            }
+
 
             assetLinkNode.setLocalTranslation(result);
 

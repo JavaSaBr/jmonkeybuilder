@@ -39,7 +39,8 @@ public class PaintingUtils {
     @FromAnyThread
     public static @Nullable Spatial getPaintedModel(@NotNull final Node cursorNode) {
         final PaintingControl control = getPaintingControl(cursorNode);
-        return control == null ? null : control.getPaintedModel();
+        final Object paintedModel = control == null ? null : control.getPaintedModel();
+        return paintedModel instanceof Spatial ? (Spatial) paintedModel : null;
     }
 
     /**
@@ -50,7 +51,8 @@ public class PaintingUtils {
      */
     @FromAnyThread
     public static @Nullable Spatial getPaintedModel(@Nullable final PaintingControl control) {
-        return control == null ? null : control.getPaintedModel();
+        final Object paintedModel = control == null ? null : control.getPaintedModel();
+        return paintedModel instanceof Spatial ? (Spatial) paintedModel : null;
     }
 
     /**

@@ -21,8 +21,8 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of the {@link PropertyControl} to change boolean values.
  *
- * @param <C> the type of a {@link ChangeConsumer}
- * @param <T> the type of an editing object
+ * @param <C> the type of a {@link ChangeConsumer}.
+ * @param <T> the type of an editing object.
  * @author JavaSaBr
  */
 public class BooleanPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Boolean> {

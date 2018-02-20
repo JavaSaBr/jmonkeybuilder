@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.operation.RemoveChildOperation;
+import com.ss.editor.model.undo.impl.RemoveChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -45,7 +45,9 @@ public class RemoveNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final TreeNode<?> node = getNode();
         final Object element = node.getElement();
-        if (!(element instanceof Spatial)) return;
+        if (!(element instanceof Spatial)) {
+            return;
+        }
 
         final Spatial spatial = (Spatial) element;
 

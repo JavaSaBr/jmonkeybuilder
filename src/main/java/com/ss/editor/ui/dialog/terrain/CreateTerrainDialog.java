@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.terrain;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -26,7 +26,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
+import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
@@ -458,6 +458,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the total size combo box.
+     *
      * @return the total size combo box.
      */
     @FxThread
@@ -466,6 +468,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the patch size combo box.
+     *
      * @return the patch size combo box.
      */
     @FxThread
@@ -474,6 +478,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the alpha blend texture size combo box.
+     *
      * @return the alpha blend texture size combo box.
      */
     @FxThread
@@ -482,6 +488,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the min radius field.
+     *
      * @return the min radius field.
      */
     @FxThread
@@ -490,6 +498,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the max radius field.
+     *
      * @return the max radius field.
      */
     @FxThread
@@ -498,7 +508,9 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * @return the settingsRoot.
+     * Get the settings root.
+     *
+     * @return the settings root.
      */
     @FxThread
     private @NotNull VBox getSettingsRoot() {
@@ -506,6 +518,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the base texture control.
+     *
      * @return the base texture control.
      */
     @FxThread
@@ -514,6 +528,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the base image control.
+     *
      * @return the base image control.
      */
     @FxThread
@@ -522,6 +538,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the type of height map.
+     *
      * @return the type of height map.
      */
     @FxThread
@@ -530,6 +548,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the height map scale field.
+     *
      * @return the height map scale field.
      */
     @FxThread
@@ -538,6 +558,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the height map smooth field.
+     *
      * @return the height map smooth field.
      */
     @FxThread
@@ -546,6 +568,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the flattening field.
+     *
      * @return the flattening field.
      */
     @FxThread
@@ -554,6 +578,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the iterations field.
+     *
      * @return the iterations field.
      */
     @FxThread
@@ -562,6 +588,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the alpha texture folder control.
+     *
      * @return the alpha texture folder control.
      */
     @FxThread
@@ -779,7 +807,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         terrainMaterial.setBoolean("WardIso", true);
 
         final com.jme3.scene.Node terrainNode = (com.jme3.scene.Node) terrain;
-        terrainNode.setUserData(LOADED_MODEL_KEY, true);
+        terrainNode.setUserData(KEY_LOADED_MODEL, true);
         terrainNode.setMaterial(terrainMaterial);
         terrainNode.setModelBound(new BoundingBox());
         terrainNode.updateModelBound();
@@ -808,6 +836,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the node tree.
+     *
      * @return the node tree.
      */
     @FxThread
@@ -816,6 +846,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the parent node.
+     *
      * @return the parent node.
      */
     @FxThread

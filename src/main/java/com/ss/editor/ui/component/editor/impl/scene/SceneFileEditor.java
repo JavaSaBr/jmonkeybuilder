@@ -18,6 +18,7 @@ import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
+import com.ss.editor.model.node.layer.LayersRoot;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.part3d.editor.impl.scene.SceneEditor3DPart;
 import com.ss.editor.ui.Icons;
@@ -29,14 +30,15 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.app.state.list.AppStateList;
 import com.ss.editor.ui.control.filter.list.FilterList;
 import com.ss.editor.ui.control.layer.LayerNodeTree;
-import com.ss.editor.model.node.layer.LayersRoot;
-import com.ss.editor.ui.control.model.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.ModelNodeTree;
+import com.ss.editor.ui.control.model.ModelPropertyEditor;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -56,8 +58,8 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class SceneFileEditor extends
-        AbstractSceneFileEditor<SceneNode, SceneEditor3DPart, EditorSceneEditorState> implements SceneChangeConsumer {
+public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEditor3DPart, EditorSceneEditorState>
+        implements SceneChangeConsumer {
 
     private static final int LAYERS_TOOL = 3;
     private static final int APP_STATES_TOOL = 4;
@@ -196,10 +198,14 @@ public class SceneFileEditor extends
     @FxThread
     private void updateVisibility(@NotNull final Spatial spatial) {
         final SceneLayer layer = SceneLayer.getLayer(spatial);
-        if (layer != null) spatial.setVisible(layer.isShowed());
+        if (layer != null) {
+            spatial.setVisible(layer.isShowed());
+        }
     }
 
     /**
+     * Get the list with app states.
+     *
      * @return the list with app states.
      */
     @FxThread
@@ -208,6 +214,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Get the list with filters.
+     *
      * @return the list with filters.
      */
     @FxThread
@@ -216,6 +224,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Get the tree with layers.
+     *
      * @return the tree with layers.
      */
     @FxThread
@@ -224,6 +234,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Get the container of property editor in layers tool.
+     *
      * @return the container of property editor in layers tool.
      */
     @FxThread
@@ -232,6 +244,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Get the container of property editor in filters tool.
+     *
      * @return the container of property editor in filters tool.
      */
     @FxThread
@@ -239,7 +253,15 @@ public class SceneFileEditor extends
         return notNull(propertyEditorFiltersContainer);
     }
 
+    @Override
+    @FxThread
+    protected boolean isNeedToOpenObjectsTool(final int current) {
+        return !(current == OBJECTS_TOOL || current == LAYERS_TOOL || current == SCRIPTING_TOOL);
+    }
+
     /**
+     * Get the container of property editor in app states tool.
+     *
      * @return the container of property editor in app states tool.
      */
     @FxThread
@@ -277,12 +299,17 @@ public class SceneFileEditor extends
      */
     @FxThread
     private void changeLight(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
 
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.updateLightShowed(newValue);
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        if (editorState != null) editorState.setShowedLight(newValue);
+        final SceneEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.updateLightShowed(newValue);
+
+        if (editorState != null) {
+            editorState.setShowedLight(newValue);
+        }
     }
 
     /**
@@ -290,12 +317,17 @@ public class SceneFileEditor extends
      */
     @FxThread
     private void changeAudio(@NotNull final Boolean newValue) {
-        if (isIgnoreListeners()) return;
 
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.updateAudioShowed(newValue);
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        if (editorState != null) editorState.setShowedAudio(newValue);
+        final SceneEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.updateAudioShowed(newValue);
+
+        if (editorState != null) {
+            editorState.setShowedAudio(newValue);
+        }
     }
 
     @Override
@@ -335,7 +367,9 @@ public class SceneFileEditor extends
         super.processChangeTool(oldValue, newValue);
 
         final int newIndex = newValue.intValue();
-        if (newIndex < 2) return;
+        if (newIndex < 2) {
+            return;
+        }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         final VBox appStateContainer = getPropertyEditorAppStateContainer();
@@ -344,24 +378,30 @@ public class SceneFileEditor extends
 
         switch (newIndex) {
             case LAYERS_TOOL: {
+                final LayerNodeTree layerNodeTree = getLayerNodeTree();
+                final TreeNode<?> selected = layerNodeTree.getSelected();
                 FXUtils.addToPane(modelPropertyEditor, layersContainer);
-                modelPropertyEditor.rebuild();
+                selectNodeFromLayersTree(selected);
                 break;
             }
             case APP_STATES_TOOL: {
+                final AppStateList appStateList = getAppStateList();
                 FXUtils.addToPane(modelPropertyEditor, appStateContainer);
-                modelPropertyEditor.rebuild();
+                selectAppStateFromList(appStateList.getSelected());
                 break;
             }
             case FILTERS_TOOL: {
+                final FilterList filterList = getFilterList();
                 FXUtils.addToPane(modelPropertyEditor, filtersContainer);
-                modelPropertyEditor.rebuild();
+                selectFilterFromList(filterList.getSelected());
                 break;
             }
         }
     }
 
     /**
+     * Get the light toggle.
+     *
      * @return the light toggle.
      */
     @FxThread
@@ -370,6 +410,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Get the audio toggle.
+     *
      * @return the audio toggle.
      */
     @FxThread
@@ -392,22 +434,14 @@ public class SceneFileEditor extends
      */
     @FxThread
     private void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
-        if (!isNeedSyncSelection()) return;
+
+        if (!isNeedSyncSelection()) {
+            return;
+        }
 
         setNeedSyncSelection(false);
         try {
-
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(null);
-
-            final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(null);
-
-            final FilterList filterList = getFilterList();
-            filterList.clearSelection();
-
             super.selectNodeFromTree(appState);
-
         } finally {
             setNeedSyncSelection(true);
         }
@@ -418,22 +452,14 @@ public class SceneFileEditor extends
      */
     @FxThread
     private void selectFilterFromList(@Nullable final EditableSceneFilter sceneFilter) {
-        if (!isNeedSyncSelection()) return;
+
+        if (!isNeedSyncSelection()) {
+            return;
+        }
 
         setNeedSyncSelection(false);
         try {
-
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(null);
-
-            final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(null);
-
-            final AppStateList appStateList = getAppStateList();
-            appStateList.clearSelection();
-
             super.selectNodeFromTree(sceneFilter);
-
         } finally {
             setNeedSyncSelection(true);
         }
@@ -444,21 +470,18 @@ public class SceneFileEditor extends
      */
     @FxThread
     private void selectNodeFromLayersTree(@Nullable final Object object) {
-        if (!isNeedSyncSelection()) return;
+
+        if (!isNeedSyncSelection()) {
+            return;
+        }
 
         setNeedSyncSelection(false);
         try {
 
             final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.select(object);
+            modelNodeTree.selectSingle(object);
 
-            final AppStateList appStateList = getAppStateList();
-            appStateList.clearSelection();
-
-            final FilterList filterList = getFilterList();
-            filterList.clearSelection();
-
-            super.selectNodeFromTree(object);
+            selectNodeFromTree(object);
 
         } finally {
             setNeedSyncSelection(true);
@@ -467,22 +490,20 @@ public class SceneFileEditor extends
 
     @Override
     @FxThread
-    public void selectNodeFromTree(@Nullable final Object object) {
-        if (!isNeedSyncSelection()) return;
+    public void selectNodesFromTree(@NotNull final Array<?> objects) {
+
+        if (!isNeedSyncSelection()) {
+            super.selectNodesFromTree(objects);
+            return;
+        }
 
         setNeedSyncSelection(false);
         try {
 
             final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.select(object);
+            layerNodeTree.selects(objects);
 
-            final AppStateList appStateList = getAppStateList();
-            appStateList.clearSelection();
-
-            final FilterList filterList = getFilterList();
-            filterList.clearSelection();
-
-            super.selectNodeFromTree(object);
+            super.selectNodesFromTree(objects);
 
         } finally {
             setNeedSyncSelection(true);
@@ -496,6 +517,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Return true if need sync selection.
+     *
      * @param needSyncSelection true if need sync selection.
      */
     @FxThread
@@ -504,6 +527,8 @@ public class SceneFileEditor extends
     }
 
     /**
+     * Return true if need sync selection.
+     *
      * @return true if need sync selection.
      */
     @FxThread
@@ -512,14 +537,8 @@ public class SceneFileEditor extends
     }
 
     @Override
-    @FxThread
-    protected void updateSelection(@Nullable Spatial spatial) {
-
-        if (spatial instanceof SceneNode || spatial instanceof SceneLayer) {
-            spatial = null;
-        }
-
-        super.updateSelection(spatial);
+    protected boolean canSelect(@NotNull final Spatial spatial) {
+        return !(spatial instanceof SceneNode) && !(spatial instanceof SceneLayer) && super.canSelect(spatial);
     }
 
     @Override
@@ -634,11 +653,11 @@ public class SceneFileEditor extends
     @FxThread
     public void notifyAddedAppState(@NotNull final SceneAppState appState) {
 
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.addAppState(appState);
+        final SceneEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.addAppState(appState);
 
         if (appState instanceof ScenePresentable) {
-            editor3DState.addPresentable((ScenePresentable) appState);
+            editor3DPart.addPresentable((ScenePresentable) appState);
         }
 
         getAppStateList().fill(getCurrentModel());
@@ -648,11 +667,11 @@ public class SceneFileEditor extends
     @FxThread
     public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
 
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.removeAppState(appState);
+        final SceneEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.removeAppState(appState);
 
         if (appState instanceof ScenePresentable) {
-            editor3DState.removePresentable((ScenePresentable) appState);
+            editor3DPart.removePresentable((ScenePresentable) appState);
         }
 
         getAppStateList().fill(getCurrentModel());
@@ -668,11 +687,11 @@ public class SceneFileEditor extends
     @FxThread
     public void notifyAddedFilter(@NotNull final SceneFilter sceneFilter) {
 
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.addFilter(sceneFilter);
+        final SceneEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.addFilter(sceneFilter);
 
         if (sceneFilter instanceof ScenePresentable) {
-            editor3DState.addPresentable((ScenePresentable) sceneFilter);
+            editor3DPart.addPresentable((ScenePresentable) sceneFilter);
         }
 
         getFilterList().fill(getCurrentModel());
@@ -682,11 +701,11 @@ public class SceneFileEditor extends
     @FxThread
     public void notifyRemovedFilter(@NotNull final SceneFilter sceneFilter) {
 
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.removeFilter(sceneFilter);
+        final SceneEditor3DPart editor3DPart = getEditor3DPart();
+        editor3DPart.removeFilter(sceneFilter);
 
         if (sceneFilter instanceof ScenePresentable) {
-            editor3DState.removePresentable((ScenePresentable) sceneFilter);
+            editor3DPart.removePresentable((ScenePresentable) sceneFilter);
         }
 
         getFilterList().fill(getCurrentModel());

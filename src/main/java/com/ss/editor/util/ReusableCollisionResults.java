@@ -9,6 +9,8 @@ import com.ss.rlib.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
+
 /**
  * The reusable implementation of collision result.
  *
@@ -38,6 +40,11 @@ public class ReusableCollisionResults extends CollisionResults implements Reusab
     public void addCollision(@NotNull final CollisionResult result) {
         collisions.add(result);
         original.add(result);
+    }
+
+    @Override
+    public Iterator<CollisionResult> iterator() {
+        return collisions.iterator();
     }
 
     @Override

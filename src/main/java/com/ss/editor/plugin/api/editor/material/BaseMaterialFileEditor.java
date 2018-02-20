@@ -23,6 +23,7 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -141,7 +142,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
         super.createToolComponents(container, root);
 
-        settingsTree = new NodeTree<>(this::selectedFromTree, getChangeConsumer());
+        settingsTree = new NodeTree<>(this::selectFromTree, getChangeConsumer(), SelectionMode.SINGLE);
         propertyEditor = new PropertyEditor<>(getChangeConsumer());
         propertyEditor.prefHeightProperty().bind(root.heightProperty());
 
@@ -177,12 +178,14 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     }
 
     /**
-     * Handle selected object from tree.
+     * Handle selected objects from tree.
      *
-     * @param object the selected object.
+     * @param objects the selected objects.
      */
     @FxThread
-    private void selectedFromTree(@Nullable final Object object) {
+    private void selectFromTree(@NotNull final Array<Object> objects) {
+
+        final Object object = objects.first();
 
         Object parent = null;
         Object element;

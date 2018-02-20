@@ -34,6 +34,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class DefaultTreeNodeFactory implements TreeNodeFactory {
 
+    public static final int PRIORITY = 0;
+
     @Override
     @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
@@ -71,5 +73,10 @@ public class DefaultTreeNodeFactory implements TreeNodeFactory {
         }
 
         return null;
+    }
+
+    @Override
+    public int getPriority() {
+        return PRIORITY;
     }
 }

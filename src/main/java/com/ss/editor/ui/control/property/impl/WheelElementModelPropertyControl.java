@@ -41,13 +41,17 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
     private boolean checkSpatial(@NotNull final Spatial spatial) {
 
         final VehicleControl control = spatial.getControl(VehicleControl.class);
-        if (control == null) return false;
+        if (control == null) {
+            return false;
+        }
 
         final int numWheels = control.getNumWheels();
 
         for (int i = 0; i < numWheels; i++) {
             final VehicleWheel wheel = control.getWheel(i);
-            if (wheel == getEditObject()) return true;
+            if (wheel == getEditObject()) {
+                return true;
+            }
         }
 
         return false;

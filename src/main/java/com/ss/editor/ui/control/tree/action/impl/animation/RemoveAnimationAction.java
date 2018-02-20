@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.tree.action.impl.operation.animation.RemoveAnimationNodeOperation;
+import com.ss.editor.model.undo.impl.animation.RemoveAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;

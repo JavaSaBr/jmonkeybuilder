@@ -132,6 +132,17 @@ public class FilterList extends VBox {
     }
 
     /**
+     * Get the current selected item.
+     *
+     * @return the current selected item.
+     */
+    @FxThread
+    public @Nullable EditableSceneFilter getSelected() {
+        final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
+        return selectionModel.getSelectedItem();
+    }
+
+    /**
      * Add a new filter.
      */
     @FxThread

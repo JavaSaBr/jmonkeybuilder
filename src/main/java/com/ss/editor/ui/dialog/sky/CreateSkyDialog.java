@@ -25,7 +25,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
+import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;

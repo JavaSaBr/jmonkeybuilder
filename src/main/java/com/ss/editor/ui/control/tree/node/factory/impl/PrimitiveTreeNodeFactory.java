@@ -24,6 +24,8 @@ import java.nio.Buffer;
  */
 public class PrimitiveTreeNodeFactory implements TreeNodeFactory {
 
+    public static final int PRIORITY = 1;
+
     @Override
     @FxThread
     public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
@@ -45,7 +47,7 @@ public class PrimitiveTreeNodeFactory implements TreeNodeFactory {
 
     @Override
     @FxThread
-    public int getOrder() {
-        return 1;
+    public int getPriority() {
+        return PRIORITY;
     }
 }

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.LOADED_MODEL_KEY;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -35,6 +35,8 @@ import java.util.Collection;
  */
 public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    public static final int PRIORITY = 1;
+
     @NotNull
     private static final CullHint[] CULL_HINTS = CullHint.values();
 
@@ -47,11 +49,6 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     @NotNull
     private static final PropertyBuilder INSTANCE = new SpatialPropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance.
-     */
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -118,7 +115,6 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
                     new Vector3FPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
             locationControl.setApplyHandler(Spatial::setLocalTranslation);
             locationControl.setSyncHandler(Spatial::getLocalTranslation);
-
             locationControl.setEditObject(spatial);
 
             final Vector3FPropertyControl<ModelChangeConsumer, Spatial> scaleControl =
@@ -262,11 +258,16 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
     @FxThread
     private boolean isNeedSkip(@NotNull final String key) {
-        return SceneLayer.KEY.equals(key) || LOADED_MODEL_KEY.equals(key);
+        return SceneLayer.KEY.equals(key) || KEY_LOADED_MODEL.equals(key);
     }
 
     @FxThread
     private boolean canEditTransformation(@NotNull final Spatial spatial) {
         return !(spatial instanceof SceneNode || spatial instanceof SceneLayer);
+    }
+
+    @Override
+    public int getPriority() {
+        return PRIORITY;
     }
 }

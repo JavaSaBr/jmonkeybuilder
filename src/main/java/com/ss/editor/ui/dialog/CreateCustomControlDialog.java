@@ -12,7 +12,7 @@ import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ClasspathManager.Scope;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddControlOperation;
+import com.ss.editor.model.undo.impl.AddControlOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;

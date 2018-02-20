@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_MODEL_NODE;
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
@@ -17,13 +18,14 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.extension.scene.InvisibleObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.AddUserDataAction;
+import com.ss.editor.ui.control.tree.action.impl.DisableAllControlsAction;
+import com.ss.editor.ui.control.tree.action.impl.EnableAllControlsAction;
 import com.ss.editor.ui.control.tree.action.impl.RemoveNodeAction;
 import com.ss.editor.ui.control.tree.action.impl.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.CreateLightControlAction;
@@ -32,12 +34,14 @@ import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateCharacter
 import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateRigidBodyControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateStaticRigidBodyControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle.CreateVehicleControlAction;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddControlOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.MoveControlOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.RenameNodeOperation;
+import com.ss.editor.model.undo.impl.AddControlOperation;
+import com.ss.editor.model.undo.impl.MoveControlOperation;
+import com.ss.editor.model.undo.impl.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
+import com.ss.editor.util.ControlUtils;
+import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -130,6 +134,18 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             items.add(new RemoveNodeAction(nodeTree, this));
         }
 
+        NodeUtils.children(element)
+            .flatMap(ControlUtils::controls)
+            .filter(control -> !ControlUtils.isEnabled(control))
+            .findAny()
+            .ifPresent(c -> items.add(new EnableAllControlsAction(nodeTree, this)));
+
+        NodeUtils.children(element)
+                .flatMap(ControlUtils::controls)
+                .filter(ControlUtils::isEnabled)
+                .findAny()
+                .ifPresent(c -> items.add(new DisableAllControlsAction(nodeTree, this)));
+
         super.fillContextMenu(nodeTree, items);
     }
 
@@ -180,7 +196,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @FxThread
     public boolean canRemove() {
         final Node parent = getElement().getParent();
-        return parent != null && parent.getUserData(EditorTransformSupport.class.getName()) != Boolean.TRUE;
+        return parent != null && parent.getUserData(KEY_MODEL_NODE) != Boolean.TRUE;
     }
 
     /**
@@ -278,7 +294,10 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @Override
     @FxThread
     public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
-        if (StringUtils.equals(getName(), newName)) return;
+
+        if (StringUtils.equals(getName(), newName)){
+            return;
+        }
 
         super.changeName(nodeTree, newName);
 

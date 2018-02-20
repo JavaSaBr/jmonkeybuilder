@@ -10,9 +10,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The default implementation of the property control.
  *
- * @param <C> the type parameter
- * @param <D> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <D> the edited object's type.
+ * @param <T> the edited property's type.
  * @author JavaSaBr
  */
 public class DefaultSinglePropertyControl<C extends ChangeConsumer, D, T> extends DefaultPropertyControl<C, D, T> {

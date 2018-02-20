@@ -32,7 +32,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
     }
 
     /**
-     * Gets an action tester for asset dialog.
+     * Get the action tester for asset dialog.
      *
      * @return the action tester.
      */

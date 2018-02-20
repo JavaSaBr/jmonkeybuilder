@@ -283,8 +283,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             return;
         }
 
-        final Path assetFile = getRealFile(Paths.get(key.getName()));
-        if (assetFile == null || !Files.exists(assetFile)) {
+        final Path realFile = getRealFile(Paths.get(key.getName()));
+        if (realFile == null || !Files.exists(realFile)) {
             return;
         }
 
@@ -292,7 +292,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
             final long timestamp = reference.getLong();
 
-            final FileTime lastModifiedTime = Files.getLastModifiedTime(assetFile);
+            final FileTime lastModifiedTime = Files.getLastModifiedTime(realFile);
             if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) {
                 return;
             }

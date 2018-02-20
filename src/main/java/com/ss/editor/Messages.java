@@ -298,6 +298,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
+    public static final String MODEL_NODE_TREE_ACTION_ENABLE_ALL_CONTROLS;
+    public static final String MODEL_NODE_TREE_ACTION_DISABLE_ALL_CONTROLS;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -305,6 +307,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_LOCATION;
     public static final String MODEL_PROPERTY_SCALE;
     public static final String MODEL_PROPERTY_ROTATION;
+    public static final String MODEL_PROPERTY_TRANSFORMATION;
     public static final String MODEL_PROPERTY_MATERIAL;
     public static final String MODEL_PROPERTY_DIRECTION;
     public static final String MODEL_PROPERTY_RADIUS;
@@ -352,6 +355,8 @@ public class Messages {
     public static final String MODEL_PROPERTY_FALL_SPEED;
     public static final String MODEL_PROPERTY_GRAVITY;
     public static final String MODEL_PROPERTY_JUMP_SPEED;
+    public static final String MODEL_PROPERTY_JUMP_FORCE;
+    public static final String MODEL_PROPERTY_PHYSICS_DAMPING;
     public static final String MODEL_PROPERTY_MAX_SLOPE;
     public static final String MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL;
     public static final String MODEL_PROPERTY_IS_USE_VIEW_DIRECTION;
@@ -635,20 +640,22 @@ public class Messages {
     public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
 
-    public static final String EDITING_COMPONENT_BRUSH_SIZE;
-    public static final String EDITING_COMPONENT_BRUSH_POWER;
-    public static final String EDITING_COMPONENT_SMOOTHLY;
-    public static final String EDITING_COMPONENT_LIMITED;
-    public static final String EDITING_COMPONENT_USE_MARKER;
-    public static final String EDITING_COMPONENT_LEVEL;
-    public static final String EDITING_COMPONENT_ROUGHNESS;
-    public static final String EDITING_COMPONENT_FREQUENCY;
-    public static final String EDITING_COMPONENT_LACUNARITY;
-    public static final String EDITING_COMPONENT_OCTAVES;
-    public static final String EDITING_COMPONENT_SCALE;
-    public static final String EDITING_COMPONENT_TRI_PLANAR;
-    public static final String EDITING_COMPONENT_SHININESS;
-    public static final String EDITING_COMPONENT_LAYER;
+    public static final String PAINTING_COMPONENT_BRUSH_SIZE;
+    public static final String PAINTING_COMPONENT_BRUSH_POWER;
+    public static final String PAINTING_COMPONENT_SMOOTHLY;
+    public static final String PAINTING_COMPONENT_LIMITED;
+    public static final String PAINTING_COMPONENT_USE_MARKER;
+    public static final String PAINTING_COMPONENT_LEVEL;
+    public static final String PAINTING_COMPONENT_ROUGHNESS;
+    public static final String PAINTING_COMPONENT_FREQUENCY;
+    public static final String PAINTING_COMPONENT_LACUNARITY;
+    public static final String PAINTING_COMPONENT_OCTAVES;
+    public static final String PAINTING_COMPONENT_SCALE;
+    public static final String PAINTING_COMPONENT_TRI_PLANAR;
+    public static final String PAINTING_COMPONENT_SHININESS;
+    public static final String PAINTING_COMPONENT_LAYER;
+    public static final String PAINTING_COMPONENT_MODEL;
+    public static final String PAINTING_COMPONENT_METHOD;
 
     public static final String MODEL_CONVERTER_DIALOG_TITLE;
     public static final String MODEL_CONVERTER_DIALOG_RESULT_NAME;
@@ -692,6 +699,10 @@ public class Messages {
     public static final String PAINTING_COMPONENT_CONTAINER_TOOL;
     public static final String PAINTING_COMPONENT_CONTAINER_NO_TOOLS;
     public static final String PAINTING_COMPONENT_TERRAIN_EDITOR;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH;
 
     static {
 
@@ -989,6 +1000,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
         MODEL_NODE_TREE_ACTION_ADD_WHEEL = bundle.getString("ModelNodeTreeActionAddWheel");
         MODEL_NODE_TREE_ACTION_ADD_TERRAIN = bundle.getString("ModelNodeTreeActionAddTerrain");
+        MODEL_NODE_TREE_ACTION_ENABLE_ALL_CONTROLS = bundle.getString("ModelNodeTreeActionEnableAllControls");
+        MODEL_NODE_TREE_ACTION_DISABLE_ALL_CONTROLS = bundle.getString("ModelNodeTreeActionDisableAllControls");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -996,6 +1009,7 @@ public class Messages {
         MODEL_PROPERTY_LOCATION = bundle.getString("ModelPropertyLocation");
         MODEL_PROPERTY_SCALE = bundle.getString("ModelPropertyScale");
         MODEL_PROPERTY_ROTATION = bundle.getString("ModelPropertyRotation");
+        MODEL_PROPERTY_TRANSFORMATION = bundle.getString("ModelPropertyTransformation");
         MODEL_PROPERTY_MATERIAL = bundle.getString("ModelPropertyMaterial");
         MODEL_PROPERTY_DIRECTION = bundle.getString("ModelPropertyDirection");
         MODEL_PROPERTY_RADIUS = bundle.getString("ModelPropertyRadius");
@@ -1043,6 +1057,8 @@ public class Messages {
         MODEL_PROPERTY_FALL_SPEED = bundle.getString("ModelPropertyFallSpeed");
         MODEL_PROPERTY_GRAVITY = bundle.getString("ModelPropertyGravity");
         MODEL_PROPERTY_JUMP_SPEED = bundle.getString("ModelPropertyJumpSpeed");
+        MODEL_PROPERTY_JUMP_FORCE = bundle.getString("ModelPropertyJumpForce");
+        MODEL_PROPERTY_PHYSICS_DAMPING = bundle.getString("ModelPropertyPhysicsDamping");
         MODEL_PROPERTY_MAX_SLOPE = bundle.getString("ModelPropertyMaxSlope");
         MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL = bundle.getString("ModelPropertyIsApplyPhysicsLocal");
         MODEL_PROPERTY_IS_USE_VIEW_DIRECTION = bundle.getString("ModelPropertyIsUseViewDirection");
@@ -1327,20 +1343,22 @@ public class Messages {
         CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTorusShapeDialogTitle");
         CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTriangleShapeDialogTitle");
 
-        EDITING_COMPONENT_BRUSH_SIZE = bundle.getString("EditingComponentBrushSize");
-        EDITING_COMPONENT_BRUSH_POWER = bundle.getString("EditingComponentBrushPower");
-        EDITING_COMPONENT_SMOOTHLY = bundle.getString("EditingComponentSmoothly");
-        EDITING_COMPONENT_LIMITED = bundle.getString("EditingComponentLimited");
-        EDITING_COMPONENT_USE_MARKER = bundle.getString("EditingComponentUseMarker");
-        EDITING_COMPONENT_LEVEL = bundle.getString("EditingComponentLevel");
-        EDITING_COMPONENT_ROUGHNESS = bundle.getString("EditingComponentRoughness");
-        EDITING_COMPONENT_FREQUENCY = bundle.getString("EditingComponentFrequency");
-        EDITING_COMPONENT_LACUNARITY = bundle.getString("EditingComponentLacunarity");
-        EDITING_COMPONENT_OCTAVES = bundle.getString("EditingComponentOctaves");
-        EDITING_COMPONENT_SCALE = bundle.getString("EditingComponentScale");
-        EDITING_COMPONENT_TRI_PLANAR = bundle.getString("EditingComponentTriPlanar");
-        EDITING_COMPONENT_SHININESS = bundle.getString("EditingComponentShininess");
-        EDITING_COMPONENT_LAYER = bundle.getString("EditingComponentLayer");
+        PAINTING_COMPONENT_BRUSH_SIZE = bundle.getString("PaintingComponentBrushSize");
+        PAINTING_COMPONENT_BRUSH_POWER = bundle.getString("PaintingComponentBrushPower");
+        PAINTING_COMPONENT_SMOOTHLY = bundle.getString("PaintingComponentSmoothly");
+        PAINTING_COMPONENT_LIMITED = bundle.getString("PaintingComponentLimited");
+        PAINTING_COMPONENT_USE_MARKER = bundle.getString("PaintingComponentUseMarker");
+        PAINTING_COMPONENT_LEVEL = bundle.getString("PaintingComponentLevel");
+        PAINTING_COMPONENT_ROUGHNESS = bundle.getString("PaintingComponentRoughness");
+        PAINTING_COMPONENT_FREQUENCY = bundle.getString("PaintingComponentFrequency");
+        PAINTING_COMPONENT_LACUNARITY = bundle.getString("PaintingComponentLacunarity");
+        PAINTING_COMPONENT_OCTAVES = bundle.getString("PaintingComponentOctaves");
+        PAINTING_COMPONENT_SCALE = bundle.getString("PaintingComponentScale");
+        PAINTING_COMPONENT_TRI_PLANAR = bundle.getString("PaintingComponentTriPlanar");
+        PAINTING_COMPONENT_SHININESS = bundle.getString("PaintingComponentShininess");
+        PAINTING_COMPONENT_LAYER = bundle.getString("PaintingComponentLayer");
+        PAINTING_COMPONENT_MODEL = bundle.getString("PaintingComponentModel");
+        PAINTING_COMPONENT_METHOD = bundle.getString("PaintingComponentMethod");
 
         MODEL_CONVERTER_DIALOG_TITLE = bundle.getString("ModelConverterDialogTitle");
         MODEL_CONVERTER_DIALOG_RESULT_NAME = bundle.getString("ModelConverterDialogResultName");
@@ -1384,5 +1402,9 @@ public class Messages {
         PAINTING_COMPONENT_CONTAINER_TOOL = bundle.getString("PaintingComponentContainerTool");
         PAINTING_COMPONENT_CONTAINER_NO_TOOLS = bundle.getString("PaintingComponentContainerNoTools");
         PAINTING_COMPONENT_TERRAIN_EDITOR = bundle.getString("PaintingComponentTerrainEditor");
+        PAINTING_COMPONENT_SPAWN_MODELS = bundle.getString("PaintingComponentSpawnModels");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS = bundle.getString("PaintingComponentSpawnModelsMethodAsIs");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK = bundle.getString("PaintingComponentSpawnModelsMethodLink");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH = bundle.getString("PaintingComponentSpawnModelsMethodBatch");
     }
 }

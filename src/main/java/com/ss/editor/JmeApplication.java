@@ -4,11 +4,10 @@ import static com.jme3.environment.LightProbeFactory.makeProbe;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.Utils.run;
-import static java.nio.file.Files.createDirectories;
 import com.jme3.app.DebugKeysAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
+import com.jme3.asset.plugins.ClasspathLocator;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
 import com.jme3.bounding.BoundingSphere;
@@ -49,18 +48,13 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.logging.impl.FolderFileListener;
 import com.ss.rlib.util.os.OperatingSystem;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.concurrent.locks.StampedLock;
-import java.util.logging.Level;
 
 /**
  * The implementation of the {@link com.jme3.app.Application} of this Editor.
@@ -104,10 +98,9 @@ public class JmeApplication extends JmeToJFXApplication {
     static @NotNull JmeApplication prepareToStart() {
 
         if (Config.DEV_DEBUG) {
-            System.err.println("config is loaded.");
+            System.err.println("config was loaded.");
         }
 
-        configureLogger();
         try {
 
             final EditorConfig config = EditorConfig.getInstance();
@@ -124,31 +117,6 @@ public class JmeApplication extends JmeToJFXApplication {
         }
 
         return JME_APPLICATION;
-    }
-
-    @JmeThread
-    private static void configureLogger() {
-
-        // disable the standard logger
-        if (!Config.DEV_DEBUG) {
-            java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
-        }
-
-        // configure our logger
-        LoggerLevel.DEBUG.setEnabled(Config.DEV_DEBUG);
-        LoggerLevel.INFO.setEnabled(true);
-        LoggerLevel.ERROR.setEnabled(true);
-        LoggerLevel.WARNING.setEnabled(true);
-
-        final Path logFolder = Config.getFolderForLog();
-
-        if (!Files.exists(logFolder)) {
-            run(() -> createDirectories(logFolder));
-        }
-
-        if (!LoggerLevel.DEBUG.isEnabled()) {
-            LoggerManager.addListener(new FolderFileListener(logFolder));
-        }
     }
 
     /**
@@ -266,7 +234,7 @@ public class JmeApplication extends JmeToJFXApplication {
         super.simpleInitApp();
 
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
-        renderManager.setSinglePassLightBatchSize(15);
+        renderManager.setSinglePassLightBatchSize(10);
 
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
@@ -276,8 +244,11 @@ public class JmeApplication extends JmeToJFXApplication {
         LOGGER.debug(this, "OS: " + system.getDistribution());
 
         final AssetManager assetManager = getAssetManager();
+        assetManager.unregisterLocator("", ClasspathLocator.class);
+        assetManager.unregisterLocator("/", ClasspathLocator.class);
         assetManager.registerLocator("", FolderAssetLocator.class);
         assetManager.registerLocator("", FileSystemAssetLocator.class);
+        assetManager.registerLocator("", ClasspathLocator.class);
         assetManager.addAssetEventListener(EditorConfig.getInstance());
 
         final AudioRenderer audioRenderer = getAudioRenderer();

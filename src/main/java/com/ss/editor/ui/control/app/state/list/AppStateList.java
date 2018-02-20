@@ -126,6 +126,8 @@ public class AppStateList extends VBox {
     }
 
     /**
+     * Get the list view with created scene app states.
+     *
      * @return the list view with created scene app states.
      */
     @FxThread
@@ -140,6 +142,17 @@ public class AppStateList extends VBox {
     public void clearSelection() {
         final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
         selectionModel.select(null);
+    }
+
+    /**
+     * Get the current selected item.
+     *
+     * @return the current selected item.
+     */
+    @FxThread
+    public @Nullable EditableSceneAppState getSelected() {
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
+        return selectionModel.getSelectedItem();
     }
 
     /**

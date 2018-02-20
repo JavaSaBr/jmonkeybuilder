@@ -58,7 +58,7 @@ public class ObjectFromListPropertyEditorControl extends PropertyEditorControl<O
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final Object value = getPropertyValue();
         final ComboBox<Object> comboBox = getComboBox();

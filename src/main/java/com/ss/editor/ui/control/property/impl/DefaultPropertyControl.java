@@ -17,9 +17,9 @@ import java.util.function.Function;
 /**
  * The default implementation of the property control.
  *
- * @param <C> the type parameter
- * @param <D> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <D> the edited object's type.
+ * @param <T> the edited property's type.
  * @author JavaSaBr
  */
 public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends PropertyControl<C, D, T> {

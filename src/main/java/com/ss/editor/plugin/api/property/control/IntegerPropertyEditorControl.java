@@ -63,7 +63,7 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
         super.reload();
         final Integer value = getPropertyValue();
         getValueField().setValue(value == null ? 0 : value);

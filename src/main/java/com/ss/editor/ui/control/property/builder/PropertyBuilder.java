@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
  *
  * @author JavaSaBr
  */
-public interface PropertyBuilder {
+public interface PropertyBuilder extends Comparable<PropertyBuilder> {
 
     /**
      * Build properties controls for the object to the container.
@@ -26,4 +26,18 @@ public interface PropertyBuilder {
     @FxThread
     void buildFor(@NotNull Object object, @Nullable Object parent, @NotNull VBox container,
                   @NotNull ChangeConsumer changeConsumer);
+
+    /**
+     * Get the priority of this builder.
+     *
+     * @return the priority of this builder.
+     */
+    default int getPriority() {
+        return 0;
+    }
+
+    @Override
+    default int compareTo(@NotNull final PropertyBuilder o) {
+        return o.getPriority() - getPriority();
+    }
 }

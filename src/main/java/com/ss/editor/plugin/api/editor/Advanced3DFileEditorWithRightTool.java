@@ -64,7 +64,9 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
         editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
         editorToolComponent.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             final S editorState = getEditorState();
-            if (editorState != null) editorState.setOpenedTool(newValue.intValue());
+            if (editorState != null) {
+                editorState.setOpenedTool(newValue.intValue());
+            }
         });
 
         mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
@@ -112,8 +114,10 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
             return;
         }
 
-        editorToolComponent.getSelectionModel().select(editorState.getOpenedTool());
-        mainSplitContainer.updateFor(editorState);
+        getEditorToolComponent().getSelectionModel()
+                .select(editorState.getOpenedTool());
+
+        getMainSplitContainer().updateFor(editorState);
     }
 
     @Override
@@ -123,11 +127,33 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     }
 
     /**
+     * Get the pane of editor area.
+     *
      * @return the pane of editor area.
      */
     @FxThread
     protected @NotNull StackPane getEditorAreaPane() {
         return notNull(editorAreaPane);
+    }
+
+    /**
+     * Get the editor tool component.
+     *
+     * @return the editor tool component.
+     */
+    @FxThread
+    protected @NotNull ScrollableEditorToolComponent getEditorToolComponent() {
+        return notNull(editorToolComponent);
+    }
+
+    /**
+     * Get the main split container.
+     *
+     * @return the main split container.
+     */
+    @FxThread
+    protected @NotNull EditorToolSplitPane getMainSplitContainer() {
+        return notNull(mainSplitContainer);
     }
 
     /**

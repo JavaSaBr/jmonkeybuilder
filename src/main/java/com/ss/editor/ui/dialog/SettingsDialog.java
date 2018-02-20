@@ -19,6 +19,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.part3d.editor.impl.scene.SceneEditor3DPart;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.plugin.api.settings.SettingsCategory;
 import com.ss.editor.plugin.api.settings.SettingsPropertyDefinition;
@@ -80,6 +81,7 @@ public class SettingsDialog extends EditorDialog {
 
     public SettingsDialog() {
         FXUtils.addClassTo(getContainer(), CssClasses.SETTINGS_DIALOG);
+        validate();
     }
 
     @Override
@@ -257,12 +259,20 @@ public class SettingsDialog extends EditorDialog {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final FXAAFilter fxaaFilter = jmeApplication.getFXAAFilter();
-            fxaaFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER));
+            final SceneEditor3DPart sceneEditor3DPart = jmeApplication.getStateManager()
+                    .getState(SceneEditor3DPart.class);
 
             final ToneMapFilter filter = jmeApplication.getToneMapFilter();
-            filter.setEnabled(editorConfig.getBoolean(PREF_FILTER_TONEMAP, PREF_DEFAULT_TONEMAP_FILTER));
             filter.setWhitePoint(editorConfig.getVector3f(PREF_FILTER_TONEMAP_WHITE_POINT, PREF_DEFAULT_TONEMAP_WHITE_POINT));
+
+            if (sceneEditor3DPart != null) {
+                return;
+            }
+
+            filter.setEnabled(editorConfig.getBoolean(PREF_FILTER_TONEMAP, PREF_DEFAULT_TONEMAP_FILTER));
+
+            final FXAAFilter fxaaFilter = jmeApplication.getFXAAFilter();
+            fxaaFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER));
         });
 
         if (requiredUpdateClasspath != null) {

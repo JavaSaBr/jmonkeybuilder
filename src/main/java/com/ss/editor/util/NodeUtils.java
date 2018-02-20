@@ -9,15 +9,15 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.lang.reflect.Field;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -28,6 +28,18 @@ import java.util.stream.Stream;
  * @author JavaSaBr
  */
 public class NodeUtils {
+
+    @NotNull
+    private static final Field FIELD_WORLD_BOUND;
+
+    static {
+        try {
+            FIELD_WORLD_BOUND = Spatial.class.getDeclaredField("worldBound");
+            FIELD_WORLD_BOUND.setAccessible(true);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Find a parent of the model.
@@ -80,7 +92,10 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial) {
-        if (!(spatial instanceof Node)) {
+
+        if (spatial instanceof Geometry) {
+            return (Geometry) spatial;
+        } else if (!(spatial instanceof Node)) {
             return null;
         }
 
@@ -392,6 +407,19 @@ public class NodeUtils {
     /**
      * Collect all geometries.
      *
+     * @param spatial the spatial.
+     * @return the list of all geometries.
+     */
+    @FromAnyThread
+    public static @NotNull Array<Geometry> getGeometries(@NotNull final Spatial spatial) {
+        final Array<Geometry> result = ArrayFactory.newArray(Geometry.class);
+        addGeometry(spatial, result);
+        return result;
+    }
+
+    /**
+     * Collect all geometries.
+     *
      * @param spatial   the spatial.
      * @param container the container.
      */
@@ -477,5 +505,14 @@ public class NodeUtils {
         return result.stream();
     }
 
-
+    /**
+     * Force update world bound of the spatial.
+     *
+     * @param spatial the spatial.
+     */
+    @JmeThread
+    public static void updateWorldBound(@NotNull final Spatial spatial) {
+        children(spatial).forEach(sp -> sp.forceRefresh(true, true, false));
+        children(spatial).forEach(Spatial::getWorldBound);
+    }
 }

@@ -217,7 +217,10 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
      */
     @JmeThread
     private void updateLightShowedImpl(final boolean showed) {
-        if (showed == isLightShowed()) return;
+
+        if (showed == isLightShowed()) {
+            return;
+        }
 
         final Node lightNode = getLightNode();
         final Node modelNode = getModelNode();
@@ -246,7 +249,10 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
      */
     @JmeThread
     private void updateAudioShowedImpl(final boolean showed) {
-        if (showed == isAudioShowed()) return;
+
+        if (showed == isAudioShowed()) {
+            return;
+        }
 
         final Node audioNode = getAudioNode();
         final Node modelNode = getModelNode();

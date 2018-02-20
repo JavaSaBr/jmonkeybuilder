@@ -47,14 +47,6 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
      */
     private BiConsumer<D, T> applyHandler;
 
-    /**
-     * Instantiates a new Abstract property operation.
-     *
-     * @param target       the target
-     * @param propertyName the property name
-     * @param newValue     the new value
-     * @param oldValue     the old value
-     */
     public PropertyOperation(@NotNull final D target, @NotNull final String propertyName, @Nullable final T newValue,
                              @Nullable final T oldValue) {
         this.newValue = newValue;
@@ -67,8 +59,9 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     @FxThread
     protected void redoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
+            editor.notifyJmePreChangeProperty(target, propertyName);
             apply(target, newValue);
-            editor.notifyJmeChangeProperty(target, propertyName);
+            editor.notifyJmeChangedProperty(target, propertyName);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(target, propertyName));
         });
     }
@@ -77,8 +70,9 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     @FxThread
     protected void undoImpl(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
+            editor.notifyJmePreChangeProperty(target, propertyName);
             apply(target, oldValue);
-            editor.notifyJmeChangeProperty(target, propertyName);
+            editor.notifyJmeChangedProperty(target, propertyName);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(target, propertyName));
         });
     }

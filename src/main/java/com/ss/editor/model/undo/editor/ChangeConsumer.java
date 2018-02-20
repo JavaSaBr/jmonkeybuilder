@@ -15,13 +15,23 @@ import org.jetbrains.annotations.Nullable;
 public interface ChangeConsumer {
 
     /**
-     * Notify about changed property from jME thread.
+     * Notify about an attempt to change the property from jME thread.
      *
-     * @param object       the object
-     * @param propertyName the property name
+     * @param object       the object.
+     * @param propertyName the property name.
      */
     @JmeThread
-    default void notifyJmeChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+    default void notifyJmePreChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+    }
+
+    /**
+     * Notify about changed the property from jME thread.
+     *
+     * @param object       the object.
+     * @param propertyName the property name.
+     */
+    @JmeThread
+    default void notifyJmeChangedProperty(@NotNull Object object, @NotNull String propertyName) {
     }
 
     /**

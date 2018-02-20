@@ -53,7 +53,7 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
 
     @Override
     @FxThread
-    protected void reload() {
+    public void reload() {
 
         final Path file = getPropertyValue();
         final String assetPath = file == null ? NOT_SELECTED : toAssetPath(file);

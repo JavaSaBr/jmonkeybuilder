@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit a color values.
  *
- * @param <C> the type parameter
+ * @param <C> the change
  * @param <T> the type parameter
  * @author JavaSaBr
  */
@@ -89,7 +89,10 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
      */
     @FxThread
     private void updateValue() {
-        if (isIgnoreListener()) return;
+
+        if (isIgnoreListener()) {
+            return;
+        }
 
         final ColorPicker colorPicker = getColorPicker();
         final ColorRGBA newColor = UiUtils.from(colorPicker.getValue());

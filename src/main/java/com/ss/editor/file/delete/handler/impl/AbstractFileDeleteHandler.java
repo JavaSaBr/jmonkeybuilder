@@ -1,6 +1,8 @@
 package com.ss.editor.file.delete.handler.impl;
 
 import com.ss.editor.file.delete.handler.FileDeleteHandler;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -11,6 +13,9 @@ import java.nio.file.Path;
  * @author JavaSaBr
  */
 public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
+
+    @NotNull
+    protected static final Logger LOGGER = LoggerManager.getLogger(FileDeleteHandler.class);
 
     @Override
     public void preDelete(@NotNull final Path file) {

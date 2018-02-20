@@ -25,8 +25,8 @@ import com.ss.editor.ui.control.tree.action.impl.light.CreateAmbientLightAction;
 import com.ss.editor.ui.control.tree.action.impl.light.CreateDirectionLightAction;
 import com.ss.editor.ui.control.tree.action.impl.light.CreatePointLightAction;
 import com.ss.editor.ui.control.tree.action.impl.light.CreateSpotLightAction;
-import com.ss.editor.ui.control.tree.action.impl.operation.AddChildOperation;
-import com.ss.editor.ui.control.tree.action.impl.operation.MoveChildOperation;
+import com.ss.editor.model.undo.impl.AddChildOperation;
+import com.ss.editor.model.undo.impl.MoveChildOperation;
 import com.ss.editor.ui.control.tree.action.impl.particle.emitter.CreateParticleEmitterAction;
 import com.ss.editor.ui.control.tree.action.impl.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.tree.action.impl.terrain.CreateTerrainAction;
@@ -143,7 +143,10 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
-        if (!(nodeTree instanceof ModelNodeTree)) return;
+
+        if (!(nodeTree instanceof ModelNodeTree)) {
+            return;
+        }
 
         final T element = getElement();
         final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitter.class::isInstance);

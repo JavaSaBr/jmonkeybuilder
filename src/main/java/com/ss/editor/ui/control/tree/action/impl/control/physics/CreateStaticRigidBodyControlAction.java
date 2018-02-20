@@ -7,6 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.util.ControlUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,12 +36,13 @@ public class CreateStaticRigidBodyControlAction extends CreateRigidBodyControlAc
         return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
     }
 
-
     @Override
     @FxThread
     protected @NotNull RigidBodyControl createControl(@NotNull final Spatial parent) {
-        final RigidBodyControl rigidBodyControl = super.createControl(parent);
+        final RigidBodyControl rigidBodyControl = new RigidBodyControl();
+        rigidBodyControl.setEnabled(false);
         rigidBodyControl.setMass(0F);
+        ControlUtils.applyScale(parent, parent.getWorldScale(), rigidBodyControl);
         return rigidBodyControl;
     }
 }

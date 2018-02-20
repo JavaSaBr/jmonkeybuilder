@@ -717,6 +717,7 @@ public abstract class EditorUtil {
                 commands.add("nautilus");
             } else if (isAppExists("dolphin -v")) {
                 commands.add("dolphin");
+                commands.add("--select");
             } else {
                 commands.add("xdg-open");
                 if (!Files.isDirectory(path)) {
@@ -725,7 +726,9 @@ public abstract class EditorUtil {
             }
         }
 
-        if (commands.isEmpty()) return;
+        if (commands.isEmpty()) {
+            return;
+        }
 
         final String url;
         try {
