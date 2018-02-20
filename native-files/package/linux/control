@@ -1,5 +1,5 @@
 Package: jmonkeybuilder
-Version: 1.7.0
+Version: @version@
 Section: Graphics
 Maintainer: Java Developer <javasabr@gmail.com>
 Priority: optional

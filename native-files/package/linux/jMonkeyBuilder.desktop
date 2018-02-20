@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=jMonkeyBuilder
-Version=1.7.0
+Version=@version@
 Comment=jMonkeyBuilder
 Exec=/opt/jMonkeyBuilder/jMonkeyBuilder
 Icon=/opt/jMonkeyBuilder/jMonkeyBuilder.png
