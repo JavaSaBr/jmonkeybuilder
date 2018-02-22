@@ -2,3 +2,8 @@ jdk:
   - oraclejdk9
 before_install:
    - ./prepareEnvironment.sh
+install:
+   - java -version
+   - java --list-modules
+   - ./gradlew install
+
