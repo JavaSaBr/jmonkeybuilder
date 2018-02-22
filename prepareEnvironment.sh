@@ -2,5 +2,5 @@
 
 echo "$JAVA_HOME"
 
-exec "java -version"
-exec "java --list-modules"
+exec "$JAVA_HOME/lib/java -version"
+exec "$JAVA_HOME/lib/java --list-modules"
