@@ -1,2 +1,4 @@
 jdk:
   - oraclejdk9
+before_install:
+   - ./prepareEnvironment.sh
