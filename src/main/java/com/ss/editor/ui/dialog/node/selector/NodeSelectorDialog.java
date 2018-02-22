@@ -10,7 +10,9 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +96,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        nodeTree = new ModelNodeTree(this::processSelect, null);
+        nodeTree = new ModelNodeTree(this::processSelect, null, SelectionMode.SINGLE);
         nodeTree.prefHeightProperty().bind(heightProperty());
         nodeTree.prefWidthProperty().bind(widthProperty());
 
@@ -130,10 +132,11 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Handle the selected object.
+     * Handle the selected objects.
      */
     @FxThread
-    private void processSelect(@Nullable final Object object) {
+    private void processSelect(@Nullable final Array<Object> objects) {
+        final Object object = objects.first();
         final Object result = object instanceof TreeNode ? ((TreeNode) object).getElement() : object;
         final Class<T> type = getType();
         final Button okButton = notNull(getOkButton());
