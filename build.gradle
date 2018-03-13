@@ -1,9 +1,11 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
@@ -11,6 +13,8 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'com.jfrog.bintray'
+
 
 group = 'com.spaceshift'
 version = '1.7.0'
@@ -69,6 +73,19 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url 'https://jitpack.io' }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['MyPublication']
+    pkg {
+        repo = 'com.ss.jmonkeybuilder'
+        name = 'jmonkeybuilder'
+        userOrg = System.getenv('BINTRAY_USER')
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/JavaSaBr/jmonkeybuilder.git'
+    }
 }
 
 javadoc {
