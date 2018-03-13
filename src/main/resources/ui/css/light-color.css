@@ -54,50 +54,60 @@
 
 .plain-code {
     -fx-fill: -var-font-color;
+    -fx-text-fill: -fx-fill;
 }
 
 .keyword {
     -fx-fill: #7f0c78;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 .value-type {
     -fx-fill: #2a5332;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 .value-value {
     -fx-fill: #b6270c;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 
 .semicolon {
     -fx-fill: -var-font-color;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 .paren {
     -fx-fill: -var-font-color;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 .bracket {
     -fx-fill: -var-font-color;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 .brace {
     -fx-fill: -var-font-color;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-fill;
 }
 
 .string {
     -fx-fill: #1017c7;
+    -fx-text-fill: -fx-fill;
 }
 
 .comment {
     -fx-fill: #3f7f5f;
+    -fx-text-fill: -fx-fill;
 }
 
 .paragraph-box:has-caret {
@@ -106,12 +116,15 @@
 
 .log-severity {
     -fx-fill: red;
+    -fx-text-fill: -fx-fill;
 }
 
 .log-framework {
     -fx-fill: #7f0c78;
+    -fx-text-fill: -fx-fill;
 }
 
 .log-class {
     -fx-fill: #2a5332;
+    -fx-text-fill: -fx-fill;
 }

@@ -165,4 +165,13 @@ public interface CssClasses {
     @NotNull String STATS_3D_STATE = "stats-3dstate";
 
     @NotNull String WEBVIEW_TEXT_AREA = "webview-text-area";
+
+    @NotNull String TEXT_PLAIN_CODE = "plain-code";
+    @NotNull String TEXT_KEYWORD = "keyword";
+    @NotNull String TEXT_VALUE_TYPE = "value-type";
+    @NotNull String TEXT_VALUE_VALUE = "value-value";
+    @NotNull String TEXT_SEMICOLON = "semicolon";
+    @NotNull String TEXT_PAREN = "paren";
+    @NotNull String TEXT_STRING = "string";
+    @NotNull String TEXT_COMMENT = "comment";
 }
