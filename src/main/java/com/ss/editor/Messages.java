@@ -1,12 +1,8 @@
 package com.ss.editor;
 
-import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
 import static java.util.ResourceBundle.getBundle;
 import com.ss.rlib.util.PropertyLoader;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
-import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -705,19 +701,6 @@ public class Messages {
     public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH;
 
     static {
-
-        final Locale locale = Locale.getDefault();
-        final ClassLoader classLoader = ControlResources.class.getClassLoader();
-
-        final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                locale, classLoader, PropertyLoader.getInstance());
-
-        final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                PropertyLoader.getInstance());
-
-        final Map<String, String> override = getUnsafeFieldValue(overrideBundle, "lookup");
-        final Map<String, String> original = getUnsafeFieldValue(controlBundle, "lookup");
-        original.putAll(override);
 
         final ResourceBundle bundle = getBundle(BUNDLE_NAME, PropertyLoader.getInstance());
 

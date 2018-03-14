@@ -81,7 +81,6 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     public void execute(@NotNull final Runnable task) {
         lock();
         try {
-
             waitTasks.add(task);
             if (!wait.get()) {
                 return;
@@ -95,6 +94,16 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
 
         } finally {
             unlock();
+        }
+
+        if (!wait.get()) {
+            return;
+        }
+
+        synchronized (wait) {
+            if (wait.compareAndSet(true, false)) {
+                ConcurrentUtils.notifyAllInSynchronize(wait);
+            }
         }
     }
 

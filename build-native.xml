@@ -5,8 +5,7 @@
     <target name="initFXAntTasks">
         <path id="fxant">
             <filelist>
-                <file name="${java.home}/../lib/ant-javafx.jar"/>
-                <file name="${java.home}/lib/jfxrt.jar"/>
+                <file name="${java.home}/lib/ant-javafx.jar"/>
                 <file name="${basedir}"/>
             </filelist>
         </path>
@@ -91,6 +90,12 @@
                     <include name="*"/>
                 </fileset>
             </classpath>
+            <compilerarg line="
+            --add-exports javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED
+            --add-exports javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED
+            --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+            --add-exports javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED"
+            />
         </javac>
 
         <!-- Copy over none Java-Files -->
@@ -142,10 +147,9 @@
             <fx:fileset dir="${basedir}/dist" includes="libs/*"/>
             <fx:fileset dir="${basedir}/dist" includes="embedded-plugins/*/*"/>
             <fx:fileset dir="${basedir}/dist" includes="embedded-plugins/*/*/*"/>
-            <fx:fileset dir="${basedir}/package"/>
         </fx:resources>
 
-        <fx:application id="fxApplication"
+        <fx:application id="jmonkeybuilder"
                         name="${applicationTitle}"
                         mainClass="${applicationMainClass}"
                         toolkit="fx"
@@ -154,7 +158,7 @@
         <mkdir dir="${basedir}/build/classes/META-INF"/>
 
         <fx:jar destfile="${basedir}/dist/jmonkeybuilder.jar">
-            <fx:application refid="fxApplication"/>
+            <fx:application refid="jmonkeybuilder"/>
             <fileset dir="${basedir}/build/classes"/>
             <fx:resources refid="appRes"/>
             <manifest>
@@ -164,8 +168,9 @@
             </manifest>
         </fx:jar>
 
-        <replace file="${basedir}/package/linux/control" token="@version@" value="${applicationVersion}"/>
-        <replace file="${basedir}/package/windows/jMonkeyBuilder.wxs" token="@version@" value="${applicationVersion}"/>
+        <replace file="${basedir}/../native-files/package/linux/control" token="@version@" value="${applicationVersion}"/>
+        <replace file="${basedir}/../native-files/package/linux/jMonkeyBuilder.desktop" token="@version@" value="${applicationVersion}"/>
+        <replace file="${basedir}/../native-files/package/windows/jMonkeyBuilder.wxs" token="@version@" value="${applicationVersion}"/>
 
         <mkdir dir="${basedir}/deploy"/>
         <!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
@@ -183,17 +188,19 @@
                 <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:6005,suspend=y"/>-->
             </fx:platform>
 
-            <preferences shortcut="true" menu="true" install="false"/>
+            <fx:preferences shortcut="true" menu="true" install="false"/>
 
-            <info category="graphics"
+            <fx:info category="Graphics"
                   description="The 3D Editor for jMonkeyEngine 3.2"
                   email="javasabr@gmail.com" license="Freeware" title="${applicationTitle}" vendor="${applicationVendor}"/>
 
-            <application refId="fxApplication"/>
-            <resources refid="appRes"/>
+            <fx:application refId="jmonkeybuilder"/>
+            <fx:resources refid="appRes"/>
+            <fx:bundleArgument arg="dropinResourcesRoot" value="${basedir}/../native-files/" />
         </fx:deploy>
 
-        <replace file="${basedir}/package/linux/control" token="${applicationVersion}" value="@version@"/>
-        <replace file="${basedir}/package/windows/jMonkeyBuilder.wxs" token="${applicationVersion}" value="@version@"/>
+        <replace file="${basedir}/../native-files/package/linux/control" token="${applicationVersion}" value="@version@"/>
+        <replace file="${basedir}/../native-files/package/linux/jMonkeyBuilder.desktop" token="${applicationVersion}" value="@version@"/>
+        <replace file="${basedir}/../native-files/package/windows/jMonkeyBuilder.wxs" token="${applicationVersion}" value="@version@"/>
     </target>
 </project>

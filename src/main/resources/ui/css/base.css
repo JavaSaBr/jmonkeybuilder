@@ -32,7 +32,6 @@
 
 /* Make popups transparent */
 .root.popup {
-    -fx-background-color: transparent;
 }
 
 /*******************************************************************************

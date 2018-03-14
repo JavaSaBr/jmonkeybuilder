@@ -16,11 +16,10 @@ import com.ss.editor.ui.component.split.pane.GlobalLeftToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
+import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -101,9 +100,6 @@ public class EditorFxSceneBuilder {
 
         build(scene, container, stage);
 
-        //TODO implement scalling
-        //bindFixedSize(container, scene.widthProperty().divide(1.5), scene.heightProperty().divide(1.5));
-
         stage.setScene(scene);
 
         return scene;
@@ -141,7 +137,5 @@ public class EditorFxSceneBuilder {
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
         FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CssClasses.MAIN_SPLIT_PANEL);
-
-        UiUtils.overrideTooltipBehavior(1000, 5000, 100);
     }
 }

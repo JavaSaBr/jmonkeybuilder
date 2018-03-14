@@ -404,7 +404,7 @@ public class FileIconManager {
      */
     @FromAnyThread
     public @NotNull Image getOriginal(@NotNull final Image image) {
-        return notNull(originalImageCache.get(image), "not found original for " + image.impl_getUrl());
+        return notNull(originalImageCache.get(image), "not found original for " + image.getUrl());
     }
 
     /**
