@@ -14,10 +14,11 @@ apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 
 group = 'com.spaceshift'
-version = '1.7.0'
+version = '1.7.3'
 
 compileJava {
     options.encoding = "UTF-8"
@@ -58,6 +59,7 @@ ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
+ext.bintryVersion = version + '-1'
 
 junitPlatform {
     filters {
@@ -75,16 +77,36 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+
+publishing {
+    publications {
+        JmbArtifact(MavenPublication) {
+            from components.java
+            groupId 'com.ss'
+            artifactId 'jmonkeybuilder'
+            version bintryVersion
+        }
+    }
+}
+
 bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['MyPublication']
+    user = System.getProperty('bintrayUser')
+    key = System.getProperty('bintrayKey')
+    publications = ['JmbArtifact']
     pkg {
-        repo = 'com.ss.jmonkeybuilder'
-        name = 'jmonkeybuilder'
-        userOrg = System.getenv('BINTRAY_USER')
+        repo = 'maven'
+        name = 'com.ss.jmonkeybuilder'
         licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/JavaSaBr/jmonkeybuilder'
         vcsUrl = 'https://github.com/JavaSaBr/jmonkeybuilder.git'
+        issueTrackerUrl = 'https://github.com/JavaSaBr/jmonkeybuilder/issues'
+        githubRepo = 'JavaSaBr/jmonkeybuilder'
+        githubReleaseNotesFile = 'README.md'
+        version {
+            name = bintryVersion
+            desc = bintryVersion
+            released  = new Date()
+        }
     }
 }
 
@@ -210,19 +232,3 @@ artifacts {
 }
 
 defaultTasks 'clean', 'install'
-
-// To specify a license in the pom:
-install {
-    repositories.mavenInstaller {
-        pom.version = version
-        pom.artifactId = 'jmonkeybuilder'
-        pom.project {
-            licenses {
-                license {
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-        }
-    }
-}
