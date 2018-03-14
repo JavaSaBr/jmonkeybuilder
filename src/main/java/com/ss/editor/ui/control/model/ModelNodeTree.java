@@ -25,4 +25,9 @@ public class ModelNodeTree extends NodeTree<ModelChangeConsumer> {
                          @Nullable final ModelChangeConsumer consumer) {
         super(selectionHandler, consumer, SelectionMode.MULTIPLE);
     }
+
+    public ModelNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler,
+                          @Nullable final ModelChangeConsumer consumer, @NotNull final SelectionMode selectionMode) {
+        super(selectionHandler, consumer, selectionMode);
+    }
 }
