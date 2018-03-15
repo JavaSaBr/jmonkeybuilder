@@ -59,7 +59,7 @@ ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
-ext.bintryVersion = version + '-2'
+ext.bintrayVersion = version + '-2'
 
 junitPlatform {
     filters {
@@ -82,9 +82,9 @@ publishing {
     publications {
         JmbArtifact(MavenPublication) {
             from components.java
-            groupId 'com.ss'
+            groupId 'com.spaceshift'
             artifactId 'jmonkeybuilder'
-            version bintryVersion
+            version bintrayVersion
         }
     }
 }
@@ -95,7 +95,7 @@ bintray {
     publications = ['JmbArtifact']
     pkg {
         repo = 'maven'
-        name = 'com.ss.jmonkeybuilder'
+        name = 'com.spaceshift.jmonkeybuilder'
         licenses = ['Apache-2.0']
         websiteUrl = 'https://github.com/JavaSaBr/jmonkeybuilder'
         vcsUrl = 'https://github.com/JavaSaBr/jmonkeybuilder.git'
@@ -103,8 +103,8 @@ bintray {
         githubRepo = 'JavaSaBr/jmonkeybuilder'
         githubReleaseNotesFile = 'README.md'
         version {
-            name = bintryVersion
-            desc = bintryVersion
+            name = bintrayVersion
+            desc = bintrayVersion
             released  = new Date()
         }
     }
