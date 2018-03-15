@@ -53,13 +53,13 @@ compileTestJava {
 ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
-ext.jmeVersion = "v3.3.dev-SNAPSHOT"
+ext.jmeVersion = "develop-SNAPSHOT"
 ext.jmbExtVersion = "2.1.1"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
-ext.bintryVersion = version + '-1'
+ext.bintryVersion = version + '-2'
 
 junitPlatform {
     filters {
@@ -230,5 +230,3 @@ artifacts {
     archives sourcesJar
     archives javadocJar
 }
-
-defaultTasks 'clean', 'install'
