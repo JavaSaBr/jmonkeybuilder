@@ -388,8 +388,9 @@ public class JmeApplication extends JmeToJFXApplication {
                 super.update();
             }
 
-        } catch (final AssetNotFoundException | RendererException | AssertionError | ArrayIndexOutOfBoundsException |
-                NullPointerException | StackOverflowError | IllegalStateException | UnsupportedOperationException e) {
+        } catch (final AssetNotFoundException | NoSuchMethodError | RendererException | AssertionError |
+                ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError |
+                IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
             finishWorkOnError(e);
         } finally {

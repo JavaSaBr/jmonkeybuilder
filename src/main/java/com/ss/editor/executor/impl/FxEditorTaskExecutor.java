@@ -1,10 +1,9 @@
 package com.ss.editor.executor.impl;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.concurrent.util.ConcurrentUtils;
-import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.util.array.Array;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +26,11 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
     public FxEditorTaskExecutor() {
         setName(FxEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
-        start();
+        try {
+            Platform.startup(this::start);
+        } catch (final IllegalStateException e) {
+            start();
+        }
     }
 
     @Override
@@ -108,17 +111,9 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
 
     @FromAnyThread
     private void executeInFxUiThread() {
-        while (true) {
-            try {
-                synchronized (this) {
-                    Platform.runLater(fxTask);
-                    ConcurrentUtils.waitInSynchronize(this);
-                }
-                break;
-            } catch (final IllegalStateException e) {
-                LOGGER.warning(this, e);
-                ThreadUtils.sleep(1000);
-            }
+        synchronized (this) {
+            Platform.runLater(fxTask);
+            ConcurrentUtils.waitInSynchronize(this);
         }
     }
 }
