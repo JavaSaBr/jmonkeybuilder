@@ -301,27 +301,30 @@ public abstract class EditorUtil {
      * @param content the content to store.
      */
     @FxThread
-    public static void addCopiedFile(@NotNull final Array<Path> paths, @NotNull final ClipboardContent content) {
+    public static @NotNull ClipboardContent addCopiedFile(
+            @NotNull Array<Path> paths,
+            @NotNull ClipboardContent content
+    ) {
 
-        final List<File> files = paths.stream()
+        final var files = paths.stream()
                 .map(Path::toFile)
                 .collect(toList());
 
         content.putFiles(files);
         content.put(EditorUtil.JAVA_PARAM, "copy");
 
-        final Platform platform = JmeSystem.getPlatform();
+        var platform = JmeSystem.getPlatform();
 
         if (platform == Platform.Linux64 || platform == Platform.Linux32) {
 
-            final StringBuilder builder = new StringBuilder("copy\n");
+            var builder = new StringBuilder("copy\n");
 
             paths.forEach(builder, (path, b) ->
                     b.append(path.toUri().toASCIIString()).append('\n'));
 
             builder.delete(builder.length() - 1, builder.length());
 
-            final ByteBuffer buffer = ByteBuffer.allocate(builder.length());
+            var buffer = ByteBuffer.allocate(builder.length());
 
             for (int i = 0, length = builder.length(); i < length; i++) {
                 buffer.put((byte) builder.charAt(i));
@@ -331,6 +334,8 @@ public abstract class EditorUtil {
 
             content.put(GNOME_FILES, buffer);
         }
+
+        return content;
     }
 
     /**

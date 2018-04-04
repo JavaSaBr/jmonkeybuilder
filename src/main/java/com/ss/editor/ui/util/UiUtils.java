@@ -47,6 +47,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * The utility class with utility UI methods.
@@ -442,10 +443,24 @@ public abstract class UiUtils {
      * @return the list with all items.
      */
     @FxThread
-    public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeItem<T> root) {
+    public static <T> Array<TreeItem<T>> getAllItems(@NotNull TreeItem<T> root) {
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
         collectAllItems(container, root);
         return container;
+    }
+
+    /**
+     * Collect all elements of tree items.
+     *
+     * @param <T>  the type parameter
+     * @param root the tree item.
+     * @return the list with all items.
+     */
+    @FxThread
+    public static <T> Stream<TreeItem<T>> allItems(@NotNull TreeItem<T> root) {
+        Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
+        collectAllItems(container, root);
+        return container.stream();
     }
 
     /**
