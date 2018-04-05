@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -21,39 +20,47 @@ import java.nio.file.Path;
  */
 public class FolderResourceElement extends ResourceElement {
 
-    public FolderResourceElement(@NotNull final Path file) {
+    public FolderResourceElement(@NotNull Path file) {
         super(file);
     }
 
     @Override
     @FromAnyThread
-    public @Nullable Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
-        if (!Files.isDirectory(file)) return null;
+    public @Nullable Array<ResourceElement> getChildren(
+            @NotNull Array<String> extensionFilter,
+            boolean onlyFolders
+    ) {
+
+        if (!Files.isDirectory(file)) {
+            return null;
+        }
 
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
 
-        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
-            stream.forEach(child -> {
+        try (var stream = Files.newDirectoryStream(file)) {
+            for (Path child : stream) {
 
-                final String fileName = child.getFileName().toString();
+                var fileName = child.getFileName().toString();
 
                 if (fileName.startsWith(".")) {
-                    return;
+                    continue;
                 } else if (Files.isDirectory(child)) {
                     elements.add(createFor(child));
-                    return;
+                    continue;
                 }
 
-                if (onlyFolders) return;
+                if (onlyFolders) {
+                    continue;
+                }
 
-                final String extension = FileUtils.getExtension(child);
+                var extension = FileUtils.getExtension(child);
 
                 if (extensionFilter.isEmpty() || extensionFilter.contains(extension)) {
                     elements.add(createFor(child));
                 }
-            });
+            }
 
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOGGER.warning(this, e);
         }
 
@@ -62,13 +69,16 @@ public class FolderResourceElement extends ResourceElement {
 
     @Override
     @FromAnyThread
-    public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
-        if (!Files.isDirectory(file)) return false;
+    public boolean hasChildren(@NotNull Array<String> extensionFilter, boolean onlyFolders) {
 
-        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
-            for (final Path path : stream) {
+        if (!Files.isDirectory(file)) {
+            return false;
+        }
 
-                final String fileName = path.getFileName().toString();
+        try (var stream = Files.newDirectoryStream(file)) {
+            for (var path : stream) {
+
+                var fileName = path.getFileName().toString();
 
                 if (fileName.startsWith(".")) {
                     continue;
@@ -76,18 +86,20 @@ public class FolderResourceElement extends ResourceElement {
                     return true;
                 }
 
-                if (onlyFolders) continue;
+                if (onlyFolders) {
+                    continue;
+                }
 
-                final String extension = FileUtils.getExtension(path);
+                var extension = FileUtils.getExtension(path);
 
                 if (extensionFilter.isEmpty() || extensionFilter.contains(extension)) {
                     return true;
                 }
             }
 
-        } catch (final AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             return false;
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOGGER.warning(this, e);
         }
 

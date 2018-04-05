@@ -20,7 +20,10 @@ import com.ss.rlib.util.array.ArrayComparator;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
 import javafx.collections.FXCollections;
-import javafx.scene.control.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
@@ -64,16 +67,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
             return firstLevel - secondLevel;
         }
 
-        var firstFile = notNull(first).getFile();
-        var firstFileFileName = firstFile.getFileName();
-        var firstName = firstFileFileName == null ? firstFile.toString() : firstFileFileName.toString();
-
-        var secondFile = notNull(second).getFile();
-        var secondFileName = secondFile.getFileName();
-        var secondName = secondFileName == null ? secondFile.toString() : secondFileName.toString();
-
-        return StringUtils.compareIgnoreCase(firstName, secondName);
+        return StringUtils.compareIgnoreCase(getNameToSort(first), getNameToSort(second));
     };
+
+    private static @NotNull String getNameToSort(@NotNull ResourceElement element) {
+        var file = notNull(element).getFile();
+        var fileName = file.getFileName();
+        return fileName == null ? file.toString() : fileName.toString();
+    }
 
     /**
      * The tree items comparator.
@@ -149,6 +150,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private IntObjectConsumer<ResourceTree> expandHandler;
 
     /**
+     * Barrier.
+     */
+    private volatile int barrier;
+    private int barrierSinck;
+
+    /**
      * The flag of read only mode.
      */
     private final boolean readOnly;
@@ -168,11 +175,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private boolean needCleanup;
 
-    public ResourceTree(final boolean readOnly) {
+    public ResourceTree(boolean readOnly) {
         this(DEFAULT_OPEN_FUNCTION, readOnly);
     }
 
-    public ResourceTree(@Nullable final Consumer<ResourceElement> openFunction, final boolean readOnly) {
+    public ResourceTree(@Nullable Consumer<ResourceElement> openFunction, boolean readOnly) {
         this.openFunction = openFunction;
         this.readOnly = readOnly;
         this.expandedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
@@ -190,6 +197,22 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
+    }
+
+    /**
+     * Read barrier.
+     */
+    @FromAnyThread
+    protected void readBarrier() {
+        barrierSinck = barrier + 1;
+    }
+
+    /**
+     * Write barrier.
+     */
+    @FromAnyThread
+    protected void writeBarrier() {
+        barrier = barrierSinck + 1;
     }
 
     /**
@@ -253,7 +276,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         Array<TreeItem<ResourceElement>> expanded = ArrayFactory.newArray(TreeItem.class);
 
-        UiUtils.allItems(getRoot()).filter(TreeItem::isExpanded)
+        UiUtils.allItems(getRoot())
+                .filter(TreeItem::isExpanded)
                 .filter(treeItem -> !treeItem.isLeaf())
                 .filter(item -> item.getChildren().size() == 1)
                 .filter(item -> item.getChildren().get(0).getValue() == LoadingResourceElement.getInstance())
@@ -467,19 +491,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FxThread
     public void fill(@NotNull Path rootFolder) {
-
-        var onLoadHandler = getOnLoadHandler();
-        if (onLoadHandler != null) {
-            onLoadHandler.accept(Boolean.FALSE);
-        }
-
-        var currentRoot = getRoot();
-        if (currentRoot != null) {
-            setRoot(null);
-        }
-
-        showLoading();
-
+        prepareToFill();
         EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(rootFolder));
     }
 
@@ -490,6 +502,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FxThread
     public void fill(@NotNull Array<Path> rootFolders) {
+        prepareToFill();
+        EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(rootFolders));
+    }
+
+    /**
+     * Prepare this component to fill again.
+     */
+    protected void prepareToFill() {
 
         var onLoadHandler = getOnLoadHandler();
         if (onLoadHandler != null) {
@@ -502,8 +522,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
 
         showLoading();
-
-        EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(rootFolders));
     }
 
     /**
@@ -610,6 +628,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     @BackgroundThread
     private void startBackgroundFill(@NotNull Path path) {
 
+        var nextBarrier = barrier + 1;
         var rootElement = createFor(path);
         var newRoot = new TreeItem<ResourceElement>(rootElement);
         newRoot.setExpanded(true);
@@ -619,6 +638,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (!isLazyMode() && isNeedCleanup()) {
             cleanup(newRoot);
         }
+
+        barrier = nextBarrier;
 
         EXECUTOR_MANAGER.addFxTask(() -> applyNewRoot(newRoot));
     }
@@ -631,12 +652,16 @@ public class ResourceTree extends TreeView<ResourceElement> {
     @BackgroundThread
     private void applyNewRoot(@NotNull TreeItem<ResourceElement> newRoot) {
 
+        var nextBarrier = barrier + 1;
+
         setRoot(newRoot);
 
         var onLoadHandler = getOnLoadHandler();
         if (onLoadHandler != null) {
             onLoadHandler.accept(Boolean.TRUE);
         }
+
+        barrier = nextBarrier;
     }
 
     /**
@@ -872,6 +897,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             @NotNull Path newFile,
             @NotNull Array<TreeItem<ResourceElement>> children
     ) {
+
         for (var child : children) {
 
             var resourceElement = child.getValue();
