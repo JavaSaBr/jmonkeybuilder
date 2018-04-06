@@ -28,38 +28,38 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
         setPriority(NORM_PRIORITY);
         try {
             Platform.startup(this::start);
-        } catch (final IllegalStateException e) {
+        } catch (IllegalStateException e) {
             start();
         }
     }
 
     @Override
     @FxThread
-    protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
+    protected void doExecute(@NotNull Array<Runnable> execute, @NotNull Array<Runnable> executed) {
 
-        final Runnable[] array = execute.array();
+        var array = execute.array();
 
         for (int i = 0, length = execute.size(); i < length; ) {
             try {
 
                 for (int count = 0; count < EXECUTE_LIMIT && i < length; count++, i++) {
 
-                    final Runnable task = array[i];
+                    var task = array[i];
                     try {
                         task.run();
-                    } catch (final Exception e) {
+                    } catch (Exception e) {
                         EditorUtil.handleException(LOGGER, this, e);
                     }
 
                     executed.add(task);
                 }
 
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning(e);
             }
         }
 
-        ConcurrentUtils.notifyAll(this);
+        ConcurrentUtils.notifyAll(fxTask);
     }
 
     @Override
@@ -111,9 +111,9 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
 
     @FromAnyThread
     private void executeInFxUiThread() {
-        synchronized (this) {
+        synchronized (fxTask) {
             Platform.runLater(fxTask);
-            ConcurrentUtils.waitInSynchronize(this);
+            ConcurrentUtils.waitInSynchronize(fxTask);
         }
     }
 }

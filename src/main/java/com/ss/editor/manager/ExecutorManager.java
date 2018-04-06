@@ -33,13 +33,7 @@ public class ExecutorManager {
     @Nullable
     private static ExecutorManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static ExecutorManager getInstance() {
+    public static @NotNull ExecutorManager getInstance() {
         if (instance == null) instance = new ExecutorManager();
         return instance;
     }
@@ -99,10 +93,10 @@ public class ExecutorManager {
     @FromAnyThread
     public void addBackgroundTask(@NotNull final Runnable task) {
 
-        final EditorTaskExecutor[] executors = getBackgroundTaskExecutors();
-        final AtomicInteger nextTaskExecutor = getNextBackgroundTaskExecutor();
+        var executors = getBackgroundTaskExecutors();
+        var nextTaskExecutor = getNextBackgroundTaskExecutor();
 
-        final int index = nextTaskExecutor.incrementAndGet();
+        var index = nextTaskExecutor.incrementAndGet();
 
         if (index < executors.length) {
             executors[index].execute(task);
@@ -113,14 +107,13 @@ public class ExecutorManager {
     }
 
     /**
-     * Add a new javaFX task.
+     * Add the new task to be executed in the JavaFX thread.
      *
-     * @param task the javaFX task.
+     * @param task the task.
      */
     @FromAnyThread
-    public void addFxTask(@NotNull final Runnable task) {
-        final EditorTaskExecutor executor = getFxTaskExecutor();
-        executor.execute(task);
+    public void addFxTask(@NotNull Runnable task) {
+        getFxTaskExecutor().execute(task);
     }
 
     /**
@@ -129,12 +122,13 @@ public class ExecutorManager {
      * @param task the editor task.
      */
     @FromAnyThread
-    public void addJmeTask(@NotNull final Runnable task) {
-        final JmeThreadExecutor executor = getJmeTasksExecutor();
-        executor.addToExecute(task);
+    public void addJmeTask(@NotNull Runnable task) {
+        getJmeTasksExecutor().addToExecute(task);
     }
 
     /**
+     * Get the list of background tasks executors.
+     *
      * @return the list of background tasks executors.
      */
     @FromAnyThread
@@ -143,6 +137,8 @@ public class ExecutorManager {
     }
 
     /**
+     * Get the executor of javaFX tasks.
+     *
      * @return the executor of javaFX tasks.
      */
     @FromAnyThread
@@ -151,6 +147,8 @@ public class ExecutorManager {
     }
 
     /**
+     * Get the index of a next background executor.
+     *
      * @return the index of a next background executor.
      */
     @FromAnyThread
@@ -159,7 +157,9 @@ public class ExecutorManager {
     }
 
     /**
-     * @return the executor of editor tasks.
+     * Get the executor of jME tasks.
+     *
+     * @return the executor of jME tasks.
      */
     @FromAnyThread
     private @NotNull JmeThreadExecutor getJmeTasksExecutor() {
@@ -173,7 +173,7 @@ public class ExecutorManager {
      * @param timeout  the timeout.
      */
     @FromAnyThread
-    public void schedule(@NotNull final Runnable runnable, final long timeout) {
+    public void schedule(@NotNull Runnable runnable, long timeout) {
         scheduledExecutorService.schedule(runnable, timeout, TimeUnit.MILLISECONDS);
     }
 
@@ -184,7 +184,7 @@ public class ExecutorManager {
      * @param delay    the delay.
      */
     @FromAnyThread
-    public void scheduleAtFixedRate(@NotNull final Runnable runnable, final long delay) {
+    public void scheduleAtFixedRate(@NotNull Runnable runnable, long delay) {
         scheduledExecutorService.scheduleAtFixedRate(runnable, delay, delay, TimeUnit.MILLISECONDS);
     }
 }

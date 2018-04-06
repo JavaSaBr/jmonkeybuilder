@@ -13,6 +13,8 @@ import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.resource.*;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.rlib.concurrent.barrier.Barrier;
+import com.ss.rlib.concurrent.barrier.BarrierFactory;
 import com.ss.rlib.function.IntObjectConsumer;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -126,6 +128,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private final Consumer<ResourceElement> openFunction;
 
     /**
+     * The memory barrier.
+     */
+    @NotNull
+    private final Barrier barrier;
+
+    /**
      * The action tester.
      */
     @NotNull
@@ -148,12 +156,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @Nullable
     private IntObjectConsumer<ResourceTree> expandHandler;
-
-    /**
-     * Barrier.
-     */
-    private volatile int barrier;
-    private int barrierSinck;
 
     /**
      * The flag of read only mode.
@@ -186,6 +188,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         this.selectedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
         this.extensionFilter = ArrayFactory.newArray(String.class, 0);
         this.actionTester = actionClass -> true;
+        this.barrier = BarrierFactory.newVolatileBased();
 
         expandedItemCountProperty()
                 .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
@@ -197,22 +200,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
-    }
-
-    /**
-     * Read barrier.
-     */
-    @FromAnyThread
-    protected void readBarrier() {
-        barrierSinck = barrier + 1;
-    }
-
-    /**
-     * Write barrier.
-     */
-    @FromAnyThread
-    protected void writeBarrier() {
-        barrier = barrierSinck + 1;
     }
 
     /**
@@ -509,6 +496,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Prepare this component to fill again.
      */
+    @FxThread
     protected void prepareToFill() {
 
         var onLoadHandler = getOnLoadHandler();
@@ -628,7 +616,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
     @BackgroundThread
     private void startBackgroundFill(@NotNull Path path) {
 
-        var nextBarrier = barrier + 1;
         var rootElement = createFor(path);
         var newRoot = new TreeItem<ResourceElement>(rootElement);
         newRoot.setExpanded(true);
@@ -639,8 +626,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
             cleanup(newRoot);
         }
 
-        barrier = nextBarrier;
-
         EXECUTOR_MANAGER.addFxTask(() -> applyNewRoot(newRoot));
     }
 
@@ -649,10 +634,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @param newRoot the new root,
      */
-    @BackgroundThread
+    @FxThread
     private void applyNewRoot(@NotNull TreeItem<ResourceElement> newRoot) {
-
-        var nextBarrier = barrier + 1;
 
         setRoot(newRoot);
 
@@ -660,8 +643,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (onLoadHandler != null) {
             onLoadHandler.accept(Boolean.TRUE);
         }
-
-        barrier = nextBarrier;
     }
 
     /**
