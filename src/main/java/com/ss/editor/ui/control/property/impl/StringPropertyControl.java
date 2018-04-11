@@ -7,6 +7,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -44,7 +45,10 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
 
         valueField = new TextField();
         valueField.setOnKeyReleased(this::updateValue);
-        valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        valueField.prefWidthProperty()
+            .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        valueField.focusedProperty()
+            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
 
         FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
@@ -69,10 +73,10 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     @Override
     @FxThread
     protected void reload() {
-        var value = getPropertyValue();
+        var storedValue = getPropertyValue();
         var valueField = getValueField();
         var caretPosition = valueField.getCaretPosition();
-        valueField.setText(value == null ? "" : value);
+        valueField.setText(storedValue == null ? "" : storedValue);
         valueField.positionCaret(caretPosition);
     }
 
@@ -86,9 +90,25 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
             return;
         }
 
-        var valueField = getValueField();
+        apply();
+    }
+
+    @Override
+    public boolean isDirty() {
+
+        var storedValue = getPropertyValue();
+        var currentValue = getValueField().getText();
+
+        return !StringUtils.equals(storedValue, currentValue);
+    }
+
+    @Override
+    @FxThread
+    protected void apply() {
+        super.apply();
+
         var oldValue = getPropertyValue();
-        var newValue = valueField.getText();
+        var newValue = getValueField().getText();
 
         changed(newValue, oldValue);
     }

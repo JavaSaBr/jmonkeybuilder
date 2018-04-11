@@ -48,9 +48,9 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
     }
 
     @FxThread
-    protected @NotNull List<EditableProperty<?, ?>> getProperties(@NotNull final AbstractControl control) {
+    protected @NotNull List<EditableProperty<?, ?>> getProperties(@NotNull AbstractControl control) {
 
-        final List<EditableProperty<?, ?>> result = new ArrayList<>();
+        var result = new ArrayList<EditableProperty<?, ?>>();
         result.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_ENABLED, control,
             AbstractControl::isEnabled, AbstractControl::setEnabled));
 
@@ -58,9 +58,9 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
     }
 
     @FxThread
-    protected @NotNull List<EditableProperty<?, ?>> getProperties(@NotNull final PhysicsControl control) {
+    protected @NotNull List<EditableProperty<?, ?>> getProperties(@NotNull PhysicsControl control) {
 
-        final List<EditableProperty<?, ?>> result = new ArrayList<>();
+        var result = new ArrayList<EditableProperty<?, ?>>();
         result.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_ENABLED, control,
             PhysicsControl::isEnabled, PhysicsControl::setEnabled));
 
@@ -69,13 +69,13 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
     @Override
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
 
-        final List<EditableProperty<?, ?>> properties = new ArrayList<>();
+        var properties = new ArrayList<EditableProperty<?, ?>>();
 
         if (object instanceof VehicleWheel) {
 
-            final VehicleWheel control = (VehicleWheel) object;
+            var control = (VehicleWheel) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_FRONT, control,
                 VehicleWheel::isFrontWheel, VehicleWheel::setFrontWheel));
@@ -116,7 +116,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         } else if (object instanceof AbstractCinematicEvent) {
 
-            final AbstractCinematicEvent control = (AbstractCinematicEvent) object;
+            var control = (AbstractCinematicEvent) object;
 
             properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_LOOP_MODE, control,
                 AbstractCinematicEvent::getLoopMode, AbstractCinematicEvent::setLoopMode));
@@ -129,7 +129,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         } else if (object instanceof Animation) {
 
-            final Animation animation = (Animation) object;
+            var animation = (Animation) object;
 
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_LENGTH, animation,
                 Animation::getLength));
@@ -137,7 +137,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         if (object instanceof MotionEvent) {
 
-            final MotionEvent control = (MotionEvent) object;
+            var control = (MotionEvent) object;
 
             properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_DIRECTION_TYPE, control,
                 MotionEvent::getDirectionType, MotionEvent::setDirectionType));
@@ -161,7 +161,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         if (object instanceof LightControl) {
 
-            final LightControl control = (LightControl) object;
+            var control = (LightControl) object;
 
             properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_DIRECTION_TYPE, control,
                     LightControl::getControlDir, LightControl::setControlDir));
@@ -170,7 +170,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         } else if (object instanceof BetterCharacterControl) {
 
-            final BetterCharacterControl control = (BetterCharacterControl) object;
+            var control = (BetterCharacterControl) object;
 
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_GRAVITY, control,
                     BetterCharacterControl::getGravity, BetterCharacterControl::setGravity));
@@ -189,21 +189,21 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         } else if (object instanceof RigidBodyControl) {
 
-            final RigidBodyControl control = (RigidBodyControl) object;
+            var control = (RigidBodyControl) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_KINEMATIC_SPATIAL, control,
                     RigidBodyControl::isKinematicSpatial, RigidBodyControl::setKinematicSpatial));
 
         } else if (object instanceof SkeletonControl) {
 
-            final SkeletonControl control = (SkeletonControl) object;
+            var control = (SkeletonControl) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED, control,
                 SkeletonControl::isHardwareSkinningPreferred, SkeletonControl::setHardwareSkinningPreferred));
 
         } else if (object instanceof VehicleControl) {
 
-            final VehicleControl control = (VehicleControl) object;
+           var control = (VehicleControl) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, control,
                 VehicleControl::isApplyPhysicsLocal, VehicleControl::setApplyPhysicsLocal));
@@ -212,7 +212,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         if (object instanceof PhysicsRigidBody) {
 
-            final PhysicsRigidBody control = (PhysicsRigidBody) object;
+            var control = (PhysicsRigidBody) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_KINEMATIC, control,
                 PhysicsRigidBody::isKinematic, PhysicsRigidBody::setKinematic));

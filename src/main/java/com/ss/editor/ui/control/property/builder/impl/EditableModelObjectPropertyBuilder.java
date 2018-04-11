@@ -25,81 +25,85 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBuilder<ModelChangeConsumer> {
 
-    protected EditableModelObjectPropertyBuilder(@NotNull final Class<? extends ModelChangeConsumer> type) {
+    protected EditableModelObjectPropertyBuilder(@NotNull Class<? extends ModelChangeConsumer> type) {
         super(type);
     }
 
     @Override
     @FxThread
-    protected void buildFor(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                            @NotNull final EditableProperty<?, ?> description) {
+    protected void buildFor(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull EditableProperty<?, ?> description
+    ) {
+
         super.buildFor(container, changeConsumer, description);
 
-        final EditablePropertyType type = description.getType();
+        var type = description.getType();
 
         switch (type) {
             case DIRECTION_LIGHT_FROM_SCENE: {
 
-                final EditableProperty<DirectionalLight, ?> property = cast(description);
-                final DirectionalLight value = property.getValue();
+                EditableProperty<DirectionalLight, ?> property = cast(description);
 
-                final LightElementModelPropertyControl<DirectionalLight, EditableProperty<DirectionalLight, ?>> propertyControl =
-                        new LightElementModelPropertyControl<>(DirectionalLight.class, value, property.getName(), changeConsumer);
+                var value = property.getValue();
+                var propertyControl = new LightElementModelPropertyControl<DirectionalLight, EditableProperty<DirectionalLight, ?>>(
+                    DirectionalLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case AMBIENT_LIGHT_FROM_SCENE: {
 
-                final EditableProperty<AmbientLight, ?> property = cast(description);
-                final AmbientLight value = property.getValue();
+                EditableProperty<AmbientLight, ?> property = cast(description);
 
-                final LightElementModelPropertyControl<AmbientLight, EditableProperty<AmbientLight, ?>> propertyControl =
-                        new LightElementModelPropertyControl<>(AmbientLight.class, value, property.getName(), changeConsumer);
+                var value = property.getValue();
+                var propertyControl = new LightElementModelPropertyControl<AmbientLight, EditableProperty<AmbientLight, ?>>(
+                    AmbientLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case POINT_LIGHT_FROM_SCENE: {
 
-                final EditableProperty<PointLight, ?> property = cast(description);
-                final PointLight value = property.getValue();
+                EditableProperty<PointLight, ?> property = cast(description);
 
-                final LightElementModelPropertyControl<PointLight, EditableProperty<PointLight, ?>> propertyControl =
-                        new LightElementModelPropertyControl<>(PointLight.class, value, property.getName(), changeConsumer);
+                var value = property.getValue();
+                var propertyControl = new LightElementModelPropertyControl<PointLight, EditableProperty<PointLight, ?>>(
+                    PointLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case LIGHT_FROM_SCENE: {
 
-                final EditableProperty<Light, ?> property = cast(description);
-                final Light value = property.getValue();
+                EditableProperty<Light, ?> property = cast(description);
 
-                final LightElementModelPropertyControl<Light, EditableProperty<Light, ?>> propertyControl =
-                        new LightElementModelPropertyControl<>(Light.class, value, property.getName(), changeConsumer);
+                var value = property.getValue();
+                var propertyControl = new LightElementModelPropertyControl<Light, EditableProperty<Light, ?>>(
+                    Light.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case SPATIAL_FROM_SCENE: {
 
-                final EditableProperty<Spatial, ?> property = cast(description);
-                final Spatial value = property.getValue();
+                EditableProperty<Spatial, ?> property = cast(description);
 
-                final SpatialElementModelPropertyControl<Spatial, EditableProperty<Spatial, ?>> propertyControl =
-                        new SpatialElementModelPropertyControl<>(Spatial.class, value, property.getName(), changeConsumer);
+                var value = property.getValue();
+                var propertyControl = new SpatialElementModelPropertyControl<Spatial, EditableProperty<Spatial, ?>>(
+                    Spatial.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case NODE_FROM_SCENE: {
 
-                final EditableProperty<Node, ?> property = cast(description);
-                final Node value = property.getValue();
+                EditableProperty<Node, ?> property = cast(description);
 
-                final SpatialElementModelPropertyControl<Node, EditableProperty<Node, ?>> propertyControl =
-                        new SpatialElementModelPropertyControl<>(Node.class, value, property.getName(), changeConsumer);
+                var value = property.getValue();
+                var propertyControl = new SpatialElementModelPropertyControl<Node, EditableProperty<Node, ?>>(
+                    Node.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -110,16 +114,16 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
             return;
         }
 
-        final SceneChangeConsumer consumer = (SceneChangeConsumer) changeConsumer;
+        var consumer = (SceneChangeConsumer) changeConsumer;
 
         switch (type) {
             case FILTER_FROM_SCENE: {
 
-                final EditableProperty<Filter, ?> property = cast(description);
-                final Filter value = property.getValue();
+                EditableProperty<Filter, ?> property = cast(description);
 
-                final FilterElementModelPropertyControl<EditableProperty<Filter, ?>> propertyControl =
-                        new FilterElementModelPropertyControl<>(value, property.getName(), consumer);
+                var value = property.getValue();
+                var propertyControl = new FilterElementModelPropertyControl<EditableProperty<Filter, ?>>(
+                    value, property.getName(), consumer);
 
                 addControl(container, property, propertyControl);
                 break;

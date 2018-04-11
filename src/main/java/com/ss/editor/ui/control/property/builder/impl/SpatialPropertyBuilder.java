@@ -1,6 +1,9 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
+import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
+
+import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -11,6 +14,10 @@ import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.editor.extension.property.SeparatorProperty;
+import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -24,23 +31,18 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Spatial} objects.
  *
  * @author JavaSaBr
  */
-public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class SpatialPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
     public static final int PRIORITY = 1;
-
-    @NotNull
-    private static final CullHint[] CULL_HINTS = CullHint.values();
-
-    @NotNull
-    private static final ShadowMode[] SHADOW_MODES = ShadowMode.values();
-
-    @NotNull
-    private static final Bucket[] BUCKETS = Bucket.values();
 
     @NotNull
     private static final PropertyBuilder INSTANCE = new SpatialPropertyBuilder();
@@ -55,102 +57,53 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     }
 
     @Override
-    @FxThread
-    protected void buildForImpl(
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(
             @NotNull Object object,
             @Nullable Object parent,
-            @NotNull VBox container,
             @NotNull ModelChangeConsumer changeConsumer
     ) {
 
-        if (!(object instanceof Spatial)) {
-            return;
+        if(!(object instanceof Spatial)) {
+            return null;
         }
 
+        var properties = new ArrayList<EditableProperty<?, ?>>();
         var spatial = (Spatial) object;
-        var cullHint = spatial.getLocalCullHint();
-        var shadowMode = spatial.getLocalShadowMode();
-        var queueBucket = spatial.getLocalQueueBucket();
 
-        if (changeConsumer instanceof SceneChangeConsumer) {
-
-            var layer = SceneLayer.getLayer(spatial);
-            var propertyControl = new LayerModelPropertyControl(layer, (SceneChangeConsumer) changeConsumer);
-            propertyControl.setEditObject(spatial);
-
-            FXUtils.addToPane(propertyControl, container);
-        }
-
-        EnumPropertyControl<ModelChangeConsumer, Spatial, CullHint> cullHintControl =
-                new EnumPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, changeConsumer, CULL_HINTS);
-        cullHintControl.setApplyHandler(Spatial::setCullHint);
-        cullHintControl.setSyncHandler(Spatial::getLocalCullHint);
-        cullHintControl.setEditObject(spatial);
-
-        EnumPropertyControl<ModelChangeConsumer, Spatial, ShadowMode> shadowModeControl =
-                new EnumPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, changeConsumer, SHADOW_MODES);
-        shadowModeControl.setApplyHandler(Spatial::setShadowMode);
-        shadowModeControl.setSyncHandler(Spatial::getLocalShadowMode);
-        shadowModeControl.setEditObject(spatial);
-
-        EnumPropertyControl<ModelChangeConsumer, Spatial, Bucket> queueBucketControl =
-                new EnumPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, changeConsumer, BUCKETS);
-        queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
-        queueBucketControl.setSyncHandler(Spatial::getLocalQueueBucket);
-        queueBucketControl.setEditObject(spatial);
-
-        FXUtils.addToPane(cullHintControl, container);
-        FXUtils.addToPane(shadowModeControl, container);
-        FXUtils.addToPane(queueBucketControl, container);
+        properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_CULL_HINT, spatial,
+            Spatial::getCullHint, Spatial::setCullHint));
+        properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_SHADOW_MODE, spatial,
+            Spatial::getShadowMode, Spatial::setShadowMode));
+        properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_QUEUE_BUCKET, spatial,
+            Spatial::getLocalQueueBucket, Spatial::setQueueBucket));
 
         if (canEditTransformation(spatial)) {
 
-            buildSplitLine(container);
+            properties.add(SeparatorProperty.getInstance());
 
-            var location = spatial.getLocalTranslation().clone();
-            var scale = spatial.getLocalScale().clone();
-            var rotation = spatial.getLocalRotation().clone();
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_LOCATION, spatial,
+                Spatial::getLocalTranslation, Spatial::setLocalTranslation));
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_SCALE, spatial,
+                Spatial::getLocalScale, Spatial::setLocalScale));
+            properties.add(new SimpleProperty<>(QUATERNION, Messages.MODEL_PROPERTY_ROTATION, spatial,
+                Spatial::getLocalRotation, Spatial::setLocalRotation));
 
-            Vector3FPropertyControl<ModelChangeConsumer, Spatial> locationControl =
-                    new Vector3FPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
-            locationControl.setApplyHandler(Spatial::setLocalTranslation);
-            locationControl.setSyncHandler(Spatial::getLocalTranslation);
-            locationControl.setEditObject(spatial);
-
-            Vector3FPropertyControl<ModelChangeConsumer, Spatial> scaleControl =
-                    new Vector3FPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, changeConsumer);
-            scaleControl.setApplyHandler(Spatial::setLocalScale);
-            scaleControl.setSyncHandler(Spatial::getLocalScale);
-            scaleControl.setEditObject(spatial);
-
-            QuaternionPropertyControl<ModelChangeConsumer, Spatial> rotationControl =
-                    new QuaternionPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
-            rotationControl.setApplyHandler(Spatial::setLocalRotation);
-            rotationControl.setSyncHandler(Spatial::getLocalRotation);
-            rotationControl.setEditObject(spatial);
-
-            FXUtils.addToPane(locationControl, container);
-            FXUtils.addToPane(scaleControl, container);
-            FXUtils.addToPane(rotationControl, container);
         }
 
         var userDataKeys = spatial.getUserDataKeys();
         if (userDataKeys.isEmpty()) {
-            return;
+            return properties;
         }
 
-        var count = 0;
-
-        for (var key : userDataKeys) {
-            if (isNeedSkip(key)) continue;
-            count++;
-        }
+        var count = userDataKeys.stream()
+            .filter(s -> !isNeedSkip(s))
+            .count();
 
         if (count < 1) {
-            return;
+            return properties;
         }
 
-        buildSplitLine(container);
+        properties.add(SeparatorProperty.getInstance());
 
         final Array<String> sortedKeys = ArrayFactory.newSortedArray(String.class);
         sortedKeys.addAll(userDataKeys);
@@ -163,98 +116,58 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
             var data = spatial.getUserData(key);
 
-            if (data instanceof Float) {
+            properties.add(new SimpleProperty<>(getUserDataType(data), key, spatial,
+                sp -> sp.getUserData(key), (sp, val) -> sp.setUserData(key, val)));
+        }
 
-                var value = (Float) data;
+        return properties;
+    }
 
-                var control = new FloatPropertyControl<ModelChangeConsumer, Spatial>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
+    private @NotNull EditablePropertyType getUserDataType(@NotNull Object value) {
 
-                FXUtils.addToPane(control, container);
+        if (value instanceof Float) {
+            return EditablePropertyType.FLOAT;
+        } else if (value instanceof Integer) {
+            return EditablePropertyType.INTEGER;
+        } else if (value instanceof Boolean) {
+            return EditablePropertyType.BOOLEAN;
+        } else if (value instanceof Vector3f) {
+            return EditablePropertyType.VECTOR_3F;
+        } else if (value instanceof Vector2f) {
+            return EditablePropertyType.VECTOR_2F;
+        } else if (value instanceof ColorRGBA) {
+            return EditablePropertyType.COLOR;
+        } else if (value instanceof String) {
+            return EditablePropertyType.STRING;
+        }
 
-            } else if (data instanceof Integer) {
+        return EditablePropertyType.READ_ONLY_STRING;
+    }
 
-                final Integer value = (Integer) data;
+    @Override
+    @FxThread
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
+        super.buildForImpl(object, parent, container, changeConsumer);
 
-                final IntegerPropertyControl<ModelChangeConsumer, Spatial> control =
-                        new IntegerPropertyControl<>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
+        if (!(object instanceof Spatial)) {
+            return;
+        }
 
-                FXUtils.addToPane(control, container);
+        var spatial = (Spatial) object;
 
-            } else if (data instanceof Boolean) {
+        if (changeConsumer instanceof SceneChangeConsumer) {
 
-                final Boolean value = (Boolean) data;
+            // TODO add an editable property type
+            var layer = SceneLayer.getLayer(spatial);
+            var propertyControl = new LayerModelPropertyControl(layer, (SceneChangeConsumer) changeConsumer);
+            propertyControl.setEditObject(spatial);
 
-                final BooleanPropertyControl<ModelChangeConsumer, Spatial> control =
-                        new BooleanPropertyControl<>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
-
-                FXUtils.addToPane(control, container);
-
-            } else if (data instanceof Vector3f) {
-
-                final Vector3f value = (Vector3f) data;
-
-                final Vector3FPropertyControl<ModelChangeConsumer, Spatial> control =
-                        new Vector3FPropertyControl<>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
-
-                FXUtils.addToPane(control, container);
-
-            } else if (data instanceof Vector2f) {
-
-                final Vector2f value = (Vector2f) data;
-
-                final Vector2FPropertyControl<ModelChangeConsumer, Spatial> control =
-                        new Vector2FPropertyControl<>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
-
-                FXUtils.addToPane(control, container);
-
-            } else if (data instanceof ColorRGBA) {
-
-                final ColorRGBA value = (ColorRGBA) data;
-
-                final ColorPropertyControl<ModelChangeConsumer, Spatial> control =
-                        new ColorPropertyControl<>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
-
-                FXUtils.addToPane(control, container);
-
-            } else if (data instanceof String) {
-
-                final String value = (String) data;
-
-                final StringPropertyControl<ModelChangeConsumer, Spatial> control =
-                        new StringPropertyControl<>(value, key, changeConsumer);
-                control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
-
-                FXUtils.addToPane(control, container);
-
-            } else {
-
-                final DefaultSinglePropertyControl<ModelChangeConsumer, Spatial, Object> control =
-                        new DefaultSinglePropertyControl<>(data, key, changeConsumer);
-                control.setSyncHandler(sp -> sp.getUserData(key));
-                control.setEditObject(spatial);
-
-                FXUtils.addToPane(control, container);
-            }
+            FXUtils.addToPane(propertyControl, container);
         }
     }
 

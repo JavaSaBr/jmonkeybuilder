@@ -273,6 +273,33 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     }
 
     /**
+     * Return true if this control has not saved changes.
+     *
+     * @return true if this control has not saved changes.
+     */
+    public boolean isDirty() {
+        return true;
+    }
+
+    /**
+     * Apply changes from control to the edited object on lost focus.
+     *
+     * @param focused the focused state.
+     */
+    protected void applyOnLostFocus(boolean focused) {
+        if (!isIgnoreListener() && !focused && isDirty()) {
+            apply();
+        }
+    }
+
+    /**
+     * Apply changes from control to the edit object.
+     */
+    @FxThread
+    protected void apply() {
+    }
+
+    /**
      * Synchronize value from the edit object.
      */
     @Override

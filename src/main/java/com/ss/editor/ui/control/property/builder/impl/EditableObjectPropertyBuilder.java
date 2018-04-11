@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
+
+import com.jme3.math.*;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
@@ -29,30 +27,37 @@ import java.util.List;
  */
 public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends AbstractPropertyBuilder<C> {
 
-    protected EditableObjectPropertyBuilder(@NotNull final Class<? extends C> type) {
+    protected EditableObjectPropertyBuilder(@NotNull Class<? extends C> type) {
         super(type);
     }
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final C changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull C changeConsumer
+    ) {
 
-        final List<EditableProperty<?, ?>> properties = getProperties(object, parent, changeConsumer);
+        var properties = getProperties(object, parent, changeConsumer);
         if (properties == null || properties.isEmpty()) {
             return;
         }
 
-        for (final EditableProperty<?, ?> description : properties) {
+        for (var description : properties) {
             buildFor(container, changeConsumer, description);
         }
     }
 
     @FxThread
-    protected void buildFor(@NotNull final VBox container, @NotNull final C changeConsumer,
-                            @NotNull final EditableProperty<?, ?> description) {
+    protected void buildFor(
+            @NotNull VBox container,
+            @NotNull C changeConsumer,
+            @NotNull EditableProperty<?, ?> description
+    ) {
 
-        final EditablePropertyType type = description.getType();
+        var type = description.getType();
 
         switch (type) {
             case BOOLEAN: {
@@ -158,6 +163,17 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 addControl(container, property, propertyControl);
                 break;
             }
+            case QUATERNION: {
+
+                EditableProperty<Quaternion, ?> property = cast(description);
+                var currentValue = property.getValue();
+
+                var propertyControl = new QuaternionPropertyControl<C, EditableProperty<Quaternion, ?>>(
+                    currentValue, property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
             case ENUM: {
 
                 final EditableProperty<Enum<?>, ?> property = cast(description);
@@ -200,8 +216,11 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @param propertyControl the property control.
      */
     @FxThread
-    protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
-                                  @NotNull final PropertyControl<? extends C, EditableProperty<T, ?>, T> propertyControl) {
+    protected <T> void addControl(
+            @NotNull VBox container,
+            @NotNull EditableProperty<T, ?> property,
+            @NotNull PropertyControl<? extends C, EditableProperty<T, ?>, T> propertyControl
+    ) {
 
         propertyControl.setApplyHandler(EditableProperty::setValue);
         propertyControl.setSyncHandler(EditableProperty::getValue);
@@ -220,9 +239,11 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @return the list of properties or null.
      */
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object,
-                                                                   @Nullable final Object parent,
-                                                                   @NotNull final C changeConsumer) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull C changeConsumer
+    ) {
         return getProperties(object);
     }
 
@@ -233,12 +254,12 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @return the list of properties or null.
      */
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
         return null;
     }
 
     @FxThread
-    protected @NotNull <T> EditableProperty<T, ?> cast(@NotNull final EditableProperty<?, ?> property) {
+    protected @NotNull <T> EditableProperty<T, ?> cast(@NotNull EditableProperty<?, ?> property) {
         return ClassUtils.unsafeCast(property);
     }
 }

@@ -30,53 +30,63 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     @Nullable
     private FloatTextField valueField;
 
-    public FloatPropertyControl(@Nullable final Float propertyValue, @NotNull final String propertyName,
-                                @NotNull final C changeConsumer) {
+    public FloatPropertyControl(
+            @Nullable Float propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
+
         super(propertyValue, propertyName, changeConsumer);
     }
 
-    public FloatPropertyControl(@Nullable final Float propertyValue, @NotNull final String propertyName,
-                                @NotNull final C changeConsumer,
-                                @Nullable final SixObjectConsumer<C, T, String, Float, Float, BiConsumer<T, Float>> changeHandler) {
+    public FloatPropertyControl(
+            @Nullable Float propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer,
+            @Nullable SixObjectConsumer<C, T, String, Float, Float, BiConsumer<T, Float>> changeHandler
+    ) {
+
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 
     @Override
     @FxThread
-    public void changeControlWidthPercent(final double controlWidthPercent) {
+    public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        final FloatTextField valueField = getValueField();
+        var valueField = getValueField();
         valueField.prefWidthProperty().unbind();
         valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         valueField = new FloatTextField();
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty()
-                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+            .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        valueField.focusedProperty()
+            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
 
         FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 
     /**
-     * Sets scroll power.
+     * Set the scroll power.
      *
      * @param scrollPower the scroll power.
      */
     @FxThread
-    public void setScrollPower(final float scrollPower) {
+    public void setScrollPower(float scrollPower) {
         getValueField().setScrollPower(scrollPower);
     }
 
     /**
-     * Gets scroll power.
+     * Get the scroll power.
      *
      * @return the scroll power.
      */
@@ -86,13 +96,13 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     }
 
     /**
-     * Set value limits for this field.
+     * Set the value limits for this field.
      *
      * @param min the min value.
      * @param max the max value.
      */
     @FxThread
-    public void setMinMax(final float min, final float max) {
+    public void setMinMax(float min, float max) {
         getValueField().setMinMax(min, max);
     }
 
@@ -103,6 +113,8 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     }
 
     /**
+     * Get the filed with current value.
+     *
      * @return the filed with current value.
      */
     @FxThread
@@ -113,11 +125,17 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     @Override
     @FxThread
     protected void reload() {
-        final Float value = getPropertyValue();
-        final FloatTextField valueField = getValueField();
-        final int caretPosition = valueField.getCaretPosition();
+        var value = getPropertyValue();
+        var valueField = getValueField();
+        var caretPosition = valueField.getCaretPosition();
         valueField.setValue(value == null ? 0F : value);
         valueField.positionCaret(caretPosition);
+    }
+
+    @Override
+    public boolean isDirty() {
+
+        return super.isDirty();
     }
 
     /**
@@ -136,4 +154,12 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
         final Float oldValue = getPropertyValue();
         changed(value, oldValue);
     }
+
+    @Override
+    protected void apply() {
+
+        super.apply();
+    }
+
+
 }
