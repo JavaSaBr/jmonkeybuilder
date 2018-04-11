@@ -1,28 +1,24 @@
 package com.ss.editor.model.undo.impl;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-
-import com.ss.editor.Editor;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The base implementation of the {@link EditorOperation} to support a generic type of an editor.
  *
- * @param <E> the type parameter
+ * @param <E> the change consumer's type.
  * @author JavaSabr
  */
 public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
     /**
-     * The constant LOGGER.
+     * The logger.
      */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorOperation.class);
@@ -33,20 +29,11 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
-
-    /**
-     * Instantiates a new Abstract editor operation.
-     */
     public AbstractEditorOperation() {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void redo(@NotNull final UndoableEditor editor) {
         redoImpl(unsafeCast(editor));
     }
@@ -56,11 +43,11 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      *
      * @param editor the editor.
      */
-    @FXThread
+    @FxThread
     protected abstract void redoImpl(@NotNull E editor);
 
     @Override
-    @FXThread
+    @FxThread
     public void undo(@NotNull final UndoableEditor editor) {
         undoImpl(unsafeCast(editor));
     }
@@ -70,6 +57,6 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      *
      * @param editor the editor.
      */
-    @FXThread
+    @FxThread
     protected abstract void undoImpl(@NotNull final E editor);
 }

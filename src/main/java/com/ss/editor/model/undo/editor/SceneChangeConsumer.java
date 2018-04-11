@@ -1,6 +1,6 @@
 package com.ss.editor.model.undo.editor;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
@@ -19,7 +19,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      *
      * @param appState the app state
      */
-    @FXThread
+    @FxThread
     void notifyAddedAppState(@NotNull SceneAppState appState);
 
     /**
@@ -27,7 +27,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      *
      * @param appState the app state
      */
-    @FXThread
+    @FxThread
     void notifyRemovedAppState(@NotNull SceneAppState appState);
 
     /**
@@ -35,7 +35,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      *
      * @param appState the app state
      */
-    @FXThread
+    @FxThread
     void notifyChangedAppState(@NotNull SceneAppState appState);
 
     /**
@@ -43,7 +43,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      *
      * @param sceneFilter the scene filter
      */
-    @FXThread
+    @FxThread
     void notifyAddedFilter(@NotNull SceneFilter sceneFilter);
 
     /**
@@ -51,7 +51,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      *
      * @param sceneFilter the scene filter
      */
-    @FXThread
+    @FxThread
     void notifyRemovedFilter(@NotNull SceneFilter sceneFilter);
 
     /**
@@ -59,7 +59,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      *
      * @param sceneFilter the scene filter
      */
-    @FXThread
+    @FxThread
     void notifyChangedFilter(@NotNull SceneFilter sceneFilter);
 
     @Override

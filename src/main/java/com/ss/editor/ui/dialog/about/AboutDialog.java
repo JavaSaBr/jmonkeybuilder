@@ -1,13 +1,13 @@
 package com.ss.editor.ui.dialog.about;
 
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.creator.FileCreator;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -53,11 +53,11 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
-        final JFXApplication application = JFXApplication.getInstance();
+        final JfxApplication application = JfxApplication.getInstance();
         final HostServices hostServices = application.getHostServices();
 
         final GridPane gridPane = new GridPane();
@@ -110,12 +110,12 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
 
         FXUtils.addToPane(gridPane, root);
 
-        FXUtils.addClassTo(root, CSSClasses.ABOUT_DIALOG);
-        FXUtils.addClassTo(gridPane, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(usedLibrariesLabel, usedIcons, CSSClasses.ABOUT_DIALOG_LONG_LABEL);
+        FXUtils.addClassTo(root, CssClasses.ABOUT_DIALOG);
+        FXUtils.addClassTo(gridPane, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(usedLibrariesLabel, usedIcons, CssClasses.ABOUT_DIALOG_LONG_LABEL);
         FXUtils.addClassesTo(versionLabel, projectHomeLabel, forumThreadLabel, usedLibrariesLabel, usedIcons,
-                versionField, projectHomeField, forumThreadField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(applicationLabel, CSSClasses.ABOUT_DIALOG_TITLE_LABEL);
+                versionField, projectHomeField, forumThreadField, CssClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(applicationLabel, CssClasses.ABOUT_DIALOG_TITLE_LABEL);
     }
 
     @Override

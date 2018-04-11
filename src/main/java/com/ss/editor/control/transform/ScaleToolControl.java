@@ -11,8 +11,11 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,24 +44,28 @@ public class ScaleToolControl extends AbstractTransformControl {
         super(editorControl);
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected String getNodeY() {
         return NODE_SCALE_Y;
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected String getNodeX() {
         return NODE_SCALE_X;
     }
 
+    @FromAnyThread
     @NotNull
     @Override
     protected String getNodeZ() {
         return NODE_SCALE_Z;
     }
 
+    @JmeThread
     @Override
     public void processTransform() {
 
@@ -66,7 +73,7 @@ public class ScaleToolControl extends AbstractTransformControl {
 
         final LocalObjects local = LocalObjects.get();
         final Camera camera = editorControl.getCamera();
-        final InputManager inputManager = EDITOR.getInputManager();
+        final InputManager inputManager = EditorUtil.getInputManager();
         final Transform transform = notNull(editorControl.getTransformCenter());
 
         // cursor position and selected position vectors

@@ -1,17 +1,18 @@
 package com.ss.editor.ui.control.tree;
 
-import static com.ss.editor.ui.util.UIUtils.findItem;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.ui.util.UiUtils.findItem;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.beans.property.BooleanProperty;
@@ -40,6 +41,9 @@ import java.util.Set;
 public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<TreeNode<?>> {
 
     @NotNull
+    public static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
+
+    @NotNull
     private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
 
     @NotNull
@@ -52,21 +56,20 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
-
-    @NotNull
     private final StringConverter<TreeNode<?>> stringConverter = new StringConverter<TreeNode<?>>() {
 
         @Override
-        public String toString(@NotNull final TreeNode<?> object) {
-            return object.getName();
+        public String toString(@Nullable final TreeNode<?> object) {
+            return object == null ? "" : object.getName();
         }
 
         @Override
         public TreeNode<?> fromString(@NotNull final String string) {
 
             final TreeNode<?> item = getItem();
-            if (item == null) return null;
+            if (item == null) {
+                return null;
+            }
 
             item.changeName(getNodeTree(), string);
 
@@ -195,13 +198,14 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
 
         setConverter(stringConverter);
 
-        FXUtils.addClassTo(content, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_NODE_TREE_CELL);
+        FXUtils.addClassTo(content, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CELL);
     }
 
     /**
      * Update hide status.
      */
+    @FxThread
     private void processHide(@NotNull final MouseEvent event) {
         event.consume();
 
@@ -222,11 +226,16 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     }
 
     @Override
+    @FxThread
     public void startEdit() {
-        if (!isEditable()) return;
+        if (!isEditable()) {
+            return;
+        }
 
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
-        if (treeItem != null) treeItem.setGraphic(null);
+        if (treeItem != null) {
+            treeItem.setGraphic(null);
+        }
 
         setIgnoreUpdate(true);
         try {
@@ -235,13 +244,14 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
             setIgnoreUpdate(false);
         }
 
-        UIUtils.updateEditedCell(this);
+        UiUtils.updateEditedCell(this);
         editing.setValue(true);
     }
 
     /**
      * @return true if need to ignore update.
      */
+    @FxThread
     private boolean isIgnoreUpdate() {
         return ignoreUpdate;
     }
@@ -249,39 +259,59 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * @param ignoreUpdate the flag of ignoring updates.
      */
+    @FxThread
     private void setIgnoreUpdate(final boolean ignoreUpdate) {
         this.ignoreUpdate = ignoreUpdate;
     }
 
     @Override
+    @FxThread
     public void cancelEdit() {
         super.cancelEdit();
+
         editing.setValue(false);
+
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
-        if (treeItem != null) treeItem.setGraphic(content);
+        if (treeItem != null) {
+            treeItem.setGraphic(content);
+        }
+
         setText(StringUtils.EMPTY);
     }
 
     @Override
+    @FxThread
     public void commitEdit(@NotNull final TreeNode<?> newValue) {
         super.commitEdit(newValue);
+
         editing.setValue(false);
+
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
-        if (treeItem != null) treeItem.setGraphic(content);
+        if (treeItem != null) {
+            treeItem.setGraphic(content);
+        }
+
         setText(StringUtils.EMPTY);
     }
 
     /**
-     * @return the icon of node.
+     * Get the icon.
+     *
+     * @return the icon.
      */
+    @FxThread
     private @NotNull ImageView getIcon() {
         return icon;
     }
 
     @Override
+    @FxThread
     public void updateItem(@Nullable final TreeNode<?> item, final boolean empty) {
         super.updateItem(item, empty);
-        if (isIgnoreUpdate()) return;
+
+        if (isIgnoreUpdate()) {
+            return;
+        }
 
         final ImageView icon = getIcon();
 
@@ -324,10 +354,11 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     }
 
     /**
-     * Gets node tree.
+     * Get the node tree.
      *
-     * @return the tree.
+     * @return the node tree.
      */
+    @FxThread
     protected @NotNull M getNodeTree() {
         return nodeTree;
     }
@@ -335,24 +366,32 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * Handle a mouse click.
      */
+    @FxThread
     private void processClick(@NotNull final MouseEvent event) {
 
         final TreeNode<?> item = getItem();
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
         final MouseButton button = event.getButton();
-        if (button != MouseButton.SECONDARY) return;
+        if (button != MouseButton.SECONDARY) {
+            return;
+        }
 
         final M nodeTree = getNodeTree();
         final ContextMenu contextMenu = nodeTree.getContextMenu(item);
-        if (contextMenu == null) return;
+        if (contextMenu == null) {
+            return;
+        }
 
-        EXECUTOR_MANAGER.addFXTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
+        EXECUTOR_MANAGER.addFxTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
     }
 
     /**
      * Handle stopping dragging.
      */
+    @FxThread
     private void stopDrag(@NotNull final DragEvent event) {
         dragged.setValue(false);
         setCursor(Cursor.DEFAULT);
@@ -362,18 +401,25 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * Handle starting dragging.
      */
+    @FxThread
     private void startDrag(@NotNull final MouseEvent mouseEvent) {
 
         final TreeNode<?> item = getItem();
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
         final TreeItem<TreeNode<?>> treeItem = findItemForValue(treeView, item);
-        if (treeView.getRoot() == treeItem) return;
+        if (treeView.getRoot() == treeItem) {
+            return;
+        }
 
         TransferMode transferMode = item.canMove() ? TransferMode.MOVE : null;
         transferMode = item.canCopy() && mouseEvent.isControlDown() ? TransferMode.COPY : transferMode;
-        if (transferMode == null) return;
+        if (transferMode == null) {
+            return;
+        }
 
         final Dragboard dragBoard = startDragAndDrop(transferMode);
         final ClipboardContent content = new ClipboardContent();
@@ -390,10 +436,13 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * Handle dropping a dragged element.
      */
+    @FxThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
 
         final TreeNode<?> item = getItem();
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
@@ -409,10 +458,14 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
             final TreeView<TreeNode<?>> treeView = getTreeView();
             final TreeItem<TreeNode<?>> dragTreeItem = findItem(treeView, objectId);
             final TreeNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-            if (dragItem == null || !item.canAccept(dragItem, isCopy)) return;
+            if (dragItem == null || !item.canAccept(dragItem, isCopy)) {
+                return;
+            }
 
             final TreeItem<TreeNode<?>> newParentItem = findItemForValue(treeView, item);
-            if (newParentItem == null) return;
+            if (newParentItem == null) {
+                return;
+            }
 
             item.accept(changeConsumer, dragItem.getElement(), isCopy);
 
@@ -426,10 +479,13 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * Handle entering a dragged element.
      */
+    @FxThread
     private void dragOver(@NotNull final DragEvent dragEvent) {
 
         final TreeNode<?> item = getItem();
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
@@ -457,6 +513,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     /**
      * Handle exiting a dragged element.
      */
+    @FxThread
     private void dragExited(@NotNull final DragEvent dragEvent) {
         dropAvailable.setValue(false);
     }

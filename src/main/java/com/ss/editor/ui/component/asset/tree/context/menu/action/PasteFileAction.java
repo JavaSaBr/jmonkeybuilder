@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
@@ -35,19 +35,19 @@ public class PasteFileAction extends FileAction {
         super(element);
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.PASTE_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);

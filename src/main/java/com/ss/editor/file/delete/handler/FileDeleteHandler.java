@@ -1,6 +1,6 @@
 package com.ss.editor.file.delete.handler;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ public interface FileDeleteHandler extends Cloneable {
      *
      * @param file the file to delete.
      */
-    @FXThread
+    @FxThread
     void preDelete(@NotNull final Path file);
 
     /**
@@ -26,7 +26,7 @@ public interface FileDeleteHandler extends Cloneable {
      *
      * @param file the deleted file.
      */
-    @FXThread
+    @FxThread
     void postDelete(@NotNull final Path file);
 
     /**
@@ -35,7 +35,7 @@ public interface FileDeleteHandler extends Cloneable {
      * @param file the file to check.
      * @return true of the file need to handle.
      */
-    @FXThread
+    @FxThread
     boolean isNeedHandle(@NotNull Path file);
 
     /**

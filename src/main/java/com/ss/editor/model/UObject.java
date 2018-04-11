@@ -8,7 +8,7 @@ package com.ss.editor.model;
 public interface UObject {
 
     /**
-     * Gets object id.
+     * Get the object id.
      *
      * @return the uniq id.
      */

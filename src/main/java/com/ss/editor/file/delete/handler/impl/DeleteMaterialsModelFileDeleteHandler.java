@@ -42,20 +42,33 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     public void preDelete(@NotNull final Path file) {
         super.preDelete(file);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 
-        final Spatial model = assetManager.loadModel(assetPath);
+        final Spatial model;
+
+        try {
+            model = assetManager.loadModel(assetPath);
+        } catch (final Exception e) {
+            LOGGER.warning(this, e);
+            return;
+        }
 
         NodeUtils.visitGeometry(model, geometry -> {
+
             final Material material = geometry.getMaterial();
             final String assetName = material.getAssetName();
-            if (!StringUtils.isEmpty(assetName)) assetKeys.add(assetName);
+
+            if (!StringUtils.isEmpty(assetName)) {
+                assetKeys.add(assetName);
+            }
         });
     }
 
     /**
+     * Get the list of used materials.
+     *
      * @return the list of used materials.
      */
     private @NotNull Array<String> getAssetKeys() {
@@ -67,7 +80,9 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         super.postDelete(file);
 
         final Array<String> assetKeys = getAssetKeys();
-        if (assetKeys.isEmpty()) return;
+        if (assetKeys.isEmpty()) {
+            return;
+        }
 
         String question = Messages.FILE_DELETE_HANDLER_DELETE_MATERIALS;
         question = question.replace("%file_name%", file.getFileName().toString());
@@ -77,7 +92,11 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     }
 
     private void handle(@Nullable final Boolean result) {
-        if (!Boolean.TRUE.equals(result)) return;
+
+        if (!Boolean.TRUE.equals(result)) {
+            return;
+        }
+
         getAssetKeys().stream().map(EditorUtil::getRealFile)
                 .filter(Files::exists)
                 .forEach(FileUtils::delete);

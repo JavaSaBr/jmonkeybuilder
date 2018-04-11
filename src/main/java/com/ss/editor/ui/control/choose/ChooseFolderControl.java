@@ -3,13 +3,14 @@ package com.ss.editor.ui.control.choose;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
@@ -52,19 +53,17 @@ public class ChooseFolderControl extends HBox {
     @Nullable
     private Runnable changeHandler;
 
-    /**
-     * Instantiates a new Choose folder control.
-     */
     public ChooseFolderControl() {
         createComponents();
         reload();
     }
 
     /**
-     * Sets change handler.
+     * Set the change handler.
      *
      * @param changeHandler the handler.
      */
+    @FxThread
     public void setChangeHandler(@Nullable final Runnable changeHandler) {
         this.changeHandler = changeHandler;
     }
@@ -72,14 +71,15 @@ public class ChooseFolderControl extends HBox {
     /**
      * The handler.
      */
-    @Nullable
-    private Runnable getChangeHandler() {
+    @FxThread
+    private @Nullable Runnable getChangeHandler() {
         return changeHandler;
     }
 
     /**
      * Create components.
      */
+    @FxThread
     protected void createComponents() {
 
         folderLabel = new Label(StringUtils.EMPTY);
@@ -97,8 +97,8 @@ public class ChooseFolderControl extends HBox {
         FXUtils.addToPane(addButton, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassesTo(this, CSSClasses.TEXT_INPUT_CONTAINER, CSSClasses.CHOOSE_RESOURCE_CONTROL);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(this, CssClasses.TEXT_INPUT_CONTAINER, CssClasses.CHOOSE_RESOURCE_CONTROL);
+        FXUtils.addClassesTo(addButton, removeButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
 
@@ -107,47 +107,52 @@ public class ChooseFolderControl extends HBox {
     }
 
     /**
+     * Get the label of the path to a folder.
+     *
      * @return the label of the path to a folder.
      */
-    @NotNull
-    private Label getFolderLabel() {
+    @FxThread
+    private @NotNull Label getFolderLabel() {
         return notNull(folderLabel);
     }
 
     /**
      * Add a folder.
      */
+    @FxThread
     private void processAdd() {
-        UIUtils.openFolderAssetDialog(this::setFolder, ACTION_TESTER);
+        UiUtils.openFolderAssetDialog(this::setFolder, ACTION_TESTER);
     }
 
     /**
-     * Gets folder.
+     * Get the selected folder.
      *
      * @return the selected folder.
      */
-    @Nullable
-    public Path getFolder() {
+    @FxThread
+    public @Nullable Path getFolder() {
         return folder;
     }
 
     /**
-     * Sets folder.
+     * Set the folder.
      *
      * @param folder the selected folder.
      */
+    @FxThread
     public void setFolder(@Nullable final Path folder) {
         this.folder = folder;
-
         reload();
-
         final Runnable changeHandler = getChangeHandler();
-        if (changeHandler != null) changeHandler.run();
+        if (changeHandler != null) {
+            changeHandler.run();
+        }
     }
 
     /**
      * Remove the current folder.
      */
+    @FxThread
     private void processRemove() {
         setFolder(null);
     }
@@ -155,6 +160,7 @@ public class ChooseFolderControl extends HBox {
     /**
      * Reload the current folder.
      */
+    @FxThread
     protected void reload() {
 
         final Label folderLabel = getFolderLabel();

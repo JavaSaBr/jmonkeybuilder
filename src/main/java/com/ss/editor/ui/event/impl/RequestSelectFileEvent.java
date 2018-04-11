@@ -27,25 +27,21 @@ public class RequestSelectFileEvent extends SceneEvent {
 
     private static final String FILE = "file";
 
-    /**
-     * Instantiates a new Request select file event.
-     */
     public RequestSelectFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE));
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file.
      */

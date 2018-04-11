@@ -37,11 +37,7 @@ public class WorkspaceManager {
     @Nullable
     private static WorkspaceManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
+    @FromAnyThread
     public static @NotNull WorkspaceManager getInstance() {
         if (instance == null) instance = new WorkspaceManager();
         return instance;
@@ -59,8 +55,11 @@ public class WorkspaceManager {
     }
 
     /**
+     * Get the table of workspaces.
+     *
      * @return the table of workspaces.
      */
+    @FromAnyThread
     private @NotNull ObjectDictionary<Path, Workspace> getWorkspaces() {
         return workspaces;
     }
@@ -72,11 +71,9 @@ public class WorkspaceManager {
      */
     @FromAnyThread
     public @Nullable Workspace getCurrentWorkspace() {
-
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return null;
-
         return getWorkspace(currentAsset);
     }
 
@@ -105,7 +102,6 @@ public class WorkspaceManager {
         }
 
         Workspace workspace;
-
         try {
             workspace = EditorUtil.deserialize(notNull(get(workspaceFile, Files::readAllBytes)));
         } catch (final RuntimeException e) {
@@ -134,7 +130,6 @@ public class WorkspaceManager {
      */
     @FromAnyThread
     public synchronized void save() {
-        final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
-        workspaces.forEach((path, workspace) -> workspace.save(true));
+        getWorkspaces().forEach((path, workspace) -> workspace.save(true));
     }
 }

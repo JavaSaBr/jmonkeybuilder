@@ -1,9 +1,9 @@
 package com.ss.editor;
 
-import static java.util.ResourceBundle.getBundle;
 import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import static java.util.ResourceBundle.getBundle;
 import com.ss.rlib.util.PropertyLoader;
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
 import java.util.Locale;
 import java.util.Map;
@@ -124,30 +124,33 @@ public class Messages {
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
 
     public static final String SETTINGS_DIALOG_TITLE;
-    public static final String SETTINGS_DIALOG_FXAA;
-    public static final String SETTINGS_DIALOG_NATIVE_FILE_CHOOSER;
-    public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
-    public static final String SETTINGS_DIALOG_FRAME_RATE;
-    public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
-    public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
-    public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
-    public static final String SETTINGS_DIALOG_ANISOTROPY;
     public static final String SETTINGS_DIALOG_MESSAGE;
-    public static final String SETTINGS_DIALOG_GOOGLE_ANALYTICS;
-    public static final String SETTINGS_DIALOG_CAMERA_ANGLE;
-    public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
-    public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
-    public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
-    public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
-    public static final String SETTINGS_DIALOG_TAB_OTHER;
-    public static final String SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL;
-    public static final String SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL;
-    public static final String SETTINGS_DIALOG_THEME_LABEL;
-    public static final String SETTINGS_DIALOG_OPEN_GL_LABEL;
     public static final String SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE;
     public static final String SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE;
-    public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
     public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
+
+    public static final String SETTINGS_PROPERTY_FXAA;
+    public static final String SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER;
+    public static final String SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS;
+    public static final String SETTINGS_PROPERTY_FRAME_RATE;
+    public static final String SETTINGS_PROPERTY_GAMMA_CORRECTION;
+    public static final String SETTINGS_PROPERTY_TONEMAP_FILTER;
+    public static final String SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT;
+    public static final String SETTINGS_PROPERTY_ANISOTROPY;
+    public static final String SETTINGS_PROPERTY_GOOGLE_ANALYTICS;
+    public static final String SETTINGS_PROPERTY_CAMERA_ANGLE;
+    public static final String SETTINGS_PROPERTY_TANGENT_GENERATION;
+    public static final String SETTINGS_PROPERTY_FLIPPED_TEXTURE;
+    public static final String SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP;
+    public static final String SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER;
+    public static final String SETTINGS_PROPERTY_USER_CLASSES_FOLDER;
+    public static final String SETTINGS_PROPERTY_THEME;
+    public static final String SETTINGS_PROPERTY_OPEN_GL;
+    public static final String SETTINGS_PROPERTY_FAST_SKY_FOLDER;
+
+    public static final String SETTINGS_CATEGORY_GRAPHICS;
+    public static final String SETTINGS_CATEGORY_OTHER;
+    public static final String SETTINGS_CATEGORY_EDITOR;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
@@ -203,10 +206,14 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_PATH;
     public static final String MODEL_FILE_EDITOR_NODE_WAY_POINT;
     public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
+    public static final String MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL;
+
+    public static final String SCENE_FILE_EDITOR_NODE_FILTERS;
+    public static final String SCENE_FILE_EDITOR_NODE_APP_STATES;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
-    public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
+    public static final String SCENE_FILE_EDITOR_TOOL_PAINTING;
     public static final String SCENE_FILE_EDITOR_TOOL_SCRIPTING;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
@@ -239,12 +246,12 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE;
-    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
+    public static final String MODEL_NODE_TREE_ACTION_COPY;
+    public static final String MODEL_NODE_TREE_ACTION_PASTE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
     public static final String MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
@@ -275,7 +282,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
-    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
@@ -290,6 +298,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
+    public static final String MODEL_NODE_TREE_ACTION_ENABLE_ALL_CONTROLS;
+    public static final String MODEL_NODE_TREE_ACTION_DISABLE_ALL_CONTROLS;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -297,6 +307,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_LOCATION;
     public static final String MODEL_PROPERTY_SCALE;
     public static final String MODEL_PROPERTY_ROTATION;
+    public static final String MODEL_PROPERTY_TRANSFORMATION;
     public static final String MODEL_PROPERTY_MATERIAL;
     public static final String MODEL_PROPERTY_DIRECTION;
     public static final String MODEL_PROPERTY_RADIUS;
@@ -344,6 +355,8 @@ public class Messages {
     public static final String MODEL_PROPERTY_FALL_SPEED;
     public static final String MODEL_PROPERTY_GRAVITY;
     public static final String MODEL_PROPERTY_JUMP_SPEED;
+    public static final String MODEL_PROPERTY_JUMP_FORCE;
+    public static final String MODEL_PROPERTY_PHYSICS_DAMPING;
     public static final String MODEL_PROPERTY_MAX_SLOPE;
     public static final String MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL;
     public static final String MODEL_PROPERTY_IS_USE_VIEW_DIRECTION;
@@ -417,6 +430,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_BILLBOARD;
     public static final String MODEL_PROPERTY_INITIAL_FORCE;
     public static final String MODEL_PROPERTY_LIFE;
+    public static final String MODEL_PROPERTY_LIGHT;
     public static final String MODEL_PROPERTY_COLUMNS;
     public static final String MODEL_PROPERTY_ROWS;
     public static final String MODEL_PROPERTY_SPRITE_COUNT;
@@ -566,7 +580,7 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
 
     public static final String NODE_SELECTOR_DIALOG_TITLE;
-
+    public static final String SCENE_ELEMENT_SELECTOR_DIALOG_TITLE;
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
     public static final String LIGHT_SELECTOR_DIALOG_TITLE;
 
@@ -626,20 +640,22 @@ public class Messages {
     public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
 
-    public static final String EDITING_COMPONENT_BRUSH_SIZE;
-    public static final String EDITING_COMPONENT_BRUSH_POWER;
-    public static final String EDITING_COMPONENT_SMOOTHLY;
-    public static final String EDITING_COMPONENT_LIMITED;
-    public static final String EDITING_COMPONENT_USE_MARKER;
-    public static final String EDITING_COMPONENT_LEVEL;
-    public static final String EDITING_COMPONENT_ROUGHNESS;
-    public static final String EDITING_COMPONENT_FREQUENCY;
-    public static final String EDITING_COMPONENT_LACUNARITY;
-    public static final String EDITING_COMPONENT_OCTAVES;
-    public static final String EDITING_COMPONENT_SCALE;
-    public static final String EDITING_COMPONENT_TRI_PLANAR;
-    public static final String EDITING_COMPONENT_SHININESS;
-    public static final String EDITING_COMPONENT_LAYER;
+    public static final String PAINTING_COMPONENT_BRUSH_SIZE;
+    public static final String PAINTING_COMPONENT_BRUSH_POWER;
+    public static final String PAINTING_COMPONENT_SMOOTHLY;
+    public static final String PAINTING_COMPONENT_LIMITED;
+    public static final String PAINTING_COMPONENT_USE_MARKER;
+    public static final String PAINTING_COMPONENT_LEVEL;
+    public static final String PAINTING_COMPONENT_ROUGHNESS;
+    public static final String PAINTING_COMPONENT_FREQUENCY;
+    public static final String PAINTING_COMPONENT_LACUNARITY;
+    public static final String PAINTING_COMPONENT_OCTAVES;
+    public static final String PAINTING_COMPONENT_SCALE;
+    public static final String PAINTING_COMPONENT_TRI_PLANAR;
+    public static final String PAINTING_COMPONENT_SHININESS;
+    public static final String PAINTING_COMPONENT_LAYER;
+    public static final String PAINTING_COMPONENT_MODEL;
+    public static final String PAINTING_COMPONENT_METHOD;
 
     public static final String MODEL_CONVERTER_DIALOG_TITLE;
     public static final String MODEL_CONVERTER_DIALOG_RESULT_NAME;
@@ -676,6 +692,17 @@ public class Messages {
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_TITLE;
     public static final String PLUGINS_DIALOG_FILE_CHOOSER_FILTER;
     public static final String PLUGINS_DIALOG_QUESTION;
+    public static final String PLUGINS_DIALOG_VERSION;
+    public static final String PLUGINS_DIALOG_HOME_PAGE;
+    public static final String PLUGINS_DIALOG_USED_DEPENDENCIES;
+
+    public static final String PAINTING_COMPONENT_CONTAINER_TOOL;
+    public static final String PAINTING_COMPONENT_CONTAINER_NO_TOOLS;
+    public static final String PAINTING_COMPONENT_TERRAIN_EDITOR;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK;
+    public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH;
 
     static {
 
@@ -800,30 +827,34 @@ public class Messages {
         SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION = bundle.getString("SingleColorTextureFileCreatorDescription");
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
-        SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
-        SETTINGS_DIALOG_NATIVE_FILE_CHOOSER = bundle.getString("SettingsDialogNativeFileChooser");
-        SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsDialogStopRenderOnLostFocus");
-        SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
-        SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
-        SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
-        SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
-        SETTINGS_DIALOG_ANISOTROPY = bundle.getString("SettingsDialogAnisotropy");
+
         SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
-        SETTINGS_DIALOG_GOOGLE_ANALYTICS = bundle.getString("SettingsDialogAnalytics");
-        SETTINGS_DIALOG_CAMERA_ANGLE = bundle.getString("SettingsDialogCameraAngle");
-        SETTINGS_DIALOG_AUTO_TANGENT_GENERATING = bundle.getString("SettingsDialogAutoTangentGenerating");
-        SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE = bundle.getString("SettingsDialogUseFlipTexture");
-        SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
-        SETTINGS_DIALOG_TAB_GRAPHICS = bundle.getString("SettingsDialogTabGraphics");
-        SETTINGS_DIALOG_TAB_OTHER = bundle.getString("SettingsDialogTabOther");
-        SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL = bundle.getString("SettingsDialogUserLibrariesFolderLabel");
-        SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL = bundle.getString("SettingsDialogUserClassesFolderLabel");
-        SETTINGS_DIALOG_THEME_LABEL = bundle.getString("SettingsDialogThemeLabel");
-        SETTINGS_DIALOG_OPEN_GL_LABEL = bundle.getString("SettingsDialogOpenGLLabel");
         SETTINGS_DIALOG_CLASSES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClassesFolderChooserTitle");
         SETTINGS_DIALOG_LIBRARIES_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogLibrariesFolderChooserTitle");
-        SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
+
+        SETTINGS_PROPERTY_FAST_SKY_FOLDER = bundle.getString("SettingsPropertyFastSkyFolder");
+        SETTINGS_PROPERTY_FXAA = bundle.getString("SettingsPropertyFXAA");
+        SETTINGS_PROPERTY_NATIVE_FILE_CHOOSER = bundle.getString("SettingsPropertyNativeFileChooser");
+        SETTINGS_PROPERTY_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsPropertyStopRenderOnLostFocus");
+        SETTINGS_PROPERTY_FRAME_RATE = bundle.getString("SettingsPropertyFrameRate");
+        SETTINGS_PROPERTY_GAMMA_CORRECTION = bundle.getString("SettingsPropertyGammaCorrection");
+        SETTINGS_PROPERTY_TONEMAP_FILTER = bundle.getString("SettingsPropertyToneMapFilter");
+        SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsPropertyToneMapFilterWhitePoint");
+        SETTINGS_PROPERTY_ANISOTROPY = bundle.getString("SettingsPropertyAnisotropy");
+        SETTINGS_PROPERTY_GOOGLE_ANALYTICS = bundle.getString("SettingsPropertyAnalytics");
+        SETTINGS_PROPERTY_CAMERA_ANGLE = bundle.getString("SettingsPropertyCameraAngle");
+        SETTINGS_PROPERTY_TANGENT_GENERATION = bundle.getString("SettingsPropertyTangentGeneration");
+        SETTINGS_PROPERTY_FLIPPED_TEXTURE = bundle.getString("SettingsPropertyFlippedTexture");
+        SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP = bundle.getString("SettingsPropertyEditorCameraLamp");
+        SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER = bundle.getString("SettingsPropertyUserLibrariesFolder");
+        SETTINGS_PROPERTY_USER_CLASSES_FOLDER = bundle.getString("SettingsPropertyUserClassesFolder");
+        SETTINGS_PROPERTY_THEME = bundle.getString("SettingsPropertyTheme");
+        SETTINGS_PROPERTY_OPEN_GL = bundle.getString("SettingsPropertyOpenGL");
+
+        SETTINGS_CATEGORY_GRAPHICS = bundle.getString("SettingsCategoryGraphics");
+        SETTINGS_CATEGORY_OTHER = bundle.getString("SettingsCategoryOther");
+        SETTINGS_CATEGORY_EDITOR = bundle.getString("SettingsCategoryEditor");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
         GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("GLTFToJ3oFileConverterDescription");
@@ -878,10 +909,14 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_MOTION_PATH = bundle.getString("ModelFileEditorNodeMotionPath");
         MODEL_FILE_EDITOR_NODE_WAY_POINT = bundle.getString("ModelFileEditorNodeWayPoint");
         MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER = bundle.getString("ModelFileEditorNodeVertexBuffer");
+        MODEL_FILE_EDITOR_NODE_LIGHT_CONTROL = bundle.getString("ModelFileEditorNodeLightControl");
+
+        SCENE_FILE_EDITOR_NODE_FILTERS = bundle.getString("SceneFileEditorNodeFilters");
+        SCENE_FILE_EDITOR_NODE_APP_STATES = bundle.getString("SceneFileEditorNodeAppStates");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
-        SCENE_FILE_EDITOR_TOOL_EDITING = bundle.getString("SceneFileEditorToolEditing");
+        SCENE_FILE_EDITOR_TOOL_PAINTING = bundle.getString("SceneFileEditorToolPainting");
         SCENE_FILE_EDITOR_TOOL_SCRIPTING = bundle.getString("SceneFileEditorToolScripting");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
         SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
@@ -914,12 +949,12 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
         MODEL_NODE_TREE_ACTION_ANIMATION_PAUSE = bundle.getString("ModelNodeTreeActionAnimationPause");
-        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
+        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRACT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
-        MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateToneg0dParticleEmitter");
-        MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
+        MODEL_NODE_TREE_ACTION_COPY = bundle.getString("ModelNodeTreeActionCopy");
+        MODEL_NODE_TREE_ACTION_PASTE = bundle.getString("ModelNodeTreeActionPaste");
         MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");
         MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS = bundle.getString("ModelNodeTreeActionResetParticleEmitters");
         MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterChangeShape");
@@ -949,7 +984,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlStaticRigidBody");
-        MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_MOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_LIGHT = bundle.getString("ModelNodeTreeActionAddControlLight");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE = bundle.getString("ModelNodeTreeActionAddControlVehicle");
@@ -964,6 +1000,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
         MODEL_NODE_TREE_ACTION_ADD_WHEEL = bundle.getString("ModelNodeTreeActionAddWheel");
         MODEL_NODE_TREE_ACTION_ADD_TERRAIN = bundle.getString("ModelNodeTreeActionAddTerrain");
+        MODEL_NODE_TREE_ACTION_ENABLE_ALL_CONTROLS = bundle.getString("ModelNodeTreeActionEnableAllControls");
+        MODEL_NODE_TREE_ACTION_DISABLE_ALL_CONTROLS = bundle.getString("ModelNodeTreeActionDisableAllControls");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -971,6 +1009,7 @@ public class Messages {
         MODEL_PROPERTY_LOCATION = bundle.getString("ModelPropertyLocation");
         MODEL_PROPERTY_SCALE = bundle.getString("ModelPropertyScale");
         MODEL_PROPERTY_ROTATION = bundle.getString("ModelPropertyRotation");
+        MODEL_PROPERTY_TRANSFORMATION = bundle.getString("ModelPropertyTransformation");
         MODEL_PROPERTY_MATERIAL = bundle.getString("ModelPropertyMaterial");
         MODEL_PROPERTY_DIRECTION = bundle.getString("ModelPropertyDirection");
         MODEL_PROPERTY_RADIUS = bundle.getString("ModelPropertyRadius");
@@ -1018,6 +1057,8 @@ public class Messages {
         MODEL_PROPERTY_FALL_SPEED = bundle.getString("ModelPropertyFallSpeed");
         MODEL_PROPERTY_GRAVITY = bundle.getString("ModelPropertyGravity");
         MODEL_PROPERTY_JUMP_SPEED = bundle.getString("ModelPropertyJumpSpeed");
+        MODEL_PROPERTY_JUMP_FORCE = bundle.getString("ModelPropertyJumpForce");
+        MODEL_PROPERTY_PHYSICS_DAMPING = bundle.getString("ModelPropertyPhysicsDamping");
         MODEL_PROPERTY_MAX_SLOPE = bundle.getString("ModelPropertyMaxSlope");
         MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL = bundle.getString("ModelPropertyIsApplyPhysicsLocal");
         MODEL_PROPERTY_IS_USE_VIEW_DIRECTION = bundle.getString("ModelPropertyIsUseViewDirection");
@@ -1081,6 +1122,7 @@ public class Messages {
         MODEL_PROPERTY_BILLBOARD = bundle.getString("ModelPropertyBillboard");
         MODEL_PROPERTY_INITIAL_FORCE = bundle.getString("ModelPropertyInitialForce");
         MODEL_PROPERTY_LIFE = bundle.getString("ModelPropertyLife");
+        MODEL_PROPERTY_LIGHT = bundle.getString("ModelPropertyLight");
         MODEL_PROPERTY_COLUMNS = bundle.getString("ModelPropertyColumns");
         MODEL_PROPERTY_ROWS = bundle.getString("ModelPropertyRows");
         MODEL_PROPERTY_SPRITE_COUNT = bundle.getString("ModelPropertySpriteCount");
@@ -1240,6 +1282,7 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
 
         NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");
+        SCENE_ELEMENT_SELECTOR_DIALOG_TITLE = bundle.getString("SceneElementSelectorDialogTitle");
 
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
         LIGHT_SELECTOR_DIALOG_TITLE = bundle.getString("LightSelectorDialogTitle");
@@ -1300,20 +1343,22 @@ public class Messages {
         CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTorusShapeDialogTitle");
         CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTriangleShapeDialogTitle");
 
-        EDITING_COMPONENT_BRUSH_SIZE = bundle.getString("EditingComponentBrushSize");
-        EDITING_COMPONENT_BRUSH_POWER = bundle.getString("EditingComponentBrushPower");
-        EDITING_COMPONENT_SMOOTHLY = bundle.getString("EditingComponentSmoothly");
-        EDITING_COMPONENT_LIMITED = bundle.getString("EditingComponentLimited");
-        EDITING_COMPONENT_USE_MARKER = bundle.getString("EditingComponentUseMarker");
-        EDITING_COMPONENT_LEVEL = bundle.getString("EditingComponentLevel");
-        EDITING_COMPONENT_ROUGHNESS = bundle.getString("EditingComponentRoughness");
-        EDITING_COMPONENT_FREQUENCY = bundle.getString("EditingComponentFrequency");
-        EDITING_COMPONENT_LACUNARITY = bundle.getString("EditingComponentLacunarity");
-        EDITING_COMPONENT_OCTAVES = bundle.getString("EditingComponentOctaves");
-        EDITING_COMPONENT_SCALE = bundle.getString("EditingComponentScale");
-        EDITING_COMPONENT_TRI_PLANAR = bundle.getString("EditingComponentTriPlanar");
-        EDITING_COMPONENT_SHININESS = bundle.getString("EditingComponentShininess");
-        EDITING_COMPONENT_LAYER = bundle.getString("EditingComponentLayer");
+        PAINTING_COMPONENT_BRUSH_SIZE = bundle.getString("PaintingComponentBrushSize");
+        PAINTING_COMPONENT_BRUSH_POWER = bundle.getString("PaintingComponentBrushPower");
+        PAINTING_COMPONENT_SMOOTHLY = bundle.getString("PaintingComponentSmoothly");
+        PAINTING_COMPONENT_LIMITED = bundle.getString("PaintingComponentLimited");
+        PAINTING_COMPONENT_USE_MARKER = bundle.getString("PaintingComponentUseMarker");
+        PAINTING_COMPONENT_LEVEL = bundle.getString("PaintingComponentLevel");
+        PAINTING_COMPONENT_ROUGHNESS = bundle.getString("PaintingComponentRoughness");
+        PAINTING_COMPONENT_FREQUENCY = bundle.getString("PaintingComponentFrequency");
+        PAINTING_COMPONENT_LACUNARITY = bundle.getString("PaintingComponentLacunarity");
+        PAINTING_COMPONENT_OCTAVES = bundle.getString("PaintingComponentOctaves");
+        PAINTING_COMPONENT_SCALE = bundle.getString("PaintingComponentScale");
+        PAINTING_COMPONENT_TRI_PLANAR = bundle.getString("PaintingComponentTriPlanar");
+        PAINTING_COMPONENT_SHININESS = bundle.getString("PaintingComponentShininess");
+        PAINTING_COMPONENT_LAYER = bundle.getString("PaintingComponentLayer");
+        PAINTING_COMPONENT_MODEL = bundle.getString("PaintingComponentModel");
+        PAINTING_COMPONENT_METHOD = bundle.getString("PaintingComponentMethod");
 
         MODEL_CONVERTER_DIALOG_TITLE = bundle.getString("ModelConverterDialogTitle");
         MODEL_CONVERTER_DIALOG_RESULT_NAME = bundle.getString("ModelConverterDialogResultName");
@@ -1350,5 +1395,16 @@ public class Messages {
         PLUGINS_DIALOG_FILE_CHOOSER_TITLE = bundle.getString("PluginsDialogFileChooserTitle");
         PLUGINS_DIALOG_FILE_CHOOSER_FILTER = bundle.getString("PluginsDialogFileChooserFilter");
         PLUGINS_DIALOG_QUESTION = bundle.getString("PluginsDialogQuestion");
+        PLUGINS_DIALOG_VERSION = bundle.getString("PluginsDialogVersion");
+        PLUGINS_DIALOG_HOME_PAGE = bundle.getString("PluginsDialogHomePage");
+        PLUGINS_DIALOG_USED_DEPENDENCIES = bundle.getString("PluginsDialogUsedDependencies");
+
+        PAINTING_COMPONENT_CONTAINER_TOOL = bundle.getString("PaintingComponentContainerTool");
+        PAINTING_COMPONENT_CONTAINER_NO_TOOLS = bundle.getString("PaintingComponentContainerNoTools");
+        PAINTING_COMPONENT_TERRAIN_EDITOR = bundle.getString("PaintingComponentTerrainEditor");
+        PAINTING_COMPONENT_SPAWN_MODELS = bundle.getString("PaintingComponentSpawnModels");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_AS_IS = bundle.getString("PaintingComponentSpawnModelsMethodAsIs");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK = bundle.getString("PaintingComponentSpawnModelsMethodLink");
+        PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH = bundle.getString("PaintingComponentSpawnModelsMethodBatch");
     }
 }

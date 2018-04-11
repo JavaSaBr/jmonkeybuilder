@@ -1,0 +1,17 @@
+Material MyMaterial : Common/MatDefs/Light/PBRLighting.j3md {
+    MaterialParameters {
+        Glossiness : 1.0
+        EmissivePower : 3.0
+        BaseColor : 1.0 1.0 1.0 1.0
+        ParallaxHeight : 0.05
+        Metallic : 0.4
+        BackfaceShadows : false
+        Roughness : 0.28
+        NormalType : -1.0
+        EmissiveIntensity : 2.0
+        BaseColorMap : Flip WrapRepeat_T WrapRepeat_S MagBilinear MinBilinearNoMipMaps Textures/ground.jpg
+        Specular : 1.0 1.0 1.0 1.0
+    }
+    AdditionalRenderState {
+    }
+}

@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
@@ -62,7 +62,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      *
      * @param event the stop drag event.
      */
-    @FXThread
+    @FxThread
     private void handleStopDragEvent(@NotNull final DragEvent event) {
         setCursor(Cursor.DEFAULT);
         event.consume();
@@ -73,7 +73,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      *
      * @param mouseEvent the mouse event.
      */
-    @FXThread
+    @FxThread
     private void handleStartDragEvent(@NotNull final MouseEvent mouseEvent) {
         startFullDrag();
 
@@ -98,7 +98,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      *
      * @param event the mouse clicked event.
      */
-    @FXThread
+    @FxThread
     private void handleMouseClickedEvent(@NotNull final MouseEvent event) {
 
         final ResourceElement item = getItem();
@@ -119,7 +119,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void updateItem(@Nullable final ResourceElement item, boolean empty) {
         super.updateItem(item, empty);
 
@@ -141,12 +141,12 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         icon.setImage(ICON_MANAGER.getIcon(file, folder, true, DEFAULT_FILE_ICON_SIZE));
 
-        setText(fileName.toString());
+        setText(fileName == null ? file.toString() : fileName.toString());
         setGraphic(icon);
         createToolTip();
     }
 
-    @FXThread
+    @FxThread
     private @NotNull ProgressIndicator createIndicator() {
         final ProgressIndicator indicator = new ProgressIndicator();
         indicator.setMaxHeight(FXConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
@@ -154,14 +154,14 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         return indicator;
     }
 
-    @FXThread
+    @FxThread
     private void removeToolTip() {
         if (tooltip == null) return;
         Tooltip.uninstall(this, tooltip);
         tooltip = null;
     }
 
-    @FXThread
+    @FxThread
     private void createToolTip() {
         tooltip = getItem().createToolTip();
         if (tooltip == null) return;

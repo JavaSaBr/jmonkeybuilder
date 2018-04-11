@@ -1,9 +1,10 @@
 package com.ss.editor.file.converter;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -17,76 +18,77 @@ public class FileConverterDescription {
     /**
      * The description.
      */
+    @Nullable
     private String description;
 
     /**
      * The constructor.
      */
+    @Nullable
     private Supplier<FileConverter> constructor;
 
     /**
      * The list of extensions.
      */
+    @Nullable
     private Array<String> extensions;
 
     /**
-     * Gets extensions.
+     * Get the list of extensions.
      *
      * @return the list of extensions.
      */
-    @NotNull
-    @FXThread
-    public Array<String> getExtensions() {
+    @FxThread
+    public @NotNull Array<String> getExtensions() {
         return notNull(extensions);
     }
 
     /**
-     * Sets extensions.
+     * Set the list of extensions.
      *
      * @param extensions the list of extensions.
      */
-    @FXThread
+    @FxThread
     public void setExtensions(@NotNull final Array<String> extensions) {
         this.extensions = extensions;
     }
 
     /**
-     * Gets constructor.
+     * Get the constructor.
      *
      * @return the constructor.
      */
-    @NotNull
-    @FXThread
-    public Supplier<FileConverter> getConstructor() {
+    @FxThread
+    public @NotNull Supplier<FileConverter> getConstructor() {
         return notNull(constructor);
     }
 
     /**
-     * Sets constructor.
+     * Set the constructor.
      *
      * @param constructor the constructor.
      */
-    @FXThread
+    @FxThread
     public void setConstructor(@NotNull final Supplier<FileConverter> constructor) {
         this.constructor = constructor;
     }
 
     /**
-     * Gets description.
+     * Get the description.
      *
      * @return the description.
      */
-    @FXThread
-    public String getDescription() {
+    @FxThread
+    public @Nullable String getDescription() {
         return description;
     }
 
     /**
-     * Sets description.
+     * Set the description.
      *
      * @param description the description.
      */
-    @FXThread
+    @FxThread
     public void setDescription(@NotNull final String description) {
         this.description = description;
     }

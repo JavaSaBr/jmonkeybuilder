@@ -1,14 +1,15 @@
 package com.ss.editor.ui.control.filter.list;
 
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.filter.dialog.CreateSceneFilterDialog;
-import com.ss.editor.ui.control.filter.operation.RemoveSceneFilterOperation;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.dialog.CreateSceneFilterDialog;
+import com.ss.editor.model.undo.impl.RemoveSceneFilterOperation;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -45,25 +47,21 @@ public class FilterList extends VBox {
     /**
      * The list view with filters.
      */
+    @Nullable
     private ListView<EditableSceneFilter> listView;
 
-    /**
-     * Instantiates a new Filter list.
-     *
-     * @param selectHandler  the select handler
-     * @param changeConsumer the change consumer
-     */
     public FilterList(@NotNull final Consumer<EditableSceneFilter> selectHandler,
                       @NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
         this.selectHandler = selectHandler;
         createComponents();
-        FXUtils.addClassTo(this, CSSClasses.SCENE_FILTER_CONTAINER);
+        FXUtils.addClassTo(this, CssClasses.SCENE_FILTER_CONTAINER);
     }
 
     /**
      * Create components of this component.
      */
+    @FxThread
     private void createComponents() {
 
         listView = new ListView<>();
@@ -92,10 +90,10 @@ public class FilterList extends VBox {
         FXUtils.addToPane(listView, this);
         FXUtils.addToPane(buttonContainer, this);
 
-        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
+        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(listView, CssClasses.TRANSPARENT_LIST_VIEW);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -105,6 +103,7 @@ public class FilterList extends VBox {
      *
      * @param sceneNode the scene node
      */
+    @FxThread
     public void fill(@NotNull final SceneNode sceneNode) {
 
         final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
@@ -126,22 +125,36 @@ public class FilterList extends VBox {
     /**
      * Clear selection.
      */
+    @FxThread
     public void clearSelection() {
         final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
         selectionModel.select(null);
     }
 
     /**
-     * Handle adding a new filter.
+     * Get the current selected item.
+     *
+     * @return the current selected item.
      */
+    @FxThread
+    public @Nullable EditableSceneFilter getSelected() {
+        final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
+        return selectionModel.getSelectedItem();
+    }
+
+    /**
+     * Add a new filter.
+     */
+    @FxThread
     private void addFilter() {
         final CreateSceneFilterDialog dialog = new CreateSceneFilterDialog(changeConsumer);
         dialog.show();
     }
 
     /**
-     * Handle removing an old filter.
+     * Remove the selected filter.
      */
+    @FxThread
     private void removeFilter() {
 
         final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
@@ -152,12 +165,12 @@ public class FilterList extends VBox {
     }
 
     /**
-     * Gets change consumer.
+     * Get the change consumer.
      *
      * @return the changes consumer.
      */
-    @NotNull
-    public SceneChangeConsumer getChangeConsumer() {
+    @FxThread
+    public @NotNull SceneChangeConsumer getChangeConsumer() {
         return changeConsumer;
     }
 }

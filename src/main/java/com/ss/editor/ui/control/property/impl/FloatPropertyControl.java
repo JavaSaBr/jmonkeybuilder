@@ -1,11 +1,11 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -18,8 +18,8 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of the {@link PropertyControl} to edit float values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <T> the edited object's type.
  * @author JavaSaBr
  */
 public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Float> {
@@ -42,7 +42,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void changeControlWidthPercent(final double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
@@ -52,7 +52,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -61,7 +61,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 
@@ -70,7 +70,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
      *
      * @param scrollPower the scroll power.
      */
-    @FXThread
+    @FxThread
     public void setScrollPower(final float scrollPower) {
         getValueField().setScrollPower(scrollPower);
     }
@@ -80,7 +80,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
      *
      * @return the scroll power.
      */
-    @FXThread
+    @FxThread
     public float getScrollPower() {
         return getValueField().getScrollPower();
     }
@@ -91,7 +91,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
      * @param min the min value.
      * @param max the max value.
      */
-    @FXThread
+    @FxThread
     public void setMinMax(final float min, final float max) {
         getValueField().setMinMax(min, max);
     }
@@ -105,13 +105,13 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     /**
      * @return the filed with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull FloatTextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
         final Float value = getPropertyValue();
         final FloatTextField valueField = getValueField();
@@ -123,9 +123,12 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     /**
      * Update the value.
      */
-    @FXThread
+    @FxThread
     private void updateValue() {
-        if (isIgnoreListener()) return;
+
+        if (isIgnoreListener()) {
+            return;
+        }
 
         final FloatTextField valueField = getValueField();
         final float value = valueField.getValue();

@@ -1,20 +1,26 @@
 package com.ss.editor.plugin;
 
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.FileIconManager;
+import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.component.painting.PaintingComponentRegistry;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
-import com.ss.editor.ui.css.CSSRegistry;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.css.CssRegistry;
+import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.rlib.plugin.PluginContainer;
 import com.ss.rlib.plugin.PluginSystem;
 import com.ss.rlib.plugin.impl.BasePlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.net.URL;
 
 /**
  * The base implementation of a plugin for this editor.
@@ -23,9 +29,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditorPlugin extends BasePlugin {
 
-    /**
-     * @param pluginContainer the plugin container.
-     */
     public EditorPlugin(@NotNull final PluginContainer pluginContainer) {
         super(pluginContainer);
     }
@@ -36,7 +39,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the CSS registry.
      */
     @FromAnyThread
-    public void register(@NotNull final CSSRegistry registry) {
+    public void register(@NotNull final CssRegistry registry) {
     }
 
     /**
@@ -103,21 +106,48 @@ public class EditorPlugin extends BasePlugin {
     }
 
     /**
-     * Do some things before when JME context will be created.
+     * Register this plugin's own file preview factories.
      *
-     * @param pluginSystem the plugin system.
+     * @param registry the registry of file preview factories.
      */
-    @JMEThread
-    public void onBeforeCreateJMEContext(@NotNull final PluginSystem pluginSystem) {
+    @FromAnyThread
+    public void register(@NotNull final FilePreviewFactoryRegistry registry) {
     }
 
     /**
-     * Do some things after when JME context was created.
+     * Register this plugin's own settings providers.
+     *
+     * @param registry the registry of settings providers.
+     */
+    @FxThread
+    public void register(@NotNull final SettingsProviderRegistry registry) {
+    }
+
+    /**
+     * Register this plugin's own painting component's constructors.
+     *
+     * @param registry the registry of painting component's constructors.
+     */
+    @FxThread
+    public void register(@NotNull final PaintingComponentRegistry registry) {
+    }
+
+    /**
+     * Do some things before when jME context will be created.
      *
      * @param pluginSystem the plugin system.
      */
-    @JMEThread
-    public void onAfterCreateJMEContext(@NotNull final PluginSystem pluginSystem) {
+    @JmeThread
+    public void onBeforeCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
+    }
+
+    /**
+     * Do some things after when jME context was created.
+     *
+     * @param pluginSystem the plugin system.
+     */
+    @JmeThread
+    public void onAfterCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**
@@ -125,8 +155,8 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FXThread
-    public void onBeforeCreateJavaFXContext(@NotNull final PluginSystem pluginSystem) {
+    @FxThread
+    public void onBeforeCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**
@@ -134,8 +164,8 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FXThread
-    public void onAfterCreateJavaFXContext(@NotNull final PluginSystem pluginSystem) {
+    @FxThread
+    public void onAfterCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
     }
 
     /**
@@ -143,13 +173,43 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FXThread
+    @FxThread
     public void onFinishLoading(@NotNull final PluginSystem pluginSystem) {
     }
 
-    @NotNull
     @Override
-    public PluginContainer getContainer() {
+    @FromAnyThread
+    public @NotNull PluginContainer getContainer() {
         return super.getContainer();
+    }
+
+    /**
+     * Get the URL to a home page of this plugin.
+     *
+     * @return the URL of a home page of this plugin or null.
+     */
+    @FromAnyThread
+    public @Nullable URL getHomePageUrl() {
+        return null;
+    }
+
+    /**
+     * Get the HTML presentation of plugin's dependencies as gradle dependencies.
+     *
+     * @return the HTML presentation of plugin's dependencies as gradle dependencies.
+     */
+    @FromAnyThread
+    public @Nullable String getUsedGradleDependencies() {
+        return null;
+    }
+
+    /**
+     * Get the HTML presentation of plugin's dependencies as maven dependencies.
+     *
+     * @return the HTML presentation of plugin's dependencies as maven dependencies.
+     */
+    @FromAnyThread
+    public @Nullable String getUsedMavenDependencies() {
+        return null;
     }
 }

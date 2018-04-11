@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.editor.state.impl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +60,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @param cameraHRotation the new horizontal rotation.
      */
-    @FXThread
+    @FxThread
     public void setCameraHRotation(final float cameraHRotation) {
         final boolean changed = getCameraHRotation() != cameraHRotation;
         this.cameraHRotation = cameraHRotation;
@@ -72,7 +72,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @return the horizontal camera rotation.
      */
-    @FXThread
+    @FxThread
     public float getCameraHRotation() {
         return cameraHRotation;
     }
@@ -82,7 +82,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @param cameraLocation the new camera position.
      */
-    @FXThread
+    @FxThread
     public void setCameraLocation(@NotNull final Vector3f cameraLocation) {
         final boolean changed = Objects.equals(getCameraLocation(), cameraLocation);
         getCameraLocation().set(cameraLocation);
@@ -94,7 +94,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @return the camera location.
      */
-    @FXThread
+    @FxThread
     public @NotNull Vector3f getCameraLocation() {
         if (cameraLocation == null) cameraLocation = new Vector3f();
         return notNull(cameraLocation);
@@ -105,7 +105,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @param cameraTDistance the new camera zoom.
      */
-    @FXThread
+    @FxThread
     public void setCameraTDistance(final float cameraTDistance) {
         final boolean changed = getCameraTDistance() != cameraTDistance;
         this.cameraTDistance = cameraTDistance;
@@ -117,7 +117,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @return the camera zoom.
      */
-    @FXThread
+    @FxThread
     public float getCameraTDistance() {
         return cameraTDistance;
     }
@@ -127,7 +127,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @param cameraSpeed the camera speed.
      */
-    @FXThread
+    @FxThread
     public void setCameraSpeed(final float cameraSpeed) {
         final boolean changed = getCameraSpeed() != cameraSpeed;
         this.cameraSpeed = cameraSpeed;
@@ -139,7 +139,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @return the camera speed.
      */
-    @FXThread
+    @FxThread
     public float getCameraSpeed() {
         return cameraSpeed;
     }
@@ -149,7 +149,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @param cameraVRotation the new vertical rotation.
      */
-    @FXThread
+    @FxThread
     public void setCameraVRotation(final float cameraVRotation) {
         final boolean changed = getCameraVRotation() != cameraVRotation;
         this.cameraVRotation = cameraVRotation;
@@ -161,7 +161,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      *
      * @return the vertical camera rotation.
      */
-    @FXThread
+    @FxThread
     public float getCameraVRotation() {
         return cameraVRotation;
     }

@@ -2,11 +2,11 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.util.EditorUtil.getAvailableValues;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -55,7 +55,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -67,13 +67,13 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(enumComboBox, container);
-        FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(enumComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
      * @return the list of available options of the {@link Enum} value.
      */
-    @FXThread
+    @FxThread
     private @NotNull ComboBox<E> getEnumComboBox() {
         return notNull(enumComboBox);
     }
@@ -81,9 +81,12 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     /**
      * Update selected {@link Enum} value.
      */
-    @FXThread
+    @FxThread
     private void change() {
-        if (isIgnoreListener()) return;
+
+        if (isIgnoreListener()) {
+            return;
+        }
 
         final ComboBox<E> enumComboBox = getEnumComboBox();
         final SingleSelectionModel<E> selectionModel = enumComboBox.getSelectionModel();
@@ -93,11 +96,9 @@ public class EnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
-
         final E element = getPropertyValue();
-
         final ComboBox<E> enumComboBox = getEnumComboBox();
         final SingleSelectionModel<E> selectionModel = enumComboBox.getSelectionModel();
         selectionModel.select(element);

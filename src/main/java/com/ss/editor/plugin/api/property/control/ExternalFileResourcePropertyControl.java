@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.dialog.file.chooser.ExternalFileEditorDialog;
 import com.ss.rlib.util.VarTable;
@@ -33,7 +33,7 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processSelect() {
         super.processSelect();
 
@@ -48,7 +48,7 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
      *
      * @param path the selected file.
      */
-    @FXThread
+    @FxThread
     private void openExternalFile(@NotNull final Path path) {
         setPropertyValue(path);
         change();
@@ -57,8 +57,8 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
 
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
 
         final Path resource = getPropertyValue();
         final Label resourceLabel = getResourceLabel();

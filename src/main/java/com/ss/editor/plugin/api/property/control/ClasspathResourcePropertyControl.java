@@ -2,10 +2,10 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
@@ -33,14 +33,14 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processSelect() {
         super.processSelect();
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
         final Array<String> resources = resourceManager.getAvailableResources(extension);
 
-        UIUtils.openResourceAssetDialog(this::processSelect, this::validate, resources);
+        UiUtils.openResourceAssetDialog(this::processSelect, this::validate, resources);
     }
 
     /**
@@ -48,7 +48,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      *
      * @param resource the selected resource.
      */
-    @FXThread
+    @FxThread
     private void processSelect(@NotNull final String resource) {
         setPropertyValue(resource);
         change();
@@ -61,7 +61,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      * @param resource the selected resource.
      * @return the message of problems or null if all are ok.
      */
-    @FXThread
+    @FxThread
     private String validate(@NotNull final String resource) {
 
         final String extension = FileUtils.getExtension(resource);
@@ -73,8 +73,8 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
 
         final String resource = getPropertyValue();
         final Label resourceLabel = getResourceLabel();

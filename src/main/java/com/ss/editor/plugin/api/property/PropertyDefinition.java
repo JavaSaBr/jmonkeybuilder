@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public final class PropertyDefinition {
+public class PropertyDefinition {
 
     @NotNull
     private static final Array<Object> EMPTY_OPTIONS = ArrayFactory.asArray();
@@ -123,7 +123,7 @@ public final class PropertyDefinition {
         this.max = Float.NaN;
         this.min = Float.NaN;
         this.extension = null;
-        this.dependencies = null;
+        this.dependencies = EMPTY_DEPENDENCIES;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
@@ -137,10 +137,12 @@ public final class PropertyDefinition {
         this.max = max;
         this.options = EMPTY_OPTIONS;
         this.extension = null;
-        this.dependencies = null;
+        this.dependencies = EMPTY_DEPENDENCIES;
     }
 
     /**
+     * Get the type of the property.
+     *
      * @return the type of the property.
      */
     @FromAnyThread
@@ -149,6 +151,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the name of the property.
+     *
      * @return the name of the property.
      */
     @FromAnyThread
@@ -167,6 +171,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the id of the property.
+     *
      * @return the id of the property.
      */
     @FromAnyThread
@@ -175,6 +181,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the default value of the property.
+     *
      * @return the default value of the property.
      */
     @FromAnyThread
@@ -183,6 +191,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the max value.
+     *
      * @return the max value.
      */
     @FromAnyThread
@@ -191,6 +201,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the min value.
+     *
      * @return the min value.
      */
     @FromAnyThread
@@ -199,6 +211,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the options.
+     *
      * @return the options.
      */
     @FromAnyThread

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.code;
 
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.util.GLSLType;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.util.GlslType;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,8 +35,8 @@ public class GLSLCodeArea extends BaseCodeArea {
     private static final String[] VALUE_TYPES;
 
     static {
-        VALUE_TYPES = Arrays.stream(GLSLType.VALUES)
-                .map(GLSLType::getRawType)
+        VALUE_TYPES = Arrays.stream(GlslType.VALUES)
+                .map(GlslType::getRawType)
                 .toArray(String[]::new);
     }
 
@@ -46,7 +46,7 @@ public class GLSLCodeArea extends BaseCodeArea {
     /**
      * The available fields.
      */
-    @NotNull
+    @Nullable
     private final List<String> fields;
 
     /**
@@ -65,7 +65,7 @@ public class GLSLCodeArea extends BaseCodeArea {
      *
      * @return available fields.
      */
-    @FXThread
+    @FxThread
     private @Nullable List<String> getFields() {
         return fields;
     }
@@ -75,7 +75,7 @@ public class GLSLCodeArea extends BaseCodeArea {
      *
      * @return the pattern to highlight code.
      */
-    @FXThread
+    @FxThread
     private @NotNull Pattern buildPattern() {
 
         String result = "(?<" + CLASS_KEYWORD + ">" + KEYWORD_PATTERN + ")" +
@@ -97,7 +97,7 @@ public class GLSLCodeArea extends BaseCodeArea {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull StyleSpans<? extends Collection<String>> calculateStyleSpans(@NotNull final String text) {
         return computeHighlighting(pattern, text);
     }

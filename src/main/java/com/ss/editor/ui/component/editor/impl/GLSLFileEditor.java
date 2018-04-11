@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor.impl;
 
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.control.code.BaseCodeArea;
@@ -30,7 +30,7 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull BaseCodeArea createCodeArea() {
         return new GLSLCodeArea();
     }

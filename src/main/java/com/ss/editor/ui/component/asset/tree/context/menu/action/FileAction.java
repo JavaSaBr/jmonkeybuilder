@@ -1,9 +1,9 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.array.Array;
@@ -28,7 +28,7 @@ public class FileAction extends MenuItem {
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The action element.
@@ -65,7 +65,7 @@ public class FileAction extends MenuItem {
      *
      * @return the file element.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ResourceElement getElement() {
         return notNull(element);
     }
@@ -75,7 +75,7 @@ public class FileAction extends MenuItem {
      *
      * @return the file elements.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Array<ResourceElement> getElements() {
         return notNull(elements);
     }
@@ -85,7 +85,7 @@ public class FileAction extends MenuItem {
      *
      * @return the icon or null.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Image getIcon() {
         return null;
     }
@@ -95,7 +95,7 @@ public class FileAction extends MenuItem {
      *
      * @param event the event.
      */
-    @FXThread
+    @FxThread
     protected void execute(@Nullable final ActionEvent event) {
     }
 
@@ -104,7 +104,7 @@ public class FileAction extends MenuItem {
      *
      * @return the name.
      */
-    @FXThread
+    @FxThread
     protected @NotNull String getName() {
         return "Unknown";
     }

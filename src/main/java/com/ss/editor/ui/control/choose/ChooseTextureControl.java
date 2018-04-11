@@ -4,15 +4,16 @@ import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,7 +41,7 @@ public class ChooseTextureControl extends HBox {
             type == RenameFileAction.class;
 
     @NotNull
-    private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     /**
      * The image channels preview.
@@ -78,43 +79,46 @@ public class ChooseTextureControl extends HBox {
     @Nullable
     private Runnable changeHandler;
 
-    /**
-     * Instantiates a new Choose texture control.
-     */
     public ChooseTextureControl() {
         createComponents();
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
         reload();
-        FXUtils.addClassesTo(this, CSSClasses.DEF_HBOX, CSSClasses.CHOOSE_TEXTURE_CONTROL);
+        FXUtils.addClassesTo(this, CssClasses.DEF_HBOX, CssClasses.CHOOSE_TEXTURE_CONTROL);
     }
 
     /**
      * Handle dropped files to editor.
      */
+    @FxThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, ChooseTextureControl::setTextureFile);
+        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, ChooseTextureControl::setTextureFile);
     }
 
     /**
      * Handle drag over.
      */
+    @FxThread
     private void dragOver(@NotNull final DragEvent dragEvent) {
-        UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
+        UiUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     /**
-     * Sets change handler.
+     * Set the change handler.
      *
      * @param changeHandler the handler.
      */
+    @FxThread
     public void setChangeHandler(@Nullable final Runnable changeHandler) {
         this.changeHandler = changeHandler;
     }
 
     /**
-     * tThe handler.
+     * Get the change handler.
+     *
+     * @return the change handler.
      */
+    @FxThread
     private @Nullable Runnable getChangeHandler() {
         return changeHandler;
     }
@@ -122,6 +126,7 @@ public class ChooseTextureControl extends HBox {
     /**
      * Create components.
      */
+    @FxThread
     protected void createComponents() {
 
         textureLabel = new Label();
@@ -151,11 +156,11 @@ public class ChooseTextureControl extends HBox {
         FXUtils.addToPane(wrapper, this);
         FXUtils.addToPane(texturePreview, previewContainer);
 
-        FXUtils.addClassTo(textureLabel, CSSClasses.CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL);
-        FXUtils.addClassTo(previewContainer, CSSClasses.CHOOSE_TEXTURE_CONTROL_PREVIEW);
-        FXUtils.addClassesTo(wrapper, CSSClasses.TEXT_INPUT_CONTAINER, CSSClasses.DEF_HBOX);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(textureLabel, CssClasses.CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL);
+        FXUtils.addClassTo(previewContainer, CssClasses.CHOOSE_TEXTURE_CONTROL_PREVIEW);
+        FXUtils.addClassesTo(wrapper, CssClasses.TEXT_INPUT_CONTAINER, CssClasses.DEF_HBOX);
+        FXUtils.addClassesTo(addButton, removeButton, CssClasses.FLAT_BUTTON,
+                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
 
@@ -163,70 +168,82 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
-     * Gets texture label.
+     * Get the texture label.
      *
      * @return the label for the path to a texture.
      */
+    @FxThread
     protected @NotNull Label getTextureLabel() {
         return notNull(textureLabel);
     }
 
     /**
-     * Gets wrapper.
+     * Get the wrapper.
      *
      * @return the wrapper.
      */
+    @FxThread
     protected @NotNull HBox getWrapper() {
         return notNull(wrapper);
     }
 
     /**
-     * @return The image channels preview.
+     * Get the image channels preview.
+     *
+     * @return the image channels preview.
      */
+    @FxThread
     private @NotNull ImageChannelPreview getTextureTooltip() {
         return notNull(textureTooltip);
     }
 
     /**
-     * Add new texture.
+     * Add a new texture.
      */
+    @FxThread
     private void processAdd() {
-        UIUtils.openFileAssetDialog(this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
-     * Gets texture file.
+     * Get the texture file.
      *
      * @return the selected file.
      */
+    @FxThread
     public @Nullable Path getTextureFile() {
         return textureFile;
     }
 
     /**
-     * Sets texture file.
+     * Set the texture file.
      *
      * @param textureFile the selected file.
      */
+    @FxThread
     public void setTextureFile(@Nullable final Path textureFile) {
         this.textureFile = textureFile;
-
         reload();
-
         final Runnable changeHandler = getChangeHandler();
-        if (changeHandler != null) changeHandler.run();
+        if (changeHandler != null) {
+            changeHandler.run();
+        }
     }
 
     /**
      * Remove the texture.
      */
+    @FxThread
     private void processRemove() {
         setTextureFile(null);
     }
 
     /**
+     * Get the image preview.
+     *
      * @return the image preview.
      */
+    @FxThread
     private @NotNull ImageView getTexturePreview() {
         return notNull(texturePreview);
     }
@@ -234,6 +251,7 @@ public class ChooseTextureControl extends HBox {
     /**
      * Reload.
      */
+    @FxThread
     protected void reload() {
 
         final ImageChannelPreview textureTooltip = getTextureTooltip();

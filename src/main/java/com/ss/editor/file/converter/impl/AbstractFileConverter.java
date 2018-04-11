@@ -1,14 +1,13 @@
 package com.ss.editor.file.converter.impl;
 
 import static com.ss.rlib.util.FileUtils.containsExtensions;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -23,50 +22,38 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * The base implementation of a file converter.
+ * The base implementation of {@link FileConverter}.
  *
  * @author JavaSaBr
  */
 public abstract class AbstractFileConverter implements FileConverter {
 
-    /**
-     * The constant LOGGER.
-     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileConverter.class);
 
+    /**
+     * The empty array.
+     */
     @NotNull
     private static final Array<String> EMPTY_ARRAY = ArrayFactory.newArray(String.class);
 
     /**
-     * The constant EDITOR_CONFIG.
+     * The editor config.
      */
     @NotNull
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executor manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The constant FX_EVENT_MANAGER.
+     * The FX event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The constant JFX_APPLICATION.
-     */
-    @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @Override
     public void convert(@NotNull final Path source) {
@@ -91,7 +78,7 @@ public abstract class AbstractFileConverter implements FileConverter {
             throw new IllegalArgumentException("incorrect extension of file " + source);
         }
 
-        EditorUtil.incrementLoading();
+        UiUtils.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
@@ -108,7 +95,7 @@ public abstract class AbstractFileConverter implements FileConverter {
 
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(null));
+                EXECUTOR_MANAGER.addFxTask(() -> notifyFileCreatedImpl(null));
             }
         });
     }
@@ -126,46 +113,44 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     /**
-     * Gets available extensions.
+     * Get the list of available extensions.
      *
      * @return the list of available extensions.
      */
-    @NotNull
-    protected Array<String> getAvailableExtensions() {
+    protected @NotNull Array<String> getAvailableExtensions() {
         return EMPTY_ARRAY;
     }
 
-    @NotNull
     @Override
-    public abstract String getTargetExtension();
+    public abstract @NotNull String getTargetExtension();
 
     /**
-     * Notify the Editor about file changing.
+     * Notify the eEditor about file changing.
      *
      * @param file the changed file.
      */
     @FromAnyThread
     protected void notifyFileChanged(@NotNull final Path file) {
-        EXECUTOR_MANAGER.addFXTask(() -> notifyFileChangedImpl(file));
+        EXECUTOR_MANAGER.addFxTask(() -> notifyFileChangedImpl(file));
     }
 
-    @FXThread
+    @FxThread
     private void notifyFileChangedImpl(@NotNull final Path file) {
-        EditorUtil.decrementLoading();
+        UiUtils.decrementLoading();
     }
 
     /**
-     * Notify the Editor about file creating.
+     * Notify the editor about file creating.
      *
      * @param file the created file.
      */
     @FromAnyThread
     protected void notifyFileCreated(@Nullable final Path file) {
-        EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(file));
+        EXECUTOR_MANAGER.addFxTask(() -> notifyFileCreatedImpl(file));
     }
 
-    @FXThread
+    @FxThread
     private void notifyFileCreatedImpl(@Nullable final Path file) {
-        EditorUtil.decrementLoading();
+        UiUtils.decrementLoading();
     }
 }

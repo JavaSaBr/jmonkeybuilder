@@ -1,83 +1,85 @@
 package com.ss.editor.analytics.google;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * The interface Ga event.
+ * The interface with constants of GA events.
  *
  * @author JavaSaBr
  */
 public interface GAEvent {
 
     /**
-     * The interface Category.
+     * The list of categories.
      */
     interface Category {
         /**
          * The constant APPLICATION.
          */
-        String APPLICATION = "Application";
+        @NotNull String APPLICATION = "Application";
         /**
          * The constant DIALOG.
          */
-        String DIALOG = "Dialog";
+        @NotNull String DIALOG = "Dialog";
         /**
          * The constant EDITOR.
          */
-        String EDITOR = "Editor";
+        @NotNull String EDITOR = "Editor";
     }
 
     /**
-     * The interface Action.
+     * The list of actions.
      */
     interface Action {
         /**
          * The constant APPLICATION_LAUNCHED.
          */
-        String APPLICATION_LAUNCHED = "Application launched";
+        @NotNull String APPLICATION_LAUNCHED = "Application launched";
         /**
          * The constant APPLICATION_CLOSED.
          */
-        String APPLICATION_CLOSED = "Application closed";
+        @NotNull String APPLICATION_CLOSED = "Application closed";
         /**
          * The constant EDITOR_OPENED.
          */
-        String EDITOR_OPENED = "Editor opened";
+        @NotNull String EDITOR_OPENED = "Editor opened";
         /**
          * The constant EDITOR_CLOSED.
          */
-        String EDITOR_CLOSED = "Editor closed";
+        @NotNull String EDITOR_CLOSED = "Editor closed";
         /**
          * The constant DIALOG_OPENED.
          */
-        String DIALOG_OPENED = "Dialog opened";
+        @NotNull String DIALOG_OPENED = "Dialog opened";
         /**
          * The constant DIALOG_CLOSED.
          */
-        String DIALOG_CLOSED = "Dialog closed";
+        @NotNull String DIALOG_CLOSED = "Dialog closed";
         /**
          * The constant EXECUTE_NODE_ACTION.
          */
-        String EXECUTE_NODE_ACTION = "Execute node action";
+        @NotNull String EXECUTE_NODE_ACTION = "Execute node action";
     }
 
     /**
-     * The interface Label.
+     * The list of labels.
      */
     interface Label {
         /**
          * The constant THE_EDITOR_APP_WAS_CLOSED.
          */
-        String THE_EDITOR_APP_WAS_CLOSED = "The editor application was closed";
+        @NotNull String THE_EDITOR_APP_WAS_CLOSED = "The editor application was closed";
         /**
          * The constant THE_EDITOR_APP_WAS_LAUNCHED.
          */
-        String THE_EDITOR_APP_WAS_LAUNCHED = "The editor application was launched";
+        @NotNull String THE_EDITOR_APP_WAS_LAUNCHED = "The editor application was launched";
         /**
          * The constant WORKING_ON_AN_EDITOR.
          */
-        String WORKING_ON_AN_EDITOR = "Working on an editor";
+        @NotNull String WORKING_ON_AN_EDITOR = "Working on an editor";
         /**
          * The constant SHOWING_A_DIALOG.
          */
-        String SHOWING_A_DIALOG = "Showing a dialog";
+        @NotNull String SHOWING_A_DIALOG = "Showing a dialog";
     }
 }

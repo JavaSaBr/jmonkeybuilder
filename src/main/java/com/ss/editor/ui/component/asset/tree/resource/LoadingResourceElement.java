@@ -26,4 +26,9 @@ public class LoadingResourceElement extends ResourceElement {
     private LoadingResourceElement() {
         super(Paths.get("./"));
     }
+
+    @Override
+    public String toString() {
+        return "LoadingResourceElement";
+    }
 }

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.asset.file;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import javafx.scene.control.Label;
@@ -28,7 +28,7 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOpen(@NotNull final ResourceElement element) {
         super.processOpen(element);
         final Consumer<Path> consumer = getConsumer();
@@ -36,13 +36,13 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Path getObject(@NotNull final ResourceElement element) {
         return element.getFile();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
         super.validate(warningLabel, element);
 

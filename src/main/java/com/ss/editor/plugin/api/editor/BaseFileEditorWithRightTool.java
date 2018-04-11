@@ -1,12 +1,13 @@
 package com.ss.editor.plugin.api.editor;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.StackPane;
@@ -39,11 +40,11 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     private StackPane editorAreaPane;
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final StackPane root) {
         createEditorAreaPane();
 
-        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
+        mainSplitContainer = new EditorToolSplitPane(EditorUtil.getFxScene(), root);
 
         editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
@@ -59,20 +60,20 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
         mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
 
         FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FXUtils.addClassTo(mainSplitContainer, CssClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
     }
 
     /**
      * Create editor area pane.
      */
-    @FXThread
+    @FxThread
     protected void createEditorAreaPane() {
 
         editorAreaPane = new StackPane();
         editorAreaPane.setOnDragOver(this::handleDragOverEvent);
         editorAreaPane.setOnDragDropped(this::handleDragDroppedEvent);
 
-        FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
+        FXUtils.addClassTo(editorAreaPane, CssClasses.FILE_EDITOR_EDITOR_AREA);
     }
 
     /**
@@ -81,12 +82,12 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      * @param oldValue the old value
      * @param newValue the new value
      */
-    @FXThread
+    @FxThread
     protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void loadState() {
         super.loadState();
 
@@ -102,7 +103,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     /**
      * @return the pane of editor area.
      */
-    @FXThread
+    @FxThread
     protected @NotNull StackPane getEditorAreaPane() {
         return notNull(editorAreaPane);
     }
@@ -113,7 +114,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      * @param container the tool container.
      * @param root the root.
      */
-    @FXThread
+    @FxThread
     protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
@@ -122,7 +123,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      *
      * @param dragEvent the drag event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
     }
 
@@ -131,7 +132,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      *
      * @param dragEvent the drop event.
      */
-    @FXThread
+    @FxThread
     protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
     }
 }

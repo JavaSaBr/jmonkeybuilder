@@ -8,13 +8,14 @@ import com.jme3.material.Material;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.serializer.MaterialSerializer;
+import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
@@ -108,7 +109,7 @@ public class MaterialFileCreator extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean validate(@NotNull final VarTable vars) {
 
         final String matDef = vars.get(PROP_MAT_DEF, String.class, StringUtils.EMPTY);
@@ -125,7 +126,7 @@ public class MaterialFileCreator extends GenericFileCreator {
     protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final String matDef = vars.get(PROP_MAT_DEF);
 
         final Material material = new Material(assetManager, matDef);

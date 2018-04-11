@@ -1,13 +1,16 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.JFXApplication;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_NATIVE_FILE_CHOOSER;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_NATIVE_FILE_CHOOSER;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
+import com.ss.editor.util.EditorUtil;
 import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 import org.jetbrains.annotations.NotNull;
@@ -24,14 +27,8 @@ import java.nio.file.Paths;
 public class OpenAssetAction extends MenuItem {
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
-    @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * Instantiates a new Open asset action.
-     */
     public OpenAssetAction() {
         super(Messages.EDITOR_MENU_FILE_OPEN_ASSET);
         setOnAction(event -> process());
@@ -40,11 +37,12 @@ public class OpenAssetAction extends MenuItem {
     /**
      * The process of selecting an asset folder.
      */
+    @FxThread
     private void process() {
 
         final EditorConfig config = EditorConfig.getInstance();
 
-        if (config.isNativeFileChooser()) {
+        if (config.getBoolean(PREF_NATIVE_FILE_CHOOSER, PREF_DEFAULT_NATIVE_FILE_CHOOSER)) {
             openAssetByNative();
         } else {
             openAsset();
@@ -54,6 +52,7 @@ public class OpenAssetAction extends MenuItem {
     /**
      * Open asset folder using native file chooser.
      */
+    @FxThread
     private void openAssetByNative() {
 
         final DirectoryChooser chooser = new DirectoryChooser();
@@ -72,11 +71,13 @@ public class OpenAssetAction extends MenuItem {
         GAnalytics.sendPageView("AssetChooseDialog", null, "/dialog/AssetChooseDialog");
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "AssetChooseDialog");
 
-        final File folder = chooser.showDialog(JFX_APPLICATION.getLastWindow());
+        final File folder = chooser.showDialog(EditorUtil.getFxLastWindow());
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, "AssetChooseDialog");
 
-        if (folder == null) return;
+        if (folder == null) {
+            return;
+        }
 
         openAssetFolder(folder.toPath());
     }
@@ -84,6 +85,7 @@ public class OpenAssetAction extends MenuItem {
     /**
      * Open an asset folder using custom file chooser.
      */
+    @FxThread
     private void openAsset() {
 
         final OpenExternalFolderEditorDialog dialog = new OpenExternalFolderEditorDialog(this::openAssetFolder);
@@ -101,7 +103,13 @@ public class OpenAssetAction extends MenuItem {
         dialog.show();
     }
 
-    private void openAssetFolder(@NotNull final Path newAsset) {
+    /**
+     * Open the asset folder.
+     *
+     * @param newAsset the asset folder.
+     */
+    @FxThread
+    public void openAssetFolder(@NotNull final Path newAsset) {
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAsset = config.getCurrentAsset();
@@ -111,9 +119,6 @@ public class OpenAssetAction extends MenuItem {
         config.setCurrentAsset(newAsset);
         config.save();
 
-        final ChangedCurrentAssetFolderEvent event = new ChangedCurrentAssetFolderEvent();
-        event.setNewAssetFolder(newAsset);
-
-        FX_EVENT_MANAGER.notify(event);
+        FX_EVENT_MANAGER.notify(new ChangedCurrentAssetFolderEvent(newAsset));
     }
 }

@@ -1,9 +1,9 @@
 package com.ss.editor.plugin.api.editor;
 
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.impl.AbstractEditor3DState;
+import com.ss.editor.part3d.editor.impl.AbstractEditor3DPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
@@ -19,23 +19,22 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extends Editor3DEditorState> extends
+public abstract class Base3DFileEditor<T extends AbstractEditor3DPart, S extends Editor3DEditorState> extends
         BaseFileEditor<S> {
 
     /**
      * The 3D part of this editor.
      */
     @NotNull
-    private final T editor3DState;
-
+    private final T editor3DPart;
 
     public Base3DFileEditor() {
-        this.editor3DState = create3DEditorState();
-        addEditorState(editor3DState);
+        this.editor3DPart = create3DEditorPart();
+        addEditor3DPart(editor3DPart);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
     }
@@ -50,8 +49,8 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
      *
      * @return the 3D part.
      */
-    @FXThread
-    protected abstract @NotNull T create3DEditorState();
+    @FxThread
+    protected abstract @NotNull T create3DEditorPart();
 
     /**
      * Get the 3D part of this editor.
@@ -59,12 +58,12 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
      * @return the 3D part of this editor.
      */
     @FromAnyThread
-    protected @NotNull T getEditor3DState() {
-        return editor3DState;
+    protected @NotNull T getEditor3DPart() {
+        return editor3DPart;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
                                             final float vRotation, final float targetDistance,
                                             final float cameraSpeed) {
@@ -81,7 +80,7 @@ public abstract class Base3DFileEditor<T extends AbstractEditor3DState, S extend
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
 
         final Pane editorPage = getPage();

@@ -1,6 +1,6 @@
 package com.ss.editor.model.undo;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 
 /**
@@ -13,13 +13,13 @@ public interface UndoableEditor {
     /**
      * Increment changes count.
      */
-    @FXThread
+    @FxThread
     void incrementChange();
 
     /**
      * Decrement changes count.
      */
-    @FXThread
+    @FxThread
     void decrementChange();
 
     /**

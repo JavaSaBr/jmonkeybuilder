@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
 import static java.lang.Math.abs;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorToolConfig;
 
 /**
@@ -41,13 +41,13 @@ public class EditorWithEditorToolEditorState extends AbstractEditorState impleme
     }
 
     @Override
-    @FXThread
+    @FxThread
     public int getToolWidth() {
         return toolWidth;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void setToolWidth(final int toolWidth) {
         final boolean changed = abs(getToolWidth() - toolWidth) > 3;
         this.toolWidth = toolWidth;
@@ -55,13 +55,13 @@ public class EditorWithEditorToolEditorState extends AbstractEditorState impleme
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isToolCollapsed() {
         return toolCollapsed;
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void setToolCollapsed(final boolean toolCollapsed) {
         final boolean changed = isToolCollapsed() != toolCollapsed;
         this.toolCollapsed = toolCollapsed;
