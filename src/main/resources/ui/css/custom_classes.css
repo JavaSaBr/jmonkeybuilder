@@ -726,7 +726,7 @@
 }
 
 .abstract-param-control > .hbox {
-    -fx-spacing: 2px;
+     -fx-spacing: 2px;
 }
 
 .abstract-param-control-multi-value-container {

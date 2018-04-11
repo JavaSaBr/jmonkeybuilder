@@ -12,14 +12,17 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link Vector2FPropertyControl} to edit min-max value range.
  *
- * @param <C> the change consumer's type.
- * @param <T> the edited object's type.
+ * @param <C> the type of a {@link ChangeConsumer}
+ * @param <T> the type of an editing object.
  * @author JavaSaBr
  */
 public class MinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial> extends Vector2FPropertyControl<C, T> {
 
-    public MinMaxPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
-                                 @NotNull final C changeConsumer) {
+    public MinMaxPropertyControl(
+            @Nullable Vector2f propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
         getXField().setMinMax(0, Integer.MAX_VALUE);
         getYField().setMinMax(0, Integer.MAX_VALUE);
@@ -27,13 +30,13 @@ public class MinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial> 
 
     @Override
     @FxThread
-    protected float checkResultXValue(final float x, final float y) {
+    protected float checkResultXValue(float x, float y) {
         return min(x, y);
     }
 
     @Override
     @FxThread
-    protected float checkResultYValue(final float x, final float y) {
+    protected float checkResultYValue(float x, float y) {
         return max(x, y);
     }
 }

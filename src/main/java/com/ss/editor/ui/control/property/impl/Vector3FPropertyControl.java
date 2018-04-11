@@ -46,23 +46,29 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @Nullable
     private FloatTextField zField;
 
-    public Vector3FPropertyControl(@Nullable final Vector3f propertyValue, @NotNull final String propertyName,
-                                   @NotNull final C changeConsumer) {
+    public Vector3FPropertyControl(
+            @Nullable Vector3f propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
-    public Vector3FPropertyControl(@Nullable final Vector3f propertyValue, @NotNull final String propertyName,
-                                    @NotNull final C changeConsumer,
-                                    @Nullable final SixObjectConsumer<C, T, String, Vector3f, Vector3f, BiConsumer<T, Vector3f>> changeHandler) {
+    public Vector3FPropertyControl(
+            @Nullable Vector3f propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer,
+            @Nullable SixObjectConsumer<C, T, String, Vector3f, Vector3f, BiConsumer<T, Vector3f>> changeHandler
+    ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
-        final Label xLabel = new Label("x:");
+        var xLabel = new Label("x:");
 
         xField = new FloatTextField();
         xField.setOnKeyReleased(this::updateVector);
@@ -70,7 +76,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
         xField.prefWidthProperty().bind(widthProperty().divide(3));
         xField.setScrollPower(getScrollPower());
 
-        final Label yLabel = new Label("y:");
+        var yLabel = new Label("y:");
 
         yField = new FloatTextField();
         yField.setOnKeyReleased(this::updateVector);
@@ -78,7 +84,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
         yField.prefWidthProperty().bind(widthProperty().divide(3));
         yField.setScrollPower(getScrollPower());
 
-        final Label zLabel = new Label("z:");
+        var zLabel = new Label("z:");
 
         zField = new FloatTextField();
         zField.setOnKeyReleased(this::updateVector);
@@ -104,12 +110,12 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
 
     @Override
     @FxThread
-    protected void setPropertyValue(@Nullable final Vector3f vector) {
+    protected void setPropertyValue(@Nullable Vector3f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
 
     /**
-     * Gets scroll power.
+     * Get the scroll power.
      *
      * @return the scroll power.
      */
@@ -119,7 +125,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Gets x field.
+     * Get the field X.
      *
      * @return the field X.
      */
@@ -129,7 +135,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Gets y filed.
+     * Get the filed Y.
      *
      * @return the field Y.
      */
@@ -139,7 +145,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Gets z field.
+     * Get the field Z.
      *
      * @return the field Z.
      */
@@ -152,17 +158,17 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @FxThread
     protected void reload() {
 
-        final Vector3f vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
+        var vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
 
-        final FloatTextField xField = getXField();
+        var xField = getXField();
         xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
-        final FloatTextField yFiled = getYFiled();
+        var yFiled = getYFiled();
         yFiled.setValue(vector.getY());
         yFiled.positionCaret(xField.getText().length());
 
-        final FloatTextField zField = getZField();
+        var zField = getZField();
         zField.setValue(vector.getZ());
         zField.positionCaret(xField.getText().length());
     }
@@ -170,26 +176,26 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
     /**
      * Update the vector.
      *
-     * @param event the event
+     * @param event the event.
      */
     @FxThread
-    protected void updateVector(@Nullable final KeyEvent event) {
+    protected void updateVector(@Nullable KeyEvent event) {
 
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
             return;
         }
 
-        final FloatTextField xField = getXField();
-        final float x = xField.getValue();
+        var xField = getXField();
+        var x = xField.getValue();
 
-        final FloatTextField yFiled = getYFiled();
-        final float y = yFiled.getValue();
+        var yFiled = getYFiled();
+        var y = yFiled.getValue();
 
-        final FloatTextField zField = getZField();
-        final float z = zField.getValue();
+        var zField = getZField();
+        var z = zField.getValue();
 
-        final Vector3f oldValue = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
-        final Vector3f newValue = new Vector3f();
+        var oldValue = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
+        var newValue = new Vector3f();
         newValue.set(x, y, z);
 
         changed(newValue, oldValue.clone());

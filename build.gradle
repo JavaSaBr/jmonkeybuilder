@@ -82,6 +82,9 @@ repositories {
     maven {
         url "https://dl.bintray.com/javasabr/maven"
     }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 publishing {
@@ -125,7 +128,7 @@ javadoc {
 dependencies {
 
     // base
-    compile 'org.fxmisc.richtext:richtextfx:0.8.2'
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '1.0.0-SNAPSHOT'
     compile 'org.controlsfx:controlsfx:9.0.0'
     compile 'com.spaceshift:rlib.fx:4.2.1-Final'
     compile 'com.spaceshift:rlib:6.8.5-Final'

@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
@@ -17,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit string values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the type of a change consumer.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public class StringPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, String> {
@@ -29,14 +29,17 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     @Nullable
     private TextField valueField;
 
-    public StringPropertyControl(@Nullable final String propertyValue, @NotNull final String propertyName,
-                                 @NotNull final C changeConsumer) {
+    public StringPropertyControl(
+            @Nullable String propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         valueField = new TextField();
@@ -54,6 +57,8 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     }
 
     /**
+     * Get the filed with current value.
+     *
      * @return the filed with current value.
      */
     @FxThread
@@ -64,9 +69,9 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
     @Override
     @FxThread
     protected void reload() {
-        final String value = getPropertyValue();
-        final TextField valueField = getValueField();
-        final int caretPosition = valueField.getCaretPosition();
+        var value = getPropertyValue();
+        var valueField = getValueField();
+        var caretPosition = valueField.getCaretPosition();
         valueField.setText(value == null ? "" : value);
         valueField.positionCaret(caretPosition);
     }
@@ -75,16 +80,15 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
      * Update the value.
      */
     @FxThread
-    private void updateValue(@NotNull final KeyEvent event) {
+    private void updateValue(@NotNull KeyEvent event) {
 
         if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) {
             return;
         }
 
-        final TextField valueField = getValueField();
-
-        final String oldValue = getPropertyValue();
-        final String newValue = valueField.getText();
+        var valueField = getValueField();
+        var oldValue = getPropertyValue();
+        var newValue = valueField.getText();
 
         changed(newValue, oldValue);
     }

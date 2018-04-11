@@ -17,7 +17,6 @@ import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -40,6 +39,7 @@ import org.reactfx.util.TriConsumer;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -75,9 +75,9 @@ public abstract class UiUtils {
      * @param controls  the controls.
      */
     @FxThread
-    public static void addFocusBinding(@NotNull final Pane pane, @NotNull final Control... controls) {
+    public static void addFocusBinding(@NotNull Pane pane, @NotNull Control... controls) {
 
-        final BooleanProperty focused = new BooleanPropertyBase(false) {
+        var focused = new BooleanPropertyBase(true) {
 
             @Override
             public void invalidated() {
@@ -95,21 +95,12 @@ public abstract class UiUtils {
             }
         };
 
-        final ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
-
-            boolean result = newValue;
-
-            if (!result) {
-                for (final Control control : controls) {
-                    result = control.isFocused();
-                    if (result) break;
-                }
-            }
-
-            focused.setValue(result);
+        ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
+            focused.setValue(newValue || Arrays.stream(controls)
+                    .anyMatch(Node::isFocused));
         };
 
-        for (final Control control : controls) {
+        for (var control : controls) {
             control.focusedProperty().addListener(listener);
         }
     }

@@ -2,8 +2,8 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
@@ -19,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit {@link Vector2f} values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
- * @author JavaSaBr.
+ * @param <C> the type of a {@link ChangeConsumer}
+ * @param <T> the type of an editing object.
+ * @author JavaSaBr
  */
 public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector2f> {
 
@@ -43,24 +43,27 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @Nullable
     private HBox fieldContainer;
 
-    public Vector2FPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
-                                   @NotNull final C changeConsumer) {
+    public Vector2FPropertyControl(
+            @Nullable Vector2f propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    public void changeControlWidthPercent(final double controlWidthPercent) {
+    public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        final HBox valueField = getFieldContainer();
+        var valueField = getFieldContainer();
         valueField.prefWidthProperty().unbind();
         valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         fieldContainer = new HBox();
@@ -92,6 +95,8 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
+     * Get the field container.
+     *
      * @return the field container.
      */
     @FxThread
@@ -101,7 +106,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
 
     @Override
     @FxThread
-    protected void setPropertyValue(@Nullable final Vector2f vector) {
+    protected void setPropertyValue(@Nullable Vector2f vector) {
         super.setPropertyValue(vector == null ? null : vector.clone());
     }
 
@@ -112,33 +117,33 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Check result x value float.
+     * Check the result x value.
      *
-     * @param x the x
-     * @param y the y
-     * @return the float
+     * @param x the x.
+     * @param y the y.
+     * @return the result x value.
      */
     @FxThread
-    protected float checkResultXValue(final float x, final float y) {
+    protected float checkResultXValue(float x, float y) {
         return x;
     }
 
     /**
-     * Check result y value float.
+     * Check result y value.
      *
-     * @param x the x
-     * @param y the y
-     * @return the float
+     * @param x the x.
+     * @param y the y.
+     * @return the result y value.
      */
     @FxThread
-    protected float checkResultYValue(final float x, final float y) {
+    protected float checkResultYValue(float x, float y) {
         return y;
     }
 
     /**
-     * Gets x field.
+     * Get the X field.
      *
-     * @return the field X.
+     * @return the X field.
      */
     @FxThread
     protected @NotNull FloatTextField getXField() {
@@ -146,9 +151,9 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     }
 
     /**
-     * Gets y field.
+     * Get the Y field.
      *
-     * @return the field Y.
+     * @return the Y field.
      */
     @FxThread
     protected @NotNull FloatTextField getYField() {
@@ -159,13 +164,13 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @FxThread
     protected void reload() {
 
-        final Vector2f vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
+        var vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
 
-        final FloatTextField xField = getXField();
+        var xField = getXField();
         xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
-        final FloatTextField yField = getYField();
+        var yField = getYField();
         yField.setValue(vector.getY());
         yField.positionCaret(yField.getText().length());
     }
@@ -176,20 +181,20 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      * @param event the event
      */
     @FxThread
-    private void updateVector(@Nullable final KeyEvent event) {
+    private void updateVector(@Nullable KeyEvent event) {
 
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
             return;
         }
 
-        final FloatTextField xField = getXField();
-        final float x = xField.getValue();
+        var xField = getXField();
+        var x = xField.getValue();
 
-        final FloatTextField yField = getYField();
-        final float y = yField.getValue();
+        var yField = getYField();
+        var y = yField.getValue();
 
-        final Vector2f oldValue = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
-        final Vector2f newValue = new Vector2f();
+        var oldValue = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
+        var newValue = new Vector2f();
         newValue.set(checkResultXValue(x, y), checkResultYValue(x, y));
 
         changed(newValue, oldValue.clone());

@@ -9,8 +9,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.newOutputStream;
-import com.jme3.renderer.Renderer;
-import com.jme3.system.JmeContext;
 import com.jme3.util.LWJGLBufferAllocator;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
@@ -47,13 +45,13 @@ import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.logging.impl.FolderFileListener;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -67,9 +65,9 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 
 /**
@@ -97,12 +95,9 @@ public class JfxApplication extends Application {
     }
 
     /**
-     * Main.
-     *
-     * @param args the args
-     * @throws IOException the io exception
+     * The start application method.
      */
-    public static void main(final String[] args) {
+    public static void main(@NotNull String[] args) {
         configureLogger();
 
         // need to disable to work on macos
@@ -113,10 +108,9 @@ public class JfxApplication extends Application {
         // JavaFX
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
-        System.setProperty("javafx.animation.fullspeed", "false");
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final OpenGLVersion openGLVersion = editorConfig.getEnum(PREF_OPEN_GL, PREF_DEFAULT_OPEN_GL);
+        var editorConfig = EditorConfig.getInstance();
+        var openGLVersion = editorConfig.getEnum(PREF_OPEN_GL, PREF_DEFAULT_OPEN_GL);
 
         // set a render if it isn't override
         if(System.getProperty("jfx.background.render") == null) {
@@ -124,20 +118,6 @@ public class JfxApplication extends Application {
         }
 
         System.setProperty(LWJGLBufferAllocator.PROPERTY_CONCURRENT_BUFFER_ALLOCATOR, "true");
-
-        // some settings for the render of JavaFX
-        System.setProperty("prism.printrendergraph", "false");
-        System.setProperty("javafx.pulseLogger", "false");
-
-        //System.setProperty("prism.cacheshapes", "true");
-        //System.setProperty("prism.scrollcacheopt", "true");
-        //System.setProperty("prism.allowhidpi", "true");
-
-        //System.setProperty("prism.order", "sw");
-        //System.setProperty("prism.showdirty", "true");
-        //System.setProperty("prism.showoverdraw", "true");
-        //System.setProperty("prism.debug", "true");
-        //System.setProperty("prism.verbose", "true");
 
         CommandLineConfig.args(args);
 
@@ -167,8 +147,10 @@ public class JfxApplication extends Application {
     private static void configureLogger() {
 
         // disable the standard logger
-        if (Config.DEV_DEBUG) {
+        if (!Config.DEV_DEBUG) {
             java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
+        } else {
+            java.util.logging.Logger.getLogger("").setLevel(Level.ALL);
         }
 
         // configure our logger
@@ -177,7 +159,7 @@ public class JfxApplication extends Application {
         LoggerLevel.ERROR.setEnabled(true);
         LoggerLevel.WARNING.setEnabled(true);
 
-        final Path logFolder = Config.getFolderForLog();
+        var logFolder = Config.getFolderForLog();
 
         if (!Files.exists(logFolder)) {
             run(() -> createDirectories(logFolder));
@@ -194,18 +176,18 @@ public class JfxApplication extends Application {
      * @param application the new jME application.
      */
     @JmeThread
-    private static void startJmeApplication(@NotNull final JmeToJFXApplication application) {
+    private static void startJmeApplication(@NotNull JmeToJFXApplication application) {
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
+        var initializationManager = InitializationManager.getInstance();
         initializationManager.onBeforeCreateJmeContext();
 
         application.start();
 
-        final JmeContext context = application.getContext();
-        final Renderer renderer = context.getRenderer();
+        var context = application.getContext();
+        var renderer = context.getRenderer();
 
         if (renderer == null) {
-            final EditorConfig editorConfig = EditorConfig.getInstance();
+            var editorConfig = EditorConfig.getInstance();
             editorConfig.set(PREF_OPEN_GL, OpenGLVersion.GL_20);
             editorConfig.save();
         }
@@ -220,22 +202,22 @@ public class JfxApplication extends Application {
     private static @NotNull ChangeListener<Boolean> makeFocusedListener() {
         return (observable, oldValue, newValue) -> {
 
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final Stage stage = EditorUtil.getFxStage();
+            var jmeApplication = JmeApplication.getInstance();
+            var stage = EditorUtil.getFxStage();
 
             if (newValue || stage.isFocused()) {
                 jmeApplication.setPaused(false);
                 return;
             }
 
-            final EditorConfig editorConfig = EditorConfig.getInstance();
+            var editorConfig = EditorConfig.getInstance();
             if (!editorConfig.getBoolean(PREF_STOP_RENDER_ON_LOST_FOCUS, PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS)) {
                 jmeApplication.setPaused(false);
                 return;
             }
 
-            final JfxApplication application = JfxApplication.getInstance();
-            final Window window = ArrayUtils.getInReadLock(application.openedWindows,
+            var application = JfxApplication.getInstance();
+            var window = ArrayUtils.getInReadLock(application.openedWindows,
                     windows -> windows.search(Window::isFocused));
 
             jmeApplication.setPaused(window == null);
@@ -251,15 +233,15 @@ public class JfxApplication extends Application {
     }
 
     @FromAnyThread
-    private static void printError(@NotNull final Throwable throwable) {
+    private static void printError(@NotNull Throwable throwable) {
         throwable.printStackTrace();
 
-        final String userHome = System.getProperty("user.home");
-        final String fileName = "jmonkeybuilder-error.log";
+        var userHome = System.getProperty("user.home");
+        var fileName = "jmonkeybuilder-error.log";
 
-        try (final PrintStream out = new PrintStream(newOutputStream(Paths.get(userHome, fileName)))) {
+        try (var out = new PrintStream(newOutputStream(Paths.get(userHome, fileName)))) {
             throwable.printStackTrace(out);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -306,7 +288,7 @@ public class JfxApplication extends Application {
      * @param window the new opened window.
      */
     @FxThread
-    public void addWindow(@NotNull final Window window) {
+    public void addWindow(@NotNull Window window) {
         window.focusedProperty().addListener(makeFocusedListener());
         ArrayUtils.runInWriteLock(openedWindows, window, Collection::add);
     }
@@ -317,7 +299,7 @@ public class JfxApplication extends Application {
      * @param window the opened window.
      */
     @FxThread
-    public void removeWindow(@NotNull final Window window) {
+    public void removeWindow(@NotNull Window window) {
         ArrayUtils.runInWriteLock(openedWindows, window, Array::slowRemove);
     }
 
@@ -333,7 +315,7 @@ public class JfxApplication extends Application {
 
     @Override
     @FxThread
-    public void start(final Stage stage) throws Exception {
+    public void start(@NotNull Stage stage) throws Exception {
         JfxApplication.instance = this;
         this.stage = stage;
 
@@ -343,20 +325,20 @@ public class JfxApplication extends Application {
             // initialize javaFX events in javaFX thread.
             ArrayFactory.asArray(ComboBoxBase.ON_SHOWN);
 
-            final ResourceManager resourceManager = ResourceManager.getInstance();
+            var resourceManager = ResourceManager.getInstance();
             resourceManager.reload();
 
-            final InitializationManager initializationManager = InitializationManager.getInstance();
+            var initializationManager = InitializationManager.getInstance();
             initializationManager.onBeforeCreateJavaFxContext();
 
-            final PluginManager pluginManager = PluginManager.getInstance();
+            var pluginManager = PluginManager.getInstance();
             pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CssRegistry.getInstance()));
 
             LogView.getInstance();
             SvgImageLoaderFactory.install();
             ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
 
-            final ObservableList<Image> icons = stage.getIcons();
+            var icons = stage.getIcons();
             icons.add(new Image("/ui/icons/app/256x256.png"));
             icons.add(new Image("/ui/icons/app/128x128.png"));
             icons.add(new Image("/ui/icons/app/96x96.png"));
@@ -366,7 +348,7 @@ public class JfxApplication extends Application {
             icons.add(new Image("/ui/icons/app/24x24.png"));
             icons.add(new Image("/ui/icons/app/16x16.png"));
 
-            final EditorConfig config = EditorConfig.getInstance();
+            var config = EditorConfig.getInstance();
 
             stage.initStyle(StageStyle.DECORATED);
             stage.setMinHeight(600);
@@ -396,7 +378,7 @@ public class JfxApplication extends Application {
 
             buildScene();
 
-        } catch (final Throwable e) {
+        } catch (Throwable e) {
             LOGGER.error(this, e);
             throw e;
         }
@@ -418,16 +400,19 @@ public class JfxApplication extends Application {
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.APPLICATION_CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
 
-        final EditorConfig config = EditorConfig.getInstance();
+        var config = EditorConfig.getInstance();
         config.save();
 
-        final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
+        var waiter = new CountDownLatch(1);
+
+        var executor = JmeThreadExecutor.getInstance();
         executor.addToExecute(() -> {
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            jmeApplication.destroy();
+            JmeApplication.getInstance().destroy();
+            waiter.countDown();
         });
 
         GAnalytics.waitForSend();
+        Utils.run(waiter::await);
     }
 
     /**
@@ -437,10 +422,10 @@ public class JfxApplication extends Application {
     private void buildScene() {
         this.scene = EditorFxSceneBuilder.build(notNull(stage));
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
+        var initializationManager = InitializationManager.getInstance();
         initializationManager.onAfterCreateJavaFxContext();
 
-        final PluginManager pluginManager = PluginManager.getInstance();
+        var pluginManager = PluginManager.getInstance();
         pluginManager.handlePlugins(editorPlugin -> {
             editorPlugin.register(FileCreatorRegistry.getInstance());
             editorPlugin.register(EditorRegistry.getInstance());
@@ -453,10 +438,10 @@ public class JfxApplication extends Application {
             editorPlugin.register(SettingsProviderRegistry.getInstance());
         });
 
-        final EditorFxScene scene = getScene();
+        var scene = getScene();
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
+        var jmeApplication = JmeApplication.getInstance();
+        var executor = JmeThreadExecutor.getInstance();
         executor.addToExecute(() -> createSceneProcessor(scene, jmeApplication));
 
         JmeFilePreviewManager.getInstance();
@@ -464,10 +449,10 @@ public class JfxApplication extends Application {
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.APPLICATION_LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
 
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        var executorManager = ExecutorManager.getInstance();
         executorManager.addBackgroundTask(new CheckNewVersionTask());
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
+        var editorConfig = EditorConfig.getInstance();
         if (editorConfig.isAnalyticsQuestion()) {
             return;
         }
@@ -477,8 +462,8 @@ public class JfxApplication extends Application {
 
         Platform.runLater(() -> {
 
-            final Stage stage = notNull(getStage());
-            final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
+            var stage = notNull(getStage());
+            var confirmDialog = new ConfirmDialog(result -> {
 
                 editorConfig.setAnalyticsQuestion(true);
                 editorConfig.set(PREF_ANALYTICS_GOOGLE, Boolean.TRUE.equals(result));
@@ -491,15 +476,15 @@ public class JfxApplication extends Application {
     }
 
     @FxThread
-    private void createSceneProcessor(@NotNull final EditorFxScene scene, @NotNull final JmeApplication jmeApplication) {
+    private void createSceneProcessor(@NotNull EditorFxScene scene, @NotNull JmeApplication jmeApplication) {
 
-        final FrameTransferSceneProcessor sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
+        var sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
         sceneProcessor.setEnabled(false);
         sceneProcessor.setTransferMode(ON_CHANGES);
 
         this.sceneProcessor = sceneProcessor;
 
-        final Stage stage = notNull(getStage());
+        var stage = notNull(getStage());
         stage.focusedProperty().addListener(makeFocusedListener());
 
         Platform.runLater(scene::notifyFinishBuild);
