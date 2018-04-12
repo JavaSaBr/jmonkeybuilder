@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.util.StringUtils.emptyIfNull;
+
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -73,10 +75,9 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
     @Override
     @FxThread
     protected void reload() {
-        var storedValue = getPropertyValue();
         var valueField = getValueField();
         var caretPosition = valueField.getCaretPosition();
-        valueField.setText(storedValue == null ? "" : storedValue);
+        valueField.setText(emptyIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
     }
 
@@ -85,20 +86,15 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
      */
     @FxThread
     private void updateValue(@NotNull KeyEvent event) {
-
-        if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) {
-            return;
+        if (!isIgnoreListener() && event.getCode() == KeyCode.ENTER) {
+            apply();
         }
-
-        apply();
     }
 
     @FxThread
     @Override
     public boolean isDirty() {
-        var storedValue = getPropertyValue();
-        var currentValue = getValueField().getText();
-        return !StringUtils.equals(storedValue, currentValue);
+        return !StringUtils.equals(getPropertyValue(), getValueField().getText());
     }
 
     @Override

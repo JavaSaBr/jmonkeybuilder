@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.NumberUtils.zeroIfNull;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -8,6 +9,7 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.NumberUtils;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -124,19 +126,16 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     @Override
     @FxThread
     protected void reload() {
-        var value = getPropertyValue();
         var valueField = getValueField();
         var caretPosition = valueField.getCaretPosition();
-        valueField.setValue(value == null ? 0F : value);
+        valueField.setValue(zeroIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
     }
 
-    @FxThread
     @Override
+    @FxThread
     public boolean isDirty() {
-        var currentValue = getValueField().getValue();
-        var storedValue = getPropertyValue();
-        return !Objects.equals(storedValue, currentValue);
+        return !Objects.equals(getValueField().getValue(), getPropertyValue());
     }
 
     /**
@@ -150,6 +149,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     }
 
     @Override
+    @FxThread
     protected void apply() {
         super.apply();
 

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.editor.util.GeomUtils.zeroIfNull;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
 import com.ss.editor.annotation.FromAnyThread;
@@ -8,6 +9,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.GeomUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.KeyCode;
@@ -19,11 +21,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit {@link Vector2f} values.
  *
- * @param <C> the type of a {@link ChangeConsumer}
- * @param <T> the type of an editing object.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector2f> {
+public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Vector2f> {
 
     /**
      * The field X.
@@ -43,7 +45,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @Nullable
     private HBox fieldContainer;
 
-    public Vector2FPropertyControl(
+    public Vector2fPropertyControl(
             @Nullable Vector2f propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer
@@ -91,7 +93,8 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
 
         FXUtils.addClassesTo(xField, yField, CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UiUtils.addFocusBinding(fieldContainer, xField, yField);
+        UiUtils.addFocusBinding(fieldContainer, xField, yField)
+            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
     }
 
     /**
@@ -107,7 +110,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @Override
     @FxThread
     protected void setPropertyValue(@Nullable Vector2f vector) {
-        super.setPropertyValue(vector == null ? null : vector.clone());
+        super.setPropertyValue(zeroIfNull(vector).clone());
     }
 
     @Override
@@ -164,7 +167,7 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
     @FxThread
     protected void reload() {
 
-        var vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
+        var vector = zeroIfNull(getPropertyValue());
 
         var xField = getXField();
         xField.setValue(vector.getX());
@@ -175,6 +178,16 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
         yField.positionCaret(yField.getText().length());
     }
 
+    @Override
+    @FxThread
+    public boolean isDirty() {
+
+        var x = getXField().getValue();
+        var y = getYField().getValue();
+
+        return GeomUtils.equals(getPropertyValue(), x, y);
+    }
+
     /**
      * Update the vector.
      *
@@ -182,20 +195,21 @@ public class Vector2FPropertyControl<C extends ChangeConsumer, T> extends Proper
      */
     @FxThread
     private void updateVector(@Nullable KeyEvent event) {
-
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
-            return;
+        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
+            apply();
         }
+    }
 
-        var xField = getXField();
-        var x = xField.getValue();
+    @Override
+    @FxThread
+    protected void apply() {
+        super.apply();
 
-        var yField = getYField();
-        var y = yField.getValue();
+        var x = getXField().getValue();
+        var y = getYField().getValue();
 
-        var oldValue = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
-        var newValue = new Vector2f();
-        newValue.set(checkResultXValue(x, y), checkResultYValue(x, y));
+        var oldValue = zeroIfNull(getPropertyValue());
+        var newValue = new Vector2f(checkResultXValue(x, y), checkResultYValue(x, y));
 
         changed(newValue, oldValue.clone());
     }

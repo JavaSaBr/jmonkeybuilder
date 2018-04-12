@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Vector3f> {
+public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Vector3f> {
 
     /**
      * The field X.
@@ -45,7 +45,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
     @Nullable
     private FloatTextField zField;
 
-    public Vector3FPropertyControl(
+    public Vector3fPropertyControl(
             @Nullable Vector3f propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer
@@ -53,7 +53,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
         super(propertyValue, propertyName, changeConsumer);
     }
 
-    public Vector3FPropertyControl(
+    public Vector3fPropertyControl(
             @Nullable Vector3f propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer,
@@ -111,7 +111,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
     @Override
     @FxThread
     protected void setPropertyValue(@Nullable Vector3f vector) {
-        super.setPropertyValue(vector == null ? null : vector.clone());
+        super.setPropertyValue(zeroIfNull(vector).clone());
     }
 
     /**
@@ -140,7 +140,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
      * @return the field Y.
      */
     @FxThread
-    protected @NotNull FloatTextField getYFiled() {
+    protected @NotNull FloatTextField getYField() {
         return notNull(yField);
     }
 
@@ -158,13 +158,13 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
     @FxThread
     protected void reload() {
 
-        var vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
+        var vector = zeroIfNull(getPropertyValue());
 
         var xField = getXField();
         xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
-        var yFiled = getYFiled();
+        var yFiled = getYField();
         yFiled.setValue(vector.getY());
         yFiled.positionCaret(xField.getText().length());
 
@@ -178,12 +178,10 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
     public boolean isDirty() {
 
         var x = getXField().getValue();
-        var y = getYFiled().getValue();
+        var y = getYField().getValue();
         var z = getZField().getValue();
 
-        var storedValue = getPropertyValue();
-
-        return GeomUtils.equals(storedValue, x, y, z);
+        return GeomUtils.equals(getPropertyValue(), x, y, z);
     }
 
     /**
@@ -193,12 +191,9 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
      */
     @FxThread
     protected void updateVector(@Nullable KeyEvent event) {
-
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
-            return;
+        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
+            apply();
         }
-
-        apply();
     }
 
     @Override
@@ -207,7 +202,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends Proper
         super.apply();
 
         var x = getXField().getValue();
-        var y = getYFiled().getValue();
+        var y = getYField().getValue();
         var z = getZField().getValue();
 
         var storedValue =  zeroIfNull(getPropertyValue());

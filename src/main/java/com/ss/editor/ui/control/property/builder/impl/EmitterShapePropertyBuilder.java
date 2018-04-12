@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -72,8 +72,8 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
 
         final Vector3f point = shape.getPoint();
 
-        final Vector3FPropertyControl<ModelChangeConsumer, EmitterPointShape> pointControl =
-                new Vector3FPropertyControl<>(point, Messages.MODEL_PROPERTY_POINT, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, EmitterPointShape> pointControl =
+                new Vector3fPropertyControl<>(point, Messages.MODEL_PROPERTY_POINT, changeConsumer);
 
         pointControl.setSyncHandler(EmitterPointShape::getPoint);
         pointControl.setApplyHandler(EmitterPointShape::setPoint);
@@ -96,15 +96,15 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         final Vector3f length = shape.getLen();
         final Vector3f min = shape.getMin();
 
-        final Vector3FPropertyControl<ModelChangeConsumer, EmitterBoxShape> lengthControl =
-                new Vector3FPropertyControl<>(length, Messages.MODEL_PROPERTY_LENGTH, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, EmitterBoxShape> lengthControl =
+                new Vector3fPropertyControl<>(length, Messages.MODEL_PROPERTY_LENGTH, changeConsumer);
 
         lengthControl.setSyncHandler(EmitterBoxShape::getLen);
         lengthControl.setApplyHandler(EmitterBoxShape::setLen);
         lengthControl.setEditObject(shape);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, EmitterBoxShape> minControl =
-                new Vector3FPropertyControl<>(min, Messages.MODEL_PROPERTY_MIN, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, EmitterBoxShape> minControl =
+                new Vector3fPropertyControl<>(min, Messages.MODEL_PROPERTY_MIN, changeConsumer);
 
         minControl.setSyncHandler(EmitterBoxShape::getMin);
         minControl.setApplyHandler(EmitterBoxShape::setMin);
@@ -135,8 +135,8 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         radiusControl.setApplyHandler(EmitterSphereShape::setRadius);
         radiusControl.setEditObject(shape);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, EmitterSphereShape> centerControl =
-                new Vector3FPropertyControl<>(center, Messages.MODEL_PROPERTY_CENTER, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, EmitterSphereShape> centerControl =
+                new Vector3fPropertyControl<>(center, Messages.MODEL_PROPERTY_CENTER, changeConsumer);
 
         centerControl.setSyncHandler(EmitterSphereShape::getCenter);
         centerControl.setApplyHandler(EmitterSphereShape::setCenter);

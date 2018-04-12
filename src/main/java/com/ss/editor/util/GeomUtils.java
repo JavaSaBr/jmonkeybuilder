@@ -392,12 +392,32 @@ public class GeomUtils {
 
         if (vector == null) {
             return false;
-        } else if (Float.compare(x, x) != 0) {
+        } else if (Float.compare(vector.getX(), x) != 0) {
             return false;
-        } else if (Float.compare(y, y) != 0) {
+        } else if (Float.compare(vector.getY(), y) != 0) {
             return false;
         } else {
-            return Float.compare(z, z) == 0;
+            return Float.compare(vector.getZ(), z) == 0;
+        }
+    }
+
+    /**
+     * Compare the vector with coordinates.
+     *
+     * @param vector the vector.
+     * @param x the X coordinate.
+     * @param y the Y coordinate.
+     * @return true if the vector is equal for the coordinates.
+     */
+    @FromAnyThread
+    public static boolean equals(@Nullable Vector2f vector, float x, float y) {
+
+        if (vector == null) {
+            return false;
+        } else if (Float.compare(vector.getX(), x) != 0) {
+            return false;
+        } else {
+            return Float.compare(vector.getY(), y) == 0;
         }
     }
 
@@ -409,5 +429,15 @@ public class GeomUtils {
      */
     public static @NotNull Vector3f zeroIfNull(@Nullable Vector3f vector) {
         return vector == null ? Vector3f.ZERO : vector;
+    }
+
+    /**
+     * Return {@link Vector2f#ZERO} if the vector is null or the same vector.
+     *
+     * @param vector the vector.
+     * @return {@link Vector2f#ZERO} if the vector is null or the same vector.
+     */
+    public static @NotNull Vector2f zeroIfNull(@Nullable Vector2f vector) {
+        return vector == null ? Vector2f.ZERO : vector;
     }
 }

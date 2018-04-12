@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.DefaultSinglePropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -48,8 +48,8 @@ public class PrimitivePropertyBuilder extends AbstractPropertyBuilder<ModelChang
             final Vector3f position = (Vector3f) object;
             final Vector3f value = position.clone();
 
-            final Vector3FPropertyControl<ModelChangeConsumer, Vector3f> control =
-                    new Vector3FPropertyControl<>(value, Messages.MODEL_PROPERTY_VALUE, changeConsumer);
+            final Vector3fPropertyControl<ModelChangeConsumer, Vector3f> control =
+                    new Vector3fPropertyControl<>(value, Messages.MODEL_PROPERTY_VALUE, changeConsumer);
             control.setApplyHandler(Vector3f::set);
             control.setSyncHandler(Vector3f::clone);
             control.setEditObject(position);

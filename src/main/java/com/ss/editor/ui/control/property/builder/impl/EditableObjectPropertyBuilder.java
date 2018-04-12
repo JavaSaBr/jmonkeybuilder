@@ -6,7 +6,6 @@ import com.jme3.math.*;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.impl.*;
@@ -146,8 +145,8 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 final EditableProperty<Vector2f, ?> property = cast(description);
                 final Vector2f currentValue = property.getValue();
 
-                final Vector2FPropertyControl<C, EditableProperty<Vector2f, ?>> propertyControl =
-                        new Vector2FPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                final Vector2fPropertyControl<C, EditableProperty<Vector2f, ?>> propertyControl =
+                        new Vector2fPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -157,8 +156,8 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 final EditableProperty<Vector3f, ?> property = cast(description);
                 final Vector3f currentValue = property.getValue();
 
-                final Vector3FPropertyControl<C, EditableProperty<Vector3f, ?>> propertyControl =
-                        new Vector3FPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                final Vector3fPropertyControl<C, EditableProperty<Vector3f, ?>> propertyControl =
+                        new Vector3fPropertyControl<>(currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.NumberUtils.zeroIfNull;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -113,19 +114,16 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     @Override
     @FxThread
     protected void reload() {
-        var element = getPropertyValue();
         var valueField = getValueField();
         var caretPosition = valueField.getCaretPosition();
-        valueField.setText(String.valueOf(element));
+        valueField.setValue(zeroIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
     }
 
-    @FxThread
     @Override
+    @FxThread
     public boolean isDirty() {
-        var currentValue = getValueField().getValue();
-        var storedValue = getPropertyValue();
-        return !Objects.equals(storedValue, currentValue);
+        return !Objects.equals(getValueField().getValue(), getPropertyValue());
     }
 
     /**
@@ -139,6 +137,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     }
 
     @Override
+    @FxThread
     protected void apply() {
         super.apply();
 

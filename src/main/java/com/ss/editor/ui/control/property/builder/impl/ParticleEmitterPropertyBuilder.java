@@ -202,14 +202,14 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         imagesControl.setSyncHandler(SYNC_IMAGES_HANDLER);
         imagesControl.setEditObject(emitter);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, ParticleEmitter> gravityControl =
-                new Vector3FPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, ParticleEmitter> gravityControl =
+                new Vector3fPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
         gravityControl.setApplyHandler(ParticleEmitter::setGravity);
         gravityControl.setSyncHandler(ParticleEmitter::getGravity);
         gravityControl.setEditObject(emitter);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, ParticleEmitter> faceNormalControl =
-                new Vector3FPropertyControl<>(faceNormal, Messages.MODEL_PROPERTY_FACE_NORMAL, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, ParticleEmitter> faceNormalControl =
+                new Vector3fPropertyControl<>(faceNormal, Messages.MODEL_PROPERTY_FACE_NORMAL, changeConsumer);
         faceNormalControl.setApplyHandler(ParticleEmitter::setFaceNormal);
         faceNormalControl.setSyncHandler(SYNC_FACE_NORMAL_HANDLER);
         faceNormalControl.setEditObject(emitter);

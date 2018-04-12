@@ -13,7 +13,7 @@ import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.AudioKeyPropertyControl;
 import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
 import com.ss.editor.util.AudioNodeUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
@@ -189,14 +189,14 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         audioKeyControl.setSyncHandler(AudioNodeUtils::getAudioKey);
         audioKeyControl.setEditObject(audioNode);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3FPropertyControl<>(velocity,
+        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3fPropertyControl<>(velocity,
                 Messages.MODEL_PROPERTY_VELOCITY, changeConsumer);
 
         velocityControl.setApplyHandler(AudioNode::setVelocity);
         velocityControl.setSyncHandler(AudioNode::getVelocity);
         velocityControl.setEditObject(audioNode);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3FPropertyControl<>(direction,
+        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3fPropertyControl<>(direction,
                 Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
 
         directionControl.setApplyHandler(AudioNode::setDirection);

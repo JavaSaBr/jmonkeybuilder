@@ -10,13 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link Vector2FPropertyControl} to edit min-max value range.
+ * The implementation of the {@link Vector2fPropertyControl} to edit min-max value range.
  *
  * @param <C> the type of a {@link ChangeConsumer}
  * @param <T> the type of an editing object.
  * @author JavaSaBr
  */
-public class MinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial> extends Vector2FPropertyControl<C, T> {
+public class MinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial> extends Vector2fPropertyControl<C, T> {
 
     public MinMaxPropertyControl(
             @Nullable Vector2f propertyValue,

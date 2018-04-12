@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.editor.util.GeomUtils.zeroIfNull;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FxThread;
@@ -8,6 +9,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.GeomUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.input.KeyCode;
@@ -19,11 +21,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit {@link com.jme3.math.Vector3f} values.
  *
- * @param <C> the change consumer's type.
- * @param <T> the edited object's type.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr.
  */
-public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector3f> {
+public class Vector3fSingleRowPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Vector3f> {
 
     /**
      * The field X.
@@ -49,24 +51,28 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
     @Nullable
     private HBox fieldContainer;
 
-    public Vector3FSingleRowPropertyControl(@Nullable final Vector3f propertyValue, @NotNull final String propertyName,
-                                            @NotNull final C changeConsumer) {
+    public Vector3fSingleRowPropertyControl(
+            @Nullable Vector3f propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
+
         super(propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    public void changeControlWidthPercent(final double controlWidthPercent) {
+    public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        final HBox valueField = getFieldContainer();
+        var valueField = getFieldContainer();
         valueField.prefWidthProperty().unbind();
         valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         fieldContainer = new HBox();
@@ -99,10 +105,13 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
                 CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
         FXUtils.addClassesTo(xField, yField, zField, CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UiUtils.addFocusBinding(fieldContainer, xField, yField, zField);
+        UiUtils.addFocusBinding(fieldContainer, xField, yField, zField)
+            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
     }
 
     /**
+     * Get the field container.
+     *
      * @return the field container.
      */
     @FxThread
@@ -112,8 +121,8 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
 
     @Override
     @FxThread
-    protected void setPropertyValue(@Nullable final Vector3f vector) {
-        super.setPropertyValue(vector == null ? null : vector.clone());
+    protected void setPropertyValue(@Nullable Vector3f vector) {
+        super.setPropertyValue(zeroIfNull(vector).clone());
     }
 
     @Override
@@ -131,7 +140,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @return the result x value.
      */
     @FxThread
-    protected float checkResultXValue(final float x, final float y, final float z) {
+    protected float checkResultXValue(float x, float y, float z) {
         return x;
     }
 
@@ -144,7 +153,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @return the result y value.
      */
     @FxThread
-    protected float checkResultYValue(final float x, final float y, final float z) {
+    protected float checkResultYValue(float x, float y, float z) {
         return y;
     }
 
@@ -157,7 +166,7 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @return the result z value.
      */
     @FxThread
-    protected float checkResultZValue(final float x, final float y, final float z) {
+    protected float checkResultZValue(float x, float y, float z) {
         return z;
     }
 
@@ -195,19 +204,30 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
     @FxThread
     protected void reload() {
 
-        final Vector3f vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
+        var vector = zeroIfNull(getPropertyValue());
 
-        final FloatTextField xField = getXField();
+        var xField = getXField();
         xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
-        final FloatTextField yField = getYField();
+        var yField = getYField();
         yField.setValue(vector.getY());
         yField.positionCaret(yField.getText().length());
 
-        final FloatTextField zField = getZField();
+        var zField = getZField();
         zField.setValue(vector.getZ());
         zField.positionCaret(zField.getText().length());
+    }
+
+    @Override
+    @FxThread
+    public boolean isDirty() {
+
+        var x = getXField().getValue();
+        var y = getYField().getValue();
+        var z = getZField().getValue();
+
+        return !GeomUtils.equals(getPropertyValue(), x, y, z);
     }
 
     /**
@@ -216,23 +236,23 @@ public class Vector3FSingleRowPropertyControl<C extends ChangeConsumer, T> exten
      * @param event the change event.
      */
     @FxThread
-    private void updateVector(@Nullable final KeyEvent event) {
-
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) {
-            return;
+    private void updateVector(@Nullable KeyEvent event) {
+        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
+            apply();
         }
+    }
 
-        final FloatTextField xField = getXField();
-        final float x = xField.getValue();
+    @Override
+    @FxThread
+    protected void apply() {
+        super.apply();
 
-        final FloatTextField yField = getYField();
-        final float y = yField.getValue();
+        var x = getXField().getValue();
+        var y = getYField().getValue();
+        var z = getZField().getValue();
 
-        final FloatTextField zField = getZField();
-        final float z = zField.getValue();
-
-        final Vector3f oldValue = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
-        final Vector3f newValue = new Vector3f();
+        var oldValue = zeroIfNull(getPropertyValue());
+        var newValue = new Vector3f();
         newValue.set(checkResultXValue(x, y, z), checkResultYValue(x, y, z), checkResultZValue(x, y, z));
 
         changed(newValue, oldValue.clone());
