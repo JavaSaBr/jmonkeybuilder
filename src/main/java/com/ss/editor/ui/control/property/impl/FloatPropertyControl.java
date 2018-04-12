@@ -1,28 +1,27 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
+import java.util.Objects;
 
 /**
  * The implementation of the {@link PropertyControl} to edit float values.
  *
- * @param <C> the change consumer's type.
- * @param <T> the edited object's type.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Float> {
+public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Float> {
 
     /**
      * The filed with current value.
@@ -43,7 +42,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
             @Nullable Float propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer,
-            @Nullable SixObjectConsumer<C, T, String, Float, Float, BiConsumer<T, Float>> changeHandler
+            @Nullable ChangeHandler<C, D, Float> changeHandler
     ) {
 
         super(propertyValue, propertyName, changeConsumer, changeHandler);
@@ -132,10 +131,12 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
         valueField.positionCaret(caretPosition);
     }
 
+    @FxThread
     @Override
     public boolean isDirty() {
-
-        return super.isDirty();
+        var currentValue = getValueField().getValue();
+        var storedValue = getPropertyValue();
+        return !Objects.equals(storedValue, currentValue);
     }
 
     /**
@@ -143,23 +144,18 @@ public class FloatPropertyControl<C extends ChangeConsumer, T> extends PropertyC
      */
     @FxThread
     private void updateValue() {
-
-        if (isIgnoreListener()) {
-            return;
+        if (!isIgnoreListener()) {
+            apply();
         }
-
-        final FloatTextField valueField = getValueField();
-        final float value = valueField.getValue();
-
-        final Float oldValue = getPropertyValue();
-        changed(value, oldValue);
     }
 
     @Override
     protected void apply() {
-
         super.apply();
+
+        var currentValue = getValueField().getValue();
+        var storedValue = getPropertyValue();
+
+        changed(currentValue, storedValue);
     }
-
-
 }

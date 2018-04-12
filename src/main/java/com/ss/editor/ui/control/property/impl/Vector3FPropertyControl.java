@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.editor.util.GeomUtils.zeroIfNull;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FxThread;
@@ -7,7 +8,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.editor.util.GeomUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Label;
@@ -17,16 +18,14 @@ import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
-
 /**
  * The implementation of the {@link PropertyControl} to edit {@link Vector3f} values.
  *
- * @param <C> the type of a {@link ChangeConsumer}
- * @param <T> the type of an editing object.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Vector3f> {
+public class Vector3FPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Vector3f> {
 
     /**
      * The field X.
@@ -58,7 +57,7 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
             @Nullable Vector3f propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer,
-            @Nullable SixObjectConsumer<C, T, String, Vector3f, Vector3f, BiConsumer<T, Vector3f>> changeHandler
+            @Nullable ChangeHandler<C, D, Vector3f> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
@@ -105,7 +104,8 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
         FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
                 CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        UiUtils.addFocusBinding(container, xField, yField, zField);
+        UiUtils.addFocusBinding(container, xField, yField, zField)
+                .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
     }
 
     @Override
@@ -173,6 +173,19 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
         zField.positionCaret(xField.getText().length());
     }
 
+    @Override
+    @FxThread
+    public boolean isDirty() {
+
+        var x = getXField().getValue();
+        var y = getYFiled().getValue();
+        var z = getZField().getValue();
+
+        var storedValue = getPropertyValue();
+
+        return GeomUtils.equals(storedValue, x, y, z);
+    }
+
     /**
      * Update the vector.
      *
@@ -185,19 +198,20 @@ public class Vector3FPropertyControl<C extends ChangeConsumer, T> extends Proper
             return;
         }
 
-        var xField = getXField();
-        var x = xField.getValue();
+        apply();
+    }
 
-        var yFiled = getYFiled();
-        var y = yFiled.getValue();
+    @Override
+    @FxThread
+    protected void apply() {
+        super.apply();
 
-        var zField = getZField();
-        var z = zField.getValue();
+        var x = getXField().getValue();
+        var y = getYFiled().getValue();
+        var z = getZField().getValue();
 
-        var oldValue = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
-        var newValue = new Vector3f();
-        newValue.set(x, y, z);
+        var storedValue =  zeroIfNull(getPropertyValue());
 
-        changed(newValue, oldValue.clone());
+        changed(new Vector3f(x, y, z), storedValue.clone());
     }
 }

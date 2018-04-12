@@ -17,6 +17,7 @@ import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -75,7 +76,7 @@ public abstract class UiUtils {
      * @param controls  the controls.
      */
     @FxThread
-    public static void addFocusBinding(@NotNull Pane pane, @NotNull Control... controls) {
+    public static @NotNull BooleanProperty addFocusBinding(@NotNull Pane pane, @NotNull Control... controls) {
 
         var focused = new BooleanPropertyBase(true) {
 
@@ -103,6 +104,8 @@ public abstract class UiUtils {
         for (var control : controls) {
             control.focusedProperty().addListener(listener);
         }
+
+        return focused;
     }
 
     /**

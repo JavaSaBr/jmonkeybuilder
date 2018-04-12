@@ -19,10 +19,10 @@ import org.jetbrains.annotations.Nullable;
  * The implementation of the {@link PropertyControl} to edit string values.
  *
  * @param <C> the type of a change consumer.
- * @param <T> the type of an editing property.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class StringPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, String> {
+public class StringPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, String> {
 
     /**
      * The filed with current value.
@@ -93,12 +93,11 @@ public class StringPropertyControl<C extends ChangeConsumer, T> extends Property
         apply();
     }
 
+    @FxThread
     @Override
     public boolean isDirty() {
-
         var storedValue = getPropertyValue();
         var currentValue = getValueField().getText();
-
         return !StringUtils.equals(storedValue, currentValue);
     }
 

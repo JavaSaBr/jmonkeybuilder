@@ -41,6 +41,15 @@ import java.util.function.Predicate;
 public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implements UpdatableControl {
 
     /**
+     * @param <C> the type of a change consumer.
+     * @param <D> the type of an editing object.
+     * @param <T> the type of an editing property.
+     * @author JavaSaBr
+     */
+    public interface ChangeHandler<C, D, T> extends SixObjectConsumer<C, D, String, T,  T, BiConsumer<D, T>> {
+    }
+
+    /**
      * The constant LOGGER.
      */
     @NotNull
@@ -147,7 +156,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             @Nullable T propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer,
-            @Nullable SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler
+            @Nullable ChangeHandler<C, D, T> changeHandler
     ) {
         this.propertyName = propertyName;
         this.changeConsumer = changeConsumer;
@@ -173,7 +182,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @return the six object consumer
      */
     @FromAnyThread
-    public @NotNull SixObjectConsumer<C, D, String, T,  T, BiConsumer<D, T>> newChangeHandler() {
+    public @NotNull ChangeHandler<C, D, T> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
             var operation = new PropertyOperation<ChangeConsumer, D, T>(object, propName, newValue, oldValue);
@@ -277,6 +286,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      *
      * @return true if this control has not saved changes.
      */
+    @FxThread
     public boolean isDirty() {
         return true;
     }

@@ -377,4 +377,37 @@ public class GeomUtils {
 
         return results;
     }
+
+    /**
+     * Compare the vector with coordinates.
+     *
+     * @param vector the vector.
+     * @param x the X coordinate.
+     * @param y the Y coordinate.
+     * @param z the Z coordinate.
+     * @return true if the vector is equal for the coordinates.
+     */
+    @FromAnyThread
+    public static boolean equals(@Nullable Vector3f vector, float x, float y, float z) {
+
+        if (vector == null) {
+            return false;
+        } else if (Float.compare(x, x) != 0) {
+            return false;
+        } else if (Float.compare(y, y) != 0) {
+            return false;
+        } else {
+            return Float.compare(z, z) == 0;
+        }
+    }
+
+    /**
+     * Return {@link Vector3f#ZERO} if the vector is null or the same vector.
+     *
+     * @param vector the vector.
+     * @return {@link Vector3f#ZERO} if the vector is null or the same vector.
+     */
+    public static @NotNull Vector3f zeroIfNull(@Nullable Vector3f vector) {
+        return vector == null ? Vector3f.ZERO : vector;
+    }
 }
