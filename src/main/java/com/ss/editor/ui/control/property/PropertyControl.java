@@ -17,7 +17,7 @@ import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FxUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -173,7 +173,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             setIgnoreListener(false);
         }
 
-        FXUtils.addClassTo(this, CssClasses.ABSTRACT_PARAM_CONTROL);
+        FxUtils.addClass(this, CssClasses.ABSTRACT_PARAM_CONTROL);
     }
 
     /**
@@ -350,15 +350,20 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
         }
 
-        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
-                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
+        FxUtils.addClass(container, CssClasses.DEF_HBOX)
+                .addClass(propertyNameLabel, getLabelCssClass());
 
-        FXUtils.addToPane(propertyNameLabel, isSingleRow() ? container : this);
+        FxUtils.addChild(isSingleRow() ? container : this, propertyNameLabel);
 
         createComponents(container);
 
-        FXUtils.addToPane(container, this);
+        FxUtils.addChild(this, container);
+    }
+
+    @FromAnyThread
+    protected @NotNull String getLabelCssClass() {
+        return isSingleRow() ? CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
+                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME;
     }
 
     /**
@@ -404,7 +409,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @param container the container.
      */
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
     }
 
     /**

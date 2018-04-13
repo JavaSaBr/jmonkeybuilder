@@ -7,23 +7,21 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FxUtils;
-import com.ss.rlib.util.ArrayUtils;
-import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link PropertyControl} to edit int array values.
+ * The implementation of the {@link PropertyControl} to edit array values.
  *
  * @param <C> the change consumer's type.
  * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
-public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, int[]> {
+public class StringBasedArrayPropertyControl<C extends ChangeConsumer, D, T> extends PropertyControl<C, D, T> {
 
     /**
      * The filed with current value.
@@ -31,19 +29,19 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends Proper
     @Nullable
     private TextField valueField;
 
-    public IntArrayPropertyControl(
-            @Nullable int[] propertyValue,
+    public StringBasedArrayPropertyControl(
+            @Nullable T propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
-    public IntArrayPropertyControl(
-            @Nullable int[] propertyValue,
+    public StringBasedArrayPropertyControl(
+            @Nullable T propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer,
-            @Nullable ChangeHandler<C, D, int[]> changeHandler
+            @Nullable ChangeHandler<C, D, T> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
@@ -84,71 +82,14 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends Proper
      * @return the filed with current value.
      */
     @FxThread
-    private @NotNull TextField getValueField() {
+    protected @NotNull TextField getValueField() {
         return notNull(valueField);
-    }
-
-    @Override
-    @FxThread
-    protected void reload() {
-
-        var element = getPropertyValue();
-
-        var valueField = getValueField();
-        var caretPosition = valueField.getCaretPosition();
-
-        if (element == null) {
-            valueField.setText(StringUtils.EMPTY);
-        } else {
-            valueField.setText(ArrayUtils.toString(element, " ", false, false));
-        }
-
-        valueField.positionCaret(caretPosition);
-    }
-
-    @Override
-    @FxThread
-    public boolean isDirty() {
-        return super.isDirty();
     }
 
     /**
      * Update the value.
      */
     @FxThread
-    private void updateValue(@Nullable KeyEvent event) {
-        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
-            apply();
-        }
-    }
-
-    @Override
-    @FxThread
-    protected void apply() {
-        super.apply();
-
-        var textValue = getValueField().getText();
-
-        int[] newValue = null;
-
-        if (!StringUtils.isEmpty(textValue)) {
-
-            var splitter = textValue.contains(" ") ? " " : ",";
-            var split = textValue.split(splitter);
-
-            newValue = new int[split.length];
-
-            for (int i = 0; i < split.length; i++) {
-                try {
-                    newValue[i] = Integer.parseInt(split[i]);
-                } catch (NumberFormatException e) {
-                    LOGGER.warning(this, e);
-                    newValue = getPropertyValue();
-                    break;
-                }
-            }
-        }
-
-        changed(newValue, getPropertyValue());
+    protected void updateValue(@Nullable KeyEvent event) {
     }
 }

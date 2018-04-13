@@ -2,13 +2,12 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.StringUtils.emptyIfNull;
-
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FxUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -52,8 +51,8 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
         valueField.focusedProperty()
             .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
 
-        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(valueField, container);
+        FxUtils.addClass(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FxUtils.addChild(container, valueField);
     }
 
     @Override
