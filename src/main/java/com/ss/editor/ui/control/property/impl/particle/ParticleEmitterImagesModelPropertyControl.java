@@ -15,10 +15,13 @@ import org.jetbrains.annotations.NotNull;
 public class ParticleEmitterImagesModelPropertyControl extends
     Vector2fPropertyControl<ModelChangeConsumer, ParticleEmitter> {
 
-    public ParticleEmitterImagesModelPropertyControl(@NotNull final Vector2f element,
-                                                     @NotNull final String paramName,
-                                                     @NotNull final ModelChangeConsumer modelChangeConsumer) {
-        super(element, paramName, modelChangeConsumer);
+    public ParticleEmitterImagesModelPropertyControl(
+            @NotNull Vector2f element,
+            @NotNull String paramName,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
+
+        super(element, paramName, changeConsumer);
         getXField().setMinMax(1, Integer.MAX_VALUE);
         getYField().setMinMax(1, Integer.MAX_VALUE);
     }

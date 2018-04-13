@@ -28,20 +28,11 @@ public class RequestedOpenFileEvent extends SceneEvent {
         }
     }
 
-    /**
-     * The constant EDITOR.
-     */
-    public static final String EDITOR = "editor";
-
+    private static final String EDITOR = "editor";
     private static final String FILE = "file";
     private static final String NEED_SHOW = "need_show";
 
-    public RequestedOpenFileEvent() {
-        super(EVENT_TYPE);
-        setNeedShow(true);
-    }
-
-    public RequestedOpenFileEvent(@NotNull final Path file) {
+    public RequestedOpenFileEvent(@NotNull Path file) {
         super(EVENT_TYPE);
         setNeedShow(true);
         setFile(file);
@@ -61,7 +52,7 @@ public class RequestedOpenFileEvent extends SceneEvent {
      *
      * @param description the editor descriptor.
      */
-    public void setDescription(@Nullable final EditorDescription description) {
+    public void setDescription(@Nullable EditorDescription description) {
         if (description == null) {
             remove(EDITOR);
         } else {
@@ -83,12 +74,12 @@ public class RequestedOpenFileEvent extends SceneEvent {
      *
      * @param file the file to open.
      */
-    public void setFile(final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 
     /**
-     * Is need show boolean.
+     * Return true if need to show the editor.
      *
      * @return true if need to show the editor.
      */
@@ -97,11 +88,11 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
-     * Set the need show.
+     * Set true if need to show the editor.
      *
      * @param needShow true if need to show the editor.
      */
-    public void setNeedShow(final boolean needShow) {
+    public void setNeedShow(boolean needShow) {
         set(NEED_SHOW, needShow);
     }
 }

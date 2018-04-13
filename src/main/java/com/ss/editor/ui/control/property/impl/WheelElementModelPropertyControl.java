@@ -51,7 +51,7 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
 
         var numWheels = control.getNumWheels();
 
-        for (int i = 0; i < numWheels; i++) {
+        for (var i = 0; i < numWheels; i++) {
             var wheel = control.getWheel(i);
             if (wheel == getEditObject()) {
                 return true;

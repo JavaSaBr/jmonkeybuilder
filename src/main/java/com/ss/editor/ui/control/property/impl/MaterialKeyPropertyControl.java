@@ -71,10 +71,7 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
             return;
         }
 
-        final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
-        event.setFile(realFile);
-
-        FX_EVENT_MANAGER.notify(event);
+        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(realFile));
     }
 
     @FxThread

@@ -15,8 +15,10 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FxUtils;
 import com.ss.rlib.util.StringUtils;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -92,12 +94,12 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         var changeButton = new Button();
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
-        changeButton.setOnAction(event -> processChange());
+        changeButton.setOnAction(this::processChange);
 
         var openButton = new Button();
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
         openButton.disableProperty().bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
-        openButton.setOnAction(event -> processOpen());
+        openButton.setOnAction(this::processOpen);
 
         audioKeyLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(changeButton.widthProperty())
@@ -114,9 +116,11 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
     /**
      * Show dialog for choosing another audio key.
+     *
+     * @param event the action event.
      */
     @FxThread
-    protected void processChange() {
+    protected void processChange(@Nullable ActionEvent event) {
         UiUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
@@ -142,9 +146,11 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
     /**
      * Open this audio data in the audio viewer.
+     *
+     * @param event the action event.
      */
     @FxThread
-    protected void processOpen() {
+    protected void processOpen(@Nullable ActionEvent event) {
 
         var element = getPropertyValue();
         if (element == null) {
@@ -162,10 +168,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
             return;
         }
 
-        var event = new RequestedOpenFileEvent();
-        event.setFile(realFile);
-
-        FX_EVENT_MANAGER.notify(event);
+        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(realFile));
     }
 
     /**
@@ -181,8 +184,10 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     @Override
     @FxThread
     protected void reload() {
-        var element = getPropertyValue();
-        var audioKeyLabel = getAudioKeyLabel();
-        audioKeyLabel.setText(element == null || StringUtils.isEmpty(element.getName()) ? NO_AUDIO : element.getName());
+        getAudioKeyLabel().setText(getKeyLabel(getPropertyValue()));
+    }
+
+    private @NotNull String getKeyLabel(@Nullable AudioKey assetKey) {
+        return EditorUtil.isEmpty(assetKey) ? NO_AUDIO : assetKey.getName();
     }
 }

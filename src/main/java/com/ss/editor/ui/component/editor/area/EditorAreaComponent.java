@@ -644,8 +644,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 return;
             }
 
-            final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
-            event.setFile(file);
+            var event = new RequestedOpenFileEvent(file);
             event.setDescription(description);
             event.setNeedShow(StringUtils.equals(assetPath, editFile));
 

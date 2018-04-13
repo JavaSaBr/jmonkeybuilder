@@ -7,6 +7,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -53,8 +54,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
         super.createComponents(container);
 
         checkBox = new CheckBox();
-        checkBox.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> updateValue());
+        checkBox.selectedProperty().addListener(this::updateValue);
         checkBox.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
@@ -129,7 +129,11 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
      * Update the value.
      */
     @FxThread
-    private void updateValue() {
+    private void updateValue(
+            @NotNull ObservableValue<? extends Boolean> observable,
+            @NotNull Boolean oldValue,
+            @NotNull Boolean newValue
+    ) {
         if (!isIgnoreListener()) {
             apply();
         }
