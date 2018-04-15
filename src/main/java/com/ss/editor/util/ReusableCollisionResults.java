@@ -3,9 +3,9 @@ package com.ss.editor.util;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.pools.Reusable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

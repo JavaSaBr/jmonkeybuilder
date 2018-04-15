@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.animation;
 
 import static com.ss.editor.util.AnimationUtils.extractAnimation;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
@@ -17,8 +17,8 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.AnimationUtils;
-import com.ss.rlib.ui.control.input.IntegerTextField;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.control.input.IntegerTextField;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;

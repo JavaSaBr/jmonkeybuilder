@@ -1,12 +1,12 @@
 package com.ss.editor.ui.event;
 
-import static com.ss.rlib.util.array.ArrayFactory.newArray;
+import static com.ss.rlib.common.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;

@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;

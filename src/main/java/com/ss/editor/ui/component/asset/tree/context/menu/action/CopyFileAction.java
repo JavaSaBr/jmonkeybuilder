@@ -1,12 +1,12 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import static com.ss.rlib.util.array.ArrayCollectors.toArray;
+import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;

@@ -5,7 +5,7 @@ import static java.util.ResourceBundle.getBundle;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.EditorPlugin;
-import com.ss.rlib.util.PropertyLoader;
+import com.ss.rlib.common.util.PropertyLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Enumeration;

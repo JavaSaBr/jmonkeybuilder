@@ -1,8 +1,8 @@
 package com.ss.editor.ui.event;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.event.Event;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;

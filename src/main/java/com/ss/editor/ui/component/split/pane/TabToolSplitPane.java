@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.split.pane;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.ss.editor.ui.component.tab.TabToolComponent;

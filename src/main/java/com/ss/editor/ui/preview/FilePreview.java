@@ -1,9 +1,9 @@
 package com.ss.editor.ui.preview;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.pools.Reusable;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.pools.Reusable;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 

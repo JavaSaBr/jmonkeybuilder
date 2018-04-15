@@ -3,10 +3,10 @@ package com.ss.editor.ui.preview;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.preview.impl.DefaultFilePreviewFactory;
-import com.ss.rlib.util.ArrayUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.ArrayUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
@@ -14,10 +14,10 @@ import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.util.FxUtils;
+import com.ss.rlib.common.function.SixObjectConsumer;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -347,7 +347,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
         propertyNameLabel = new Label(getPropertyName() + ":");
 
         if (isSingleRow()) {
-            propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
+            propertyNameLabel.maxWidthProperty()
+                .bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
         }
 
         FxUtils.addClass(container, CssClasses.DEF_HBOX)
@@ -390,7 +391,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
 
         var propertyNameLabel = getPropertyNameLabel();
         propertyNameLabel.maxWidthProperty().unbind();
-        propertyNameLabel.maxWidthProperty().bind(widthProperty().multiply(1D - controlWidthPercent));
+        propertyNameLabel.maxWidthProperty()
+            .bind(widthProperty().multiply(1D - controlWidthPercent));
     }
 
     /**

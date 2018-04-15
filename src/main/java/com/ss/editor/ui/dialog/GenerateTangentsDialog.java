@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -13,7 +13,7 @@ import com.ss.editor.model.undo.impl.ChangeMeshOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;

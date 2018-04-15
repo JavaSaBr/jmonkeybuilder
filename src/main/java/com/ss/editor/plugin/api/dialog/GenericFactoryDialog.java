@@ -1,15 +1,15 @@
 package com.ss.editor.plugin.api.dialog;
 
 import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;

@@ -1,6 +1,6 @@
 package com.ss.editor.manager;
 
-import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
+import static com.ss.rlib.common.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
@@ -9,16 +9,16 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.manager.InitializeManager;
-import com.ss.rlib.plugin.ConfigurablePluginSystem;
-import com.ss.rlib.plugin.Plugin;
-import com.ss.rlib.plugin.PluginContainer;
-import com.ss.rlib.plugin.exception.PreloadPluginException;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.plugin.ConfigurablePluginSystem;
+import com.ss.rlib.common.plugin.Plugin;
+import com.ss.rlib.common.plugin.PluginContainer;
+import com.ss.rlib.common.plugin.exception.PreloadPluginException;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

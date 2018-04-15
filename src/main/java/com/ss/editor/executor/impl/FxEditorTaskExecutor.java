@@ -3,8 +3,8 @@ package com.ss.editor.executor.impl;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.concurrent.util.ConcurrentUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.common.util.array.Array;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 

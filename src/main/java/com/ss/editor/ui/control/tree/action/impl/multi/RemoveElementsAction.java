@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl.multi;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -15,10 +15,10 @@ import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.spatial.SpatialTreeNode;
-import com.ss.rlib.function.TripleConsumer;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayCollectors;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.function.TripleConsumer;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayCollectors;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;

@@ -13,8 +13,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DirectionLightPropertyControl<T extends Light> extends Vector3fPropertyControl<ModelChangeConsumer, T> {
 
-    public DirectionLightPropertyControl(@NotNull final Vector3f element, @NotNull final String paramName,
-                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public DirectionLightPropertyControl(
+            @NotNull Vector3f element,
+            @NotNull String paramName,
+            @NotNull ModelChangeConsumer modelChangeConsumer
+    ) {
         super(element, paramName, modelChangeConsumer);
     }
 }

@@ -7,7 +7,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

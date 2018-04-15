@@ -1,12 +1,13 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -36,22 +37,27 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     @Nullable
     private Function<T, String> toStringFunction;
 
-    public DefaultPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
-                                  @NotNull final C changeConsumer) {
+    public DefaultPropertyControl(
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
     /**
-     * Sets to string function.
+     * Set the string function.
      *
      * @param toStringFunction the string function.
      */
     @FromAnyThread
-    public void setToStringFunction(@Nullable final Function<T, String> toStringFunction) {
+    public void setToStringFunction(@Nullable Function<T, String> toStringFunction) {
         this.toStringFunction = toStringFunction;
     }
 
     /**
+     * Get the string function.
+     *
      * @return the string function.
      */
     @FromAnyThread
@@ -60,6 +66,8 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     }
 
     /**
+     * Get the label with value of the property.
+     *
      * @return the label with value of the property.
      */
     protected @NotNull Label getPropertyValueLabel() {
@@ -68,15 +76,16 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         propertyValueLabel = new Label();
-        propertyValueLabel.prefWidthProperty().bind(container.widthProperty());
+        propertyValueLabel.prefWidthProperty()
+            .bind(container.widthProperty());
 
-        FXUtils.addClassesTo(propertyValueLabel, CssClasses.ABSTRACT_PARAM_CONTROL_LABEL_VALUE,
+        FxUtils.addClass(propertyValueLabel, CssClasses.ABSTRACT_PARAM_CONTROL_LABEL_VALUE,
                 CssClasses.TEXT_INPUT_CONTAINER);
-        FXUtils.addToPane(propertyValueLabel, container);
+        FxUtils.addChild(container, propertyValueLabel);
     }
 
     @Override
@@ -84,9 +93,8 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     public void reload() {
         super.reload();
 
-        final Function<T, String> function = getToStringFunction();
-
-        final Label propertyValueLabel = getPropertyValueLabel();
+        var function = getToStringFunction();
+        var propertyValueLabel = getPropertyValueLabel();
         propertyValueLabel.setText(function == null ? String.valueOf(getPropertyValue()) :
                 function.apply(getPropertyValue()));
     }

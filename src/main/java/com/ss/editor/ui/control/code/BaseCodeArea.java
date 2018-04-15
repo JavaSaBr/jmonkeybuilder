@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.code;
 
 import static java.util.Collections.singleton;
 import com.ss.editor.annotation.FxThread;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;

@@ -1,7 +1,7 @@
 package com.ss.editor.util;
 
-import static com.ss.rlib.util.ClassUtils.cast;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.cast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
@@ -38,11 +38,11 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.Alert;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;

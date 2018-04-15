@@ -2,11 +2,11 @@ package com.ss.editor.remote.control.client;
 
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.manager.ClasspathManager;
-import com.ss.rlib.network.ConnectionOwner;
-import com.ss.rlib.network.annotation.PacketDescription;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.network.ConnectionOwner;
+import com.ss.rlib.common.network.annotation.PacketDescription;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;

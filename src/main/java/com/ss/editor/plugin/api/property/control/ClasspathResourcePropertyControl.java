@@ -1,15 +1,15 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 

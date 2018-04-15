@@ -13,8 +13,8 @@ import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

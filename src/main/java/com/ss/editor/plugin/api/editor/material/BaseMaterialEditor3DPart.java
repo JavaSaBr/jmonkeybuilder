@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.editor.material;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetNotFoundException;
@@ -26,9 +26,9 @@ import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.plugin.api.editor.part3d.AdvancedPbrWithStudioSky3DEditorPart;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.function.BooleanFloatConsumer;
-import com.ss.rlib.geom.util.AngleUtils;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.function.BooleanFloatConsumer;
+import com.ss.rlib.common.geom.util.AngleUtils;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -2,14 +2,14 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 

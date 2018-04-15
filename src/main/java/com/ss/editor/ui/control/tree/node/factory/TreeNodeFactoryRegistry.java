@@ -1,12 +1,12 @@
 package com.ss.editor.ui.control.tree.node.factory;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.tree.node.factory.impl.MaterialSettingsTreeNodeFactory;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.impl.*;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

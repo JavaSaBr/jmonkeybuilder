@@ -14,7 +14,7 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.TextureCubeMap;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

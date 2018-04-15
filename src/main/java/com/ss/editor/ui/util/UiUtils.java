@@ -1,7 +1,7 @@
 package com.ss.editor.ui.util;
 
 import static com.ss.editor.util.EditorUtil.getFxScene;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FromAnyThread;
@@ -13,10 +13,10 @@ import com.ss.editor.ui.dialog.asset.file.FileAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;

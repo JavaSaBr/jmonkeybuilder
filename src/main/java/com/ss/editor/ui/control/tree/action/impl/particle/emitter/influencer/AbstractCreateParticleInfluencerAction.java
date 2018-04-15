@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl.particle.emitter.influencer;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.ss.editor.annotation.FxThread;

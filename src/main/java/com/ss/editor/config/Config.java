@@ -3,10 +3,10 @@ package com.ss.editor.config;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.plugin.Version;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.os.OperatingSystem;
+import com.ss.rlib.common.plugin.Version;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.os.OperatingSystem;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;

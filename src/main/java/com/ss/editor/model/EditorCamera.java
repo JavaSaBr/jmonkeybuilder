@@ -1,7 +1,7 @@
 package com.ss.editor.model;
 
-import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
-import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
+import static com.ss.rlib.common.geom.util.AngleUtils.degreeToRadians;
+import static com.ss.rlib.common.geom.util.AngleUtils.radiansToDegree;
 import static java.lang.Math.*;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -19,8 +19,8 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.config.Config;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayCollectors;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayCollectors;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.rlib.util.array.ArrayCollectors.toArray;
+import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 
 /**
  * The presentation of list of folders.

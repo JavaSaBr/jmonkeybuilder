@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node.impl.spatial;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;

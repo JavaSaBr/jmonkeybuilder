@@ -6,10 +6,10 @@ import com.jme3.math.*;
 import com.jme3.scene.Spatial;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.util.CycleBuffer;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.pools.Reusable;
+import com.ss.rlib.common.util.CycleBuffer;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

@@ -2,9 +2,9 @@ package com.ss.editor.ui.component.asset.tree.resource;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

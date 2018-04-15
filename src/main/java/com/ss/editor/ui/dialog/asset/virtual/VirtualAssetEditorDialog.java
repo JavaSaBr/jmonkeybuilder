@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.asset.virtual;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.virtual.tree.VirtualResourceTree;
@@ -8,7 +8,7 @@ import com.ss.editor.ui.component.virtual.tree.resource.RootVirtualResourceEleme
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElementFactory;
 import com.ss.editor.ui.dialog.asset.BaseAssetEditorDialog;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;

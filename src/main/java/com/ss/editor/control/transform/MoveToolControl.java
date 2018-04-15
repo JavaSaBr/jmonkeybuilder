@@ -1,7 +1,7 @@
 package com.ss.editor.control.transform;
 
 import static com.ss.editor.util.GeomUtils.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;

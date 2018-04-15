@@ -2,8 +2,8 @@ package com.ss.editor.plugin.api.property;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

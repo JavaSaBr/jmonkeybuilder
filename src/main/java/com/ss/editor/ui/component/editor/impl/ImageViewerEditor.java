@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -10,7 +10,7 @@ import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;

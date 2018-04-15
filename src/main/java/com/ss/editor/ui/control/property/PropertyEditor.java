@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -8,7 +8,7 @@ import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;

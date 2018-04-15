@@ -3,12 +3,12 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.manager.ClasspathManager.Scope;
-import com.ss.rlib.network.NetworkConfig;
-import com.ss.rlib.network.NetworkFactory;
-import com.ss.rlib.network.packet.ReadablePacket;
-import com.ss.rlib.network.packet.ReadablePacketRegistry;
-import com.ss.rlib.network.server.AcceptHandler;
-import com.ss.rlib.network.server.ServerNetwork;
+import com.ss.rlib.common.network.NetworkConfig;
+import com.ss.rlib.common.network.NetworkFactory;
+import com.ss.rlib.common.network.packet.ReadablePacket;
+import com.ss.rlib.common.network.packet.ReadablePacketRegistry;
+import com.ss.rlib.common.network.server.AcceptHandler;
+import com.ss.rlib.common.network.server.ServerNetwork;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

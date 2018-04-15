@@ -1,7 +1,7 @@
 package com.ss.editor.control.painting.terrain;
 
 import static com.ss.editor.util.PaintingUtils.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;

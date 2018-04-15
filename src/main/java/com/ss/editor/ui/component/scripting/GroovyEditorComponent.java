@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.scripting;
 import static java.util.Collections.singleton;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;

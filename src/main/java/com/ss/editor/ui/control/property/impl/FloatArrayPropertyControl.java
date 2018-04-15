@@ -3,13 +3,15 @@ package com.ss.editor.ui.control.property.impl;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.rlib.util.ArrayUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.ArrayUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 /**
  * The implementation of the {@link PropertyControl} to edit float array values.
@@ -42,10 +44,9 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
     @FxThread
     protected void reload() {
 
-        final float[] element = getPropertyValue();
-
-        final TextField valueField = getValueField();
-        final int caretPosition = valueField.getCaretPosition();
+        var element = getPropertyValue();
+        var valueField = getValueField();
+        var caretPosition = valueField.getCaretPosition();
 
         if (element == null) {
             valueField.setText(StringUtils.EMPTY);
@@ -59,7 +60,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
     @Override
     @FxThread
     public boolean isDirty() {
-        return super.isDirty();
+        return !Arrays.equals(getCurrentValue(), getPropertyValue());
     }
 
     @Override
@@ -74,6 +75,10 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
     @FxThread
     protected void apply() {
         super.apply();
+        changed(getCurrentValue(), getPropertyValue());
+    }
+
+    private @Nullable float[] getCurrentValue() {
 
         var textValue = getValueField().getText();
 
@@ -97,6 +102,6 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
             }
         }
 
-        changed(newValue, getPropertyValue());
+        return newValue;
     }
 }

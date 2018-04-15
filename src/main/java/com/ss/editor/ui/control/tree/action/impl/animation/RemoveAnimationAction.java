@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl.animation;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;

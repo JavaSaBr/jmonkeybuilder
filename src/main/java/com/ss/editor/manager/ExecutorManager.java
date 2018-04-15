@@ -5,9 +5,9 @@ import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
 import com.ss.editor.executor.impl.FxEditorTaskExecutor;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
-import com.ss.rlib.concurrent.atomic.AtomicInteger;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.concurrent.atomic.AtomicInteger;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

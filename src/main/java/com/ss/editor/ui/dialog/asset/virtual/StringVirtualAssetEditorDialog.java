@@ -2,9 +2,9 @@ package com.ss.editor.ui.dialog.asset.virtual;
 
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

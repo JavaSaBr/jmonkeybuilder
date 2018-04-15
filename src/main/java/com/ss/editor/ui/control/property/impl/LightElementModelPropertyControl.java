@@ -27,7 +27,7 @@ public class LightElementModelPropertyControl<L extends Light, D> extends Elemen
     @FxThread
     protected @NotNull NodeSelectorDialog<L> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        return new LightSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
+        return new LightSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::addElement);
     }
 
     @Override

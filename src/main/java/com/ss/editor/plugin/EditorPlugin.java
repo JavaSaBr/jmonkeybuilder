@@ -14,9 +14,9 @@ import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
-import com.ss.rlib.plugin.PluginContainer;
-import com.ss.rlib.plugin.PluginSystem;
-import com.ss.rlib.plugin.impl.BasePlugin;
+import com.ss.rlib.common.plugin.PluginContainer;
+import com.ss.rlib.common.plugin.PluginSystem;
+import com.ss.rlib.common.plugin.impl.BasePlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

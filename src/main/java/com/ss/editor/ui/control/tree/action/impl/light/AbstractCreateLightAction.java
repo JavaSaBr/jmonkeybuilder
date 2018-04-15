@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl.light;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FxThread;

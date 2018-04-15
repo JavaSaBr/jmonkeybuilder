@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 
 import com.jme3.math.*;
 import com.jme3.texture.Texture2D;
@@ -10,8 +10,8 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.impl.*;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.ClassUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

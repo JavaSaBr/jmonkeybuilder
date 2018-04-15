@@ -17,14 +17,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class DefaultSinglePropertyControl<C extends ChangeConsumer, D, T> extends DefaultPropertyControl<C, D, T> {
 
-    public DefaultSinglePropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
-                                        @NotNull final C changeConsumer) {
+    public DefaultSinglePropertyControl(
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
         getPropertyValueLabel().prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));

@@ -1,14 +1,14 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.NumberUtils.zeroIfNull;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.NumberUtils.zeroIfNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.control.input.IntegerTextField;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.control.input.IntegerTextField;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -108,7 +108,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
      */
     @FxThread
     public int getScrollPower() {
-        return getValueField().getScrollPower();
+        return (int) getValueField().getScrollPower();
     }
 
     @Override

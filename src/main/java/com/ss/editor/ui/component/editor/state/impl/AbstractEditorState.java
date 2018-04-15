@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.common.util.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

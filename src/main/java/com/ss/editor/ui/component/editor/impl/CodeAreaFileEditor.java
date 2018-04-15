@@ -1,12 +1,12 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.code.BaseCodeArea;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.FileUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;

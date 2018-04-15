@@ -1,7 +1,7 @@
 package com.ss.editor;
 
 import static java.util.ResourceBundle.getBundle;
-import com.ss.rlib.util.PropertyLoader;
+import com.ss.rlib.common.util.PropertyLoader;
 
 import java.util.ResourceBundle;
 

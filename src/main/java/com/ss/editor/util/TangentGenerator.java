@@ -5,8 +5,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.TangentBinormalGenerator;
 import com.jme3.util.mikktspace.MikktspaceTangentGenerator;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 /**

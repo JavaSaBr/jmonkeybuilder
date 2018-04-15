@@ -1,17 +1,17 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
-import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.geom.util.AngleUtils.degreeToRadians;
+import static com.ss.rlib.common.geom.util.AngleUtils.radiansToDegree;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.Quaternion;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;

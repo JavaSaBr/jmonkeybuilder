@@ -4,7 +4,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Region;

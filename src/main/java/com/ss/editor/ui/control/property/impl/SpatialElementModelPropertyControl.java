@@ -27,7 +27,7 @@ public class SpatialElementModelPropertyControl<S extends Spatial, D> extends El
     @FxThread
     protected @NotNull NodeSelectorDialog<S> createNodeSelectorDialog() {
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        return new SpatialSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
+        return new SpatialSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::addElement);
     }
 
     @Override

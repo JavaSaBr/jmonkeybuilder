@@ -3,7 +3,7 @@ package com.ss.editor.ui.preview.impl;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactory;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
 /**

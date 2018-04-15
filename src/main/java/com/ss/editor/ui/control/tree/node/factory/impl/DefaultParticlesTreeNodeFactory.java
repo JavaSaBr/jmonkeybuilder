@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node.factory.impl;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.influencers.DefaultParticleInfluencer;
 import com.jme3.effect.influencers.EmptyParticleInfluencer;

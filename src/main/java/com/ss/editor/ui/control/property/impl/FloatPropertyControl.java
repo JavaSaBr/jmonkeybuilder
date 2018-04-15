@@ -1,15 +1,17 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.NumberUtils.zeroIfNull;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.NumberUtils.zeroIfNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.NumberUtils;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.NumberUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,9 +57,8 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        var valueField = getValueField();
-        valueField.prefWidthProperty().unbind();
-        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+        FxUtils.rebindPrefWidth(getValueField(),
+            widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
@@ -66,11 +67,12 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
         super.createComponents(container);
 
         valueField = new FloatTextField();
-        valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty()
             .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
         valueField.focusedProperty()
             .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
+
+        FxControlUtils.onValueChange(valueField, this::updateValue);
 
         FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);

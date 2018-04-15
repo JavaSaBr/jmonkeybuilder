@@ -10,7 +10,7 @@ import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.dialog.geometry.lod.GenerateLodLevelsDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.common.util.ClassUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

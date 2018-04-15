@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
@@ -16,9 +16,9 @@ import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.model.undo.impl.AddVehicleWheelOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

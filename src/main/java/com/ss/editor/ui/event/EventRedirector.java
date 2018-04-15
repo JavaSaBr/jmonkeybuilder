@@ -1,12 +1,12 @@
 package com.ss.editor.ui.event;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;

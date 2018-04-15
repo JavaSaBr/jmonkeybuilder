@@ -1,8 +1,8 @@
 package com.ss.editor.file.delete.handler.impl;
 
 import com.ss.editor.file.delete.handler.FileDeleteHandler;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;

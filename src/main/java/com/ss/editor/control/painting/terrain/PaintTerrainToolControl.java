@@ -1,6 +1,6 @@
 package com.ss.editor.control.painting.terrain;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -18,9 +18,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.LocalObjects;
-import com.ss.rlib.function.ObjectFloatObjectConsumer;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.function.ObjectFloatObjectConsumer;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,6 +1,6 @@
 package com.ss.editor.control.transform;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.collision.CollisionResult;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
@@ -10,8 +10,8 @@ import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,9 +1,9 @@
 package com.ss.editor.util;
 
 import com.ss.editor.manager.PluginManager;
-import com.ss.rlib.util.ref.Reference;
-import com.ss.rlib.util.ref.ReferenceFactory;
-import com.ss.rlib.util.ref.ReferenceType;
+import com.ss.rlib.common.util.ref.Reference;
+import com.ss.rlib.common.util.ref.ReferenceFactory;
+import com.ss.rlib.common.util.ref.ReferenceType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

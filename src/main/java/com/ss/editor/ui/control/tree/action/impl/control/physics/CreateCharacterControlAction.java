@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.action.impl.control.physics;
 
 import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.scene.Spatial;
@@ -15,8 +15,8 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

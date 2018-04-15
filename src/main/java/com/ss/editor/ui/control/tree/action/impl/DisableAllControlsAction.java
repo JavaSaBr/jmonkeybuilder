@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.array.ArrayCollectors.toArray;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
@@ -14,7 +14,7 @@ import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

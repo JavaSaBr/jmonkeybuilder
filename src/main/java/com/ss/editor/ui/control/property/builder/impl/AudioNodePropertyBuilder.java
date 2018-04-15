@@ -16,7 +16,7 @@ import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
 import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
 import com.ss.editor.util.AudioNodeUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -22,7 +22,7 @@ public abstract class SceneElementPropertyControl<D, T> extends ElementPropertyC
 
     @Override
     @FxThread
-    protected void processAdd() {
+    protected void addElement() {
         final SceneSelectorDialog<T> dialog = createSceneSelectorDialog();
         dialog.show(this);
     }

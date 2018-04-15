@@ -1,7 +1,7 @@
 package com.ss.editor.model.scene;
 
 import static com.ss.editor.util.GeomUtils.getDirection;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;

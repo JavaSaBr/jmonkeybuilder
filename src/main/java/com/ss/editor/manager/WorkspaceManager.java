@@ -1,16 +1,16 @@
 package com.ss.editor.manager;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.Utils.get;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.Utils.get;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.manager.InitializeManager;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

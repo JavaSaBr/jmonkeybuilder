@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.FileExtensions.AUDIO_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
@@ -16,8 +16,8 @@ import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FxUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.fx.util.FxUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -98,8 +98,9 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         var openButton = new Button();
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
-        openButton.disableProperty().bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
-        openButton.setOnAction(this::processOpen);
+        openButton.setOnAction(this::openAudio);
+        openButton.disableProperty()
+            .bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
 
         audioKeyLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(changeButton.widthProperty())
@@ -150,7 +151,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      * @param event the action event.
      */
     @FxThread
-    protected void processOpen(@Nullable ActionEvent event) {
+    protected void openAudio(@Nullable ActionEvent event) {
 
         var element = getPropertyValue();
         if (element == null) {

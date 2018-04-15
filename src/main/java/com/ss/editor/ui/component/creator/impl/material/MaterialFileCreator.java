@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.creator.impl.material;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -17,10 +17,10 @@ import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

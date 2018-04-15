@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node.factory.impl;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.math.Vector3f;

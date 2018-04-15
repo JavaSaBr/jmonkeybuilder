@@ -8,7 +8,7 @@ import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ProgressIndicator;

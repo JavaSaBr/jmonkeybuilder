@@ -20,7 +20,7 @@ import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;

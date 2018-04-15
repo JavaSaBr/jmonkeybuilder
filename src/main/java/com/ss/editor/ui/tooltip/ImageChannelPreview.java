@@ -1,10 +1,10 @@
 package com.ss.editor.ui.tooltip;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.image.*;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;

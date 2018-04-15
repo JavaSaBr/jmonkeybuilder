@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.geometry.lod;
 
 import static com.ss.editor.ui.FXConstants.DIALOG_LIST_WIDTH_PERCENT;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -19,7 +19,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;

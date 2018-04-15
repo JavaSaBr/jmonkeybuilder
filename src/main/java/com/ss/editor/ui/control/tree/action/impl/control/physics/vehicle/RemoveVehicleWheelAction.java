@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.ss.editor.Messages;

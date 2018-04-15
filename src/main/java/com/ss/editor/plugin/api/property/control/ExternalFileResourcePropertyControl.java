@@ -4,7 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.dialog.file.chooser.ExternalFileEditorDialog;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.VarTable;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,15 +1,15 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.VarTable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;

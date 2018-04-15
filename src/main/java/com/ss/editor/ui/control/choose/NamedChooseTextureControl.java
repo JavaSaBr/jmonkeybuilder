@@ -1,10 +1,10 @@
 package com.ss.editor.ui.control.choose;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;

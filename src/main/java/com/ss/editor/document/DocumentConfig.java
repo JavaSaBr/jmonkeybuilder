@@ -1,7 +1,7 @@
 package com.ss.editor.document;
 
-import com.ss.rlib.data.AbstractStreamDocument;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.data.AbstractStreamDocument;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

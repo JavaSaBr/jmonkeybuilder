@@ -15,8 +15,8 @@ import com.ss.editor.ui.control.tree.action.impl.particle.emitter.influencer.Cre
 import com.ss.editor.ui.control.tree.action.impl.particle.emitter.shape.*;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;

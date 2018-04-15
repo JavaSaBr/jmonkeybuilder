@@ -17,23 +17,25 @@ import org.jetbrains.annotations.Nullable;
  */
 public class FilterElementModelPropertyControl<D> extends SceneElementPropertyControl<D, Filter> {
 
-    public FilterElementModelPropertyControl(@Nullable final Filter propertyValue, @NotNull final String propertyName,
-                                             @NotNull final SceneChangeConsumer changeConsumer) {
+    public FilterElementModelPropertyControl(
+            @Nullable Filter propertyValue,
+            @NotNull String propertyName,
+            @NotNull SceneChangeConsumer changeConsumer
+    ) {
         super(Filter.class, propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
     protected @NotNull SceneSelectorDialog<Filter> createSceneSelectorDialog() {
-        final SceneChangeConsumer changeConsumer = getChangeConsumer();
-        return new FilterSceneSelectorDialog(changeConsumer.getCurrentModel(), this::processAdd);
+        return new FilterSceneSelectorDialog(getChangeConsumer().getCurrentModel(), this::processAdd);
     }
 
     @Override
     @FxThread
     protected void reload() {
-        final Filter filter = getPropertyValue();
-        final Label elementLabel = getElementLabel();
+        var filter = getPropertyValue();
+        var elementLabel = getElementLabel();
         String name = filter == null ? null : filter.getName();
         name = name == null && filter != null ? filter.getClass().getSimpleName() : name;
         elementLabel.setText(name == null ? NO_ELEMENT : name);
