@@ -5,9 +5,6 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.StringUtils;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,20 +62,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
 
     @Override
     @FxThread
-    protected void updateValue(@Nullable KeyEvent event) {
-        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
-            apply();
-        }
-    }
-
-    @Override
-    @FxThread
-    protected void apply() {
-        super.apply();
-        changed(getCurrentValue(), getPropertyValue());
-    }
-
-    private @Nullable float[] getCurrentValue() {
+    protected @Nullable float[] getCurrentValue() {
 
         var textValue = getValueField().getText();
 

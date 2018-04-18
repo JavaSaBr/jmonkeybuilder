@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type of an editing object.
  * @author JavaSaBr
  */
-public class Texture2DSingleRowPropertyControl<C extends ChangeConsumer, T> extends Texture2DPropertyControl<C, T> {
+public class Texture2DSingleRowPropertyControl<C extends ChangeConsumer, T> extends Texture2dPropertyControl<C, T> {
 
     public Texture2DSingleRowPropertyControl(@Nullable final Texture2D propertyValue,
                                              @NotNull final String propertyName, @NotNull final C changeConsumer) {

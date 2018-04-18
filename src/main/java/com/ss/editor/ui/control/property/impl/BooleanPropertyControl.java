@@ -2,19 +2,15 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Boolean.TRUE;
-
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,8 +59,10 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
 
         FxControlUtils.onSelectedChange(checkBox, this::updateValue);
 
+        FxUtils.addClass(checkBox,
+                CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+
         FxUtils.addChild(container, checkBox);
-        FxUtils.addClass(checkBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     @Override

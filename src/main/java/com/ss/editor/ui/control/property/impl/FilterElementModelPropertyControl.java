@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.dialog.scene.selector.FilterSceneSelectorDialog;
 import com.ss.editor.ui.dialog.scene.selector.SceneSelectorDialog;
-import javafx.scene.control.Label;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,16 +28,18 @@ public class FilterElementModelPropertyControl<D> extends SceneElementPropertyCo
     @Override
     @FxThread
     protected @NotNull SceneSelectorDialog<Filter> createSceneSelectorDialog() {
-        return new FilterSceneSelectorDialog(getChangeConsumer().getCurrentModel(), this::processAdd);
+        return new FilterSceneSelectorDialog(getChangeConsumer().getCurrentModel(), this::addElement);
     }
 
     @Override
     @FxThread
     protected void reload() {
+
         var filter = getPropertyValue();
-        var elementLabel = getElementLabel();
+
         String name = filter == null ? null : filter.getName();
-        name = name == null && filter != null ? filter.getClass().getSimpleName() : name;
-        elementLabel.setText(name == null ? NO_ELEMENT : name);
+        name = StringUtils.isEmpty(name) && filter != null ? filter.getClass().getSimpleName() : name;
+
+        getElementLabel().setText(StringUtils.ifEmpty(name, NO_ELEMENT));
     }
 }

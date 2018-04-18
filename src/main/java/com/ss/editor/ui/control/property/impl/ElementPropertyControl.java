@@ -8,7 +8,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit an elements from scene.
  *
- * @param <C> the change consumer's type.
- * @param <D> the edited object's type.
- * @param <T> the element's type.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends PropertyControl<C, D, T> {
@@ -74,11 +73,16 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
         editButton.disableProperty()
             .bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
 
+        FxUtils.addClass(container,
+                    CssClasses.TEXT_INPUT_CONTAINER,
+                    CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
+            .addClass(elementLabel,
+                    CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
+            .addClass(changeButton, editButton,
+                    CssClasses.FLAT_BUTTON,
+                    CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
         FxUtils.addChild(container, elementLabel, changeButton, editButton);
-        FxUtils.addClass(container, CssClasses.TEXT_INPUT_CONTAINER, CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
-            .addClass(elementLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
-            .addClass(changeButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON)
-            .addClass(editButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(changeButton, editButton);
     }

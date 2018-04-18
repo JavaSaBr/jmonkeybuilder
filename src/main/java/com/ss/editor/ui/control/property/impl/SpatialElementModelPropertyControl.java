@@ -5,41 +5,42 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.dialog.node.selector.NodeSelectorDialog;
 import com.ss.editor.ui.dialog.node.selector.SpatialSelectorDialog;
-import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of the {@link ElementModelPropertyControl} to edit a spatial from a scene.
  *
- * @param <D> the type parameter
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
-public class SpatialElementModelPropertyControl<S extends Spatial, D> extends ElementModelPropertyControl<D, S> {
+public class SpatialElementModelPropertyControl<T extends Spatial, D> extends ElementModelPropertyControl<D, T> {
 
-    public SpatialElementModelPropertyControl(@NotNull Class<S> type, @Nullable final S propertyValue,
-                                              @NotNull final String propertyName,
-                                              @NotNull final ModelChangeConsumer changeConsumer) {
+    public SpatialElementModelPropertyControl(
+            @NotNull Class<T> type,
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
         super(type, propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    protected @NotNull NodeSelectorDialog<S> createNodeSelectorDialog() {
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        return new SpatialSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::addElement);
+    protected @NotNull NodeSelectorDialog<T> createNodeSelectorDialog() {
+        return new SpatialSelectorDialog<>(getChangeConsumer().getCurrentModel(), type, this::addElement);
     }
 
     @Override
     @FxThread
     protected void reload() {
 
-        final Spatial spatial = getPropertyValue();
-        final Label elementLabel = getElementLabel();
+        var spatial = getPropertyValue();
 
         String name = spatial == null ? null : spatial.getName();
         name = name == null && spatial != null ? spatial.getClass().getSimpleName() : name;
 
-        elementLabel.setText(name == null ? NO_ELEMENT : name);
+        getElementLabel().setText(name == null ? NO_ELEMENT : name);
     }
 }

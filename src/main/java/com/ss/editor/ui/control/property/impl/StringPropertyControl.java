@@ -7,6 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.TextField;
@@ -48,10 +49,11 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
         valueField.setOnKeyReleased(this::updateValue);
         valueField.prefWidthProperty()
             .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
-        valueField.focusedProperty()
-            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
 
-        FxUtils.addClass(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
+        FxUtils.addClass(valueField,
+                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, valueField);
     }
 
@@ -100,10 +102,6 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
     @FxThread
     protected void apply() {
         super.apply();
-
-        var oldValue = getPropertyValue();
-        var newValue = getValueField().getText();
-
-        changed(newValue, oldValue);
+        changed(getValueField().getText(), getPropertyValue());
     }
 }

@@ -190,8 +190,8 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 final EditableProperty<Texture2D, ?> property = cast(description);
                 final Texture2D value = property.getValue();
 
-                final Texture2DPropertyControl<C, EditableProperty<Texture2D, ?>> propertyControl =
-                        new Texture2DPropertyControl<>(value, property.getName(), changeConsumer);
+                final Texture2dPropertyControl<C, EditableProperty<Texture2D, ?>> propertyControl =
+                        new Texture2dPropertyControl<>(value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;

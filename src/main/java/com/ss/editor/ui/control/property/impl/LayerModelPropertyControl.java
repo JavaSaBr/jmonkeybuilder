@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.common.util.ObjectUtils.ifNull;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
@@ -13,6 +14,7 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -50,7 +52,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
     private ComboBox<SceneLayer> layerComboBox;
 
     public LayerModelPropertyControl(@Nullable SceneLayer layer, @NotNull SceneChangeConsumer changeConsumer) {
-        super(layer == null ? SceneLayer.NO_LAYER : layer, Messages.MODEL_PROPERTY_LAYER, changeConsumer);
+        super(ifNull(layer, SceneLayer.NO_LAYER), Messages.MODEL_PROPERTY_LAYER, changeConsumer);
         setApplyHandler(this::setLayer);
         setSyncHandler(this::getLayer);
     }
@@ -75,8 +77,7 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
 
     @JmeThread
     private SceneLayer getLayer(@NotNull Spatial spatial) {
-        var sceneLayer = SceneLayer.getLayer(spatial);
-        return sceneLayer == null ? SceneLayer.NO_LAYER : sceneLayer;
+        return ifNull(SceneLayer.getLayer(spatial), SceneLayer.NO_LAYER);
     }
 
     @Override
@@ -94,12 +95,15 @@ public class LayerModelPropertyControl extends PropertyControl<ModelChangeConsum
         layerComboBox.setCellFactory(param -> new LayerCell());
         layerComboBox.setButtonCell(new LayerCell());
         layerComboBox.setEditable(false);
-        layerComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
-        layerComboBox.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
+        layerComboBox.prefWidthProperty()
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+
+        FxControlUtils.onSelectedItemChange(layerComboBox, this::updateLevel);
+
+        FxUtils.addClass(layerComboBox,
+                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
 
         FxUtils.addChild(container, layerComboBox);
-        FxUtils.addClass(layerComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     @FxThread

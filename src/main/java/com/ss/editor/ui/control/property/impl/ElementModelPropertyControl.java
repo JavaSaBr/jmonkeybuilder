@@ -9,7 +9,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link ElementPropertyControl} to edit elements from models.
  *
- * @param <D> the edited object's type.
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyControl<ModelChangeConsumer, D, T> {

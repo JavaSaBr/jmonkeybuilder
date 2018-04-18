@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -454,6 +455,16 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     @FxThread
     public @Nullable T getPropertyValue() {
         return propertyValue;
+    }
+
+    /**
+     * Get the property value.
+     *
+     * @return the value of the property.
+     */
+    @FxThread
+    public @NotNull Optional<T> getPropertyValueOpt() {
+        return Optional.ofNullable(getPropertyValue());
     }
 
     /**

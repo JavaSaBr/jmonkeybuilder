@@ -7,6 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
@@ -66,14 +67,15 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
         super.createComponents(container);
 
         enumComboBox = new ComboBox<>();
-        enumComboBox.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> change());
         enumComboBox.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
+        FxControlUtils.onSelectedItemChange(enumComboBox, this::change);
+
+        FxUtils.addClass(enumComboBox,
+                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, enumComboBox);
-        FxUtils.addClass(enumComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**

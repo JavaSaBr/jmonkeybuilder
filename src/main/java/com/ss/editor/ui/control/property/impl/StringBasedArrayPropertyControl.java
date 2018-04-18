@@ -8,6 +8,7 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -51,9 +52,8 @@ public class StringBasedArrayPropertyControl<C extends ChangeConsumer, D, T> ext
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        var valueField = getValueField();
-        valueField.prefWidthProperty().unbind();
-        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+        FxUtils.rebindPrefWidth(getValueField(),
+                widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
@@ -66,7 +66,9 @@ public class StringBasedArrayPropertyControl<C extends ChangeConsumer, D, T> ext
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FxUtils.addClass(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FxUtils.addClass(valueField,
+                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, valueField);
     }
 
@@ -91,5 +93,20 @@ public class StringBasedArrayPropertyControl<C extends ChangeConsumer, D, T> ext
      */
     @FxThread
     protected void updateValue(@Nullable KeyEvent event) {
+        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
+            apply();
+        }
+    }
+
+    @Override
+    @FxThread
+    protected void apply() {
+        super.apply();
+        changed(getCurrentValue(), getPropertyValue());
+    }
+
+    @FxThread
+    protected @Nullable T getCurrentValue() {
+        throw new UnsupportedOperationException();
     }
 }

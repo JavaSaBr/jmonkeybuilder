@@ -8,8 +8,6 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
-import com.ss.rlib.common.util.NumberUtils;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;
@@ -38,7 +36,6 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
             @NotNull String propertyName,
             @NotNull C changeConsumer
     ) {
-
         super(propertyValue, propertyName, changeConsumer);
     }
 
@@ -48,7 +45,6 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
             @NotNull C changeConsumer,
             @Nullable ChangeHandler<C, D, Float> changeHandler
     ) {
-
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 
@@ -58,7 +54,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
         super.changeControlWidthPercent(controlWidthPercent);
 
         FxUtils.rebindPrefWidth(getValueField(),
-            widthProperty().multiply(controlWidthPercent));
+                widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
@@ -69,13 +65,14 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
         valueField = new FloatTextField();
         valueField.prefWidthProperty()
             .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
-        valueField.focusedProperty()
-            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
 
         FxControlUtils.onValueChange(valueField, this::updateValue);
+        FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
 
-        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(valueField, container);
+        FxUtils.addClass(valueField,
+                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+
+        FxUtils.addChild(container, valueField);
     }
 
     /**
@@ -154,10 +151,6 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     @FxThread
     protected void apply() {
         super.apply();
-
-        var currentValue = getValueField().getValue();
-        var storedValue = getPropertyValue();
-
-        changed(currentValue, storedValue);
+        changed(getValueField().getValue(), getPropertyValue());
     }
 }

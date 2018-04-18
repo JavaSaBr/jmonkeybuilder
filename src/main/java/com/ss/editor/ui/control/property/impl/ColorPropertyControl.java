@@ -2,13 +2,12 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ColorPicker;
@@ -46,12 +45,14 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
 
         colorPicker = new ColorPicker();
         colorPicker.prefWidthProperty()
-            .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FxControlUtils.onColorChange(colorPicker, this::updateValue);
 
+        FxUtils.addClass(colorPicker,
+                CssClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
+
         FxUtils.addChild(container, colorPicker);
-        FxUtils.addClass(colorPicker, CssClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
     }
 
     @Override
@@ -59,9 +60,8 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        var width = getColorPicker().prefWidthProperty();
-        width.unbind();
-        width.bind(widthProperty().multiply(controlWidthPercent));
+        FxUtils.rebindPrefWidth(getColorPicker(),
+                widthProperty().multiply(controlWidthPercent));
     }
 
     @Override

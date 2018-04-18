@@ -100,17 +100,23 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
         openButton.setOnAction(this::openAudio);
         openButton.disableProperty()
-            .bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
+                .bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
 
         audioKeyLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(changeButton.widthProperty())
                 .subtract(openButton.widthProperty()));
 
-        FxUtils.addChild(container, audioKeyLabel, changeButton, openButton);
-        FxUtils.addClass(container, CssClasses.TEXT_INPUT_CONTAINER, CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
-                .addClass(audioKeyLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
-                .addClass(changeButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON)
-                .addClass(openButton, CssClasses.FLAT_BUTTON, CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FxUtils.addClass(container,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
+                .addClass(audioKeyLabel,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
+                .addClass(changeButton, openButton,
+                        CssClasses.FLAT_BUTTON,
+                        CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        FxUtils.addChild(container,
+                audioKeyLabel, changeButton, openButton);
 
         DynamicIconSupport.addSupport(changeButton, openButton);
     }

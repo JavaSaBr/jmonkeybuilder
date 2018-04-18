@@ -2,6 +2,7 @@ package com.ss.editor.util;
 
 import static com.ss.rlib.common.util.ClassUtils.cast;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
@@ -30,12 +31,13 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.logging.Logger;
@@ -43,9 +45,9 @@ import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
-import javafx.scene.control.Alert;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
@@ -53,13 +55,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -947,5 +949,44 @@ public abstract class EditorUtil {
      */
     public static boolean isEmpty(@Nullable AssetKey<?> assetKey) {
         return assetKey == null || StringUtils.isEmpty(assetKey.getName());
+    }
+
+    /**
+     * Open the asset resource in an editor.
+     *
+     * @param assetKey the asset key.
+     */
+    @FromAnyThread
+    public static void openInEditor(@Nullable AssetKey<?> assetKey) {
+
+        if (assetKey == null) {
+            return;
+        }
+
+        var assetPath = assetKey.getName();
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
+
+        var assetFile = Paths.get(assetPath);
+        var realFile = notNull(getRealFile(assetFile));
+        if (!Files.exists(realFile)) {
+            return;
+        }
+
+        FxEventManager.getInstance()
+                .notify(new RequestedOpenFileEvent(realFile));
+    }
+
+    /**
+     * Get the list of files in the current dragboard.
+     *
+     * @param dragboard the current dragboard.
+     * @return the list of files.
+     */
+    @FromAnyThread
+    public static @NotNull List<File> getFiles(@NotNull Dragboard dragboard) {
+        List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+        return files == null ? Collections.emptyList() : files;
     }
 }

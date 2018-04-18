@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.property.impl;
 import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FLIPPED_TEXTURES;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
+import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
+import static com.ss.editor.extension.property.EditablePropertyType.ENUM;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetKey;
@@ -13,7 +15,6 @@ import com.jme3.texture.Texture2D;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -23,10 +24,10 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -49,7 +50,7 @@ import java.nio.file.Path;
  * @param <T> the type of an editing object.
  * @author JavaSaBr
  */
-public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Texture2D> {
+public class Texture2dPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Texture2D> {
 
     /**
      * The constant NO_TEXTURE.
@@ -99,8 +100,11 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     @Nullable
     private HBox fieldContainer;
 
-    public Texture2DPropertyControl(@Nullable final Texture2D propertyValue, @NotNull final String propertyName,
-                                    @NotNull final C changeConsumer) {
+    public Texture2dPropertyControl(
+            @Nullable Texture2D propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
         setOnDragOver(this::handleDragOverEvent);
         setOnDragDropped(this::handleDragDroppedEvent);
@@ -117,8 +121,8 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      * @param dragEvent the drag dropped event.
      */
     @FxThread
-    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
-        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DPropertyControl::setTexture);
+    protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
+        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2dPropertyControl::setTexture);
     }
 
     /**
@@ -127,43 +131,46 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
      * @param dragEvent the drag over event.
      */
     @FxThread
-    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
+    protected void handleDragOverEvent(@NotNull DragEvent dragEvent) {
         UiUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         fieldContainer = new HBox();
 
         if (!isSingleRow()) {
-            fieldContainer.prefWidthProperty().bind(container.widthProperty());
+            fieldContainer.prefWidthProperty()
+                    .bind(container.widthProperty());
         }
 
         textureTooltip = new ImageChannelPreview();
 
-        final VBox previewContainer = new VBox();
+        var previewContainer = new VBox();
 
         texturePreview = new ImageView();
-        texturePreview.fitHeightProperty().bind(previewContainer.heightProperty());
-        texturePreview.fitWidthProperty().bind(previewContainer.widthProperty());
+        texturePreview.fitHeightProperty()
+                .bind(previewContainer.heightProperty());
+        texturePreview.fitWidthProperty()
+                .bind(previewContainer.widthProperty());
 
         Tooltip.install(texturePreview, textureTooltip);
 
-        final Button settingsButton = new Button();
+        var settingsButton = new Button();
         settingsButton.setGraphic(new ImageView(Icons.SETTINGS_16));
         settingsButton.setOnAction(event -> openSettings());
         settingsButton.disableProperty().bind(buildDisableRemoveCondition());
 
-        final Button addButton = new Button();
+        var addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
-        addButton.setOnAction(event -> processAdd());
+        addButton.setOnAction(event -> addNewTexture());
 
-        final Button removeButton = new Button();
+        var removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
-        removeButton.setOnAction(event -> processRemove());
+        removeButton.setOnAction(event -> removeTexture());
         removeButton.disableProperty().bind(buildDisableRemoveCondition());
 
         if (!isSingleRow()) {
@@ -197,6 +204,8 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     /**
+     * Get the disable|remove condition.
+     *
      * @return the disable|remove condition.
      */
     @FxThread
@@ -205,6 +214,8 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     /**
+     * Get the texture label.
+     *
      * @return the texture label.
      */
     @FxThread
@@ -223,6 +234,8 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     /**
+     * Get the texture preview.
+     *
      * @return the texture preview.
      */
     @FxThread
@@ -231,6 +244,8 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     /**
+     * Get the image channels preview.
+     *
      * @return the image channels preview.
      */
     @FxThread
@@ -239,23 +254,23 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
     }
 
     /**
-     * Process to remove the current texture.
+     * Remove the current texture.
      */
     @FxThread
-    protected void processRemove() {
+    protected void removeTexture() {
         setTexture(null);
     }
 
     /**
-     * Process to add a new texture.
+     * Open the dialog to choose a new texture.
      */
     @FxThread
-    protected void processAdd() {
+    protected void addNewTexture() {
         UiUtils.openFileAssetDialog(this::setTexture, TEXTURE_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     /**
-     * Process to open texture's settings.
+     * Open a dialog with texture's settings.
      */
     @FxThread
     protected void openSettings() {
@@ -269,11 +284,11 @@ public class Texture2DPropertyControl<C extends ChangeConsumer, T> extends Prope
         final Texture.MinFilter minFilter = texture.getMinFilter();
 
         final Array<PropertyDefinition> properties = ArrayFactory.newArray(PropertyDefinition.class);
-        properties.add(new PropertyDefinition(EditablePropertyType.BOOLEAN, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y, PROP_FLIP, flipY));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S, PROP_WRAP_MODE_S, wrapS));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T, PROP_WRAP_MODE_T, wrapT));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER, PROP_MAG_FILTER, magFilter));
-        properties.add(new PropertyDefinition(EditablePropertyType.ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER, PROP_MIN_FILTER, minFilter));
+        properties.add(new PropertyDefinition(BOOLEAN, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_FLIP_Y, PROP_FLIP, flipY));
+        properties.add(new PropertyDefinition(ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_S, PROP_WRAP_MODE_S, wrapS));
+        properties.add(new PropertyDefinition(ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_WRAP_MODE_T, PROP_WRAP_MODE_T, wrapT));
+        properties.add(new PropertyDefinition(ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_MAG_FILTER, PROP_MAG_FILTER, magFilter));
+        properties.add(new PropertyDefinition(ENUM, Messages.MATERIAL_MODEL_PROPERTY_CONTROL_MIN_FILTER, PROP_MIN_FILTER, minFilter));
 
         final GenericFactoryDialog dialog = new GenericFactoryDialog(properties, this::applyChanges);
         dialog.setTitle(Messages.MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS);

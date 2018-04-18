@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.dialog.node.selector.LightSelectorDialog;
 import com.ss.editor.ui.dialog.node.selector.NodeSelectorDialog;
-import javafx.scene.control.Label;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,29 +17,31 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LightElementModelPropertyControl<L extends Light, D> extends ElementModelPropertyControl<D, L> {
 
-    public LightElementModelPropertyControl(@NotNull final Class<L> type, @Nullable final L propertyValue,
-                                            @NotNull final String propertyName,
-                                            @NotNull final ModelChangeConsumer changeConsumer) {
+    public LightElementModelPropertyControl(
+            @NotNull Class<L> type,
+            @Nullable L propertyValue,
+            @NotNull String propertyName,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
         super(type, propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
     protected @NotNull NodeSelectorDialog<L> createNodeSelectorDialog() {
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        return new LightSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::addElement);
+        return new LightSelectorDialog<>(getChangeConsumer().getCurrentModel(), type, this::addElement);
     }
 
     @Override
     @FxThread
     protected void reload() {
 
-        final L light = getPropertyValue();
-        final Label elementLabel = getElementLabel();
+        var light = getPropertyValue();
+        var elementLabel = getElementLabel();
 
         String name = light == null ? null : light.getName();
         name = name == null && light != null ? light.getClass().getSimpleName() : name;
 
-        elementLabel.setText(name == null ? NO_ELEMENT : name);
+        elementLabel.setText(StringUtils.ifEmpty(name, NO_ELEMENT));
     }
 }
