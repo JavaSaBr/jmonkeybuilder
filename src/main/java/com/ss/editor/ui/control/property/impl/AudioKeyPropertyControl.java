@@ -102,7 +102,8 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
         openButton.disableProperty()
                 .bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
 
-        audioKeyLabel.prefWidthProperty().bind(widthProperty()
+        audioKeyLabel.prefWidthProperty()
+                .bind(widthProperty()
                 .subtract(changeButton.widthProperty())
                 .subtract(openButton.widthProperty()));
 

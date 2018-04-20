@@ -10,7 +10,8 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.GeomUtils;
 import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -70,39 +71,45 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
         var xLabel = new Label("x:");
 
         xField = new FloatTextField();
-        xField.setOnKeyReleased(this::updateVector);
-        xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        xField.prefWidthProperty().bind(widthProperty().divide(3));
+        xField.setOnKeyReleased(this::keyReleased);
         xField.setScrollPower(getScrollPower());
+        xField.prefWidthProperty().
+                bind(widthProperty().divide(3));
 
         var yLabel = new Label("y:");
 
         yField = new FloatTextField();
-        yField.setOnKeyReleased(this::updateVector);
-        yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        yField.prefWidthProperty().bind(widthProperty().divide(3));
+        yField.setOnKeyReleased(this::keyReleased);
         yField.setScrollPower(getScrollPower());
+        yField.prefWidthProperty()
+                .bind(widthProperty().divide(3));
 
         var zLabel = new Label("z:");
 
         zField = new FloatTextField();
-        zField.setOnKeyReleased(this::updateVector);
-        zField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        zField.prefWidthProperty().bind(widthProperty().divide(3));
+        zField.setOnKeyReleased(this::keyReleased);
         zField.setScrollPower(getScrollPower());
+        zField.prefWidthProperty()
+                .bind(widthProperty().divide(3));
 
-        FXUtils.addToPane(xLabel, container);
-        FXUtils.addToPane(xField, container);
-        FXUtils.addToPane(yLabel, container);
-        FXUtils.addToPane(yField, container);
-        FXUtils.addToPane(zLabel, container);
-        FXUtils.addToPane(zField, container);
+        FxControlUtils.onValueChange(xField, this::changeValue);
+        FxControlUtils.onValueChange(yField, this::changeValue);
+        FxControlUtils.onValueChange(zField, this::changeValue);
 
-        FXUtils.addClassTo(xLabel, yLabel, zLabel, CssClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
-                CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
-                CssClasses.TRANSPARENT_TEXT_FIELD);
+        FxUtils.addClass(xLabel, yLabel, zLabel,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL)
+                .addClass(container,
+                        CssClasses.DEF_HBOX,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
+                .addClass(xField, yField, zField,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                        CssClasses.TRANSPARENT_TEXT_FIELD);
+
+        FxUtils.addChild(container,
+                xLabel, xField,
+                yLabel, yField,
+                zLabel, zField);
 
         UiUtils.addFocusBinding(container, xField, yField, zField)
                 .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
@@ -185,13 +192,21 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
     }
 
     /**
-     * Update the vector.
-     *
-     * @param event the event.
+     * Handle of input the enter key.
      */
     @FxThread
-    protected void updateVector(@Nullable KeyEvent event) {
-        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
+    private void keyReleased(@NotNull KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            changeValue();
+        }
+    }
+
+    /**
+     * Change value of vector.
+     */
+    @FxThread
+    private void changeValue() {
+        if (!isIgnoreListener()) {
             apply();
         }
     }

@@ -3,15 +3,16 @@ package com.ss.editor.ui.control.property.impl;
 import static com.ss.editor.util.GeomUtils.zeroIfNull;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.GeomUtils;
 import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -65,9 +66,8 @@ public class Vector3fSingleRowPropertyControl<C extends ChangeConsumer, D> exten
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        var valueField = getFieldContainer();
-        valueField.prefWidthProperty().unbind();
-        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+        FxUtils.rebindPrefWidth(getFieldContainer(),
+                widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
@@ -79,31 +79,36 @@ public class Vector3fSingleRowPropertyControl<C extends ChangeConsumer, D> exten
         fieldContainer.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         xField = new FloatTextField();
-        xField.setOnKeyReleased(this::updateVector);
-        xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        xField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.33));
+        xField.setOnKeyReleased(this::keyReleased);
         xField.setScrollPower(10F);
+        xField.prefWidthProperty().
+                bind(fieldContainer.widthProperty().multiply(0.33));
 
         yField = new FloatTextField();
-        yField.setOnKeyReleased(this::updateVector);
-        yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        yField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.33));
+        yField.setOnKeyReleased(this::keyReleased);
         yField.setScrollPower(10F);
+        yField.prefWidthProperty()
+                .bind(fieldContainer.widthProperty().multiply(0.33));
 
         zField = new FloatTextField();
-        zField.setOnKeyReleased(this::updateVector);
-        zField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
-        zField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.33));
+        zField.setOnKeyReleased(this::keyReleased);
         zField.setScrollPower(10F);
+        zField.prefWidthProperty()
+                .bind(fieldContainer.widthProperty().multiply(0.33));
 
-        FXUtils.addToPane(xField, fieldContainer);
-        FXUtils.addToPane(yField, fieldContainer);
-        FXUtils.addToPane(zField, fieldContainer);
-        FXUtils.addToPane(fieldContainer, container);
+        FxControlUtils.onValueChange(xField, this::changeValue);
+        FxControlUtils.onValueChange(yField, this::changeValue);
+        FxControlUtils.onValueChange(zField, this::changeValue);
 
-        FXUtils.addClassesTo(fieldContainer, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
-                CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
-        FXUtils.addClassesTo(xField, yField, zField, CssClasses.TRANSPARENT_TEXT_FIELD);
+        FxUtils.addClass(fieldContainer,
+                        CssClasses.DEF_HBOX,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER)
+                .addClass(xField, yField, zField,
+                        CssClasses.TRANSPARENT_TEXT_FIELD);
+
+        FxUtils.addChild(fieldContainer, xField, yField, zField)
+                .addChild(container, fieldContainer);
 
         UiUtils.addFocusBinding(fieldContainer, xField, yField, zField)
             .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
@@ -231,13 +236,21 @@ public class Vector3fSingleRowPropertyControl<C extends ChangeConsumer, D> exten
     }
 
     /**
-     * Update the current value.
-     *
-     * @param event the change event.
+     * Handle of input the enter key.
      */
     @FxThread
-    private void updateVector(@Nullable KeyEvent event) {
-        if (!isIgnoreListener() && (event == null || event.getCode() == KeyCode.ENTER)) {
+    private void keyReleased(@NotNull KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            changeValue();
+        }
+    }
+
+    /**
+     * Change value of vector.
+     */
+    @FxThread
+    private void changeValue() {
+        if (!isIgnoreListener()) {
             apply();
         }
     }

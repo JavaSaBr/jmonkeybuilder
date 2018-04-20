@@ -9,14 +9,17 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The single row implementation of the control to edit textures.
  *
- * @param <C> the type of a {@link ChangeConsumer}
- * @param <T> the type of an editing object.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class Texture2DSingleRowPropertyControl<C extends ChangeConsumer, T> extends Texture2dPropertyControl<C, T> {
+public class Texture2dSingleRowPropertyControl<C extends ChangeConsumer, D> extends Texture2dPropertyControl<C, D> {
 
-    public Texture2DSingleRowPropertyControl(@Nullable final Texture2D propertyValue,
-                                             @NotNull final String propertyName, @NotNull final C changeConsumer) {
+    public Texture2dSingleRowPropertyControl(
+            @Nullable Texture2D propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 

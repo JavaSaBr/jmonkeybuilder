@@ -5,7 +5,6 @@ import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.plugin.Version;
 import com.ss.rlib.common.util.Utils;
-import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.os.OperatingSystem;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +29,7 @@ public final class Config {
      * The name of editor's folder in user home folder.
      */
     @NotNull
-    private static final String SS_FOLDER_IN_USER_HOME = ".jmonkeybuilder";
+    private static final String EDITOR_FOLDER_IN_USER_HOME = ".jmonkeybuilder";
 
     /**
      * The editor's title.
@@ -42,7 +41,7 @@ public final class Config {
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.7.2");
+    public static final Version APP_VERSION = new Version("1.8.0");
 
     /**
      * The string version.
@@ -121,10 +120,11 @@ public final class Config {
 
     static {
 
-        final GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        final GraphicsDevice device = graphicsEnvironment.getDefaultScreenDevice();
+        var graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        var device = graphicsEnvironment.getDefaultScreenDevice();
 
-        final VarTable vars = new DocumentConfig(EditorUtil.getInputStream(CONFIG_RESOURCE_PATH)).parse();
+        var vars = new DocumentConfig(EditorUtil.requireInputStream(CONFIG_RESOURCE_PATH))
+                .parse();
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
         DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
@@ -142,21 +142,21 @@ public final class Config {
     }
 
     /**
-     * Gets folder for log.
+     * Get a folder to store log files.
      *
-     * @return the path to the folder for writing log files.
+     * @return the path to a folder to store log files.
      */
     public static @NotNull Path getFolderForLog() {
         return getAppFolderInUserHome().resolve("log");
     }
 
     /**
-     * The path to the folder for storing data in the user home.
+     * Get a path to the folder to store data in a user home.
      *
-     * @return the app folder in user home
+     * @return the path to the folder to store data in a user home.
      */
     public static @NotNull Path getAppFolderInUserHome() {
-        final String userHome = System.getProperty("user.home");
-        return Paths.get(userHome, SS_FOLDER_IN_USER_HOME);
+        var userHome = System.getProperty("user.home");
+        return Paths.get(userHome, EDITOR_FOLDER_IN_USER_HOME);
     }
 }

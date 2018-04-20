@@ -68,15 +68,10 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
     @Override
     @FxThread
     public void changeControlWidthPercent(double controlWidthPercent) {
+        super.changeControlWidthPercent(controlWidthPercent);
 
-        var checkBox = getCheckBox();
-        var widthProperty = checkBox.prefWidthProperty();
-
-        if (widthProperty.isBound()) {
-            super.changeControlWidthPercent(controlWidthPercent);
-            widthProperty.unbind();
-            widthProperty.bind(widthProperty().multiply(controlWidthPercent));
-        }
+        FxUtils.rebindPrefWidth(getCheckBox(),
+                widthProperty().multiply(controlWidthPercent));
     }
 
     /**

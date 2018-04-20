@@ -423,7 +423,7 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Gets input stream.
+     * Get an input stream.
      *
      * @param path the path to resource.
      * @return the input stream of the resource or null.
@@ -431,6 +431,17 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static @Nullable InputStream getInputStream(@NotNull String path) {
         return JfxApplication.class.getResourceAsStream(path);
+    }
+
+    /**
+     * Get an input stream or throw an exception.
+     *
+     * @param path the path to resource.
+     * @return the input stream of the resource or null.
+     */
+    @FromAnyThread
+    public static @NotNull InputStream requireInputStream(@NotNull String path) {
+        return notNull(JfxApplication.class.getResourceAsStream(path));
     }
 
     /**

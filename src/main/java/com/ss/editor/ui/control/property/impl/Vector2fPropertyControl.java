@@ -11,7 +11,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.GeomUtils;
 import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -58,9 +58,8 @@ public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends Proper
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        var valueField = getFieldContainer();
-        valueField.prefWidthProperty().unbind();
-        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+        FxUtils.rebindPrefWidth(getFieldContainer(),
+                widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
@@ -84,14 +83,15 @@ public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends Proper
         yField.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.5));
         yField.setScrollPower(10F);
 
-        FXUtils.addToPane(xField, fieldContainer);
-        FXUtils.addToPane(yField, fieldContainer);
-        FXUtils.addToPane(fieldContainer, container);
+        FxUtils.addClass(fieldContainer,
+                        CssClasses.DEF_HBOX,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER)
+                .addClass(xField, yField,
+                        CssClasses.TRANSPARENT_TEXT_FIELD);
 
-        FXUtils.addClassesTo(fieldContainer, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
-                CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
-
-        FXUtils.addClassesTo(xField, yField, CssClasses.TRANSPARENT_TEXT_FIELD);
+        FxUtils.addChild(fieldContainer, xField, yField)
+                .addChild(container, fieldContainer);
 
         UiUtils.addFocusBinding(fieldContainer, xField, yField)
             .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));

@@ -1,13 +1,11 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.AudioKeyPropertyControl;
@@ -33,12 +31,12 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
         if (audioKey == null) {
             audioNode.setAudioData(null, null);
         } else {
-            final AudioData audioData = assetManager.loadAudio(audioKey);
+            var audioData = assetManager.loadAudio(audioKey);
             AudioNodeUtils.updateData(audioNode, audioData, audioKey);
         }
     };
@@ -62,8 +60,12 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
 
         if (!(object instanceof AudioNode)) return;
 

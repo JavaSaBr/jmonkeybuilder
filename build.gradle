@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'application'
 
 group = 'com.spaceshift'
-version = '1.7.3'
+version = '1.8.0'
 
 compileJava {
     options.encoding = "UTF-8"
@@ -61,7 +61,7 @@ ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
-ext.bintrayVersion = version + '-4'
+ext.bintrayVersion = version
 
 junitPlatform {
     filters {
@@ -82,9 +82,6 @@ repositories {
     }
     maven {
         url "https://dl.bintray.com/javasabr/maven"
-    }
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
 }
 
@@ -129,7 +126,7 @@ javadoc {
 dependencies {
 
     // base
-    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '1.0.0-SNAPSHOT'
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.9.0'
     compile 'org.controlsfx:controlsfx:9.0.0'
     compile 'com.spaceshift:rlib.fx:5.0.0'
     compile 'com.spaceshift:rlib.common:7.0.0'

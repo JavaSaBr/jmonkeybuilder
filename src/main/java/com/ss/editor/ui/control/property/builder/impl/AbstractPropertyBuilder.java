@@ -4,7 +4,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -37,7 +37,6 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
             @NotNull VBox container,
             @NotNull ChangeConsumer changeConsumer
     ) {
-
         if (type.isInstance(changeConsumer)) {
             buildForImpl(object, parent, container, type.cast(changeConsumer));
         }
@@ -71,8 +70,10 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
         var line = new HBox();
         var container = new VBox(line);
 
-        FXUtils.addClassTo(line, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(container, CssClasses.ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE);
-        FXUtils.addToPane(container, pane);
+        FxUtils.addClass(line, CssClasses.DEF_HBOX)
+                .addClass(container,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE);
+
+        FxUtils.addChild(pane, container);
     }
 }
