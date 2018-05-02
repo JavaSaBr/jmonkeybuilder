@@ -62,6 +62,39 @@ public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends Proper
                 widthProperty().multiply(controlWidthPercent));
     }
 
+    /**
+     * Set value limits for this field.
+     *
+     * @param min the min value.
+     * @param max the max value.
+     */
+    @FxThread
+    public void setMinMax(float min, float max) {
+        getXField().setMinMax(min, max);
+        getYField().setMinMax(min, max);
+    }
+
+    /**
+     * Sets the scroll power.
+     *
+     * @param scrollPower the scroll power.
+     */
+    @FxThread
+    public void setScrollPower(float scrollPower) {
+        getXField().setScrollPower(scrollPower);
+        getYField().setScrollPower(scrollPower);
+    }
+
+    /**
+     * Get the scroll power.
+     *
+     * @return the scroll power.
+     */
+    @FxThread
+    public float getScrollPower() {
+        return getXField().getScrollPower();
+    }
+
     @Override
     @FxThread
     protected void createComponents(@NotNull HBox container) {

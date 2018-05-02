@@ -4,17 +4,16 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
+import com.jme3.math.Vector2f;
 import com.jme3.post.Filter;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.property.impl.FilterElementModelPropertyControl;
-import com.ss.editor.ui.control.property.impl.LightElementModelPropertyControl;
-import com.ss.editor.ui.control.property.impl.SpatialElementModelPropertyControl;
+import com.ss.editor.ui.control.property.impl.*;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -124,6 +123,17 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
                 var value = property.getValue();
                 var propertyControl = new FilterElementModelPropertyControl<EditableProperty<Filter, ?>>(
                     value, property.getName(), consumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+            case SCENE_LAYER: {
+
+                EditableProperty<SceneLayer, ?> property = cast(description);
+
+                var value = property.getValue();
+                var propertyControl = new LayerModelPropertyControl<EditableProperty<SceneLayer, ?>>(value,
+                        property.getName(), consumer);
 
                 addControl(container, property, propertyControl);
                 break;

@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.property.impl;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.jme3.math.Vector2f;
-import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class MinMaxPropertyControl<C extends ChangeConsumer, D extends Spatial> extends Vector2fPropertyControl<C, D> {
+public class MinMaxPropertyControl<C extends ChangeConsumer, D> extends Vector2fPropertyControl<C, D> {
 
     public MinMaxPropertyControl(
             @Nullable Vector2f propertyValue,
