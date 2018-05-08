@@ -14,6 +14,7 @@ import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.environment.util.EnvMapUtils;
 import com.jme3.font.BitmapFont;
+import com.jme3.jfx.injfx.JmeToJfxApplication;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.material.TechniqueDef;
@@ -26,7 +27,6 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
@@ -57,7 +57,7 @@ import java.util.concurrent.locks.StampedLock;
  *
  * @author JavaSaBr
  */
-public class JmeApplication extends JmeToJFXApplication {
+public class JmeApplication extends JmeToJfxApplication {
 
     @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JmeApplication.class);

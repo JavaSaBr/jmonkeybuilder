@@ -87,9 +87,6 @@ public interface CssClasses {
     @NotNull String ABSTRACT_NODE_TREE_CONTAINER = "abstract-node-tree-container";
     @NotNull String ABSTRACT_NODE_TREE_CELL = "abstract-node-tree-cell";
 
-    @NotNull String ABSTRACT_PARAM_CONTROL_CONTAINER = "abstract-param-control-container";
-    @NotNull String ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE = "abstract-param-control-container-split-line";
-    @NotNull String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
     @NotNull String ABSTRACT_PARAM_EDITOR_CONTROL = "abstract-param-editor-control";
     @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
     @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "abstract-param-control-param-name";
@@ -104,9 +101,11 @@ public interface CssClasses {
     @NotNull String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "abstract-param-control-vector3f-field";
     @NotNull String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "abstract-param-control-label-value";
     @NotNull String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
-    @NotNull String ABSTRACT_PARAM_CONTROL_INFLUENCER = "abstract-param-control-influencer";
-    @NotNull String ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT = "abstract-param-control-influencer-element";
     @NotNull String ABSTRACT_RESOURCE_PROPERTY_CONTROL = "abstract-resource-property-control";
+
+    @NotNull String PROPERTY_EDITOR = "property-editor";
+    @NotNull String PROPERTY_EDITOR_CONTAINER = "property-editor-container";
+    @NotNull String PROPERTY_EDITOR_CONTAINER_SPLIT_LINE = "property-editor-container-split-line";
 
     @NotNull String EDITOR_SCRIPTING_COMPONENT = "editor-scripting-component";
     @NotNull String GROOVY_EDITOR_COMPONENT = "groovy-editor-component";

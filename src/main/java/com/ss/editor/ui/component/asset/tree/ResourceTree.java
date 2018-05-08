@@ -9,7 +9,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.resource.*;
 import com.ss.editor.ui.util.UiUtils;
@@ -194,7 +194,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
                 .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
 
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        setFixedCellSize(FXConstants.RESOURCE_TREE_CELL_HEIGHT);
+        setFixedCellSize(FxConstants.RESOURCE_TREE_CELL_HEIGHT);
         setCellFactory(param -> new ResourceTreeCell());
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
@@ -616,6 +616,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     @BackgroundThread
     private void startBackgroundFill(@NotNull Path path) {
 
+        barrier.loadChanges();
+
         var rootElement = createFor(path);
         var newRoot = new TreeItem<ResourceElement>(rootElement);
         newRoot.setExpanded(true);
@@ -625,6 +627,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (!isLazyMode() && isNeedCleanup()) {
             cleanup(newRoot);
         }
+
+        barrier.commitChanges();
 
         EXECUTOR_MANAGER.addFxTask(() -> applyNewRoot(newRoot));
     }
@@ -636,12 +640,18 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FxThread
     private void applyNewRoot(@NotNull TreeItem<ResourceElement> newRoot) {
+        barrier.loadChanges();
+        try {
 
-        setRoot(newRoot);
+            setRoot(newRoot);
 
-        var onLoadHandler = getOnLoadHandler();
-        if (onLoadHandler != null) {
-            onLoadHandler.accept(Boolean.TRUE);
+            var onLoadHandler = getOnLoadHandler();
+            if (onLoadHandler != null) {
+                onLoadHandler.accept(Boolean.TRUE);
+            }
+
+        } finally {
+            barrier.commitChanges();
         }
     }
 

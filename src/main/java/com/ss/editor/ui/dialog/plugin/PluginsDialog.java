@@ -9,7 +9,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.PluginManager;
 import com.ss.editor.plugin.EditorPlugin;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -109,7 +109,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
 
         pluginListView = new ListView<>();
         pluginListView.setCellFactory(param -> new PluginListCell());
-        pluginListView.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
+        pluginListView.setFixedCellSize(FxConstants.LIST_CELL_HEIGHT);
         pluginListView.prefWidthProperty().bind(root.widthProperty().divide(2));
         pluginListView.prefHeightProperty().bind(root.heightProperty());
 

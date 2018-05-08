@@ -72,7 +72,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
 
         FxUtils.addClass(line, CssClasses.DEF_HBOX)
                 .addClass(container,
-                        CssClasses.ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE);
+                        CssClasses.PROPERTY_EDITOR_CONTAINER_SPLIT_LINE);
 
         FxUtils.addChild(pane, container);
     }

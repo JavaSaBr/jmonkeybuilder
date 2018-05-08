@@ -4,11 +4,11 @@ import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    @NotNull
     private static final PropertyBuilderRegistry BUILDER_REGISTRY = PropertyBuilderRegistry.getInstance();
 
     /**
@@ -71,12 +70,14 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     private void createComponents() {
         this.container = new VBox();
         this.container.prefWidthProperty()
-                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
+                .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
         var wrapper = new VBox(container);
 
-        FXUtils.addClassTo(this, CssClasses.ABSTRACT_PARAM_CONTROL_CONTAINER);
-        FXUtils.addClassesTo(wrapper, container, CssClasses.DEF_VBOX);
+        FxUtils.addClass(this,
+                        CssClasses.PROPERTY_EDITOR)
+                .addClass(wrapper, container,
+                        CssClasses.DEF_VBOX, CssClasses.PROPERTY_EDITOR_CONTAINER);
 
         setContent(wrapper);
     }
@@ -214,7 +215,7 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      * @param currentObject the current editable object.
      */
     @FxThread
-    private void setCurrentObject(@Nullable final Object currentObject) {
+    private void setCurrentObject(@Nullable Object currentObject) {
         this.currentObject = currentObject;
     }
 

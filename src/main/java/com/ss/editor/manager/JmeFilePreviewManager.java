@@ -1,22 +1,20 @@
 package com.ss.editor.manager;
 
-import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
-import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
+import static com.jme3.jfx.injfx.JmeToJfxIntegrator.bind;
+import static com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.common.util.FileUtils.getExtension;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
-import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
@@ -26,7 +24,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.SkyFactory;
-import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
@@ -36,17 +33,15 @@ import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TangentGenerator;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,29 +54,21 @@ import java.nio.file.Path;
  */
 public class JmeFilePreviewManager extends AbstractControl {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JmeFilePreviewManager.class);
 
-    @NotNull
-    private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
+    private static final Vector3f LIGHT_DIRECTION =
+            new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
 
-    @NotNull
-    private static final Vector3f CAMERA_LOCATION = new Vector3f(13.660254F, 5.176381F, 13.660254F);
+    private static final Vector3f CAMERA_LOCATION =
+            new Vector3f(13.660254F, 5.176381F, 13.660254F);
 
-    @NotNull
-    private static final Quaternion CAMERA_ROTATION = new Quaternion(0.9159756F, 0.04995022F, -0.37940952F,
-            0.12059049F);
+    private static final Quaternion CAMERA_ROTATION =
+            new Quaternion(0.9159756F, 0.04995022F, -0.37940952F, 0.12059049F);
 
-    @NotNull
     private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
-
-    @NotNull
     private static final Array<String> MODELS_FORMATS = ArrayFactory.newArray(String.class);
-
-    @NotNull
     private static final Array<String> AUDIO_FORMATS = ArrayFactory.newArray(String.class);
 
-    @NotNull
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     static {
@@ -95,7 +82,6 @@ public class JmeFilePreviewManager extends AbstractControl {
         MODELS_FORMATS.add(FileExtensions.MODEL_GLTF);
     }
 
-    @NotNull
     private static final JmeThreadExecutor EDITOR_THREAD_EXECUTOR = JmeThreadExecutor.getInstance();
 
     @Nullable
@@ -120,10 +106,8 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @return true is the file is a file of a model.
      */
     @FromAnyThread
-    public static boolean isModelFile(@Nullable final Path file) {
-        if (file == null) return false;
-        final String extension = getExtension(file);
-        return MODELS_FORMATS.contains(extension);
+    public static boolean isModelFile(@Nullable Path file) {
+        return file != null && MODELS_FORMATS.contains(getExtension(file));
     }
 
     /**
@@ -133,10 +117,9 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @return true is the file is a file of a model.
      */
     @FromAnyThread
-    public static boolean isModelFile(@Nullable final String assetPath) {
-        if (StringUtils.isEmpty(assetPath)) return false;
-        final String extension = getExtension(assetPath);
-        return MODELS_FORMATS.contains(extension);
+    public static boolean isModelFile(@Nullable String assetPath) {
+        return !StringUtils.isEmpty(assetPath) &&
+                MODELS_FORMATS.contains(getExtension(assetPath));
     }
 
     /**
@@ -146,10 +129,8 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @return true is the file is a JME file.
      */
     @FromAnyThread
-    public static boolean isJmeFile(@Nullable final Path file) {
-        if (file == null) return false;
-        final String extension = getExtension(file);
-        return JME_FORMATS.contains(extension);
+    public static boolean isJmeFile(@Nullable Path file) {
+        return file != null && JME_FORMATS.contains(getExtension(file));
     }
 
     /**
@@ -159,10 +140,9 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @return true is the file is a JME file.
      */
     @FromAnyThread
-    public static boolean isJmeFile(@Nullable final String assetPath) {
-        if (StringUtils.isEmpty(assetPath)) return false;
-        final String extension = getExtension(assetPath);
-        return JME_FORMATS.contains(extension);
+    public static boolean isJmeFile(@Nullable String assetPath) {
+        return !StringUtils.isEmpty(assetPath) &&
+                JME_FORMATS.contains(getExtension(assetPath));
     }
 
     /**
@@ -172,10 +152,8 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @return true is the file is an audio file.
      */
     @FromAnyThread
-    public static boolean isAudioFile(@Nullable final Path file) {
-        if (file == null) return false;
-        final String extension = getExtension(file);
-        return AUDIO_FORMATS.contains(extension);
+    public static boolean isAudioFile(@Nullable Path file) {
+        return file != null && AUDIO_FORMATS.contains(getExtension(file));
     }
 
     /**
@@ -185,13 +163,10 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @return true is the asset path is an audio file.
      */
     @FromAnyThread
-    public static boolean isAudioFile(@Nullable final String assetPath) {
-        if (assetPath == null) return false;
-        final String extension = getExtension(assetPath);
-        return AUDIO_FORMATS.contains(extension);
+    public static boolean isAudioFile(@Nullable String assetPath) {
+        return assetPath != null && AUDIO_FORMATS.contains(getExtension(assetPath));
     }
 
-    @NotNull
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
         @Override
@@ -234,27 +209,26 @@ public class JmeFilePreviewManager extends AbstractControl {
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.modelNode = new Node("Model Node");
 
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() -> {
 
-            final EditorFxScene scene = EditorUtil.getFxScene();
-            final StackPane container = scene.getHideLayer();
+            var scene = EditorUtil.getFxScene();
+            var container = scene.getHideLayer();
 
-            FXUtils.addToPane(imageView, container);
-
+            FxUtils.addChild(container, imageView);
             TangentGenerator.useMikktspaceGenerator(testBox);
 
-            final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
+            var executor = JmeThreadExecutor.getInstance();
             executor.addToExecute(this::prepareScene);
         });
     }
 
     @Override
     @JmeThread
-    protected void controlUpdate(final float tpf) {
+    protected void controlUpdate(float tpf) {
 
         if (frame == 2) {
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
+            var jmeApplication = JmeApplication.getInstance();
             jmeApplication.updatePreviewLightProbe(probeHandler);
         }
 
@@ -263,13 +237,13 @@ public class JmeFilePreviewManager extends AbstractControl {
 
     @JmeThread
     private void notifyProbeComplete() {
-        final Node rootNode = EditorUtil.getPreviewNode();
+        var rootNode = EditorUtil.getPreviewNode();
         rootNode.attachChild(modelNode);
     }
 
     @Override
     @JmeThread
-    protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
+    protected void controlRender(@NotNull RenderManager renderManager, @NotNull ViewPort viewPort) {
     }
 
     /**
@@ -280,12 +254,13 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param fitHeight the target height of preview.
      */
     @FromAnyThread
-    public void show(@NotNull final Path file, final int fitWidth, final int fitHeight) {
+    public void show(@NotNull Path file, int fitWidth, int fitHeight) {
+
         imageView.setFitHeight(fitHeight);
         imageView.setFitWidth(fitWidth);
 
-        final Path assetFile = notNull(getAssetFile(file), "File can't be null.");
-        final String path = toAssetPath(assetFile);
+        var assetFile = notNull(getAssetFile(file), "File can't be null.");
+        var path = toAssetPath(assetFile);
 
         showPreview(path, getExtension(assetFile), false);
     }
@@ -298,7 +273,7 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param fitHeight the target height of preview.
      */
     @FromAnyThread
-    public void showExternal(@NotNull final Path file, final int fitWidth, final int fitHeight) {
+    public void showExternal(@NotNull Path file, int fitWidth, int fitHeight) {
         imageView.setFitHeight(fitHeight);
         imageView.setFitWidth(fitWidth);
         showPreview(file.toString(), getExtension(file), true);
@@ -312,7 +287,7 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param external  true if the path is external path.
      */
     @FromAnyThread
-    private void showPreview(@NotNull final String path, @NotNull final String extension, final boolean external) {
+    private void showPreview(@NotNull String path, @NotNull String extension, boolean external) {
         if (FileExtensions.JME_MATERIAL.equals(extension)) {
             EDITOR_THREAD_EXECUTOR.addToExecute(() -> showMaterial(path));
         } else if (isModelFile(path)) {
@@ -330,7 +305,7 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param fitHeight the target height of preview.
      */
     @FromAnyThread
-    public void show(@NotNull final String assetPath, final int fitWidth, final int fitHeight) {
+    public void show(@NotNull String assetPath, int fitWidth, int fitHeight) {
         imageView.setFitHeight(fitHeight);
         imageView.setFitWidth(fitWidth);
         showPreview(assetPath, getExtension(assetPath), false);
@@ -343,11 +318,12 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param external true if the object is external object.
      */
     @JmeThread
-    private void showObject(@NotNull final String path, final boolean external) {
+    private void showObject(@NotNull String path, boolean external) {
         prepareProcessor();
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Spatial model;
+        var assetManager = EditorUtil.getAssetManager();
+
+        Spatial model;
 
         FolderAssetLocator.setIgnore(external);
         try {
@@ -364,7 +340,7 @@ public class JmeFilePreviewManager extends AbstractControl {
 
         tryToLoad(model);
 
-        final Node rootNode = EditorUtil.getPreviewNode();
+        var rootNode = EditorUtil.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -374,16 +350,15 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param model the model.
      */
     @JmeThread
-    private void tryToLoad(@NotNull final Spatial model) {
+    private void tryToLoad(@NotNull Spatial model) {
         try {
 
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final RenderManager renderManager = jmeApplication.getRenderManager();
+            var renderManager = EditorUtil.getRenderManager();
             renderManager.preloadScene(model);
 
             modelNode.attachChild(model);
 
-        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
+        } catch (RendererException | AssetNotFoundException | UnsupportedOperationException e) {
             EditorUtil.handleException(LOGGER, this, e);
         }
     }
@@ -400,7 +375,7 @@ public class JmeFilePreviewManager extends AbstractControl {
 
         frame = 0;
 
-        final Camera camera = EditorUtil.getPreviewCamera();
+        var camera = EditorUtil.getPreviewCamera();
         camera.setLocation(CAMERA_LOCATION);
         camera.setRotation(CAMERA_ROTATION);
 
@@ -413,16 +388,16 @@ public class JmeFilePreviewManager extends AbstractControl {
      * @param path the path to material.
      */
     @JmeThread
-    private void showMaterial(@NotNull final String path) {
+    private void showMaterial(@NotNull String path) {
         prepareProcessor();
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Material material = assetManager.loadMaterial(path);
+        var assetManager = EditorUtil.getAssetManager();
+        var material = assetManager.loadMaterial(path);
 
         testBox.setMaterial(material);
         tryToLoad(testBox);
 
-        final Node rootNode = EditorUtil.getPreviewNode();
+        var rootNode = EditorUtil.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -437,8 +412,8 @@ public class JmeFilePreviewManager extends AbstractControl {
     @JmeThread
     private void clearImpl() {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final Node rootNode = jmeApplication.getPreviewNode();
+        var jmeApplication = JmeApplication.getInstance();
+        var rootNode = jmeApplication.getPreviewNode();
         rootNode.detachChild(modelNode);
 
         if (processor != null) {
@@ -447,7 +422,7 @@ public class JmeFilePreviewManager extends AbstractControl {
     }
 
     /**
-     * Gets image view.
+     * Gets the image view with a preview.
      *
      * @return the image view with a preview.
      */
@@ -464,24 +439,24 @@ public class JmeFilePreviewManager extends AbstractControl {
     @JmeThread
     private @NotNull FrameTransferSceneProcessor prepareScene() {
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final AssetManager assetManager = jmeApplication.getAssetManager();
-        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
+        var jmeApplication = JmeApplication.getInstance();
+        var assetManager = jmeApplication.getAssetManager();
+        var sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
                         SkyFactory.EnvMapType.EquirectMap);
 
-        final DirectionalLight light = new DirectionalLight();
+        var light = new DirectionalLight();
         light.setDirection(LIGHT_DIRECTION);
 
-        final Node cameraNode = new Node("Camera node");
-        final Node rootNode = jmeApplication.getPreviewNode();
+        var cameraNode = new Node("Camera node");
+        var rootNode = jmeApplication.getPreviewNode();
         rootNode.addControl(this);
         rootNode.attachChild(sky);
         rootNode.addLight(light);
         rootNode.attachChild(cameraNode);
         rootNode.attachChild(modelNode);
 
-        final Camera camera = jmeApplication.getPreviewCamera();
-        final EditorCamera editorCamera = new EditorCamera(camera, cameraNode);
+        var camera = jmeApplication.getPreviewCamera();
+        var editorCamera = new EditorCamera(camera, cameraNode);
         editorCamera.setMaxDistance(10000);
         editorCamera.setMinDistance(0.01F);
         editorCamera.setSmoothMotion(false);

@@ -130,7 +130,7 @@ dependencies {
     compile 'org.controlsfx:controlsfx:9.0.0'
     compile 'com.spaceshift:rlib.fx:5.0.0'
     compile 'com.spaceshift:rlib.common:7.0.0'
-    compile ('com.jme3x:jme-jfx:2.0.0') {
+    compile ('com.jme3:jfx:2.0.0') {
         exclude group: 'org.jmonkeyengine'
     }
 

@@ -1,7 +1,7 @@
 package com.ss.editor;
 
-import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
-import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
+import static com.jme3.jfx.injfx.JmeToJfxIntegrator.bind;
+import static com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_OPEN_GL;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
@@ -9,9 +9,9 @@ import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.newOutputStream;
+import com.jme3.jfx.injfx.JmeToJfxApplication;
+import com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.jme3.util.LWJGLBufferAllocator;
-import com.jme3x.jfx.injfx.JmeToJFXApplication;
-import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
@@ -121,7 +121,7 @@ public class JfxApplication extends Application {
 
         CommandLineConfig.args(args);
 
-        JmeToJFXApplication application;
+        JmeToJfxApplication application;
         try {
             application = JmeApplication.prepareToStart();
         } catch (final Throwable e) {
@@ -176,7 +176,7 @@ public class JfxApplication extends Application {
      * @param application the new jME application.
      */
     @JmeThread
-    private static void startJmeApplication(@NotNull JmeToJFXApplication application) {
+    private static void startJmeApplication(@NotNull JmeToJfxApplication application) {
 
         var initializationManager = InitializationManager.getInstance();
         initializationManager.onBeforeCreateJmeContext();

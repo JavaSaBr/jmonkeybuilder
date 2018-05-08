@@ -173,8 +173,6 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
         } finally {
             setIgnoreListener(false);
         }
-
-        FxUtils.addClass(this, CssClasses.ABSTRACT_PARAM_CONTROL);
     }
 
     /**
@@ -183,7 +181,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @return the six object consumer
      */
     @FromAnyThread
-    public @NotNull ChangeHandler<C, D, T> newChangeHandler() {
+    protected @NotNull ChangeHandler<C, D, T> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
             var operation = new PropertyOperation<ChangeConsumer, D, T>(object, propName, newValue, oldValue);
@@ -505,13 +503,5 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     @FxThread
     protected boolean isIgnoreListener() {
         return ignoreListener;
-    }
-
-    @Override
-    public String toString() {
-        return "PropertyControl{" +
-                "propertyName='" + propertyName + '\'' +
-                ", propertyValue=" + propertyValue +
-                "} " + super.toString();
     }
 }

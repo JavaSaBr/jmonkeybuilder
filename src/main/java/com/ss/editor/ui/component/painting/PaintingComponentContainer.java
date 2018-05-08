@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.util.FXUtils;
@@ -90,11 +90,11 @@ public class PaintingComponentContainer extends ScrollPane {
         this.provider = provider;
         this.container = new VBox();
         this.container.prefWidthProperty()
-                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
+                .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
         final HBox horContainer = new HBox();
         horContainer.prefWidthProperty()
-                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
+                .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
         final Label label = new Label(Messages.PAINTING_COMPONENT_CONTAINER_TOOL + ":");
         label.maxWidthProperty().bind(horContainer.widthProperty()

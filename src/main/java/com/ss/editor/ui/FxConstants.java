@@ -5,7 +5,7 @@ package com.ss.editor.ui;
  *
  * @author JavaSaBr
  */
-public interface FXConstants {
+public interface FxConstants {
 
     int PROPERTY_LIST_OFFSET = 17;
 

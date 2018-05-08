@@ -10,7 +10,6 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.scene.EditorFxScene;
@@ -18,17 +17,15 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import com.ss.rlib.fx.window.popup.dialog.AbstractPopupDialog;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,28 +45,14 @@ import java.time.LocalTime;
  */
 public class EditorDialog {
 
-    /**
-     * The constant LOGGER.
-     */
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
-    /**
-     * The constant FX_EVENT_MANAGER.
-     */
-    @NotNull
     protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-
-    /**
-     * The CSS registry.
-     */
-    @NotNull
-    private static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
+    protected static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
 
     /**
      * The default dialog size.
      */
-    @NotNull
     private static final Point DEFAULT_SIZE = new Point(0, 0);
 
     /**
@@ -102,11 +85,11 @@ public class EditorDialog {
         container = new VBox();
         container.setAlignment(CENTER);
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+        var editorConfig = EditorConfig.getInstance();
+        var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
-        final Scene scene = new Scene(container);
-        final ObservableList<String> stylesheets = scene.getStylesheets();
+        var scene = new Scene(container);
+        var stylesheets = scene.getStylesheets();
         stylesheets.addAll(CSS_REGISTRY.getAvailableCssFiles());
         stylesheets.add(theme.getCssFile());
 
@@ -119,14 +102,16 @@ public class EditorDialog {
         dialog.setResizable(isResizable());
         dialog.setScene(scene);
 
-        final Stage fxStage = EditorUtil.getFxStage();
-        final ObservableList<Image> icons = dialog.getIcons();
+        var fxStage = EditorUtil.getFxStage();
+        var icons = dialog.getIcons();
         icons.addAll(fxStage.getIcons());
 
         configureSize(container);
     }
 
     /**
+     * Returns true if this dialog should be resizable.
+     *
      * @return true if this dialog should be resizable.
      */
     @FromAnyThread
@@ -140,28 +125,28 @@ public class EditorDialog {
      * @param root the root container.
      */
     @FxThread
-    protected void createControls(@NotNull final VBox root) {
+    protected void createControls(@NotNull VBox root) {
 
-        final VBox actionsContainer = new VBox();
-
-        FXUtils.addClassTo(actionsContainer, CssClasses.DIALOG_ACTIONS_ROOT);
+        var actionsContainer = new VBox();
 
         if (isGridStructure()) {
-            final GridPane container = new GridPane();
-            FXUtils.addClassesTo(container, CssClasses.DEF_GRID_PANE, CssClasses.DIALOG_CONTENT_ROOT);
+            var container = new GridPane();
+            FxUtils.addClass(container, CssClasses.DEF_GRID_PANE, CssClasses.DIALOG_CONTENT_ROOT);
             createContent(container);
-            FXUtils.addToPane(container, root);
+            FxUtils.addChild(root, container);
         } else {
-            final VBox container = new VBox();
-            FXUtils.addClassesTo(container, CssClasses.DEF_VBOX, CssClasses.DIALOG_CONTENT_ROOT);
+            var container = new VBox();
+            FxUtils.addClass(container, CssClasses.DEF_VBOX, CssClasses.DIALOG_CONTENT_ROOT);
             createContent(container);
-            FXUtils.addToPane(container, root);
+            FxUtils.addChild(root, container);
         }
 
         createActions(actionsContainer);
 
-        FXUtils.addToPane(actionsContainer, root);
-        FXUtils.addClassTo(root, CssClasses.DIALOG_ROOT);
+        FxUtils.addClass(actionsContainer, CssClasses.DIALOG_ACTIONS_ROOT)
+                .addClass(root, CssClasses.DIALOG_ROOT);
+
+        FxUtils.addChild(root, actionsContainer);
 
         root.addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
@@ -202,7 +187,7 @@ public class EditorDialog {
      * @param container the root container.
      */
     @FxThread
-    protected void configureSize(@NotNull final VBox container) {
+    protected void configureSize(@NotNull VBox container) {
         configureSize(container, getSize());
     }
 
@@ -212,7 +197,7 @@ public class EditorDialog {
      * @param size the size.
      */
     @FxThread
-    public void configureSize(@NotNull final Point size) {
+    public void configureSize(@NotNull Point size) {
         configureSize(container, size);
     }
 
@@ -223,12 +208,12 @@ public class EditorDialog {
      * @param size      the size.
      */
     @FxThread
-    private void configureSize(@NotNull final VBox container, @NotNull final Point size) {
+    private void configureSize(@NotNull VBox container, @NotNull Point size) {
 
-        final Stage dialog = getDialog();
+        var dialog = getDialog();
 
-        final double width = size.getX();
-        final double height = size.getY();
+        var width = size.getX();
+        var height = size.getY();
 
         if (width >= 1D) {
             FXUtils.setFixedWidth(container, width);
@@ -244,9 +229,9 @@ public class EditorDialog {
     }
 
     /**
-     * Gets container.
+     * Get the content container.
      *
-     * @return The content container.
+     * @return the content container.
      */
     @FromAnyThread
     protected @NotNull VBox getContainer() {
@@ -259,7 +244,7 @@ public class EditorDialog {
      * @param size the size of the dialog.
      */
     @FxThread
-    public void updateSize(@NotNull final Point size) {
+    public void updateSize(@NotNull Point size) {
         configureSize(getContainer(), size);
     }
 
@@ -274,7 +259,7 @@ public class EditorDialog {
      * @param event the event
      */
     @FxThread
-    protected void processKey(@NotNull final KeyEvent event) {
+    protected void processKey(@NotNull KeyEvent event) {
         event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
             hide();
@@ -287,7 +272,7 @@ public class EditorDialog {
      * @param owner the owner.
      */
     @FxThread
-    public void show(@NotNull final Node owner) {
+    public void show(@NotNull Node owner) {
         show(owner.getScene().getWindow());
     }
 
@@ -305,13 +290,13 @@ public class EditorDialog {
      * @param owner the owner.
      */
     @FxThread
-    public void show(@NotNull final Window owner) {
+    public void show(@NotNull Window owner) {
 
-        final Scene scene = owner.getScene();
+        var scene = owner.getScene();
 
         if (scene instanceof EditorFxScene) {
-            final EditorFxScene editorFxScene = (EditorFxScene) scene;
-            final StackPane container = editorFxScene.getContainer();
+            var editorFxScene = (EditorFxScene) scene;
+            var container = editorFxScene.getContainer();
             container.setFocusTraversable(false);
         }
 
@@ -344,15 +329,15 @@ public class EditorDialog {
     @FxThread
     public void hide() {
 
-        final Duration duration = Duration.between(showedTime, LocalTime.now());
-        final int seconds = (int) duration.getSeconds();
+        var duration = Duration.between(showedTime, LocalTime.now());
+        var seconds = (int) duration.getSeconds();
 
-        final Window window = dialog.getOwner();
-        final Scene scene = window.getScene();
+        var window = dialog.getOwner();
+        var scene = window.getScene();
 
         if (scene instanceof EditorFxScene) {
-            final EditorFxScene editorFxScene = (EditorFxScene) scene;
-            final StackPane container = editorFxScene.getContainer();
+            var editorFxScene = (EditorFxScene) scene;
+            var container = editorFxScene.getContainer();
             container.setFocusTraversable(true);
         }
 
@@ -374,7 +359,7 @@ public class EditorDialog {
      * @param root the root
      */
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
     }
 
     /**
@@ -383,7 +368,7 @@ public class EditorDialog {
      * @param root the root
      */
     @FxThread
-    protected void createContent(@NotNull final GridPane root) {
+    protected void createContent(@NotNull GridPane root) {
     }
 
     /**
@@ -402,7 +387,7 @@ public class EditorDialog {
      * @param root the root
      */
     @FxThread
-    protected void createActions(@NotNull final VBox root) {
+    protected void createActions(@NotNull VBox root) {
     }
 
     /**
@@ -421,7 +406,7 @@ public class EditorDialog {
      * @param title the new title.
      */
     @FxThread
-    public void setTitleText(@NotNull final String title) {
+    public void setTitleText(@NotNull String title) {
         dialog.setTitle(title);
     }
 }

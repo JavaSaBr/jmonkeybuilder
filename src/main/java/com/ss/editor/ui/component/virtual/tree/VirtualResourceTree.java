@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.virtual.tree;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.component.virtual.tree.resource.FolderVirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
 import com.ss.editor.ui.util.UiUtils;
@@ -75,7 +75,7 @@ public class VirtualResourceTree<T> extends TreeView<VirtualResourceElement<?>> 
         this.objectsType = objectsType;
 
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        setFixedCellSize(FXConstants.RESOURCE_TREE_CELL_HEIGHT);
+        setFixedCellSize(FxConstants.RESOURCE_TREE_CELL_HEIGHT);
         setCellFactory(param -> new VirtualResourceTreeCell());
         setShowRoot(false);
         setFocusTraversable(true);

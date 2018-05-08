@@ -4,7 +4,7 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.FileIconManager;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -161,8 +161,8 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     @FxThread
     private @NotNull ProgressIndicator createIndicator() {
         var indicator = new ProgressIndicator();
-        indicator.setMaxHeight(FXConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
-        indicator.setMaxWidth(FXConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
+        indicator.setMaxHeight(FxConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
+        indicator.setMaxWidth(FxConstants.RESOURCE_TREE_CELL_HEIGHT - 2);
         return indicator;
     }
 

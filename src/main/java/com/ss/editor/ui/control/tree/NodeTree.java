@@ -169,17 +169,17 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param object the object.
      */
     @FxThread
-    public void fill(@NotNull final Object object) {
+    public void fill(@NotNull Object object) {
 
-        final TreeView<TreeNode<?>> treeView = getTreeView();
-        final TreeItem<TreeNode<?>> currentRoot = treeView.getRoot();
+        var treeView = getTreeView();
+        var currentRoot = treeView.getRoot();
 
         if (currentRoot != null) {
             treeView.setRoot(null);
         }
 
-        final TreeNode<?> rootElement = FACTORY_REGISTRY.createFor(object);
-        final TreeItem<TreeNode<?>> newRoot = new TreeItem<>(rootElement);
+        var rootElement = FACTORY_REGISTRY.createFor(object);
+        var newRoot = new TreeItem<TreeNode<?>>(rootElement);
         newRoot.setExpanded(true);
 
         fill(newRoot, false, 1);
@@ -191,16 +191,16 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * Fill the item.
      */
     @FxThread
-    private void fill(@NotNull final TreeItem<TreeNode<?>> treeItem, final boolean expanded, final int level) {
+    private void fill(@NotNull TreeItem<TreeNode<?>> treeItem, boolean expanded, int level) {
         treeItem.setExpanded(expanded || level == 1);
 
-        final TreeNode<?> element = treeItem.getValue();
+        var element = treeItem.getValue();
         if (!element.hasChildren(this)) {
             return;
         }
 
-        final ObservableList<TreeItem<TreeNode<?>>> items = treeItem.getChildren();
-        final Array<TreeNode<?>> children = element.getChildren(this);
+        var items = treeItem.getChildren();
+        var children = element.getChildren(this);
         children.forEach(child -> {
             element.notifyChildPreAdd(child);
             items.add(new TreeItem<>(child));

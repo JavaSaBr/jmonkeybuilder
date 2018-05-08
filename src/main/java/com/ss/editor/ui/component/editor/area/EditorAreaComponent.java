@@ -2,8 +2,6 @@ package com.ss.editor.ui.component.editor.area;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.jme3.app.state.AppStateManager;
-import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.JfxApplication;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
@@ -11,19 +9,12 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.file.converter.FileConverter;
-import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.model.workspace.Workspace;
-import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.component.creator.FileCreator;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
-import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CssIds;
@@ -47,10 +38,7 @@ import com.ss.rlib.common.util.dictionary.DictionaryUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.Event;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
@@ -60,8 +48,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The component for containing editors.
@@ -70,40 +56,17 @@ import java.util.Map;
  */
 public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorAreaComponent.class);
 
-    /**
-     * The constant COMPONENT_ID.
-     */
-    @NotNull
     private static final String COMPONENT_ID = "EditorAreaComponent";
-
-    /**
-     * The constant KEY_EDITOR.
-     */
-    @NotNull
     private static final String KEY_EDITOR = "editor";
 
-    @NotNull
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
-
-    @NotNull
     private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
-
-    @NotNull
     private static final WorkspaceManager WORKSPACE_MANAGER = WorkspaceManager.getInstance();
-
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-
-    @NotNull
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
-
-    @NotNull
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     /**
@@ -113,13 +76,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private final ConcurrentObjectDictionary<Path, Tab> openedEditors;
 
     /**
-     * The list of opening files now.
+     * The list of opened files.
      */
     @NotNull
     private final ConcurrentArray<Path> openingFiles;
 
     /**
-     * The flag for ignoring changing the list of opened editors.
+     * True if need to ignore change events.
      */
     private boolean ignoreOpenedFiles;
 
@@ -133,17 +96,26 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         getSelectionModel().selectedItemProperty()
                 .addListener(this::switchEditor);
 
-        FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE, event -> processCreateFile((RequestedCreateFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(RequestedConvertFileEvent.EVENT_TYPE, event -> processConvertFile((RequestedConvertFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processEvent((ChangedCurrentAssetFolderEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE,
+                event -> processOpenFile((RequestedOpenFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE,
+                event -> processCreateFile((RequestedCreateFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RequestedConvertFileEvent.EVENT_TYPE,
+                event -> processConvertFile((RequestedConvertFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE,
+                event -> processEvent((RenamedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE,
+                event -> processEvent((MovedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE,
+                event -> processEvent((ChangedCurrentAssetFolderEvent) event));
     }
 
     @FxThread
-    private void switchEditor(@NotNull final ObservableValue<? extends Tab> observable, @Nullable final Tab oldValue,
-                              @Nullable final Tab newValue) {
+    private void switchEditor(
+            @NotNull ObservableValue<? extends Tab> observable,
+            @Nullable Tab oldValue,
+            @Nullable Tab newValue
+    ) {
 
         BorderPane current3DArea = null;
         BorderPane new3DArea = null;
@@ -152,8 +124,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         if (newValue != null) {
 
-            final ObservableMap<Object, Object> properties = newValue.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            var properties = newValue.getProperties();
+            var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
             fileEditor.notifyShowed();
 
             newCurrentFile = fileEditor.getEditFile();
@@ -161,14 +133,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
 
         if (oldValue != null) {
-            final ObservableMap<Object, Object> properties = oldValue.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+
+            var properties = oldValue.getProperties();
+            var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
             fileEditor.notifyHided();
+
             current3DArea = fileEditor.get3DArea();
         }
 
-        final EditorFxScene scene = (EditorFxScene) getScene();
-        final ImageView canvas = scene.getCanvas();
+        var scene = (EditorFxScene) getScene();
+        var canvas = scene.getCanvas();
 
         if (new3DArea != null) {
             new3DArea.setCenter(canvas);
@@ -177,40 +151,40 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             scene.hideCanvas();
         }
 
-        final Workspace workspace = notNull(WORKSPACE_MANAGER.getCurrentWorkspace());
+        var workspace = notNull(WORKSPACE_MANAGER.getCurrentWorkspace());
         workspace.updateCurrentEditedFile(newCurrentFile);
 
         EXECUTOR_MANAGER.addJmeTask(() -> processShowEditor(oldValue, newValue));
     }
 
     /**
-     * Handle changing the current asset folder.
+     * Handle the event of changing a current asset folder.
      */
     @FxThread
-    private void processEvent(@NotNull final ChangedCurrentAssetFolderEvent event) {
+    private void processEvent(@NotNull ChangedCurrentAssetFolderEvent event) {
         setIgnoreOpenedFiles(true);
         try {
-
-            final ObservableList<Tab> tabs = getTabs();
-            tabs.clear();
-
+            getTabs().clear();
             loadOpenedFiles();
-
         } finally {
             setIgnoreOpenedFiles(false);
         }
     }
 
     /**
-     * @param ignoreOpenedFiles the flag for ignoring changing the list of opened editors.
+     * Set true if need to ignore change events.
+     *
+     * @param ignoreOpenedFiles true if need to ignore change events.
      */
     @FromAnyThread
-    private void setIgnoreOpenedFiles(final boolean ignoreOpenedFiles) {
+    private void setIgnoreOpenedFiles(boolean ignoreOpenedFiles) {
         this.ignoreOpenedFiles = ignoreOpenedFiles;
     }
 
     /**
-     * @return the flag for ignoring changing the list of opened editors.
+     * Return true if need to ignore change events.
+     *
+     * @return true if need to ignore change events.
      */
     @FromAnyThread
     private boolean isIgnoreOpenedFiles() {
@@ -218,27 +192,19 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Handle a renamed file.
+     * Handle the event of renamed file.
      */
     @FxThread
-    private void processEvent(@NotNull final RenamedFileEvent event) {
-
-        final Path prevFile = event.getPrevFile();
-        final Path newFile = event.getNewFile();
-
-        handleMovedFiles(prevFile, newFile);
+    private void processEvent(@NotNull RenamedFileEvent event) {
+        handleMovedFiles(event.getPrevFile(), event.getNewFile());
     }
 
     /**
-     * Handle a moved file.
+     * Handle the event of moved file.
      */
     @FxThread
     private void processEvent(@NotNull final MovedFileEvent event) {
-
-        final Path prevFile = event.getPrevFile();
-        final Path newFile = event.getNewFile();
-
-        handleMovedFiles(prevFile, newFile);
+        handleMovedFiles(event.getPrevFile(), event.getNewFile());
     }
 
     /**
@@ -248,22 +214,23 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param newFile  the new version of the file.
      */
     @FxThread
-    private void handleMovedFiles(@NotNull final Path prevFile, @NotNull final Path newFile) {
+    private void handleMovedFiles(@NotNull Path prevFile, @NotNull Path newFile) {
 
-        final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
-        final long stamp = openedEditors.writeLock();
+        var openedEditors = getOpenedEditors();
+        var stamp = openedEditors.writeLock();
         try {
 
-            final Array<Path> files = openedEditors.keyArray(Path.class);
-            for (final Path file : files) {
+            var files = openedEditors.keyArray(Path.class);
+
+            for (var file : files) {
 
                 if (!file.startsWith(prevFile)) {
                     continue;
                 }
 
-                final Tab tab = openedEditors.get(file);
-                final ObservableMap<Object, Object> properties = tab.getProperties();
-                final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+                var tab = openedEditors.get(file);
+                var properties = tab.getProperties();
+                var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
                 fileEditor.notifyRenamed(prevFile, newFile);
 
                 if (fileEditor.isDirty()) {
@@ -272,12 +239,12 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                     tab.setText(fileEditor.getFileName());
                 }
 
-                final Path editFile = fileEditor.getEditFile();
+                var editFile = fileEditor.getEditFile();
 
                 openedEditors.remove(file);
                 openedEditors.put(editFile, tab);
 
-                final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+                var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
 
                 if (workspace != null) {
                     workspace.removeOpenedFile(file);
@@ -294,17 +261,15 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Handle the request to convert a file.
      */
     @FxThread
-    private void processConvertFile(@NotNull final RequestedConvertFileEvent event) {
+    private void processConvertFile(@NotNull RequestedConvertFileEvent event) {
 
-        final Path file = event.getFile();
-        final FileConverterDescription description = event.getDescription();
+        var file = event.getFile();
+        var description = event.getDescription();
+        var converter = FILE_CONVERTER_REGISTRY.newCreator(description, file);
 
-        final FileConverter converter = FILE_CONVERTER_REGISTRY.newCreator(description, file);
-        if (converter == null) {
-            return;
+        if (converter != null) {
+            converter.convert(file);
         }
-
-        converter.convert(file);
     }
 
     /**
@@ -318,9 +283,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Get the list of opening files now.
+     * Get the list of opened files.
      *
-     * @return the list of opening files now.
+     * @return the list of opened files.
      */
     @FromAnyThread
     private @NotNull ConcurrentArray<Path> getOpeningFiles() {
@@ -331,39 +296,37 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Handle the request to create a file.
      */
     @FxThread
-    private void processCreateFile(@NotNull final RequestedCreateFileEvent event) {
+    private void processCreateFile(@NotNull RequestedCreateFileEvent event) {
 
-        final Path file = event.getFile();
-        final FileCreatorDescription description = event.getDescription();
+        var file = event.getFile();
+        var description = event.getDescription();
+        var fileCreator = CREATOR_REGISTRY.newCreator(description, file);
 
-        final FileCreator fileCreator = CREATOR_REGISTRY.newCreator(description, file);
-        if (fileCreator == null) {
-            return;
+        if (fileCreator != null) {
+            fileCreator.start(file);
         }
-
-        fileCreator.start(file);
     }
 
     /**
      * Handle the request to close a file editor.
      */
     @FxThread
-    private void processChangeTabs(@NotNull final ListChangeListener.Change<? extends Tab> change) {
+    private void processChangeTabs(@NotNull ListChangeListener.Change<? extends Tab> change) {
 
         if (!change.next()) {
             return;
         }
 
-        final List<? extends Tab> removed = change.getRemoved();
+        var removed = change.getRemoved();
         if (removed == null || removed.isEmpty()) {
             return;
         }
 
         removed.forEach(tab -> {
 
-            final ObservableMap<Object, Object> properties = tab.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-            final Path editFile = fileEditor.getEditFile();
+            var properties = tab.getProperties();
+            var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            var editFile = fileEditor.getEditFile();
 
             DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, ObjectDictionary::remove);
 
@@ -373,7 +336,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 return;
             }
 
-            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+            var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
             if (workspace != null) {
                 workspace.removeOpenedFile(editFile);
             }
@@ -387,10 +350,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      */
     @FxThread
     public @Nullable FileEditor getCurrentEditor() {
-        final Tab selectedTab = getSelectionModel().getSelectedItem();
-        if (selectedTab == null) return null;
-        final ObservableMap<Object, Object> properties = selectedTab.getProperties();
-        return (FileEditor) properties.get(KEY_EDITOR);
+
+        var selectedTab = getSelectionModel()
+                .getSelectedItem();
+
+        if (selectedTab == null) {
+            return null;
+        }
+
+        return (FileEditor) selectedTab.getProperties()
+                .get(KEY_EDITOR);
     }
 
     /**
@@ -400,36 +369,37 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param newTab  the new editor.
      */
     @JmeThread
-    private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
+    private void processShowEditor(@Nullable Tab prevTab, @Nullable Tab newTab) {
 
-        final AppStateManager stateManager = EditorUtil.getStateManager();
-        final ImageView canvas = EditorUtil.getFxScene().getCanvas();
-        final FrameTransferSceneProcessor sceneProcessor = JfxApplication.getInstance().getSceneProcessor();
+        var stateManager = EditorUtil.getStateManager();
+        var canvas = EditorUtil.getFxScene().getCanvas();
+        var sceneProcessor = JfxApplication.getInstance()
+                .getSceneProcessor();
 
         boolean enabled = false;
 
         if (prevTab != null) {
 
-            final ObservableMap<Object, Object> properties = prevTab.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            var fileEditor = (FileEditor) prevTab.getProperties()
+                    .get(KEY_EDITOR);
 
-            final Array<Editor3DPart> states = fileEditor.get3DStates();
+            var states = fileEditor.get3DStates();
             states.forEach(stateManager::detach);
         }
 
         if (newTab != null) {
 
-            final ObservableMap<Object, Object> properties = newTab.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            var fileEditor = (FileEditor) newTab.getProperties()
+                    .get(KEY_EDITOR);
 
-            final Array<Editor3DPart> states = fileEditor.get3DStates();
+            var states = fileEditor.get3DStates();
             states.forEach(stateManager::attach);
 
             enabled = states.size() > 0;
         }
 
         if (sceneProcessor.isEnabled() != enabled) {
-            final boolean result = enabled;
+            var result = enabled;
             EXECUTOR_MANAGER.addFxTask(() -> {
                 ThreadUtils.sleep(100);
                 canvas.setOpacity(result ? 1D : 0D);
@@ -442,21 +412,20 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Handle the request to open a file.
      */
     @FxThread
-    private void processOpenFile(@NotNull final RequestedOpenFileEvent event) {
+    private void processOpenFile(@NotNull RequestedOpenFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
-        final Tab tab = DictionaryUtils.getInReadLock(openedEditors, file, ObjectDictionary::get);
+        var openedEditors = getOpenedEditors();
+        var tab = DictionaryUtils.getInReadLock(openedEditors, file, ObjectDictionary::get);
 
         if (tab != null) {
-            final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
-            selectionModel.select(tab);
+            getSelectionModel().select(tab);
             return;
         }
 
-        final ConcurrentArray<Path> openingFiles = getOpeningFiles();
-        final long stamp = openingFiles.writeLock();
+        var openingFiles = getOpeningFiles();
+        var stamp = openingFiles.writeLock();
         try {
 
             if (openingFiles.contains(file)) {
@@ -475,19 +444,19 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     @BackgroundThread
-    private void processOpenFileImpl(@NotNull final RequestedOpenFileEvent event, @NotNull final Path file) {
+    private void processOpenFileImpl(@NotNull RequestedOpenFileEvent event, @NotNull Path file) {
 
-        final EditorFxScene scene = EditorUtil.getFxScene();
+        var scene = EditorUtil.getFxScene();
 
         FileEditor editor;
         try {
 
-            final EditorDescription description = event.getDescription();
+            var description = event.getDescription();
 
             editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) :
                     EDITOR_REGISTRY.createEditorFor(description, file);
 
-        } catch (final Throwable e) {
+        } catch (Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
             EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
             ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
@@ -500,17 +469,17 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        final FileEditor resultEditor = editor;
+        var resultEditor = editor;
 
-        final JmeApplication jmeApplication = JmeApplication.getInstance();
-        final long stamp = jmeApplication.asyncLock();
+        var jmeApplication = JmeApplication.getInstance();
+        var stamp = jmeApplication.asyncLock();
         try {
             editor.openFile(file);
-        } catch (final Throwable e) {
+        } catch (Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
             ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
 
-            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+            var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
             if (workspace != null) {
                 workspace.removeOpenedFile(file);
             }
@@ -536,28 +505,23 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param needShow the need show
      */
     @FxThread
-    private void addEditor(@NotNull final FileEditor editor, final boolean needShow) {
+    private void addEditor(@NotNull FileEditor editor, boolean needShow) {
 
-        final Path editFile = editor.getEditFile();
+        var editFile = editor.getEditFile();
 
-        final Tab tab = new Tab(editor.getFileName());
+        var tab = new Tab(editor.getFileName());
         tab.setGraphic(new ImageView(ICON_MANAGER.getIcon(editFile, DEFAULT_FILE_ICON_SIZE)));
         tab.setContent(editor.getPage());
         tab.setOnCloseRequest(event -> handleRequestToCloseEditor(editor, tab, event));
+        tab.getProperties().put(KEY_EDITOR, editor);
 
-        final ObservableMap<Object, Object> properties = tab.getProperties();
-        properties.put(KEY_EDITOR, editor);
+        editor.dirtyProperty().addListener((observable, oldValue, newValue) ->
+                tab.setText(newValue == Boolean.TRUE ? "*" + editor.getFileName() : editor.getFileName()));
 
-        editor.dirtyProperty().addListener((observable, oldValue, newValue) -> {
-            tab.setText(newValue == Boolean.TRUE ? "*" + editor.getFileName() : editor.getFileName());
-        });
-
-        final ObservableList<Tab> tabs = getTabs();
-        tabs.add(tab);
+        getTabs().add(tab);
 
         if (needShow) {
-            final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
-            selectionModel.select(tab);
+            getSelectionModel().select(tab);
         }
 
         DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
@@ -569,24 +533,27 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-
+        var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
         if (workspace != null) {
             workspace.addOpenedFile(editFile, editor);
         }
     }
 
     @FxThread
-    private void handleRequestToCloseEditor(@NotNull final FileEditor editor, @NotNull final Tab tab,
-                                            @NotNull final Event event) {
+    private void handleRequestToCloseEditor(@NotNull FileEditor editor, @NotNull Tab tab, @NotNull Event event) {
+
         if (!editor.isDirty()) {
             return;
         }
 
-        final String question = Messages.EDITOR_AREA_SAVE_FILE_QUESTION.replace("%file_name%", editor.getFileName());
+        var question = Messages.EDITOR_AREA_SAVE_FILE_QUESTION
+                .replace("%file_name%", editor.getFileName());
 
-        final ConfirmDialog dialog = new ConfirmDialog(result -> {
-            if (result == null) return;
+        var dialog = new ConfirmDialog(result -> {
+
+            if (result == null) {
+                return;
+            }
 
             if (result) {
                 editor.save(fileEditor -> getTabs().remove(tab));
@@ -623,23 +590,23 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @FxThread
     private void loadOpenedFiles() {
 
-        final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+        var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
         if (workspace == null) {
             return;
         }
 
-        final Path assetFolder = workspace.getAssetFolder();
-        final String editFile = workspace.getCurrentEditedFile();
+        var assetFolder = workspace.getAssetFolder();
+        var editFile = workspace.getCurrentEditedFile();
 
-        final Map<String, String> openedFiles = workspace.getOpenedFiles();
+        var openedFiles = workspace.getOpenedFiles();
         openedFiles.forEach((assetPath, editorId) -> {
 
-            final EditorDescription description = EDITOR_REGISTRY.getDescription(editorId);
+            var description = EDITOR_REGISTRY.getDescription(editorId);
             if (description == null) {
                 return;
             }
 
-            final Path file = assetFolder.resolve(assetPath);
+            var file = assetFolder.resolve(assetPath);
             if (!Files.exists(file)) {
                 return;
             }

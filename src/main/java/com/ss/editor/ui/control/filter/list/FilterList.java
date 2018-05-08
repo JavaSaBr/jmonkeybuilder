@@ -5,7 +5,7 @@ import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.dialog.CreateSceneFilterDialog;
 import com.ss.editor.model.undo.impl.RemoveSceneFilterOperation;
@@ -70,7 +70,7 @@ public class FilterList extends VBox {
         listView.setFocusTraversable(true);
         listView.prefHeightProperty().bind(heightProperty());
         listView.prefWidthProperty().bind(widthProperty());
-        listView.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
+        listView.setFixedCellSize(FxConstants.LIST_CELL_HEIGHT);
 
         final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) ->

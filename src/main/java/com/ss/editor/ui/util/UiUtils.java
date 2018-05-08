@@ -103,7 +103,11 @@ public abstract class UiUtils {
 
         for (var control : controls) {
             control.focusedProperty().addListener(listener);
+            control.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> control.requestFocus());
         }
+
+        focused.setValue(Arrays.stream(controls)
+                .anyMatch(Node::isFocused));
 
         return focused;
     }

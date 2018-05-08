@@ -1170,11 +1170,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      */
     @FxThread
     protected void refreshTree() {
-
-        final M currentModel = getCurrentModel();
-
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.fill(currentModel);
+        getModelNodeTree().fill(notNull(getCurrentModel()));
     }
 
     /**

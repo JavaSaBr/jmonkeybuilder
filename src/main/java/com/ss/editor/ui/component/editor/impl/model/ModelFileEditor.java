@@ -168,18 +168,18 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     @Override
     @FxThread
-    protected void doOpenFile(@NotNull final Path file) throws IOException {
+    protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 
-        final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
-        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
+        var assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
+        var modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Spatial model = assetManager.loadAsset(modelKey);
+        var assetManager = EditorUtil.getAssetManager();
+        var model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditor3DPart editor3DPart = getEditor3DPart();
+        var editor3DPart = getEditor3DPart();
         editor3DPart.openModel(model);
 
         handleAddedObject(model);
@@ -188,8 +188,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         setIgnoreListeners(true);
         try {
 
-            final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
-            fastSkyComboBox.getSelectionModel().select(FAST_SKY_LIST.first());
+            getFastSkyComboBox().getSelectionModel()
+                    .select(FAST_SKY_LIST.first());
 
             refreshTree();
 
