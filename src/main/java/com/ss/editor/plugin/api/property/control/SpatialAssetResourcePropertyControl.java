@@ -5,20 +5,18 @@ import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,9 +37,11 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
         EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public SpatialAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                               @NotNull final PropertyDefinition definition,
-                                               @NotNull final Runnable validationCallback) {
+    public SpatialAssetResourcePropertyControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
@@ -53,17 +53,17 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
 
     @Override
     @FxThread
-    protected void processSelect(@NotNull final Path file) {
+    protected void chooseNew(@NotNull Path file) {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
-        final Path assetFile = notNull(getAssetFile(file));
-        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
-        final T spatial = findResource(assetManager, modelKey);
+        var assetFile = notNull(getAssetFile(file));
+        var modelKey = new ModelKey(toAssetPath(assetFile));
+        var spatial = findResource(assetManager, modelKey);
 
         setPropertyValue(unsafeCast(spatial));
 
-        super.processSelect(file);
+        super.chooseNew(file);
     }
 
     /**
@@ -74,31 +74,32 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
      * @return the target resource.
      */
     @FxThread
-    protected @Nullable T findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
+    protected @Nullable T findResource(@NotNull AssetManager assetManager, @NotNull ModelKey modelKey) {
         return unsafeCast(assetManager.loadModel(modelKey));
     }
 
     @Override
     @FxThread
-    protected boolean canAccept(@NotNull final File file) {
+    protected boolean canAccept(@NotNull File file) {
         return EXTENSIONS.contains(FileUtils.getExtension(file.getName()));
     }
 
     @Override
     @FxThread
-    protected void handleFile(@NotNull final File file) {
-        processSelect(file.toPath());
+    protected void handleFile(@NotNull File file) {
+        chooseNew(file.toPath());
     }
 
     @Override
     @FxThread
     public void reload() {
 
-        final T model = getPropertyValue();
-        final Spatial root = model == null ? null : findParent(model, spatial -> spatial.getKey() != null);
-        final AssetKey key = root == null ? null : root.getKey();
+        var model = getPropertyValue();
 
-        final Label resourceLabel = getResourceLabel();
+        Spatial root = model == null ? null : findParent(model, spatial -> spatial.getKey() != null);
+
+        var key = root == null ? null : root.getKey();
+        var resourceLabel = getResourceLabel();
         resourceLabel.setText(key == null ? NOT_SELECTED : key.getName() + "[" + model.getName() + "]");
 
         super.reload();

@@ -5,11 +5,10 @@ import static com.ss.editor.util.EditorUtil.getAssetManager;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 import com.jme3.asset.ModelKey;
-import com.jme3.collision.CollisionResult;
-import com.jme3.collision.CollisionResults;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
@@ -22,10 +21,9 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.control.painting.impl.AbstractPaintingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
 import com.ss.editor.model.undo.impl.AddChildOperation;
+import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
 import com.ss.editor.util.GeomUtils;
-import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -33,6 +31,7 @@ import jme3tools.optimize.GeometryBatchFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -73,10 +72,22 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     private final Array<Spatial> examples;
 
     /**
-     * The models scale.
+     * The models min minScale.
      */
     @NotNull
-    private final Vector3f scale;
+    private final Vector3f minScale;
+
+    /**
+     * The models max minScale.
+     */
+    @NotNull
+    private final Vector3f maxScale;
+
+    /**
+     * The models padding.
+     */
+    @NotNull
+    private final Vector3f padding;
 
     /**
      * The spawn method.
@@ -89,12 +100,14 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
      */
     private float time;
 
-    public SpawnToolControl(@NotNull final SpawnPaintingComponent component) {
+    public SpawnToolControl(@NotNull SpawnPaintingComponent component) {
         super(component);
         this.spawnedModels = ArrayFactory.newArray(Spatial.class);
         this.examples = ArrayFactory.newArray(Spatial.class);
         this.method = SpawnMethod.BATCH;
-        this.scale = new Vector3f(1F, 1F, 1F);
+        this.minScale = Vector3f.UNIT_XYZ.clone();
+        this.maxScale = Vector3f.UNIT_XYZ.clone();
+        this.padding = Vector3f.ZERO.clone();
     }
 
     /**
@@ -113,28 +126,68 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
      * @param method the spawn method.
      */
     @JmeThread
-    public void setMethod(@NotNull final SpawnMethod method) {
+    public void setMethod(@NotNull SpawnMethod method) {
         this.method = method;
     }
 
     /**
-     * Get the models scale.
+     * Get the models min scale.
      *
-     * @return the models scale.
+     * @return the models min scale.
      */
     @JmeThread
-    private @NotNull Vector3f getScale() {
-        return scale;
+    private @NotNull Vector3f getMinScale() {
+        return minScale;
     }
 
     /**
-     * Set the models scale.
+     * Get the models max scale.
      *
-     * @param scale the models scale.
+     * @return the models max scale.
      */
     @JmeThread
-    public void setScale(@NotNull final Vector3f scale) {
-        this.scale.set(scale);
+    private @NotNull Vector3f getMaxScale() {
+        return maxScale;
+    }
+
+    /**
+     * Get the models padding.
+     *
+     * @return the models padding.
+     */
+    @JmeThread
+    private @NotNull Vector3f getPadding() {
+        return minScale;
+    }
+
+    /**
+     * Set the models min scale.
+     *
+     * @param minScale the models min scale.
+     */
+    @JmeThread
+    public void setMinScale(@NotNull Vector3f minScale) {
+        this.minScale.set(minScale);
+    }
+
+    /**
+     * Set the models min scale.
+     *
+     * @param minScale the models min scale.
+     */
+    @JmeThread
+    public void setMaxScale(@NotNull Vector3f minScale) {
+        this.maxScale.set(minScale);
+    }
+
+    /**
+     * Set the models min scale.
+     *
+     * @param padding the models padding.
+     */
+    @JmeThread
+    public void setPadding(@NotNull Vector3f padding) {
+        this.padding.set(padding);
     }
 
     @Override
@@ -159,7 +212,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
      * @param examples the list of available examples.
      */
     @JmeThread
-    public void updateExamples(@NotNull final Array<Spatial> examples) {
+    public void updateExamples(@NotNull Array<Spatial> examples) {
         this.examples.clear();
         this.examples.addAll(examples);
     }
@@ -191,10 +244,13 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     }
 
     @Override
-    public void startPainting(@NotNull final PaintingInput input, @NotNull final Quaternion brushRotation,
-                              @NotNull final Vector3f contactPoint) {
+    public void startPainting(
+            @NotNull PaintingInput input,
+            @NotNull Quaternion brushRotation,
+            @NotNull Vector3f contactPoint
+    ) {
 
-        final Array<Spatial> spawnedModel = getExamples();
+        var spawnedModel = getExamples();
         if (spawnedModel.isEmpty()) {
             return;
         }
@@ -207,8 +263,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
 
     @Override
     @JmeThread
-    public void updatePainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint,
-                               final float tpf) {
+    public void updatePainting(@NotNull Quaternion brushRotation, @NotNull Vector3f contactPoint, float tpf) {
 
         time += (tpf * 10F);
 
@@ -217,7 +272,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
             return;
         }
 
-        final PaintingInput currentInput = notNull(getCurrentInput());
+        var currentInput = notNull(getCurrentInput());
 
         switch (currentInput) {
             case MOUSE_PRIMARY: {
@@ -234,38 +289,45 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
      * @param contactPoint  the contact point.
      */
     @JmeThread
-    protected void spawn(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint) {
+    protected void spawn(@NotNull Quaternion brushRotation, @NotNull Vector3f contactPoint) {
 
-        final float brushSize = getBrushSize();
+        var brushSize = getBrushSize();
 
-        final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final LocalObjects local = getLocalObjects();
-        final Vector3f spawnPosition = local.nextVector();
+        var random = ThreadLocalRandom.current();
+        var local = getLocalObjects();
+        var spawnPosition = local.nextVector();
 
-        final Node paintedModel = getPaintedModel();
-        final Vector3f direction = GeomUtils.getDirection(brushRotation, local.nextVector())
+        var paintedModel = getPaintedModel();
+        var direction = GeomUtils.getDirection(brushRotation, local.nextVector())
                 .negateLocal()
                 .multLocal(10);
 
-        final Vector3f sourcePoint = contactPoint.subtract(direction, local.nextVector());
-        final Ray ray = local.nextRay();
+        var sourcePoint = contactPoint.subtract(direction, local.nextVector());
+        var ray = local.nextRay();
         ray.setOrigin(sourcePoint);
 
-        final Vector3f scale = getScale();
-        final Vector3f resultPosition = local.nextVector();
-        final CollisionResults collisions = local.nextCollisionResults();
-        final CollisionResults spawnedCollisions = local.nextCollisionResults();
+        var minScale = getMinScale();
+        var maxScale = getMaxScale();
+        var padding = getPadding();
 
-        final int maxCount = (int) Math.max(getBrushPower() / 2F, 1F);
+        var resultPosition = local.nextVector();
+        var collisions = local.nextCollisionResults();
+        var spawnedCollisions = local.nextCollisionResults();
+        var resultScale = local.nextVector();
+        var needCalculateScale = !minScale.equals(maxScale);
 
-        for(int count = 0; count < maxCount; count++) {
-            for (int attempts = 0; attempts < 10; attempts++, attempts++) {
+        var maxCount = (int) Math.max(getBrushPower() / 2F, 1F);
+        var spawnedModels = getSpawnedModels();
+
+        for(var count = 0; count < maxCount; count++) {
+            for (var attempts = 0; attempts < 10; attempts++, attempts++) {
+
                 collisions.clear();
                 spawnedCollisions.clear();
 
-                final float x = nextOffset(brushSize, random);
-                final float y = nextOffset(brushSize, random);
-                final float z = nextOffset(brushSize, random);
+                var x = nextOffset(brushSize, random);
+                var y = nextOffset(brushSize, random);
+                var z = nextOffset(brushSize, random);
 
                 spawnPosition.set(x, y, z)
                         .addLocal(contactPoint)
@@ -276,7 +338,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
 
                 paintedModel.collideWith(ray, collisions);
 
-                final CollisionResult closest = collisions.getClosestCollision();
+                var closest = collisions.getClosestCollision();
                 if (closest == null || contactPoint.distance(closest.getContactPoint()) > brushSize / 2) {
                     continue;
                 }
@@ -284,21 +346,76 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
                 resultPosition.set(closest.getContactPoint())
                         .subtractLocal(paintedModel.getWorldTranslation());
 
-                final Spatial clone = examples.get(random.nextInt(0, examples.size())).clone();
+                Spatial clone = examples.get(random.nextInt(0, examples.size())).clone();
                 clone.setUserData(KEY_IGNORE_RAY_CAST, Boolean.TRUE);
                 clone.setLocalTranslation(resultPosition);
-                clone.setLocalScale(scale);
+
+                if (needCalculateScale) {
+                    clone.setLocalScale(nextScale(minScale, maxScale, resultScale, random));
+                } else {
+                    clone.setLocalScale(minScale);
+                }
+
                 clone.updateModelBound();
 
-                if (paintedModel.collideWith(clone.getWorldBound(), spawnedCollisions) > 2) {
+                var worldBound = clone.getWorldBound();
+
+                if (!Vector3f.ZERO.equals(padding)) {
+                    worldBound = addPadding(worldBound, padding);
+                }
+
+                if (paintedModel.collideWith(worldBound, spawnedCollisions) > 2) {
                     continue;
                 }
 
-                getSpawnedModels().add(clone);
+                spawnedModels.add(clone);
                 paintedModel.attachChild(clone);
                 break;
             }
         }
+    }
+
+    protected BoundingVolume addPadding(@NotNull BoundingVolume boundingVolume, @NotNull Vector3f padding) {
+
+        if (boundingVolume instanceof BoundingBox) {
+            var box = (BoundingBox) boundingVolume;
+            var xExtent = box.getXExtent() + padding.getX();
+            var yExtent = box.getYExtent() + padding.getY();
+            var zExtent = box.getZExtent() + padding.getZ();
+            return new BoundingBox(box.getCenter(), xExtent, yExtent, zExtent);
+        }
+
+        return boundingVolume;
+    }
+
+    /**
+     * Calculate a new random scale.
+     *
+     * @param minScale the min scale.
+     * @param maxScale the max scale.
+     * @param result   the result vector.
+     * @param random   the random.
+     * @return the result vector.
+     */
+    protected Vector3f nextScale(
+            @NotNull Vector3f minScale,
+            @NotNull Vector3f maxScale,
+            @NotNull Vector3f result,
+            @NotNull Random random
+    ) {
+
+        float newX = nextScale(random, minScale.getX(), maxScale.getX());
+        float newY = nextScale(random, minScale.getX(), maxScale.getX());
+        float newZ = nextScale(random, minScale.getX(), maxScale.getX());
+
+        return result.set(newX, newY, newZ);
+    }
+
+    protected float nextScale(@NotNull Random random, float min, float max) {
+        int minInt = (int) (Math.min(min, max) * 1000);
+        int maxInt = (int) (Math.max(max, min) * 1000);
+        int added = random.nextInt(maxInt - minInt);
+        return Math.min(min, max) + (added / 1000F);
     }
 
     /**
@@ -309,7 +426,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
      * @return the new coordinate.
      */
     @JmeThread
-    protected float nextOffset(final float brushSize, @NotNull final ThreadLocalRandom random) {
+    protected float nextOffset(float brushSize, @NotNull ThreadLocalRandom random) {
         float result = random.nextInt(0, (int) (brushSize * 100)) / 100F;
         result /= 2F;
         return random.nextBoolean() ? result * -1 : result;
@@ -317,38 +434,43 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
 
     @Override
     @JmeThread
-    public void finishPainting(@NotNull final Quaternion brushRotation, @NotNull final Vector3f contactPoint) {
+    public void finishPainting(@NotNull Quaternion brushRotation, @NotNull Vector3f contactPoint) {
         super.finishPainting(brushRotation, contactPoint);
 
-        final Array<Spatial> spawnedModels = getSpawnedModels();
+        var spawnedModels = getSpawnedModels();
         if (spawnedModels.isEmpty()) {
             return;
         }
 
-        final LocalObjects local = getLocalObjects();
-        final Vector3f location = local.nextVector();
-        final Vector3f offset = local.nextVector();
-        offset.set(contactPoint);
+        var local = getLocalObjects();
+        var location = local.nextVector();
+        var offset = local.nextVector()
+                .set(contactPoint);
 
         spawnedModels.stream().peek(Spatial::removeFromParent)
                 .forEach(sp -> sp.setUserData(KEY_IGNORE_RAY_CAST, null));
 
-        final Node paintedModel = notNull(getPaintedModel());
-        final Node parent = paintedModel instanceof Terrain ?
+        var paintedModel = notNull(getPaintedModel());
+
+        Node parent = paintedModel instanceof Terrain ?
                 NodeUtils.findParent(paintedModel, sp -> !(sp instanceof Terrain)) : paintedModel;
 
         if (parent != paintedModel) {
-            final Vector3f diff = local.nextVector();
-            diff.set(parent.getWorldTranslation()).subtractLocal(paintedModel.getWorldTranslation());
+
+            var diff = local.nextVector();
+            diff.set(parent.getWorldTranslation())
+                    .subtractLocal(paintedModel.getWorldTranslation());
+
             offset.addLocal(diff);
         }
 
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
+        var changeConsumer = getChangeConsumer();
 
-        final SpawnMethod method = getMethod();
+        var method = getMethod();
+
         switch (method) {
             case AS_IS: {
-                final Node spawnedNode = new Node("Spawned");
+                var spawnedNode = new Node("Spawned");
                 spawnedNode.setLocalTranslation(contactPoint);
                 spawnedModels.forEach(geom -> updatePositionAndAttach(offset, location, spawnedNode, geom));
                 spawnedNode.updateModelBound();
@@ -357,7 +479,7 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
             }
             case LINK: {
 
-                final Node spawnedNode = new Node("Spawned");
+                var spawnedNode = new Node("Spawned");
                 spawnedNode.setLocalTranslation(contactPoint);
                 spawnedModels.stream().map(this::linkSpatial)
                         .forEach(geom -> updatePositionAndAttach(offset, location, spawnedNode, geom));
@@ -369,9 +491,10 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
             }
             case BATCH: {
 
-                final Node spawnedNode = new Node("Spawned");
+                var spawnedNode = new Node("Spawned");
                 spawnedNode.setLocalTranslation(contactPoint);
-                final Array<Geometry> geometries = spawnedModels.stream()
+
+                var geometries = spawnedModels.stream()
                         .flatMap(NodeUtils::children)
                         .filter(Geometry.class::isInstance)
                         .map(Geometry.class::cast)
@@ -389,10 +512,14 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
     }
 
     @JmeThread
-    protected void updatePositionAndAttach(@NotNull final Vector3f contactPoint, @NotNull final Vector3f location,
-                                           @NotNull final Node spawnedNode, @NotNull final Spatial geom) {
+    protected void updatePositionAndAttach(
+            @NotNull Vector3f contactPoint,
+            @NotNull Vector3f location,
+            @NotNull Node spawnedNode,
+            @NotNull Spatial geom
+    ) {
 
-        final Vector3f newPosition = location.set(geom.getLocalTranslation())
+        var newPosition = location.set(geom.getLocalTranslation())
                 .subtractLocal(contactPoint);
 
         geom.setLocalTranslation(newPosition);
@@ -406,11 +533,11 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
      * @return the asset link node.
      */
     @JmeThread
-    protected @NotNull AssetLinkNode linkSpatial(@NotNull final Spatial spatial) {
-        final AssetLinkNode linkNode = new AssetLinkNode();
+    protected @NotNull AssetLinkNode linkSpatial(@NotNull Spatial spatial) {
+        var linkNode = new AssetLinkNode();
         linkNode.setLocalTranslation(spatial.getLocalTranslation());
         linkNode.setName(spatial.getName());
-        linkNode.setLocalScale(getScale());
+        linkNode.setLocalScale(getMinScale());
         linkNode.attachLinkedChild(getAssetManager(), (ModelKey) spatial.getKey());
         return linkNode;
     }

@@ -111,5 +111,6 @@ public interface PaintingComponent extends HasName {
      * @param propertyName the property name
      */
     @FxThread
-    void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);
+    default void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+    }
 }

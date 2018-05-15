@@ -34,8 +34,8 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
 
     @Override
     @FxThread
-    protected void processSelect() {
-        super.processSelect();
+    protected void chooseNew() {
+        super.chooseNew();
 
         final ExternalFileEditorDialog dialog = new ExternalFileEditorDialog(this::openExternalFile);
         dialog.setTitleText(Messages.ASSET_EDITOR_DIALOG_TITLE);

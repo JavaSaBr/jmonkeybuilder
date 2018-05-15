@@ -325,7 +325,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(skyTypeLabel, normalScaleLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
         FXUtils.addClassTo(skyTypeComboBox, CssClasses.DIALOG_FIELD);
         FXUtils.addClassesTo(normalScaleXField, normalScaleYField, normalScaleZField,
-                CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD, CssClasses.TRANSPARENT_TEXT_FIELD);
+                CssClasses.PROPERTY_CONTROL_VECTOR_3F_FIELD, CssClasses.TRANSPARENT_TEXT_FIELD);
 
         UiUtils.addFocusBinding(normalScaleContainer, normalScaleXField, normalScaleYField, normalScaleZField);
     }

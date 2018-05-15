@@ -134,6 +134,7 @@
     -fx-border-radius: 1px;
     -fx-padding: 1px 1px 1px 4px;
     -fx-min-height: -var-default-field-height;
+    -fx-alignment: center;
 }
 
 .text-input-container:focused {
@@ -719,11 +720,37 @@
 .property-editor-container-split-line > .hbox {
 
     -fx-border-color: -var-border-color transparent transparent transparent,
-    transparent transparent transparent transparent;
+                        transparent transparent transparent transparent;
 
     -fx-border-insets: 0, 1 0 0 0;
     -fx-border-style: none;
     -fx-padding: 0px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Property Control                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
+
+.property-control-resource {
+
+}
+
+.property-control-resource > .hbox {
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+.property-control-combo-box {
+}
+
+.property-control-vector-3f-field {
+    -fx-min-height: -var-default-field-inner-height;
+}
+
+.property-control-vector-3f-field:focused {
+    -fx-min-height: -var-default-field-inner-height;
 }
 
 
@@ -790,14 +817,9 @@
 .abstract-param-control-checkbox {
 }
 
-.abstract-param-control-combobox {
-}
-
 .abstract-param-control-vector2f-field {
 }
 
-.abstract-param-control-vector3f-field {
-}
 
 .abstract-param-control-label-value {
     -fx-alignment: center-left;
@@ -1223,25 +1245,11 @@
 
 /*******************************************************************************
  *                                                                             *
- * Abstract Resource Property Control                                          *
+ * Property Editor Control                                                     *
  *                                                                             *
  ******************************************************************************/
 
-.abstract-resource-property-control {
-
-}
-
-.abstract-resource-property-control > .hbox {
-    -fx-padding: 0px 0px 0px 4px;
-}
-
-/*******************************************************************************
- *                                                                             *
- * Abstract Param Editor Control                                               *
- *                                                                             *
- ******************************************************************************/
-
-.abstract-param-editor-control {
+.property-editor-control {
     -fx-padding: 1px 0px 1px 0px;
     -fx-spacing: 2px;
 }

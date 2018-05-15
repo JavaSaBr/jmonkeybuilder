@@ -45,6 +45,8 @@ import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -72,23 +74,16 @@ import java.util.List;
  */
 public abstract class EditorUtil {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
 
-    /**
-     * The constant JAVA_PARAM.
-     */
-    @NotNull
-    public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
-
-    /**
-     * Represents a list of files.
-     */
+    public static final DataFormat JAVA_PARAM = new DataFormat("jMB.javaParam");
     public static final DataFormat GNOME_FILES = new DataFormat("x-special/gnome-copied-files");
 
-    @NotNull
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
             new SimpleDateFormat("HH:mm:ss:SSS"));
+
+    private static ThreadLocal<ObjectDictionary<Class<?>, Enum<?>[]>> ENUM_VALUES_LOCAL =
+            ThreadLocal.withInitial(DictionaryFactory::newObjectDictionary);
 
     @NotNull
     private static JmeApplication jmeApplication;
@@ -877,7 +872,7 @@ public abstract class EditorUtil {
 
         var enumConstants = valueClass.getEnumConstants();
 
-        return ClassUtils.unsafeCast(enumConstants);
+        return unsafeCast(enumConstants);
     }
 
     /**
@@ -999,5 +994,23 @@ public abstract class EditorUtil {
     public static @NotNull List<File> getFiles(@NotNull Dragboard dragboard) {
         List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
         return files == null ? Collections.emptyList() : files;
+    }
+
+    /**
+     * Get an array of enum constants by the class.
+     *
+     * @param enumType the enum's class.
+     * @param <T>      the enum's type.
+     * @return the array of enum's constants.
+     */
+    @FromAnyThread
+    public static <T> T[] getEnumValues(@NotNull Class<?> enumType) {
+
+        if(!enumType.isEnum()) {
+            throw new IllegalArgumentException("The type " + enumType + " isn't a enum.");
+        }
+
+        return unsafeCast(ENUM_VALUES_LOCAL.get()
+                .get(enumType, type -> (Enum<?>[]) type.getEnumConstants()));
     }
 }

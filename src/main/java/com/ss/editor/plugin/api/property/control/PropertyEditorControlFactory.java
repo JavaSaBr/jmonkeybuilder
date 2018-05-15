@@ -21,9 +21,11 @@ public class PropertyEditorControlFactory {
      * @return the new property control.
      */
     @FxThread
-    public static @NotNull PropertyEditorControl<?> build(@NotNull final VarTable vars,
-                                                          @NotNull final PropertyDefinition definition,
-                                                          @NotNull final Runnable validation) {
+    public static @NotNull PropertyEditorControl<?> build(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validation
+    ) {
 
         switch (definition.getPropertyType()) {
             case FLOAT: {

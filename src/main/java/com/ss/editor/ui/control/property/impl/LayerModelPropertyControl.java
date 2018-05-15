@@ -77,7 +77,7 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
         FxControlUtils.onSelectedItemChange(layerComboBox, this::updateLevel);
 
         FxUtils.addClass(layerComboBox,
-                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
         FxUtils.addChild(container, layerComboBox);
     }

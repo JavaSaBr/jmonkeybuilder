@@ -40,15 +40,15 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
 
     @Override
     @FxThread
-    protected void processSelect() {
-        UiUtils.openFolderAssetDialog(this::processSelect, getActionTester());
+    protected void chooseNew() {
+        UiUtils.openFolderAssetDialog(this::chooseNew, getActionTester());
     }
 
     @Override
     @FxThread
-    protected void processSelect(@NotNull final Path file) {
+    protected void chooseNew(@NotNull final Path file) {
         setPropertyValue(notNull(getAssetFile(file)));
-        super.processSelect(file);
+        super.chooseNew(file);
     }
 
     @Override

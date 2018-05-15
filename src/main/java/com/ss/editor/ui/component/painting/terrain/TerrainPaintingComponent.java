@@ -540,7 +540,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private void createSlopeControlSettings() {
 
-        final Label smoothlyLabel = new Label(Messages.PAINTING_COMPONENT_SMOOTHLY + ":");
+        final Label smoothlyLabel = new Label(Messages.MODEL_PROPERTY_SMOOTHLY + ":");
         smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         slopeControlSmoothly = new CheckBox();
@@ -548,7 +548,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         slopeControlSmoothly.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
 
-        final Label limitedLabel = new Label(Messages.PAINTING_COMPONENT_LIMITED + ":");
+        final Label limitedLabel = new Label(Messages.MODEL_PROPERTY_LIMITED + ":");
         limitedLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         slopeControlLimited = new CheckBox();
@@ -573,7 +573,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private void createLevelControlSettings() {
 
-        final Label smoothlyLabel = new Label(Messages.PAINTING_COMPONENT_SMOOTHLY + ":");
+        final Label smoothlyLabel = new Label(Messages.MODEL_PROPERTY_SMOOTHLY + ":");
         smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlSmoothly = new CheckBox();
@@ -581,7 +581,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         levelControlSmoothly.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
 
-        final Label useMarkerLabel = new Label(Messages.PAINTING_COMPONENT_USE_MARKER + ":");
+        final Label useMarkerLabel = new Label(Messages.MODEL_PROPERTY_USE_MARKER + ":");
         useMarkerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlUseMarker = new CheckBox();
@@ -589,7 +589,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         levelControlUseMarker.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
 
-        final Label levelLabel = new Label(Messages.PAINTING_COMPONENT_LEVEL + ":");
+        final Label levelLabel = new Label(Messages.MODEL_PROPERTY_LEVEL + ":");
         levelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlLevelField = new FloatTextField();
@@ -611,7 +611,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
                 CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
 
         FXUtils.addClassesTo(levelControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(levelControlLevelField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(levelControlLevelField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
@@ -621,7 +621,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private void createRoughControlSettings() {
 
-        final Label roughnessLabel = new Label(Messages.PAINTING_COMPONENT_ROUGHNESS + ":");
+        final Label roughnessLabel = new Label(Messages.MODEL_PROPERTY_ROUGHNESS + ":");
         roughnessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlRoughnessField = new FloatTextField();
@@ -629,7 +629,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         roughControlRoughnessField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlRoughnessField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlRoughness(newValue));
 
-        final Label frequencyLabel = new Label(Messages.PAINTING_COMPONENT_FREQUENCY + ":");
+        final Label frequencyLabel = new Label(Messages.MODEL_PROPERTY_FREQUENCY + ":");
         frequencyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlFrequencyField = new FloatTextField();
@@ -637,7 +637,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         roughControlFrequencyField.setMinMax(0.1F, Integer.MAX_VALUE);
         roughControlFrequencyField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlFrequency(newValue));
 
-        final Label lacunarityLabel = new Label(Messages.PAINTING_COMPONENT_LACUNARITY + ":");
+        final Label lacunarityLabel = new Label(Messages.MODEL_PROPERTY_LACUNARITY + ":");
         lacunarityLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlLacunarityField = new FloatTextField();
@@ -645,7 +645,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         roughControlLacunarityField.setMinMax(1.1F, Integer.MAX_VALUE);
         roughControlLacunarityField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlLacunarity(newValue));
 
-        final Label octavesLabel = new Label(Messages.PAINTING_COMPONENT_OCTAVES + ":");
+        final Label octavesLabel = new Label(Messages.MODEL_PROPERTY_OCTAVES + ":");
         octavesLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlOctavesField = new FloatTextField();
@@ -653,7 +653,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         roughControlOctavesField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlOctavesField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlOctaves(newValue));
 
-        final Label scaleLabel = new Label(Messages.PAINTING_COMPONENT_SCALE + ":");
+        final Label scaleLabel = new Label(Messages.MODEL_PROPERTY_MIN_SCALE + ":");
         scaleLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlScaleField = new FloatTextField();
@@ -679,7 +679,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         FXUtils.addClassesTo(roughControlSettings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(roughControlRoughnessField, roughControlFrequencyField, roughControlLacunarityField,
-                roughControlOctavesField, roughControlScaleField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+                roughControlOctavesField, roughControlScaleField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -688,7 +688,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private void createPaintControlSettings() {
 
-        final Label triPlanarLabelLabel = new Label(Messages.PAINTING_COMPONENT_TRI_PLANAR + ":");
+        final Label triPlanarLabelLabel = new Label(Messages.MODEL_PROPERTY_TRI_PLANAR + ":");
         triPlanarLabelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         triPlanarCheckBox = new CheckBox();
@@ -696,7 +696,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         triPlanarCheckBox.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
 
-        final Label shininessLabel = new Label(Messages.PAINTING_COMPONENT_SHININESS + ":");
+        final Label shininessLabel = new Label(Messages.MODEL_PROPERTY_SHININESS + ":");
         shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         shininessField = new FloatTextField();
@@ -716,7 +716,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         FXUtils.addClassesTo(paintControlSettings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(shininessLabel, triPlanarLabelLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         FXUtils.addClassTo(triPlanarCheckBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
-        FXUtils.addClassTo(shininessField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(shininessField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
     }
 
     /**

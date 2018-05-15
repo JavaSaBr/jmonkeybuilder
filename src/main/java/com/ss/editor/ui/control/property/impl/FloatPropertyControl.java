@@ -70,7 +70,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
         FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
 
         FxUtils.addClass(valueField,
-                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
         FxUtils.addChild(container, valueField);
     }

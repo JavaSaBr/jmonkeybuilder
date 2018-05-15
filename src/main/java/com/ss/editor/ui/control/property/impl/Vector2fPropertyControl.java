@@ -218,7 +218,7 @@ public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends Proper
         var x = getXField().getValue();
         var y = getYField().getValue();
 
-        return GeomUtils.equals(getPropertyValue(), x, y);
+        return !GeomUtils.equals(getPropertyValue(), x, y);
     }
 
     /**

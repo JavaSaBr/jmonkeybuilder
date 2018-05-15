@@ -103,7 +103,7 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
                         CssClasses.TEXT_INPUT_CONTAINER,
                         CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
                 .addClass(xField, yField, zField,
-                        CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                        CssClasses.PROPERTY_CONTROL_VECTOR_3F_FIELD,
                         CssClasses.TRANSPARENT_TEXT_FIELD);
 
         FxUtils.addChild(container,
@@ -188,7 +188,7 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
         var y = getYField().getValue();
         var z = getZField().getValue();
 
-        return GeomUtils.equals(getPropertyValue(), x, y, z);
+        return !GeomUtils.equals(getPropertyValue(), x, y, z);
     }
 
     /**

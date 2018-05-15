@@ -1,14 +1,15 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.SingleSelectionModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,15 +26,18 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
     @Nullable
     private ComboBox<T> enumComboBox;
 
-    protected EnumPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                        @NotNull final Runnable validationCallback) {
+    protected EnumPropertyEditorControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
 
-        final T defaultValue = unsafeCast(notNull(definition.getDefaultValue()));
-        final T[] enumConstants = unsafeCast(defaultValue.getClass().getEnumConstants());
+        var defaultValue = ClassUtils.<T>unsafeCast(notNull(definition.getDefaultValue()));
+        var enumConstants = EditorUtil.<T>getEnumValues(defaultValue.getClass());
 
-        final ComboBox<T> enumComboBox = getEnumComboBox();
-        enumComboBox.getItems().addAll(enumConstants);
+        getEnumComboBox().getItems()
+                .addAll(enumConstants);
     }
 
     @Override
@@ -42,12 +46,15 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
         super.createComponents();
 
         enumComboBox = new ComboBox<>();
-        enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> change());
-        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        enumComboBox.prefWidthProperty()
+                .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+
         enumComboBox.setVisibleRowCount(20);
 
-        FXUtils.addClassTo(enumComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(enumComboBox, this);
+        FxControlUtils.onSelectedItemChange(enumComboBox, this::change);
+
+        FxUtils.addClass(enumComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addChild(this, enumComboBox);
     }
 
     /**
@@ -62,17 +69,20 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
     @FxThread
     public void reload() {
         super.reload();
-        final T value = getPropertyValue();
-        final ComboBox<T> enumComboBox = getEnumComboBox();
-        enumComboBox.getSelectionModel().select(value);
+        getEnumComboBox().getSelectionModel()
+                .select(getPropertyValue());
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        final ComboBox<T> enumComboBox = getEnumComboBox();
-        final SingleSelectionModel<T> selectionModel = enumComboBox.getSelectionModel();
-        setPropertyValue(selectionModel.getSelectedItem());
+
+        var currentValue = getEnumComboBox()
+                .getSelectionModel()
+                .getSelectedItem();
+
+        setPropertyValue(currentValue);
+
         super.changeImpl();
     }
 }

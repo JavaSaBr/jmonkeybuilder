@@ -59,8 +59,8 @@ public abstract class AbstractPaintingStateWithEditorTool extends AbstractEditor
     }
 
     @FxThread
-    public void setBrushSize(final float brushSize) {
-        final boolean changed = abs(getBrushSize() - brushSize) > 0.001f;
+    public void setBrushSize(float brushSize) {
+        var changed = abs(getBrushSize() - brushSize) > 0.001f;
         this.brushSize = brushSize;
         if (changed) notifyChange();
     }
@@ -71,8 +71,8 @@ public abstract class AbstractPaintingStateWithEditorTool extends AbstractEditor
     }
 
     @FxThread
-    public void setBrushPower(final float brushPower) {
-        final boolean changed = abs(getBrushPower() - brushPower) > 0.001f;
+    public void setBrushPower(float brushPower) {
+        var changed = abs(getBrushPower() - brushPower) > 0.001f;
         this.brushPower = brushPower;
         if (changed) notifyChange();
     }

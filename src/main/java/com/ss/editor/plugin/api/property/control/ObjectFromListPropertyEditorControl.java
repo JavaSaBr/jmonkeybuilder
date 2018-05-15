@@ -42,7 +42,7 @@ public class ObjectFromListPropertyEditorControl extends PropertyEditorControl<O
         comboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
         comboBox.setVisibleRowCount(20);
 
-        FXUtils.addClassTo(comboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(comboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FXUtils.addToPane(comboBox, this);
     }
 

@@ -93,7 +93,7 @@ public class QuaternionPropertyControl<C extends ChangeConsumer, D> extends Prop
                         CssClasses.TEXT_INPUT_CONTAINER,
                         CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
                 .addClass(xField, yField, zField,
-                        CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                        CssClasses.PROPERTY_CONTROL_VECTOR_3F_FIELD,
                         CssClasses.TRANSPARENT_TEXT_FIELD);
 
         FxUtils.addChild(container,

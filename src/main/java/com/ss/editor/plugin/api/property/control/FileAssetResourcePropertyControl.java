@@ -52,9 +52,9 @@ public class FileAssetResourcePropertyControl extends AssetResourcePropertyEdito
 
     @Override
     @FxThread
-    protected void processSelect(@NotNull final Path file) {
+    protected void chooseNew(@NotNull final Path file) {
         setPropertyValue(notNull(getAssetFile(file)));
-        super.processSelect(file);
+        super.chooseNew(file);
     }
 
     @Override

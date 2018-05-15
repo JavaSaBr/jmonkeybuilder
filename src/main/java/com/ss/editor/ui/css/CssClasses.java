@@ -87,7 +87,12 @@ public interface CssClasses {
     @NotNull String ABSTRACT_NODE_TREE_CONTAINER = "abstract-node-tree-container";
     @NotNull String ABSTRACT_NODE_TREE_CELL = "abstract-node-tree-cell";
 
-    @NotNull String ABSTRACT_PARAM_EDITOR_CONTROL = "abstract-param-editor-control";
+    @NotNull String PROPERTY_EDITOR_CONTROL = "property-editor-control";
+
+    @NotNull String PROPERTY_CONTROL_VECTOR_3F_FIELD = "property-control-vector-3f-field";
+    @NotNull String PROPERTY_CONTROL_RESOURCE = "property-control-resource";
+    @NotNull String PROPERTY_CONTROL_COMBO_BOX = "property-control-combo-box";
+
     @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
     @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "abstract-param-control-param-name";
     @NotNull String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "abstract-param-control-element-label";
@@ -96,12 +101,9 @@ public interface CssClasses {
     @NotNull String ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER = "abstract-param-control-short-input-container";
     @NotNull String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "abstract-param-control-checkbox";
     @NotNull String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "abstract-param-control-param-color-picker";
-    @NotNull String ABSTRACT_PARAM_CONTROL_COMBO_BOX = "abstract-param-control-combobox";
     @NotNull String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "abstract-param-control-vector2f-field";
-    @NotNull String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "abstract-param-control-vector3f-field";
     @NotNull String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "abstract-param-control-label-value";
     @NotNull String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
-    @NotNull String ABSTRACT_RESOURCE_PROPERTY_CONTROL = "abstract-resource-property-control";
 
     @NotNull String PROPERTY_EDITOR = "property-editor";
     @NotNull String PROPERTY_EDITOR_CONTAINER = "property-editor-container";

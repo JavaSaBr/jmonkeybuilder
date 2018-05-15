@@ -79,7 +79,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
         binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
 
         FXUtils.addClassesTo(comboBox.getEditor(), CssClasses.TRANSPARENT_TEXT_FIELD, CssClasses.TEXT_FIELD_IN_COMBO_BOX);
-        FXUtils.addClassTo(comboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(comboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FXUtils.addToPane(comboBox, this);
     }
 

@@ -67,7 +67,7 @@ public class StringBasedArrayPropertyControl<C extends ChangeConsumer, D, T> ext
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FxUtils.addClass(valueField,
-                CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
         FxUtils.addChild(container, valueField);
     }

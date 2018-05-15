@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.painting.spawn;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -16,7 +16,6 @@ import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
 import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -30,17 +29,22 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Node, SpawnPaintingStateWithEditorTool, SpawnToolControl> {
+public class SpawnPaintingComponent extends
+        PropertiesBasedPaintingComponent<Node, SpawnPaintingStateWithEditorTool, SpawnToolControl> {
+
+    private static final SpawnMethod[] SPAWN_METHODS = SpawnMethod.values();
 
     private static final String CATEGORY_DEFAULT = "Default";
 
     private static final String PROPERTY_MODEL = "model";
     private static final String PROPERTY_METHOD = "method";
-    private static final String PROPERTY_SCALE = "scale";
+    private static final String PROPERTY_MIN_SCALE = "minScale";
+    private static final String PROPERTY_MAX_SCALE = "maxScale";
+    private static final String PROPERTY_PADDING = "padding";
 
     public static final int AVAILABLE_MODELS = 10;
 
-    public SpawnPaintingComponent(@NotNull final PaintingComponentContainer container) {
+    public SpawnPaintingComponent(@NotNull PaintingComponentContainer container) {
         super(container);
         setToolControl(new SpawnToolControl(this));
         showCategory(CATEGORY_DEFAULT);
@@ -50,15 +54,19 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
     @FxThread
     protected @NotNull Array<PaintingPropertyDefinition> getPaintingProperties() {
 
-        final Array<PaintingPropertyDefinition> result = ArrayFactory.newArray(PaintingPropertyDefinition.class);
+        var result = ArrayFactory.<PaintingPropertyDefinition>newArray(PaintingPropertyDefinition.class);
         result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, ENUM,
-                Messages.PAINTING_COMPONENT_METHOD, PROPERTY_METHOD, SpawnMethod.BATCH));
+                Messages.MODEL_PROPERTY_METHOD, PROPERTY_METHOD, SpawnMethod.BATCH));
         result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, VECTOR_3F,
-                Messages.PAINTING_COMPONENT_SCALE, PROPERTY_SCALE, new Vector3f(1F, 1F, 1F)));
+                Messages.MODEL_PROPERTY_MIN_SCALE, PROPERTY_MIN_SCALE, new Vector3f(1F, 1F, 1F)));
+        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, VECTOR_3F,
+                Messages.MODEL_PROPERTY_MAX_SCALE, PROPERTY_MAX_SCALE, new Vector3f(1F, 1F, 1F)));
+        result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, VECTOR_3F,
+                Messages.MODEL_PROPERTY_PADDING, PROPERTY_PADDING, new Vector3f(1F, 1F, 1F)));
 
         for (int i = 1; i <= AVAILABLE_MODELS; i++) {
             result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, SPATIAL_FROM_ASSET_FOLDER,
-                    Messages.PAINTING_COMPONENT_MODEL + " " + "#" + i, PROPERTY_MODEL + "_" + i, null));
+                    Messages.MODEL_PROPERTY_MODEL + " " + "#" + i, PROPERTY_MODEL + "_" + i, null));
         }
 
         return result;
@@ -68,59 +76,77 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
     protected void syncValues() {
         super.syncValues();
 
-        final VarTable vars = getVars();
-        final SpawnToolControl toolControl = getToolControl();
+        var vars = getVars();
+        var toolControl = getToolControl();
 
-        final Array<Spatial> examples = ArrayFactory.newArray(Spatial.class);
-        final String[] selectedModels = new String[AVAILABLE_MODELS];
+        var examples = ArrayFactory.<Spatial>newArray(Spatial.class);
+        var selectedModels = new String[AVAILABLE_MODELS];
 
-        for (int i = 1; i <= AVAILABLE_MODELS; i++) {
+        for (var i = 1; i <= AVAILABLE_MODELS; i++) {
 
-            final String id = PROPERTY_MODEL + "_" + i;
+            var id = PROPERTY_MODEL + "_" + i;
             if (!vars.has(id)) {
                 selectedModels[i - 1] = null;
                 continue;
             }
 
-            final Spatial spatial = vars.get(id);
+            var spatial = vars.get(id, Spatial.class);
+
             examples.add(spatial);
-            selectedModels[i - 1] = spatial.getKey().getName();
+
+            selectedModels[i - 1] = spatial.getKey()
+                    .getName();
         }
 
-        final SpawnMethod method = vars.get(PROPERTY_METHOD);
-        final Vector3f scale = vars.get(PROPERTY_SCALE);
+        var method = vars.getEnum(PROPERTY_METHOD, SpawnMethod.class);
+        var minScale = vars.get(PROPERTY_MIN_SCALE, Vector3f.class);
+        var maxScale = vars.get(PROPERTY_MAX_SCALE, Vector3f.class);
+        var padding = vars.get(PROPERTY_PADDING, Vector3f.class);
 
-        final SpawnPaintingStateWithEditorTool state = getState();
+        var state = getState();
         state.setMethod(method.ordinal());
-        state.setScale(scale);
+        state.setMinScale(minScale);
+        state.setMaxScale(maxScale);
+        state.setPadding(padding);
         state.setSelectedModels(selectedModels);
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
             toolControl.setMethod(method);
-            toolControl.setScale(scale);
+            toolControl.setMinScale(minScale);
+            toolControl.setMaxScale(maxScale);
+            toolControl.setPadding(padding);
             toolControl.updateExamples(examples);
         });
     }
 
     @Override
     @FxThread
-    protected void readState(@NotNull final SpawnPaintingStateWithEditorTool state) {
+    protected void readState(@NotNull SpawnPaintingStateWithEditorTool state) {
 
-        final int method = state.getMethod();
-        final String[] selectedModels = state.getSelectedModels();
+        var method = state.getMethod();
+        var selectedModels = state.getSelectedModels();
 
-        final VarTable vars = getVars();
-        vars.set(PROPERTY_METHOD, SpawnMethod.values()[method]);
-        vars.set(PROPERTY_SCALE, state.getScale());
+        var vars = getVars();
+        vars.set(PROPERTY_METHOD, SPAWN_METHODS[method]);
+        vars.set(PROPERTY_MIN_SCALE, state.getMinScale());
+        vars.set(PROPERTY_MAX_SCALE, state.getMaxScale());
+        vars.set(PROPERTY_PADDING, state.getPadding());
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
         for (int i = 1; i <= AVAILABLE_MODELS; i++) {
-            final String selectedModel = selectedModels[i - 1];
+
+            var selectedModel = selectedModels[i - 1];
             if (selectedModel == null) {
                 continue;
             }
-            vars.set(PROPERTY_MODEL + "_" + i, assetManager.loadModel(selectedModel));
+
+            try {
+                vars.set(PROPERTY_MODEL + "_" + i, assetManager.loadModel(selectedModel));
+            } catch (AssetNotFoundException e) {
+                LOGGER.warning(this, e);
+                continue;
+            }
         }
 
         super.readState(state);
@@ -140,7 +166,7 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
 
     @Override
     @FxThread
-    public boolean isSupport(@NotNull final Object object) {
+    public boolean isSupport(@NotNull Object object) {
         return object instanceof Node &&
                 NodeUtils.findGeometry((Spatial) object) != null;
     }
@@ -155,11 +181,5 @@ public class SpawnPaintingComponent extends PropertiesBasedPaintingComponent<Nod
     @FxThread
     public @Nullable Image getIcon() {
         return Icons.FOREST_16;
-    }
-
-    @Override
-    @FxThread
-    public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-
     }
 }

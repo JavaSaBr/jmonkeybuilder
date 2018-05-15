@@ -11,12 +11,13 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponent;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.fx.control.input.FloatTextField;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Label;
@@ -38,10 +39,8 @@ import java.util.function.Supplier;
 public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingStateWithEditorTool, C extends PaintingControl> extends
         VBox implements PaintingComponent {
 
-    /**
-     * The executor manager.
-     */
-    @NotNull
+    protected static final Logger LOGGER = LoggerManager.getLogger(PaintingComponent.class);
+
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -90,7 +89,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     private boolean ignoreListeners;
 
-    public AbstractPaintingComponent(@NotNull final PaintingComponentContainer container) {
+    public AbstractPaintingComponent(@NotNull PaintingComponentContainer container) {
         this.container = container;
         createComponents();
         prefWidthProperty().bind(widthProperty());
@@ -99,7 +98,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     @FxThread
     protected @NotNull GridPane createBrushSettings() {
 
-        final Label brushSizeLabel = new Label(Messages.PAINTING_COMPONENT_BRUSH_SIZE + ":");
+        final Label brushSizeLabel = new Label(Messages.MODEL_PROPERTY_BRUSH_SIZE + ":");
         brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         brushSizeField = new FloatTextField();
@@ -107,7 +106,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
         brushSizeField.setMinMax(0.0001F, Integer.MAX_VALUE);
         brushSizeField.addChangeListener((observable, oldValue, newValue) -> changeBrushSize(newValue));
 
-        final Label brushPowerLabel = new Label(Messages.PAINTING_COMPONENT_BRUSH_POWER + ":");
+        final Label brushPowerLabel = new Label(Messages.MODEL_PROPERTY_BRUSH_POWER + ":");
         brushPowerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         brushPowerField = new FloatTextField();
@@ -124,14 +123,14 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
 
         FXUtils.addClassTo(settings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(brushSizeLabel, brushPowerLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(brushSizeField, brushPowerField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(brushSizeField, brushPowerField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
         return settings;
     }
 
     @Override
-    public void loadState(@NotNull final EditorState editorState) {
-        final S state = editorState.getOrCreateAdditionalState(getStateType(), getStateConstructor());
+    public void loadState(@NotNull EditorState editorState) {
+        var state = editorState.getOrCreateAdditionalState(getStateType(), getStateConstructor());
         this.state = state;
         readState(state);
     }
@@ -144,17 +143,6 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     @FxThread
     protected @NotNull S getState() {
         return notNull(state);
-    }
-
-    /**
-     * Read the saved component's state.
-     *
-     * @param state the saved component's state.
-     */
-    @FxThread
-    protected void readState(@NotNull final S state) {
-        getBrushSizeField().setValue(state.getBrushSize());
-        getBrushPowerField().setValue(state.getBrushPower());
     }
 
     /**
@@ -172,6 +160,17 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     @FromAnyThread
     protected abstract @NotNull Class<S> getStateType();
+
+    /**
+     * Read the saved component's state.
+     *
+     * @param state the saved component's state.
+     */
+    @FxThread
+    protected void readState(@NotNull S state) {
+        getBrushSizeField().setValue(state.getBrushSize());
+        getBrushPowerField().setValue(state.getBrushPower());
+    }
 
     /**
      * Change brush sizes.
@@ -192,7 +191,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      * @param size the brush size.
      */
     @JmeThread
-    protected void setBrushSize(@NotNull final Float size) {
+    protected void setBrushSize(@NotNull Float size) {
         getToolControl().setBrushSize(size);
     }
 
@@ -200,7 +199,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      * Change brush powers.
      */
     @FromAnyThread
-    protected void changeBrushPower(@NotNull final Float power) {
+    protected void changeBrushPower(@NotNull Float power) {
 
         if (state != null) {
             state.setBrushPower(power);
@@ -215,7 +214,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      * @param power the brush power.
      */
     @JmeThread
-    protected void setBrushPower(@NotNull final Float power) {
+    protected void setBrushPower(@NotNull Float power) {
         getToolControl().setBrushPower(power);
     }
 
@@ -235,7 +234,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      * @param toolControl the current tool control.
      */
     @FromAnyThread
-    protected void setToolControl(@Nullable final C toolControl) {
+    protected void setToolControl(@Nullable C toolControl) {
         this.toolControl = toolControl;
     }
 
@@ -272,8 +271,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     @FromAnyThread
     public @NotNull ModelChangeConsumer getChangeConsumer() {
-        final PaintingComponentContainer editingContainer = getContainer();
-        return editingContainer.getChangeConsumer();
+        return getContainer().getChangeConsumer();
     }
 
     @Override
@@ -284,7 +282,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
 
     @Override
     @FxThread
-    public void startPainting(@NotNull final Object object) {
+    public void startPainting(@NotNull Object object) {
         this.paintedObject = unsafeCast(object);
     }
 
@@ -302,9 +300,8 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     @JmeThread
     public @NotNull Node getCursorNode() {
-        final PaintingComponentContainer container = getContainer();
-        final Editor3DProvider provider = container.getProvider();
-        return provider.getCursorNode();
+        return getContainer().getProvider()
+                .getCursorNode();
     }
 
     /**
@@ -314,9 +311,8 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     @JmeThread
     public @NotNull Node getMarkersNode() {
-        final PaintingComponentContainer container = getContainer();
-        final Editor3DProvider provider = container.getProvider();
-        return provider.getMarkersNode();
+        return getContainer().getProvider()
+                .getMarkersNode();
     }
 
     @Override
@@ -334,7 +330,7 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     }
 
     /**
-     * Is showed boolean.
+     * Return true if this component is showed.
      *
      * @return true if this component is showed.
      */
@@ -344,25 +340,29 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     }
 
     /**
-     * Sets showed.
+     * Set true if this component is showed.
      *
      * @param showed true if this component is showed.
      */
     @FxThread
-    protected void setShowed(final boolean showed) {
+    protected void setShowed(boolean showed) {
         this.showed = showed;
     }
 
     /**
-     * @param ignoreListeners the flag of ignoring listeners.
+     * Set true of need to ignore listeners
+     *
+     * @param ignoreListeners true of need to ignore listeners
      */
     @FxThread
-    protected void setIgnoreListeners(final boolean ignoreListeners) {
+    protected void setIgnoreListeners(boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @return the flag of ignoring listeners.
+     * Return true of need to ignore listeners
+     *
+     * @return true of need to ignore listeners
      */
     @FxThread
     protected boolean isIgnoreListeners() {
