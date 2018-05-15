@@ -7,24 +7,24 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The control to edit string values.
+ * The combo box based property control.
  *
  * @author JavaSaBr
  */
-public class StringPropertyEditorControl extends PropertyEditorControl<String> {
+public class ComboBoxPropertyEditorControl<T> extends PropertyEditorControl<T> {
 
     /**
-     * The value field.
+     * The list of available options.
      */
     @Nullable
-    private TextField valueField;
+    private ComboBox<T> comboBox;
 
-    protected StringPropertyEditorControl(
+    protected ComboBoxPropertyEditorControl(
             @NotNull VarTable vars,
             @NotNull PropertyDefinition definition,
             @NotNull Runnable validationCallback
@@ -37,38 +37,41 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     protected void createComponents() {
         super.createComponents();
 
-        valueField = new TextField();
-        valueField.prefWidthProperty()
+        comboBox = new ComboBox<>();
+        comboBox.setVisibleRowCount(20);
+        comboBox.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FxControlUtils.onTextChange(valueField, this::change);
+        FxControlUtils.onSelectedItemChange(comboBox, this::change);
 
-        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-        FxUtils.addChild(this, valueField);
+        FxUtils.addClass(comboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addChild(this, comboBox);
     }
 
     /**
-     * Get the value field.
+     * Get the list of available options.
      *
-     * @return the value field.
+     * @return the list of available options.
      */
     @FxThread
-    private @NotNull TextField getValueField() {
-        return notNull(valueField);
+    protected @NotNull ComboBox<T> getComboBox() {
+        return notNull(comboBox);
     }
 
     @Override
     @FxThread
     public void reload() {
         super.reload();
-        var value = getPropertyValue();
-        getValueField().setText(value == null ? "" : value);
+        getComboBox().getSelectionModel()
+                .select(getPropertyValue());
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        setPropertyValue(getValueField().getText());
+        var comboBox = getComboBox();
+        var selectionModel = comboBox.getSelectionModel();
+        setPropertyValue(selectionModel.getSelectedItem());
         super.changeImpl();
     }
 }

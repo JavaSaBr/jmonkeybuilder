@@ -753,6 +753,11 @@
     -fx-min-height: -var-default-field-inner-height;
 }
 
+.property-control-check-box {
+}
+
+.property-control-check-box-color-picker {
+}
 
 /*******************************************************************************
  *                                                                             *
@@ -811,11 +816,6 @@
     -fx-max-height: -var-default-inner-field-height;
 }
 
-.abstract-param-control-param-color-picker {
-}
-
-.abstract-param-control-checkbox {
-}
 
 .abstract-param-control-vector2f-field {
 }

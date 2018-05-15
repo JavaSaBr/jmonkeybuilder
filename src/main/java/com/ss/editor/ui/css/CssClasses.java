@@ -92,6 +92,8 @@ public interface CssClasses {
     @NotNull String PROPERTY_CONTROL_VECTOR_3F_FIELD = "property-control-vector-3f-field";
     @NotNull String PROPERTY_CONTROL_RESOURCE = "property-control-resource";
     @NotNull String PROPERTY_CONTROL_COMBO_BOX = "property-control-combo-box";
+    @NotNull String PROPERTY_CONTROL_CHECK_BOX = "property-control-check-box";
+    @NotNull String PROPERTY_CONTROL_COLOR_PICKER = "property-control-check-box-color-picker";
 
     @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
     @NotNull String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "abstract-param-control-param-name";
@@ -99,8 +101,6 @@ public interface CssClasses {
     @NotNull String ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER = "abstract-param-control-preview-container";
     @NotNull String ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER = "abstract-param-control-input-container";
     @NotNull String ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER = "abstract-param-control-short-input-container";
-    @NotNull String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "abstract-param-control-checkbox";
-    @NotNull String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "abstract-param-control-param-color-picker";
     @NotNull String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "abstract-param-control-vector2f-field";
     @NotNull String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "abstract-param-control-label-value";
     @NotNull String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";

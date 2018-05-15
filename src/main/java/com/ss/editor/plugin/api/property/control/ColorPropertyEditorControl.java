@@ -6,8 +6,9 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ColorPicker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,8 +26,11 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     @Nullable
     private ColorPicker colorPicker;
 
-    protected ColorPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                         @NotNull final Runnable validationCallback) {
+    protected ColorPropertyEditorControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
@@ -36,14 +40,18 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
         super.createComponents();
 
         colorPicker = new ColorPicker();
-        colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> change());
-        colorPicker.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        colorPicker.prefWidthProperty()
+                .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(colorPicker, CssClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
-        FXUtils.addToPane(colorPicker, this);
+        FxControlUtils.onColorChange(colorPicker, this::change);
+
+        FxUtils.addClass(colorPicker, CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
+        FxUtils.addChild(this, colorPicker);
     }
 
     /**
+     * Get the color picker.
+     *
      * @return the color picker.
      */
     @FxThread
@@ -55,14 +63,13 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     @FxThread
     public void reload() {
         super.reload();
-        final ColorPicker colorPicker = getColorPicker();
-        colorPicker.setValue(UiUtils.from(getPropertyValue()));
+        getColorPicker().setValue(UiUtils.from(getPropertyValue()));
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        final ColorPicker colorPicker = getColorPicker();
+        var colorPicker = getColorPicker();
         setPropertyValue(UiUtils.from(colorPicker.getValue()));
         super.changeImpl();
     }

@@ -564,7 +564,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         FXUtils.addClassTo(slopeControlSettings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(smoothlyLabel, limitedLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
     }
 
     /**
@@ -612,7 +612,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         FXUtils.addClassesTo(levelControlSettings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(levelControlLevelField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
     }
 
     /**
@@ -715,7 +715,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         FXUtils.addClassesTo(paintControlSettings, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(shininessLabel, triPlanarLabelLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(triPlanarCheckBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(triPlanarCheckBox, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
         FXUtils.addClassTo(shininessField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
     }
 
