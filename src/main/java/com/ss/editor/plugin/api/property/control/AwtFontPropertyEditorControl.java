@@ -2,14 +2,15 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.util.AwtFontSuggestionProvider;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
-import impl.org.controlsfx.autocompletion.SuggestionProvider;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     private static final GraphicsEnvironment GRAPHICS_ENVIRONMENT = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private static final Font[] FONTS = GRAPHICS_ENVIRONMENT.getAllFonts();
 
-    private static final StringConverter<Font> STRING_CONVERTER = new StringConverter<Font>() {
+    private static final StringConverter<Font> STRING_CONVERTER = new StringConverter<>() {
 
         @Override
         public @NotNull String toString(@Nullable Font font) {
@@ -72,13 +73,20 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
 
         var selectionModel = comboBox.getSelectionModel();
 
-        var binding = new AutoCompletionTextFieldBinding<Font>(comboBox.getEditor(),
-                SuggestionProvider.create(comboBox.getItems()), STRING_CONVERTER);
+        var editor = comboBox.getEditor();
+        var binding = new AutoCompletionTextFieldBinding<Font>(editor,
+                new AwtFontSuggestionProvider(comboBox.getItems()), STRING_CONVERTER);
         binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
+        binding.prefWidthProperty().bind(comboBox.widthProperty().multiply(1.3));
+
+        FxControlUtils.onSelectedItemChange(comboBox, newValue -> {
+            var executorManager = ExecutorManager.getInstance();
+            executorManager.addFxTask(() -> editor.positionCaret(newValue.getFontName().length()));
+        });
 
         FxControlUtils.onSelectedItemChange(comboBox, this::change);
 
-        FxUtils.addClass(comboBox.getEditor(),
+        FxUtils.addClass(editor,
                         CssClasses.TRANSPARENT_TEXT_FIELD, CssClasses.TEXT_FIELD_IN_COMBO_BOX)
                 .addClass(comboBox,
                         CssClasses.PROPERTY_CONTROL_COMBO_BOX);

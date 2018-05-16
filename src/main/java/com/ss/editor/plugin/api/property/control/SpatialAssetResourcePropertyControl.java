@@ -2,7 +2,6 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
@@ -67,7 +66,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     }
 
     /**
-     * Finds a resource rom asset folder by the model key.
+     * Find a resource rom asset folder by the model key.
      *
      * @param assetManager the asset manager.
      * @param modelKey     the model key.
@@ -95,12 +94,10 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     public void reload() {
 
         var model = getPropertyValue();
+        var rootKey = EditorUtil.findRootKey(model);
 
-        Spatial root = model == null ? null : findParent(model, spatial -> spatial.getKey() != null);
-
-        var key = root == null ? null : root.getKey();
         var resourceLabel = getResourceLabel();
-        resourceLabel.setText(key == null ? NOT_SELECTED : key.getName() + "[" + model.getName() + "]");
+        resourceLabel.setText(rootKey == null ? NOT_SELECTED : rootKey + "[" + model.getName() + "]");
 
         super.reload();
     }

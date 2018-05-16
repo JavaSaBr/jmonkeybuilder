@@ -8,7 +8,7 @@ import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The control to edit enum values.
+ * The property control to edit enum values.
  *
  * @author JavaSaBr
  */

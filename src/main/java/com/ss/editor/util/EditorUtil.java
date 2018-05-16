@@ -21,6 +21,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
 import com.ss.editor.JfxApplication;
@@ -1012,5 +1013,23 @@ public abstract class EditorUtil {
 
         return unsafeCast(ENUM_VALUES_LOCAL.get()
                 .get(enumType, type -> (Enum<?>[]) type.getEnumConstants()));
+    }
+
+    /**
+     * Find a root key of the spatial.
+     *
+     * @param spatial the spatial.
+     * @return the root key or null.
+     */
+    public static @Nullable String findRootKey(@Nullable Spatial spatial) {
+
+        if(spatial == null) {
+            return null;
+        }
+
+        return NodeUtils.<Spatial>findParentOpt(spatial, sp -> sp.getKey() != null)
+                .map(Spatial::getKey)
+                .map(AssetKey::getName)
+                .orElse(null);
     }
 }

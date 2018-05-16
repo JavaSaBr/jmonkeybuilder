@@ -29,7 +29,7 @@ public class PropertyEditorControlFactory {
 
         switch (definition.getPropertyType()) {
             case FLOAT: {
-                final FloatPropertyEditorControl control = new FloatPropertyEditorControl(vars, definition, validation);
+                var control = new FloatPropertyEditorControl(vars, definition, validation);
                 control.setMinMax(definition.getMin(), definition.getMax());
                 return control;
             }
@@ -38,7 +38,7 @@ public class PropertyEditorControlFactory {
             case BOOLEAN:
                 return new BooleanPropertyEditorControl(vars, definition, validation);
             case INTEGER: {
-                final IntegerPropertyEditorControl control = new IntegerPropertyEditorControl(vars, definition, validation);
+                var control = new IntegerPropertyEditorControl(vars, definition, validation);
                 control.setMinMax(definition.getMin(), definition.getMax());
                 return control;
             }

@@ -3,20 +3,19 @@ package com.ss.editor.ui.component.creator.impl.material;
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
-import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
@@ -36,22 +35,12 @@ import java.nio.file.Path;
  */
 public class MaterialFileCreator extends GenericFileCreator {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
-    @NotNull
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
-    @NotNull
     private static final String PBR_MAT_DEF = "Common/MatDefs/Light/PBRLighting.j3md";
-
-    @NotNull
     private static final String LIGHTING_MAT_DEF = "Common/MatDefs/Light/Lighting.j3md";
-
-    @NotNull
     private static final String PROP_MAT_DEF = "matDef";
 
     static {
@@ -83,7 +72,7 @@ public class MaterialFileCreator extends GenericFileCreator {
 
         definitions = RESOURCE_MANAGER.getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION);
 
-        final String def;
+        String def;
 
         if (definitions.contains(PBR_MAT_DEF)) {
             def = PBR_MAT_DEF;
@@ -93,7 +82,7 @@ public class MaterialFileCreator extends GenericFileCreator {
             def = definitions.first();
         }
 
-        final Array<PropertyDefinition> result = ArrayFactory.newArray(PropertyDefinition.class);
+        var result = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         result.add(new PropertyDefinition(EditablePropertyType.STRING_FROM_LIST,
                 Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL, PROP_MAT_DEF, def, definitions));
 
@@ -101,6 +90,8 @@ public class MaterialFileCreator extends GenericFileCreator {
     }
 
     /**
+     * Get the list of available definitions.
+     *
      * @return the list of available definitions.
      */
     @FromAnyThread
@@ -110,9 +101,9 @@ public class MaterialFileCreator extends GenericFileCreator {
 
     @Override
     @FxThread
-    protected boolean validate(@NotNull final VarTable vars) {
+    protected boolean validate(@NotNull VarTable vars) {
 
-        final String matDef = vars.get(PROP_MAT_DEF, String.class, StringUtils.EMPTY);
+        var matDef = vars.get(PROP_MAT_DEF, String.class, StringUtils.EMPTY);
 
         if (matDef.isEmpty() || !getDefinitions().contains(matDef)) {
             return false;
@@ -123,18 +114,18 @@ public class MaterialFileCreator extends GenericFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
+    protected void writeData(@NotNull VarTable vars, @NotNull Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final String matDef = vars.get(PROP_MAT_DEF);
+        var assetManager = EditorUtil.getAssetManager();
+        var matDef = vars.get(PROP_MAT_DEF, String.class);
 
-        final Material material = new Material(assetManager, matDef);
+        var material = new Material(assetManager, matDef);
         material.getAdditionalRenderState();
 
-        final String materialContent = MaterialSerializer.serializeToString(material);
+        var materialContent = MaterialSerializer.serializeToString(material);
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
+        try (var out = new PrintWriter(Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(materialContent);
         }
     }

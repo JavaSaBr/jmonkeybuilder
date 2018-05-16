@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -50,19 +51,44 @@ public class NodeUtils {
      * @return the found parent or null.
      */
     @FromAnyThread
-    public static <T> @Nullable T findParent(@NotNull final Spatial spatial,
-                                             @NotNull final Predicate<Spatial> condition) {
+    public static <T> @Nullable T findParent(@NotNull Spatial spatial, @NotNull Predicate<Spatial> condition) {
 
         if (condition.test(spatial)) {
             return unsafeCast(spatial);
         }
 
-        final Node parent = spatial.getParent();
+        var parent = spatial.getParent();
         if (parent == null) {
             return null;
         }
 
         return findParent(parent, condition);
+    }
+
+    /**
+     * Find a parent of the model.
+     *
+     * @param <T>       the node's type.
+     * @param spatial   the spatial.
+     * @param condition the condition.
+     * @return the optional result.
+     */
+    @FromAnyThread
+    public static <T> @NotNull Optional<T> findParentOpt(
+            @NotNull Spatial spatial,
+            @NotNull Predicate<Spatial> condition
+    ) {
+
+        if (condition.test(spatial)) {
+            return Optional.of(unsafeCast(spatial));
+        }
+
+        var parent = spatial.getParent();
+        if (parent == null) {
+            return Optional.empty();
+        }
+
+        return findParentOpt(parent, condition);
     }
 
     /**
