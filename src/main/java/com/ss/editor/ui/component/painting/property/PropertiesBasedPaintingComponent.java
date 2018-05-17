@@ -128,9 +128,20 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
      */
     @FxThread
     protected void showCategory(@NotNull String category) {
+
         var children = getChildren();
         children.removeIf(AdditionalPropertyContainer.class::isInstance);
-        children.add(propertyContainers.get(category));
+
+        var index = children.indexOf(brushSettings);
+
+        // supporting additional not properties children
+        propertyContainers.getOptional(category).ifPresent(container -> {
+            if (children.size() == 1) {
+                children.add(container);
+            } else {
+                children.add(index + 1, container);
+            }
+        });
     }
 
     /**

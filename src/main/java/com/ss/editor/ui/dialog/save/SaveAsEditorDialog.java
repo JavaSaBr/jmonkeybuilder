@@ -18,12 +18,11 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import javafx.event.Event;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -62,13 +61,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
-    private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
+    private final EventHandler<CreatedFileEvent> createdFileHandler = this::processEvent;
 
     @NotNull
-    private final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
+    private final EventHandler<RequestSelectFileEvent> selectFileHandle = this::processEvent;
 
     @NotNull
-    private final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
+    private final EventHandler<DeletedFileEvent> deletedFileHandler = this::processEvent;
 
     /**
      * The list of waited files to select.

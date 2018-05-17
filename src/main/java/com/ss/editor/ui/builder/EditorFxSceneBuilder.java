@@ -36,34 +36,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditorFxSceneBuilder {
 
-    /**
-     * The CSS registry.
-     */
-    @NotNull
     private static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
 
     /**
      * The path to the base CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_BASE = "ui/css/base.css";
 
     /**
      * The path to the external CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_EXTERNAL = "ui/css/external.css";
 
     /**
      * The path to the custom ids CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_CUSTOM_IDS = "ui/css/custom_ids.css";
 
     /**
      * The path to the custom classes CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_CUSTOM_CLASSES = "ui/css/custom_classes.css";
 
     static {

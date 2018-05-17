@@ -46,12 +46,6 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      */
     private boolean collapsed;
 
-    /**
-     * Instantiates a new Tab tool split pane.
-     *
-     * @param scene  the scene
-     * @param config the config
-     */
     protected TabToolSplitPane(@NotNull final Scene scene, @Nullable C config) {
         this.scene = scene;
         this.config = config;

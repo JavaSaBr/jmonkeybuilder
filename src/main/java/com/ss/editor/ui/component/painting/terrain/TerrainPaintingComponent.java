@@ -20,20 +20,20 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
+import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
+import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
 import com.ss.editor.ui.component.painting.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
-import javafx.collections.ObservableList;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -55,13 +55,13 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, TerrainPaintingStateWithEditorTool, TerrainToolControl> {
+public class TerrainPaintingComponent extends
+        PropertiesBasedPaintingComponent<Node, TerrainPaintingStateWithEditorTool, TerrainToolControl> {
 
-    /**
-     * The constant TERRAIN_PARAM.
-     */
-    @NotNull
     public static final String TERRAIN_PARAM = "terrainParam";
+
+    private static final String CATEGORY_RAISE_LOWER = "RaiseLower";
+
 
     @NotNull
     private static final Function<Integer, String> LAYER_TO_SCALE_NAME = layer -> "DiffuseMap_" + layer + "_scale";
@@ -117,6 +117,12 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
      */
     @NotNull
     private final ObjectDictionary<ToggleButton, TerrainToolControl> buttonToControl;
+
+    /**
+     * The map with mapping toggle button to properties category.
+     */
+    @NotNull
+    private final ObjectDictionary<ToggleButton, String> buttonToCategory;
 
     /**
      * The map with mapping toggle button to its settings.
@@ -304,11 +310,12 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @Nullable
     private FloatTextField shininessField;
 
-    public TerrainPaintingComponent(@NotNull final PaintingComponentContainer container) {
+    public TerrainPaintingComponent(@NotNull PaintingComponentContainer container) {
         super(container);
 
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
         this.buttonToSettings = DictionaryFactory.newObjectDictionary();
+        this.buttonToCategory = DictionaryFactory.newObjectDictionary();
         this.raiseLowerToolControl = new RaiseLowerTerrainToolControl(this);
         this.smoothToolControl = new SmoothTerrainToolControl(this);
         this.roughToolControl = new RoughTerrainToolControl(this);
@@ -322,7 +329,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         this.toggleButtons.addAll(toArray(raiseLowerButton, smoothButton, roughButton, levelButton,
                 slopeButton, paintButton));
 
-        final ToggleButton raiseLowerButton = getRaiseLowerButton();
+        var raiseLowerButton = getRaiseLowerButton();
 
         buttonToControl.put(raiseLowerButton, raiseLowerToolControl);
         buttonToControl.put(getSmoothButton(), smoothToolControl);
@@ -334,6 +341,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         buttonToSettings.put(getLevelButton(), levelControlSettings);
         buttonToSettings.put(getRoughButton(), roughControlSettings);
         buttonToSettings.put(getPaintButton(), paintControlSettings);
+        buttonToCategory.put(raiseLowerButton, CATEGORY_RAISE_LOWER);
 
         raiseLowerButton.setSelected(true);
 
@@ -352,6 +360,16 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FromAnyThread
     protected @NotNull Supplier<TerrainPaintingStateWithEditorTool> getStateConstructor() {
         return TerrainPaintingStateWithEditorTool::new;
+    }
+
+    @Override
+    protected @NotNull Array<PaintingPropertyDefinition> getPaintingProperties() {
+
+        var result = ArrayFactory.<PaintingPropertyDefinition>newArray(PaintingPropertyDefinition.class);
+        //result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, ENUM,
+        //        Messages.MODEL_PROPERTY_METHOD, PROPERTY_METHOD, SpawnToolControl.SpawnMethod.BATCH));
+
+        return result;
     }
 
     @Override
@@ -398,6 +416,16 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private @NotNull ObjectDictionary<ToggleButton, TerrainToolControl> getButtonToControl() {
         return buttonToControl;
+    }
+
+    /**
+     * Get the map with mapping toggle button to properties category.
+     *
+     * @return the map with mapping toggle button to properties category.
+     */
+    @FxThread
+    private ObjectDictionary<ToggleButton, String> getButtonToCategory() {
+        return buttonToCategory;
     }
 
     /**
@@ -503,7 +531,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         paintButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_PAINT_32));
         paintButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
-        final GridPane buttonsContainer = new GridPane();
+        var buttonsContainer = new GridPane();
         buttonsContainer.setAlignment(Pos.CENTER);
         buttonsContainer.setPadding(new Insets(2, 4, 2, 4));
         buttonsContainer.add(raiseLowerButton, 0, 0);
@@ -1045,17 +1073,20 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
      * Switch editing mode.
      */
     @FxThread
-    private void switchMode(@NotNull final ToggleButton source) {
+    private void switchMode(@NotNull ToggleButton source) {
 
         if (!source.isSelected()) {
             source.setSelected(true);
             return;
         }
 
-        getToggleButtons().forEach(source, (button, arg) -> button !=
-                arg, (toggleButton, arg) -> toggleButton.setSelected(false));
+        getToggleButtons().forEach(source,
+                (button, arg) -> button != arg,
+                (toDeselect, arg) -> toDeselect.setSelected(false));
 
-        final ObjectDictionary<ToggleButton, Pane> buttonToSettings = getButtonToSettings();
+        showCategory(notNull(getButtonToCategory().get(source)));
+
+        /*final ObjectDictionary<ToggleButton, Pane> buttonToSettings = getButtonToSettings();
         final Pane settings = buttonToSettings.get(source);
 
         final VBox controlSettings = getControlSettings();
@@ -1064,10 +1095,9 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
         if (settings != null) {
             children.add(settings);
-        }
+        }*/
 
-        final ObjectDictionary<ToggleButton, TerrainToolControl> buttonToControl = getButtonToControl();
-        final TerrainToolControl toolControl = buttonToControl.get(source);
+        var toolControl = getButtonToControl().get(source);
 
         setToolControl(toolControl);
 
@@ -1076,7 +1106,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         }
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Node cursorNode = getCursorNode();
+            var cursorNode = getCursorNode();
             cursorNode.removeControl(TerrainToolControl.class);
             cursorNode.addControl(toolControl);
         });

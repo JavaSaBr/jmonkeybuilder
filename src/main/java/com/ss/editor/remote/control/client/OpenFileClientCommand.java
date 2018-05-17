@@ -10,7 +10,6 @@ import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.network.ConnectionOwner;
 import com.ss.rlib.common.network.annotation.PacketDescription;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,21 +25,18 @@ import java.nio.file.Paths;
 @PacketDescription(id = 1)
 public class OpenFileClientCommand extends ClientCommand {
 
-    @NotNull
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @Override
     @BackgroundThread
-    protected void readImpl(@NotNull final ConnectionOwner owner, @NotNull final ByteBuffer buffer) {
+    protected void readImpl(@NotNull ConnectionOwner owner, @NotNull ByteBuffer buffer) {
 
-        final Path assetPath = Paths.get(readString(buffer));
-        final Path fileToOpen = Paths.get(readString(buffer));
+        var assetPath = Paths.get(readString(buffer));
+        var fileToOpen = Paths.get(readString(buffer));
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
 
         if (currentAsset != null && assetPath.equals(currentAsset)) {
             EXECUTOR_MANAGER.addFxTask(() -> openFile(fileToOpen));
@@ -50,10 +46,10 @@ public class OpenFileClientCommand extends ClientCommand {
                 final OpenAssetAction action = new OpenAssetAction();
                 action.openAssetFolder(assetPath);
 
-                final EventHandler<Event> eventHandler = new EventHandler<Event>() {
+                var eventHandler = new EventHandler<AssetComponentLoadedEvent>() {
 
                     @Override
-                    public void handle(final Event event) {
+                    public void handle(@NotNull AssetComponentLoadedEvent event) {
                         FX_EVENT_MANAGER.removeEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, this);
                         openFile(fileToOpen);
                     }
@@ -70,7 +66,7 @@ public class OpenFileClientCommand extends ClientCommand {
      *
      * @param fileToOpen the file.
      */
-    private void openFile(@NotNull final Path fileToOpen) {
+    private void openFile(@NotNull Path fileToOpen) {
         FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
         EditorUtil.requestFxFocus();
     }

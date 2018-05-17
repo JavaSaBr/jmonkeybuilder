@@ -2,11 +2,7 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-
-import com.jme3.asset.AssetKey;
-import com.jme3.asset.ModelKey;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
@@ -24,17 +20,15 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -93,7 +87,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The file changes listener.
      */
     @NotNull
-    private final EventHandler<Event> fileChangedHandler;
+    private final EventHandler<FileChangedEvent> fileChangedHandler;
 
     /**
      * The dirty property.
@@ -152,7 +146,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.showedTime = LocalTime.now();
         this.editor3DParts = ArrayFactory.newArray(Editor3DPart.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
-        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
+        this.fileChangedHandler = this::processChangedFile;
         createContent();
     }
 
@@ -614,7 +608,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @return the file changes listener.
      */
     @FxThread
-    private @NotNull EventHandler<Event> getFileChangedHandler() {
+    private @NotNull EventHandler<FileChangedEvent> getFileChangedHandler() {
         return fileChangedHandler;
     }
 

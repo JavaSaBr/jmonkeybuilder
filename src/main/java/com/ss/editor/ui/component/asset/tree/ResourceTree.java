@@ -13,8 +13,6 @@ import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.resource.*;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.common.concurrent.barrier.Barrier;
-import com.ss.rlib.common.concurrent.barrier.BarrierFactory;
 import com.ss.rlib.common.function.IntObjectConsumer;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -22,9 +20,11 @@ import com.ss.rlib.common.util.array.ArrayComparator;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeItem.TreeModificationEvent;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -128,10 +128,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private final Consumer<ResourceElement> openFunction;
 
     /**
-     * The memory barrier.
+     * The tree item event handler.
      */
     @NotNull
-    private final Barrier barrier;
+    private final EventHandler<TreeModificationEvent<ResourceElement>> treeItemEventHandler;
 
     /**
      * The action tester.
@@ -188,10 +188,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         this.selectedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
         this.extensionFilter = ArrayFactory.newArray(String.class, 0);
         this.actionTester = actionClass -> true;
-        this.barrier = BarrierFactory.newVolatileBased();
-
-        expandedItemCountProperty()
-                .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
+        this.treeItemEventHandler = this::processChangedExpands;
 
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setFixedCellSize(FxConstants.RESOURCE_TREE_CELL_HEIGHT);
@@ -200,6 +197,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
+
+        rootProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeEventHandler(TreeItem.treeNotificationEvent(), treeItemEventHandler);
+            }
+            if (newValue != null) {
+                newValue.addEventHandler(TreeItem.treeNotificationEvent(), treeItemEventHandler);
+            }
+        });
     }
 
     /**
@@ -246,13 +252,18 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * Handle changed count of expanded elements.
      */
     @FxThread
-    private void processChangedExpands(@NotNull Number newValue) {
+    private void processChangedExpands(@NotNull TreeModificationEvent<?> event) {
+
+        if (!(event.wasExpanded() || event.wasCollapsed())) {
+            return;
+        }
 
         if (isLazyMode()) {
             EXECUTOR_MANAGER.addFxTask(this::lazyLoadChildren);
         }
 
-        getExpandHandler().ifPresent(handler -> handler.accept(newValue.intValue(), this));
+        getExpandHandler().ifPresent(handler ->
+                handler.accept(getExpandedItemCount(), this));
     }
 
     /**
@@ -616,8 +627,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
     @BackgroundThread
     private void startBackgroundFill(@NotNull Path path) {
 
-        barrier.loadChanges();
-
         var rootElement = createFor(path);
         var newRoot = new TreeItem<ResourceElement>(rootElement);
         newRoot.setExpanded(true);
@@ -627,8 +636,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (!isLazyMode() && isNeedCleanup()) {
             cleanup(newRoot);
         }
-
-        barrier.commitChanges();
 
         EXECUTOR_MANAGER.addFxTask(() -> applyNewRoot(newRoot));
     }
@@ -640,18 +647,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     @FxThread
     private void applyNewRoot(@NotNull TreeItem<ResourceElement> newRoot) {
-        barrier.loadChanges();
-        try {
+        setRoot(newRoot);
 
-            setRoot(newRoot);
-
-            var onLoadHandler = getOnLoadHandler();
-            if (onLoadHandler != null) {
-                onLoadHandler.accept(Boolean.TRUE);
-            }
-
-        } finally {
-            barrier.commitChanges();
+        var onLoadHandler = getOnLoadHandler();
+        if (onLoadHandler != null) {
+            onLoadHandler.accept(Boolean.TRUE);
         }
     }
 

@@ -21,14 +21,14 @@ public class PaintingComponentListCell extends ListCell<PaintingComponent> {
     @NotNull
     private final ImageView imageView;
 
-    public PaintingComponentListCell(@Nullable final ListView<PaintingComponent> listView) {
+    public PaintingComponentListCell(@Nullable ListView<PaintingComponent> listView) {
         this.imageView = new ImageView();
         setGraphic(imageView);
     }
 
     @Override
     @FxThread
-    protected void updateItem(@Nullable final PaintingComponent item, final boolean empty) {
+    protected void updateItem(@Nullable PaintingComponent item, boolean empty) {
         super.updateItem(item, empty);
 
         if (item == null) {

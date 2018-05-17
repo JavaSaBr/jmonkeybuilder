@@ -14,10 +14,7 @@ import java.nio.file.Path;
  */
 public class RequestSelectFileEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<RequestSelectFileEvent> EVENT_TYPE;
 
     static {
         synchronized (EventType.class) {
@@ -45,7 +42,7 @@ public class RequestSelectFileEvent extends SceneEvent {
      *
      * @param file the file.
      */
-    public void setFile(@NotNull final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 }

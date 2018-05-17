@@ -3,8 +3,8 @@ package com.ss.editor.ui.dialog.asset.file;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UiUtils.findItemForValue;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
@@ -19,7 +19,6 @@ import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
@@ -58,19 +57,19 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
      * The handler created files events.
      */
     @NotNull
-    private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
+    private final EventHandler<CreatedFileEvent> createdFileHandler = this::processEvent;
 
     /**
      * The handler selected file events.
      */
     @NotNull
-    private final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
+    private final EventHandler<RequestSelectFileEvent> selectFileHandle = this::processEvent;
 
     /**
      * The handler deleted file events,
      */
     @NotNull
-    private final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
+    private final EventHandler<DeletedFileEvent> deletedFileHandler = this::processEvent;
 
     /**
      * The list of waited files to select.

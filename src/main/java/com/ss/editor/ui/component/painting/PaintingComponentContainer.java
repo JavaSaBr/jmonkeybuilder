@@ -9,10 +9,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -29,13 +28,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PaintingComponentContainer extends ScrollPane {
 
-    /**
-     * The constant LABEL_PERCENT.
-     */
     public static final double LABEL_PERCENT = 1D - PropertyControl.CONTROL_WIDTH_PERCENT_2;
-    /**
-     * The constant FIELD_PERCENT.
-     */
     public static final double FIELD_PERCENT = PropertyControl.CONTROL_WIDTH_PERCENT_2;
 
     /**
@@ -85,42 +78,44 @@ public class PaintingComponentContainer extends ScrollPane {
      */
     protected boolean showed;
 
-    public PaintingComponentContainer(@NotNull final ModelChangeConsumer changeConsumer, @NotNull final Editor3DProvider provider) {
+    public PaintingComponentContainer(@NotNull ModelChangeConsumer changeConsumer, @NotNull Editor3DProvider provider) {
         this.changeConsumer = changeConsumer;
         this.provider = provider;
         this.container = new VBox();
         this.container.prefWidthProperty()
                 .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
-        final HBox horContainer = new HBox();
-        horContainer.prefWidthProperty()
+        var toolTypeContainer = new HBox();
+        toolTypeContainer.prefWidthProperty()
                 .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
-        final Label label = new Label(Messages.PAINTING_COMPONENT_CONTAINER_TOOL + ":");
-        label.maxWidthProperty().bind(horContainer.widthProperty()
+        var label = new Label(Messages.PAINTING_COMPONENT_CONTAINER_TOOL + ":");
+        label.maxWidthProperty().bind(toolTypeContainer.widthProperty()
                 .multiply(LABEL_PERCENT));
 
         componentBox = new ComboBox<>();
         componentBox.setCellFactory(PaintingComponentListCell::new);
         componentBox.setButtonCell(new PaintingComponentListCell(null));
         componentBox.setPromptText("No tools");
-        componentBox.prefWidthProperty().bind(horContainer.widthProperty()
+        componentBox.prefWidthProperty().bind(toolTypeContainer.widthProperty()
                 .multiply(FIELD_PERCENT));
         componentBox.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(this::activate);
 
-        final VBox resultContainer = new VBox();
+        var resultContainer = new VBox();
 
         setContent(resultContainer);
 
-        FXUtils.addToPane(label, componentBox, horContainer);
-        FXUtils.addToPane(horContainer, container, resultContainer);
-        FXUtils.addClassTo(container, CssClasses.DEF_VBOX);
-        FXUtils.addClassTo(horContainer, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(resultContainer, CssClasses.PAINTING_COMPONENT_ROOT);
+        FxUtils.addClass(container, CssClasses.DEF_VBOX)
+                .addClass(toolTypeContainer, CssClasses.DEF_HBOX)
+                .addClass(resultContainer, CssClasses.PAINTING_COMPONENT_ROOT);
 
-        final PaintingComponentRegistry registry = PaintingComponentRegistry.getInstance();
+        FxUtils.addChild(toolTypeContainer, label, componentBox)
+                .addChild(resultContainer, toolTypeContainer, container);
+
+        var registry = PaintingComponentRegistry.getInstance();
+
         this.components = registry.createComponents(this);
     }
 
@@ -140,7 +135,7 @@ public class PaintingComponentContainer extends ScrollPane {
      * @param paintedObject the painted object.
      */
     @FxThread
-    private void setPaintedObject(@Nullable final Object paintedObject) {
+    private void setPaintedObject(@Nullable Object paintedObject) {
         this.paintedObject = paintedObject;
     }
 
@@ -160,7 +155,7 @@ public class PaintingComponentContainer extends ScrollPane {
      * @param currentComponent the current painting component.
      */
     @FxThread
-    private void setCurrentComponent(@Nullable final PaintingComponent currentComponent) {
+    private void setCurrentComponent(@Nullable PaintingComponent currentComponent) {
         this.currentComponent = currentComponent;
     }
 
@@ -172,11 +167,13 @@ public class PaintingComponentContainer extends ScrollPane {
      * @param newValue   the new component.
      */
     @FxThread
-    private void activate(@NotNull final ObservableValue<? extends PaintingComponent> observable,
-                          @Nullable final PaintingComponent oldValue, @Nullable final PaintingComponent newValue) {
+    private void activate(
+            @NotNull ObservableValue<? extends PaintingComponent> observable,
+            @Nullable PaintingComponent oldValue,
+            @Nullable PaintingComponent newValue
+    ) {
 
-        final ObservableList<Node> items = getContainer()
-                .getChildren();
+        var items = getContainer().getChildren();
 
         if (oldValue != null) {
             oldValue.notifyHided();
@@ -184,15 +181,18 @@ public class PaintingComponentContainer extends ScrollPane {
             items.remove(oldValue);
         }
 
-        final Object paintedObject = getPaintedObject();
+        var paintedObject = getPaintedObject();
 
         if (newValue != null) {
+
             if (paintedObject != null) {
                 newValue.startPainting(paintedObject);
             }
+
             if (isShowed()) {
                 newValue.notifyShowed();
             }
+
             items.add((Node) newValue);
         }
 
@@ -235,11 +235,11 @@ public class PaintingComponentContainer extends ScrollPane {
      * @param element the element.
      */
     @FxThread
-    public void prepareFor(@Nullable final Object element) {
+    public void prepareFor(@Nullable Object element) {
         setPaintedObject(element);
 
-        final ComboBox<PaintingComponent> componentBox = getComponentBox();
-        final ObservableList<PaintingComponent> items = componentBox.getItems();
+        var componentBox = getComponentBox();
+        var items = componentBox.getItems();
         items.clear();
 
         if (element != null) {
@@ -258,7 +258,7 @@ public class PaintingComponentContainer extends ScrollPane {
     @FxThread
     public void notifyShowed() {
         setShowed(true);
-        final PaintingComponent currentComponent = getCurrentComponent();
+        var currentComponent = getCurrentComponent();
         if (currentComponent != null) {
             currentComponent.notifyShowed();
         }
@@ -270,7 +270,7 @@ public class PaintingComponentContainer extends ScrollPane {
     @FxThread
     public void notifyHided() {
         setShowed(false);
-        final PaintingComponent currentComponent = getCurrentComponent();
+        var currentComponent = getCurrentComponent();
         if (currentComponent != null) {
             currentComponent.notifyHided();
         }
@@ -312,7 +312,7 @@ public class PaintingComponentContainer extends ScrollPane {
      * @param showed true if this component is showed.
      */
     @FxThread
-    protected void setShowed(final boolean showed) {
+    protected void setShowed(boolean showed) {
         this.showed = showed;
     }
 
@@ -323,8 +323,8 @@ public class PaintingComponentContainer extends ScrollPane {
      * @param propertyName the property name.
      */
     @FxThread
-    public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
-        final PaintingComponent currentComponent = getCurrentComponent();
+    public void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+        var currentComponent = getCurrentComponent();
         if (currentComponent != null) {
             currentComponent.notifyChangeProperty(object, propertyName);
         }

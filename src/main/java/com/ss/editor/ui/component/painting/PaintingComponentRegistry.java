@@ -42,7 +42,7 @@ public class PaintingComponentRegistry {
      * @param constructor the new painting component's constructor.
      */
     @FxThread
-    public void register(@NotNull final Function<PaintingComponentContainer, PaintingComponent> constructor) {
+    public void register(@NotNull Function<PaintingComponentContainer, PaintingComponent> constructor) {
         this.constructors.add(constructor);
     }
 
@@ -53,9 +53,13 @@ public class PaintingComponentRegistry {
      * @return all available painting components.
      */
     @FxThread
-    public @NotNull Array<PaintingComponent> createComponents(@NotNull final PaintingComponentContainer container) {
-        final Array<PaintingComponent> result = ArrayFactory.newArray(PaintingComponent.class);
-        constructors.forEach(result, container, (constructor, components, cont) -> components.add(constructor.apply(cont)));
+    public @NotNull Array<PaintingComponent> createComponents(@NotNull PaintingComponentContainer container) {
+
+        var result = ArrayFactory.<PaintingComponent>newArray(PaintingComponent.class);
+
+        constructors.forEach(result, container,
+                (constructor, components, cont) -> components.add(constructor.apply(cont)));
+
         return result;
     }
 }
