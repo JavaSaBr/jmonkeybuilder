@@ -107,7 +107,7 @@ public class JfxApplication extends Application {
 
         // JavaFX
         System.setProperty("prism.lcdtext", "false");
-        System.setProperty("prism.text", "t2k");
+        //System.setProperty("prism.text", "t2k");
 
         var editorConfig = EditorConfig.getInstance();
         var openGLVersion = editorConfig.getEnum(PREF_OPEN_GL, PREF_DEFAULT_OPEN_GL);

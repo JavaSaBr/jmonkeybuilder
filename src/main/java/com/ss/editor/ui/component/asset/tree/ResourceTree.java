@@ -13,12 +13,14 @@ import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.resource.*;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.function.IntObjectConsumer;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayComparator;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -264,6 +266,18 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         getExpandHandler().ifPresent(handler ->
                 handler.accept(getExpandedItemCount(), this));
+
+        repaint();
+    }
+
+    private void repaint() {
+
+        //FIXME temp fix how to refresh
+        var stage = EditorUtil.getFxStage();
+        var old = stage.getWidth();
+        stage.setWidth(old + 1);
+
+        Platform.runLater(() -> stage.setWidth(old));
     }
 
     /**
@@ -653,6 +667,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (onLoadHandler != null) {
             onLoadHandler.accept(Boolean.TRUE);
         }
+
+        repaint();
     }
 
     /**
