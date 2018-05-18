@@ -275,7 +275,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         //FIXME temp fix how to refresh
         var stage = EditorUtil.getFxStage();
         var old = stage.getWidth();
-        stage.setWidth(old + 1);
+        stage.setWidth(old + 3);
 
         Platform.runLater(() -> stage.setWidth(old));
     }
