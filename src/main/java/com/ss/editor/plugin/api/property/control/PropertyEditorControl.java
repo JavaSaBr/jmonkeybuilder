@@ -1,20 +1,22 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.Editor;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * The base implementation of an editor control to edit properties on the factory dialog.
@@ -23,21 +25,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyEditorControl<T> extends HBox {
 
-    /**
-     * The constant DEFAULT_LABEL_W_PERCENT.
-     */
-    public static final double DEFAULT_LABEL_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_LABEL_W_PERCENT;
+    public static final double DEFAULT_LABEL_W_PERCENT =
+            AbstractSimpleEditorDialog.DEFAULT_LABEL_W_PERCENT;
 
-    /**
-     * The constant DEFAULT_FIELD_W_PERCENT.
-     */
-    public static final double DEFAULT_FIELD_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_FIELD_W_PERCENT;
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    public static final double DEFAULT_FIELD_W_PERCENT =
+            AbstractSimpleEditorDialog.DEFAULT_FIELD_W_PERCENT;
 
     /**
      * The validation callback to call re-validating.
@@ -64,6 +56,18 @@ public class PropertyEditorControl<T> extends HBox {
     private final String name;
 
     /**
+     * The property type.
+     */
+    @NotNull
+    private final EditablePropertyType propertyType;
+
+    /**
+     * The default value.
+     */
+    @Nullable
+    private final Object defaultValue;
+
+    /**
      * The dependencies.
      */
     @NotNull
@@ -80,23 +84,29 @@ public class PropertyEditorControl<T> extends HBox {
      */
     private boolean ignoreListener;
 
-    protected PropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                    @NotNull final Runnable validationCallback) {
+    protected PropertyEditorControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         this.vars = vars;
         this.id = definition.getId();
         this.name = definition.getName();
+        this.propertyType = definition.getPropertyType();
         this.validationCallback = validationCallback;
         this.dependencies = definition.getDependencies();
+        this.defaultValue = definition.getDefaultValue();
 
-        final Object defaultValue = definition.getDefaultValue();
+        var defaultValue = definition.getDefaultValue();
 
         if (defaultValue != null) {
             vars.set(id, defaultValue);
         }
 
-        setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
-        setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
+        setOnKeyReleased(UiUtils::consumeIfIsNotHotKey);
+        setOnKeyPressed(UiUtils::consumeIfIsNotHotKey);
         createComponents();
+
         setIgnoreListener(true);
         try {
             reload();
@@ -104,28 +114,30 @@ public class PropertyEditorControl<T> extends HBox {
             setIgnoreListener(false);
         }
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_EDITOR_CONTROL);
+        FxUtils.addClass(this, CssClasses.PROPERTY_EDITOR_CONTROL);
     }
 
     /**
      * Check dependency of this control.
      */
-    @FXThread
+    @FxThread
     public void checkDependency() {
 
-        final Array<String> dependencies = getDependencies();
-        if (dependencies.isEmpty()) return;
+        var dependencies = getDependencies();
+        if (dependencies.isEmpty()) {
+            return;
+        }
 
         setDisable(false);
 
-        for (final String dependency : dependencies) {
+        for (var dependency : dependencies) {
 
             if (!vars.has(dependency)) {
                 setDisable(true);
                 return;
             }
 
-            final Object value = vars.get(dependency);
+            var value = vars.get(dependency);
 
             if (value instanceof Boolean) {
                 setDisable(!(Boolean) value);
@@ -142,39 +154,72 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return the dependencies.
      */
-    @FXThread
+    @FxThread
     protected @NotNull Array<String> getDependencies() {
         return dependencies;
     }
 
-    @FXThread
-    protected void reload() {
+    /**
+     * Get the property id.
+     *
+     * @return the property id.
+     */
+    @FxThread
+    public @NotNull String getPropertyId() {
+        return id;
     }
 
-    @FXThread
+    /**
+     * Get the default value.
+     *
+     * @return the default value.
+     */
+    @FxThread
+    public @Nullable Object getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+     * Get the property type.
+     *
+     * @return the property type.
+     */
+    @FxThread
+    public @NotNull EditablePropertyType getPropertyType() {
+        return propertyType;
+    }
+
+    /**
+     * Reload value of this control.
+     */
+    @FxThread
+    public void reload() {
+    }
+
+    @FxThread
     protected void change() {
         if (isIgnoreListener()) return;
         changeImpl();
     }
 
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         validationCallback.run();
     }
 
-    @FXThread
+    @FxThread
     protected void createComponents() {
         setAlignment(Pos.CENTER_RIGHT);
 
         propertyNameLabel = new Label(getName() + ":");
         propertyNameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addToPane(propertyNameLabel, this);
+        FxUtils.addClass(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FxUtils.addChild(this, propertyNameLabel);
     }
 
     /**
-     * Gets a name of the property.
+     * Get the name of the property.
      *
      * @return the name of the property.
      */
@@ -184,7 +229,7 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     /**
-     * Gets a current property value.
+     * Get the current property value.
      *
      * @return the current property value.
      */
@@ -195,12 +240,12 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     /**
-     * Sets a new current property value.
+     * Set the new current property value.
      *
      * @param propertyValue the new current property value.
      */
-    @FXThread
-    protected void setPropertyValue(@Nullable final T propertyValue) {
+    @FxThread
+    protected void setPropertyValue(@Nullable T propertyValue) {
         if (propertyValue == null) {
             vars.clear(id);
         } else {
@@ -213,8 +258,8 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @param ignoreListener the flag for ignoring listeners.
      */
-    @FXThread
-    protected void setIgnoreListener(final boolean ignoreListener) {
+    @FxThread
+    protected void setIgnoreListener(boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
 
@@ -223,8 +268,20 @@ public class PropertyEditorControl<T> extends HBox {
      *
      * @return true if need to ignore listeners.
      */
-    @FXThread
+    @FxThread
     protected boolean isIgnoreListener() {
         return ignoreListener;
+    }
+
+    /**
+     * Check the current value with the default value.
+     *
+     * @return true if this property isn't equal to default value.
+     */
+    @FxThread
+    public boolean isNotDefault() {
+        var propertyValue = getPropertyValue();
+        var defaultValue = getDefaultValue();
+        return !Objects.equals(defaultValue, propertyValue);
     }
 }

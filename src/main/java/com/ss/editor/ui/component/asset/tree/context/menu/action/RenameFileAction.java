@@ -1,14 +1,14 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
 import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -29,19 +29,19 @@ public class RenameFileAction extends FileAction {
         super(element);
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.EDIT_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);

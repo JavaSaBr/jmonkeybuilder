@@ -1,11 +1,11 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -61,7 +61,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -69,7 +69,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         questionLabel.minWidthProperty().bind(widthProperty().multiply(0.9));
 
         FXUtils.addToPane(questionLabel, root);
-        FXUtils.addClassTo(root, CSSClasses.CONFIRM_DIALOG);
+        FXUtils.addClassTo(root, CssClasses.CONFIRM_DIALOG);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processKey(@NotNull final KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             processClose();
@@ -93,14 +93,14 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
         handler.accept(Boolean.TRUE);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processClose() {
         super.processClose();
         handler.accept(Boolean.FALSE);
@@ -121,14 +121,14 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createAdditionalActions(@NotNull final HBox container) {
         super.createAdditionalActions(container);
 
         final Button closeButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
         closeButton.setOnAction(event -> processCancel());
 
-        FXUtils.addClassTo(closeButton, CSSClasses.DIALOG_BUTTON);
+        FXUtils.addClassTo(closeButton, CssClasses.DIALOG_BUTTON);
         FXUtils.addToPane(closeButton, container);
     }
 }

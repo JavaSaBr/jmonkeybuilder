@@ -1,17 +1,15 @@
 package com.ss.editor.ui.control.property.impl;
 
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ObjectUtils;
-import javafx.collections.ObservableList;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.common.util.ObjectUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
@@ -28,11 +26,11 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     private class LodLevelCell extends ListCell<Integer> {
 
         @Override
-        protected void updateItem(@Nullable final Integer level, final boolean empty) {
+        protected void updateItem(@Nullable Integer level, boolean empty) {
             super.updateItem(level, empty);
 
-            final Geometry geometry = getEditObject();
-            final Mesh mesh = geometry.getMesh();
+            var geometry = getEditObject();
+            var mesh = geometry.getMesh();
 
             if (level == null || mesh == null) {
                 setText("None");
@@ -42,7 +40,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
             int elements;
 
             if (level < mesh.getNumLodLevels()) {
-                final VertexBuffer lodLevel = mesh.getLodLevel(level);
+                var lodLevel = mesh.getLodLevel(level);
                 elements = lodLevel.getNumElements();
             } else {
                 elements = mesh.getTriangleCount();
@@ -59,8 +57,11 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     @Nullable
     private ComboBox<Integer> levelComboBox;
 
-    public LodLevelPropertyControl(@Nullable final Integer element, @NotNull final String paramName,
-                                   @NotNull final C changeConsumer) {
+    public LodLevelPropertyControl(
+            @Nullable Integer element,
+            @NotNull String paramName,
+            @NotNull C changeConsumer
+    ) {
         super(element, paramName, changeConsumer);
     }
 
@@ -71,20 +72,23 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     }
 
     @Override
-    @FXThread
-    protected void createComponents(@NotNull final HBox container) {
+    @FxThread
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         levelComboBox = new ComboBox<>();
         levelComboBox.setCellFactory(param -> new LodLevelCell());
         levelComboBox.setButtonCell(new LodLevelCell());
         levelComboBox.setEditable(false);
-        levelComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
-        levelComboBox.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
+        levelComboBox.prefWidthProperty()
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addToPane(levelComboBox, container);
-        FXUtils.addClassTo(levelComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FxControlUtils.onSelectedItemChange(levelComboBox, this::updateLevel);
+
+        FxUtils.addClass(levelComboBox,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
+        FxUtils.addChild(container, levelComboBox);
     }
 
     /**
@@ -92,46 +96,50 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @param newValue the new level.
      */
-    @FXThread
-    private void updateLevel(@Nullable final Integer newValue) {
+    @FxThread
+    private void updateLevel(@Nullable Integer newValue) {
         if (isIgnoreListener()) return;
-        changed(newValue == null ? 0 : newValue, getPropertyValue());
+        changed(ObjectUtils.ifNull(newValue, 0), getPropertyValue());
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @NotNull Integer getPropertyValue() {
-        final Integer value = super.getPropertyValue();
-        return value == null ? 0 : value;
+        return ObjectUtils.ifNull(super.getPropertyValue(), 0);
     }
 
     /**
-     * Gets level combo box.
+     * Get the level combo box.
      *
-     * @return The lod level combobox.
+     * @return The lod level combo box.
      */
-    @FXThread
+    @FxThread
     protected @NotNull ComboBox<Integer> getLevelComboBox() {
         return ObjectUtils.notNull(levelComboBox);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
-        if (!hasEditObject()) return;
 
-        final Geometry geometry = getEditObject();
-        final Mesh mesh = geometry.getMesh();
-        if (mesh == null) return;
+        if (!hasEditObject()) {
+            return;
+        }
 
-        final Integer element = getPropertyValue();
-        final ComboBox<Integer> levelComboBox = getLevelComboBox();
-        final ObservableList<Integer> items = levelComboBox.getItems();
+        var geometry = getEditObject();
+        var mesh = geometry.getMesh();
+        if (mesh == null) {
+            return;
+        }
+
+        var element = getPropertyValue();
+        var levelComboBox = getLevelComboBox();
+        var items = levelComboBox.getItems();
         items.clear();
 
-        final int numLodLevels = mesh.getNumLodLevels();
+        var numLodLevels = mesh.getNumLodLevels();
 
-        for (int i = 0; i < numLodLevels; i++) {
+        for (var i = 0; i < numLodLevels; i++) {
             items.add(i);
         }
 
@@ -139,6 +147,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
             items.add(0);
         }
 
-        levelComboBox.getSelectionModel().select(element);
+        levelComboBox.getSelectionModel()
+                .select(element);
     }
 }

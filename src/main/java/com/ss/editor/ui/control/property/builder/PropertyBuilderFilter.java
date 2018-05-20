@@ -19,5 +19,5 @@ public interface PropertyBuilderFilter {
      * @param parent  the parent.
      * @return true of we should skip the builder for the object.
      */
-    boolean skip(@NotNull final PropertyBuilder builder, @NotNull final Object object, @Nullable final Object parent);
+    boolean skip(@NotNull PropertyBuilder builder, @NotNull Object object, @Nullable Object parent);
 }

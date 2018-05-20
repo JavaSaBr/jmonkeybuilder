@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.bar.action;
 
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.util.EditorUtil;
 import javafx.scene.control.MenuItem;
 
 /**
@@ -26,13 +26,12 @@ public class UpdateClasspathAndAssetCacheAction extends MenuItem {
      * Update classpath and clear asset cache.
      */
     private void process() {
-        ExecutorManager.getInstance().addJMETask(() -> {
+        ExecutorManager.getInstance().addJmeTask(() -> {
 
             final ClasspathManager classpathManager = ClasspathManager.getInstance();
             classpathManager.reload();
 
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             assetManager.clearCache();
         });
     }

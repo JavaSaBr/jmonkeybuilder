@@ -1,9 +1,10 @@
 package com.ss.editor.ui.control.choose;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -31,16 +32,12 @@ public class NamedChooseTextureControl extends ChooseTextureControl {
     @Nullable
     private Label nameLabel;
 
-    /**
-     * Instantiates a new Named choose texture control.
-     *
-     * @param name the name
-     */
     public NamedChooseTextureControl(@NotNull final String name) {
         this.name = name + ":";
     }
 
     @Override
+    @FxThread
     protected void createComponents() {
 
         nameLabel = new Label();
@@ -57,10 +54,11 @@ public class NamedChooseTextureControl extends ChooseTextureControl {
     }
 
     /**
-     * Sets a width percent of a control.
+     * Set the width percent of this control.
      *
-     * @param percent the percent.
+     * @param percent the width percent.
      */
+    @FxThread
     public void setControlWidthPercent(final double percent) {
 
         final Label nameLabel = getNameLabel();
@@ -73,14 +71,17 @@ public class NamedChooseTextureControl extends ChooseTextureControl {
     }
 
     /**
+     * GEt the label with name.
+     *
      * @return the label with name.
      */
-    @NotNull
-    private Label getNameLabel() {
+    @FxThread
+    private @NotNull Label getNameLabel() {
         return notNull(nameLabel);
     }
 
     @Override
+    @FxThread
     protected void reload() {
         super.reload();
 
@@ -89,10 +90,12 @@ public class NamedChooseTextureControl extends ChooseTextureControl {
     }
 
     /**
+     * Get the name of this control.
+     *
      * @return the name of this control.
      */
-    @NotNull
-    private String getName() {
+    @FxThread
+    private @NotNull String getName() {
         return name == null ? StringUtils.EMPTY : name;
     }
 }

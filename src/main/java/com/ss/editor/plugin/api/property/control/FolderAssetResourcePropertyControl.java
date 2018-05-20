@@ -2,15 +2,14 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
-import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.VarTable;
-import javafx.scene.control.Label;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -26,9 +25,11 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
     @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class;
 
-    public FolderAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                              @NotNull final PropertyDefinition definition,
-                                              @NotNull final Runnable validationCallback) {
+    public FolderAssetResourcePropertyControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
@@ -39,26 +40,26 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
     }
 
     @Override
-    @FXThread
-    protected void processSelect() {
-        UIUtils.openFolderAssetDialog(this::processSelect, getActionTester());
+    @FxThread
+    protected void chooseNew() {
+        UiUtils.openFolderAssetDialog(this::chooseNew, getActionTester());
     }
 
     @Override
-    @FXThread
-    protected void processSelect(@NotNull final Path file) {
+    @FxThread
+    protected void chooseNew(@NotNull Path file) {
         setPropertyValue(notNull(getAssetFile(file)));
-        super.processSelect(file);
+        super.chooseNew(file);
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
 
-        final Path file = getPropertyValue();
-        final String assetPath = file == null ? NOT_SELECTED : toAssetPath(file);
+        var file = getPropertyValue();
+        var assetPath = file == null ? NOT_SELECTED : toAssetPath(file);
 
-        final Label resourceLabel = getResourceLabel();
+        var resourceLabel = getResourceLabel();
         resourceLabel.setText(StringUtils.isEmpty(assetPath) ? "/" : assetPath);
 
         super.reload();

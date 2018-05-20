@@ -1,6 +1,8 @@
 package com.ss.editor.ui.util;
 
-import com.ss.editor.annotation.FXThread;
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.css.CssColorTheme;
@@ -53,7 +55,7 @@ public class DynamicIconSupport {
      *
      * @param buttons the buttons.
      */
-    @FXThread
+    @FxThread
     public static void addSupport(@NotNull final ToggleButton... buttons) {
         for (final ToggleButton button : buttons) {
             addSupport(button);
@@ -65,7 +67,7 @@ public class DynamicIconSupport {
      *
      * @param buttons the buttons.
      */
-    @FXThread
+    @FxThread
     public static void addSupport(@NotNull final ButtonBase... buttons) {
         for (final ButtonBase button : buttons) {
             addSupport(button);
@@ -77,11 +79,11 @@ public class DynamicIconSupport {
      *
      * @param button the button.
      */
-    @FXThread
+    @FxThread
     public static void addSupport(@NotNull final ToggleButton button) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
         if (!theme.needRepaintIcons()) {
             return;
@@ -115,11 +117,11 @@ public class DynamicIconSupport {
      *
      * @param button the button.
      */
-    @FXThread
+    @FxThread
     public static void addSupport(@NotNull final ButtonBase button) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
         if (!theme.needRepaintIcons()) {
             return;
@@ -155,7 +157,7 @@ public class DynamicIconSupport {
      * @param imageView the image view.
      * @param condition the condition of changing.
      */
-    @FXThread
+    @FxThread
     public static void updateListener(@NotNull final Node node, @NotNull final ImageView imageView,
                                       @NotNull final ReadOnlyBooleanProperty condition) {
         updateListener(node, imageView, condition, SELECTED_IMAGE_LISTENER, NOT_SELECTED_IMAGE, SELECTED_IMAGE);
@@ -168,20 +170,20 @@ public class DynamicIconSupport {
      * @param imageView the image view.
      * @param condition the condition of changing.
      */
-    @FXThread
+    @FxThread
     public static void updateListener2(@NotNull final Node node, @NotNull final ImageView imageView,
                                        @NotNull final ReadOnlyBooleanProperty condition) {
         updateListener(node, imageView, condition, SELECTED_IMAGE_LISTENER_2, NOT_SELECTED_IMAGE_2, SELECTED_IMAGE_2);
     }
 
-    @FXThread
+    @FxThread
     private static void updateListener(@NotNull final Node node, @NotNull final ImageView imageView,
                                        @NotNull final ReadOnlyBooleanProperty condition,
                                        @NotNull final Object listenerKey, @NotNull final Object notSelectedKey,
                                        @NotNull final Object selectedKey) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getTheme();
+        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
         if (!theme.needRepaintIcons()) {
             return;

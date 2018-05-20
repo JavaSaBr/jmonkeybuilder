@@ -14,33 +14,19 @@ public class EditorThread extends Thread {
     /**
      * The container of thread local objects.
      */
+    @NotNull
     private final LocalObjects localObjects;
 
-    /**
-     * Instantiates a new Editor thread.
-     */
     public EditorThread() {
         this.localObjects = new LocalObjects();
     }
 
-    /**
-     * Instantiates a new Editor thread.
-     *
-     * @param target the target
-     */
-    public EditorThread(final Runnable target) {
+    public EditorThread(@NotNull final Runnable target) {
         super(target);
         this.localObjects = new LocalObjects();
     }
 
-    /**
-     * Instantiates a new Editor thread.
-     *
-     * @param group  the group
-     * @param target the target
-     * @param name   the name
-     */
-    public EditorThread(final ThreadGroup group, final Runnable target, final String name) {
+    public EditorThread(@NotNull final ThreadGroup group, @NotNull final Runnable target, @NotNull final String name) {
         super(group, target, name);
         this.localObjects = new LocalObjects();
     }

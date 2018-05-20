@@ -1,11 +1,21 @@
 package com.ss.editor.analytics.google;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_ANALYTICS_GOOGLE;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_ANALYTICS_GOOGLE;
+import static com.ss.rlib.common.util.StringUtils.isEmpty;
 import static org.apache.http.impl.client.HttpClients.createMinimal;
-import static com.ss.rlib.util.StringUtils.isEmpty;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
+import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.linkedlist.LinkedList;
+import com.ss.rlib.common.util.linkedlist.LinkedListFactory;
+import com.ss.rlib.common.util.os.OperatingSystem;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -13,14 +23,6 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.concurrent.util.ConcurrentUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.linkedlist.LinkedList;
-import com.ss.rlib.util.linkedlist.LinkedListFactory;
-import com.ss.rlib.util.os.OperatingSystem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +35,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The implementation to work with Google Analytics.
+ * The implementation of a client to work with Google Analytics.
  *
  * @author JavaSaBr
  */
@@ -76,14 +78,8 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private static final GAnalytics INSTANCE = new GAnalytics();
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
     @FromAnyThread
-    public static GAnalytics getInstance() {
+    public static @NotNull GAnalytics getInstance() {
         return INSTANCE;
     }
 
@@ -92,27 +88,36 @@ public class GAnalytics extends EditorThread {
      */
     @FromAnyThread
     public static void waitForSend() {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
+
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;
-        if (progressCount.get() < 1) return;
+
+        if (progressCount.get() < 1) {
+            return;
+        }
+
         ConcurrentUtils.wait(progressCount, 2000);
     }
 
     /**
-     * Send an event.
+     * Send the event.
      *
      * @param category the category.
      * @param action   the action.
      */
     @FromAnyThread
     public static void sendEvent(@NotNull final String category, @NotNull final String action) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
-        sendEvent(category, action, null);
+        if (EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            sendEvent(category, action, null);
+        }
     }
 
     /**
-     * Send an event.
+     * Send the event.
      *
      * @param category the category.
      * @param action   the action.
@@ -121,19 +126,24 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendEvent(@NotNull final String category, @NotNull final String action,
                                  @Nullable final String label) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_EVENT_CATEGORY, category);
         parameters.put(PARAM_EVENT_ACTION, action);
 
-        if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
+        if (!isEmpty(label)) {
+            parameters.put(PARAM_EVENT_LABEL, label);
+        }
 
         send(HitType.EVENT, parameters);
     }
 
     /**
-     * Send an event ignoring disabling GA.
+     * Send the event with ignoring disabling GA.
      *
      * @param category the category.
      * @param action   the action.
@@ -147,20 +157,25 @@ public class GAnalytics extends EditorThread {
         parameters.put(PARAM_EVENT_CATEGORY, category);
         parameters.put(PARAM_EVENT_ACTION, action);
 
-        if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
+        if (!isEmpty(label)) {
+            parameters.put(PARAM_EVENT_LABEL, label);
+        }
 
         send(HitType.EVENT, parameters);
     }
 
     /**
-     * Send an exception.
+     * Send the exception.
      *
      * @param exception the exception.
      * @param fatal     true if the exception is fatal.
      */
     @FromAnyThread
     public static void sendException(@NotNull final Throwable exception, final boolean fatal) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final StringWriter writer = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(writer);
@@ -178,7 +193,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send a page view event.
+     * Send the page view event.
      *
      * @param title    the title.
      * @param location the location.
@@ -187,7 +202,10 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendPageView(@NotNull final String title, @Nullable final String location,
                                     @Nullable final String page) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final Map<String, Object> parameters = new HashMap<>();
         if (!isEmpty(title)) parameters.put(PARAM_PAGE_VIEW_TITLE, title);
@@ -198,7 +216,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send a timing stats.
+     * Send the timing stats.
      *
      * @param timingCategory the category.
      * @param timingVar      the variable.
@@ -208,20 +226,25 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendTiming(@NotNull final String timingCategory, @NotNull final String timingVar,
                                   final int timingValue, @Nullable final String timingLabel) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        if (!EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
+            return;
+        }
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_USER_TIMING_CATEGORY, timingCategory);
         parameters.put(PARAM_USER_TIMING_VAR_NAME, timingVar);
         parameters.put(PARAM_USER_TIMING_TIME, timingValue);
 
-        if (!isEmpty(timingLabel)) parameters.put(PARAM_USER_TIMING_LABEL, timingLabel);
+        if (!isEmpty(timingLabel)) {
+            parameters.put(PARAM_USER_TIMING_LABEL, timingLabel);
+        }
 
         send(HitType.TIMING, parameters);
     }
 
     /**
-     * Send an analytic event.
+     * Send the analytic event.
      *
      * @param hitType    the hit type.
      * @param parameters the parameters.
@@ -232,7 +255,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Send an analytic event.
+     * Send the analytic event.
      *
      * @param parameters the parameters.
      */
@@ -241,7 +264,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Process sending an analytic events.
+     * Process of sending the analytic event.
      *
      * @param parameters the parameters.
      */
@@ -266,7 +289,7 @@ public class GAnalytics extends EditorThread {
             parameters.put(PARAM_TRACKING_ID, PROP_TRACKING_ID);
             parameters.put(PARAM_CLIENT_ID, PROP_CLIENT_ID);
 
-            if (EDITOR_CONFIG.isAnalytics()) {
+            if (EDITOR_CONFIG.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE)) {
                 if (!StringUtils.isEmpty(userId)) parameters.put(FIELD_USER_ID, userId);
             }
 
@@ -289,13 +312,14 @@ public class GAnalytics extends EditorThread {
             }
 
         } catch (final IOException e) {
+            // ignore the exception
         } finally {
             progressCount.decrementAndGet();
             ConcurrentUtils.notifyAll(progressCount);
         }
     }
 
-    private static String buildParameters(@NotNull final Map<String, Object> parameters) {
+    private static @NotNull String buildParameters(@NotNull final Map<String, Object> parameters) {
         final StringBuilder builder = new StringBuilder();
         parameters.forEach((key, value) -> appendParam(builder, key, value));
         return builder.toString();
@@ -333,10 +357,7 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private final AtomicInteger progressCount;
 
-    /**
-     * Instantiates a new G analytics.
-     */
-    public GAnalytics() {
+    private GAnalytics() {
         setName("GAnalytics Thread");
         this.queue = LinkedListFactory.newLinkedList(Runnable.class);
         this.progressCount = new AtomicInteger();
@@ -344,7 +365,7 @@ public class GAnalytics extends EditorThread {
     }
 
     /**
-     * Add a new task for executing.
+     * Add the new task to execute.
      *
      * @param runnable a new task.
      */

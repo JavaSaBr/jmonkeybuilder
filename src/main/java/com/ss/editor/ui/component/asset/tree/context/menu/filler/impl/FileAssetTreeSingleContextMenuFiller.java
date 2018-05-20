@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.filler.impl;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
@@ -8,7 +8,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiC
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.MenuItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public class FileAssetTreeSingleContextMenuFiller implements AssetTreeSingleCont
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
 
     @Override
-    @FXThread
+    @FxThread
     public void fill(@NotNull final ResourceElement element, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
 
@@ -60,7 +60,7 @@ public class FileAssetTreeSingleContextMenuFiller implements AssetTreeSingleCont
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void fill(@NotNull final Array<ResourceElement> elements, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
     }

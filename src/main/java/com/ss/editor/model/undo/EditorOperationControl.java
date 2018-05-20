@@ -1,14 +1,12 @@
 package com.ss.editor.model.undo;
 
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
-
-import org.jetbrains.annotations.NotNull;
-
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.application.Platform;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The implementation of controller to support undo/redo operations.
@@ -17,6 +15,9 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class EditorOperationControl {
 
+    /**
+     * The maximum history size.
+     */
     private static final int HISTORY_SIZE = 20;
 
     /**
@@ -32,16 +33,11 @@ public class EditorOperationControl {
     private final Array<EditorOperation> toRedo;
 
     /**
-     * The editor with supporting endo/redo.
+     * The editor with supporting undo/redo.
      */
     @NotNull
     private final UndoableEditor editor;
 
-    /**
-     * Instantiates a new Editor operation control.
-     *
-     * @param editor the editor
-     */
     public EditorOperationControl(@NotNull final UndoableEditor editor) {
         this.editor = editor;
         this.operations = ArrayFactory.newArray(EditorOperation.class);
@@ -49,31 +45,37 @@ public class EditorOperationControl {
     }
 
     /**
+     * Get the list of operations.
+     *
      * @return the list of operations.
      */
-    @NotNull
-    private Array<EditorOperation> getOperations() {
+    @FromAnyThread
+    private @NotNull Array<EditorOperation> getOperations() {
         return operations;
     }
 
     /**
+     * Get the list of operations to redo.
+     *
      * @return the list of operations to redo.
      */
-    @NotNull
-    private Array<EditorOperation> getToRedo() {
+    @FromAnyThread
+    private @NotNull Array<EditorOperation> getToRedo() {
         return toRedo;
     }
 
     /**
+     * Get the editor with supporting undo/redo.
+     *
      * @return the editor with supporting undo/redo.
      */
-    @NotNull
-    private UndoableEditor getEditor() {
+    @FromAnyThread
+    private @NotNull UndoableEditor getEditor() {
         return editor;
     }
 
     /**
-     * Execute an operation.
+     * Execute the operation.
      *
      * @param operation the operation.
      */
@@ -83,26 +85,29 @@ public class EditorOperationControl {
             executeImpl(operation);
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(() -> executeImpl(operation));
+            executorManager.addFxTask(() -> executeImpl(operation));
         }
     }
 
     /**
-     * Executing an operation.
+     * Executing the operation.
      *
      * @param operation the operation.
      */
-    @FXThread
+    @FxThread
     private void executeImpl(@NotNull final EditorOperation operation) {
 
         final UndoableEditor editor = getEditor();
         operation.redo(editor);
+
         editor.incrementChange();
 
         final Array<EditorOperation> operations = getOperations();
         operations.add(operation);
 
-        if (operations.size() > HISTORY_SIZE) operations.poll();
+        if (operations.size() > HISTORY_SIZE) {
+            operations.poll();
+        }
 
         final Array<EditorOperation> toRedo = getToRedo();
         toRedo.clear();
@@ -117,19 +122,21 @@ public class EditorOperationControl {
             undoImpl();
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(this::undoImpl);
+            executorManager.addFxTask(this::undoImpl);
         }
     }
 
     /**
      * Undo the last operation.
      */
-    @FXThread
+    @FxThread
     private synchronized void undoImpl() {
 
         final Array<EditorOperation> operations = getOperations();
         final EditorOperation operation = operations.pop();
-        if (operation == null) return;
+        if (operation == null) {
+            return;
+        }
 
         final UndoableEditor editor = getEditor();
         operation.undo(editor);
@@ -148,19 +155,21 @@ public class EditorOperationControl {
             redoImpl();
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(this::redoImpl);
+            executorManager.addFxTask(this::redoImpl);
         }
     }
 
     /**
      * Redo the last undo operation.
      */
-    @FXThread
+    @FxThread
     private void redoImpl() {
 
         final Array<EditorOperation> toRedo = getToRedo();
         final EditorOperation operation = toRedo.pop();
-        if (operation == null) return;
+        if (operation == null) {
+            return;
+        }
 
         operation.redo(editor);
 
@@ -180,7 +189,7 @@ public class EditorOperationControl {
             clearImpl();
         } else {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(this::clearImpl);
+            executorManager.addFxTask(this::clearImpl);
         }
     }
 

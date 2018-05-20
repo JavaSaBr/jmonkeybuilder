@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
@@ -31,25 +31,21 @@ public class RequestedConvertFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String CONVERTER = "converter";
 
-    /**
-     * Instantiates a new Requested convert file event.
-     */
     public RequestedConvertFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Gets description.
+     * Get the description.
      *
      * @return the converter description.
      */
-    @NotNull
-    public FileConverterDescription getDescription() {
+    public @NotNull FileConverterDescription getDescription() {
         return notNull(get(CONVERTER));
     }
 
     /**
-     * Sets description.
+     * Set the description.
      *
      * @param description the converter description.
      */
@@ -58,17 +54,16 @@ public class RequestedConvertFileEvent extends SceneEvent {
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file to convert.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE));
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file to convert.
      */

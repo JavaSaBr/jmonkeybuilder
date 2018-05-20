@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -29,27 +29,28 @@ public class ChangedCurrentAssetFolderEvent extends SceneEvent {
 
     private static final String ASSET = "asset";
 
-    /**
-     * Instantiates a new Changed current asset folder event.
-     */
     public ChangedCurrentAssetFolderEvent() {
         super(EVENT_TYPE);
     }
 
+    public ChangedCurrentAssetFolderEvent(@NotNull final Path assetFolder) {
+        super(EVENT_TYPE);
+        setNewAssetFolder(assetFolder);
+    }
+
     /**
-     * Gets new asset folder.
+     * Get the new asset folder.
      *
-     * @return the new asset.
+     * @return the new asset folder.
      */
-    @NotNull
-    public Path getNewAssetFolder() {
+    public @NotNull Path getNewAssetFolder() {
         return notNull(get(ASSET));
     }
 
     /**
-     * Sets new asset folder.
+     * Set the new asset folder.
      *
-     * @param newAssetFolder the new asset.
+     * @param newAssetFolder the new asset folder.
      */
     public void setNewAssetFolder(@NotNull final Path newAssetFolder) {
         set(ASSET, newAssetFolder);

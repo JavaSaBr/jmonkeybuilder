@@ -1,25 +1,24 @@
 package com.ss.editor.ui.dialog.asset.file;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.editor.ui.util.UiUtils.findItemForValue;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.dialog.asset.BaseAssetEditorDialog;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
@@ -52,25 +51,25 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
      * The event manager.
      */
     @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The handler created files events.
      */
     @NotNull
-    private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
+    private final EventHandler<CreatedFileEvent> createdFileHandler = this::processEvent;
 
     /**
      * The handler selected file events.
      */
     @NotNull
-    private final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
+    private final EventHandler<RequestSelectFileEvent> selectFileHandle = this::processEvent;
 
     /**
      * The handler deleted file events,
      */
     @NotNull
-    private final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
+    private final EventHandler<DeletedFileEvent> deletedFileHandler = this::processEvent;
 
     /**
      * The list of waited files to select.
@@ -124,7 +123,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull Region buildFirstPart(@NotNull final HBox container) {
 
         resourceTree = new ResourceTree(this::processOpen, false);
@@ -140,13 +139,13 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
      *
      * @param element the element
      */
-    @FXThread
+    @FxThread
     protected void processOpen(@NotNull final ResourceElement element) {
         hide();
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
@@ -161,13 +160,13 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
         FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
         FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
 
-        EXECUTOR_MANAGER.addFXTask(resourceTree::requestFocus);
+        EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
     }
 
     /**
      * Handle creating file event.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
@@ -185,7 +184,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     /**
      * Handle deleting file event.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
@@ -197,7 +196,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     /**
      * Handle selecting file event.
      */
-    @FXThread
+    @FxThread
     private void processEvent(@NotNull final RequestSelectFileEvent event) {
 
         final Path file = event.getFile();
@@ -223,13 +222,13 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @Nullable Path getRealFile(@NotNull final ResourceElement element) {
         return element.getFile();
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void hide() {
 
         FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
@@ -240,7 +239,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
         final ResourceTree resourceTree = getResourceTree();
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
@@ -251,13 +250,13 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     /**
      * @return the tree with all resources.
      */
-    @FXThread
+    @FxThread
     private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
 

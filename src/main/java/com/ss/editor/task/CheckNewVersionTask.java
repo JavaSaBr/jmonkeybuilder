@@ -1,12 +1,12 @@
 package com.ss.editor.task;
 
 import static org.apache.http.impl.client.HttpClients.createMinimal;
-import com.ss.editor.JFXApplication;
+import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.Config;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.plugin.Version;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.plugin.Version;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * The task to check new versions of the Editor.
+ * The task to check new versions of the editor.
  *
  * @author JavaSaBr
  */
@@ -84,7 +84,7 @@ public class CheckNewVersionTask implements Runnable {
 
             Platform.runLater(() -> {
 
-                final JFXApplication jfxApplication = JFXApplication.getInstance();
+                final JfxApplication jfxApplication = JfxApplication.getInstance();
                 final HostServices hostServices = jfxApplication.getHostServices();
 
                 final Hyperlink hyperlink = new Hyperlink(Messages.CHECK_NEW_VERSION_DIALOG_HYPERLINK + targetLink);

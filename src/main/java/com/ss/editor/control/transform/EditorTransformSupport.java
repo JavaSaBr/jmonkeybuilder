@@ -8,7 +8,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,18 +94,18 @@ public interface EditorTransformSupport {
         GLOBAL {
 
             @Override
-            @JMEThread
+            @JmeThread
             public void prepareToRotate(@NotNull final Node parent, @NotNull final Node child,
                                         @NotNull final Transform transform, @NotNull final Camera camera) {
                 parent.setLocalRotation(Quaternion.IDENTITY);
                 child.setLocalRotation(transform.getRotation());
             }
 
-            @NotNull
             @Override
-            @JMEThread
-            protected Vector3f getScaleAxis(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
-                                               @NotNull final Camera camera) {
+            @JmeThread
+            protected @NotNull Vector3f getScaleAxis(@NotNull final Transform transform,
+                                                     @NotNull final PickedAxis pickedAxis,
+                                                     @NotNull final Camera camera) {
 
                 final LocalObjects local = LocalObjects.get();
 
@@ -117,7 +117,7 @@ public interface EditorTransformSupport {
             }
 
             @Override
-            @JMEThread
+            @JmeThread
             public void prepareToMove(@NotNull final Node parent, @NotNull final Node child,
                                       @NotNull final Transform transform, @NotNull final Camera camera) {
                 parent.setLocalTranslation(Vector3f.ZERO);
@@ -126,10 +126,11 @@ public interface EditorTransformSupport {
                 child.setLocalRotation(transform.getRotation());
             }
 
-            @NotNull
+
             @Override
-            @JMEThread
-            public Quaternion getToolRotation(@NotNull final Transform transform, @NotNull final Camera camera) {
+            @JmeThread
+            public @NotNull Quaternion getToolRotation(@NotNull final Transform transform,
+                                                       @NotNull final Camera camera) {
                 return Quaternion.IDENTITY;
             }
         },
@@ -139,33 +140,18 @@ public interface EditorTransformSupport {
         VIEW {
 
             @Override
-            @JMEThread
+            @JmeThread
             public void prepareToRotate(@NotNull final Node parent, @NotNull final Node child,
                                         @NotNull final Transform transform, @NotNull final Camera camera) {
                 parent.setLocalRotation(Quaternion.IDENTITY);
                 child.setLocalRotation(transform.getRotation());
             }
 
-            @NotNull
             @Override
-            @JMEThread
-            protected Vector3f getScaleAxis(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
-                                               @NotNull final Camera camera) {
-
-                final LocalObjects local = LocalObjects.get();
-
-                if (pickedAxis == PickedAxis.Y) {
-                    return getUp(camera.getRotation(), local.nextVector());
-                } else if (pickedAxis == PickedAxis.Z) {
-                    return getDirection(camera.getRotation(), local.nextVector());
-                } else return getLeft(camera.getRotation(), local.nextVector());
-            }
-
-            @NotNull
-            @Override
-            @JMEThread
-            protected Vector3f getPickedVector(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
-                                               @NotNull final Camera camera) {
+            @JmeThread
+            protected @NotNull Vector3f getScaleAxis(@NotNull final Transform transform,
+                                                     @NotNull final PickedAxis pickedAxis,
+                                                     @NotNull final Camera camera) {
 
                 final LocalObjects local = LocalObjects.get();
 
@@ -177,7 +163,22 @@ public interface EditorTransformSupport {
             }
 
             @Override
-            @JMEThread
+            @JmeThread
+            protected @NotNull Vector3f getPickedVector(@NotNull final Transform transform,
+                                                        @NotNull final PickedAxis pickedAxis,
+                                                        @NotNull final Camera camera) {
+
+                final LocalObjects local = LocalObjects.get();
+
+                if (pickedAxis == PickedAxis.Y) {
+                    return getUp(camera.getRotation(), local.nextVector());
+                } else if (pickedAxis == PickedAxis.Z) {
+                    return getDirection(camera.getRotation(), local.nextVector());
+                } else return getLeft(camera.getRotation(), local.nextVector());
+            }
+
+            @Override
+            @JmeThread
             public void prepareToMove(@NotNull final Node parent, @NotNull final Node child,
                                       @NotNull final Transform transform, @NotNull final Camera camera) {
                 parent.setLocalRotation(camera.getRotation());
@@ -186,10 +187,10 @@ public interface EditorTransformSupport {
                 child.setLocalRotation(Quaternion.IDENTITY);
             }
 
-            @NotNull
             @Override
-            @JMEThread
-            public Quaternion getToolRotation(@NotNull final Transform transform, @NotNull final Camera camera) {
+            @JmeThread
+            public @NotNull Quaternion getToolRotation(@NotNull final Transform transform,
+                                                       @NotNull final Camera camera) {
                 return camera.getRotation();
             }
         };
@@ -197,9 +198,8 @@ public interface EditorTransformSupport {
         @NotNull
         private static final TransformationMode[] VALUES = values();
 
-        @NotNull
         @FromAnyThread
-        public static TransformationMode valueOf(final int index) {
+        public static @NotNull TransformationMode valueOf(final int index) {
             return VALUES[index];
         }
 
@@ -210,9 +210,8 @@ public interface EditorTransformSupport {
          * @param camera    the camera.
          * @return the tool rotation.
          */
-        @NotNull
-        @JMEThread
-        public Quaternion getToolRotation(@NotNull final Transform transform, @NotNull final Camera camera) {
+        @JmeThread
+        public @NotNull Quaternion getToolRotation(@NotNull final Transform transform, @NotNull final Camera camera) {
             return transform.getRotation();
         }
 
@@ -224,7 +223,7 @@ public interface EditorTransformSupport {
          * @param transform the base transform.
          * @param camera    the camera.
          */
-        @JMEThread
+        @JmeThread
         public void prepareToRotate(@NotNull final Node parent, @NotNull final Node child,
                                     @NotNull final Transform transform, @NotNull final Camera camera) {
             parent.setLocalRotation(transform.getRotation());
@@ -239,7 +238,7 @@ public interface EditorTransformSupport {
          * @param transform the base transform.
          * @param camera    the camera.
          */
-        @JMEThread
+        @JmeThread
         public void prepareToScale(@NotNull final Node parent, @NotNull final Node child,
                                    @NotNull final Transform transform, @NotNull final Camera camera) {
             parent.setLocalScale(transform.getScale());
@@ -254,7 +253,7 @@ public interface EditorTransformSupport {
          * @param transform the base transform.
          * @param camera    the camera.
          */
-        @JMEThread
+        @JmeThread
         public void prepareToMove(@NotNull final Node parent, @NotNull final Node child,
                                   @NotNull final Transform transform, @NotNull final Camera camera) {
             parent.setLocalTranslation(transform.getTranslation());
@@ -271,16 +270,18 @@ public interface EditorTransformSupport {
          * @param camera     the camera.
          * @return the axis vector.
          */
-        @NotNull
-        @JMEThread
-        protected Vector3f getPickedVector(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
-                                           @NotNull final Camera camera) {
+        @JmeThread
+        protected @NotNull Vector3f getPickedVector(@NotNull final Transform transform,
+                                                    @NotNull final PickedAxis pickedAxis,
+                                                    @NotNull final Camera camera) {
 
             if (pickedAxis == PickedAxis.Y) {
                 return Vector3f.UNIT_Y;
             } else if (pickedAxis == PickedAxis.Z) {
                 return Vector3f.UNIT_Z;
-            } else return Vector3f.UNIT_X;
+            } else {
+                return Vector3f.UNIT_X;
+            }
         }
 
         /**
@@ -291,10 +292,9 @@ public interface EditorTransformSupport {
          * @param camera     the camera.
          * @return the axis vector.
          */
-        @NotNull
-        @JMEThread
-        protected Vector3f getScaleAxis(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
-                                        @NotNull final Camera camera) {
+        @JmeThread
+        protected @NotNull Vector3f getScaleAxis(@NotNull final Transform transform,
+                                                 @NotNull final PickedAxis pickedAxis, @NotNull final Camera camera) {
 
             if (pickedAxis == PickedAxis.Y) {
                 return Vector3f.UNIT_Y;
@@ -309,16 +309,15 @@ public interface EditorTransformSupport {
      *
      * @return the center of transformation.
      */
-    @Nullable
-    @JMEThread
-    Transform getTransformCenter();
+    @JmeThread
+    @Nullable Transform getTransformCenter();
 
     /**
      * Sets picked axis.
      *
      * @param axis the picked axis.
      */
-    @JMEThread
+    @JmeThread
     void setPickedAxis(@NotNull final PickedAxis axis);
 
     /**
@@ -326,34 +325,31 @@ public interface EditorTransformSupport {
      *
      * @return the picked axis.
      */
-    @NotNull
-    @JMEThread
-    PickedAxis getPickedAxis();
+    @JmeThread
+    @NotNull PickedAxis getPickedAxis();
 
     /**
      * Gets the transform mode.
      *
      * @return the transform mode.
      */
-    @NotNull
-    @JMEThread
-    EditorTransformSupport.TransformationMode getTransformationMode();
+    @JmeThread
+    @NotNull EditorTransformSupport.TransformationMode getTransformationMode();
 
     /**
      * Gets collision plane.
      *
      * @return the collision plane.
      */
-    @Nullable
-    @JMEThread
-    Node getCollisionPlane();
+    @JmeThread
+    @Nullable Node getCollisionPlane();
 
     /**
      * Set delta of transformation.
      *
      * @param transformDeltaX the x delta.
      */
-    @JMEThread
+    @JmeThread
     void setTransformDeltaX(float transformDeltaX);
 
     /**
@@ -361,7 +357,7 @@ public interface EditorTransformSupport {
      *
      * @param transformDeltaY the y delta.
      */
-    @JMEThread
+    @JmeThread
     void setTransformDeltaY(float transformDeltaY);
 
     /**
@@ -369,7 +365,7 @@ public interface EditorTransformSupport {
      *
      * @param transformDeltaZ the z delta.
      */
-    @JMEThread
+    @JmeThread
     void setTransformDeltaZ(float transformDeltaZ);
 
     /**
@@ -377,7 +373,7 @@ public interface EditorTransformSupport {
      *
      * @return the delta x.
      */
-    @JMEThread
+    @JmeThread
     float getTransformDeltaX();
 
     /**
@@ -385,7 +381,7 @@ public interface EditorTransformSupport {
      *
      * @return the delta y.
      */
-    @JMEThread
+    @JmeThread
     float getTransformDeltaY();
 
     /**
@@ -393,7 +389,7 @@ public interface EditorTransformSupport {
      *
      * @return the delta z.
      */
-    @JMEThread
+    @JmeThread
     float getTransformDeltaZ();
 
     /**
@@ -401,16 +397,15 @@ public interface EditorTransformSupport {
      *
      * @return the model to transform.
      */
-    @Nullable
-    @JMEThread
-    Spatial getToTransform();
+    @JmeThread
+    @Nullable Spatial getToTransform();
 
     /**
      * Notify transformed.
      *
      * @param spatial the model which was transformed.
      */
-    @JMEThread
+    @JmeThread
     void notifyTransformed(@NotNull final Spatial spatial);
 
     /**
@@ -418,7 +413,6 @@ public interface EditorTransformSupport {
      *
      * @return the camera.
      */
-    @NotNull
-    @JMEThread
-    Camera getCamera();
+    @JmeThread
+    @NotNull Camera getCamera();
 }

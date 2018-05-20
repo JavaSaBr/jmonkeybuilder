@@ -1,15 +1,15 @@
 package com.ss.editor.plugin.api.dialog;
 
 import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
@@ -40,13 +40,13 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * The list of all definitions.
      */
     @NotNull
-    private final Array<@NotNull PropertyDefinition> definitions;
+    private final Array<PropertyDefinition> definitions;
 
     /**
      * The handler to handle result properties.
      */
     @NotNull
-    private final Consumer<@NotNull VarTable> handler;
+    private final Consumer<VarTable> handler;
 
     /**
      * THe callback to call re-validating.
@@ -58,7 +58,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * The validator of all properties.
      */
     @NotNull
-    private Predicate<@NotNull VarTable> validator;
+    private Predicate<VarTable> validator;
 
     /**
      * The root content container.
@@ -66,14 +66,14 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private VBox root;
 
-    public GenericFactoryDialog(@NotNull final Array<@NotNull PropertyDefinition> definitions,
-                                @NotNull final Consumer<@NotNull VarTable> handler) {
+    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
+                                @NotNull final Consumer<VarTable> handler) {
         this(definitions, handler, varTable -> true);
     }
 
-    public GenericFactoryDialog(@NotNull final Array<@NotNull PropertyDefinition> definitions,
-                                @NotNull final Consumer<@NotNull VarTable> handler,
-                                @NotNull final Predicate<@NotNull VarTable> validator) {
+    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
+                                @NotNull final Consumer<VarTable> handler,
+                                @NotNull final Predicate<VarTable> validator) {
         this.definitions = definitions;
         this.handler = handler;
         this.validator = validator;
@@ -84,31 +84,31 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets the title.
+     * Set the title.
      *
      * @param title the new title.
      */
-    @FXThread
+    @FxThread
     public void setTitle(@NotNull final String title) {
         getDialog().setTitle(title);
     }
 
     /**
-     * Sets the text to the OK button.
+     * Set the text to the OK button.
      *
      * @param text the new text.
      */
-    @FXThread
+    @FxThread
     public void setButtonOkText(@NotNull final String text) {
         notNull(getOkButton()).setText(text);
     }
 
     /**
-     * Sets the text to the Close button.
+     * Set the text to the close button.
      *
      * @param text the new text.
      */
-    @FXThread
+    @FxThread
     public void setButtonCloseText(@NotNull final String text) {
         notNull(getCloseButton()).setText(text);
     }
@@ -120,18 +120,18 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
         this.root = root;
     }
 
     /**
-     * Gets the root to place controls.
+     * Get the root to place controls.
      *
      * @return the root.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getRoot() {
         return notNull(root);
     }
@@ -139,7 +139,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     /**
      * Create controls.
      */
-    @FXThread
+    @FxThread
     private void createControls() {
 
         final ObservableList<Node> children = getRoot().getChildren();
@@ -159,9 +159,11 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the list of all definitions.
+     * 
      * @return the list of all definitions.
      */
-    @FXThread
+    @FxThread
     private @NotNull Array<PropertyDefinition> getDefinitions() {
         return definitions;
     }
@@ -169,7 +171,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate current values.
      */
-    @FXThread
+    @FxThread
     protected void validate() {
 
         getRoot().getChildren().stream()
@@ -181,7 +183,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.processOk();
         handler.accept(vars);

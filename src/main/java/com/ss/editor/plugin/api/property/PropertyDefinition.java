@@ -2,8 +2,8 @@ package com.ss.editor.plugin.api.property;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,12 +12,9 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public final class PropertyDefinition {
+public class PropertyDefinition {
 
-    @NotNull
     private static final Array<Object> EMPTY_OPTIONS = ArrayFactory.asArray();
-
-    @NotNull
     private static final Array<String> EMPTY_DEPENDENCIES = ArrayFactory.newArray(String.class);
 
     /**
@@ -72,14 +69,22 @@ public final class PropertyDefinition {
      */
     private final float max;
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue
+    ) {
         this(propertyType, null, name, id, defaultValue);
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType,
-                              @Nullable final Array<String> dependencies, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @Nullable Array<String> dependencies,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -91,16 +96,24 @@ public final class PropertyDefinition {
         this.dependencies = dependencies == null ? EMPTY_DEPENDENCIES : dependencies;
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue,
-                              @Nullable final String extension) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            @Nullable String extension
+    ) {
         this(propertyType, null, name, id, defaultValue, extension);
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType,
-                              @Nullable final Array<String> dependencies, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue,
-                              @Nullable final String extension) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @Nullable Array<String> dependencies,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            @Nullable String extension
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -112,9 +125,13 @@ public final class PropertyDefinition {
         this.dependencies = dependencies == null ? EMPTY_DEPENDENCIES : dependencies;
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue,
-                              @NotNull final Array<?> options) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull final String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            @NotNull Array<?> options
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -123,12 +140,17 @@ public final class PropertyDefinition {
         this.max = Float.NaN;
         this.min = Float.NaN;
         this.extension = null;
-        this.dependencies = null;
+        this.dependencies = EMPTY_DEPENDENCIES;
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue, final float min,
-                              final float max) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            float min,
+            float max
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -137,10 +159,12 @@ public final class PropertyDefinition {
         this.max = max;
         this.options = EMPTY_OPTIONS;
         this.extension = null;
-        this.dependencies = null;
+        this.dependencies = EMPTY_DEPENDENCIES;
     }
 
     /**
+     * Get the type of the property.
+     *
      * @return the type of the property.
      */
     @FromAnyThread
@@ -149,6 +173,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the name of the property.
+     *
      * @return the name of the property.
      */
     @FromAnyThread
@@ -167,6 +193,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the id of the property.
+     *
      * @return the id of the property.
      */
     @FromAnyThread
@@ -175,6 +203,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the default value of the property.
+     *
      * @return the default value of the property.
      */
     @FromAnyThread
@@ -183,6 +213,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the max value.
+     *
      * @return the max value.
      */
     @FromAnyThread
@@ -191,6 +223,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the min value.
+     *
      * @return the min value.
      */
     @FromAnyThread
@@ -199,6 +233,8 @@ public final class PropertyDefinition {
     }
 
     /**
+     * Get the options.
+     *
      * @return the options.
      */
     @FromAnyThread

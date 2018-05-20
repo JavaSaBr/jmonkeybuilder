@@ -1,16 +1,14 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import javafx.scene.control.Label;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,30 +24,33 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     @NotNull
     private final String extension;
 
-    public ClasspathResourcePropertyControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                            @NotNull final Runnable validationCallback) {
+    public ClasspathResourcePropertyControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
         this.extension = notNull(definition.getExtension());
     }
 
     @Override
-    @FXThread
-    protected void processSelect() {
-        super.processSelect();
+    @FxThread
+    protected void chooseNew() {
+        super.chooseNew();
 
-        final ResourceManager resourceManager = ResourceManager.getInstance();
-        final Array<String> resources = resourceManager.getAvailableResources(extension);
+        var resourceManager = ResourceManager.getInstance();
+        var resources = resourceManager.getAvailableResources(extension);
 
-        UIUtils.openResourceAssetDialog(this::processSelect, this::validate, resources);
+        UiUtils.openResourceAssetDialog(this::chooseNew, this::validate, resources);
     }
 
     /**
-     * Handle selected resource.
+     * Choose the new resource by the path
      *
      * @param resource the selected resource.
      */
-    @FXThread
-    private void processSelect(@NotNull final String resource) {
+    @FxThread
+    private void chooseNew(@NotNull String resource) {
         setPropertyValue(resource);
         change();
         reload();
@@ -61,10 +62,10 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      * @param resource the selected resource.
      * @return the message of problems or null if all are ok.
      */
-    @FXThread
+    @FxThread
     private String validate(@NotNull final String resource) {
 
-        final String extension = FileUtils.getExtension(resource);
+        var extension = FileUtils.getExtension(resource);
         if (StringUtils.isEmpty(extension)) {
             return Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
         }
@@ -73,11 +74,11 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
 
-        final String resource = getPropertyValue();
-        final Label resourceLabel = getResourceLabel();
+        var resource = getPropertyValue();
+        var resourceLabel = getResourceLabel();
         resourceLabel.setText(resource == null ? NOT_SELECTED : resource);
 
         super.reload();

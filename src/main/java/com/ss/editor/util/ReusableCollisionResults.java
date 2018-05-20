@@ -2,11 +2,14 @@ package com.ss.editor.util;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.pools.Reusable;
+import com.ss.editor.annotation.JmeThread;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
 
 /**
  * The reusable implementation of collision result.
@@ -33,28 +36,37 @@ public class ReusableCollisionResults extends CollisionResults implements Reusab
     }
 
     @Override
+    @JmeThread
     public void addCollision(@NotNull final CollisionResult result) {
         collisions.add(result);
         original.add(result);
     }
 
     @Override
+    public Iterator<CollisionResult> iterator() {
+        return collisions.iterator();
+    }
+
+    @Override
+    @JmeThread
     public CollisionResult getCollisionDirect(final int index) {
         return original.get(index);
     }
 
     @Override
+    @JmeThread
     public int size() {
         return original.size();
     }
 
-    @Nullable
     @Override
-    public CollisionResult getClosestCollision() {
+    @JmeThread
+    public @Nullable CollisionResult getClosestCollision() {
         return collisions.first();
     }
 
     @Override
+    @JmeThread
     public void free() {
         collisions.clear();
         original.clear();

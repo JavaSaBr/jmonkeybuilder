@@ -1,20 +1,19 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.util.StringUtils;
-import javafx.scene.control.Label;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.util.StringUtils;
+import javafx.event.ActionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * The implementation of the {@link MaterialPropertyControl} to edit the {@link MaterialKey}.
@@ -24,23 +23,26 @@ import java.nio.file.Paths;
  */
 public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends MaterialPropertyControl<C, T, MaterialKey> {
 
-    public MaterialKeyPropertyControl(@Nullable final MaterialKey element, @NotNull final String paramName,
-                                      @NotNull final C changeConsumer) {
+    public MaterialKeyPropertyControl(
+            @Nullable MaterialKey element,
+            @NotNull String paramName,
+            @NotNull C changeConsumer
+    ) {
         super(element, paramName, changeConsumer);
     }
 
-    @FXThread
     @Override
-    protected void processChange() {
-        UIUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
+    @FxThread
+    protected void change(@Nullable ActionEvent event) {
+        UiUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
-    @FXThread
     @Override
-    protected void addMaterial(@NotNull final Path file) {
+    @FxThread
+    protected void addMaterial(@NotNull Path file) {
 
-        final Path assetFile = notNull(getAssetFile(file));
-        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
+        var assetFile = notNull(getAssetFile(file));
+        var materialKey = new MaterialKey(toAssetPath(assetFile));
 
         changed(materialKey, getPropertyValue());
         setIgnoreListener(true);
@@ -51,31 +53,17 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
         }
     }
 
-    @FXThread
     @Override
-    protected void processEdit() {
-
-        final MaterialKey element = getPropertyValue();
-        if (element == null) return;
-
-        final String assetPath = element.getName();
-        if (StringUtils.isEmpty(assetPath)) return;
-
-        final Path assetFile = Paths.get(assetPath);
-        final Path realFile = notNull(getRealFile(assetFile));
-        if (!Files.exists(realFile)) return;
-
-        final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
-        event.setFile(realFile);
-
-        FX_EVENT_MANAGER.notify(event);
+    @FxThread
+    protected void openToEdit(@Nullable ActionEvent event) {
+        EditorUtil.openInEditor(getPropertyValue());
     }
 
-    @FXThread
     @Override
+    @FxThread
     protected void reload() {
-        final MaterialKey element = getPropertyValue();
-        final Label materialLabel = getMaterialLabel();
-        materialLabel.setText(element == null || StringUtils.isEmpty(element.getName()) ? NO_MATERIAL : element.getName());
+        var element = getPropertyValue();
+        getMaterialLabel().setText(element == null || StringUtils.isEmpty(element.getName()) ?
+                NO_MATERIAL : element.getName());
     }
 }

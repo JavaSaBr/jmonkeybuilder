@@ -1,32 +1,24 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ArrayUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.ArrayUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
+import java.util.Arrays;
 
 /**
  * The implementation of the {@link PropertyControl} to edit int array values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the change consumer's type.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, int[]> {
+public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends StringBasedArrayPropertyControl<C, D, int[]> {
 
     /**
      * The filed with current value.
@@ -34,63 +26,31 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
     @Nullable
     private TextField valueField;
 
-    public IntArrayPropertyControl(@Nullable final int[] propertyValue, @NotNull final String propertyName,
-                                   @NotNull final C changeConsumer) {
+    public IntArrayPropertyControl(
+            @Nullable int[] propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
-    public IntArrayPropertyControl(@Nullable final int[] propertyValue, @NotNull final String propertyName,
-                                   @NotNull final C changeConsumer,
-                                   @Nullable final SixObjectConsumer<C, T, String, int[], int[], BiConsumer<T, int[]>> changeHandler) {
+    public IntArrayPropertyControl(
+            @Nullable int[] propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer,
+            @Nullable ChangeHandler<C, D, int[]> changeHandler
+    ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 
     @Override
-    @FXThread
-    public void changeControlWidthPercent(final double controlWidthPercent) {
-        super.changeControlWidthPercent(controlWidthPercent);
-
-        final TextField valueField = getValueField();
-        valueField.prefWidthProperty().unbind();
-        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
-    }
-
-    @Override
-    @FXThread
-    protected void createComponents(@NotNull final HBox container) {
-        super.createComponents(container);
-
-        valueField = new TextField();
-        valueField.setOnKeyReleased(this::updateValue);
-        valueField.prefWidthProperty()
-                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
-
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(valueField, container);
-    }
-
-    @Override
-    @FromAnyThread
-    protected boolean isSingleRow() {
-        return true;
-    }
-
-    /**
-     * @return the filed with current value.
-     */
-    @FXThread
-    private @NotNull TextField getValueField() {
-        return notNull(valueField);
-    }
-
-    @Override
-    @FXThread
+    @FxThread
     protected void reload() {
 
-        final int[] element = getPropertyValue();
+        var element = getPropertyValue();
 
-        final TextField valueField = getValueField();
-        final int caretPosition = valueField.getCaretPosition();
+        var valueField = getValueField();
+        var caretPosition = valueField.getCaretPosition();
 
         if (element == null) {
             valueField.setText(StringUtils.EMPTY);
@@ -101,27 +61,31 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
         valueField.positionCaret(caretPosition);
     }
 
-    /**
-     * Update the value.
-     */
-    @FXThread
-    private void updateValue(@Nullable final KeyEvent event) {
-        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+    @Override
+    @FxThread
+    public boolean isDirty() {
+        return !Arrays.equals(getCurrentValue(), getPropertyValue());
+    }
 
-        final String textValue = getValueField().getText();
+    @Override
+    @FxThread
+    protected @Nullable int[] getCurrentValue() {
+
+        var textValue = getValueField().getText();
+
         int[] newValue = null;
 
         if (!StringUtils.isEmpty(textValue)) {
 
-            final String splitter = textValue.contains(" ") ? " " : ",";
-            final String[] splited = textValue.split(splitter);
+            var splitter = textValue.contains(" ") ? " " : ",";
+            var split = textValue.split(splitter);
 
-            newValue = new int[splited.length];
+            newValue = new int[split.length];
 
-            for (int i = 0; i < splited.length; i++) {
+            for (var i = 0; i < split.length; i++) {
                 try {
-                    newValue[i] = Integer.parseInt(splited[i]);
-                } catch (final NumberFormatException e) {
+                    newValue[i] = Integer.parseInt(split[i]);
+                } catch (NumberFormatException e) {
                     LOGGER.warning(this, e);
                     newValue = getPropertyValue();
                     break;
@@ -129,6 +93,6 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, T> extends Proper
             }
         }
 
-        changed(newValue, getPropertyValue());
+        return newValue;
     }
 }

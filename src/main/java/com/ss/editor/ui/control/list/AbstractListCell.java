@@ -1,10 +1,11 @@
 package com.ss.editor.ui.control.list;
 
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.ImageView;
@@ -52,12 +53,13 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
 
         setEditable(false);
 
-        FXUtils.addClassTo(content, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(content, CssClasses.DEF_HBOX);
     }
 
     /**
      * Update hide status.
      */
+    @FxThread
     private void processHide(@NotNull final MouseEvent event) {
         event.consume();
 
@@ -71,9 +73,11 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
     /**
      * Process to hide.
      */
+    @FxThread
     protected abstract void processHideImpl();
 
     @Override
+    @FxThread
     public void updateItem(@Nullable final T item, final boolean empty) {
         super.updateItem(item, empty);
 
@@ -97,17 +101,18 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
     }
 
     /**
-     * Gets a name of the item.
+     * Get the name of the item.
      *
      * @param item the item.
      * @return the name.
      */
-    @NotNull
-    protected abstract String getName(@Nullable final T item);
+    @FxThread
+    protected abstract @NotNull String getName(@Nullable final T item);
 
     /**
      * @param item the item which needs to check.
      * @return true if the item is enabled.
      */
+    @FxThread
     protected abstract boolean isEnabled(@Nullable final T item);
 }

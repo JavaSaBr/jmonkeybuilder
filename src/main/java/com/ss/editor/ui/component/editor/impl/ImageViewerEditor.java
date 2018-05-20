@@ -1,16 +1,16 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 
 /**
- * The implementation of the {@link Editor} to view image files.
+ * The implementation of the {@link JmeApplication} to view image files.
  *
  * @author JavaSaBr
  */
@@ -33,7 +33,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     @NotNull
-    private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFxImageManager JAVA_FX_IMAGE_MANAGER = JavaFxImageManager.getInstance();
 
     private static final int IMAGE_SIZE = 512;
 
@@ -51,38 +51,38 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     private ImageView imageView;
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
 
         imageView = new ImageView();
 
         FXUtils.addToPane(imageView, root);
-        FXUtils.addClassTo(root, CSSClasses.IMAGE_VIEW_EDITOR_CONTAINER);
+        FXUtils.addClassTo(root, CssClasses.IMAGE_VIEW_EDITOR_CONTAINER);
     }
 
     /**
      * @return the image view.
      */
-    @FXThread
+    @FxThread
     private @NotNull ImageView getImageView() {
         return notNull(imageView);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         final Path file = event.getFile();
         if (!getEditFile().equals(file)) return;
-        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> showImage(file)), 1000);
+        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFxTask(() -> showImage(file)), 1000);
     }
 
-    @FXThread
+    @FxThread
     private void showImage(@NotNull final Path file) {
         final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(file, IMAGE_SIZE, IMAGE_SIZE);
         final ImageView imageView = getImageView();
@@ -90,7 +90,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
         showImage(file);

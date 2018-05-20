@@ -1,16 +1,16 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
@@ -31,35 +31,44 @@ import java.util.List;
  */
 public class PasteFileAction extends FileAction {
 
-    public PasteFileAction(@NotNull final ResourceElement element) {
+    @FxThread
+    public static void applyFor(@NotNull ResourceElement element) {
+        new PasteFileAction(element).getOnAction().handle(null);
+    }
+
+    public PasteFileAction(@NotNull ResourceElement element) {
         super(element);
     }
 
-    @FXThread
     @Override
+    @FxThread
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
     }
 
-    @FXThread
     @Override
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.PASTE_16;
     }
 
-    @FXThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    @FxThread
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-        if (clipboard == null) return;
+        var clipboard = Clipboard.getSystemClipboard();
+        if (clipboard == null) {
+            return;
+        }
 
-        final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
-        if (files == null || files.isEmpty()) return;
+        List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
+        if (files == null || files.isEmpty()) {
+            return;
+        }
 
-        final Path currentFile = getElement().getFile();
-        final boolean isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
+        var currentFile = getElement().getFile();
+        var isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
 
         if (isCut) {
             files.forEach(file -> moveFile(currentFile, file.toPath()));
@@ -70,7 +79,7 @@ public class PasteFileAction extends FileAction {
         clipboard.clear();
     }
 
-    private void copyFile(@NotNull final Path currentFile, @NotNull final Path file) {
+    private void copyFile(@NotNull Path currentFile, @NotNull Path file) {
         if (Files.isDirectory(currentFile)) {
             processCopy(currentFile, file);
         } else {
@@ -78,8 +87,7 @@ public class PasteFileAction extends FileAction {
         }
     }
 
-    private void moveFile(@NotNull final Path currentFile, @NotNull final Path file) {
-
+    private void moveFile(@NotNull Path currentFile, @NotNull Path file) {
         if (Files.isDirectory(currentFile)) {
             processMove(currentFile, file);
         } else {
@@ -90,9 +98,9 @@ public class PasteFileAction extends FileAction {
     /**
      * Process of moving.
      */
-    private void processMove(@NotNull final Path targetFolder, @NotNull final Path file) {
+    private void processMove(@NotNull Path targetFolder, @NotNull Path file) {
 
-        final Path newFile = targetFolder.resolve(file.getFileName());
+        var newFile = targetFolder.resolve(file.getFileName());
 
         try {
             Files.move(file, newFile);
@@ -101,7 +109,7 @@ public class PasteFileAction extends FileAction {
             return;
         }
 
-        final MovedFileEvent event = new MovedFileEvent();
+        var event = new MovedFileEvent();
         event.setPrevFile(file);
         event.setNewFile(newFile);
 
@@ -111,10 +119,10 @@ public class PasteFileAction extends FileAction {
     /**
      * Process of copying.
      */
-    private void processCopy(@NotNull final Path targetFolder, @NotNull final Path file) {
+    private void processCopy(@NotNull Path targetFolder, @NotNull Path file) {
 
-        final Array<Path> toCopy = ArrayFactory.newArray(Path.class);
-        final Array<Path> copied = ArrayFactory.newArray(Path.class);
+        Array<Path> toCopy = ArrayFactory.newArray(Path.class);
+        Array<Path> copied = ArrayFactory.newArray(Path.class);
 
         if (Files.isDirectory(file)) {
             toCopy.addAll(FileUtils.getFiles(file, true));
@@ -122,8 +130,8 @@ public class PasteFileAction extends FileAction {
             toCopy.slowRemove(file);
         }
 
-        final String freeName = FileUtils.getFirstFreeName(targetFolder, file);
-        final Path newFile = targetFolder.resolve(freeName);
+        var freeName = FileUtils.getFirstFreeName(targetFolder, file);
+        var newFile = targetFolder.resolve(freeName);
 
         try {
             processCopy(file, toCopy, copied, newFile);
@@ -131,7 +139,7 @@ public class PasteFileAction extends FileAction {
             EditorUtil.handleException(LOGGER, this, e);
         }
 
-        final RequestSelectFileEvent event = new RequestSelectFileEvent();
+        var event = new RequestSelectFileEvent();
         event.setFile(newFile);
 
         FX_EVENT_MANAGER.notify(event);
@@ -140,16 +148,20 @@ public class PasteFileAction extends FileAction {
     /**
      * Process of copying.
      */
-    private void processCopy(@NotNull final Path file, @NotNull final Array<Path> toCopy,
-                             @NotNull final Array<Path> copied, @NotNull final Path newFile) throws IOException {
+    private void processCopy(
+            @NotNull Path file,
+            @NotNull Array<Path> toCopy,
+            @NotNull Array<Path> copied,
+            @NotNull Path newFile
+    ) throws IOException {
 
         Files.copy(file, newFile);
 
         copied.add(newFile);
         toCopy.forEach(path -> {
 
-            final Path relativeFile = file.relativize(path);
-            final Path targetFile = newFile.resolve(relativeFile);
+            var relativeFile = file.relativize(path);
+            var targetFile = newFile.resolve(relativeFile);
 
             try {
                 Files.copy(path, targetFile);
@@ -157,10 +169,13 @@ public class PasteFileAction extends FileAction {
                 throw new RuntimeException(e);
             }
 
-            boolean needAddToCopied = true;
+            var needAddToCopied = true;
 
-            for (final Path copiedFile : copied) {
-                if (!Files.isDirectory(copiedFile)) continue;
+            for (var copiedFile : copied) {
+
+                if (!Files.isDirectory(copiedFile)) {
+                    continue;
+                }
 
                 if (targetFile.startsWith(copiedFile)) {
                     needAddToCopied = false;
@@ -168,7 +183,9 @@ public class PasteFileAction extends FileAction {
                 }
             }
 
-            if (needAddToCopied) copied.add(targetFile);
+            if (needAddToCopied) {
+                copied.add(targetFile);
+            }
         });
     }
 }

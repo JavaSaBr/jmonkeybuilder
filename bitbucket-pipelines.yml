@@ -5,7 +5,7 @@
 # You can specify a custom docker image from Docker Hub as your build environment.
 # image: atlassian/default-image:latest
 
-image: java:8
+image: java:10
 pipelines:
   default:
     - step:

@@ -1,11 +1,12 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
-import com.ss.editor.ui.css.CSSClasses;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.CheckBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,42 +24,48 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     @Nullable
     private CheckBox checkBox;
 
-    protected BooleanPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                           @NotNull final Runnable validationCallback) {
+    protected BooleanPropertyEditorControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createComponents() {
         super.createComponents();
 
         checkBox = new CheckBox();
-        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> change());
-        checkBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        checkBox.prefWidthProperty()
+                .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addToPane(checkBox, this);
-        FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FxControlUtils.onSelectedChange(checkBox, this::change);
+
+        FxUtils.addClass(checkBox, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
+        FxUtils.addChild(this, checkBox);
     }
 
     /**
-     * @return the CheckBox with current value.
+     * Get the check box with current value.
+     *
+     * @return the check box with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull CheckBox getCheckBox() {
         return notNull(checkBox);
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
         super.reload();
-        final Boolean value = getPropertyValue();
-        getCheckBox().setSelected(value == null ? false : value);
+        getCheckBox().setSelected(Boolean.TRUE.equals(getPropertyValue()));
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getCheckBox().isSelected());
         super.changeImpl();

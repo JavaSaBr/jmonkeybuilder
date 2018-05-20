@@ -3,11 +3,11 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
-import com.ss.editor.executor.impl.FXEditorTaskExecutor;
-import com.ss.editor.executor.impl.JMEThreadExecutor;
-import com.ss.rlib.concurrent.atomic.AtomicInteger;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.editor.executor.impl.FxEditorTaskExecutor;
+import com.ss.editor.executor.impl.JmeThreadExecutor;
+import com.ss.rlib.common.concurrent.atomic.AtomicInteger;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,13 +33,7 @@ public class ExecutorManager {
     @Nullable
     private static ExecutorManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static ExecutorManager getInstance() {
+    public static @NotNull ExecutorManager getInstance() {
         if (instance == null) instance = new ExecutorManager();
         return instance;
     }
@@ -60,7 +54,7 @@ public class ExecutorManager {
      * The executor of editor tasks.
      */
     @NotNull
-    private final JMEThreadExecutor jmeTasksExecutor;
+    private final JmeThreadExecutor jmeTasksExecutor;
 
     /**
      * The executor of javaFX tasks.
@@ -83,12 +77,12 @@ public class ExecutorManager {
             backgroundTaskExecutors[i] = new BackgroundEditorTaskExecutor(i + 1);
         }
 
-        this.jmeTasksExecutor = JMEThreadExecutor.getInstance();
-        this.fxEditorTaskExecutor = new FXEditorTaskExecutor();
+        this.jmeTasksExecutor = JmeThreadExecutor.getInstance();
+        this.fxEditorTaskExecutor = new FxEditorTaskExecutor();
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
 
-        LOGGER.info("initialized.");
+        LOGGER.debug("initialized.");
     }
 
     /**
@@ -99,10 +93,10 @@ public class ExecutorManager {
     @FromAnyThread
     public void addBackgroundTask(@NotNull final Runnable task) {
 
-        final EditorTaskExecutor[] executors = getBackgroundTaskExecutors();
-        final AtomicInteger nextTaskExecutor = getNextBackgroundTaskExecutor();
+        var executors = getBackgroundTaskExecutors();
+        var nextTaskExecutor = getNextBackgroundTaskExecutor();
 
-        final int index = nextTaskExecutor.incrementAndGet();
+        var index = nextTaskExecutor.incrementAndGet();
 
         if (index < executors.length) {
             executors[index].execute(task);
@@ -113,14 +107,13 @@ public class ExecutorManager {
     }
 
     /**
-     * Add a new javaFX task.
+     * Add the new task to be executed in the JavaFX thread.
      *
-     * @param task the javaFX task.
+     * @param task the task.
      */
     @FromAnyThread
-    public void addFXTask(@NotNull final Runnable task) {
-        final EditorTaskExecutor executor = getFxTaskExecutor();
-        executor.execute(task);
+    public void addFxTask(@NotNull Runnable task) {
+        getFxTaskExecutor().execute(task);
     }
 
     /**
@@ -129,40 +122,47 @@ public class ExecutorManager {
      * @param task the editor task.
      */
     @FromAnyThread
-    public void addJMETask(@NotNull final Runnable task) {
-        final JMEThreadExecutor executor = getJmeTasksExecutor();
-        executor.addToExecute(task);
+    public void addJmeTask(@NotNull Runnable task) {
+        getJmeTasksExecutor().addToExecute(task);
     }
 
     /**
+     * Get the list of background tasks executors.
+     *
      * @return the list of background tasks executors.
      */
-    @NotNull
-    private EditorTaskExecutor[] getBackgroundTaskExecutors() {
+    @FromAnyThread
+    private @NotNull EditorTaskExecutor[] getBackgroundTaskExecutors() {
         return backgroundTaskExecutors;
     }
 
     /**
+     * Get the executor of javaFX tasks.
+     *
      * @return the executor of javaFX tasks.
      */
-    @NotNull
-    private EditorTaskExecutor getFxTaskExecutor() {
+    @FromAnyThread
+    private @NotNull EditorTaskExecutor getFxTaskExecutor() {
         return fxEditorTaskExecutor;
     }
 
     /**
+     * Get the index of a next background executor.
+     *
      * @return the index of a next background executor.
      */
-    @NotNull
-    private AtomicInteger getNextBackgroundTaskExecutor() {
+    @FromAnyThread
+    private @NotNull AtomicInteger getNextBackgroundTaskExecutor() {
         return nextBackgroundTaskExecutor;
     }
 
     /**
-     * @return the executor of editor tasks.
+     * Get the executor of jME tasks.
+     *
+     * @return the executor of jME tasks.
      */
-    @NotNull
-    private JMEThreadExecutor getJmeTasksExecutor() {
+    @FromAnyThread
+    private @NotNull JmeThreadExecutor getJmeTasksExecutor() {
         return jmeTasksExecutor;
     }
 
@@ -173,7 +173,7 @@ public class ExecutorManager {
      * @param timeout  the timeout.
      */
     @FromAnyThread
-    public void schedule(@NotNull final Runnable runnable, final long timeout) {
+    public void schedule(@NotNull Runnable runnable, long timeout) {
         scheduledExecutorService.schedule(runnable, timeout, TimeUnit.MILLISECONDS);
     }
 
@@ -184,7 +184,7 @@ public class ExecutorManager {
      * @param delay    the delay.
      */
     @FromAnyThread
-    public void scheduleAtFixedRate(@NotNull final Runnable runnable, final long delay) {
+    public void scheduleAtFixedRate(@NotNull Runnable runnable, long delay) {
         scheduledExecutorService.scheduleAtFixedRate(runnable, delay, delay, TimeUnit.MILLISECONDS);
     }
 }

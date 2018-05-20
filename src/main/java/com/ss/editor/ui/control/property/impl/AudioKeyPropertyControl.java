@@ -2,21 +2,23 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.FileExtensions.AUDIO_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.fx.util.FxUtils;
+import com.ss.rlib.common.util.StringUtils;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -32,6 +34,7 @@ import java.nio.file.Paths;
 /**
  * The implementation of the {@link PropertyControl} to edit the {@link AudioData}.
  *
+ * @param <C> the type of a change consumer.
  * @author JavaSaBr
  */
 public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyControl<C, AudioNode, AudioKey> {
@@ -45,8 +48,11 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     @Nullable
     private Label audioKeyLabel;
 
-    public AudioKeyPropertyControl(@Nullable final AudioKey element, @NotNull final String paramName,
-                                   @NotNull final C changeConsumer) {
+    public AudioKeyPropertyControl(
+            @Nullable AudioKey element,
+            @NotNull String paramName,
+            @NotNull C changeConsumer
+    ) {
         super(element, paramName, changeConsumer);
         setOnDragOver(this::handleDragOverEvent);
         setOnDragDropped(this::handleDragDroppedEvent);
@@ -54,21 +60,20 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     }
 
     /**
-     * Handle grad exited events.
+     * Handle drag exited events.
      *
      * @param dragEvent the drag exited event.
      */
-    private void handleDragExitedEvent(@NotNull final DragEvent dragEvent) {
-
+    private void handleDragExitedEvent(@NotNull DragEvent dragEvent) {
     }
 
     /**
-     * Handle dropped event.
+     * Handle dropped events.
      *
      * @param dragEvent the dropped event.
      */
-    private void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, AUDIO_EXTENSIONS, this, AudioKeyPropertyControl::addAudioData);
+    private void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
+        UiUtils.handleDroppedFile(dragEvent, AUDIO_EXTENSIONS, this, AudioKeyPropertyControl::addAudioData);
     }
 
     /**
@@ -76,49 +81,55 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @param dragEvent the drag over events.
      */
-    private void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
-        UIUtils.acceptIfHasFile(dragEvent, AUDIO_EXTENSIONS);
+    private void handleDragOverEvent(@NotNull DragEvent dragEvent) {
+        UiUtils.acceptIfHasFile(dragEvent, AUDIO_EXTENSIONS);
     }
 
     @Override
-    @FXThread
-    protected void createComponents(@NotNull final HBox container) {
+    @FxThread
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         audioKeyLabel = new Label(NO_AUDIO);
 
-        final Button changeButton = new Button();
+        var changeButton = new Button();
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
-        changeButton.setOnAction(event -> processChange());
+        changeButton.setOnAction(this::processChange);
 
-        final Button openButton = new Button();
+        var openButton = new Button();
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
-        openButton.disableProperty().bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
-        openButton.setOnAction(event -> processOpen());
+        openButton.setOnAction(this::openAudio);
+        openButton.disableProperty()
+                .bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
 
-        audioKeyLabel.prefWidthProperty().bind(widthProperty()
+        audioKeyLabel.prefWidthProperty()
+                .bind(widthProperty()
                 .subtract(changeButton.widthProperty())
                 .subtract(openButton.widthProperty()));
 
-        FXUtils.addToPane(audioKeyLabel, container);
-        FXUtils.addToPane(changeButton, container);
-        FXUtils.addToPane(openButton, container);
+        FxUtils.addClass(container,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
+                .addClass(audioKeyLabel,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
+                .addClass(changeButton, openButton,
+                        CssClasses.FLAT_BUTTON,
+                        CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
-        FXUtils.addClassesTo(container, CSSClasses.TEXT_INPUT_CONTAINER,
-                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassTo(audioKeyLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-        FXUtils.addClassesTo(changeButton, openButton, CSSClasses.FLAT_BUTTON,
-                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FxUtils.addChild(container,
+                audioKeyLabel, changeButton, openButton);
 
         DynamicIconSupport.addSupport(changeButton, openButton);
     }
 
     /**
      * Show dialog for choosing another audio key.
+     *
+     * @param event the action event.
      */
-    @FXThread
-    protected void processChange() {
-        UIUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
+    @FxThread
+    protected void processChange(@Nullable ActionEvent event) {
+        UiUtils.openFileAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     /**
@@ -126,11 +137,11 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      *
      * @param file the audio file.
      */
-    @FXThread
-    private void addAudioData(@NotNull final Path file) {
+    @FxThread
+    private void addAudioData(@NotNull Path file) {
 
-        final Path assetFile = notNull(getAssetFile(file));
-        final AudioKey audioKey = new AudioKey(toAssetPath(assetFile));
+        var assetFile = notNull(getAssetFile(file));
+        var audioKey = new AudioKey(toAssetPath(assetFile));
 
         changed(audioKey, getPropertyValue());
         setIgnoreListener(true);
@@ -143,41 +154,48 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
     /**
      * Open this audio data in the audio viewer.
+     *
+     * @param event the action event.
      */
-    @FXThread
-    protected void processOpen() {
+    @FxThread
+    protected void openAudio(@Nullable ActionEvent event) {
 
-        final AudioKey element = getPropertyValue();
-        if (element == null) return;
+        var element = getPropertyValue();
+        if (element == null) {
+            return;
+        }
 
-        final String assetPath = element.getName();
-        if (StringUtils.isEmpty(assetPath)) return;
+        var assetPath = element.getName();
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
 
-        final Path assetFile = Paths.get(assetPath);
-        final Path realFile = notNull(getRealFile(assetFile));
-        if (!Files.exists(realFile)) return;
+        var assetFile = Paths.get(assetPath);
+        var realFile = notNull(getRealFile(assetFile));
+        if (!Files.exists(realFile)) {
+            return;
+        }
 
-        final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
-        event.setFile(realFile);
-
-        FX_EVENT_MANAGER.notify(event);
+        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(realFile));
     }
 
     /**
-     * Gets audio key label.
+     * Get the audio key label.
      *
-     * @return the label with name of the audio key.
+     * @return the audio key label.
      */
-    @FXThread
+    @FxThread
     private @NotNull Label getAudioKeyLabel() {
         return notNull(audioKeyLabel);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
-        final AudioKey element = getPropertyValue();
-        final Label audioKeyLabel = getAudioKeyLabel();
-        audioKeyLabel.setText(element == null || StringUtils.isEmpty(element.getName()) ? NO_AUDIO : element.getName());
+        getAudioKeyLabel().setText(getKeyLabel(getPropertyValue()));
+    }
+
+    private @NotNull String getKeyLabel(@Nullable AudioKey assetKey) {
+        return EditorUtil.isEmpty(assetKey) ? NO_AUDIO : assetKey.getName();
     }
 }

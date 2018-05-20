@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -15,11 +15,7 @@ import java.nio.file.Path;
  */
 public class DeletedFileEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<DeletedFileEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {
@@ -28,27 +24,23 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     private static final String FILE = "file";
-    private static final String IS_DIRECTORY = "isDirectory";
+    private static final String IS_DIRECTORY = "is_directory";
 
-    /**
-     * Instantiates a new Deleted file event.
-     */
     public DeletedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE), "Can't find a file");
     }
 
     /**
-     * Is directory boolean.
+     * Return true if the file is directory.
      *
      * @return true if the file is directory.
      */
@@ -57,20 +49,20 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file.
      */
-    public void setFile(@NotNull final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 
     /**
-     * Sets directory.
+     * Return true if it is a directory.
      *
-     * @param directory the directory.
+     * @param directory true if it is a directory.
      */
-    public void setDirectory(final boolean directory) {
+    public void setDirectory(boolean directory) {
         set(IS_DIRECTORY, directory);
     }
 }

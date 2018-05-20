@@ -2,13 +2,13 @@ package com.ss.editor.ui.component.editor.scripting;
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.scripting.GroovyEditorComponent;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import groovy.lang.GroovyShell;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -89,7 +89,7 @@ public class EditorScriptingComponent extends GridPane {
         add(editorComponent, 0, 3, 1, 1);
         add(runButton, 0, 4, 1, 1);
 
-        FXUtils.addClassTo(this, CSSClasses.EDITOR_SCRIPTING_COMPONENT);
+        FXUtils.addClassTo(this, CssClasses.EDITOR_SCRIPTING_COMPONENT);
     }
 
     /**

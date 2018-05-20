@@ -1,14 +1,11 @@
 package com.ss.editor.ui.control.property.builder;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.app.state.property.builder.impl.AppStatePropertyBuilder;
-import com.ss.editor.ui.control.filter.property.builder.impl.FilterPropertyBuilder;
-import com.ss.editor.ui.control.material.property.builder.MaterialSettingsPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.*;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.editor.ui.control.property.builder.impl.*;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,23 +40,22 @@ public class PropertyBuilderRegistry {
     private PropertyBuilderRegistry() {
         builders = ArrayFactory.newArray(PropertyBuilder.class);
         filters = ArrayFactory.newArray(PropertyBuilderFilter.class);
-        builders.add(AudioNodePropertyBuilder.getInstance());
-        builders.add(ParticleEmitterPropertyBuilder.getInstance());
-        builders.add(GeometryPropertyBuilder.getInstance());
-        builders.add(LightPropertyBuilder.getInstance());
-        builders.add(SpatialPropertyBuilder.getInstance());
-        builders.add(AppStatePropertyBuilder.getInstance());
-        builders.add(FilterPropertyBuilder.getInstance());
-        builders.add(DefaultControlPropertyBuilder.getInstance());
-        builders.add(EditableControlPropertyBuilder.getInstance());
-        builders.add(CollisionShapePropertyBuilder.getInstance());
-        builders.add(PrimitivePropertyBuilder.getInstance());
-        builders.add(MeshPropertyBuilder.getInstance());
-        builders.add(MaterialPropertyBuilder.getInstance());
-        builders.add(ParticleInfluencerPropertyBuilder.getInstance());
-        builders.add(EmitterShapePropertyBuilder.getInstance());
-        builders.add(Toneg0dParticleInfluencerPropertyBuilder.getInstance());
-        builders.add(MaterialSettingsPropertyBuilder.getInstance());
+        register(AudioNodePropertyBuilder.getInstance());
+        register(ParticleEmitterPropertyBuilder.getInstance());
+        register(GeometryPropertyBuilder.getInstance());
+        register(LightPropertyBuilder.getInstance());
+        register(SpatialPropertyBuilder.getInstance());
+        register(SceneAppStatePropertyBuilder.getInstance());
+        register(SceneFilterPropertyBuilder.getInstance());
+        register(DefaultControlPropertyBuilder.getInstance());
+        register(EditableControlPropertyBuilder.getInstance());
+        register(CollisionShapePropertyBuilder.getInstance());
+        register(PrimitivePropertyBuilder.getInstance());
+        register(MeshPropertyBuilder.getInstance());
+        register(MaterialPropertyBuilder.getInstance());
+        register(ParticleInfluencerPropertyBuilder.getInstance());
+        register(EmitterShapePropertyBuilder.getInstance());
+        register(MaterialSettingsPropertyBuilder.getInstance());
     }
 
     /**
@@ -68,8 +64,9 @@ public class PropertyBuilderRegistry {
      * @param builder the property builder.
      */
     @FromAnyThread
-    public void register(@NotNull final PropertyBuilder builder) {
+    public void register(@NotNull PropertyBuilder builder) {
         builders.add(builder);
+        builders.sort(PropertyBuilder::compareTo);
     }
 
     /**
@@ -78,7 +75,7 @@ public class PropertyBuilderRegistry {
      * @param filter the property builder filter.
      */
     @FromAnyThread
-    public void register(@NotNull final PropertyBuilderFilter filter) {
+    public void register(@NotNull PropertyBuilderFilter filter) {
         filters.add(filter);
     }
 
@@ -90,15 +87,19 @@ public class PropertyBuilderRegistry {
      * @param container      the container for containing these controls.
      * @param changeConsumer the consumer to work between controls and editor.
      */
-    @FXThread
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                         @NotNull final ChangeConsumer changeConsumer) {
+    @FxThread
+    public void buildFor(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ChangeConsumer changeConsumer
+    ) {
 
-        for (final PropertyBuilder builder : builders) {
+        for (var builder : builders) {
 
             boolean needSkip = false;
 
-            for (final PropertyBuilderFilter filter : filters) {
+            for (var filter : filters) {
                 if (filter.skip(builder, object, parent)) {
                     needSkip = true;
                     break;

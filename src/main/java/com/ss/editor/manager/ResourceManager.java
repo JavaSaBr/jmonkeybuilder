@@ -1,42 +1,43 @@
 package com.ss.editor.manager;
 
 import static com.ss.editor.FileExtensions.*;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FAST_SKY_FOLDER;
 import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.util.ArrayUtils.contains;
-import static com.ss.rlib.util.FileUtils.getFiles;
-import static com.ss.rlib.util.FileUtils.toUrl;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.Utils.get;
-import static com.ss.rlib.util.array.ArrayFactory.toArray;
-import static com.ss.rlib.util.ref.ReferenceFactory.newRef;
+import static com.ss.rlib.common.util.ArrayUtils.contains;
+import static com.ss.rlib.common.util.FileUtils.getFiles;
+import static com.ss.rlib.common.util.FileUtils.toUrl;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.Utils.get;
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
+import static com.ss.rlib.common.util.ref.ReferenceFactory.newRef;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.file.StandardWatchEventKinds.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
-import com.ss.editor.Editor;
 import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
-import com.ss.rlib.concurrent.util.ThreadUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.manager.InitializeManager;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayComparator;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
-import com.ss.rlib.util.ref.Reference;
-import com.ss.rlib.util.ref.ReferenceType;
+import com.ss.rlib.common.concurrent.util.ThreadUtils;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayComparator;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.ref.Reference;
+import com.ss.rlib.common.util.ref.ReferenceType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,7 +63,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
@@ -130,9 +131,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @NotNull
     private final Array<WatchKey> watchKeys;
 
-    /**
-     * Instantiates a new Resource manager.
-     */
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
@@ -149,16 +147,15 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final InitializationManager initializationManager = InitializationManager.getInstance();
         initializationManager.addOnFinishLoading(() -> {
             prepareClasspathResources();
-            final FXEventManager fxEventManager = FXEventManager.getInstance();
+            final FxEventManager fxEventManager = FxEventManager.getInstance();
             fxEventManager.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
             fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
             fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
         });
 
-        initializationManager.addOnAfterCreateJMEContext(() -> {
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
+        initializationManager.addOnAfterCreateJmeContext(() -> {
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             assetManager.addAssetEventListener(this);
         });
 
@@ -233,6 +230,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @param fileExtension the file type.
      */
+    @FromAnyThread
     public synchronized void registerInterestedFileType(@NotNull final String fileExtension) {
 
         ObjectDictionary<String, Array<String>> resources = getInterestedResources();
@@ -251,12 +249,15 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public synchronized void assetLoaded(@NotNull final AssetKey key) {
+
         if (key.getCacheType() == null) {
             return;
         }
 
         final String extension = key.getExtension();
-        if (StringUtils.isEmpty(extension)) return;
+        if (StringUtils.isEmpty(extension)) {
+            return;
+        }
 
         final ObjectDictionary<String, Reference> table = getAssetCacheTable();
         final Reference reference = notNull(table.get(key.getName(), () -> newRef(ReferenceType.LONG)));
@@ -266,29 +267,37 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public synchronized void assetRequested(@NotNull final AssetKey key) {
+
         if (key.getCacheType() == null) {
             return;
         }
 
         final String extension = key.getExtension();
-        if (StringUtils.isEmpty(extension)) return;
+        if (StringUtils.isEmpty(extension)){
+            return;
+        }
 
         final ObjectDictionary<String, Reference> table = getAssetCacheTable();
         final Reference reference = table.get(key.getName());
-        if (reference == null) return;
+        if (reference == null) {
+            return;
+        }
 
-        final Path assetFile = getRealFile(Paths.get(key.getName()));
-        if (assetFile == null || !Files.exists(assetFile)) return;
+        final Path realFile = getRealFile(Paths.get(key.getName()));
+        if (realFile == null || !Files.exists(realFile)) {
+            return;
+        }
 
         try {
 
             final long timestamp = reference.getLong();
 
-            final FileTime lastModifiedTime = Files.getLastModifiedTime(assetFile);
-            if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) return;
+            final FileTime lastModifiedTime = Files.getLastModifiedTime(realFile);
+            if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) {
+                return;
+            }
 
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             assetManager.deleteFromCache(key);
 
         } catch (final IOException e) {
@@ -308,12 +317,13 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     public synchronized void updateAdditionalEnvs() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-
         final Array<Path> additionalEnvs = getAdditionalEnvs();
         additionalEnvs.clear();
 
-        final Path folder = editorConfig.getAdditionalEnvs();
-        if (folder == null) return;
+        final Path folder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
+        if (folder == null) {
+            return;
+        }
 
         additionalEnvs.addAll(getFiles(folder, IMAGE_HDR, IMAGE_TGA, IMAGE_PNG));
     }
@@ -341,7 +351,10 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @FromAnyThread
     private synchronized void processEvent(@NotNull final DeletedFileEvent event) {
-        if (event.isDirectory()) return;
+
+        if (event.isDirectory()) {
+            return;
+        }
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
@@ -358,8 +371,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
 
             final URL url = toUrl(file);
             final Array<URLClassLoader> classLoaders = getClassLoaders();
@@ -472,8 +484,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         watchKeys.forEach(WatchKey::cancel);
         watchKeys.clear();
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final Array<URLClassLoader> classLoaders = getClassLoaders();
         classLoaders.forEach(assetManager, (loader, manager) -> manager.removeClassLoader(loader));
@@ -512,7 +523,10 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @FromAnyThread
     private synchronized void handleFile(@NotNull final Path file) {
-        if (Files.isDirectory(file)) return;
+
+        if (Files.isDirectory(file)) {
+            return;
+        }
 
         final String extension = FileUtils.getExtension(file);
 
@@ -526,9 +540,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
-
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final URL url = get(file, FileUtils::toUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
@@ -628,7 +640,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private synchronized void removeWatchKeyFor(@NotNull final Path path) {
 
         final WatchKey watchKey = findWatchKey(path);
-        if (watchKey == null) return;
+        if (watchKey == null) {
+            return;
+        }
 
         final Array<WatchKey> watchKeys = getWatchKeys();
         watchKeys.fastRemove(watchKey);

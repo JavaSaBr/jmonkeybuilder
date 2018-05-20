@@ -5,7 +5,7 @@ import static java.util.ResourceBundle.getBundle;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.EditorPlugin;
-import com.ss.rlib.util.PropertyLoader;
+import com.ss.rlib.common.util.PropertyLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Enumeration;
@@ -43,9 +43,8 @@ public class MessagesPluginFactory {
      * @param pluginClass the plugin class.
      * @return the resource bundle.
      */
-    @NotNull
     @FromAnyThread
-    public static ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass) {
+    public static @NotNull ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass) {
         return getResourceBundle(pluginClass, Messages.BUNDLE_NAME);
     }
 
@@ -56,10 +55,9 @@ public class MessagesPluginFactory {
      * @param bundleName  the bundle name.
      * @return the resource bundle.
      */
-    @NotNull
     @FromAnyThread
-    public static ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass,
-                                                   @NotNull final String bundleName) {
+    public static @NotNull ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass,
+                                                            @NotNull final String bundleName) {
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = pluginClass.getClassLoader();
         final ResourceBundle resourceBundle = getBundle(bundleName, locale, classLoader, PropertyLoader.getInstance());

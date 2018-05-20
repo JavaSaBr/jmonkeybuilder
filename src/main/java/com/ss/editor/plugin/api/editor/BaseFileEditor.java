@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.editor;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
@@ -64,7 +64,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      *
      * @return the editor operation control.
      */
-    @FXThread
+    @FxThread
     protected @NotNull EditorOperationControl createOperationControl() {
         return new EditorOperationControl(this);
     }
@@ -75,7 +75,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
         operationControl.execute(operation);
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isShiftDown,
@@ -96,14 +96,14 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void incrementChange() {
         final int result = changeCounter.incrementAndGet();
         setDirty(result != 0);
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void decrementChange() {
         final int result = changeCounter.decrementAndGet();
         setDirty(result != 0);
@@ -132,7 +132,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
@@ -142,13 +142,13 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
             throw new RuntimeException(e);
         }
 
-        EXECUTOR_MANAGER.addFXTask(this::loadState);
+        EXECUTOR_MANAGER.addFxTask(this::loadState);
     }
 
     /**
      * Loading a state of this editor.
      */
-    @FXThread
+    @FxThread
     protected void loadState() {
 
         final Supplier<EditorState> stateFactory = getEditorStateFactory();
@@ -167,7 +167,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      *
      * @return the factory to make an editor state.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return null;
     }
@@ -178,7 +178,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * @param file the file to open.
      * @throws IOException if was some problem with writing to the file.
      */
-    @FXThread
+    @FxThread
     protected void doOpenFile(@NotNull final Path file) throws IOException {
     }
 
@@ -199,13 +199,13 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull StackPane createRoot() {
         return new StackPane();
     }
 
     @Override
-    @FXThread
+    @FxThread
     public @Nullable BorderPane get3DArea() {
         return null;
     }
@@ -221,7 +221,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     }
 
     @Override
-    @FXThread
+    @FxThread
     public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
         return false;
     }

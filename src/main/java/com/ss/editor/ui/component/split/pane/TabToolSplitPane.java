@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.split.pane;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.ss.editor.ui.component.tab.TabToolComponent;
@@ -46,12 +46,6 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      */
     private boolean collapsed;
 
-    /**
-     * Instantiates a new Tab tool split pane.
-     *
-     * @param scene  the scene
-     * @param config the config
-     */
     protected TabToolSplitPane(@NotNull final Scene scene, @Nullable C config) {
         this.scene = scene;
         this.config = config;

@@ -11,7 +11,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 
 /**
  * The action to create a new file.

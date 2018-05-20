@@ -2,24 +2,24 @@ package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.editor.util.NodeUtils.findParent;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetKey;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import javafx.scene.control.Label;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.nio.file.Path;
 
 /**
@@ -36,9 +36,11 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
         EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public SpatialAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                               @NotNull final PropertyDefinition definition,
-                                               @NotNull final Runnable validationCallback) {
+    public SpatialAssetResourcePropertyControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
@@ -49,42 +51,53 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     }
 
     @Override
-    @FXThread
-    protected void processSelect(@NotNull final Path file) {
+    @FxThread
+    protected void chooseNew(@NotNull Path file) {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
-        final Path assetFile = notNull(getAssetFile(file));
-        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
-        final T spatial = findResource(assetManager, modelKey);
+        var assetFile = notNull(getAssetFile(file));
+        var modelKey = new ModelKey(toAssetPath(assetFile));
+        var spatial = findResource(assetManager, modelKey);
 
         setPropertyValue(unsafeCast(spatial));
 
-        super.processSelect(file);
+        super.chooseNew(file);
     }
 
     /**
-     * Finds a resource rom asset folder by the model key.
+     * Find a resource rom asset folder by the model key.
      *
      * @param assetManager the asset manager.
      * @param modelKey     the model key.
      * @return the target resource.
      */
-    @FXThread
-    protected @Nullable T findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
+    @FxThread
+    protected @Nullable T findResource(@NotNull AssetManager assetManager, @NotNull ModelKey modelKey) {
         return unsafeCast(assetManager.loadModel(modelKey));
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    protected boolean canAccept(@NotNull File file) {
+        return EXTENSIONS.contains(FileUtils.getExtension(file.getName()));
+    }
 
-        final T model = getPropertyValue();
-        final Spatial root = model == null ? null : findParent(model, spatial -> spatial.getKey() != null);
-        final AssetKey key = root == null ? null : root.getKey();
+    @Override
+    @FxThread
+    protected void handleFile(@NotNull File file) {
+        chooseNew(file.toPath());
+    }
 
-        final Label resourceLabel = getResourceLabel();
-        resourceLabel.setText(key == null ? NOT_SELECTED : key.getName() + "[" + model.getName() + "]");
+    @Override
+    @FxThread
+    public void reload() {
+
+        var model = getPropertyValue();
+        var rootKey = EditorUtil.findRootKey(model);
+
+        var resourceLabel = getResourceLabel();
+        resourceLabel.setText(rootKey == null ? NOT_SELECTED : rootKey + "[" + model.getName() + "]");
 
         super.reload();
     }

@@ -1,25 +1,24 @@
 package com.ss.editor.ui.component.asset;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.css.CssIds;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.editor.ui.util.UiUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -37,20 +36,11 @@ public class AssetComponent extends VBox implements ScreenComponent {
     @NotNull
     private static final String COMPONENT_ID = "AssetComponent";
 
-    /**
-     * The executor manager.
-     */
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
-     * The event manager.
-     */
-    @NotNull
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The list of waited files to select.
+     * The list of waited files to be selected.
      */
     @NotNull
     private final Array<Path> waitedFilesToSelect;
@@ -77,19 +67,19 @@ public class AssetComponent extends VBox implements ScreenComponent {
      */
     public AssetComponent() {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
-        setId(CSSIds.ASSET_COMPONENT);
+        setId(CssIds.ASSET_COMPONENT);
         createComponents();
-        FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefresh());
-        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
-        FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, event -> processEvent((RequestSelectFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> refreshAssetFolder());
+        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> switchAssetFolder());
+        FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, this::handleCreatedFile);
+        FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, this::handleRequestToSelectFile);
+        FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::handleDeletedFile);
     }
 
     /**
-     * Gets waited files to select.
+     * Get the list of waited files to be selected.
      *
-     * @return the list of waited files to select.
+     * @return the list of waited files to be selected.
      */
     @FromAnyThread
     private @NotNull Array<Path> getWaitedFilesToSelect() {
@@ -97,16 +87,16 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Handle request for selection a file.
+     * Handle of the request to select a file.
      */
-    @FXThread
-    private void processEvent(@NotNull final RequestSelectFileEvent event) {
+    @FxThread
+    private void handleRequestToSelectFile(@NotNull RequestSelectFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final ResourceTree resourceTree = getResourceTree();
-        final ResourceElement element = ResourceElementFactory.createFor(file);
-        final TreeItem<ResourceElement> treeItem = UIUtils.findItemForValue(resourceTree.getRoot(), element);
+        var resourceTree = getResourceTree();
+        var element = ResourceElementFactory.createFor(file);
+        var treeItem = UiUtils.findItemForValue(resourceTree.getRoot(), element);
 
         if (treeItem == null) {
             getWaitedFilesToSelect().add(file);
@@ -117,101 +107,117 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Handle a created file.
+     * Handle of the created file.
      */
-    @FXThread
-    private void processEvent(@NotNull final CreatedFileEvent event) {
+    @FxThread
+    private void handleCreatedFile(@NotNull CreatedFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final Array<Path> waitedFilesToSelect = getWaitedFilesToSelect();
-        final boolean waitedSelect = waitedFilesToSelect.contains(file);
+        var waitedFilesToSelect = getWaitedFilesToSelect();
+        var wasWaitedToSelect = waitedFilesToSelect.contains(file);
 
-        final ResourceTree resourceTree = getResourceTree();
+        var resourceTree = getResourceTree();
         resourceTree.notifyCreated(file);
 
-        if (waitedSelect) waitedFilesToSelect.fastRemove(file);
-        if (waitedSelect || event.isNeedSelect()) resourceTree.expandTo(file, true);
+        if (wasWaitedToSelect) {
+            waitedFilesToSelect.fastRemove(file);
+        }
+
+        if (wasWaitedToSelect || event.isNeedSelect()) {
+            resourceTree.expandTo(file, true);
+        }
     }
 
     /**
-     * Handle a deleted file.
+     * Handle of the deleted file.
      */
-    @FXThread
-    private void processEvent(@NotNull final DeletedFileEvent event) {
+    @FxThread
+    private void handleDeletedFile(@NotNull DeletedFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final ResourceTree resourceTree = getResourceTree();
+        var resourceTree = getResourceTree();
         resourceTree.notifyDeleted(file);
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace workspace = workspaceManager.getCurrentWorkspace();
-        if (workspace == null) return;
-        workspace.removeEditorState(file);
+        var workspaceManager = WorkspaceManager.getInstance();
+        var workspace = workspaceManager.getCurrentWorkspace();
+
+        if (workspace != null) {
+            workspace.removeEditorState(file);
+        }
     }
 
     /**
-     * Handle changing an asset folder.
+     * Switch to a new asset folder.
      */
-    @FXThread
-    private void processChangeAsset() {
+    @FxThread
+    private void switchAssetFolder() {
         loadAssetFolder();
     }
 
     /**
-     * Handle refreshing.
+     * Refresh the current asset folder.
      */
-    @FXThread
-    private void processRefresh() {
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.refresh();
+    @FxThread
+    private void refreshAssetFolder() {
+        getResourceTree().refresh();
     }
 
     /**
      * Create components.
      */
-    @FXThread
+    @FxThread
     private void createComponents() {
         setIgnoreExpanded(true);
 
-        this.barComponent = new AssetBarComponent();
-        this.resourceTree = new ResourceTree(false);
-        this.resourceTree.setExpandHandler(this::updateExpanded);
-        this.resourceTree.setOnLoadHandler(this::handleTreeLoading);
+        barComponent = new AssetBarComponent();
+
+        resourceTree = new ResourceTree(false);
+        resourceTree.setExpandHandler(this::updateExpanded);
+        resourceTree.setOnLoadHandler(this::handleTreeLoading);
+        resourceTree.prefHeightProperty().bind(heightProperty());
 
         //FIXME пока он не нужен
         //FXUtils.addToPane(barComponent, this);
         //FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
 
-        FXUtils.addToPane(resourceTree, this);
-        FXUtils.bindFixedHeight(resourceTree, heightProperty());
-        FXUtils.addClassTo(resourceTree, CSSClasses.TRANSPARENT_LIST_VIEW);
+        FxUtils.addClass(resourceTree, CssClasses.TRANSPARENT_LIST_VIEW);
+        FxUtils.addChild(this, resourceTree);
     }
 
     /**
-     * Handle changing loading state of the tree.
+     * Handle of changing loading state of the tree.
      */
-    @FXThread
-    private void handleTreeLoading(@NotNull final Boolean finished) {
+    @FxThread
+    private void handleTreeLoading(@NotNull Boolean finished) {
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace workspace = workspaceManager.getCurrentWorkspace();
+        var workspaceManager = WorkspaceManager.getInstance();
+        var workspace = workspaceManager.getCurrentWorkspace();
 
         if (finished && workspace != null) {
-            final Array<Path> expandedFolders = workspace.getExpandedAbsoluteFolders();
-            expandedFolders.forEach(getResourceTree()::markExpand);
+            workspace.getExpandedAbsoluteFolders()
+                    .forEach(getResourceTree()::markExpand);
         }
 
         if (finished) {
-            EXECUTOR_MANAGER.addFXTask(() -> setIgnoreExpanded(false));
+
+            var editorConfig = EditorConfig.getInstance();
+            var currentAsset = editorConfig.getCurrentAsset();
+
+            EXECUTOR_MANAGER.addFxTask(() -> setIgnoreExpanded(false));
+
+            if (currentAsset != null) {
+                FX_EVENT_MANAGER.notify(new AssetComponentLoadedEvent(currentAsset));
+            }
+
         } else {
             setIgnoreExpanded(true);
         }
     }
 
     /**
-     * Is ignore expanded boolean.
+     * Return true if the expand listener is ignored.
      *
      * @return true if the expand listener is ignored.
      */
@@ -221,9 +227,9 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Sets ignore expanded.
+     * Set true if the expand listener is ignored.
      *
-     * @param ignoreExpanded the flag for ignoring expand changes.
+     * @param ignoreExpanded true if the expand listener is ignored.
      */
     @FromAnyThread
     private void setIgnoreExpanded(final boolean ignoreExpanded) {
@@ -233,16 +239,21 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle changes count of expanded folders.
      */
-    @FXThread
-    private void updateExpanded(final int count, final ResourceTree tree) {
-        if (isIgnoreExpanded()) return;
+    @FxThread
+    private void updateExpanded(int count, ResourceTree tree) {
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace workspace = workspaceManager.getCurrentWorkspace();
-        if (workspace == null) return;
+        if (isIgnoreExpanded()) {
+            return;
+        }
 
-        final Array<Path> expanded = ArrayFactory.newArray(Path.class);
-        final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(tree);
+        var workspaceManager = WorkspaceManager.getInstance();
+        var workspace = workspaceManager.getCurrentWorkspace();
+        if (workspace == null) {
+            return;
+        }
+
+        var expanded = ArrayFactory.<Path>newArray(Path.class);
+        var allItems = UiUtils.getAllItems(tree);
         allItems.stream().filter(TreeItem::isExpanded)
                 .filter(treeItem -> !treeItem.isLeaf())
                 .map(TreeItem::getValue)
@@ -254,17 +265,21 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
+     * Get the toolbar of this component.
+     *
      * @return the toolbar of this component.
      */
-    @FXThread
+    @FxThread
     private @NotNull AssetBarComponent getBarComponent() {
         return notNull(barComponent);
     }
 
     /**
+     * Get the resource tree.
+     *
      * @return the resource tree.
      */
-    @FXThread
+    @FxThread
     private @NotNull ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
@@ -276,19 +291,20 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void notifyFinishBuild() {
         loadAssetFolder();
     }
 
-    @FXThread
+    @FxThread
     private void loadAssetFolder() {
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return;
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) {
+            return;
+        }
 
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.fill(currentAsset);
+        getResourceTree().fill(currentAsset);
     }
 }

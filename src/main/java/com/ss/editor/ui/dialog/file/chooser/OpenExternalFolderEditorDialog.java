@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.file.chooser;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.dialog.EditorDialog;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class OpenExternalFolderEditorDialog extends ExternalFileEditorDialog {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
         getResourceTree().setOnlyFolders(true);

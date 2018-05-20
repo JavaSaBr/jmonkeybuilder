@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
@@ -28,62 +28,58 @@ public class RequestedOpenFileEvent extends SceneEvent {
         }
     }
 
-    /**
-     * The constant EDITOR.
-     */
-    public static final String EDITOR = "editor";
-
+    private static final String EDITOR = "editor";
     private static final String FILE = "file";
     private static final String NEED_SHOW = "need_show";
 
-    /**
-     * Instantiates a new Requested open file event.
-     */
-    public RequestedOpenFileEvent() {
+    public RequestedOpenFileEvent(@NotNull Path file) {
         super(EVENT_TYPE);
         setNeedShow(true);
+        setFile(file);
     }
 
     /**
-     * Gets description.
+     * Get the description.
      *
      * @return the editor descriptor.
      */
-    @Nullable
-    public EditorDescription getDescription() {
+    public @Nullable EditorDescription getDescription() {
         return get(EDITOR);
     }
 
     /**
-     * Sets description.
+     * Set the description.
      *
      * @param description the editor descriptor.
      */
-    public void setDescription(final EditorDescription description) {
-        set(EDITOR, description);
+    public void setDescription(@Nullable EditorDescription description) {
+        if (description == null) {
+            remove(EDITOR);
+        } else {
+            set(EDITOR, description);
+        }
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file to open.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE));
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file to open.
      */
-    public void setFile(final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 
     /**
-     * Is need show boolean.
+     * Return true if need to show the editor.
      *
      * @return true if need to show the editor.
      */
@@ -92,11 +88,11 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
-     * Sets need show.
+     * Set true if need to show the editor.
      *
      * @param needShow true if need to show the editor.
      */
-    public void setNeedShow(final boolean needShow) {
+    public void setNeedShow(boolean needShow) {
         set(NEED_SHOW, needShow);
     }
 }

@@ -1,30 +1,21 @@
 package com.ss.editor.file.delete.handler.impl;
 
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.file.delete.handler.FileDeleteHandler;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
 /**
- * The base implementation of file delete handler.
+ * The base implementation of {@link FileDeleteHandler}.
  *
  * @author JavaSaBr
  */
 public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
 
-    /**
-     * The javaFX application.
-     */
     @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * The editor.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
+    protected static final Logger LOGGER = LoggerManager.getLogger(FileDeleteHandler.class);
 
     @Override
     public void preDelete(@NotNull final Path file) {

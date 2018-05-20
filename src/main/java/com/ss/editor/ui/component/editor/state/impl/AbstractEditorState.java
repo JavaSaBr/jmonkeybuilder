@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.common.util.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +52,7 @@ public abstract class AbstractEditorState implements EditorState {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void setChangeHandler(@NotNull final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         for (final AdditionalEditorState additionalState : additionalStates) {
@@ -61,7 +61,7 @@ public abstract class AbstractEditorState implements EditorState {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public <T extends AdditionalEditorState> @NotNull T getOrCreateAdditionalState(@NotNull final Class<T> type,
                                                                                    @NotNull final Supplier<T> factory) {
 
@@ -84,12 +84,12 @@ public abstract class AbstractEditorState implements EditorState {
      *
      * @return the change handler.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Runnable getChangeHandler() {
         return changeHandler;
     }
 
-    @FXThread
+    @FxThread
     protected void notifyChange() {
         if (changeHandler != null) {
             changeHandler.run();

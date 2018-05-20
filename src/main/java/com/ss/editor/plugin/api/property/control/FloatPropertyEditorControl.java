@@ -1,52 +1,30 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.fx.control.input.FloatTextField;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The control to edit float values.
  *
  * @author JavaSaBr
  */
-public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
+public class FloatPropertyEditorControl extends TypedTextFieldPropertyEditorControl<Float, FloatTextField> {
 
-    /**
-     * The value field.
-     */
-    @Nullable
-    private FloatTextField valueField;
-
-    protected FloatPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                         @NotNull final Runnable validationCallback) {
+    public FloatPropertyEditorControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
     @Override
-    @FXThread
-    protected void createComponents() {
-        super.createComponents();
-
-        valueField = new FloatTextField();
-        valueField.addChangeListener((observable, oldValue, newValue) -> change());
-        valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
-
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(valueField, this);
-    }
-
-    /**
-     * @return the value field.
-     */
-    @FXThread
-    private @NotNull FloatTextField getValueField() {
-        return notNull(valueField);
+    @FxThread
+    protected @NotNull FloatTextField createField() {
+        return new FloatTextField();
     }
 
     /**
@@ -55,22 +33,22 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
      * @param min the min value.
      * @param max the max value.
      */
-    @FXThread
-    public void setMinMax(final float min, final float max) {
+    @FxThread
+    public void setMinMax(float min, float max) {
         if (Float.isNaN(min) || Float.isNaN(max)) return;
         getValueField().setMinMax(min, max);
     }
 
     @Override
-    @FXThread
-    protected void reload() {
+    @FxThread
+    public void reload() {
         super.reload();
-        final Float value = getPropertyValue();
+        var value = getPropertyValue();
         getValueField().setValue(value == null ? 0 : value);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void changeImpl() {
         setPropertyValue(getValueField().getValue());
         super.changeImpl();

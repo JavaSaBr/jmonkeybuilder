@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -24,33 +24,31 @@ class OpenFileByEditorAction extends FileAction {
     @NotNull
     private final EditorDescription description;
 
-    public OpenFileByEditorAction(@NotNull final ResourceElement element,
-                                  @NotNull final EditorDescription description) {
+    public OpenFileByEditorAction(@NotNull ResourceElement element, @NotNull EditorDescription description) {
         super(element);
         this.description = description;
 
         setText(description.getEditorName());
 
-        final Image icon = description.getIcon();
+        var icon = description.getIcon();
 
         if (icon != null) {
             setGraphic(new ImageView(icon));
         }
     }
 
-    @FXThread
+    @FxThread
     @Override
     protected @Nullable Image getIcon() {
         return Icons.EDIT_16;
     }
 
-    @FXThread
+    @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final RequestedOpenFileEvent newEvent = new RequestedOpenFileEvent();
-        newEvent.setFile(getElement().getFile());
+        var newEvent = new RequestedOpenFileEvent(getElement().getFile());
         newEvent.setDescription(description);
 
         FX_EVENT_MANAGER.notify(newEvent);

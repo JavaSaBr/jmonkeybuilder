@@ -1,16 +1,16 @@
 package com.ss.editor.file.converter;
 
+import static com.ss.rlib.common.util.FileUtils.containsExtensions;
+import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.file.converter.impl.*;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.function.Supplier;
 
 /**
  * The registry of file converters.
@@ -25,13 +25,7 @@ public class FileConverterRegistry {
     @NotNull
     private static final FileConverterRegistry INSTANCE = new FileConverterRegistry();
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static FileConverterRegistry getInstance() {
+    public static @NotNull FileConverterRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -44,16 +38,16 @@ public class FileConverterRegistry {
     private FileConverterRegistry() {
         this.descriptions = ArrayFactory.newArray(FileConverterDescription.class);
         register(BlendToJ3oFileConverter.DESCRIPTION);
-        register(FBXToJ3oFileConverter.DESCRIPTION);
+        register(FbxToJ3oFileConverter.DESCRIPTION);
         register(ObjToJ3oFileConverter.DESCRIPTION);
         register(SceneToJ3oFileConverter.DESCRIPTION);
         register(MeshXmlToJ3oFileConverter.DESCRIPTION);
-        register(XBufToJ3oFileConverter.DESCRIPTION);
-        register(GLTFToJ3oFileConverter.DESCRIPTION);
+        register(XbufToJ3oFileConverter.DESCRIPTION);
+        register(GltfToJ3oFileConverter.DESCRIPTION);
     }
 
     /**
-     * Add a new file converter descriptor.
+     * Add the new file converter descriptor.
      *
      * @param description the new descriptor.
      */
@@ -63,39 +57,30 @@ public class FileConverterRegistry {
     }
 
     /**
+     * Get the list of converters.
+     *
      * @return the list of converters.
      */
-    @NotNull
     @FromAnyThread
-    private Array<FileConverterDescription> getDescriptions() {
+    private @NotNull Array<FileConverterDescription> getDescriptions() {
         return descriptions;
     }
 
     /**
-     * Get the list of available converters for a file.
+     * Get the list of available converters for the file.
      *
-     * @param path the path
+     * @param path the path.
      * @return the list of available converters.
      */
     @FromAnyThread
-    public Array<FileConverterDescription> getDescriptions(@NotNull final Path path) {
-
-        final Array<FileConverterDescription> result = ArrayFactory.newArray(FileConverterDescription.class);
-        final Array<FileConverterDescription> descriptions = getDescriptions();
-        descriptions.forEach(description -> {
-
-            final Array<String> extensions = description.getExtensions();
-
-            if (FileUtils.containsExtensions(extensions.array(), path)) {
-                result.add(description);
-            }
-        });
-
-        return result;
+    public @NotNull Array<FileConverterDescription> getDescriptions(@NotNull final Path path) {
+        return getDescriptions().stream()
+                .filter(desc -> containsExtensions(desc.getExtensions(), path))
+                .collect(toArray(FileConverterDescription.class));
     }
 
     /**
-     * Create a file converter using a converter description.
+     * Create a file converter using the converter description.
      *
      * @param description the converter description.
      * @param file        the file.
@@ -103,7 +88,6 @@ public class FileConverterRegistry {
      */
     @FromAnyThread
     public FileConverter newCreator(@NotNull final FileConverterDescription description, @NotNull final Path file) {
-        final Supplier<FileConverter> constructor = description.getConstructor();
-        return constructor.get();
+        return description.getConstructor().get();
     }
 }

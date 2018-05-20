@@ -5,10 +5,10 @@ import com.ss.editor.ui.component.creator.impl.*;
 import com.ss.editor.ui.component.creator.impl.material.MaterialFileCreator;
 import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefinitionFileCreator;
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +56,6 @@ public class FileCreatorRegistry {
         register(EmptyModelCreator.DESCRIPTION);
         register(SingleColorTextureFileCreator.DESCRIPTION);
         register(EmptySceneCreator.DESCRIPTION);
-        register(DefaultSceneCreator.DESCRIPTION);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
@@ -31,25 +31,21 @@ public class RequestedCreateFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String CREATOR = "creator";
 
-    /**
-     * Instantiates a new Requested create file event.
-     */
     public RequestedCreateFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Gets description.
+     * Get the description.
      *
      * @return the creator description.
      */
-    @NotNull
-    public FileCreatorDescription getDescription() {
+    public @NotNull FileCreatorDescription getDescription() {
         return notNull(get(CREATOR));
     }
 
     /**
-     * Sets description.
+     * Set the description.
      *
      * @param description the creator description.
      */
@@ -58,17 +54,16 @@ public class RequestedCreateFileEvent extends SceneEvent {
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the file.
      */
-    @NotNull
-    public Path getFile() {
+    public @NotNull Path getFile() {
         return notNull(get(FILE));
     }
 
     /**
-     * Sets file.
+     * Set the file.
      *
      * @param file the file.
      */

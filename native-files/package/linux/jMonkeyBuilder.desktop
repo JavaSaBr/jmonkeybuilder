@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=jMonkeyBuilder
+Version=@version@
+Comment=jMonkeyBuilder
+Exec=/opt/jMonkeyBuilder/jMonkeyBuilder
+Icon=/opt/jMonkeyBuilder/jMonkeyBuilder.png
+Terminal=false
+Type=Application
+Categories=Graphics
+Comment=3D Editor for jMonkeyEngine 3.2

@@ -48,9 +48,8 @@ public enum HitType {
         this.requestValue = requestValue;
     }
 
-    @NotNull
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return requestValue;
     }
 }

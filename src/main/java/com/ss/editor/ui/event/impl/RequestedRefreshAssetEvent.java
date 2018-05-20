@@ -22,9 +22,6 @@ public class RequestedRefreshAssetEvent extends SceneEvent {
         }
     }
 
-    /**
-     * Instantiates a new Requested refresh asset event.
-     */
     public RequestedRefreshAssetEvent() {
         super(EVENT_TYPE);
     }

@@ -1,23 +1,23 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.jme3.audio.AudioSource.Status.Playing;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioSource;
-import com.ss.editor.Editor;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.impl.audio.AudioViewer3DState;
+import com.ss.editor.part3d.editor.impl.audio.AudioViewer3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 
 /**
- * The implementation of the {@link Editor} to view audio files.
+ * The implementation of the {@link JmeApplication} to view audio files.
  *
  * @author JavaSaBr
  */
@@ -54,7 +54,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * The editor app state.
      */
     @NotNull
-    private final AudioViewer3DState editorAppState;
+    private final AudioViewer3DPart editorAppState;
 
     /**
      * The play button.
@@ -99,18 +99,18 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     private TextField sampleRateField;
 
     private AudioViewerEditor() {
-        this.editorAppState = new AudioViewer3DState(this);
-        addEditorState(editorAppState);
+        this.editorAppState = new AudioViewer3DPart(this);
+        addEditor3DPart(editorAppState);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected @NotNull VBox createRoot() {
         return new VBox();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void createContent(@NotNull final VBox root) {
 
         final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
@@ -162,11 +162,11 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         FXUtils.addToPane(stopButton, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(playButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(stopButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(gridPane, CSSClasses.DEF_GRID_PANE);
-        FXUtils.addClassesTo(root, CSSClasses.DEF_VBOX, CSSClasses.AUDIO_VIEW_EDITOR_CONTAINER);
+        FXUtils.addClassTo(playButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(stopButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(gridPane, CssClasses.DEF_GRID_PANE);
+        FXUtils.addClassesTo(root, CssClasses.DEF_VBOX, CssClasses.AUDIO_VIEW_EDITOR_CONTAINER);
 
         DynamicIconSupport.addSupport(playButton, stopButton);
     }
@@ -174,7 +174,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * Stop of plying.
      */
-    @FXThread
+    @FxThread
     private void processStop() {
         getEditorAppState().stop();
     }
@@ -182,9 +182,9 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * Play the audio.
      */
-    @FXThread
+    @FxThread
     private void processPlay() {
-        final AudioViewer3DState appState = getEditorAppState();
+        final AudioViewer3DPart appState = getEditorAppState();
         if (appState.getPrevStatus() == Playing) {
             appState.pause();
         } else {
@@ -193,7 +193,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
@@ -201,7 +201,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AudioKey audioKey = new AudioKey(assetPath);
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final AudioData audioData = assetManager.loadAudio(audioKey);
 
         final float duration = audioData.getDuration();
@@ -210,7 +210,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         final AudioData.DataType dataType = audioData.getDataType();
         final int sampleRate = audioData.getSampleRate();
 
-        final AudioViewer3DState editorAppState = getEditorAppState();
+        final AudioViewer3DPart editorAppState = getEditorAppState();
         editorAppState.load(audioData, audioKey);
 
         getChannelsField().setText(String.valueOf(channels));
@@ -230,7 +230,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * @return the editor app state.
      */
     @FromAnyThread
-    private @NotNull AudioViewer3DState getEditorAppState() {
+    private @NotNull AudioViewer3DPart getEditorAppState() {
         return editorAppState;
     }
 
@@ -239,7 +239,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      *
      * @param status the new status.
      */
-    @FXThread
+    @FxThread
     public void notifyChangedStatus(final AudioSource.Status status) {
 
         final Button playButton = getPlayButton();
@@ -269,7 +269,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the play button.
      */
-    @FXThread
+    @FxThread
     private @NotNull Button getPlayButton() {
         return notNull(playButton);
     }
@@ -277,7 +277,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the stop button.
      */
-    @FXThread
+    @FxThread
     private @NotNull Button getStopButton() {
         return notNull(stopButton);
     }
@@ -285,7 +285,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the channels field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getChannelsField() {
         return notNull(channelsField);
     }
@@ -293,7 +293,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the duration field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getDurationField() {
         return notNull(durationField);
     }
@@ -301,7 +301,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the data type field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getDataTypeField() {
         return notNull(dataTypeField);
     }
@@ -309,7 +309,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the sample rate field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getSampleRateField() {
         return notNull(sampleRateField);
     }
@@ -317,7 +317,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the bits per sample field.
      */
-    @FXThread
+    @FxThread
     private @NotNull TextField getBitsPerSampleField() {
         return notNull(bitsPerSampleField);
     }

@@ -1,23 +1,25 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.svg.SvgImageLoader;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.manager.InitializeManager;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.IntegerDictionary;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.IntegerDictionary;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
@@ -111,11 +113,6 @@ public class FileIconManager {
     @Nullable
     private static FileIconManager instance;
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
     @FromAnyThread
     public static @NotNull FileIconManager getInstance() {
         if (instance == null) instance = new FileIconManager();
@@ -166,19 +163,19 @@ public class FileIconManager {
     }
 
     /**
-     * Get an icon to a file.
+     * Get an icon of the file.
      *
      * @param path the file.
      * @param size the icon size.
      * @return the icon.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getIcon(@NotNull final Path path, int size) {
         return getIcon(path, Files.isDirectory(path), true, size);
     }
 
     /**
-     * Get an icon to a file.
+     * Get an icon of the file.
      *
      * @param path                the file.
      * @param directory           the directory.
@@ -186,7 +183,7 @@ public class FileIconManager {
      * @param size                the icon size.
      * @return the icon.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getIcon(@NotNull final Path path, final boolean directory, final boolean tryToGetContentType,
                                   int size) {
 
@@ -194,7 +191,6 @@ public class FileIconManager {
         final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
 
         String url = extensionToUrl.get(extension);
-
         if (url != null) {
             return getImage(url, size);
         }
@@ -274,56 +270,56 @@ public class FileIconManager {
 
 
     /**
-     * Get an image by an URL.
+     * Get an image by the URL.
      *
      * @param url the url.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImage(@NotNull final String url) {
         return getImage(url, 16);
     }
 
     /**
-     * Get an image by an URL.
+     * Get an image by the URL.
      *
      * @param url  the url.
      * @param size the size.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImage(@NotNull final String url, final int size) {
         return getImage(url, size, true);
     }
 
     /**
-     * Get an image by an URL.
+     * Get an image by the URL.
      *
      * @param url         the url.
      * @param classLoader the class loader.
      * @param size        the size.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImage(@NotNull final String url, @NotNull final ClassLoader classLoader, final int size) {
         return getImage(url, classLoader, size, true);
     }
 
     /**
-     * Get an image by an URL.
+     * Get an image by the URL.
      *
      * @param url      the url.
      * @param size     the size.
      * @param useCache true if need to use cache.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImage(@NotNull final String url, final int size, final boolean useCache) {
         return getImage(url, getClass().getClassLoader(), size, useCache);
     }
 
     /**
-     * Get an image by an URL.
+     * Get an image by the URL.
      *
      * @param url         the url.
      * @param classLoader the class loader.
@@ -331,24 +327,24 @@ public class FileIconManager {
      * @param useCache    true if need to use cache.
      * @return the image.
      */
-    @FXThread
+    @FxThread
     public @NotNull Image getImage(@NotNull final String url, @NotNull final ClassLoader classLoader, final int size,
                                    final boolean useCache) {
+        if (!useCache) {
+            return buildImage(url, classLoader, size);
+        }
 
-        if (!useCache) return buildImage(url, classLoader, size);
-
-        final ObjectDictionary<String, Image> cache = imageCache.get(size, DictionaryFactory::newObjectDictionary);
-        final Image image = cache.get(url, () -> buildImage(url, classLoader, size));
-
-        return notNull(image);
+        return imageCache.get(size, DictionaryFactory::newObjectDictionary)
+                .get(url, () -> buildImage(url, classLoader, size));
     }
 
+    @FxThread
     private @NotNull Image buildImage(@NotNull final String url, @NotNull final ClassLoader classLoader,
                                       final int size) {
-        final InputStream in = EditorUtil.getInputStream(url, classLoader);
-        return buildImage(url, in, size);
+        return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
     }
 
+    @FxThread
     private @NotNull Image buildImage(@NotNull final String url, @Nullable final InputStream in, final int size) {
 
         final Image image;
@@ -365,7 +361,7 @@ public class FileIconManager {
         }
 
         final EditorConfig config = EditorConfig.getInstance();
-        final CssColorTheme theme = config.getTheme();
+        final CssColorTheme theme = config.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
         if (theme.needRepaintIcons()) {
             try {
@@ -381,6 +377,7 @@ public class FileIconManager {
                     } else {
                         coloredImage = new Image(url, size, size, false, true);
                     }
+
                 } finally {
                     SvgImageLoader.OVERRIDE_COLOR.set(null);
                 }
@@ -400,17 +397,19 @@ public class FileIconManager {
     }
 
     /**
-     * Gets an original image of the image.
+     * Get an original image of the image.
      *
      * @param image the image.
      * @return the original image.
      */
     @FromAnyThread
     public @NotNull Image getOriginal(@NotNull final Image image) {
-        return notNull(originalImageCache.get(image), "not found original for " + image.impl_getUrl());
+        return notNull(originalImageCache.get(image), "not found original for " + image.getUrl());
     }
 
     /**
+     * Get the list of icon finders.
+     *
      * @return the list of icon finders.
      */
     @FromAnyThread

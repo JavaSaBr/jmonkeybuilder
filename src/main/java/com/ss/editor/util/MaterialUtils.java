@@ -1,11 +1,9 @@
 package com.ss.editor.util;
 
 import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.array.ArrayFactory.toArray;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
+import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -16,10 +14,11 @@ import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
-import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
 import jme3tools.converters.ImageToAwt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,9 +42,6 @@ import java.util.List;
 public class MaterialUtils {
 
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
-
-    @NotNull
     private static final String[][] TEXTURE_TYPE_PARAM_NAMES = {
             toArray(""),
             toArray("DiffuseMap", "BaseColorMap"),
@@ -59,7 +55,7 @@ public class MaterialUtils {
     private static final int TEXTURE_DIFFUSE = 1;
     private static final int TEXTURE_NORMAL = 2;
     private static final int TEXTURE_EMISSIVE = 3;
-    private static final int TEXTURE_METALIC = 4;
+    private static final int TEXTURE_METALLIC = 4;
     private static final int TEXTURE_ROUGHNESS = 5;
     private static final int TEXTURE_SPECULAR = 6;
 
@@ -69,6 +65,7 @@ public class MaterialUtils {
      * @param textureName the texture name.
      * @return the texture type or 0.
      */
+    @FromAnyThread
     public static int getPossibleTextureType(@NotNull final String textureName) {
 
         if (textureName.contains("NORMAL") || textureName.contains("Normal") || textureName.contains("normal")) {
@@ -96,7 +93,7 @@ public class MaterialUtils {
         } else if (textureName.contains("GLOW") || textureName.contains("glow")) {
             return TEXTURE_EMISSIVE;
         } else if (textureName.contains("METALLIC") || textureName.contains("metallic")) {
-            return TEXTURE_METALIC;
+            return TEXTURE_METALLIC;
         } else if (textureName.contains("ROUGHNESS") || textureName.contains("roughness")) {
             return TEXTURE_ROUGHNESS;
         } else if (textureName.contains("SPECULAR") || textureName.contains("specular")) {
@@ -116,8 +113,8 @@ public class MaterialUtils {
      * @param textureType the texture type.
      * @return the array of possible param names.
      */
-    @NotNull
-    public static String[] getPossibleParamNames(final int textureType) {
+    @FromAnyThread
+    public static @NotNull String[] getPossibleParamNames(final int textureType) {
         return TEXTURE_TYPE_PARAM_NAMES[textureType];
     }
 
@@ -128,10 +125,10 @@ public class MaterialUtils {
      * @param material the current material.
      * @return the updated material or null.
      */
-    @Nullable
-    public static Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
+    @JmeThread
+    public static @Nullable Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         boolean needToReload = false;
         String textureKey = null;
@@ -178,6 +175,7 @@ public class MaterialUtils {
      * @param file     the file of the shader.
      * @return true if the material contains the shader.
      */
+    @FromAnyThread
     private static boolean containsShader(@NotNull final Material material, @NotNull final Path file) {
 
         final MaterialDef materialDef = material.getMaterialDef();
@@ -195,8 +193,8 @@ public class MaterialUtils {
      * @param file     the file of the texture.
      * @return changed texture key or null.
      */
-    @Nullable
-    private static String containsTexture(@NotNull final Material material, @NotNull final Path file) {
+    @FromAnyThread
+    private static @Nullable String containsTexture(@NotNull final Material material, @NotNull final Path file) {
 
         final Path assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
@@ -211,6 +209,7 @@ public class MaterialUtils {
      * @param assetPath   the path of the shader.
      * @return true if the material definition contains the shader.
      */
+    @FromAnyThread
     private static boolean containsShader(@NotNull final MaterialDef materialDef, @NotNull final String assetPath) {
 
         final List<TechniqueDef> defaultTechniques = materialDef.getTechniqueDefs("Default");
@@ -230,6 +229,7 @@ public class MaterialUtils {
      * @param assetPath the path of the texture.
      * @return true if the material definition contains the texture.
      */
+    @FromAnyThread
     private static boolean containsTexture(@NotNull final Material material, @NotNull final String assetPath) {
 
         final Collection<MatParam> materialParams = material.getParams();
@@ -251,10 +251,10 @@ public class MaterialUtils {
      * @param path the file path.
      * @return true if the file is shader.
      */
+    @FromAnyThread
     public static boolean isShaderFile(@NotNull final Path path) {
         final String extension = FileUtils.getExtension(path);
         return FileExtensions.GLSL_FRAGMENT.equals(extension) || FileExtensions.GLSL_VERTEX.equals(extension);
-
     }
 
     /**
@@ -263,6 +263,7 @@ public class MaterialUtils {
      * @param path the file path.
      * @return true if the file is texture.
      */
+    @FromAnyThread
     public static boolean isTextureFile(@NotNull final Path path) {
         final String extension = FileUtils.getExtension(path);
         return FileExtensions.IMAGE_DDS.equals(extension) || FileExtensions.IMAGE_HDR.equals(extension) ||
@@ -278,9 +279,10 @@ public class MaterialUtils {
      * @param material   the material.
      * @param textureKey the texture key.
      */
+    @JmeThread
     private static void refreshTextures(@NotNull final Material material, @NotNull final String textureKey) {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final Collection<MatParam> params = material.getParams();
         params.forEach(matParam -> {
@@ -307,6 +309,7 @@ public class MaterialUtils {
      * @param toUpdate the material for updating.
      * @param material the target material.
      */
+    @JmeThread
     private static void updateTo(@NotNull final Material toUpdate, @NotNull final Material material) {
 
         final Collection<MatParam> oldParams = new ArrayList<>(toUpdate.getParams());
@@ -338,6 +341,7 @@ public class MaterialUtils {
      * @param target the target migrating.
      * @param source the source material.
      */
+    @JmeThread
     public static void migrateTo(@NotNull final Material target, @NotNull final Material source) {
 
         final MaterialDef materialDef = target.getMaterialDef();
@@ -365,6 +369,7 @@ public class MaterialUtils {
      *
      * @param spatial the model.
      */
+    @JmeThread
     public static void cleanUpMaterialParams(@NotNull final Spatial spatial) {
         NodeUtils.visitGeometry(spatial, geometry -> {
             final Material material = geometry.getMaterial();
@@ -377,10 +382,11 @@ public class MaterialUtils {
      *
      * @param material the material.
      */
+    @JmeThread
     private static void cleanUp(@NotNull final Material material) {
         final Collection<MatParam> params = new ArrayList<>(material.getParams());
-        params.stream().filter(param -> param.getValue() ==
-                null).forEach(matParam -> material.clearParam(matParam.getName()));
+        params.stream().filter(param -> param.getValue() == null)
+                .forEach(matParam -> material.clearParam(matParam.getName()));
     }
 
     /**
@@ -388,6 +394,7 @@ public class MaterialUtils {
      *
      * @param material the material.
      */
+    @FromAnyThread
     public static void saveIfNeedTextures(@NotNull final Material material) {
         final Collection<MatParam> params = material.getParams();
         params.stream().filter(matParam -> matParam.getVarType() == VarType.Texture2D)
@@ -401,6 +408,7 @@ public class MaterialUtils {
      *
      * @param texture the texture.
      */
+    @FromAnyThread
     private static void saveIfNeedTexture(@NotNull final Texture texture) {
 
         final Image image = texture.getImage();
@@ -417,5 +425,43 @@ public class MaterialUtils {
         }
 
         image.clearChanges();
+    }
+
+    /**
+     * Set the material parameter with check of existing this parameter in the material's definition.
+     *
+     * @param material the material.
+     * @param name     the parameter's name.
+     * @param value    the value.
+     */
+    @FromAnyThread
+    public static void safeSet(@Nullable final Material material, @NotNull final String name, final float value) {
+        if (material == null) {
+            return;
+        }
+
+        final MatParam materialParam = material.getMaterialDef().getMaterialParam(name);
+        if (materialParam != null) {
+            material.setFloat(name, value);
+        }
+    }
+
+    /**
+     * Set the material parameter with check of existing this parameter in the material's definition.
+     *
+     * @param material the material.
+     * @param name     the parameter's name.
+     * @param value    the value.
+     */
+    @FromAnyThread
+    public static void safeSet(@Nullable final Material material, @NotNull final String name, final boolean value) {
+        if (material == null) {
+            return;
+        }
+
+        final MatParam materialParam = material.getMaterialDef().getMaterialParam(name);
+        if (materialParam != null) {
+            material.setBoolean(name, value);
+        }
     }
 }

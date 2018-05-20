@@ -1,7 +1,7 @@
 package com.ss.editor.model;
 
-import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
-import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
+import static com.ss.rlib.common.geom.util.AngleUtils.degreeToRadians;
+import static com.ss.rlib.common.geom.util.AngleUtils.radiansToDegree;
 import static java.lang.Math.*;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -19,8 +19,8 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.config.Config;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -174,7 +174,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param camera the application camera
      * @param target the spatial to follow
      */
-    public EditorCamera(final Camera camera, final Spatial target) {
+    public EditorCamera(@NotNull final Camera camera, @NotNull final Spatial target) {
         this(camera);
         target.addControl(this);
     }
@@ -185,7 +185,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param camera the application camera
      */
-    public EditorCamera(final Camera camera) {
+    public EditorCamera(@NotNull final Camera camera) {
         this.camera = camera;
         this.initialUpVec = Vector3f.UNIT_Y;
         this.targetDir = new Vector3f();
@@ -285,8 +285,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             return;
         }
 
-        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
-            LOGGER.debug("Toggle camera " + keyPressed);
+        if (Config.DEV_CAMERA_DEBUG) {
+            LOGGER.debug(this, keyPressed, flag -> "Toggle camera " + flag);
         }
 
         if (keyPressed) {
@@ -452,9 +452,13 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param tpf the tpf
      */
     public void updateCamera(float tpf) {
-        if (!enabled) return;
 
-        targetLocation.set(target.getWorldTranslation()).addLocal(lookAtOffset);
+        if (!enabled) {
+            return;
+        }
+
+        targetLocation.set(target.getWorldTranslation())
+                .addLocal(lookAtOffset);
 
         if (smoothMotion) {
 

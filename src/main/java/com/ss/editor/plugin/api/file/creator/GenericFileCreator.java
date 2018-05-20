@@ -1,16 +1,16 @@
 package com.ss.editor.plugin.api.file.creator;
 
 import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
@@ -63,7 +63,7 @@ public class GenericFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     public void show(@NotNull final Window owner) {
         super.show(owner);
         validateFileName();
@@ -72,7 +72,7 @@ public class GenericFileCreator extends AbstractFileCreator {
     /**
      * @return the result vars of the creator.
      */
-    @FXThread
+    @FxThread
     protected @NotNull VarTable getVars() {
         return notNull(vars);
     }
@@ -82,13 +82,13 @@ public class GenericFileCreator extends AbstractFileCreator {
      *
      * @return the settings container.
      */
-    @FXThread
+    @FxThread
     private @NotNull GridPane getSettingsContainer() {
         return notNull(settingsContainer);
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void validateFileName() {
         super.validateFileName();
 
@@ -114,7 +114,7 @@ public class GenericFileCreator extends AbstractFileCreator {
      * @param vars the variables.
      * @return true if the all variables are valid.
      */
-    @FXThread
+    @FxThread
     protected boolean validate(@NotNull final VarTable vars) {
         return true;
     }
@@ -136,6 +136,11 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
     }
 
+    /**
+     * Get the list of property definitions.
+     *
+     * @return the list of property definitions.
+     */
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
         return EMPTY_ARRAY;

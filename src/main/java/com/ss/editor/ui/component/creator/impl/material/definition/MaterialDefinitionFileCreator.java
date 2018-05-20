@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.creator.impl.material.definition;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL_DEFINITION;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -11,7 +11,7 @@ import com.jme3.renderer.Caps;
 import com.jme3.renderer.Renderer;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.property.EditablePropertyType;
@@ -20,11 +20,11 @@ import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -61,8 +61,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     static {
         AVAILABLE_GLSL = ArrayFactory.newArray(String.class);
 
-        final Renderer renderer = EDITOR.getRenderer();
-
+        final Renderer renderer = EditorUtil.getRenderer();
         final EnumSet<Caps> caps = renderer.getCaps();
         caps.stream().filter(cap -> cap.name().startsWith("GLSL"))
                 .map(Enum::name)
@@ -101,7 +100,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected boolean validate(@NotNull final VarTable vars) {
 
         final String glslVersion = vars.get(PROP_GLSL_VERSION, String.class, StringUtils.EMPTY);
@@ -125,7 +124,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void processOk() {
         super.hide();
 

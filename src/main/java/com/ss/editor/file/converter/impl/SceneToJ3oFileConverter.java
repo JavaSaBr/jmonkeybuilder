@@ -6,8 +6,8 @@ import com.ss.editor.file.converter.FileConverterDescription;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 
 /**
  * The implementation of {@link AbstractFileConverter} to convert .scene file to .j3o.
@@ -25,7 +25,7 @@ public class SceneToJ3oFileConverter extends AbstractModelFileConverter {
     }
 
     /**
-     * The constant DESCRIPTION.
+     * The description.
      */
     @NotNull
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
@@ -39,15 +39,13 @@ public class SceneToJ3oFileConverter extends AbstractModelFileConverter {
     private SceneToJ3oFileConverter() {
     }
 
-    @NotNull
     @Override
-    protected Array<String> getAvailableExtensions() {
+    protected @NotNull Array<String> getAvailableExtensions() {
         return EXTENSIONS;
     }
 
-    @NotNull
     @Override
-    public String getTargetExtension() {
+    public @NotNull String getTargetExtension() {
         return FileExtensions.JME_OBJECT;
     }
 }

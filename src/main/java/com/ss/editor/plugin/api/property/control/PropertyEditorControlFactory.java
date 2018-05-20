@@ -1,8 +1,8 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,14 +20,16 @@ public class PropertyEditorControlFactory {
      * @param validation the validator.
      * @return the new property control.
      */
-    @FXThread
-    public static @NotNull PropertyEditorControl<?> build(@NotNull final VarTable vars,
-                                                          @NotNull final PropertyDefinition definition,
-                                                          @NotNull final Runnable validation) {
+    @FxThread
+    public static @NotNull PropertyEditorControl<?> build(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validation
+    ) {
 
         switch (definition.getPropertyType()) {
             case FLOAT: {
-                final FloatPropertyEditorControl control = new FloatPropertyEditorControl(vars, definition, validation);
+                var control = new FloatPropertyEditorControl(vars, definition, validation);
                 control.setMinMax(definition.getMin(), definition.getMax());
                 return control;
             }
@@ -36,7 +38,7 @@ public class PropertyEditorControlFactory {
             case BOOLEAN:
                 return new BooleanPropertyEditorControl(vars, definition, validation);
             case INTEGER: {
-                final IntegerPropertyEditorControl control = new IntegerPropertyEditorControl(vars, definition, validation);
+                var control = new IntegerPropertyEditorControl(vars, definition, validation);
                 control.setMinMax(definition.getMin(), definition.getMax());
                 return control;
             }
@@ -48,10 +50,14 @@ public class PropertyEditorControlFactory {
                 return new StringPropertyEditorControl(vars, definition, validation);
             case GEOMETRY_FROM_ASSET_FOLDER:
                 return new GeometryAssetResourcePropertyControl(vars, definition, validation);
+            case SPATIAL_FROM_ASSET_FOLDER:
+                return new SpatialAssetResourcePropertyControl<>(vars, definition, validation);
             case FILE_FROM_ASSET_FOLDER:
                 return new FileAssetResourcePropertyControl(vars, definition, validation);
             case STRING_FROM_LIST:
                 return new StringFromListPropertyEditorControl(vars, definition, validation, definition.getOptions());
+            case OBJECT_FROM_LIST:
+                return new ObjectFromListPropertyEditorControl(vars, definition, validation, definition.getOptions());
             case AWT_FONT:
                 return new AwtFontPropertyEditorControl(vars, definition, validation);
             case RESOURCE_FROM_CLASSPATH:

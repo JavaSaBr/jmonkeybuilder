@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import javafx.event.ActionEvent;
@@ -15,24 +15,20 @@ import org.jetbrains.annotations.Nullable;
  */
 public class OpenFileAction extends FileAction {
 
-    public OpenFileAction(@NotNull final ResourceElement element) {
+    public OpenFileAction(@NotNull ResourceElement element) {
         super(element);
     }
 
-    @FXThread
     @Override
+    @FxThread
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
     }
 
-    @FXThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    @FxThread
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
-
-        final RequestedOpenFileEvent newEvent = new RequestedOpenFileEvent();
-        newEvent.setFile(getElement().getFile());
-
-        FX_EVENT_MANAGER.notify(newEvent);
+        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(getElement().getFile()));
     }
 }

@@ -1,25 +1,29 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.rlib.common.util.NumberUtils.zeroIfNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.control.input.IntegerTextField;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.fx.control.input.IntegerTextField;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * The implementation of the {@link PropertyControl} to edit integer values.
  *
- * @param <C> the type of {@link ChangeConsumer}
- * @param <T> the type of edited object
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class IntegerPropertyControl<C extends ChangeConsumer, T> extends PropertyControl<C, T, Integer> {
+public class IntegerPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Integer> {
 
     /**
      * The filed with current value.
@@ -27,32 +31,39 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     @Nullable
     private IntegerTextField valueField;
 
-    public IntegerPropertyControl(@Nullable final Integer propertyValue, @NotNull final String propertyName,
-                                  @NotNull final C changeConsumer) {
+    public IntegerPropertyControl(
+            @Nullable Integer propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
     }
 
     @Override
-    @FXThread
-    public void changeControlWidthPercent(final double controlWidthPercent) {
+    @FxThread
+    public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        final IntegerTextField valueField = getValueField();
-        valueField.prefWidthProperty().unbind();
-        valueField.prefWidthProperty().bind(widthProperty().multiply(controlWidthPercent));
+        FxUtils.rebindPrefWidth(getValueField(),
+                widthProperty().multiply(controlWidthPercent));
     }
 
     @Override
-    @FXThread
-    protected void createComponents(@NotNull final HBox container) {
+    @FxThread
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         valueField = new IntegerTextField();
-        valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
-        valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        valueField.prefWidthProperty()
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(valueField, container);
+        FxControlUtils.onValueChange(valueField, this::updateValue);
+        FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
+
+        FxUtils.addClass(valueField,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
+        FxUtils.addChild(container, valueField);
     }
 
     @Override
@@ -62,9 +73,11 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
     }
 
     /**
+     * Get the filed with current value.
+     *
      * @return the filed with current value.
      */
-    @FXThread
+    @FxThread
     private @NotNull IntegerTextField getValueField() {
         return notNull(valueField);
     }
@@ -75,52 +88,60 @@ public class IntegerPropertyControl<C extends ChangeConsumer, T> extends Propert
      * @param min the min value.
      * @param max the max value.
      */
-    @FXThread
-    public void setMinMax(final int min, final int max) {
+    @FxThread
+    public void setMinMax(int min, int max) {
         getValueField().setMinMax(min, max);
     }
 
     /**
-     * Sets scroll power.
+     * Set the scroll power.
      *
      * @param scrollPower the scroll power.
      */
-    @FXThread
-    public void setScrollPower(final int scrollPower) {
+    @FxThread
+    public void setScrollPower(int scrollPower) {
         getValueField().setScrollPower(scrollPower);
     }
 
     /**
-     * Gets scroll power.
+     * Get the scroll power.
      *
      * @return the scroll power.
      */
-    @FXThread
+    @FxThread
     public int getScrollPower() {
-        return getValueField().getScrollPower();
+        return (int) getValueField().getScrollPower();
     }
 
     @Override
-    @FXThread
+    @FxThread
     protected void reload() {
-        final Integer element = getPropertyValue();
-        final IntegerTextField valueField = getValueField();
-        final int caretPosition = valueField.getCaretPosition();
-        valueField.setText(String.valueOf(element));
+        var valueField = getValueField();
+        var caretPosition = valueField.getCaretPosition();
+        valueField.setValue(zeroIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
+    }
+
+    @Override
+    @FxThread
+    public boolean isDirty() {
+        return !Objects.equals(getValueField().getValue(), getPropertyValue());
     }
 
     /**
      * Update the value.
      */
-    @FXThread
+    @FxThread
     private void updateValue() {
-        if (isIgnoreListener()) return;
+        if (!isIgnoreListener()) {
+            apply();
+        }
+    }
 
-        final IntegerTextField valueField = getValueField();
-        final int value = valueField.getValue();
-        final Integer oldValue = getPropertyValue();
-
-        changed(value, oldValue);
+    @Override
+    @FxThread
+    protected void apply() {
+        super.apply();
+        changed(getValueField().getValue(), getPropertyValue());
     }
 }

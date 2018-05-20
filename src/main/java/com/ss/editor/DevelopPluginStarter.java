@@ -3,7 +3,6 @@ package com.ss.editor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -13,9 +12,9 @@ import java.nio.file.Paths;
  */
 public class DevelopPluginStarter {
 
-    public static void main(@NotNull final String[] args) throws IOException {
-        final Path embeddedFolder = Paths.get("./embedded-plugins");
+    public static void main(@NotNull String[] args) throws IOException {
+        var embeddedFolder = Paths.get("./embedded-plugins");
         System.setProperty("editor.embedded.plugins.path", embeddedFolder.toAbsolutePath().toString());
-        JFXApplication.main(args);
+        JfxApplication.main(args);
     }
 }

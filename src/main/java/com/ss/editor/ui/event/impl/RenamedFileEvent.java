@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -30,25 +30,21 @@ public class RenamedFileEvent extends SceneEvent {
     private static final String PREV_FILE = "prev_file";
     private static final String NEW_FILE = "new_file";
 
-    /**
-     * Instantiates a new Renamed file event.
-     */
     public RenamedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * Gets new file.
+     * Get the new file.
      *
      * @return the new file.
      */
-    @NotNull
-    public Path getNewFile() {
+    public @NotNull Path getNewFile() {
         return notNull(get(NEW_FILE));
     }
 
     /**
-     * Sets new file.
+     * Set the new file.
      *
      * @param file the new file.
      */
@@ -57,17 +53,16 @@ public class RenamedFileEvent extends SceneEvent {
     }
 
     /**
-     * Gets prev file.
+     * Get the previous file.
      *
      * @return the previous file.
      */
-    @NotNull
-    public Path getPrevFile() {
+    public @NotNull Path getPrevFile() {
         return notNull(get(PREV_FILE));
     }
 
     /**
-     * Sets prev file.
+     * Set the previous file.
      *
      * @param file the previous file.
      */

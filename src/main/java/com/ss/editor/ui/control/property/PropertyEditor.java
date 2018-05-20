@@ -1,16 +1,14 @@
 package com.ss.editor.ui.control.property;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FXThread;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    @NotNull
     private static final PropertyBuilderRegistry BUILDER_REGISTRY = PropertyBuilderRegistry.getInstance();
 
     /**
@@ -51,20 +48,17 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     @Nullable
     private Object currentParent;
 
-    /**
-     * Instantiates a new Abstract property editor.
-     *
-     * @param changeConsumer the change consumer
-     */
-    public PropertyEditor(@NotNull final C changeConsumer) {
+    public PropertyEditor(@NotNull C changeConsumer) {
         this.changeConsumer = changeConsumer;
         createComponents();
     }
 
     /**
-     * @return The container of controls.
+     * Get the container of controls.
+     *
+     * @return the container of controls.
      */
-    @FXThread
+    @FxThread
     private @NotNull VBox getContainer() {
         return notNull(container);
     }
@@ -72,35 +66,37 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * Create components.
      */
-    @FXThread
+    @FxThread
     private void createComponents() {
         this.container = new VBox();
         this.container.prefWidthProperty()
-                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
+                .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
-        final VBox wrapper = new VBox(container);
+        var wrapper = new VBox(container);
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_CONTROL_CONTAINER);
-        FXUtils.addClassTo(container, CSSClasses.DEF_VBOX);
-        FXUtils.addClassTo(wrapper, CSSClasses.DEF_VBOX);
+        FxUtils.addClass(this,
+                        CssClasses.PROPERTY_EDITOR)
+                .addClass(wrapper, container,
+                        CssClasses.DEF_VBOX, CssClasses.PROPERTY_EDITOR_CONTAINER);
 
         setContent(wrapper);
     }
 
     /**
-     * Sync all properties with controls.
+     * Sync all property controls.
      *
-     * @param object the object
+     * @param object the object.
      */
-    @FXThread
-    public void syncFor(@Nullable final Object object) {
-        if (!isNeedUpdate(object)) return;
+    @FxThread
+    public void syncFor(@Nullable Object object) {
 
-        final VBox container = getContainer();
+        if (!isNeedUpdate(object)) {
+            return;
+        }
+
+        var container = getContainer();
         container.setDisable(object == null || !canEdit(object, getCurrentParent()));
-
-        final ObservableList<Node> children = container.getChildren();
-        children.forEach(node -> {
+        container.getChildren().forEach(node -> {
             if (node instanceof UpdatableControl) {
                 ((UpdatableControl) node).sync();
             }
@@ -108,19 +104,19 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     }
 
     /**
-     * Sync all properties with controls.
+     * Sync all property controls.
      */
-    @FXThread
+    @FxThread
     public void refresh() {
 
-        final Object object = getCurrentObject();
-        if (object == null) return;
+        var object = getCurrentObject();
+        if (object == null) {
+            return;
+        }
 
-        final VBox container = getContainer();
+        var container = getContainer();
         container.setDisable(!canEdit(object, getCurrentParent()));
-
-        final ObservableList<Node> children = container.getChildren();
-        children.forEach(node -> {
+        container.getChildren().forEach(node -> {
             if (node instanceof UpdatableControl) {
                 ((UpdatableControl) node).sync();
             }
@@ -133,12 +129,15 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
      * @param object the object
      * @param parent the parent
      */
-    @FXThread
-    public void buildFor(@Nullable final Object object, @Nullable final Object parent) {
-        if (getCurrentObject() == object) return;
+    @FxThread
+    public void buildFor(@Nullable Object object, @Nullable Object parent) {
 
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
+        if (getCurrentObject() == object) {
+            return;
+        }
+
+        var container = getContainer();
+        var children = container.getChildren();
         children.clear();
 
         if (object != null) {
@@ -152,29 +151,32 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     }
 
     /**
-     * Can edit boolean.
+     * Return true if we can edit properties of the object.
      *
      * @param object the object to edit.
      * @param parent the parent.
      * @return true if we can edit properties of the object.
      */
-    @FXThread
-    protected boolean canEdit(@NotNull final Object object, @Nullable final Object parent) {
+    @FxThread
+    protected boolean canEdit(@NotNull Object object, @Nullable Object parent) {
         return true;
     }
 
     /**
      * Re-build property controls for the object.
      *
-     * @param object the object
-     * @param parent the parent
+     * @param object the object.
+     * @param parent the parent.
      */
-    @FXThread
-    public void rebuildFor(@Nullable final Object object, @Nullable final Object parent) {
-        if (getCurrentObject() != object) return;
+    @FxThread
+    public void rebuildFor(@Nullable Object object, @Nullable Object parent) {
 
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
+        if (getCurrentObject() != object) {
+            return;
+        }
+
+        var container = getContainer();
+        var children = container.getChildren();
         children.clear();
 
         if (object != null) {
@@ -183,62 +185,66 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     }
 
     /**
-     * Rebuild this editor.
+     * Rebuild all property controls.
      */
-    @FXThread
+    @FxThread
     public void rebuild() {
         rebuildFor(getCurrentObject(), null);
     }
 
     /**
-     * Is need update boolean.
+     * Return true if need to update property controls.
      *
-     * @param object the object
-     * @return the boolean
+     * @param object the object.
+     * @return true if need to update property controls.
      */
-    @FXThread
-    protected boolean isNeedUpdate(@Nullable final Object object) {
-        final Object currentObject = getCurrentObject();
+    @FxThread
+    protected boolean isNeedUpdate(@Nullable Object object) {
+
+        var currentObject = getCurrentObject();
         if (object instanceof EditableProperty) {
             return currentObject == ((EditableProperty) object).getObject();
         }
+
         return currentObject == object;
     }
 
     /**
+     * Set the current editable object.
+     *
      * @param currentObject the current editable object.
      */
-    @FXThread
-    private void setCurrentObject(@Nullable final Object currentObject) {
+    @FxThread
+    private void setCurrentObject(@Nullable Object currentObject) {
         this.currentObject = currentObject;
     }
 
     /**
-     * Gets current object.
+     * Get the current object.
      *
      * @return the current editable object.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Object getCurrentObject() {
         return currentObject;
     }
 
     /**
-     * Sets the current parent.
+     * Set the current parent.
      *
      * @param currentParent the current parent.
      */
-    @FXThread
-    protected void setCurrentParent(@Nullable final Object currentParent) {
+    @FxThread
+    protected void setCurrentParent(@Nullable Object currentParent) {
         this.currentParent = currentParent;
     }
 
     /**
-     * Gets the current parent.
+     * Get the current parent.
      *
      * @return the current parent.
      */
-    @FXThread
+    @FxThread
     protected @Nullable Object getCurrentParent() {
         return currentParent;
     }

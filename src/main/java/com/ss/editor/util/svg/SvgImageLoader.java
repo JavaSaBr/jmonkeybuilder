@@ -2,8 +2,9 @@ package com.ss.editor.util.svg;
 
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_HEIGHT;
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_WIDTH;
+import com.ss.editor.annotation.FxThread;
 import com.sun.javafx.iio.ImageFrame;
-import com.sun.javafx.iio.ImageStorage;
+import com.sun.javafx.iio.ImageStorage.ImageType;
 import de.codecentric.centerdevice.javafxsvg.BufferedImageTranscoder;
 import de.codecentric.centerdevice.javafxsvg.FixedPixelDensityImageFrame;
 import de.codecentric.centerdevice.javafxsvg.ScreenHelper;
@@ -12,6 +13,7 @@ import javafx.stage.Screen;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -24,7 +26,7 @@ import java.nio.ByteBuffer;
 public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgImageLoader {
 
     @NotNull
-    public static ThreadLocal<Color> OVERRIDE_COLOR = new ThreadLocal<>();
+    public static final ThreadLocal<Color> OVERRIDE_COLOR = new ThreadLocal<>();
 
     private static final int DEFAULT_SIZE = 400;
     private static final int BYTES_PER_PIXEL = 4; // RGBA
@@ -34,12 +36,13 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
     @NotNull
     private final InputStream input;
 
-    protected SvgImageLoader(@NotNull final InputStream input) {
+    protected SvgImageLoader(@NotNull InputStream input) {
         super(input);
         this.input = input;
     }
 
     @Override
+    @FxThread
     public float getPixelScale() {
 
         if (pixelScale == null) {
@@ -50,14 +53,16 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
     }
 
     @Override
-    public ImageFrame load(int imageIndex, int width, int height, boolean preserveAspectRatio, boolean smooth)
+    @FxThread
+    public @Nullable ImageFrame load(int imageIndex, int width, int height, boolean preserveAspectRatio, boolean smooth)
             throws IOException {
+
         if (0 != imageIndex) {
             return null;
         }
 
-        int imageWidth = width > 0 ? width : DEFAULT_SIZE;
-        int imageHeight = height > 0 ? height : DEFAULT_SIZE;
+        var imageWidth = width > 0 ? width : DEFAULT_SIZE;
+        var imageHeight = height > 0 ? height : DEFAULT_SIZE;
 
         try {
             return createImageFrame(imageWidth, imageHeight, getPixelScale());
@@ -67,39 +72,41 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
     }
 
     @Override
+    @FxThread
     public float calculateMaxRenderScale() {
 
-        float maxRenderScale = 0;
+        var maxRenderScale = 0F;
+        var accessor = ScreenHelper.getScreenAccessor();
 
-        ScreenHelper.ScreenAccessor accessor = ScreenHelper.getScreenAccessor();
-
-        for (final Screen screen : Screen.getScreens()) {
+        for (var screen : Screen.getScreens()) {
             maxRenderScale = Math.max(maxRenderScale, accessor.getRenderScale(screen));
         }
 
         return maxRenderScale;
     }
 
-    @NotNull
-    private ImageFrame createImageFrame(final int width, final int height, final float pixelScale)
+    @FxThread
+    private @NotNull ImageFrame createImageFrame(int width, int height, float pixelScale)
             throws TranscoderException {
 
-        final BufferedImage bufferedImage = getTranscodedImage(width * pixelScale, height * pixelScale);
-        final ByteBuffer imageData = getImageData(bufferedImage);
+        var bufferedImage = getTranscodedImage(width * pixelScale, height * pixelScale);
+        var imageData = getImageData(bufferedImage);
 
-        return new FixedPixelDensityImageFrame(ImageStorage.ImageType.RGBA, imageData, bufferedImage.getWidth(),
+        return new FixedPixelDensityImageFrame(ImageType.RGBA, imageData, bufferedImage.getWidth(),
                 bufferedImage.getHeight(), getStride(bufferedImage), null, pixelScale, null);
     }
 
-    private BufferedImage getTranscodedImage(final float width, final float height) throws TranscoderException {
-        final BufferedImageTranscoder trans = new BufferedImageTranscoder(BufferedImage.TYPE_INT_ARGB);
+    @FxThread
+    private @NotNull BufferedImage getTranscodedImage(float width, float height) throws TranscoderException {
+        var trans = new BufferedImageTranscoder(BufferedImage.TYPE_INT_ARGB);
         trans.addTranscodingHint(KEY_WIDTH, width);
         trans.addTranscodingHint(KEY_HEIGHT, height);
         trans.transcode(new TranscoderInput(this.input), null);
         return trans.getBufferedImage();
     }
 
-    private int getStride(@NotNull final BufferedImage bufferedImage) {
+    @FxThread
+    private int getStride(@NotNull BufferedImage bufferedImage) {
         return bufferedImage.getWidth() * BYTES_PER_PIXEL;
     }
 
@@ -109,12 +116,12 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
      * @param bufferedImage the image.
      * @return the bytes pixels.
      */
-    @NotNull
-    private ByteBuffer getImageData(@NotNull final BufferedImage bufferedImage) {
+    @FxThread
+    private @NotNull ByteBuffer getImageData(@NotNull BufferedImage bufferedImage) {
 
-        final int[] argbData = bufferedImage.getRGB(0, 0, bufferedImage.getWidth(),
+        var argbData = bufferedImage.getRGB(0, 0, bufferedImage.getWidth(),
                 bufferedImage.getHeight(), null, 0, bufferedImage.getWidth());
-        final byte[] imageData = new byte[getStride(bufferedImage) * bufferedImage.getHeight()];
+        var imageData = new byte[getStride(bufferedImage) * bufferedImage.getHeight()];
 
         copyColorToBytes(argbData, imageData);
 
@@ -127,22 +134,22 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
      * @param argbData  the argb pixels data.
      * @param imageData the bytes pixels data.
      */
-    private void copyColorToBytes(final int[] argbData, final byte[] imageData) {
+    @FxThread
+    private void copyColorToBytes(int[] argbData, byte[] imageData) {
 
         if (argbData.length * BYTES_PER_PIXEL != imageData.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        final Color overrideColor = OVERRIDE_COLOR.get();
+        var overrideColor = OVERRIDE_COLOR.get();
 
         for (int i = 0; i < argbData.length; i++) {
 
-            final int argb = argbData[i];
-
-            int alpha = argb >>> 24;
-            int red = (argb >> 16) & 0xff;
-            int green = (argb >> 8) & 0xff;
-            int blue = (argb) & 0xff;
+            var argb = argbData[i];
+            var alpha = argb >>> 24;
+            var red = (argb >> 16) & 0xff;
+            var green = (argb >> 8) & 0xff;
+            var blue = (argb) & 0xff;
 
             if (overrideColor != null) {
                 red = (int) (overrideColor.getRed() * 255);
@@ -150,7 +157,8 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
                 blue = (int) (overrideColor.getBlue() * 255);
             }
 
-            int dataOffset = BYTES_PER_PIXEL * i;
+            var dataOffset = BYTES_PER_PIXEL * i;
+
             imageData[dataOffset] = (byte) red;
             imageData[dataOffset + 1] = (byte) green;
             imageData[dataOffset + 2] = (byte) blue;

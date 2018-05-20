@@ -1,5 +1,6 @@
 package com.ss.editor.util.svg;
 
+import com.ss.editor.annotation.FxThread;
 import com.sun.javafx.iio.ImageFormatDescription;
 import com.sun.javafx.iio.ImageLoader;
 import com.sun.javafx.iio.ImageLoaderFactory;
@@ -16,25 +17,27 @@ import java.io.InputStream;
 public class SvgImageLoaderFactory implements ImageLoaderFactory {
 
     @NotNull
-    private static final ImageLoaderFactory instance = new SvgImageLoaderFactory();
+    private static final ImageLoaderFactory INSTANCE = new SvgImageLoaderFactory();
 
+    @FxThread
     public static void install() {
-        ImageStorage.addImageLoaderFactory(instance);
+        ImageStorage.addImageLoaderFactory(INSTANCE);
     }
 
-    @NotNull
-    public static ImageLoaderFactory getInstance() {
-        return instance;
+    @FxThread
+    public static @NotNull ImageLoaderFactory getInstance() {
+        return INSTANCE;
     }
 
     @Override
+    @FxThread
     public ImageFormatDescription getFormatDescription() {
         return SvgDescriptor.getInstance();
     }
 
     @Override
-    public ImageLoader createImageLoader(@NotNull InputStream input) throws IOException {
+    @FxThread
+    public ImageLoader createImageLoader(@NotNull final InputStream input) throws IOException {
         return new SvgImageLoader(input);
     }
-
 }

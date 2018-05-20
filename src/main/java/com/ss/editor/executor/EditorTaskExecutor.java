@@ -1,5 +1,6 @@
 package com.ss.editor.executor;
 
+import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,9 +11,10 @@ import org.jetbrains.annotations.NotNull;
 public interface EditorTaskExecutor {
 
     /**
-     * Add a new task.
+     * Add the new task.
      *
      * @param task the new task.
      */
+    @FromAnyThread
     void execute(@NotNull Runnable task);
 }
