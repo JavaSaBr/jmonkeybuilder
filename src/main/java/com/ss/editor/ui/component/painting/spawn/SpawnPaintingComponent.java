@@ -8,6 +8,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.spawn.SpawnToolControl;
 import com.ss.editor.control.painting.spawn.SpawnToolControl.SpawnMethod;
 import com.ss.editor.ui.Icons;
@@ -16,6 +17,7 @@ import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
 import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -73,10 +75,9 @@ public class SpawnPaintingComponent extends
     }
 
     @Override
-    protected void syncValues() {
-        super.syncValues();
+    @FxThread
+    protected void syncValues(@NotNull VarTable vars, @NotNull SpawnPaintingStateWithEditorTool state) {
 
-        var vars = getVars();
         var toolControl = getToolControl();
 
         var examples = ArrayFactory.<Spatial>newArray(Spatial.class);
@@ -103,30 +104,35 @@ public class SpawnPaintingComponent extends
         var maxScale = vars.get(PROPERTY_MAX_SCALE, Vector3f.class);
         var padding = vars.get(PROPERTY_PADDING, Vector3f.class);
 
-        var state = getState();
         state.setMethod(method.ordinal());
         state.setMinScale(minScale);
         state.setMaxScale(maxScale);
         state.setPadding(padding);
         state.setSelectedModels(selectedModels);
 
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            toolControl.setMethod(method);
-            toolControl.setMinScale(minScale);
-            toolControl.setMaxScale(maxScale);
-            toolControl.setPadding(padding);
-            toolControl.updateExamples(examples);
-        });
+        super.syncValues(vars, state);
+
+        EXECUTOR_MANAGER.addJmeTask(() ->
+                toolControl.updateExamples(examples));
     }
 
     @Override
-    @FxThread
-    protected void readState(@NotNull SpawnPaintingStateWithEditorTool state) {
+    @JmeThread
+    protected void syncValues(@NotNull SpawnPaintingStateWithEditorTool state, @NotNull SpawnToolControl toolControl) {
+        super.syncValues(state, toolControl);
+        toolControl.setMethod(SpawnMethod.valueOf(state.getMethod()));
+        toolControl.setMinScale(state.getMinScale());
+        toolControl.setMaxScale(state.getMaxScale());
+        toolControl.setPadding(state.getPadding());
+    }
+
+    @Override
+    protected void readState(@NotNull SpawnPaintingStateWithEditorTool state, @NotNull VarTable vars) {
+        super.readState(state, vars);
 
         var method = state.getMethod();
         var selectedModels = state.getSelectedModels();
 
-        var vars = getVars();
         vars.set(PROPERTY_METHOD, SPAWN_METHODS[method]);
         vars.set(PROPERTY_MIN_SCALE, state.getMinScale());
         vars.set(PROPERTY_MAX_SCALE, state.getMaxScale());
@@ -145,11 +151,8 @@ public class SpawnPaintingComponent extends
                 vars.set(PROPERTY_MODEL + "_" + i, assetManager.loadModel(selectedModel));
             } catch (AssetNotFoundException e) {
                 LOGGER.warning(this, e);
-                continue;
             }
         }
-
-        super.readState(state);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.painting.terrain;
 
+import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
+import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import static com.ss.editor.ui.component.painting.PaintingComponentContainer.FIELD_PERCENT;
 import static com.ss.editor.ui.component.painting.PaintingComponentContainer.LABEL_PERCENT;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
@@ -18,7 +20,6 @@ import com.ss.editor.control.painting.terrain.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
 import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
@@ -28,12 +29,14 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import com.ss.rlib.fx.control.input.FloatTextField;
 import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -42,7 +45,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,6 +63,14 @@ public class TerrainPaintingComponent extends
     public static final String TERRAIN_PARAM = "terrainParam";
 
     private static final String CATEGORY_RAISE_LOWER = "RaiseLower";
+    private static final String CATEGORY_SLOPE = "Slope";
+    private static final String CATEGORY_LEVEL = "Level";
+
+    private static final String PROPERTY_SLOPE_SMOOTHLY = "slope.smoothly";
+    private static final String PROPERTY_SLOPE_LIMITED = "slope.limited";
+    private static final String PROPERTY_LEVEL_SMOOTHLY = "level.smoothly";
+    private static final String PROPERTY_LEVEL_USE_MARKER = "level.useMarker";
+    private static final String PROPERTY_LEVEL_VALUE = "level.level";
 
 
     @NotNull
@@ -124,11 +134,6 @@ public class TerrainPaintingComponent extends
     @NotNull
     private final ObjectDictionary<ToggleButton, String> buttonToCategory;
 
-    /**
-     * The map with mapping toggle button to its settings.
-     */
-    @NotNull
-    private final ObjectDictionary<ToggleButton, Pane> buttonToSettings;
 
     /**
      * The control to raise/lowe terrain.
@@ -209,30 +214,6 @@ public class TerrainPaintingComponent extends
     private VBox controlSettings;
 
     /**
-     * The settings of level control.
-     */
-    @Nullable
-    private GridPane levelControlSettings;
-
-    /**
-     * The setting of using smoothly changing of terrain height.
-     */
-    @Nullable
-    private CheckBox levelControlSmoothly;
-
-    /**
-     * The setting of using marker to detect a level.
-     */
-    @Nullable
-    private CheckBox levelControlUseMarker;
-
-    /**
-     * The setting of target level.
-     */
-    @Nullable
-    private FloatTextField levelControlLevelField;
-
-    /**
      * The settings of rough control.
      */
     @Nullable
@@ -269,24 +250,6 @@ public class TerrainPaintingComponent extends
     private FloatTextField roughControlScaleField;
 
     /**
-     * The settings of slope control.
-     */
-    @Nullable
-    private GridPane slopeControlSettings;
-
-    /**
-     * The setting of using smoothly changing of terrain height.
-     */
-    @Nullable
-    private CheckBox slopeControlSmoothly;
-
-    /**
-     * The setting of using limited between markers.
-     */
-    @Nullable
-    private CheckBox slopeControlLimited;
-
-    /**
      * The settings of painting control.
      */
     @Nullable
@@ -314,7 +277,6 @@ public class TerrainPaintingComponent extends
         super(container);
 
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
-        this.buttonToSettings = DictionaryFactory.newObjectDictionary();
         this.buttonToCategory = DictionaryFactory.newObjectDictionary();
         this.raiseLowerToolControl = new RaiseLowerTerrainToolControl(this);
         this.smoothToolControl = new SmoothTerrainToolControl(this);
@@ -330,24 +292,25 @@ public class TerrainPaintingComponent extends
                 slopeButton, paintButton));
 
         var raiseLowerButton = getRaiseLowerButton();
+        var slopeButton = getSlopeButton();
+        var levelButton = getLevelButton();
 
         buttonToControl.put(raiseLowerButton, raiseLowerToolControl);
         buttonToControl.put(getSmoothButton(), smoothToolControl);
         buttonToControl.put(getRoughButton(), roughToolControl);
-        buttonToControl.put(getLevelButton(), levelToolControl);
-        buttonToControl.put(getSlopeButton(), slopeToolControl);
+        buttonToControl.put(levelButton, levelToolControl);
+        buttonToControl.put(slopeButton, slopeToolControl);
         buttonToControl.put(getPaintButton(), paintToolControl);
-        buttonToSettings.put(getSlopeButton(), slopeControlSettings);
-        buttonToSettings.put(getLevelButton(), levelControlSettings);
-        buttonToSettings.put(getRoughButton(), roughControlSettings);
-        buttonToSettings.put(getPaintButton(), paintControlSettings);
         buttonToCategory.put(raiseLowerButton, CATEGORY_RAISE_LOWER);
+        buttonToCategory.put(slopeButton, CATEGORY_SLOPE);
+        buttonToCategory.put(levelButton, CATEGORY_LEVEL);
 
         raiseLowerButton.setSelected(true);
 
         setToolControl(raiseLowerToolControl);
+        showCategory(CATEGORY_RAISE_LOWER);
 
-        FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
+        FxUtils.addClass(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
     }
 
     @Override
@@ -369,23 +332,20 @@ public class TerrainPaintingComponent extends
         //result.add(new PaintingPropertyDefinition(CATEGORY_DEFAULT, ENUM,
         //        Messages.MODEL_PROPERTY_METHOD, PROPERTY_METHOD, SpawnToolControl.SpawnMethod.BATCH));
 
-        return result;
-    }
 
-    @Override
-    @FxThread
-    public void loadState(@NotNull final EditorState editorState) {
-        super.loadState(editorState);
-        getLevelControlLevelField().setValue(state.getLevelValue());
-        getLevelControlUseMarker().setSelected(state.isLevelUseMarker());
-        getLevelControlSmoothly().setSelected(state.isLevelSmoothly());
-        getSlopeControlLimited().setSelected(state.isSlopeLimited());
-        getSlopeControlSmoothly().setSelected(state.isSlopeSmoothly());
-        getRoughControlFrequencyField().setValue(state.getRoughtFrequency());
-        getRoughControlLacunarityField().setValue(state.getRoughtLacunarity());
-        getRoughControlOctavesField().setValue(state.getRoughtOctaves());
-        getRoughControlRoughnessField().setValue(state.getRoughtRoughness());
-        getRoughControlScaleField().setValue(state.getRoughtScale());
+        result.add(new PaintingPropertyDefinition(CATEGORY_SLOPE, BOOLEAN, Messages.MODEL_PROPERTY_SMOOTHLY,
+                PROPERTY_SLOPE_SMOOTHLY, false));
+        result.add(new PaintingPropertyDefinition(CATEGORY_SLOPE, BOOLEAN, Messages.MODEL_PROPERTY_LIMITED,
+                PROPERTY_SLOPE_LIMITED, false));
+
+        result.add(new PaintingPropertyDefinition(CATEGORY_LEVEL, FLOAT, Messages.MODEL_PROPERTY_LEVEL,
+                PROPERTY_LEVEL_VALUE, 1F, 0F, Integer.MAX_VALUE));
+        result.add(new PaintingPropertyDefinition(CATEGORY_LEVEL, BOOLEAN, Messages.MODEL_PROPERTY_SMOOTHLY,
+                PROPERTY_LEVEL_SMOOTHLY, false));
+        result.add(new PaintingPropertyDefinition(CATEGORY_LEVEL, BOOLEAN, Messages.MODEL_PROPERTY_USE_MARKER,
+                PROPERTY_LEVEL_USE_MARKER, false));
+
+        return result;
     }
 
     /**
@@ -426,16 +386,6 @@ public class TerrainPaintingComponent extends
     @FxThread
     private ObjectDictionary<ToggleButton, String> getButtonToCategory() {
         return buttonToCategory;
-    }
-
-    /**
-     * Get the map with mapping toggle button to its settings.
-     *
-     * @return the map with mapping toggle button to its settings.
-     */
-    @FxThread
-    private @NotNull ObjectDictionary<ToggleButton, Pane> getButtonToSettings() {
-        return buttonToSettings;
     }
 
     /**
@@ -511,7 +461,6 @@ public class TerrainPaintingComponent extends
     @Override
     @FxThread
     protected void createComponents() {
-        super.createComponents();
 
         raiseLowerButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_UP_32));
         raiseLowerButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
@@ -542,105 +491,75 @@ public class TerrainPaintingComponent extends
         buttonsContainer.add(paintButton, 5, 0);
         buttonsContainer.prefWidthProperty().bind(widthProperty());
 
-        FXUtils.addClassTo(buttonsContainer, CssClasses.DEF_GRID_PANE);
+        FxUtils.addChild(this, buttonsContainer);
+
+        super.createComponents();
 
         controlSettings = new VBox();
         controlSettings.prefWidthProperty().bind(widthProperty());
 
-        FXUtils.addToPane(buttonsContainer, this);
-        FXUtils.addToPane(createBrushSettings(), this);
-        FXUtils.addToPane(controlSettings, this);
+        FxUtils.addChild(this, controlSettings);
 
-        createLevelControlSettings();
-        createSlopeControlSettings();
-        createRoughControlSettings();
         createPaintControlSettings();
 
-        FXUtils.addClassesTo(raiseLowerButton, smoothButton, roughButton, levelButton, slopeButton, paintButton,
-                CssClasses.MEDIUM_TOGGLE_BUTTON);
-
-        FXUtils.addClassTo(controlSettings, CssClasses.DEF_VBOX);
+        FxUtils.addClass(raiseLowerButton, smoothButton, roughButton, CssClasses.MEDIUM_TOGGLE_BUTTON)
+                .addClass(levelButton, slopeButton, paintButton, CssClasses.MEDIUM_TOGGLE_BUTTON)
+                .addClass(buttonsContainer, CssClasses.DEF_GRID_PANE)
+                .addClass(controlSettings, CssClasses.DEF_VBOX);
     }
 
-    /**
-     * Create settings of slope control.
-     */
-    @FxThread
-    private void createSlopeControlSettings() {
+    @Override
+    protected void readState(@NotNull TerrainPaintingStateWithEditorTool state, @NotNull VarTable vars) {
+        super.readState(state, vars);
 
-        final Label smoothlyLabel = new Label(Messages.MODEL_PROPERTY_SMOOTHLY + ":");
-        smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        slopeControlSmoothly = new CheckBox();
-        slopeControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlSmoothly.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
-
-        final Label limitedLabel = new Label(Messages.MODEL_PROPERTY_LIMITED + ":");
-        limitedLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        slopeControlLimited = new CheckBox();
-        slopeControlLimited.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlLimited.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeSlopeControlLimited(newValue));
-
-        slopeControlSettings = new GridPane();
-        slopeControlSettings.add(smoothlyLabel, 0, 0);
-        slopeControlSettings.add(slopeControlSmoothly, 1, 0);
-        slopeControlSettings.add(limitedLabel, 0, 1);
-        slopeControlSettings.add(slopeControlLimited, 1, 1);
-
-        FXUtils.addClassTo(slopeControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(smoothlyLabel, limitedLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
+        vars.set(PROPERTY_SLOPE_LIMITED, state.isSlopeLimited());
+        vars.set(PROPERTY_SLOPE_SMOOTHLY, state.isSlopeSmoothly());
+        vars.set(PROPERTY_LEVEL_VALUE, state.getLevelValue());
+        vars.set(PROPERTY_LEVEL_SMOOTHLY, state.isLevelSmoothly());
+        vars.set(PROPERTY_LEVEL_USE_MARKER, state.isLevelUseMarker());
     }
 
-    /**
-     * Create settings of level control.
-     */
-    @FxThread
-    private void createLevelControlSettings() {
+    @Override
+    protected void syncValues(@NotNull VarTable vars, @NotNull TerrainPaintingStateWithEditorTool state) {
 
-        final Label smoothlyLabel = new Label(Messages.MODEL_PROPERTY_SMOOTHLY + ":");
-        smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var slopeLimited = vars.getBoolean(PROPERTY_SLOPE_LIMITED);
+        var slopeSmoothly = vars.getBoolean(PROPERTY_SLOPE_SMOOTHLY);
+        var levelUseMarker = vars.getBoolean(PROPERTY_LEVEL_USE_MARKER);
+        var levelSmoothly = vars.getBoolean(PROPERTY_LEVEL_SMOOTHLY);
+        var levelValue = vars.getFloat(PROPERTY_LEVEL_VALUE);
 
-        levelControlSmoothly = new CheckBox();
-        levelControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlSmoothly.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
+        state.setSlopeLimited(slopeLimited);
+        state.setSlopeSmoothly(slopeSmoothly);
+        state.setLevelSmoothly(levelSmoothly);
+        state.setLevelUseMarker(levelUseMarker);
+        state.setLevelValue(levelValue);
 
-        final Label useMarkerLabel = new Label(Messages.MODEL_PROPERTY_USE_MARKER + ":");
-        useMarkerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        super.syncValues(vars, state);
+    }
 
-        levelControlUseMarker = new CheckBox();
-        levelControlUseMarker.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlUseMarker.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
+    @Override
+    @JmeThread
+    protected void syncValues(
+            @NotNull TerrainPaintingStateWithEditorTool state,
+            @NotNull TerrainToolControl toolControl) {
 
-        final Label levelLabel = new Label(Messages.MODEL_PROPERTY_LEVEL + ":");
-        levelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var brushPower = state.getBrushPower();
+        var brushSize = state.getBrushSize();
 
-        levelControlLevelField = new FloatTextField();
-        levelControlLevelField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlLevelField.setMinMax(0F, Integer.MAX_VALUE);
-        levelControlLevelField.addChangeListener((observable, oldValue, newValue) -> changeLevelControlLevel(newValue));
-        levelControlLevelField.disableProperty()
-                .bind(levelControlUseMarker.selectedProperty());
+        var toolControls = getToolControls();
+        toolControls.forEach(brushSize, TerrainToolControl::setBrushSize);
+        toolControls.forEach(brushPower, TerrainToolControl::setBrushPower);
 
-        levelControlSettings = new GridPane();
-        levelControlSettings.add(smoothlyLabel, 0, 0);
-        levelControlSettings.add(levelControlSmoothly, 1, 0);
-        levelControlSettings.add(useMarkerLabel, 0, 1);
-        levelControlSettings.add(levelControlUseMarker, 1, 1);
-        levelControlSettings.add(levelLabel, 0, 2);
-        levelControlSettings.add(levelControlLevelField, 1, 2);
+        var slopeToolControl = getSlopeToolControl();
+        slopeToolControl.setLock(state.isSlopeLimited());
+        slopeToolControl.setPrecision(state.isSlopeSmoothly());
 
-        FXUtils.addClassTo(smoothlyLabel, useMarkerLabel, levelLabel,
-                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        var levelToolControl = getLevelToolControl();
+        levelToolControl.setLevel(state.getLevelValue());
+        levelToolControl.setPrecision(state.isLevelSmoothly());
+        levelToolControl.setUseMarker(state.isLevelUseMarker());
 
-        FXUtils.addClassesTo(levelControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(levelControlLevelField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
+        super.syncValues(state, toolControl);
     }
 
     /**
@@ -836,51 +755,6 @@ public class TerrainPaintingComponent extends
     }
 
     /**
-     * Change using smoothly editing.
-     */
-    @FromAnyThread
-    private void changeLevelControlSmoothly(@NotNull final Boolean newValue) {
-        if (state != null) state.setLevelSmoothly(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setPrecision(!newValue));
-    }
-
-    /**
-     * Change using marker for level control.
-     */
-    @FromAnyThread
-    private void changeLevelControlUseMarker(@NotNull final Boolean newValue) {
-        if (state != null) state.setLevelUseMarker(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setUseMarker(newValue));
-    }
-
-    /**
-     * Change a level of a level control.
-     */
-    @FromAnyThread
-    private void changeLevelControlLevel(@NotNull final Float newLevel) {
-        if (state != null) state.setLevelValue(newLevel);
-        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setLevel(newLevel));
-    }
-
-    /**
-     * Change using smoothly editing.
-     */
-    @FromAnyThread
-    private void changeSlopeControlSmoothly(@NotNull final Boolean newValue) {
-        if (state != null) state.setSlopeSmoothly(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getSlopeToolControl().setPrecision(!newValue));
-    }
-
-    /**
-     * Change using limited editing.
-     */
-    @FromAnyThread
-    private void changeSlopeControlLimited(@NotNull final Boolean newValue) {
-        if (state != null) state.setSlopeLimited(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getSlopeToolControl().setLock(newValue));
-    }
-
-    /**
      * Change scale of a rough control.
      */
     @FromAnyThread
@@ -925,20 +799,6 @@ public class TerrainPaintingComponent extends
         EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setRoughness(newRoughness));
     }
 
-    @Override
-    @JmeThread
-    protected void setBrushSize(@NotNull final Float size) {
-        final Array<TerrainToolControl> toolControls = getToolControls();
-        toolControls.forEach(size, TerrainToolControl::setBrushSize);
-    }
-
-    @Override
-    @JmeThread
-    protected void setBrushPower(@NotNull final Float power) {
-        final Array<TerrainToolControl> toolControls = getToolControls();
-        toolControls.forEach(power, TerrainToolControl::setBrushPower);
-    }
-
     /**
      * Get the box to use tri-planar.
      *
@@ -957,106 +817,6 @@ public class TerrainPaintingComponent extends
     @FxThread
     protected @NotNull FloatTextField getShininessField() {
         return notNull(shininessField);
-    }
-
-    /**
-     * Get the setting of using smoothly changing of terrain height.
-     *
-     * @return the setting of using smoothly changing of terrain height.
-     */
-    @FxThread
-    private @NotNull CheckBox getLevelControlSmoothly() {
-        return notNull(levelControlSmoothly);
-    }
-
-    /**
-     * Get the setting of using marker to detect a level.
-     *
-     * @return the setting of using marker to detect a level.
-     */
-    @FxThread
-    private @NotNull CheckBox getLevelControlUseMarker() {
-        return notNull(levelControlUseMarker);
-    }
-
-    /**
-     * Get the setting of target level.
-     *
-     * @return the setting of target level.
-     */
-    @FxThread
-    private @NotNull FloatTextField getLevelControlLevelField() {
-        return notNull(levelControlLevelField);
-    }
-
-    /**
-     * Get the setting of using limited between markers.
-     *
-     * @return the setting of using limited between markers.
-     */
-    @FxThread
-    private @NotNull CheckBox getSlopeControlLimited() {
-        return notNull(slopeControlLimited);
-    }
-
-    /**
-     * Get the setting of using smoothly changing of terrain height.
-     *
-     * @return the setting of using smoothly changing of terrain height.
-     */
-    @FxThread
-    private @NotNull CheckBox getSlopeControlSmoothly() {
-        return notNull(slopeControlSmoothly);
-    }
-
-    /**
-     * Get the settings of frequency.
-     *
-     * @return the settings of frequency.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlFrequencyField() {
-        return notNull(roughControlFrequencyField);
-    }
-
-    /**
-     * Get the settings of lacunarity.
-     *
-     * @return the settings of lacunarity.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlLacunarityField() {
-        return notNull(roughControlLacunarityField);
-    }
-
-    /**
-     * Get the settings of octaves.
-     *
-     * @return the settings of octaves.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlOctavesField() {
-        return notNull(roughControlOctavesField);
-    }
-
-    /**
-     * Get the settings of roughness.
-     *
-     * @return the settings of roughness.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlRoughnessField() {
-        return notNull(roughControlRoughnessField);
-    }
-
-    /**
-     * Get the settings of scale.
-     *
-     * @return the settings of scale.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlScaleField() {
-        return notNull(roughControlScaleField);
     }
 
     /**

@@ -27,6 +27,19 @@ public class PaintingPropertyDefinition extends PropertyDefinition {
         this.category = category;
     }
 
+    public PaintingPropertyDefinition(
+            @NotNull String category,
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            float min,
+            float max
+    ) {
+        super(propertyType, name, id, defaultValue, min, max);
+        this.category = category;
+    }
+
     /**
      * Get the category.
      *

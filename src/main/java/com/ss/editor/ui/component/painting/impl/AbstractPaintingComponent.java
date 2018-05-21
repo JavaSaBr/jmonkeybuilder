@@ -1,11 +1,8 @@
 package com.ss.editor.ui.component.painting.impl;
 
-import static com.ss.editor.ui.component.painting.PaintingComponentContainer.FIELD_PERCENT;
-import static com.ss.editor.ui.component.painting.PaintingComponentContainer.LABEL_PERCENT;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
-import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
@@ -15,13 +12,8 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponent;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
-import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,18 +40,6 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     @Nullable
     protected PaintingComponentContainer container;
-
-    /**
-     * The brush size field.
-     */
-    @Nullable
-    private FloatTextField brushSizeField;
-
-    /**
-     * The brush power field.
-     */
-    @Nullable
-    private FloatTextField brushPowerField;
 
     /**
      * The painted object.
@@ -93,39 +73,6 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
         this.container = container;
         createComponents();
         prefWidthProperty().bind(widthProperty());
-    }
-
-    @FxThread
-    protected @NotNull GridPane createBrushSettings() {
-
-        final Label brushSizeLabel = new Label(Messages.MODEL_PROPERTY_BRUSH_SIZE + ":");
-        brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        brushSizeField = new FloatTextField();
-        brushSizeField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        brushSizeField.setMinMax(0.0001F, Integer.MAX_VALUE);
-        brushSizeField.addChangeListener((observable, oldValue, newValue) -> changeBrushSize(newValue));
-
-        final Label brushPowerLabel = new Label(Messages.MODEL_PROPERTY_BRUSH_POWER + ":");
-        brushPowerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        brushPowerField = new FloatTextField();
-        brushPowerField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        brushPowerField.setScrollPower(3F);
-        brushPowerField.setMinMax(0.0001F, Integer.MAX_VALUE);
-        brushPowerField.addChangeListener((observable, oldValue, newValue) -> changeBrushPower(newValue));
-
-        final GridPane settings = new GridPane();
-        settings.add(brushSizeLabel, 0, 0);
-        settings.add(brushSizeField, 1, 0);
-        settings.add(brushPowerLabel, 0, 1);
-        settings.add(brushPowerField, 1, 1);
-
-        FXUtils.addClassTo(settings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(brushSizeLabel, brushPowerLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(brushSizeField, brushPowerField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-
-        return settings;
     }
 
     @Override
@@ -168,54 +115,6 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
      */
     @FxThread
     protected void readState(@NotNull S state) {
-        getBrushSizeField().setValue(state.getBrushSize());
-        getBrushPowerField().setValue(state.getBrushPower());
-    }
-
-    /**
-     * Change brush sizes.
-     */
-    @FromAnyThread
-    protected void changeBrushSize(@NotNull final Float size) {
-
-        if (state != null) {
-            state.setBrushSize(size);
-        }
-
-        EXECUTOR_MANAGER.addJmeTask(() -> setBrushSize(size));
-    }
-
-    /**
-     * Set the brush size.
-     *
-     * @param size the brush size.
-     */
-    @JmeThread
-    protected void setBrushSize(@NotNull Float size) {
-        getToolControl().setBrushSize(size);
-    }
-
-    /**
-     * Change brush powers.
-     */
-    @FromAnyThread
-    protected void changeBrushPower(@NotNull Float power) {
-
-        if (state != null) {
-            state.setBrushPower(power);
-        }
-
-        EXECUTOR_MANAGER.addJmeTask(() -> setBrushPower(power));
-    }
-
-    /**
-     * Set the brush power.
-     *
-     * @param power the brush power.
-     */
-    @JmeThread
-    protected void setBrushPower(@NotNull Float power) {
-        getToolControl().setBrushPower(power);
     }
 
     /**
@@ -236,26 +135,6 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     @FromAnyThread
     protected void setToolControl(@Nullable C toolControl) {
         this.toolControl = toolControl;
-    }
-
-    /**
-     * Get the brush power field.
-     *
-     * @return the brush power field.
-     */
-    @FxThread
-    protected @NotNull FloatTextField getBrushPowerField() {
-        return notNull(brushPowerField);
-    }
-
-    /**
-     * Get the brush size field.
-     *
-     * @return the brush size field.
-     */
-    @FxThread
-    protected @NotNull FloatTextField getBrushSizeField() {
-        return notNull(brushSizeField);
     }
 
     @Override
@@ -319,14 +198,16 @@ public abstract class AbstractPaintingComponent<T, S extends AbstractPaintingSta
     @FxThread
     public void notifyShowed() {
         setShowed(true);
-        EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().addControl(getToolControl()));
+        EXECUTOR_MANAGER.addJmeTask(() ->
+                getCursorNode().addControl(getToolControl()));
     }
 
     @Override
     @FxThread
     public void notifyHided() {
         setShowed(false);
-        EXECUTOR_MANAGER.addJmeTask(() -> getCursorNode().removeControl(getToolControl()));
+        EXECUTOR_MANAGER.addJmeTask(() ->
+                getCursorNode().removeControl(getToolControl()));
     }
 
     /**

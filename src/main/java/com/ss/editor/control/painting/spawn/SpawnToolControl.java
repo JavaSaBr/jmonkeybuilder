@@ -46,10 +46,16 @@ public class SpawnToolControl extends AbstractPaintingControl<SpawnPaintingCompo
         BATCH(Messages.PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH),
         LINK(Messages.PAINTING_COMPONENT_SPAWN_MODELS_METHOD_LINK);
 
+        private static final SpawnMethod[] SPAWN_METHODS = values();
+
+        public static @NotNull SpawnMethod valueOf(int index) {
+            return SPAWN_METHODS[index];
+        }
+
         @NotNull
         private final String label;
 
-        SpawnMethod(@NotNull final String label) {
+        SpawnMethod(@NotNull String label) {
             this.label = label;
         }
 

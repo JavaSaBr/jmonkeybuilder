@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.painting.property;
 import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
@@ -39,6 +40,12 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
             ArrayFactory.newArray(PaintingPropertyDefinition.class);
 
     protected static class AdditionalPropertyContainer extends VBox {
+
+        private final String category;
+
+        public AdditionalPropertyContainer(@NotNull String category) {
+            this.category = category;
+        }
     }
 
     /**
@@ -80,28 +87,31 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
             FxUtils.addChild(brushSettings, control);
         }
 
+        FxUtils.addChild(this, brushSettings);
+
         for (var definition : getPaintingProperties()) {
             var control = PropertyEditorControlFactory.build(vars, definition, callback);
             var container = propertyContainers.get(definition.getCategory(), containerFactory);
             FxUtils.addChild(container, control);
         }
 
-        FxUtils.addChild(this, brushSettings);
+        propertyContainers.forEach((category, propertyContainer) ->
+                FxUtils.addChild(this, propertyContainer));
     }
 
     @Override
     @FxThread
     protected void readState(@NotNull S state) {
-
-        var vars = getVars();
-        vars.set(PROPERTY_BRUSH_POWER, state.getBrushPower());
-        vars.set(PROPERTY_BRUSH_SIZE, state.getBrushSize());
-
-        //FIXME
-        // super.readState(state);
-
+        super.readState(state);
+        readState(state, getVars());
         refreshPropertyControls();
         syncValues();
+    }
+
+    @FxThread
+    protected void readState(@NotNull S state, @NotNull VarTable vars) {
+        vars.set(PROPERTY_BRUSH_POWER, state.getBrushPower());
+        vars.set(PROPERTY_BRUSH_SIZE, state.getBrushSize());
     }
 
     /**
@@ -128,20 +138,14 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
      */
     @FxThread
     protected void showCategory(@NotNull String category) {
-
-        var children = getChildren();
-        children.removeIf(AdditionalPropertyContainer.class::isInstance);
-
-        var index = children.indexOf(brushSettings);
-
-        // supporting additional not properties children
-        propertyContainers.getOptional(category).ifPresent(container -> {
-            if (children.size() == 1) {
-                children.add(container);
-            } else {
-                children.add(index + 1, container);
-            }
-        });
+        getChildren().stream()
+                .filter(AdditionalPropertyContainer.class::isInstance)
+                .peek(node -> node.setManaged(false))
+                .peek(node -> node.setVisible(false))
+                .map(AdditionalPropertyContainer.class::cast)
+                .filter(container -> container.category.equals(category))
+                .peek(container -> container.setManaged(true))
+                .forEach(container -> container.setVisible(true));
     }
 
     /**
@@ -159,21 +163,39 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
      */
     @FxThread
     protected void syncValues() {
+        syncValues(getVars(), getState());
+    }
 
-        var vars = getVars();
+    /**
+     * Synchronize values from properties.
+     *
+     * @param vars  the variable's table.
+     * @param state the state.
+     */
+    @FxThread
+    protected void syncValues(@NotNull VarTable vars, @NotNull S state) {
+
         var brushSize = vars.getFloat(PROPERTY_BRUSH_SIZE);
         var brushPower = vars.getFloat(PROPERTY_BRUSH_POWER);
 
-        var state = getState();
         state.setBrushPower(brushPower);
         state.setBrushSize(brushSize);
 
         var toolControl = getToolControl();
 
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            toolControl.setBrushPower(brushPower);
-            toolControl.setBrushSize(brushSize);
-        });
+        EXECUTOR_MANAGER.addJmeTask(() -> syncValues(state, toolControl));
+    }
+
+    /**
+     * Synchronize values from properties with the current tool control.
+     *
+     * @param state       the state.
+     * @param toolControl the tool control.
+     */
+    @JmeThread
+    protected void syncValues(@NotNull S state, @NotNull C toolControl) {
+        toolControl.setBrushPower(state.getBrushPower());
+        toolControl.setBrushSize(state.getBrushSize());
     }
 
     /**
@@ -183,7 +205,7 @@ public abstract class PropertiesBasedPaintingComponent<T, S extends AbstractPain
      */
     @FxThread
     private AdditionalPropertyContainer createContainer(@NotNull String category) {
-        return new AdditionalPropertyContainer();
+        return new AdditionalPropertyContainer(category);
     }
 
     /**
