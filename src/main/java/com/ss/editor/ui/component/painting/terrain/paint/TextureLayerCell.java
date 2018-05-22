@@ -81,7 +81,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         normalTextureControl.setChangeHandler(this::updateNormal);
         normalTextureControl.setControlWidthPercent(PropertyControl.CONTROL_WIDTH_PERCENT_2);
 
-        final Label scaleLabel = new Label(Messages.MODEL_PROPERTY_MIN_SCALE + ":");
+        final Label scaleLabel = new Label(Messages.MODEL_PROPERTY_SCALE + ":");
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
 
         scaleField = new FloatTextField();
