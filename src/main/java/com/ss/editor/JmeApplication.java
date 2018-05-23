@@ -66,7 +66,7 @@ public class JmeApplication extends JmeToJfxApplication {
      * The empty job adapter for handling creating {@link LightProbe}.
      */
     @NotNull
-    private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<LightProbe>() {
+    private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<>() {
         public void done(@NotNull LightProbe result) {
         }
     };
@@ -107,7 +107,7 @@ public class JmeApplication extends JmeToJfxApplication {
             JME_APPLICATION.setDisplayStatView(false);
             JME_APPLICATION.setDisplayFps(false);
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             LOGGER.warning(e);
             throw new RuntimeException(e);
         }
@@ -384,7 +384,7 @@ public class JmeApplication extends JmeToJfxApplication {
                 super.update();
             }
 
-        } catch (final AssetNotFoundException | NoSuchMethodError | RendererException | AssertionError |
+        } catch (AssetNotFoundException | NoSuchMethodError | RendererException | AssertionError |
                 ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError |
                 IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
@@ -398,7 +398,7 @@ public class JmeApplication extends JmeToJfxApplication {
     }
 
     @JmeThread
-    private void finishWorkOnError(@NotNull final Throwable e) {
+    private void finishWorkOnError(@NotNull Throwable e) {
 
         GAnalytics.sendException(e, true);
         GAnalytics.waitForSend();
@@ -512,7 +512,7 @@ public class JmeApplication extends JmeToJfxApplication {
      * @param progressAdapter the progress adapter
      */
     @JmeThread
-    public void updatePreviewLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+    public void updatePreviewLightProbe(@NotNull JobProgressAdapter<LightProbe> progressAdapter) {
 
         var lightProbe = getPreviewLightProbe();
         var environmentCamera = getPreviewEnvironmentCamera();

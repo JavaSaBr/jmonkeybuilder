@@ -4,7 +4,6 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.*;
 import com.ss.editor.ui.css.CssIds;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import org.jetbrains.annotations.NotNull;
@@ -16,15 +15,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
 
-    /**
-     * The constant COMPONENT_ID.
-     */
-    @NotNull
     private static final String COMPONENT_ID = "EditorMenuBarComponent";
 
-    /**
-     * Instantiates a new Editor bar component.
-     */
     public EditorMenuBarComponent() {
         super();
         setId(CssIds.EDITOR_MENU_BAR_COMPONENT);
@@ -32,16 +24,14 @@ public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
     }
 
     private void createComponents() {
-        final ObservableList<Menu> menus = getMenus();
-        menus.addAll(createFileMenu(),
+        getMenus().addAll(createFileMenu(),
                 createOtherMenu(),
                 createHelpMenu());
     }
 
-    @NotNull
-    private Menu createFileMenu() {
+    private @NotNull Menu createFileMenu() {
 
-        final Menu menu = new Menu(Messages.EDITOR_MENU_FILE);
+        var menu = new Menu(Messages.EDITOR_MENU_FILE);
         menu.getItems().addAll(new OpenAssetAction(),
                 new ReopenAssetMenu(),
                 new ExitAction());
@@ -49,10 +39,9 @@ public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
         return menu;
     }
 
-    @NotNull
-    private Menu createOtherMenu() {
+    private @NotNull Menu createOtherMenu() {
 
-        final Menu menu = new Menu(Messages.EDITOR_MENU_OTHER);
+        var menu = new Menu(Messages.EDITOR_MENU_OTHER);
         menu.getItems().addAll(new OpenSettingsAction(),
                 new OpenPluginsAction(),
                 new ClearAssetCacheAction(),
@@ -61,10 +50,9 @@ public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
         return menu;
     }
 
-    @NotNull
-    private Menu createHelpMenu() {
+    private @NotNull Menu createHelpMenu() {
 
-        final Menu menu = new Menu(Messages.EDITOR_MENU_HELP);
+        var menu = new Menu(Messages.EDITOR_MENU_HELP);
         menu.getItems().addAll(new AboutAction());
 
         return menu;

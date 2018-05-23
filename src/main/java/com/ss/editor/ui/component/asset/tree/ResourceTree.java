@@ -20,7 +20,6 @@ import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayComparator;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -28,6 +27,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeItem.TreeModificationEvent;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.skin.TreeViewSkin;
+import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
@@ -46,22 +47,31 @@ import java.util.function.Predicate;
  */
 public class ResourceTree extends TreeView<ResourceElement> {
 
+    public static class MySkin extends TreeViewSkin<ResourceElement> {
+
+        public MySkin(TreeView control) {
+            super(control);
+        }
+
+        @Override
+        public void updateItemCount() {
+            super.updateItemCount();
+        }
+    }
+
     /**
      * The executor manager.
      */
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The resource elements comparator.
      */
-    @NotNull
     private static final ArrayComparator<ResourceElement> COMPARATOR = ResourceElement::compareTo;
 
     /**
      * The name comparator.
      */
-    @NotNull
     private static final ArrayComparator<ResourceElement> NAME_COMPARATOR = (first, second) -> {
 
         var firstLevel = getLevel(first);
@@ -83,7 +93,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * The tree items comparator.
      */
-    @NotNull
     private static final ArrayComparator<TreeItem<ResourceElement>> ITEM_COMPARATOR = (first, second) -> {
         var firstElement = notNull(first).getValue();
         var secondElement = notNull(second).getValue();
@@ -93,7 +102,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * The context menu filler registry.
      */
-    @NotNull
     private static final AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY =
             AssetTreeContextMenuFillerRegistry.getInstance();
 
@@ -199,6 +207,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
+        setSkin(new MySkin(this));
 
         rootProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -275,9 +284,19 @@ public class ResourceTree extends TreeView<ResourceElement> {
         //FIXME temp fix how to refresh
         var stage = EditorUtil.getFxStage();
         var old = stage.getWidth();
-        stage.setWidth(old + 3);
+        //stage.setWidth(old + 3);
+        //setLayoutX(20F);
 
-        Platform.runLater(() -> stage.setWidth(old));
+        //Platform.runLater(() -> stage.setWidth(old));
+        //Platform.runLater(() -> setLayoutX(0));
+
+        MySkin mySkin = (MySkin) getSkin();
+        mySkin.getChildren().stream()
+                .filter(VirtualFlow.class::isInstance)
+                .map(VirtualFlow.class::cast)
+                .forEach(VirtualFlow::requestLayout);
+
+        mySkin.updateItemCount();
     }
 
     /**
