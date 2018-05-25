@@ -2,7 +2,6 @@ package com.ss.editor.ui.builder;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
-import static javafx.application.Platform.runLater;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
@@ -19,7 +18,6 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Group;
 import javafx.scene.layout.StackPane;
@@ -104,7 +102,8 @@ public class EditorFxSceneBuilder {
         new EventRedirector(editorAreaComponent, canvas, stage);
 
         var leftSplitContainer = new GlobalLeftToolSplitPane(scene);
-        leftSplitContainer.prefHeightProperty().bind(container.heightProperty());
+        leftSplitContainer.prefHeightProperty()
+                .bind(container.heightProperty());
 
         var bottomSplitContainer = new GlobalBottomToolSplitPane(scene);
         var globalLeftToolComponent = new GlobalLeftToolComponent(leftSplitContainer);
@@ -116,16 +115,14 @@ public class EditorFxSceneBuilder {
         leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
         bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
 
-        // to fix with layout bottom panel
-        bottomSplitContainer.heightProperty()
-                .addListener((observable, oldValue, newValue) -> runLater(editorAreaComponent::requestLayout));
-
         FxUtils.addClass(leftSplitContainer, bottomSplitContainer,
                 CssClasses.MAIN_SPLIT_PANEL);
 
         FxUtils.addChild(container, new VBox(barComponent, leftSplitContainer));
 
-        FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
-        FXUtils.bindFixedWidth(barComponent, container.widthProperty());
+        leftSplitContainer.prefWidthProperty()
+                .bind(container.widthProperty());
+        barComponent.prefWidthProperty()
+                .bind(container.widthProperty());
     }
 }

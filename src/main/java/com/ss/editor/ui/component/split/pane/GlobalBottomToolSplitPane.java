@@ -1,7 +1,9 @@
 package com.ss.editor.ui.component.split.pane;
 
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.tab.TabToolComponent;
+import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -15,66 +17,70 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GlobalBottomToolSplitPane extends TabToolSplitPane<EditorConfig> {
 
-    /**
-     * Instantiates a new Global bottom tool split pane.
-     *
-     * @param scene the scene
-     */
-    public GlobalBottomToolSplitPane(@NotNull final Scene scene) {
+    public GlobalBottomToolSplitPane(@NotNull Scene scene) {
         super(scene, EditorConfig.getInstance());
         setOrientation(Orientation.VERTICAL);
     }
 
     @Override
-    protected void addElements(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
+    @FxThread
+    protected void addElements(@NotNull TabToolComponent toolComponent, @NotNull Node other) {
         getItems().setAll(other, toolComponent);
     }
 
     @Override
-    protected void addListeners(@NotNull final TabToolComponent toolComponent) {
-        toolComponent.heightProperty()
-                .addListener((observable, oldValue, newValue) -> handleToolChanged(newValue));
+    @FxThread
+    protected void addListeners(@NotNull TabToolComponent toolComponent) {
+        ObservableUtils.onChange(toolComponent.heightProperty(), this::handleToolChanged);
     }
 
     @Override
+    @FxThread
     protected void bindToScene() {
-        scene.heightProperty()
-                .addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneSize()));
+        ObservableUtils.onChange(scene.heightProperty(),
+                number -> handleSceneChanged(getSceneSize()));
     }
 
     @Override
+    @FxThread
     protected boolean loadCollapsed() {
         return getConfig().isGlobalBottomToolCollapsed();
     }
 
     @Override
+    @FxThread
     protected int loadSize() {
         return getConfig().getGlobalBottomToolHeight();
     }
 
     @Override
-    protected void saveCollapsed(final boolean collapsed) {
+    @FxThread
+    protected void storeCollapsed(boolean collapsed) {
         getConfig().setGlobalBottomToolCollapsed(collapsed);
     }
 
     @Override
-    protected void saveSize(final int size) {
+    @FxThread
+    protected void storeSize(int size) {
         getConfig().setGlobalBottomToolHeight(size);
     }
 
     @Override
+    @FxThread
     protected double getCollapsedPosition() {
         return 1;
     }
 
     @Override
+    @FxThread
     protected double getSceneSize() {
-        final double height = scene.getHeight();
-        return height == 0 ? scene.getHeight() : height;
+        var height = scene.getHeight();
+        return Double.compare(height, 0D) == 0 ? scene.getHeight() : height;
     }
 
     @Override
-    protected double getExpandPosition(final double toolSize, final double sceneSize) {
+    @FxThread
+    protected double getExpandPosition(double toolSize, double sceneSize) {
         return 1D - super.getExpandPosition(toolSize, sceneSize);
     }
 }

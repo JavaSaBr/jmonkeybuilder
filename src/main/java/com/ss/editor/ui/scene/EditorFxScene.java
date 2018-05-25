@@ -83,7 +83,7 @@ public class EditorFxScene extends Scene {
     @Nullable
     private Node focused;
 
-    public EditorFxScene(@NotNull final Group root) {
+    public EditorFxScene(@NotNull Group root) {
         super(root);
 
         this.canvas = new EditorFxImageView();
@@ -104,8 +104,6 @@ public class EditorFxScene extends Scene {
 
         var background = new Pane();
         background.setId(CssIds.ROOT);
-
-        // FxUtils.addDebugBorderTo(canvas);
 
         FxUtils.addChild(root, hideLayer, background, container, loadingLayer);
 
@@ -227,6 +225,7 @@ public class EditorFxScene extends Scene {
 
         var loadingLayer = getLoadingLayer();
         loadingLayer.setVisible(true);
+        loadingLayer.setManaged(true);
         loadingLayer.toFront();
 
         progressIndicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
@@ -246,6 +245,7 @@ public class EditorFxScene extends Scene {
 
         var loadingLayer = getLoadingLayer();
         loadingLayer.setVisible(false);
+        loadingLayer.setManaged(false);
         loadingLayer.getChildren().clear();
 
         progressIndicator = null;

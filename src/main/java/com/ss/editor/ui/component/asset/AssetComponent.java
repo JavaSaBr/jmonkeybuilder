@@ -232,7 +232,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      * @param ignoreExpanded true if the expand listener is ignored.
      */
     @FromAnyThread
-    private void setIgnoreExpanded(final boolean ignoreExpanded) {
+    private void setIgnoreExpanded(boolean ignoreExpanded) {
         this.ignoreExpanded = ignoreExpanded;
     }
 

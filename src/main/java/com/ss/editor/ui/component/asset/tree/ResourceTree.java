@@ -27,8 +27,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeItem.TreeModificationEvent;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.skin.TreeViewSkin;
-import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
@@ -46,18 +44,6 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 public class ResourceTree extends TreeView<ResourceElement> {
-
-    public static class MySkin extends TreeViewSkin<ResourceElement> {
-
-        public MySkin(TreeView control) {
-            super(control);
-        }
-
-        @Override
-        public void updateItemCount() {
-            super.updateItemCount();
-        }
-    }
 
     /**
      * The executor manager.
@@ -207,7 +193,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
-        setSkin(new MySkin(this));
 
         rootProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -289,14 +274,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         //Platform.runLater(() -> stage.setWidth(old));
         //Platform.runLater(() -> setLayoutX(0));
-
-        MySkin mySkin = (MySkin) getSkin();
-        mySkin.getChildren().stream()
-                .filter(VirtualFlow.class::isInstance)
-                .map(VirtualFlow.class::cast)
-                .forEach(VirtualFlow::requestLayout);
-
-        mySkin.updateItemCount();
     }
 
     /**
