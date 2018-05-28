@@ -1,7 +1,6 @@
 package com.ss.editor;
 
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -49,7 +48,7 @@ public interface FileExtensions {
     @NotNull String MODEL_MESH_XML = "mesh.xml";
     @NotNull String MODEL_XBUF = "xbuf";
     
-    @NotNull Array<String> IMAGE_EXTENSIONS = ArrayFactory.asArray(
+    @NotNull Array<String> IMAGE_EXTENSIONS = Array.of(
             IMAGE_PNG,
             IMAGE_JPG,
             IMAGE_JPEG,
@@ -58,24 +57,26 @@ public interface FileExtensions {
             IMAGE_HDR,
             IMAGE_BMP,
             IMAGE_GIF,
-            IMAGE_TIFF);
+            IMAGE_TIFF
+    );
 
-    @NotNull Array<String> TEXTURE_EXTENSIONS = ArrayFactory.asArray(
+    @NotNull Array<String> TEXTURE_EXTENSIONS = Array.of(
             IMAGE_PNG,
             IMAGE_JPG,
             IMAGE_JPEG,
             IMAGE_TGA,
             IMAGE_DDS,
-            IMAGE_HDR);
+            IMAGE_HDR
+    );
 
-    @NotNull Array<String> SHADER_EXTENSIONS = ArrayFactory.asArray(GLSL_FRAGMENT,
+    @NotNull Array<String> SHADER_EXTENSIONS = Array.of(
+            GLSL_FRAGMENT,
             GLSL_VERTEX,
             GLSL_TESSELLATION_CONTROL,
             GLSL_TESSELLATION_EVALUATION,
             GLSL_GEOM,
-            GLSL_LIB);
+            GLSL_LIB
+    );
 
-    @NotNull Array<String> AUDIO_EXTENSIONS = ArrayFactory.asArray(AUDIO_MP3,
-            AUDIO_WAV,
-            AUDIO_OGG);
+    @NotNull Array<String> AUDIO_EXTENSIONS = Array.of(AUDIO_MP3, AUDIO_WAV, AUDIO_OGG);
 }

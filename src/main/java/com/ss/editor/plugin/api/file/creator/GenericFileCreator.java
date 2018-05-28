@@ -3,15 +3,14 @@ package com.ss.editor.plugin.api.file.creator;
 import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
@@ -46,17 +45,16 @@ public class GenericFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void createSettings(@NotNull final GridPane root) {
+    protected void createSettings(@NotNull GridPane root) {
         super.createSettings(root);
 
         this.settingsContainer = root;
         this.vars = VarTable.newInstance();
 
-        int rowIndex = 1;
+        var rowIndex = 1;
 
-        final Array<PropertyDefinition> definitions = getPropertyDefinitions();
-        for (final PropertyDefinition definition : definitions) {
-            final PropertyEditorControl<?> control = build(vars, definition, this::validateFileName);
+        for (var definition : getPropertyDefinitions()) {
+            var control = build(vars, definition, this::validateFileName);
             control.prefWidthProperty().bind(widthProperty());
             root.add(control, 0, rowIndex++, 2, 1);
         }
@@ -64,7 +62,7 @@ public class GenericFileCreator extends AbstractFileCreator {
 
     @Override
     @FxThread
-    public void show(@NotNull final Window owner) {
+    public void show(@NotNull Window owner) {
         super.show(owner);
         validateFileName();
     }
@@ -92,16 +90,18 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void validateFileName() {
         super.validateFileName();
 
-        final GridPane settingsContainer = getSettingsContainer();
+        var settingsContainer = getSettingsContainer();
         settingsContainer.getChildren().stream()
                 .filter(PropertyEditorControl.class::isInstance)
                 .map(PropertyEditorControl.class::cast)
                 .forEach(PropertyEditorControl::checkDependency);
 
-        final Button okButton = getOkButton();
-        if (okButton == null) return;
+        var okButton = getOkButton();
+        if (okButton == null) {
+            return;
+        }
 
-        final boolean result = validate(getVars());
+        var result = validate(getVars());
 
         if (!okButton.isDisabled()) {
             okButton.setDisable(!result);
@@ -115,13 +115,13 @@ public class GenericFileCreator extends AbstractFileCreator {
      * @return true if the all variables are valid.
      */
     @FxThread
-    protected boolean validate(@NotNull final VarTable vars) {
+    protected boolean validate(@NotNull VarTable vars) {
         return true;
     }
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) throws IOException {
+    protected void writeData(@NotNull Path resultFile) throws IOException {
         writeData(getVars(), resultFile);
     }
 
@@ -133,7 +133,7 @@ public class GenericFileCreator extends AbstractFileCreator {
      * @throws IOException if was some problem with writing to the result file.
      */
     @BackgroundThread
-    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) throws IOException {
+    protected void writeData(@NotNull VarTable vars, @NotNull Path resultFile) throws IOException {
     }
 
     /**

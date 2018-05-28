@@ -23,7 +23,6 @@ public class LocalObjects {
 
     private static final int SIZE = 50;
 
-    @NotNull
     private static final ThreadLocal<LocalObjects> THREAD_LOCAL = ThreadLocal.withInitial(LocalObjects::new);
 
     /**
@@ -210,7 +209,7 @@ public class LocalObjects {
      * @return the next free vector with values from the source vector.
      */
     @FromAnyThread
-    public @NotNull Vector3f nextVector(@NotNull final Vector3f vector3f) {
+    public @NotNull Vector3f nextVector(@NotNull Vector3f vector3f) {
         return vectorBuffer.next().set(vector3f);
     }
 
@@ -223,7 +222,7 @@ public class LocalObjects {
      * @return the next free vector with the values.
      */
     @FromAnyThread
-    public @NotNull Vector3f nextVector(final float x, final float y, final float z) {
+    public @NotNull Vector3f nextVector(float x, float y, float z) {
         return vectorBuffer.next().set(x, y, z);
     }
 
@@ -245,7 +244,7 @@ public class LocalObjects {
      * @return the next free vector with the values.
      */
     @FromAnyThread
-    public @NotNull Vector2f nextVector(final float x, final float y) {
+    public @NotNull Vector2f nextVector(float x, float y) {
         return vector2fBuffer.next().set(x, y);
     }
 

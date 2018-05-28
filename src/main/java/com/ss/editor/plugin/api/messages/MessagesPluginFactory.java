@@ -22,10 +22,10 @@ public class MessagesPluginFactory {
     /**
      * The empty resource bundle.
      */
-    @NotNull
     private static final ResourceBundle EMPTY_RESOURCE_BUNDLE = new ResourceBundle() {
+
         @Override
-        protected Object handleGetObject(@NotNull final String key) {
+        protected Object handleGetObject(@NotNull String key) {
             return null;
         }
 
@@ -44,7 +44,7 @@ public class MessagesPluginFactory {
      * @return the resource bundle.
      */
     @FromAnyThread
-    public static @NotNull ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass) {
+    public static @NotNull ResourceBundle getResourceBundle(@NotNull Class<? extends EditorPlugin> pluginClass) {
         return getResourceBundle(pluginClass, Messages.BUNDLE_NAME);
     }
 
@@ -56,11 +56,14 @@ public class MessagesPluginFactory {
      * @return the resource bundle.
      */
     @FromAnyThread
-    public static @NotNull ResourceBundle getResourceBundle(@NotNull final Class<? extends EditorPlugin> pluginClass,
-                                                            @NotNull final String bundleName) {
-        final Locale locale = Locale.getDefault();
-        final ClassLoader classLoader = pluginClass.getClassLoader();
-        final ResourceBundle resourceBundle = getBundle(bundleName, locale, classLoader, PropertyLoader.getInstance());
+    public static @NotNull ResourceBundle getResourceBundle(
+            @NotNull Class<? extends EditorPlugin> pluginClass,
+            @NotNull String bundleName
+    ) {
+
+        var locale = Locale.getDefault();
+        var classLoader = pluginClass.getClassLoader();
+        var resourceBundle = getBundle(bundleName, locale, classLoader, PropertyLoader.getInstance());
 
         if (resourceBundle == null) {
             return EMPTY_RESOURCE_BUNDLE;

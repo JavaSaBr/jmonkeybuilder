@@ -59,7 +59,6 @@ import java.util.concurrent.locks.StampedLock;
  */
 public class JmeApplication extends JmeToJfxApplication {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JmeApplication.class);
 
     /**
@@ -371,6 +370,7 @@ public class JmeApplication extends JmeToJfxApplication {
     @Override
     @JmeThread
     public void update() {
+
         var stamp = syncLock();
         try {
 

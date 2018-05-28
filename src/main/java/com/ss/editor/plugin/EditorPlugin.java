@@ -29,7 +29,7 @@ import java.net.URL;
  */
 public class EditorPlugin extends BasePlugin {
 
-    public EditorPlugin(@NotNull final PluginContainer pluginContainer) {
+    public EditorPlugin(@NotNull PluginContainer pluginContainer) {
         super(pluginContainer);
     }
 
@@ -39,7 +39,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the CSS registry.
      */
     @FromAnyThread
-    public void register(@NotNull final CssRegistry registry) {
+    public void register(@NotNull CssRegistry registry) {
     }
 
     /**
@@ -48,7 +48,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the file creator registry.
      */
     @FromAnyThread
-    public void register(@NotNull final FileCreatorRegistry registry) {
+    public void register(@NotNull FileCreatorRegistry registry) {
     }
 
     /**
@@ -57,7 +57,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the file creator registry.
      */
     @FromAnyThread
-    public void register(@NotNull final EditorRegistry registry) {
+    public void register(@NotNull EditorRegistry registry) {
     }
 
     /**
@@ -66,7 +66,7 @@ public class EditorPlugin extends BasePlugin {
      * @param iconManager the icon manager.
      */
     @FromAnyThread
-    public void register(@NotNull final FileIconManager iconManager) {
+    public void register(@NotNull FileIconManager iconManager) {
     }
 
     /**
@@ -75,7 +75,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the converters registry.
      */
     @FromAnyThread
-    public void register(@NotNull final FileConverterRegistry registry) {
+    public void register(@NotNull FileConverterRegistry registry) {
     }
 
     /**
@@ -84,7 +84,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the menu fillers registry.
      */
     @FromAnyThread
-    public void register(@NotNull final AssetTreeContextMenuFillerRegistry registry) {
+    public void register(@NotNull AssetTreeContextMenuFillerRegistry registry) {
     }
 
     /**
@@ -93,7 +93,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the registry of tree node factories.
      */
     @FromAnyThread
-    public void register(@NotNull final TreeNodeFactoryRegistry registry) {
+    public void register(@NotNull TreeNodeFactoryRegistry registry) {
     }
 
     /**
@@ -102,7 +102,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the registry of property builders.
      */
     @FromAnyThread
-    public void register(@NotNull final PropertyBuilderRegistry registry) {
+    public void register(@NotNull PropertyBuilderRegistry registry) {
     }
 
     /**
@@ -111,7 +111,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the registry of file preview factories.
      */
     @FromAnyThread
-    public void register(@NotNull final FilePreviewFactoryRegistry registry) {
+    public void register(@NotNull FilePreviewFactoryRegistry registry) {
     }
 
     /**
@@ -120,7 +120,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the registry of settings providers.
      */
     @FxThread
-    public void register(@NotNull final SettingsProviderRegistry registry) {
+    public void register(@NotNull SettingsProviderRegistry registry) {
     }
 
     /**
@@ -129,7 +129,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the registry of painting component's constructors.
      */
     @FxThread
-    public void register(@NotNull final PaintingComponentRegistry registry) {
+    public void register(@NotNull PaintingComponentRegistry registry) {
     }
 
     /**
@@ -138,7 +138,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @JmeThread
-    public void onBeforeCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
+    public void onBeforeCreateJmeContext(@NotNull PluginSystem pluginSystem) {
     }
 
     /**
@@ -147,7 +147,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @JmeThread
-    public void onAfterCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
+    public void onAfterCreateJmeContext(@NotNull PluginSystem pluginSystem) {
     }
 
     /**
@@ -156,7 +156,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @FxThread
-    public void onBeforeCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
+    public void onBeforeCreateJavaFxContext(@NotNull PluginSystem pluginSystem) {
     }
 
     /**
@@ -165,7 +165,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @FxThread
-    public void onAfterCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
+    public void onAfterCreateJavaFxContext(@NotNull PluginSystem pluginSystem) {
     }
 
     /**
@@ -174,7 +174,7 @@ public class EditorPlugin extends BasePlugin {
      * @param pluginSystem the plugin system.
      */
     @FxThread
-    public void onFinishLoading(@NotNull final PluginSystem pluginSystem) {
+    public void onFinishLoading(@NotNull PluginSystem pluginSystem) {
     }
 
     @Override

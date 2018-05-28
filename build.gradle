@@ -55,7 +55,7 @@ mainClassName = "com.ss.editor.JfxApplication"
 ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
-ext.jmeVersion = "develop-SNAPSHOT"
+ext.jmeVersion = "3.2.1-SNAPSHOT"
 ext.jmbExtVersion = "2.3.1"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
@@ -129,7 +129,7 @@ dependencies {
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.9.0'
     compile 'org.controlsfx:controlsfx:9.0.0'
     compile 'com.spaceshift:rlib.fx:5.0.2'
-    compile 'com.spaceshift:rlib.common:7.1.1'
+    compile 'com.spaceshift:rlib.common:7.1.2'
     compile ('com.jme3:jfx:2.0.0') {
         exclude group: 'org.jmonkeyengine'
     }

@@ -48,6 +48,7 @@ import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
+import javafx.application.HostServices;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -86,10 +87,7 @@ public abstract class EditorUtil {
     private static ThreadLocal<ObjectDictionary<Class<?>, Enum<?>[]>> ENUM_VALUES_LOCAL =
             ThreadLocal.withInitial(DictionaryFactory::newObjectDictionary);
 
-    @NotNull
     private static JmeApplication jmeApplication;
-
-    @NotNull
     private static JfxApplication jfxApplication;
 
     public static void setJmeApplication(@NotNull JmeApplication jmeApplication) {
@@ -254,6 +252,16 @@ public abstract class EditorUtil {
     @FxThread
     public static @NotNull EditorFxScene getFxScene() {
         return jfxApplication.getScene();
+    }
+
+    /**
+     * Get the host services.
+     *
+     * @return the host services.
+     */
+    @FxThread
+    public static @NotNull HostServices getHostServices() {
+        return jfxApplication.getHostServices();
     }
 
     /**
@@ -544,7 +552,7 @@ public abstract class EditorUtil {
 
         try {
             return currentAsset.relativize(file);
-        } catch (final IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.warning("Can't create asset file of the " + file + " for asset folder " + currentAsset);
             LOGGER.warning(e);
             return null;
@@ -898,7 +906,7 @@ public abstract class EditorUtil {
         Object newExample = null;
         try {
             newExample = ClassUtils.newInstance(className);
-        } catch (final RuntimeException e) {
+        } catch (RuntimeException e) {
 
             var classLoaders = resourceManager.getClassLoaders();
 

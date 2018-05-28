@@ -274,7 +274,7 @@ public class ClasspathManager {
      * Load local libraries.
      */
     @FromAnyThread
-    public synchronized void loadLocalLibraries(@NotNull final Array<Path> libraries) {
+    public synchronized @NotNull ClasspathManager loadLocalLibraries(@NotNull Array<Path> libraries) {
 
         final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalLibrariesLoader();
@@ -286,7 +286,7 @@ public class ClasspathManager {
 
         if (libraries.isEmpty()) {
             this.localLibrariesScanner = null;
-            return;
+            return this;
         }
 
         final URL[] urlArray = libraries.stream()
@@ -310,13 +310,14 @@ public class ClasspathManager {
         scanner.scan();
 
         this.localLibrariesScanner = scanner;
+        return this;
     }
 
     /**
      * Load local classes.
      */
     @FromAnyThread
-    public synchronized void loadLocalClasses(@Nullable final Path output) {
+    public synchronized @NotNull ClasspathManager loadLocalClasses(@Nullable final Path output) {
 
         final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalClassesLoader();
@@ -328,7 +329,7 @@ public class ClasspathManager {
 
         if (output == null || !Files.exists(output)) {
             this.localClassesScanner = null;
-            return;
+            return this;
         }
 
         final Array<Path> folders = ArrayFactory.newArray(Path.class);
@@ -365,6 +366,7 @@ public class ClasspathManager {
         scanner.scan();
 
         this.localClassesScanner = scanner;
+        return this;
     }
 
     /**

@@ -3,15 +3,13 @@ package com.ss.editor.plugin.api.dialog;
 import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +25,6 @@ import java.util.function.Predicate;
  */
 public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
 
-    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, -1);
 
     /**
@@ -66,14 +63,15 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private VBox root;
 
-    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
-                                @NotNull final Consumer<VarTable> handler) {
+    public GenericFactoryDialog(@NotNull Array<PropertyDefinition> definitions, @NotNull Consumer<VarTable> handler) {
         this(definitions, handler, varTable -> true);
     }
 
-    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
-                                @NotNull final Consumer<VarTable> handler,
-                                @NotNull final Predicate<VarTable> validator) {
+    public GenericFactoryDialog(
+            @NotNull Array<PropertyDefinition> definitions,
+            @NotNull Consumer<VarTable> handler,
+            @NotNull Predicate<VarTable> validator
+    ) {
         this.definitions = definitions;
         this.handler = handler;
         this.validator = validator;
@@ -89,7 +87,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * @param title the new title.
      */
     @FxThread
-    public void setTitle(@NotNull final String title) {
+    public void setTitle(@NotNull String title) {
         getDialog().setTitle(title);
     }
 
@@ -99,7 +97,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * @param text the new text.
      */
     @FxThread
-    public void setButtonOkText(@NotNull final String text) {
+    public void setButtonOkText(@NotNull String text) {
         notNull(getOkButton()).setText(text);
     }
 
@@ -109,7 +107,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      * @param text the new text.
      */
     @FxThread
-    public void setButtonCloseText(@NotNull final String text) {
+    public void setButtonCloseText(@NotNull String text) {
         notNull(getCloseButton()).setText(text);
     }
 
@@ -121,7 +119,7 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
         super.createContent(root);
         this.root = root;
     }
@@ -142,11 +140,11 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
     @FxThread
     private void createControls() {
 
-        final ObservableList<Node> children = getRoot().getChildren();
+        var children = getRoot().getChildren();
 
-        final Array<PropertyDefinition> definitions = getDefinitions();
+        var definitions = getDefinitions();
         definitions.forEach(definition -> {
-            final PropertyEditorControl<?> control = build(vars, definition, validateCallback);
+            var control = build(vars, definition, validateCallback);
             control.prefWidthProperty().bind(widthProperty());
             children.add(control);
         });

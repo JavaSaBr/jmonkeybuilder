@@ -16,5 +16,5 @@ public abstract class ClientCommand extends AbstractReadablePacket {
 
     @Override
     @BackgroundThread
-    protected abstract void readImpl(@NotNull final ConnectionOwner owner, @NotNull final ByteBuffer buffer);
+    protected abstract void readImpl(@NotNull ConnectionOwner owner, @NotNull ByteBuffer buffer);
 }

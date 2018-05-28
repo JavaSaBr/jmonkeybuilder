@@ -77,7 +77,6 @@ import java.util.logging.Level;
  */
 public class JfxApplication extends Application {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JfxApplication.class);
 
     @Nullable

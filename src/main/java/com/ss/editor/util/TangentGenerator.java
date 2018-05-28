@@ -1,8 +1,7 @@
 package com.ss.editor.util;
 
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.TangentBinormalGenerator;
 import com.jme3.util.mikktspace.MikktspaceTangentGenerator;
 import com.ss.rlib.common.logging.Logger;
@@ -25,20 +24,20 @@ public class TangentGenerator {
      * @param spatial       the spatial.
      * @param splitMirrored the split mirrored.
      */
-    public static void useStandardGenerator(@NotNull final Spatial spatial, final boolean splitMirrored) {
+    public static void useStandardGenerator(@NotNull Spatial spatial, boolean splitMirrored) {
         try {
 
             NodeUtils.visitGeometry(spatial, geometry -> {
 
-                final Mesh mesh = geometry.getMesh();
-                final VertexBuffer texCoord = mesh.getBuffer(VertexBuffer.Type.TexCoord);
+                var mesh = geometry.getMesh();
+                var texCoord = mesh.getBuffer(Type.TexCoord);
 
                 if (texCoord != null) {
                     TangentBinormalGenerator.generate(geometry, splitMirrored);
                 }
             });
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             EditorUtil.handleException(LOGGER, null, e);
         }
     }
@@ -48,20 +47,20 @@ public class TangentGenerator {
      *
      * @param spatial the spatial.
      */
-    public static void useMikktspaceGenerator(@NotNull final Spatial spatial) {
+    public static void useMikktspaceGenerator(@NotNull Spatial spatial) {
         try {
 
             NodeUtils.visitGeometry(spatial, geometry -> {
 
-                final Mesh mesh = geometry.getMesh();
-                final VertexBuffer texCoord = mesh.getBuffer(VertexBuffer.Type.TexCoord);
+                var mesh = geometry.getMesh();
+                var texCoord = mesh.getBuffer(Type.TexCoord);
 
                 if (texCoord != null) {
                     MikktspaceTangentGenerator.generate(geometry);
                 }
             });
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             EditorUtil.handleException(LOGGER, null, e);
         }
     }

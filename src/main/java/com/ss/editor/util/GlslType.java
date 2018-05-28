@@ -34,17 +34,13 @@ public enum GlslType {
     SAMPLER_2D("sampler2D", "Texture 2D"),
     SAMPLER_CUBE("samplerCube", "Cube Texture");
 
-    @NotNull
     public static final GlslType[] VALUES = values();
 
-    @NotNull
     private static final ObjectDictionary<String, GlslType> RAW_TYPE_TO_ENUM = DictionaryFactory.newObjectDictionary();
-
-    @NotNull
     private static final ObjectDictionary<String, GlslType> UI_NAME_TO_ENUM = DictionaryFactory.newObjectDictionary();
 
     static {
-        for (final GlslType glslType : VALUES) {
+        for (var glslType : VALUES) {
             RAW_TYPE_TO_ENUM.put(glslType.getRawType(), glslType);
             UI_NAME_TO_ENUM.put(glslType.getUIName(), glslType);
         }
@@ -57,7 +53,7 @@ public enum GlslType {
      * @return the enum value.
      */
     @FromAnyThread
-    public static @NotNull GlslType ofRawType(@NotNull final String rawType) {
+    public static @NotNull GlslType ofRawType(@NotNull String rawType) {
         return notNull(RAW_TYPE_TO_ENUM.get(rawType));
     }
 
@@ -68,7 +64,7 @@ public enum GlslType {
      * @return the enum value.
      */
     @FromAnyThread
-    public static @NotNull GlslType ofUIName(@NotNull final String uiName) {
+    public static @NotNull GlslType ofUIName(@NotNull String uiName) {
         return notNull(RAW_TYPE_TO_ENUM.get(uiName));
     }
 
@@ -84,7 +80,7 @@ public enum GlslType {
     @NotNull
     private String uiName;
 
-    GlslType(@NotNull final String rawType, @NotNull final String uiName) {
+    GlslType(@NotNull String rawType, @NotNull String uiName) {
         this.rawType = rawType;
         this.uiName = uiName;
     }

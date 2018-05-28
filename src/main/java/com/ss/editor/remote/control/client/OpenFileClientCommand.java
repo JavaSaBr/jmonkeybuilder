@@ -38,7 +38,7 @@ public class OpenFileClientCommand extends ClientCommand {
         var editorConfig = EditorConfig.getInstance();
         var currentAsset = editorConfig.getCurrentAsset();
 
-        if (currentAsset != null && assetPath.equals(currentAsset)) {
+        if (assetPath.equals(currentAsset)) {
             EXECUTOR_MANAGER.addFxTask(() -> openFile(fileToOpen));
         } else {
             EXECUTOR_MANAGER.addFxTask(() -> {

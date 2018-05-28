@@ -10,7 +10,6 @@ import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
@@ -37,14 +36,14 @@ public class ControlUtils {
      * @return the control's stream.
      */
     @FromAnyThread
-    public static boolean has(@NotNull final Spatial spatial, @NotNull final Class<?> type) {
+    public static boolean has(@NotNull Spatial spatial, @NotNull Class<?> type) {
 
-        final int numControls = spatial.getNumControls();
+        var numControls = spatial.getNumControls();
         if (numControls < 1) {
             return false;
         }
 
-        for (int i = 0; i < numControls; i++) {
+        for (var i = 0; i < numControls; i++) {
             if (type.isInstance(spatial.getControl(i))) {
                 return true;
             }
@@ -60,15 +59,15 @@ public class ControlUtils {
      * @return the control's stream.
      */
     @FromAnyThread
-    public static @NotNull Stream<Control> controls(@NotNull final Spatial spatial) {
+    public static @NotNull Stream<Control> controls(@NotNull Spatial spatial) {
 
-        final int numControls = spatial.getNumControls();
+        var numControls = spatial.getNumControls();
         if (numControls < 1) {
             return Stream.empty();
         }
 
-        final Control[] controls = new Control[numControls];
-        for (int i = 0; i < numControls; i++) {
+        var controls = new Control[numControls];
+        for (var i = 0; i < numControls; i++) {
             controls[i] = spatial.getControl(i);
         }
 
@@ -82,7 +81,7 @@ public class ControlUtils {
      * @return true if this control is enabled.
      */
     @FromAnyThread
-    public static boolean isEnabled(@NotNull final Control control) {
+    public static boolean isEnabled(@NotNull Control control) {
         if (control instanceof AbstractControl) {
             return ((AbstractControl) control).isEnabled();
         } else if (control instanceof PhysicsControl) {
@@ -99,7 +98,7 @@ public class ControlUtils {
      * @param enabled true if the control should be enabled.
      */
     @FromAnyThread
-    public static void setEnabled(@NotNull final Control control, final boolean enabled) {
+    public static void setEnabled(@NotNull Control control, boolean enabled) {
         if (control instanceof AbstractControl) {
             ((AbstractControl) control).setEnabled(enabled);
         } else if (control instanceof PhysicsControl) {
@@ -115,30 +114,32 @@ public class ControlUtils {
      * @param object       the collision object.
      */
     @JmeThread
-    public static void applyScale(@NotNull Spatial spatial,
-                                  @NotNull final Vector3f currentScale,
-                                  @NotNull final PhysicsCollisionObject object) {
+    public static void applyScale(
+            @NotNull Spatial spatial,
+            @NotNull Vector3f currentScale,
+            @NotNull PhysicsCollisionObject object
+    ) {
 
-        final float mass = object instanceof PhysicsRigidBody ? ((PhysicsRigidBody) object).getMass() : 1F;
+        var mass = object instanceof PhysicsRigidBody ? ((PhysicsRigidBody) object).getMass() : 1F;
 
         CollisionShape shape = null;
 
         if (spatial instanceof Geometry) {
 
-            final Geometry geom = (Geometry) spatial;
-            final Mesh mesh = geom.getMesh();
+            var geom = (Geometry) spatial;
+            var mesh = geom.getMesh();
 
             if (mesh instanceof Sphere) {
 
-                final float x = currentScale.getX();
+                var x = currentScale.getX();
                 if (Float.compare(x, currentScale.getY()) == 0 && Float.compare(x, currentScale.getZ()) == 0) {
                     shape = new SphereCollisionShape(((Sphere) mesh).getRadius() * x);
                 }
 
             } else if (mesh instanceof Box) {
 
-                final Box box = (Box) mesh;
-                final Vector3f halfExtents = new Vector3f(box.getXExtent(), box.getYExtent(), box.getZExtent());
+                var box = (Box) mesh;
+                var halfExtents = new Vector3f(box.getXExtent(), box.getYExtent(), box.getZExtent());
                 halfExtents.multLocal(currentScale);
 
                 shape = new BoxCollisionShape(halfExtents);

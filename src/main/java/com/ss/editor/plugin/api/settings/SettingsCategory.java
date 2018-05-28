@@ -2,6 +2,7 @@ package com.ss.editor.plugin.api.settings;
 
 import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The class to describe a settings category.
@@ -27,7 +28,7 @@ public class SettingsCategory implements Comparable<SettingsCategory> {
      */
     private final int order;
 
-    public SettingsCategory(@NotNull final String id, @NotNull final String label, final int order) {
+    public SettingsCategory(@NotNull String id, @NotNull String label, int order) {
         this.id = id;
         this.label = label;
         this.order = order;
@@ -54,7 +55,7 @@ public class SettingsCategory implements Comparable<SettingsCategory> {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final SettingsCategory that = (SettingsCategory) o;
@@ -67,7 +68,7 @@ public class SettingsCategory implements Comparable<SettingsCategory> {
     }
 
     @Override
-    public int compareTo(@NotNull final SettingsCategory o) {
+    public int compareTo(@NotNull SettingsCategory o) {
         return order - o.order;
     }
 }

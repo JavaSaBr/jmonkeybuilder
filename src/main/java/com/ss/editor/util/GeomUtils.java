@@ -2,9 +2,7 @@ package com.ss.editor.util;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -16,7 +14,6 @@ import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,7 +32,7 @@ public class GeomUtils {
      * @return the up.
      */
     @FromAnyThread
-    public static @NotNull Vector3f getUp(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
+    public static @NotNull Vector3f getUp(@NotNull Quaternion rotation, @NotNull Vector3f store) {
         return rotation.getRotationColumn(1, store);
     }
 
@@ -47,7 +44,7 @@ public class GeomUtils {
      * @return the left.
      */
     @FromAnyThread
-    public static @NotNull Vector3f getLeft(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
+    public static @NotNull Vector3f getLeft(@NotNull Quaternion rotation, @NotNull Vector3f store) {
         return rotation.getRotationColumn(0, store);
     }
 
@@ -59,7 +56,7 @@ public class GeomUtils {
      * @return the direction.
      */
     @FromAnyThread
-    public static @NotNull Vector3f getDirection(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
+    public static @NotNull Vector3f getDirection(@NotNull Quaternion rotation, @NotNull Vector3f store) {
         return rotation.getRotationColumn(2, store);
     }
 
@@ -71,7 +68,7 @@ public class GeomUtils {
      * @return the index.
      */
     @FromAnyThread
-    public static int getIndex(@NotNull final Spatial model, @NotNull final Object object) {
+    public static int getIndex(@NotNull Spatial model, @NotNull Object object) {
 
         Spatial parent = model;
         int parentIndex = 0;
@@ -86,12 +83,11 @@ public class GeomUtils {
             return -1;
         }
 
-        final AtomicInteger counter = new AtomicInteger(0);
-        final Node node = (Node) model;
+        var counter = new AtomicInteger(0);
+        var node = (Node) model;
+        var children = node.getChildren();
 
-        final List<Spatial> children = node.getChildren();
-
-        for (final Spatial child : children) {
+        for (var child : children) {
             if (getIndex(child, object, counter)) {
                 return counter.get();
             }
@@ -104,8 +100,7 @@ public class GeomUtils {
      * Get the index of the object in the model.
      */
     @FromAnyThread
-    private static boolean getIndex(@NotNull final Object model, @NotNull final Object object,
-                                    @NotNull final AtomicInteger counter) {
+    private static boolean getIndex(@NotNull Object model, @NotNull Object object, @NotNull AtomicInteger counter) {
         counter.incrementAndGet();
 
         if (Objects.equals(model, object)) {
@@ -116,10 +111,10 @@ public class GeomUtils {
             return false;
         }
 
-        final Node node = (Node) model;
-        final List<Spatial> children = node.getChildren();
+        var node = (Node) model;
+        var children = node.getChildren();
 
-        for (final Spatial child : children) {
+        for (var child : children) {
             if (getIndex(child, object, counter)) {
                 return true;
             }
@@ -136,7 +131,7 @@ public class GeomUtils {
      * @return the object by index.
      */
     @FromAnyThread
-    public static @Nullable Object getObjectByIndex(@NotNull final Spatial model, final int index) {
+    public static @Nullable Object getObjectByIndex(@NotNull Spatial model, int index) {
 
         Spatial parent = model;
         int parentIndex = 0;
@@ -151,14 +146,15 @@ public class GeomUtils {
             return null;
         }
 
-        final AtomicInteger counter = new AtomicInteger(0);
-        final Node node = (Node) model;
+        var counter = new AtomicInteger(0);
+        var node = (Node) model;
+        var children = node.getChildren();
 
-        final List<Spatial> children = node.getChildren();
-
-        for (final Spatial child : children) {
-            final Object object = getObjectByIndex(child, index, counter);
-            if (object != null) return object;
+        for (var child : children) {
+            var object = getObjectByIndex(child, index, counter);
+            if (object != null) {
+                return object;
+            }
         }
 
         return null;
@@ -168,8 +164,11 @@ public class GeomUtils {
      * Find the object by the index in the model.
      */
     @FromAnyThread
-    private static @Nullable Object getObjectByIndex(@NotNull final Object model, final int index,
-                                           @NotNull final AtomicInteger counter) {
+    private static @Nullable Object getObjectByIndex(
+            @NotNull Object model,
+            int index,
+            @NotNull AtomicInteger counter
+    ) {
 
         if (counter.incrementAndGet() == index) {
             return model;
@@ -179,12 +178,14 @@ public class GeomUtils {
             return null;
         }
 
-        final Node node = (Node) model;
-        final List<Spatial> children = node.getChildren();
+        var node = (Node) model;
+        var children = node.getChildren();
 
-        for (final Spatial child : children) {
-            final Object object = getObjectByIndex(child, index, counter);
-            if (object != null) return object;
+        for (var child : children) {
+            var object = getObjectByIndex(child, index, counter);
+            if (object != null) {
+                return object;
+            }
         }
 
         return null;
@@ -199,7 +200,7 @@ public class GeomUtils {
      * @return true if the spatial can be attached to the node.
      */
     @FromAnyThread
-    public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial, final boolean isCopy) {
+    public static boolean canAttach(@NotNull Node node, @NotNull Spatial spatial, boolean isCopy) {
 
         if (spatial.getParent() == node && !isCopy) {
             return false;
@@ -207,8 +208,8 @@ public class GeomUtils {
             return false;
         }
 
-        final AssetLinkNode linkNode = isCopy ? null :
-                NodeUtils.findParent(spatial.getParent(), AssetLinkNode.class::isInstance);
+        var linkNode = isCopy ? null : NodeUtils.<AssetLinkNode>findParent(spatial.getParent(),
+                AssetLinkNode.class::isInstance);
 
         return linkNode == null;
     }
@@ -221,9 +222,9 @@ public class GeomUtils {
      * @return the contact point or null.
      */
     @FromAnyThread
-    public static @Nullable Vector3f getContactPointFromCursor(@NotNull final Spatial spatial, @NotNull final Camera camera) {
-        final InputManager inputManager = EditorUtil.getInputManager();
-        final Vector2f cursor = inputManager.getCursorPosition();
+    public static @Nullable Vector3f getContactPointFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
+        var inputManager = EditorUtil.getInputManager();
+        var cursor = inputManager.getCursorPosition();
         return getContactPointFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
@@ -235,10 +236,9 @@ public class GeomUtils {
      * @return the collision result or null.
      */
     @FromAnyThread
-    public static @Nullable CollisionResult getCollisionFromCursor(@NotNull final Spatial spatial,
-                                                                   @NotNull final Camera camera) {
-        final InputManager inputManager = EditorUtil.getInputManager();
-        final Vector2f cursor = inputManager.getCursorPosition();
+    public static @Nullable CollisionResult getCollisionFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
+        var inputManager = EditorUtil.getInputManager();
+        var cursor = inputManager.getCursorPosition();
         return getCollisionFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
@@ -250,10 +250,9 @@ public class GeomUtils {
      * @return the collisions result.
      */
     @FromAnyThread
-    public static @NotNull CollisionResults getCollisionsFromCursor(@NotNull final Spatial spatial,
-                                                                    @NotNull final Camera camera) {
-        final InputManager inputManager = EditorUtil.getInputManager();
-        final Vector2f cursor = inputManager.getCursorPosition();
+    public static @NotNull CollisionResults getCollisionsFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
+        var inputManager = EditorUtil.getInputManager();
+        var cursor = inputManager.getCursorPosition();
         return getCollisionsFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
@@ -267,10 +266,13 @@ public class GeomUtils {
      * @return the contact point or null.
      */
     @FromAnyThread
-    public static @Nullable Vector3f getContactPointFromScreenPos(@NotNull final Spatial spatial,
-                                                                  @NotNull final Camera camera, final float screenX,
-                                                                  final float screenY) {
-        final CollisionResult collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
+    public static @Nullable Vector3f getContactPointFromScreenPos(
+            @NotNull Spatial spatial,
+            @NotNull Camera camera,
+            float screenX,
+            float screenY
+    ) {
+        var collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
         return collision == null ? null : collision.getContactPoint();
     }
 
@@ -284,10 +286,13 @@ public class GeomUtils {
      * @return the contact normal or null.
      */
     @FromAnyThread
-    public static @Nullable Vector3f getContactNormalFromScreenPos(@NotNull final Spatial spatial,
-                                                                   @NotNull final Camera camera, final float screenX,
-                                                                   final float screenY) {
-        final CollisionResult collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
+    public static @Nullable Vector3f getContactNormalFromScreenPos(
+            @NotNull Spatial spatial,
+            @NotNull Camera camera,
+            float screenX,
+            float screenY
+    ) {
+        var collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
         return collision == null ? null : collision.getContactNormal();
     }
 
@@ -299,9 +304,9 @@ public class GeomUtils {
      * @return the geometry or null.
      */
     @FromAnyThread
-    public static @Nullable Geometry getGeometryFromCursor(@NotNull final Spatial spatial, @NotNull final Camera camera) {
-        final InputManager inputManager = EditorUtil.getInputManager();
-        final Vector2f cursor = inputManager.getCursorPosition();
+    public static @Nullable Geometry getGeometryFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
+        var inputManager = EditorUtil.getInputManager();
+        var cursor = inputManager.getCursorPosition();
         return getGeometryFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
@@ -315,10 +320,13 @@ public class GeomUtils {
      * @return the geometry or null.
      */
     @FromAnyThread
-    public static @Nullable Geometry getGeometryFromScreenPos(@NotNull final Spatial spatial,
-                                                              @NotNull final Camera camera, final float screenX,
-                                                              final float screenY) {
-        final CollisionResult collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
+    public static @Nullable Geometry getGeometryFromScreenPos(
+            @NotNull Spatial spatial,
+            @NotNull Camera camera,
+            float screenX,
+            float screenY
+    ) {
+        var collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
         return collision == null ? null : collision.getGeometry();
     }
 
@@ -332,11 +340,14 @@ public class GeomUtils {
      * @return the collision or null.
      */
     @FromAnyThread
-    public static @Nullable CollisionResult getCollisionFromScreenPos(@NotNull final Spatial spatial,
-                                                                      @NotNull final Camera camera, final float screenX,
-                                                                      final float screenY) {
+    public static @Nullable CollisionResult getCollisionFromScreenPos(
+            @NotNull Spatial spatial,
+            @NotNull Camera camera,
+            float screenX,
+            float screenY
+    ) {
 
-        final CollisionResults results = getCollisionsFromScreenPos(spatial, camera, screenX, screenY);
+        var results = getCollisionsFromScreenPos(spatial, camera, screenX, screenY);
         if (results.size() < 1) {
             return null;
         }
@@ -354,23 +365,26 @@ public class GeomUtils {
      * @return the collisions .
      */
     @FromAnyThread
-    public static @NotNull CollisionResults getCollisionsFromScreenPos(@NotNull final Spatial spatial,
-                                                                       @NotNull final Camera camera,
-                                                                       final float screenX, final float screenY) {
+    public static @NotNull CollisionResults getCollisionsFromScreenPos(
+            @NotNull Spatial spatial,
+            @NotNull Camera camera,
+            float screenX,
+            float screenY
+    ) {
 
-        final LocalObjects local = LocalObjects.get();
+        var local = LocalObjects.get();
 
-        final Vector2f cursor = local.nextVector(screenX, screenY);
-        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f, local.nextVector());
-        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f, local.nextVector())
+        var cursor = local.nextVector(screenX, screenY);
+        var click3d = camera.getWorldCoordinates(cursor, 0f, local.nextVector());
+        var dir = camera.getWorldCoordinates(cursor, 1f, local.nextVector())
                 .subtractLocal(click3d)
                 .normalizeLocal();
 
-        final Ray ray = local.nextRay();
+        var ray = local.nextRay();
         ray.setOrigin(click3d);
         ray.setDirection(dir);
 
-        final CollisionResults results = local.nextCollisionResults();
+        var results = local.nextCollisionResults();
 
         spatial.updateModelBound();
         spatial.collideWith(ray, results);

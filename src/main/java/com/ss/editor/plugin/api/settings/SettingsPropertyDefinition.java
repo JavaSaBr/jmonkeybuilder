@@ -20,46 +20,75 @@ public class SettingsPropertyDefinition extends PropertyDefinition {
     @NotNull
     private final SettingsCategory category;
 
-    public SettingsPropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                                      @NotNull final String id, @NotNull final SettingsCategory category,
-                                      @Nullable final Object defaultValue) {
+    public SettingsPropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @NotNull SettingsCategory category,
+            @Nullable Object defaultValue
+    ) {
         super(propertyType, name, id, defaultValue);
         this.category = category;
     }
 
-    public SettingsPropertyDefinition(@NotNull final EditablePropertyType propertyType,
-                                      @Nullable final Array<String> dependencies, @NotNull final String name,
-                                      @NotNull final String id, @NotNull final SettingsCategory category,
-                                      @Nullable final Object defaultValue) {
+    public SettingsPropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @Nullable Array<String> dependencies,
+            @NotNull String name,
+            @NotNull String id,
+            @NotNull SettingsCategory category,
+            @Nullable Object defaultValue
+    ) {
         super(propertyType, dependencies, name, id, defaultValue);
         this.category = category;
     }
 
-    public SettingsPropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                                      @NotNull final String id, @NotNull final SettingsCategory category,
-                                      @Nullable final Object defaultValue, @Nullable final String extension) {
+    public SettingsPropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @NotNull SettingsCategory category,
+            @Nullable Object defaultValue,
+            @Nullable String extension
+    ) {
         super(propertyType, name, id, defaultValue, extension);
         this.category = category;
     }
 
-    public SettingsPropertyDefinition(@NotNull final EditablePropertyType propertyType,
-                                      @Nullable final Array<String> dependencies, @NotNull final String name,
-                                      @NotNull final String id, @NotNull final SettingsCategory category,
-                                      @Nullable final Object defaultValue, @Nullable final String extension) {
+    public SettingsPropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @Nullable Array<String> dependencies,
+            @NotNull String name,
+            @NotNull String id,
+            @NotNull SettingsCategory category,
+            @Nullable Object defaultValue,
+            @Nullable String extension
+    ) {
         super(propertyType, dependencies, name, id, defaultValue, extension);
         this.category = category;
     }
 
-    public SettingsPropertyDefinition(@NotNull final EditablePropertyType propertyType, final @NotNull String name,
-                                      @NotNull final String id, @NotNull final SettingsCategory category,
-                                      @Nullable final Object defaultValue, @NotNull final Array<?> options) {
+    public SettingsPropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @NotNull SettingsCategory category,
+            @Nullable Object defaultValue,
+            @NotNull Array<?> options
+    ) {
         super(propertyType, name, id, defaultValue, options);
         this.category = category;
     }
 
-    public SettingsPropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                                      @NotNull final String id, @NotNull final SettingsCategory category,
-                                      @Nullable final Object defaultValue, final float min, final float max) {
+    public SettingsPropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @NotNull SettingsCategory category,
+            @Nullable Object defaultValue,
+            float min,
+            float max
+    ) {
         super(propertyType, name, id, defaultValue, min, max);
         this.category = category;
     }

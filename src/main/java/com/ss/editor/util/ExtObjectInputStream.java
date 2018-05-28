@@ -1,7 +1,6 @@
 package com.ss.editor.util;
 
 import com.ss.editor.manager.PluginManager;
-import com.ss.rlib.common.util.ref.Reference;
 import com.ss.rlib.common.util.ref.ReferenceFactory;
 import com.ss.rlib.common.util.ref.ReferenceType;
 import org.jetbrains.annotations.NotNull;
@@ -18,29 +17,31 @@ import java.io.ObjectStreamClass;
  */
 public class ExtObjectInputStream extends ObjectInputStream {
 
-    public ExtObjectInputStream(@NotNull final InputStream in) throws IOException {
+    public ExtObjectInputStream(@NotNull InputStream in) throws IOException {
         super(in);
     }
 
     @Override
-    protected Class<?> resolveClass(@NotNull final ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+    protected Class<?> resolveClass(@NotNull ObjectStreamClass desc) throws IOException, ClassNotFoundException {
         try {
             return super.resolveClass(desc);
-        } catch (final ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
 
-            final String name = desc.getName();
+            var name = desc.getName();
 
-            try (final Reference ref = ReferenceFactory.takeFromTLPool(ReferenceType.OBJECT)) {
+            try (var ref = ReferenceFactory.takeFromTLPool(ReferenceType.OBJECT)) {
 
-                final PluginManager pluginManager = PluginManager.getInstance();
+                var pluginManager = PluginManager.getInstance();
                 pluginManager.handlePlugins(plugin -> {
 
-                    if (ref.getObject() != null) return;
+                    if (ref.getObject() != null) {
+                        return;
+                    }
 
-                    final ClassLoader classLoader = plugin.getClassLoader();
+                    var classLoader = plugin.getClassLoader();
                     try {
                         ref.setObject(classLoader.loadClass(name));
-                    } catch (final ClassNotFoundException ex) {
+                    } catch (ClassNotFoundException ex) {
                         // ignore this exception
                     }
                 });

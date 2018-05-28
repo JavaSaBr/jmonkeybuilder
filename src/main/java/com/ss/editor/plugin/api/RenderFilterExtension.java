@@ -51,7 +51,7 @@ public class RenderFilterExtension {
      * @param filter the filter.
      */
     @JmeThread
-    public void register(@NotNull final Filter filter) {
+    public void register(@NotNull Filter filter) {
         this.filters.add(filter);
         EditorUtil.getGlobalFilterPostProcessor()
                 .addFilter(filter);
@@ -65,7 +65,7 @@ public class RenderFilterExtension {
      * @param <T>     the filter's type.
      */
     @JmeThread
-    public <T extends Filter> void setOnRefresh(@NotNull final T filter, @NotNull final Consumer<@NotNull T> handler) {
+    public <T extends Filter> void setOnRefresh(@NotNull T filter, @NotNull Consumer<T> handler) {
 
         if (!filters.contains(filter)) {
             throw new IllegalArgumentException("The filter " + filter + "isn't registered.");
@@ -80,7 +80,7 @@ public class RenderFilterExtension {
     @JmeThread
     public void refreshFilters() {
         refreshActions.forEach((filter, consumer) -> {
-            final Consumer<@NotNull Filter> cast = ClassUtils.unsafeCast(consumer);
+            var cast = ClassUtils.<Consumer<Filter>>unsafeCast(consumer);
             cast.accept(filter);
         });
     }
