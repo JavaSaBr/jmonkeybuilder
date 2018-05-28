@@ -22,7 +22,7 @@ public class PositionTreeNode extends TreeNode<Vector3f> {
     @Nullable
     private String name;
 
-    public PositionTreeNode(@NotNull final Vector3f element, final long objectId) {
+    public PositionTreeNode(@NotNull Vector3f element, long objectId) {
         super(element, objectId);
     }
 
@@ -46,7 +46,7 @@ public class PositionTreeNode extends TreeNode<Vector3f> {
 
     @Override
     @FxThread
-    public void setName(@Nullable final String name) {
+    public void setName(@Nullable String name) {
         this.name = name;
     }
 }

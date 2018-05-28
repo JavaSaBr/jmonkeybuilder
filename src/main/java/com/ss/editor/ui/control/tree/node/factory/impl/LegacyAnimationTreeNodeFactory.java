@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.tree.node.factory.impl;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.node.impl.control.anim.*;
+import com.ss.editor.ui.control.tree.node.impl.control.legacyanim.*;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
 import org.jetbrains.annotations.Nullable;
@@ -13,13 +13,14 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class AnimationTreeNodeFactory implements TreeNodeFactory {
+@Deprecated
+public class LegacyAnimationTreeNodeFactory implements TreeNodeFactory {
 
     public static final int PRIORITY = 1;
 
     @Override
     @FxThread
-    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable T element, long objectId) {
 
         if (element instanceof Animation) {
             return unsafeCast(new AnimationTreeNode((Animation) element, objectId));

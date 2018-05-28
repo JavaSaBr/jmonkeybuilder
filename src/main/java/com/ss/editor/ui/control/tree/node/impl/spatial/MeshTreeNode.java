@@ -22,7 +22,7 @@ import com.ss.rlib.common.util.array.ArrayFactory;
  */
 public class MeshTreeNode extends TreeNode<Mesh> {
 
-    public MeshTreeNode(@NotNull final Mesh element, final long objectId) {
+    public MeshTreeNode(@NotNull Mesh element, long objectId) {
         super(element, objectId);
     }
 
@@ -40,12 +40,12 @@ public class MeshTreeNode extends TreeNode<Mesh> {
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
+        var element = getElement();
+        var buffers = element.getBuffers();
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class, buffers.size());
 
-        final Mesh element = getElement();
-        final IntMap<VertexBuffer> buffers = element.getBuffers();
         buffers.forEach(entry -> result.add(FACTORY_REGISTRY.createFor(entry.getValue())));
 
         return result;
@@ -53,7 +53,7 @@ public class MeshTreeNode extends TreeNode<Mesh> {
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
         return true;
     }
 

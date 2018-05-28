@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AssetLinkNodeTreeNode extends NodeTreeNode<AssetLinkNode> {
 
-    public AssetLinkNodeTreeNode(@NotNull final AssetLinkNode element, final long objectId) {
+    public AssetLinkNodeTreeNode(@NotNull AssetLinkNode element, long objectId) {
         super(element, objectId);
     }
 

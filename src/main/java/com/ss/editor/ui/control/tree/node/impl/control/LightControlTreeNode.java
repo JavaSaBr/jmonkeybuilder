@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LightControlTreeNode extends ControlTreeNode<LightControl> {
 
-    public LightControlTreeNode(@NotNull final LightControl element, final long objectId) {
+    public LightControlTreeNode(@NotNull LightControl element, long objectId) {
         super(element, objectId);
     }
 

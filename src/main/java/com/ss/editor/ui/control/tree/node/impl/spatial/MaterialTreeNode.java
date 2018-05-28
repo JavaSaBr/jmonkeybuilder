@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MaterialTreeNode extends TreeNode<Material> {
 
-    public MaterialTreeNode(@NotNull final Material element, final long objectId) {
+    public MaterialTreeNode(@NotNull Material element, long objectId) {
         super(element, objectId);
     }
 
@@ -44,13 +44,13 @@ public class MaterialTreeNode extends TreeNode<Material> {
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
         super.fillContextMenu(nodeTree, items);
 
-        final Material material = getElement();
-        final TreeNode<?> parent = notNull(getParent());
-        final Object parentElement = parent.getElement();
-        final Object linkNode = parentElement instanceof Spatial ?
+        var material = getElement();
+        var parent = notNull(getParent());
+        var parentElement = parent.getElement();
+        var linkNode = parentElement instanceof Spatial ?
                 NodeUtils.findParent((Spatial) parentElement, AssetLinkNode.class::isInstance) : null;
 
         if (linkNode == null) {
@@ -64,7 +64,7 @@ public class MaterialTreeNode extends TreeNode<Material> {
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
         return false;
     }
 

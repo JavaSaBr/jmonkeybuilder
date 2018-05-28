@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.node.impl.control.anim;
+package com.ss.editor.ui.control.tree.node.impl.control.legacyanim;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Track;
@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type parameter
  * @author JavaSaBr
  */
+@Deprecated
 public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T> {
 
     /**

@@ -16,7 +16,7 @@ import java.nio.Buffer;
  */
 public class BufferTreeNode extends TreeNode<Buffer> {
 
-    public BufferTreeNode(@NotNull final Buffer element, final long objectId) {
+    public BufferTreeNode(@NotNull Buffer element, long objectId) {
         super(element, objectId);
     }
 

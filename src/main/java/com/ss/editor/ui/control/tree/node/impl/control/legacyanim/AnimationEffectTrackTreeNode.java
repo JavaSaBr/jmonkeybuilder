@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.node.impl.control.anim;
+package com.ss.editor.ui.control.tree.node.impl.control.legacyanim;
 
 import com.jme3.animation.EffectTrack;
 import com.ss.editor.ui.Icons;
@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
+@Deprecated
 public class AnimationEffectTrackTreeNode extends AnimationTrackTreeNode<EffectTrack> {
 
     /**

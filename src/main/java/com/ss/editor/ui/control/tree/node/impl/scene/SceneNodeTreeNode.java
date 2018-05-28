@@ -19,6 +19,8 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * The implementation of the {@link NodeTreeNode} for representing the {@link SceneNode} in the editor.
  *
@@ -26,44 +28,44 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
 
-    public SceneNodeTreeNode(@NotNull final SceneNode element, final long objectId) {
+    public SceneNodeTreeNode(@NotNull SceneNode element, long objectId) {
         super(element, objectId);
     }
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
         if (!(nodeTree instanceof ModelNodeTree)) {
             return;
         }
 
-        final Menu createMenu = createCreationMenu(nodeTree);
+        createCreationMenu(nodeTree)
+                .ifPresent(items::add);
 
-        items.add(createMenu);
         items.add(new RenameNodeAction(nodeTree, this));
     }
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
         return super.hasChildren(nodeTree) || nodeTree instanceof SceneNodeTree;
     }
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
         if (nodeTree instanceof ModelNodeTree) {
             return super.getChildren(nodeTree);
         } else if (!(nodeTree instanceof SceneNodeTree)) {
-            return EMPTY_ARRAY;
+            return Array.empty();
         }
 
-        final SceneNode sceneNode = getElement();
+        var sceneNode = getElement();
 
         //TODO to add other children
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
         result.add(FACTORY_REGISTRY.createFor(new SceneFiltersNode(sceneNode)));
 
         return result;
@@ -83,7 +85,7 @@ public class SceneNodeTreeNode extends NodeTreeNode<SceneNode> {
 
     @Override
     @FxThread
-    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+    public boolean canAccept(@NotNull TreeNode<?> treeNode, boolean isCopy) {
         return false;
     }
 

@@ -20,6 +20,8 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * The implementation of the {@link SpatialTreeNode} to represent the {@link Geometry} in the editor.
  *
@@ -28,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
 
-    public GeometryTreeNode(@NotNull final T element, final long objectId) {
+    public GeometryTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
     }
 
@@ -38,16 +40,21 @@ public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
     }
 
     @Override
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
-        if (!(nodeTree instanceof ModelNodeTree)) return TreeNode.EMPTY_ARRAY;
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
+        if (!(nodeTree instanceof ModelNodeTree)) {
+            return Array.empty();
+        }
 
-        final Geometry geometry = getElement();
-        final Mesh mesh = geometry.getMesh();
-        final Material material = geometry.getMaterial();
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
 
-        if (mesh != null) result.add(FACTORY_REGISTRY.createFor(mesh));
+        var geometry = getElement();
+        var mesh = geometry.getMesh();
+        var material = geometry.getMaterial();
+
+        if (mesh != null) {
+            result.add(FACTORY_REGISTRY.createFor(mesh));
+        }
 
         result.add(FACTORY_REGISTRY.createFor(material));
         result.addAll(super.getChildren(nodeTree));
@@ -56,48 +63,47 @@ public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
     }
 
     @Override
-    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
 
-        final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
-        toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this),
+        var toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS,
+                new ImageView(Icons.INFLUENCER_16));
+
+        toolActions.getItems()
+                .addAll(new TangentGeneratorAction(nodeTree, this),
                         new GenerateLoDAction(nodeTree, this));
 
-        return toolActions;
+        return Optional.of(toolActions);
     }
 
     @Override
-    public void add(@NotNull final TreeNode<?> child) {
+    public void add(@NotNull TreeNode<?> child) {
         super.add(child);
 
-        final Geometry geometry = getElement();
-
         if (child instanceof MeshTreeNode) {
-            final Mesh element = (Mesh) child.getElement();
-            geometry.setMesh(element);
+            getElement().setMesh((Mesh) child.getElement());
         }
     }
 
     @Override
-    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
-        final Object element = treeNode.getElement();
+    public boolean canAccept(@NotNull TreeNode<?> treeNode, boolean isCopy) {
+        var element = treeNode.getElement();
         return (element instanceof Material && isCopy) || super.canAccept(treeNode, isCopy);
     }
 
     @Override
-    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
-                       final boolean isCopy) {
+    public void accept(@NotNull ChangeConsumer changeConsumer, @NotNull Object object, boolean isCopy) {
 
-        final Geometry geometry = getElement();
+        var geometry = getElement();
 
         if (object instanceof Material) {
 
-            final Material material = (Material) object;
+            var material = (Material) object;
 
             if (isCopy) {
 
-                final Material clone = material.clone();
-                final PropertyOperation<ChangeConsumer, Geometry, Material> operation =
-                        new PropertyOperation<>(geometry, "Material", clone, geometry.getMaterial());
+                var clone = material.clone();
+                var operation = new PropertyOperation<ChangeConsumer, Geometry, Material>(geometry,
+                        "Material", clone, geometry.getMaterial());
                 operation.setApplyHandler(Geometry::setMaterial);
 
                 changeConsumer.execute(operation);

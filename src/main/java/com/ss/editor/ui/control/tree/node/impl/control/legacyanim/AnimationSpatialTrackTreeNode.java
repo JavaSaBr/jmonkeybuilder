@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.node.impl.control.anim;
+package com.ss.editor.ui.control.tree.node.impl.control.legacyanim;
 
 import com.jme3.animation.SpatialTrack;
 import com.ss.editor.annotation.FxThread;
@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
+@Deprecated
 public class AnimationSpatialTrackTreeNode extends AnimationTrackTreeNode<SpatialTrack> {
 
     public AnimationSpatialTrackTreeNode(@NotNull final SpatialTrack element, final long objectId) {

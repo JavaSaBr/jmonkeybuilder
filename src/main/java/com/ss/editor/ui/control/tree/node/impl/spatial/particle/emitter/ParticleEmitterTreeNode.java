@@ -25,6 +25,8 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * The implementation of the {@link NodeTreeNode} to represent the {@link ParticleEmitter} in the editor.
  *
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
 
-    public ParticleEmitterTreeNode(@NotNull final ParticleEmitter element, final long objectId) {
+    public ParticleEmitterTreeNode(@NotNull ParticleEmitter element, long objectId) {
         super(element, objectId);
     }
 
@@ -44,15 +46,22 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final ParticleEmitter element = getElement();
-        final TreeNode<ParticleInfluencer> influencerTreeNode = FACTORY_REGISTRY.createFor(element.getParticleInfluencer());
-        final TreeNode<EmitterShape> shapeTreeNode = FACTORY_REGISTRY.createFor(element.getShape());
+        var element = getElement();
+        var influencerTreeNode = FACTORY_REGISTRY.createFor(element.getParticleInfluencer());
+        var shapeTreeNode = FACTORY_REGISTRY.createFor(element.getShape());
 
-        final Array<TreeNode<?>> children = ArrayFactory.newArray(TreeNode.class);
-        if (influencerTreeNode != null) children.add(influencerTreeNode);
-        if (shapeTreeNode != null) children.add(shapeTreeNode);
+        var children = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
+
+        if (influencerTreeNode != null) {
+            children.add(influencerTreeNode);
+        }
+
+        if (shapeTreeNode != null) {
+            children.add(shapeTreeNode);
+        }
+
         children.addAll(super.getChildren(nodeTree));
 
         return children;
@@ -60,25 +69,26 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
-                                @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
         final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE,
                 new ImageView(Icons.EDIT_16));
 
-        changeShapeMenu.getItems().addAll(new CreateBoxShapeEmitterAction(nodeTree, this),
-                new CreateSphereShapeEmitterAction(nodeTree, this),
-                new CreatePointShapeEmitterAction(nodeTree, this),
-                new CreateMeshVertexShapeEmitterAction(nodeTree, this),
-                new CreateMeshFaceShapeEmitterAction(nodeTree, this),
-                new CreateMeshConvexHullShapeEmitterAction(nodeTree, this));
+        changeShapeMenu.getItems()
+                .addAll(new CreateBoxShapeEmitterAction(nodeTree, this),
+                        new CreateSphereShapeEmitterAction(nodeTree, this),
+                        new CreatePointShapeEmitterAction(nodeTree, this),
+                        new CreateMeshVertexShapeEmitterAction(nodeTree, this),
+                        new CreateMeshFaceShapeEmitterAction(nodeTree, this),
+                        new CreateMeshConvexHullShapeEmitterAction(nodeTree, this));
 
         final Menu changeInfluencerMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER,
                 new ImageView(Icons.EDIT_16));
 
-        changeInfluencerMenu.getItems().addAll(new CreateEmptyParticleInfluencerAction(nodeTree, this),
-                new CreateDefaultParticleInfluencerAction(nodeTree, this),
-                new CreateRadialParticleInfluencerAction(nodeTree, this));
+        changeInfluencerMenu.getItems()
+                .addAll(new CreateEmptyParticleInfluencerAction(nodeTree, this),
+                        new CreateDefaultParticleInfluencerAction(nodeTree, this),
+                        new CreateRadialParticleInfluencerAction(nodeTree, this));
 
         items.add(new ResetParticleEmittersAction(nodeTree, this));
         items.add(changeShapeMenu);
@@ -89,13 +99,13 @@ public class ParticleEmitterTreeNode extends GeometryTreeNode<ParticleEmitter> {
 
     @Override
     @FxThread
-    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 
     @Override
     @FxThread
-    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createCreationMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 }

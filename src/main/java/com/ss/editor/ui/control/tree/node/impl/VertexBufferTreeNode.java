@@ -8,6 +8,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -16,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.Buffer;
 
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+
 /**
  * The implementation of the {@link TreeNode} to represent the {@link VertexBuffer} in the editor.
  *
@@ -23,7 +26,7 @@ import java.nio.Buffer;
  */
 public class VertexBufferTreeNode extends TreeNode<VertexBuffer> {
 
-    public VertexBufferTreeNode(@NotNull final VertexBuffer element, final long objectId) {
+    public VertexBufferTreeNode(@NotNull VertexBuffer element, long objectId) {
         super(element, objectId);
     }
 
@@ -41,22 +44,21 @@ public class VertexBufferTreeNode extends TreeNode<VertexBuffer> {
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final VertexBuffer vertexBuffer = getElement();
+        var vertexBuffer = getElement();
+        var data = vertexBuffer.getData();
 
-        final Buffer data = vertexBuffer.getData();
-        if (data == null) return EMPTY_ARRAY;
+        if (data == null) {
+            return Array.empty();
+        }
 
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
-        result.add(FACTORY_REGISTRY.createFor(data));
-
-        return result;
+        return Array.of(notNull(FACTORY_REGISTRY.createFor(data)));
     }
 }

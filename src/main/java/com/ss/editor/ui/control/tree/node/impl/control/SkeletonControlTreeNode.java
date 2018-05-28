@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SkeletonControlTreeNode extends ControlTreeNode<SkeletonControl> {
 
-    public SkeletonControlTreeNode(@NotNull final SkeletonControl element, final long objectId) {
+    public SkeletonControlTreeNode(@NotNull SkeletonControl element, long objectId) {
         super(element, objectId);
     }
 

@@ -23,13 +23,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ControlTreeNode<T extends Control> extends TreeNode<T> {
 
-    public ControlTreeNode(@NotNull final T element, final long objectId) {
+    public ControlTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
     }
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
         items.add(new RemoveControlAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
@@ -56,7 +56,7 @@ public class ControlTreeNode<T extends Control> extends TreeNode<T> {
     @FromAnyThread
     public @NotNull String getName() {
 
-        final T element = getElement();
+        var element = getElement();
 
         if (element instanceof EditableControl) {
             return ((EditableControl) element).getName();

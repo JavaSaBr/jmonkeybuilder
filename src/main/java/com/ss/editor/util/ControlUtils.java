@@ -92,6 +92,17 @@ public class ControlUtils {
     }
 
     /**
+     * Check enabled status of the control.
+     *
+     * @param control the control.
+     * @return true if this control isn't enabled.
+     */
+    @FromAnyThread
+    public static boolean isNotEnabled(@NotNull Control control) {
+        return !isEnabled(control);
+    }
+
+    /**
      * Change the enabled status of the control.
      *
      * @param control the control.

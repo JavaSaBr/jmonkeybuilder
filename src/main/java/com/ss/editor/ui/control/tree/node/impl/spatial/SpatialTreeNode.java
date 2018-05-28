@@ -12,7 +12,6 @@ import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.AssetLinkNode;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
@@ -52,6 +51,7 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
@@ -62,26 +62,31 @@ import java.util.function.BiFunction;
  */
 public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
-    /**
-     * The list of additional creation action factories.
-     */
-    @NotNull
-    private static final Array<BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem>>
-            CREATION_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
+    @FunctionalInterface
+    public interface ActionFactory extends BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> {
 
-    /**
-     * The list of additional creation control action factories.
-     */
-    @NotNull
-    private static final Array<BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem>>
-            CREATION_CONTROL_ACTION_FACTORIES = ArrayFactory.newArray(BiFunction.class);
+        @Override
+        @Nullable MenuItem apply(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree);
+
+        @FxThread
+        default @NotNull Optional<MenuItem> create(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree) {
+            return Optional.ofNullable(apply(treeNode, tree));
+        }
+    }
+
+    private static final Array<ActionFactory> CREATION_ACTION_FACTORIES =
+            ArrayFactory.newArray(ActionFactory.class);
+
+    private static final Array<ActionFactory> CREATION_CONTROL_ACTION_FACTORIES =
+            ArrayFactory.newArray(ActionFactory.class);
 
     /**
      * Register the additional creation action factory.
      *
      * @param actionFactory the additional creation action factory.
      */
-    public static void registerCreationAction(@NotNull final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> actionFactory) {
+    @FxThread
+    public static void registerCreationAction(@NotNull ActionFactory actionFactory) {
         CREATION_ACTION_FACTORIES.add(actionFactory);
     }
 
@@ -90,40 +95,36 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      *
      * @param actionFactory the additional creation control action factory.
      */
-    public static void registerCreationControlAction(@NotNull final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> actionFactory) {
+    @FxThread
+    public static void registerCreationControlAction(@NotNull ActionFactory actionFactory) {
         CREATION_CONTROL_ACTION_FACTORIES.add(actionFactory);
     }
 
-    protected SpatialTreeNode(@NotNull final T element, final long objectId) {
+    protected SpatialTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
     }
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
-                                @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
         if (!(nodeTree instanceof ModelNodeTree)) {
             return;
         }
 
-        final T element = getElement();
-        final AssetLinkNode linkNode = findParent(element, AssetLinkNode.class::isInstance);
+        var element = getElement();
+        var linkNode = NodeUtils.<AssetLinkNode>findParent(element,
+                AssetLinkNode.class::isInstance);
 
         if (linkNode == null) {
 
-            final Menu createMenu = createCreationMenu(nodeTree);
+            createCreationMenu(nodeTree).stream()
+                    .peek(this::sort)
+                    .forEach(items::add);
 
-            if (createMenu != null) {
-                createMenu.getItems().sort(ACTION_COMPARATOR);
-                items.add(createMenu);
-            }
-
-            final Menu toolMenu = createToolMenu(nodeTree);
-            if (toolMenu != null) {
-                toolMenu.getItems().sort(ACTION_COMPARATOR);
-                items.add(toolMenu);
-            }
+            createToolMenu(nodeTree).stream()
+                    .peek(this::sort)
+                    .forEach(items::add);
         }
 
         if (linkNode == null || element == linkNode) {
@@ -136,17 +137,27 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         NodeUtils.children(element)
             .flatMap(ControlUtils::controls)
-            .filter(control -> !ControlUtils.isEnabled(control))
+            .filter(ControlUtils::isNotEnabled)
             .findAny()
-            .ifPresent(c -> items.add(new EnableAllControlsAction(nodeTree, this)));
+            .ifPresent(control -> items.add(new EnableAllControlsAction(nodeTree, this)));
 
         NodeUtils.children(element)
                 .flatMap(ControlUtils::controls)
                 .filter(ControlUtils::isEnabled)
                 .findAny()
-                .ifPresent(c -> items.add(new DisableAllControlsAction(nodeTree, this)));
+                .ifPresent(control -> items.add(new DisableAllControlsAction(nodeTree, this)));
 
         super.fillContextMenu(nodeTree, items);
+    }
+
+    /**
+     * Sort items of the menu.
+     *
+     * @param menu the menu.
+     */
+    @FxThread
+    protected void sort(@NotNull Menu menu) {
+        menu.getItems().sort(ACTION_COMPARATOR);
     }
 
     @Override
@@ -163,25 +174,24 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
     @Override
     @FxThread
-    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
-        final Object element = treeNode.getElement();
+    public boolean canAccept(@NotNull TreeNode<?> treeNode, boolean isCopy) {
+        var element = treeNode.getElement();
         return element instanceof AbstractControl || super.canAccept(treeNode, isCopy);
     }
 
     @Override
     @FxThread
-    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
-                       final boolean isCopy) {
+    public void accept(@NotNull ChangeConsumer changeConsumer, @NotNull Object object, boolean isCopy) {
 
-        final T spatial = getElement();
+        var spatial = getElement();
 
         if (object instanceof AbstractControl) {
 
-            final AbstractControl control = (AbstractControl) object;
-            final Spatial prevParent = control.getSpatial();
+            var control = (AbstractControl) object;
+            var prevParent = control.getSpatial();
 
             if (isCopy) {
-                final AbstractControl clone = (AbstractControl) control.jmeClone();
+                var clone = (AbstractControl) control.jmeClone();
                 clone.setSpatial(null);
                 changeConsumer.execute(new AddControlOperation(clone, spatial));
             } else {
@@ -195,7 +205,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @Override
     @FxThread
     public boolean canRemove() {
-        final Node parent = getElement().getParent();
+        var parent = getElement().getParent();
         return parent != null && parent.getUserData(KEY_MODEL_NODE) != Boolean.TRUE;
     }
 
@@ -206,59 +216,56 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * @return the menu
      */
     @FxThread
-    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @NotNull Optional<Menu> createCreationMenu(@NotNull NodeTree<?> nodeTree) {
 
-        final T element = getElement();
+        var element = getElement();
 
-        final Menu menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
-        final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_12));
+        var menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
+        var createControlMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_12));
 
-        final ObservableList<MenuItem> items = createControlsMenu.getItems();
-        items.add(new CreateCustomControlAction(nodeTree, this));
+        var createControlItems = createControlMenu.getItems();
+        createControlItems.add(new CreateCustomControlAction(nodeTree, this));
 
         if (element.getControl(RigidBodyControl.class) == null) {
-            items.add(new CreateStaticRigidBodyControlAction(nodeTree, this));
-            items.add(new CreateRigidBodyControlAction(nodeTree, this));
+            createControlItems.add(new CreateStaticRigidBodyControlAction(nodeTree, this));
+            createControlItems.add(new CreateRigidBodyControlAction(nodeTree, this));
         }
 
         if (element.getControl(VehicleControl.class) == null) {
-            items.add(new CreateVehicleControlAction(nodeTree, this));
+            createControlItems.add(new CreateVehicleControlAction(nodeTree, this));
         }
 
         if (element.getControl(CharacterControl.class) == null) {
-            items.add(new CreateCharacterControlAction(nodeTree, this));
+            createControlItems.add(new CreateCharacterControlAction(nodeTree, this));
         }
 
         if (element.getControl(MotionEvent.class) == null) {
-            items.add(new CreateMotionControlAction(nodeTree, this));
+            createControlItems.add(new CreateMotionControlAction(nodeTree, this));
         }
 
-        items.add(new CreateLightControlAction(nodeTree, this));
+        createControlItems.add(new CreateLightControlAction(nodeTree, this));
 
-        for (final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> factory : CREATION_CONTROL_ACTION_FACTORIES) {
-            final MenuItem item = factory.apply(this, nodeTree);
-            if (item != null) {
-                items.add(item);
-            }
+        for (var factory : CREATION_CONTROL_ACTION_FACTORIES) {
+            factory.create(this, nodeTree)
+                    .ifPresent(createControlItems::add);
         }
 
-        items.sort(ACTION_COMPARATOR);
+        createControlItems.sort(ACTION_COMPARATOR);
 
         //final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
         //if (skeletonControl != null) {
-            //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
+            //FIXME resultItems.add(new CreateKinematicRagdollControlAction(nodeTree, this));
         //}
 
-        menu.getItems().add(createControlsMenu);
+        var resultItems = menu.getItems();
+        resultItems.add(createControlMenu);
 
-        for (final BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> factory : CREATION_ACTION_FACTORIES) {
-            final MenuItem item = factory.apply(this, nodeTree);
-            if (item != null) {
-                menu.getItems().add(item);
-            }
+        for (var factory : CREATION_ACTION_FACTORIES) {
+            factory.create(this, nodeTree)
+                    .ifPresent(resultItems::add);
         }
 
-        return menu;
+        return Optional.of(menu);
     }
 
     /**
@@ -268,8 +275,8 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      * @return the menu
      */
     @FxThread
-    protected @Nullable Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 
     @Override
@@ -287,13 +294,13 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
     @FxThread
-    public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
+    public void changeName(@NotNull NodeTree<?> nodeTree, @NotNull String newName) {
 
         if (StringUtils.equals(getName(), newName)){
             return;
@@ -301,30 +308,30 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         super.changeName(nodeTree, newName);
 
-        final Spatial spatial = getElement();
-        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
-        consumer.execute(new RenameNodeOperation(spatial.getName(), newName, spatial));
+        var spatial = getElement();
+
+        notNull(nodeTree.getChangeConsumer())
+                .execute(new RenameNodeOperation(spatial.getName(), newName, spatial));
     }
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
-        final Spatial element = getElement();
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
+        var element = getElement();
 
-        final LightList lightList = element.getLocalLightList();
+        var lightList = element.getLocalLightList();
         lightList.forEach(light -> {
             if (!(light instanceof InvisibleObject)) {
                 result.add(FACTORY_REGISTRY.createFor(light));
             }
         });
 
-        final int numControls = element.getNumControls();
+        var numControls = element.getNumControls();
 
         for (int i = 0; i < numControls; i++) {
-            final Control control = element.getControl(i);
-            result.add(FACTORY_REGISTRY.createFor(control));
+            result.add(FACTORY_REGISTRY.createFor(element.getControl(i)));
         }
 
         return result;
@@ -332,33 +339,29 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
     @Override
     @FxThread
-    public void add(@NotNull final TreeNode<?> child) {
+    public void add(@NotNull TreeNode<?> child) {
         super.add(child);
 
-        final T element = getElement();
+        var element = getElement();
 
         if (child instanceof LightTreeNode) {
-            final Light light = (Light) child.getElement();
-            element.addLight(light);
+            element.addLight((Light) child.getElement());
         } else if (child instanceof ControlTreeNode) {
-            final Control control = (Control) child.getElement();
-            element.addControl(control);
+            element.addControl((Control) child.getElement());
         }
     }
 
     @Override
     @FxThread
-    public void remove(@NotNull final TreeNode<?> child) {
+    public void remove(@NotNull TreeNode<?> child) {
         super.remove(child);
 
-        final T element = getElement();
+        var element = getElement();
 
         if (child instanceof LightTreeNode) {
-            final Light light = (Light) child.getElement();
-            element.removeLight(light);
+            element.removeLight((Light) child.getElement());
         } else if (child instanceof ControlTreeNode) {
-            final Control control = (Control) child.getElement();
-            element.removeControl(control);
+            element.removeControl((Control) child.getElement());
         }
     }
 }

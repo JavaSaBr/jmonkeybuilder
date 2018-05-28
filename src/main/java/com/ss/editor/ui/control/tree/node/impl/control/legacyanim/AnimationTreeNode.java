@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.tree.node.impl.control.anim;
+package com.ss.editor.ui.control.tree.node.impl.control.legacyanim;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
+@Deprecated
 public class AnimationTreeNode extends TreeNode<Animation> {
 
     /**

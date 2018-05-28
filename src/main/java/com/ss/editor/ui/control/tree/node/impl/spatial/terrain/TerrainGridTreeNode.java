@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * The implementation of the {@link TreeNode} to represent a {@link TerrainGrid} in an editor.
  *
@@ -18,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TerrainGridTreeNode extends NodeTreeNode<TerrainGrid> {
 
-    public TerrainGridTreeNode(@NotNull final TerrainGrid element, final long objectId) {
+    public TerrainGridTreeNode(@NotNull TerrainGrid element, long objectId) {
         super(element, objectId);
     }
 
@@ -30,13 +32,13 @@ public class TerrainGridTreeNode extends NodeTreeNode<TerrainGrid> {
 
     @Override
     @FxThread
-    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createCreationMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 
     @Override
     @FxThread
-    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 }

@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource;
+import com.jme3.audio.AudioSource.Status;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
@@ -24,20 +25,23 @@ import javafx.scene.image.Image;
  */
 public class AudioTreeNode extends NodeTreeNode<AudioNode> {
 
-    public AudioTreeNode(@NotNull final AudioNode element, final long objectId) {
+    public AudioTreeNode(@NotNull AudioNode element, long objectId) {
         super(element, objectId);
     }
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
-        if (!(nodeTree instanceof ModelNodeTree)) return;
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
-        final AudioNode element = getElement();
-        final AudioData audioData = element.getAudioData();
-        final AudioSource.Status status = element.getStatus();
+        if (!(nodeTree instanceof ModelNodeTree)) {
+            return;
+        }
 
-        if (audioData != null && status != AudioSource.Status.Playing) {
+        var element = getElement();
+        var audioData = element.getAudioData();
+        var status = element.getStatus();
+
+        if (audioData != null && status != Status.Playing) {
             items.add(new PlayAudioNodeAction(nodeTree, this));
         } else if (audioData != null) {
             items.add(new StopAudioNodeAction(nodeTree, this));

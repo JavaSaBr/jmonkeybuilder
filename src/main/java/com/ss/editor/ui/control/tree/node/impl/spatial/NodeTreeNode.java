@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetManager;
+
 import com.jme3.asset.ModelKey;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.scene.AssetLinkNode;
@@ -48,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -59,17 +60,35 @@ import java.util.function.Predicate;
  */
 public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
-    /**
-     * The additional particle emitter finders.
-     */
-    @NotNull
-    private static final Array<Predicate<Node>> PARTICLE_EMITTER_FINDERS = ArrayFactory.newArray(Predicate.class);
+    @FunctionalInterface
+    public interface ChildrenFilter extends BiPredicate<Node, Spatial> {
 
-    /**
-     * The additional filters of node children.
-     */
-    @NotNull
-    private static final Array<BiPredicate<Node, Spatial>> NODE_CHILDREN_FILTERS = ArrayFactory.newArray(BiPredicate.class);
+        @Override
+        default boolean test(Node node, Spatial spatial) {
+            return isNeedExclude(node, spatial);
+        }
+
+        @FxThread
+        boolean isNeedExclude(@NotNull Node node, @NotNull Spatial spatial);
+    }
+
+    @FunctionalInterface
+    public interface ParticleEmitterFinder extends Predicate<Node> {
+
+        @Override
+        default boolean test(Node node) {
+            return isExist(node);
+        }
+
+        @FxThread
+        boolean isExist(@NotNull Node node);
+    }
+
+    private static final Array<ParticleEmitterFinder> PARTICLE_EMITTER_FINDERS =
+            ArrayFactory.newArray(ParticleEmitterFinder.class);
+
+    private static final Array<ChildrenFilter> NODE_CHILDREN_FILTERS =
+            ArrayFactory.newArray(ChildrenFilter.class);
 
     /**
      * Register the additional particle emitter finder.
@@ -78,7 +97,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * @param finder the additional particle emitter finder.
      */
     @FxThread
-    public static void registerParticleEmitterFinder(@NotNull final Predicate<Node> finder) {
+    public static void registerParticleEmitterFinder(@NotNull ParticleEmitterFinder finder) {
         PARTICLE_EMITTER_FINDERS.add(finder);
     }
 
@@ -86,72 +105,79 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * Register the additional node children filter.
      * The filter should return true when a child should be excluded.
      *
-     * @param finder the additional node children filter.
+     * @param filter the additional children filter.
      */
     @FxThread
-    public static void registerNodeChildrenFilter(@NotNull final BiPredicate<Node, Spatial> finder) {
-        NODE_CHILDREN_FILTERS.add(finder);
+    public static void registerNodeChildrenFilter(@NotNull ChildrenFilter filter) {
+        NODE_CHILDREN_FILTERS.add(filter);
     }
 
-    public NodeTreeNode(@NotNull final T element, final long objectId) {
+    public NodeTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
     }
 
     @Override
-    @FxThread
-    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
-        final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
+        var toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
-        return toolMenu;
+        return Optional.of(toolMenu);
     }
 
     @Override
     @FxThread
-    protected @Nullable Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
+    protected @NotNull Optional<Menu> createCreationMenu(@NotNull NodeTree<?> nodeTree) {
 
-        final Menu menu = super.createCreationMenu(nodeTree);
-        if (menu == null) return null;
+        var menuOptional = super.createCreationMenu(nodeTree);
 
-        final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE,
+        if (!menuOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        var createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE,
                 new ImageView(Icons.ADD_12));
+
         createPrimitiveMenu.getItems()
                 .addAll(new CreateBoxAction(nodeTree, this),
                         new CreateSphereAction(nodeTree, this),
                         new CreateQuadAction(nodeTree, this));
 
-        final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT, new ImageView(Icons.ADD_12));
+        var addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT,
+                new ImageView(Icons.ADD_12));
+
         addLightMenu.getItems()
                 .addAll(new CreateSpotLightAction(nodeTree, this),
                         new CreatePointLightAction(nodeTree, this),
                         new CreateAmbientLightAction(nodeTree, this),
                         new CreateDirectionLightAction(nodeTree, this));
 
-        menu.getItems().addAll(new CreateNodeAction(nodeTree, this),
-                new LoadModelAction(nodeTree, this),
-                new LinkModelAction(nodeTree, this),
-                new CreateSkyAction(nodeTree, this),
-                new CreateEditableSkyAction(nodeTree, this),
-                new CreateParticleEmitterAction(nodeTree, this),
-                new CreateAudioNodeAction(nodeTree, this),
-                new CreateTerrainAction(nodeTree, this),
-                createPrimitiveMenu, addLightMenu);
+        var resultMenu = menuOptional.get();
+        resultMenu.getItems()
+                .addAll(new CreateNodeAction(nodeTree, this),
+                        new LoadModelAction(nodeTree, this),
+                        new LinkModelAction(nodeTree, this),
+                        new CreateSkyAction(nodeTree, this),
+                        new CreateEditableSkyAction(nodeTree, this),
+                        new CreateParticleEmitterAction(nodeTree, this),
+                        new CreateAudioNodeAction(nodeTree, this),
+                        new CreateTerrainAction(nodeTree, this),
+                        createPrimitiveMenu,
+                        addLightMenu);
 
-        return menu;
+        return menuOptional;
     }
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
-                                @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
         if (!(nodeTree instanceof ModelNodeTree)) {
             return;
         }
 
-        final T element = getElement();
-        final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitter.class::isInstance);
+        var element = getElement();
+        var emitter = NodeUtils.findSpatial(element, ParticleEmitter.class::isInstance);
 
-        if (emitter != null || PARTICLE_EMITTER_FINDERS.search(element, Predicate::test) != null) {
+        if (emitter != null || PARTICLE_EMITTER_FINDERS.search(element, ParticleEmitterFinder::isExist) != null) {
             items.add(new ResetParticleEmittersAction(nodeTree, this));
         }
 
@@ -160,22 +186,24 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final T element = getElement();
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
-        final List<Spatial> children = getSpatialChildren();
-        for (final Spatial child : children) {
-            if (NODE_CHILDREN_FILTERS.search(element, child, BiPredicate::test) == null) {
+        var element = getElement();
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
+        var children = getSpatialChildren();
+
+        for (var child : children) {
+            if (NODE_CHILDREN_FILTERS.search(element, child, ChildrenFilter::isNeedExclude) == null) {
                 result.add(FACTORY_REGISTRY.createFor(child));
             }
         }
+
         result.addAll(super.getChildren(nodeTree));
 
         return result;
@@ -188,19 +216,18 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      */
     @FxThread
     protected @NotNull List<Spatial> getSpatialChildren() {
-        final Node element = getElement();
-        return element.getChildren();
+        return getElement().getChildren();
     }
 
     @Override
     @FxThread
-    public boolean canAccept(@NotNull final TreeNode<?> treeNode, final boolean isCopy) {
+    public boolean canAccept(@NotNull TreeNode<?> treeNode, boolean isCopy) {
 
         if (treeNode == this) {
             return false;
         }
 
-        final Object element = treeNode.getElement();
+        var element = treeNode.getElement();
         if (element instanceof Spatial) {
             return GeomUtils.canAttach(getElement(), (Spatial) element, isCopy);
         }
@@ -210,19 +237,18 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @Override
     @FxThread
-    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
-                       final boolean isCopy) {
+    public void accept(@NotNull ChangeConsumer changeConsumer, @NotNull Object object, boolean isCopy) {
 
-        final T newParent = getElement();
+        var newParent = getElement();
 
         if (object instanceof Spatial) {
 
-            final Spatial spatial = (Spatial) object;
+            var spatial = (Spatial) object;
 
             if (isCopy) {
 
-                final Spatial clone = spatial.clone();
-                final SceneLayer layer = SceneLayer.getLayer(spatial);
+                var clone = spatial.clone();
+                var layer = SceneLayer.getLayer(spatial);
 
                 if (layer != null) {
                     SceneLayer.setLayer(layer, clone);
@@ -231,8 +257,8 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
                 changeConsumer.execute(new AddChildOperation(clone, newParent, true));
 
             } else {
-                final Node parent = spatial.getParent();
-                final int childIndex = parent.getChildIndex(spatial);
+                var parent = spatial.getParent();
+                var childIndex = parent.getChildIndex(spatial);
                 changeConsumer.execute(new MoveChildOperation(spatial, parent, newParent, childIndex));
             }
         }
@@ -242,11 +268,11 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @Override
     @FxThread
-    public void add(@NotNull final TreeNode<?> child) {
+    public void add(@NotNull TreeNode<?> child) {
         super.add(child);
 
-        final Node node = getElement();
-        final Object toAdd = child.getElement();
+        var node = getElement();
+        var toAdd = child.getElement();
 
         if (toAdd instanceof Spatial) {
             node.attachChildAt((Spatial) toAdd, 0);
@@ -255,11 +281,11 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @Override
     @FxThread
-    public void remove(@NotNull final TreeNode<?> child) {
+    public void remove(@NotNull TreeNode<?> child) {
         super.remove(child);
 
-        final Node node = getElement();
-        final Object toRemove = child.getElement();
+        var node = getElement();
+        var toRemove = child.getElement();
 
         if (toRemove instanceof Spatial) {
             node.detachChild((Spatial) toRemove);
@@ -274,14 +300,15 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @Override
     @FxThread
-    public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
+    public boolean canAcceptExternal(@NotNull Dragboard dragboard) {
         return UiUtils.isHasFile(dragboard, FileExtensions.JME_OBJECT);
     }
 
     @Override
     @FxThread
-    public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
-        UiUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT, getElement(), consumer, this::dropExternalObject);
+    public void acceptExternal(@NotNull Dragboard dragboard, @NotNull ChangeConsumer consumer) {
+        UiUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT,
+                getElement(), consumer, this::dropExternalObject);
     }
 
     /**
@@ -292,17 +319,20 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      * @param path the path to the external object.
      */
     @FxThread
-    protected void dropExternalObject(@NotNull final T node, @NotNull final ChangeConsumer cons,
-                                      @NotNull final Path path) {
+    protected void dropExternalObject(
+            @NotNull T node,
+            @NotNull ChangeConsumer cons,
+            @NotNull Path path
+    ) {
 
-        final SceneLayer defaultLayer = getDefaultLayer(cons);
-        final Path assetFile = notNull(getAssetFile(path), "Not found asset file for " + path);
-        final String assetPath = toAssetPath(assetFile);
-        final ModelKey modelKey = new ModelKey(assetPath);
+        var defaultLayer = getDefaultLayer(cons);
+        var assetFile = notNull(getAssetFile(path), "Not found asset file for " + path);
+        var assetPath = toAssetPath(assetFile);
+        var modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Spatial loadedModel = assetManager.loadModel(assetPath);
-        final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+        var assetManager = EditorUtil.getAssetManager();
+        var loadedModel = assetManager.loadModel(assetPath);
+        var assetLinkNode = new AssetLinkNode(modelKey);
         assetLinkNode.attachLinkedChild(loadedModel, modelKey);
 
         if (defaultLayer != null) {

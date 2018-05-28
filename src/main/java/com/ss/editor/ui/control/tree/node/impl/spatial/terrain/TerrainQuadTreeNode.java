@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * The implementation of the {@link TreeNode} to represent a {@link TerrainQuad} in an editor.
  *
@@ -18,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TerrainQuadTreeNode extends NodeTreeNode<TerrainQuad> {
 
-    public TerrainQuadTreeNode(@NotNull final TerrainQuad element, final long objectId) {
+    public TerrainQuadTreeNode(@NotNull TerrainQuad element, long objectId) {
         super(element, objectId);
     }
 
@@ -30,7 +32,7 @@ public class TerrainQuadTreeNode extends NodeTreeNode<TerrainQuad> {
 
     @Override
     @FxThread
-    protected @Nullable Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 }

@@ -1,6 +1,7 @@
-package com.ss.editor.ui.control.tree.node.impl.control.anim;
+package com.ss.editor.ui.control.tree.node.impl.control.legacyanim;
 
 import com.jme3.animation.AudioTrack;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -11,28 +12,23 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
+@Deprecated
 public class AnimationAudioTrackTreeNode extends AnimationTrackTreeNode<AudioTrack> {
 
-    /**
-     * Instantiates a new Animation audio track model node.
-     *
-     * @param element  the element
-     * @param objectId the object id
-     */
-    public AnimationAudioTrackTreeNode(@NotNull final AudioTrack element, final long objectId) {
+    public AnimationAudioTrackTreeNode(@NotNull AudioTrack element, long objectId) {
         super(element, objectId);
     }
 
-    @NotNull
     @Override
-    protected String computeName() {
-        final AudioTrack audioTrack = getElement();
+    @FxThread
+    protected @NotNull String computeName() {
+        var audioTrack = getElement();
         return "Audio track : " + audioTrack.getAudio().getName();
     }
 
-    @Nullable
     @Override
-    public Image getIcon() {
+    @FxThread
+    public @Nullable Image getIcon() {
         return Icons.AUDIO_16;
     }
 }

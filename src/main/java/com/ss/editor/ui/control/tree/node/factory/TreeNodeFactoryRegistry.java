@@ -42,7 +42,7 @@ public class TreeNodeFactoryRegistry {
     private TreeNodeFactoryRegistry() {
         this.factories = ArrayFactory.newArray(TreeNodeFactory.class);
         register(new PrimitiveTreeNodeFactory());
-        register(new AnimationTreeNodeFactory());
+        register(new LegacyAnimationTreeNodeFactory());
         register(new CollisionTreeNodeFactory());
         register(new ControlTreeNodeFactory());
         register(new DefaultParticlesTreeNodeFactory());

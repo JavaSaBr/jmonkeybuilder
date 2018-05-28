@@ -12,7 +12,7 @@ import com.ss.editor.model.undo.impl.RemoveElementsOperation;
 import com.ss.editor.model.undo.impl.RemoveElementsOperation.Element;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.control.legacyanim.AnimationTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.spatial.SpatialTreeNode;
 import com.ss.rlib.common.function.TripleConsumer;
