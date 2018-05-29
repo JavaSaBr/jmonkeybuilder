@@ -5,7 +5,6 @@ import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FAST
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ArrayUtils.contains;
 import static com.ss.rlib.common.util.FileUtils.getFiles;
-import static com.ss.rlib.common.util.FileUtils.toUrl;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.Utils.get;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
@@ -373,7 +372,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
             final AssetManager assetManager = EditorUtil.getAssetManager();
 
-            final URL url = toUrl(file);
+            final URL url = FileUtils.getUrl(file);
             final Array<URLClassLoader> classLoaders = getClassLoaders();
 
             final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
@@ -541,7 +540,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
             final AssetManager assetManager = EditorUtil.getAssetManager();
-            final URL url = get(file, FileUtils::toUrl);
+            final URL url = get(file, FileUtils::getUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
             final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));

@@ -55,27 +55,26 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      */
     private int channel;
 
-    public AnimationTreeNode(@NotNull final Animation element, final long objectId) {
+    public AnimationTreeNode(@NotNull Animation element, long objectId) {
         super(element, objectId);
         this.channel = -1;
     }
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
-                                @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
-        final Animation animation = getElement();
-        final AnimationControlTreeNode controlModelNode = notNull(getControlModelNode());
-        final AnimControl control = controlModelNode.getElement();
+        var animation = getElement();
+        var controlModelNode = notNull(getControlModelNode());
+        var animControl = controlModelNode.getElement();
 
-        final int frameCount = AnimationUtils.getFrameCount(animation);
+        var frameCount = AnimationUtils.getFrameCount(animation);
 
-        if (getChannel() < 0 && control.getNumChannels() < 1) {
+        if (getChannel() < 0 && animControl.getNumChannels() < 1) {
             items.add(new PlayAnimationAction(nodeTree, this));
             items.add(new RemoveAnimationAction(nodeTree, this));
             items.add(new RenameNodeAction(nodeTree, this));
-        } else if (getChannel() >= 0 && control.getChannel(getChannel()).getSpeed() < 0.0001F) {
+        } else if (getChannel() >= 0 && animControl.getChannel(getChannel()).getSpeed() < 0.0001F) {
             items.add(new PlayAnimationAction(nodeTree, this));
             items.add(new StopAnimationAction(nodeTree, this));
         } else if (getChannel() >= 0) {
@@ -92,22 +91,24 @@ public class AnimationTreeNode extends TreeNode<Animation> {
 
     @Override
     @FxThread
-    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final Animation element = getElement();
-        final Track[] tracks = element.getTracks();
+        var animation = getElement();
+        var tracks = animation.getTracks();
 
-        return tracks != null && tracks.length > 0 && nodeTree instanceof ModelNodeTree;
+        return tracks != null && tracks.length > 0 &&
+            nodeTree instanceof ModelNodeTree;
     }
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final Animation element = getElement();
-        final Track[] tracks = element.getTracks();
+        var animation = getElement();
+        var tracks = animation.getTracks();
 
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class, tracks.length);
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class, tracks.length);
+
         ArrayUtils.forEach(tracks, track -> result.add(FACTORY_REGISTRY.createFor(track)));
 
         return result;
@@ -121,17 +122,20 @@ public class AnimationTreeNode extends TreeNode<Animation> {
 
     @Override
     @FxThread
-    public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
-        if (StringUtils.equals(getName(), newName)) return;
+    public void changeName(@NotNull NodeTree<?> nodeTree, @NotNull String newName) {
+
+        if (StringUtils.equals(getName(), newName)) {
+            return;
+        }
 
         super.changeName(nodeTree, newName);
 
-        final AnimationControlTreeNode controlModelNode = notNull(getControlModelNode());
-        final AnimControl control = controlModelNode.getElement();
-        final RenameAnimationNodeOperation operation = new RenameAnimationNodeOperation(getName(), newName, control);
+        var controlModelNode = notNull(getControlModelNode());
+        var animControl = controlModelNode.getElement();
+        var operation = new RenameAnimationNodeOperation(getName(), newName, animControl);
 
-        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(operation);
+        notNull(nodeTree.getChangeConsumer())
+                .execute(operation);
     }
 
     /**
@@ -150,7 +154,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      * @param controlModelNode the node of an animation control.
      */
     @FxThread
-    public void setControlModelNode(@Nullable final AnimationControlTreeNode controlModelNode) {
+    public void setControlModelNode(@Nullable AnimationControlTreeNode controlModelNode) {
         this.controlModelNode = controlModelNode;
     }
 
@@ -170,7 +174,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      * @param control the animation control.
      */
     @FxThread
-    public void setControl(@Nullable final AnimControl control) {
+    public void setControl(@Nullable AnimControl control) {
         this.control = control;
     }
 
@@ -196,7 +200,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      * @param channel the index of playing animation.
      */
     @FxThread
-    public void setChannel(final int channel) {
+    public void setChannel(int channel) {
         this.channel = channel;
     }
 
@@ -216,21 +220,25 @@ public class AnimationTreeNode extends TreeNode<Animation> {
      * @param speed the speed
      */
     @FxThread
-    public void setSpeed(final float speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 
     @Override
     @FxThread
     public @Nullable Image getIcon() {
-        if (getChannel() < 0) return Icons.PLAY_16;
+
+        if (getChannel() < 0) {
+            return Icons.PLAY_16;
+        }
+
         return getSpeed() < 0.0001F ? Icons.PAUSE_16 : Icons.STOP_16;
     }
 
     @Override
     @FxThread
-    public void notifyChildPreAdd(@NotNull final TreeNode<?> treeNode) {
-        final AnimationTrackTreeNode<?> animationTrackModelNode = (AnimationTrackTreeNode<?>) treeNode;
+    public void notifyChildPreAdd(@NotNull TreeNode<?> treeNode) {
+        var animationTrackModelNode = (AnimationTrackTreeNode<?>) treeNode;
         animationTrackModelNode.setControl(getControl());
         super.notifyChildPreAdd(treeNode);
     }

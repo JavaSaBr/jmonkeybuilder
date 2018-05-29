@@ -1,12 +1,15 @@
 package com.ss.editor.ui.event;
 
-import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import com.ss.editor.annotation.FxThread;
+import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.event.Event;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * The base implementation of an event in the javaFX UI.
@@ -17,11 +20,13 @@ public class SceneEvent extends Event {
 
     private static final long serialVersionUID = 6827900349094865635L;
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
+    public static final EventType<SceneEvent> EVENT_TYPE;
+
+    static {
+        synchronized (EventType.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
+        }
+    }
 
     /**
      * The parameters.
@@ -29,12 +34,22 @@ public class SceneEvent extends Event {
     @Nullable
     private ObjectDictionary<Object, Object> values;
 
-    public SceneEvent(@Nullable final Object source, @NotNull final EventType<? extends Event> eventType) {
+    public SceneEvent(@Nullable Object source, @NotNull EventType<? extends Event> eventType) {
         super(source, null, eventType);
     }
 
-    public SceneEvent(@NotNull final EventType<? extends Event> eventType) {
+    public SceneEvent(@NotNull EventType<? extends Event> eventType) {
         super(eventType);
+    }
+
+    /**
+     * Get the map of all values of this event.
+     *
+     * @return the map of all values of this event.
+     */
+    @FxThread
+    private @NotNull Optional<ObjectDictionary<Object, Object>> getValues() {
+        return Optional.ofNullable(values);
     }
 
     /**
@@ -43,7 +58,7 @@ public class SceneEvent extends Event {
      * @param key   the key.
      * @param value the value.
      */
-    public void set(@NotNull final Object key, @NotNull final Object value) {
+    public void set(@NotNull Object key, @NotNull Object value) {
 
         if (values == null) {
             values = DictionaryFactory.newObjectDictionary();
@@ -57,22 +72,21 @@ public class SceneEvent extends Event {
      *
      * @param key the key.
      */
-    public void remove(@NotNull final Object key) {
-        if (values == null) return;
-        values.remove(key);
+    public void remove(@NotNull Object key) {
+        getValues().ifPresent(objects -> objects.remove(key));
     }
 
     /**
      * Get a value by the key.
      *
-     * @param <T> the type parameter
+     * @param <T> the result's type.
      * @param key the key.
      * @return the value or null.
      */
-    public <T> @Nullable T get(@NotNull final Object key) {
-        if (values == null) return null;
-        final Object object = values.get(key);
-        if (object == null) return null;
-        return unsafeCast(object);
+    public <T> @Nullable T get(@NotNull Object key) {
+        return getValues()
+                .map(objects -> objects.get(key))
+                .map(ClassUtils::<T>unsafeCast)
+                .orElse(null);
     }
 }

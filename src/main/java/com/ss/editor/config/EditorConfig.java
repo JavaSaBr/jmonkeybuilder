@@ -149,7 +149,7 @@ public final class EditorConfig implements AssetEventListener {
      * @return the setting's value or default.
      */
     @FromAnyThread
-    private <T> @Nullable T get(@NotNull String id, @NotNull Class<T> type, @Nullable T def) {
+    private synchronized <T> @Nullable T get(@NotNull String id, @NotNull Class<T> type, @Nullable T def) {
 
         var value = DictionaryUtils.getInReadLock(settings, id, (objects, s) -> objects.get(id));
         if (value == null) {
@@ -204,7 +204,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param value the setting's value.
      */
     @FromAnyThread
-    public void set(@NotNull String id, @Nullable Object value) {
+    public synchronized void set(@NotNull String id, @Nullable Object value) {
         var stamp = settings.writeLock();
         try {
 

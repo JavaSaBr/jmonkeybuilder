@@ -168,6 +168,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_SPOT_LIGHT;
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_ANIM_COMPOSER;
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS;
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY;
     public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT;
@@ -859,6 +860,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_SPOT_LIGHT = bundle.getString("ModelFileEditorNodeSpotLight");
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
+        MODEL_FILE_EDITOR_NODE_ANIM_COMPOSER = bundle.getString("ModelFileEditorNodeAnimComposer");
         MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencers");
         MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencerEmpty");
         MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencerDefault");

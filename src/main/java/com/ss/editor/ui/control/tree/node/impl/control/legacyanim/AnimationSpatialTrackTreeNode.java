@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @Deprecated
 public class AnimationSpatialTrackTreeNode extends AnimationTrackTreeNode<SpatialTrack> {
 
-    public AnimationSpatialTrackTreeNode(@NotNull final SpatialTrack element, final long objectId) {
+    public AnimationSpatialTrackTreeNode(@NotNull SpatialTrack element, long objectId) {
         super(element, objectId);
     }
 

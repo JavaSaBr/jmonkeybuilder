@@ -49,6 +49,7 @@ public class TreeNodeFactoryRegistry {
         register(new DefaultTreeNodeFactory());
         register(new LightTreeNodeFactory());
         register(new MaterialSettingsTreeNodeFactory());
+        register(new AnimationTreeNodeFactory());
     }
 
     /**

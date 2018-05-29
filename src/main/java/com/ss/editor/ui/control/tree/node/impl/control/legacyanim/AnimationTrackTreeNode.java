@@ -29,17 +29,17 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
     @Nullable
     private String cachedName;
 
-    public AnimationTrackTreeNode(@NotNull final T element, final long objectId) {
+    public AnimationTrackTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
     }
 
     /**
-     * Sets control.
+     * Set the animation control.
      *
      * @param control the animation control.
      */
     @FxThread
-    public void setControl(@Nullable final AnimControl control) {
+    public void setControl(@Nullable AnimControl control) {
         this.control = control;
         this.cachedName = computeName();
     }
@@ -59,7 +59,7 @@ public abstract class AnimationTrackTreeNode<T extends Track> extends TreeNode<T
     }
 
     /**
-     * Gets control.
+     * Get the animation control.
      *
      * @return the animation control.
      */

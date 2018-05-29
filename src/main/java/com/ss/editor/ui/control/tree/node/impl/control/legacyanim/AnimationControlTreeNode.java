@@ -104,13 +104,13 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
 
-        final AnimControl element = getElement();
-        final Collection<String> animationNames = element.getAnimationNames();
-        animationNames.forEach(name -> result.add(FACTORY_REGISTRY.createFor(element.getAnim(name))));
+        var animControl = getElement();
+        var animationNames = animControl.getAnimationNames();
+        animationNames.forEach(name -> result.add(FACTORY_REGISTRY.createFor(animControl.getAnim(name))));
 
         result.addAll(super.getChildren(nodeTree));
 
@@ -119,9 +119,9 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimControl> {
 
     @Override
     @FxThread
-    public void notifyChildPreAdd(@NotNull final TreeNode<?> treeNode) {
+    public void notifyChildPreAdd(@NotNull TreeNode<?> treeNode) {
 
-        final AnimationTreeNode animationModelNode = (AnimationTreeNode) treeNode;
+        var animationModelNode = (AnimationTreeNode) treeNode;
         animationModelNode.setControl(getElement());
         animationModelNode.setControlModelNode(this);
 

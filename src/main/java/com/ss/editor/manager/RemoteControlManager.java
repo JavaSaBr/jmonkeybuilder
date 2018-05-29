@@ -3,17 +3,22 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.manager.ClasspathManager.Scope;
+import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
 import com.ss.rlib.common.network.NetworkConfig;
 import com.ss.rlib.common.network.NetworkFactory;
 import com.ss.rlib.common.network.packet.ReadablePacket;
 import com.ss.rlib.common.network.packet.ReadablePacketRegistry;
 import com.ss.rlib.common.network.server.AcceptHandler;
 import com.ss.rlib.common.network.server.ServerNetwork;
+import com.ss.rlib.common.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 
 /**
  * The manager to process remote control.
@@ -22,7 +27,6 @@ import java.net.InetSocketAddress;
  */
 public class RemoteControlManager {
 
-    @NotNull
     private static final NetworkConfig NETWORK_CONFIG = new NetworkConfig() {
 
         @Override
@@ -44,22 +48,57 @@ public class RemoteControlManager {
         return instance;
     }
 
-    @NotNull
-    private final ReadablePacketRegistry packetRegistry;
+    /**
+     * The packet registry.
+     */
+    @Nullable
+    private volatile ReadablePacketRegistry packetRegistry;
 
+    /**
+     * The control server.
+     */
     @Nullable
     private volatile ServerNetwork serverNetwork;
 
-    private RemoteControlManager() {
+    /**
+     * True if jME context is already created.
+     */
+    private volatile boolean canStart;
 
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        final Class<ReadablePacket>[] packets = classpathManager.findImplements(ReadablePacket.class, Scope.ONLY_CORE)
-                .toArray(Class.class);
+    private RemoteControlManager() {
+        InitializationManager.getInstance()
+                .addOnAfterCreateJmeContext(this::start);
+        FxEventManager.getInstance()
+                .addEventHandler(CoreClassesScannedEvent.EVENT_TYPE, event -> createPacketRegistry());
+    }
+
+    /**
+     * Get a packet registry.
+     *
+     * @return the packet registry.
+     */
+    @FromAnyThread
+    private @Nullable ReadablePacketRegistry getPacketRegistry() {
+        return packetRegistry;
+    }
+
+    /**
+     * Create a packet registry when the {@link ClasspathManager} will be initialized.
+     */
+    @FromAnyThread
+    private synchronized void createPacketRegistry() {
+
+        var classpathManager = ClasspathManager.getInstance();
+
+        Class<ReadablePacket>[] packets = unsafeCast(classpathManager
+                .findImplements(ReadablePacket.class, Scope.ONLY_CORE)
+                .toArray(Class.class));
 
         this.packetRegistry = ReadablePacketRegistry.of(packets);
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnAfterCreateJmeContext(this::start);
+        if (canStart) {
+            start();
+        }
     }
 
     /**
@@ -67,16 +106,22 @@ public class RemoteControlManager {
      */
     @FromAnyThread
     private synchronized void start() {
+        canStart = true;
 
-        if (Config.REMOTE_CONTROL_PORT == -1) {
+        var packetRegistry = getPacketRegistry();
+        if (packetRegistry == null || Config.REMOTE_CONTROL_PORT == -1) {
             return;
         }
 
-        serverNetwork = NetworkFactory.newDefaultAsyncServerNetwork(NETWORK_CONFIG, packetRegistry, AcceptHandler.newDefault());
+        var serverNetwork = NetworkFactory.newDefaultAsyncServerNetwork(NETWORK_CONFIG,
+                packetRegistry, AcceptHandler.newDefault());
+
         try {
             serverNetwork.bind(new InetSocketAddress(Config.REMOTE_CONTROL_PORT));
-        } catch (final IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        this.serverNetwork = serverNetwork;
     }
 }

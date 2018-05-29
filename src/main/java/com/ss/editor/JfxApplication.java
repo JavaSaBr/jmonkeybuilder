@@ -97,6 +97,9 @@ public class JfxApplication extends Application {
      * The start application method.
      */
     public static void main(@NotNull String[] args) {
+
+        long time = Config.DEV_DEBUG_STARTUP ? System.currentTimeMillis() : 0L;
+
         configureLogger();
 
         // need to disable to work on macos
@@ -123,7 +126,7 @@ public class JfxApplication extends Application {
         JmeToJfxApplication application;
         try {
             application = JmeApplication.prepareToStart();
-        } catch (final Throwable e) {
+        } catch (Throwable e) {
             printError(e);
             System.exit(-1);
             return;

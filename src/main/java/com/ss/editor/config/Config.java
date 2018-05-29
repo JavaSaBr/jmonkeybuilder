@@ -1,6 +1,7 @@
 package com.ss.editor.config;
 
 import com.ss.editor.JmeApplication;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.plugin.Version;
@@ -109,6 +110,11 @@ public final class Config {
     public static boolean DEV_DEBUG_JFX_KEY_INPUT;
 
     /**
+     * The flag to enable startup debug mode.
+     */
+    public static boolean DEV_DEBUG_STARTUP;
+
+    /**
      * The flag to enable PBR render.
      */
     public static boolean ENABLE_PBR;
@@ -146,6 +152,7 @@ public final class Config {
      *
      * @return the path to a folder to store log files.
      */
+    @FromAnyThread
     public static @NotNull Path getFolderForLog() {
         return getAppFolderInUserHome().resolve("log");
     }
@@ -155,6 +162,7 @@ public final class Config {
      *
      * @return the path to the folder to store data in a user home.
      */
+    @FromAnyThread
     public static @NotNull Path getAppFolderInUserHome() {
         var userHome = System.getProperty("user.home");
         return Paths.get(userHome, EDITOR_FOLDER_IN_USER_HOME);

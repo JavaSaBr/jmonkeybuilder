@@ -37,7 +37,7 @@ public class AnimationControlTreeNode extends ControlTreeNode<AnimComposer> {
     @Override
     @FromAnyThread
     public @NotNull String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
+        return Messages.MODEL_FILE_EDITOR_NODE_ANIM_COMPOSER;
     }
 
     @Override

@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FxEventManager {
 
-    @NotNull
     private static final FxEventManager INSTANCE = new FxEventManager();
 
     @FromAnyThread
