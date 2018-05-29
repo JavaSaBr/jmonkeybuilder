@@ -3,9 +3,8 @@ package com.ss.editor.util;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
-import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.annotation.FromAnyThread;
-
+import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,10 +17,7 @@ import java.lang.reflect.Field;
  */
 public class AudioNodeUtils {
 
-    @NotNull
     private static final Field AUDIO_DATA_FIELD;
-
-    @NotNull
     private static final Field AUDIO_KEY_FIELD;
 
     static {
@@ -33,7 +29,7 @@ public class AudioNodeUtils {
             AUDIO_DATA_FIELD = AudioNode.class.getDeclaredField("data");
             AUDIO_DATA_FIELD.setAccessible(true);
 
-        } catch (final NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
@@ -46,12 +42,15 @@ public class AudioNodeUtils {
      * @param audioKey  the audio key.
      */
     @JmeThread
-    public static void updateData(@NotNull final AudioNode audioNode, @Nullable final AudioData audioData,
-                                  @Nullable final AudioKey audioKey) {
+    public static void updateData(
+            @NotNull AudioNode audioNode,
+            @Nullable AudioData audioData,
+            @Nullable AudioKey audioKey
+    ) {
         try {
             AUDIO_DATA_FIELD.set(audioNode, audioData);
             AUDIO_KEY_FIELD.set(audioNode, audioKey);
-        } catch (final IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -63,10 +62,10 @@ public class AudioNodeUtils {
      * @return the audio key.
      */
     @FromAnyThread
-    public static @Nullable AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
+    public static @Nullable AudioKey getAudioKey(@NotNull AudioNode audioNode) {
         try {
             return (AudioKey) AUDIO_KEY_FIELD.get(audioNode);
-        } catch (final IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

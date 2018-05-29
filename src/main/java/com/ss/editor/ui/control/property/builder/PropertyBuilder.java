@@ -2,11 +2,9 @@ package com.ss.editor.ui.control.property.builder;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.layout.VBox;
 
 /**
  * The interface to implement property builder to create property controls for some objects.
@@ -24,8 +22,12 @@ public interface PropertyBuilder extends Comparable<PropertyBuilder> {
      * @param changeConsumer the consumer for working between controls and editor.
      */
     @FxThread
-    void buildFor(@NotNull Object object, @Nullable Object parent, @NotNull VBox container,
-                  @NotNull ChangeConsumer changeConsumer);
+    void buildFor(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ChangeConsumer changeConsumer
+    );
 
     /**
      * Get the priority of this builder.
@@ -37,7 +39,7 @@ public interface PropertyBuilder extends Comparable<PropertyBuilder> {
     }
 
     @Override
-    default int compareTo(@NotNull final PropertyBuilder o) {
+    default int compareTo(@NotNull PropertyBuilder o) {
         return o.getPriority() - getPriority();
     }
 }

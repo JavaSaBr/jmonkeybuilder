@@ -3,8 +3,8 @@ package com.ss.editor.plugin.api.settings;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.DefaultSettingsProvider;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,7 +38,7 @@ public class SettingsProviderRegistry {
      * @param settingsProvider the new settings provider.
      */
     @FxThread
-    public void register(@NotNull final SettingsProvider settingsProvider) {
+    public void register(@NotNull SettingsProvider settingsProvider) {
         this.providers.add(settingsProvider);
     }
 
@@ -49,8 +49,12 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public @NotNull Array<SettingsPropertyDefinition> getDefinitions() {
-        final Array<SettingsPropertyDefinition> result = ArrayFactory.newArray(SettingsPropertyDefinition.class);
-        providers.forEach(result, (provider, definitions) -> definitions.addAll(provider.getDefinitions()));
+
+        var result = ArrayFactory.<SettingsPropertyDefinition>newArray(SettingsPropertyDefinition.class);
+
+        providers.forEach(result,
+                (provider, definitions) -> definitions.addAll(provider.getDefinitions()));
+
         return result;
     }
 
@@ -61,8 +65,9 @@ public class SettingsProviderRegistry {
      * @return true if need to restart to apply changes for this property.
      */
     @FxThread
-    public boolean isRequiredRestart(@NotNull final String propertyId) {
-        return providers.search(propertyId, (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+    public boolean isRequiredRestart(@NotNull String propertyId) {
+        return providers.search(propertyId,
+                (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
     }
 
     /**
@@ -72,8 +77,9 @@ public class SettingsProviderRegistry {
      * @return true if need to update classpath to apply changes for this property.
      */
     @FxThread
-    public boolean isRequiredUpdateClasspath(@NotNull final String propertyId) {
-        return providers.search(propertyId, (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+    public boolean isRequiredUpdateClasspath(@NotNull String propertyId) {
+        return providers.search(propertyId,
+                (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
     }
 
     /**
@@ -83,7 +89,8 @@ public class SettingsProviderRegistry {
      * @return true if need to reshape 3D view to apply changes for this property.
      */
     @FxThread
-    public boolean isRequiredReshape3DView(@NotNull final String propertyId) {
-        return providers.search(propertyId, (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+    public boolean isRequiredReshape3DView(@NotNull String propertyId) {
+        return providers.search(propertyId,
+                (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
     }
 }

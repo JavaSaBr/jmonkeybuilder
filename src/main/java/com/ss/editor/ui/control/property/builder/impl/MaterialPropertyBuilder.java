@@ -12,8 +12,8 @@ import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,11 +36,6 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     private static final ObjectDictionary<VarType, Integer> SIZE_MAP = DictionaryFactory.newObjectDictionary();
 
     static {
-
-        for (final VarType varType : VarType.values()) {
-            SIZE_MAP.put(varType, 0);
-        }
-
         SIZE_MAP.put(VarType.Texture2D, -1);
         SIZE_MAP.put(VarType.Vector3, -2);
         SIZE_MAP.put(VarType.Boolean, 3);
@@ -50,9 +45,9 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
 
     @NotNull
     protected static final Comparator<MatParam> MAT_PARAM_COMPARATOR = (first, second) -> {
-        final VarType firstType = first.getVarType();
-        final VarType secondType = second.getVarType();
-        return SIZE_MAP.get(secondType) - SIZE_MAP.get(firstType);
+        var firstType = first.getVarType();
+        var secondType = second.getVarType();
+        return SIZE_MAP.get(secondType, () -> 0) - SIZE_MAP.get(firstType, () -> 0);
     };
 
     /**
@@ -71,17 +66,16 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
 
     @Override
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
 
         if(!(object instanceof Material)) {
             return null;
         }
 
-        final Material material = (Material) object;
-        final MaterialDef definition = material.getMaterialDef();
+        var material = (Material) object;
+        var definition = material.getMaterialDef();
 
-        final Collection<MatParam> materialParams = definition.getMaterialParams();
-        return materialParams.stream()
+        return definition.getMaterialParams().stream()
                 .sorted(MAT_PARAM_COMPARATOR)
                 .map(param -> convert(param, material))
                 .filter(Objects::nonNull)
@@ -96,17 +90,15 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @return the editable property or null.
      */
     @FxThread
-    private @Nullable EditableProperty<?, Material> convert(@NotNull final MatParam param,
-                                                            @NotNull final Material material) {
+    private @Nullable EditableProperty<?, Material> convert(@NotNull MatParam param, @NotNull Material material) {
 
-        final EditablePropertyType propertyType = convert(param.getVarType());
+        var propertyType = convert(param.getVarType());
         if (propertyType == null) {
             return null;
         }
 
         return new SimpleProperty<>(propertyType, param.getName(), 0.1F, material,
-                object -> getParamValue(param, object),
-                (object, newValue) -> applyParam(param, object, newValue));
+                object -> getParamValue(param, object), (object, newValue) -> applyParam(param, object, newValue));
     }
 
     /**
@@ -117,8 +109,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @param newValue the new value.
      */
     @FxThread
-    protected void applyParam(@NotNull final MatParam param, @NotNull final Material material,
-                              @Nullable final Object newValue) {
+    protected void applyParam(@NotNull MatParam param, @NotNull Material material, @Nullable Object newValue) {
 
         if (newValue == null) {
             material.clearParam(param.getName());
@@ -135,8 +126,8 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @return the relevant value.
      */
     @FxThread
-    protected @Nullable Object getParamValue(@NotNull final MatParam param, @NotNull final Material material) {
-        final MatParam currentParam = material.getParam(param.getName());
+    protected @Nullable Object getParamValue(@NotNull MatParam param, @NotNull Material material) {
+        var currentParam = material.getParam(param.getName());
         return currentParam == null ? null : currentParam.getValue();
     }
 
@@ -147,7 +138,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      * @return the editable property type or null.
      */
     @FxThread
-    protected @Nullable EditablePropertyType convert(@NotNull final VarType varType) {
+    protected @Nullable EditablePropertyType convert(@NotNull VarType varType) {
 
         switch (varType) {
             case Boolean:

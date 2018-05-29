@@ -1,6 +1,6 @@
 package com.ss.editor.file.converter.impl;
 
-import static com.ss.rlib.util.FileUtils.containsExtensions;
+import static com.ss.rlib.common.util.FileUtils.containsExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
@@ -9,11 +9,11 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

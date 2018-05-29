@@ -6,8 +6,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -81,7 +81,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         normalTextureControl.setChangeHandler(this::updateNormal);
         normalTextureControl.setControlWidthPercent(PropertyControl.CONTROL_WIDTH_PERCENT_2);
 
-        final Label scaleLabel = new Label(Messages.PAINTING_COMPONENT_SCALE + ":");
+        final Label scaleLabel = new Label(Messages.MODEL_PROPERTY_SCALE + ":");
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
 
         scaleField = new FloatTextField();
@@ -99,7 +99,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         FXUtils.addClassTo(settingContainer, CssClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(layerField, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
         FXUtils.addClassTo(scaleLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(scaleField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(scaleField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER);
     }
 
@@ -222,7 +222,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
             diffuseTextureControl.setTextureFile(item.getDiffuseFile());
 
             final Label layerField = getLayerField();
-            layerField.setText(Messages.PAINTING_COMPONENT_LAYER + " #" + (item.getLayer() + 1));
+            layerField.setText(Messages.MODEL_PROPERTY_LAYER + " #" + (item.getLayer() + 1));
 
         } finally {
             setIgnoreListeners(false);

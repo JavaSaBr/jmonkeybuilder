@@ -1,23 +1,23 @@
 package com.ss.editor.util;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.jme3.asset.AssetKey;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.Light;
-import com.jme3.light.LightList;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.DFSMode;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -29,14 +29,13 @@ import java.util.stream.Stream;
  */
 public class NodeUtils {
 
-    @NotNull
     private static final Field FIELD_WORLD_BOUND;
 
     static {
         try {
             FIELD_WORLD_BOUND = Spatial.class.getDeclaredField("worldBound");
             FIELD_WORLD_BOUND.setAccessible(true);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -50,19 +49,44 @@ public class NodeUtils {
      * @return the found parent or null.
      */
     @FromAnyThread
-    public static <T> @Nullable T findParent(@NotNull final Spatial spatial,
-                                             @NotNull final Predicate<Spatial> condition) {
+    public static <T> @Nullable T findParent(@NotNull Spatial spatial, @NotNull Predicate<Spatial> condition) {
 
         if (condition.test(spatial)) {
             return unsafeCast(spatial);
         }
 
-        final Node parent = spatial.getParent();
+        var parent = spatial.getParent();
         if (parent == null) {
             return null;
         }
 
         return findParent(parent, condition);
+    }
+
+    /**
+     * Find a parent of the model.
+     *
+     * @param <T>       the node's type.
+     * @param spatial   the spatial.
+     * @param condition the condition.
+     * @return the optional result.
+     */
+    @FromAnyThread
+    public static <T> @NotNull Optional<T> findParentOpt(
+            @NotNull Spatial spatial,
+            @NotNull Predicate<Spatial> condition
+    ) {
+
+        if (condition.test(spatial)) {
+            return Optional.of(unsafeCast(spatial));
+        }
+
+        var parent = spatial.getParent();
+        if (parent == null) {
+            return Optional.empty();
+        }
+
+        return findParentOpt(parent, condition);
     }
 
     /**
@@ -73,7 +97,7 @@ public class NodeUtils {
      * @return the result parent.
      */
     @FromAnyThread
-    public static @Nullable Spatial findParent(@NotNull final Spatial spatial, int count) {
+    public static @Nullable Spatial findParent(@NotNull Spatial spatial, int count) {
 
         Spatial parent = spatial;
 
@@ -91,7 +115,7 @@ public class NodeUtils {
      * @return the geometry or null.
      */
     @FromAnyThread
-    public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial) {
+    public static @Nullable Geometry findGeometry(@NotNull Spatial spatial) {
 
         if (spatial instanceof Geometry) {
             return (Geometry) spatial;
@@ -99,10 +123,10 @@ public class NodeUtils {
             return null;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
-            final Geometry geometry = findGeometry(children);
+        for (var children : node.getChildren()) {
+            var geometry = findGeometry(children);
             if (geometry != null) {
                 return geometry;
             } else if (children instanceof Geometry) {
@@ -121,17 +145,21 @@ public class NodeUtils {
      * @return the geometry or null.
      */
     @FromAnyThread
-    public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
+    public static @Nullable Geometry findGeometry(@NotNull Spatial spatial, @NotNull String name) {
 
         if (!(spatial instanceof Node)) {
             return null;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
-            final Geometry geometry = findGeometry(children, name);
-            if (geometry != null) return geometry;
+        for (var children : node.getChildren()) {
+
+            var geometry = findGeometry(children, name);
+            if (geometry != null) {
+                return geometry;
+            }
+
             if (children instanceof Geometry && StringUtils.equals(children.getName(), name)) {
                 return (Geometry) children;
             }
@@ -148,18 +176,17 @@ public class NodeUtils {
      * @return the geometry or null.
      */
     @FromAnyThread
-    public static @Nullable Geometry findGeometry(@NotNull final Spatial spatial,
-                                                  @NotNull final Predicate<Geometry> condition) {
+    public static @Nullable Geometry findGeometry(@NotNull Spatial spatial, @NotNull Predicate<Geometry> condition) {
 
         if (!(spatial instanceof Node)) {
             return null;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial child : node.getChildren()) {
+        for (var child : node.getChildren()) {
 
-            final Geometry geometry = findGeometry(child, condition);
+            var geometry = findGeometry(child, condition);
             if (geometry != null) {
                 return geometry;
             }
@@ -180,18 +207,17 @@ public class NodeUtils {
      * @return the material or null.
      */
     @FromAnyThread
-    public static @Nullable Material findMateial(@NotNull final Spatial spatial,
-                                                 @NotNull final Predicate<Material> condition) {
+    public static @Nullable Material findMateial(@NotNull Spatial spatial, @NotNull Predicate<Material> condition) {
 
         if (!(spatial instanceof Node)) {
             return null;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial child : node.getChildren()) {
+        for (var child : node.getChildren()) {
 
-            final Material material = findMateial(child, condition);
+            var material = findMateial(child, condition);
             if (material != null) {
                 return material;
             }
@@ -212,8 +238,12 @@ public class NodeUtils {
      * @return the spatial or null.
      */
     @FromAnyThread
-    public static @Nullable Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
-        if (!(spatial instanceof Node)) return null;
+    public static @Nullable Spatial findSpatial(@NotNull Spatial spatial, @NotNull String name) {
+
+        if (!(spatial instanceof Node)) {
+            return null;
+        }
+
         return ((Node) spatial).getChild(name);
     }
 
@@ -225,7 +255,7 @@ public class NodeUtils {
      * @return the spatial.
      */
     @FromAnyThread
-    public static @Nullable Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
+    public static @Nullable Spatial findSpatial(@NotNull Spatial spatial, @NotNull Predicate<Spatial> condition) {
 
         if (condition.test(spatial)) {
             return spatial;
@@ -233,10 +263,10 @@ public class NodeUtils {
             return null;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
-            final Spatial child = findSpatial(children, condition);
+        for (var children : node.getChildren()) {
+            var child = findSpatial(children, condition);
             if (child != null) {
                 return child;
             }
@@ -253,15 +283,21 @@ public class NodeUtils {
      * @param assetPath the asset path.
      */
     @FromAnyThread
-    public static void addGeometryWithMaterial(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container,
-                                               @NotNull final String assetPath) {
-        if (StringUtils.isEmpty(assetPath)) return;
+    public static void addGeometryWithMaterial(
+            @NotNull Spatial spatial,
+            @NotNull Array<Geometry> container,
+            @NotNull String assetPath
+    ) {
+
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
 
         if (spatial instanceof Geometry) {
 
-            final Geometry geometry = (Geometry) spatial;
-            final Material material = geometry.getMaterial();
-            final String assetName = material == null ? null : material.getAssetName();
+            var geometry = (Geometry) spatial;
+            var material = geometry.getMaterial();
+            var assetName = material == null ? null : material.getAssetName();
 
             if (StringUtils.equals(assetName, assetPath)) {
                 container.add(geometry);
@@ -273,9 +309,9 @@ public class NodeUtils {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             addGeometryWithMaterial(children, container, assetPath);
         }
     }
@@ -288,11 +324,17 @@ public class NodeUtils {
      * @param assetPath the asset path.
      */
     @FromAnyThread
-    public static void addSpatialWithAssetPath(@NotNull final Spatial spatial, @NotNull final Array<Spatial> container,
-                                               @NotNull final String assetPath) {
-        if (StringUtils.isEmpty(assetPath)) return;
+    public static void addSpatialWithAssetPath(
+            @NotNull Spatial spatial,
+            @NotNull Array<Spatial> container,
+            @NotNull String assetPath
+    ) {
 
-        final AssetKey key = spatial.getKey();
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
+
+        var key = spatial.getKey();
 
         if (key != null && StringUtils.equals(key.getName(), assetPath)) {
             container.add(spatial);
@@ -302,9 +344,9 @@ public class NodeUtils {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             addSpatialWithAssetPath(children, container, assetPath);
         }
     }
@@ -316,20 +358,12 @@ public class NodeUtils {
      * @param consumer the consumer.
      */
     @FromAnyThread
-    public static void visitGeometry(@NotNull final Spatial spatial, @NotNull final Consumer<Geometry> consumer) {
-
-        if (spatial instanceof Geometry) {
-            consumer.accept((Geometry) spatial);
-            return;
-        } else if (!(spatial instanceof Node)) {
-            return;
-        }
-
-        final Node node = (Node) spatial;
-
-        for (final Spatial children : node.getChildren()) {
-            visitGeometry(children, consumer);
-        }
+    public static void visitGeometry(@NotNull Spatial spatial, @NotNull Consumer<Geometry> consumer) {
+        spatial.depthFirstTraversal(sp -> {
+            if (spatial instanceof Geometry) {
+                consumer.accept((Geometry) sp);
+            }
+        }, DFSMode.PRE_ORDER);
     }
 
     /**
@@ -339,7 +373,7 @@ public class NodeUtils {
      * @param handler the handler which should return true if need to visit children of a spatial.
      */
     @FromAnyThread
-    public static void visitSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> handler) {
+    public static void visitSpatial(@NotNull Spatial spatial, @NotNull Predicate<Spatial> handler) {
 
         if (!handler.test(spatial)) {
             return;
@@ -347,9 +381,9 @@ public class NodeUtils {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial child : node.getChildren()) {
+        for (var child : node.getChildren()) {
             visitSpatial(child, handler);
         }
     }
@@ -361,7 +395,7 @@ public class NodeUtils {
      * @param consumer the consumer.
      */
     @FromAnyThread
-    public static void visitMaterials(@NotNull final Spatial spatial, @NotNull final Consumer<Material> consumer) {
+    public static void visitMaterials(@NotNull Spatial spatial, @NotNull Consumer<Material> consumer) {
 
         if (spatial instanceof Geometry) {
             consumer.accept(((Geometry) spatial).getMaterial());
@@ -370,9 +404,9 @@ public class NodeUtils {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             visitMaterials(children, consumer);
         }
     }
@@ -386,8 +420,11 @@ public class NodeUtils {
      * @param consumer the consumer.
      */
     @FromAnyThread
-    public static <T extends Spatial> void visitSpatial(@NotNull final Spatial spatial, @NotNull final Class<T> type,
-                                                        @NotNull final Consumer<T> consumer) {
+    public static <T extends Spatial> void visitSpatial(
+            @NotNull Spatial spatial,
+            @NotNull Class<T> type,
+            @NotNull Consumer<T> consumer
+    ) {
 
         if (type.isInstance(spatial)) {
             consumer.accept(type.cast(spatial));
@@ -397,9 +434,9 @@ public class NodeUtils {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             visitSpatial(children, type, consumer);
         }
     }
@@ -411,8 +448,8 @@ public class NodeUtils {
      * @return the list of all geometries.
      */
     @FromAnyThread
-    public static @NotNull Array<Geometry> getGeometries(@NotNull final Spatial spatial) {
-        final Array<Geometry> result = ArrayFactory.newArray(Geometry.class);
+    public static @NotNull Array<Geometry> getGeometries(@NotNull Spatial spatial) {
+        var result = ArrayFactory.<Geometry>newArray(Geometry.class);
         addGeometry(spatial, result);
         return result;
     }
@@ -424,7 +461,7 @@ public class NodeUtils {
      * @param container the container.
      */
     @FromAnyThread
-    public static void addGeometry(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container) {
+    public static void addGeometry(@NotNull Spatial spatial, @NotNull Array<Geometry> container) {
 
         if (spatial instanceof Geometry) {
             container.add((Geometry) spatial);
@@ -433,9 +470,9 @@ public class NodeUtils {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             addGeometry(children, container);
         }
     }
@@ -447,18 +484,18 @@ public class NodeUtils {
      * @param container the container.
      */
     @FromAnyThread
-    public static void addLight(@NotNull final Spatial spatial, @NotNull final Array<Light> container) {
+    public static void addLight(@NotNull Spatial spatial, @NotNull Array<Light> container) {
 
-        final LightList lightList = spatial.getLocalLightList();
+        var lightList = spatial.getLocalLightList();
         lightList.forEach(container::add);
 
         if (!(spatial instanceof Node)) {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             addLight(children, container);
         }
     }
@@ -470,15 +507,15 @@ public class NodeUtils {
      * @param container the container.
      */
     @FromAnyThread
-    public static void addAudioNodes(@NotNull final Spatial spatial, @NotNull final Array<AudioNode> container) {
+    public static void addAudioNodes(@NotNull Spatial spatial, @NotNull Array<AudioNode> container) {
 
         if (!(spatial instanceof Node)) {
             return;
         }
 
-        final Node node = (Node) spatial;
+        var node = (Node) spatial;
 
-        for (final Spatial children : node.getChildren()) {
+        for (var children : node.getChildren()) {
             if (children instanceof AudioNode) {
                 container.add((AudioNode) children);
             }
@@ -493,9 +530,9 @@ public class NodeUtils {
      * @return the spatial's stream.
      */
     @FromAnyThread
-    public static Stream<Spatial> children(@NotNull final Spatial spatial) {
+    public static Stream<Spatial> children(@NotNull Spatial spatial) {
 
-        final Array<Spatial> result = ArrayFactory.newArray(Spatial.class);
+        var result = ArrayFactory.<Spatial>newArray(Spatial.class);
 
         visitSpatial(spatial, sp -> {
             result.add(sp);
@@ -511,7 +548,7 @@ public class NodeUtils {
      * @param spatial the spatial.
      */
     @JmeThread
-    public static void updateWorldBound(@NotNull final Spatial spatial) {
+    public static void updateWorldBound(@NotNull Spatial spatial) {
         children(spatial).forEach(sp -> sp.forceRefresh(true, true, false));
         children(spatial).forEach(Spatial::getWorldBound);
     }

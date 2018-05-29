@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.DefaultSinglePropertyControl;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

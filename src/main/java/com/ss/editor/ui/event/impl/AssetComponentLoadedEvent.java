@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -15,11 +15,7 @@ import java.nio.file.Path;
  */
 public class AssetComponentLoadedEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<AssetComponentLoadedEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {
@@ -29,7 +25,7 @@ public class AssetComponentLoadedEvent extends SceneEvent {
 
     private static final String ASSET = "asset";
 
-    public AssetComponentLoadedEvent(@NotNull final Path assetFolder) {
+    public AssetComponentLoadedEvent(@NotNull Path assetFolder) {
         super(EVENT_TYPE);
         setAssetFolder(assetFolder);
     }
@@ -48,7 +44,7 @@ public class AssetComponentLoadedEvent extends SceneEvent {
      *
      * @param assetFolder the asset folder.
      */
-    public void setAssetFolder(@NotNull final Path assetFolder) {
+    public void setAssetFolder(@NotNull Path assetFolder) {
         set(ASSET, assetFolder);
     }
 }

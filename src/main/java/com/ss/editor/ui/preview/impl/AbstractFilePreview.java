@@ -2,7 +2,7 @@ package com.ss.editor.ui.preview.impl;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.preview.FilePreview;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;

@@ -3,9 +3,9 @@ package com.ss.editor.util;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.pools.Reusable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.pools.Reusable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,19 +37,19 @@ public class ReusableCollisionResults extends CollisionResults implements Reusab
 
     @Override
     @JmeThread
-    public void addCollision(@NotNull final CollisionResult result) {
+    public void addCollision(@NotNull CollisionResult result) {
         collisions.add(result);
         original.add(result);
     }
 
     @Override
-    public Iterator<CollisionResult> iterator() {
+    public @NotNull Iterator<CollisionResult> iterator() {
         return collisions.iterator();
     }
 
     @Override
     @JmeThread
-    public CollisionResult getCollisionDirect(final int index) {
+    public CollisionResult getCollisionDirect(int index) {
         return original.get(index);
     }
 

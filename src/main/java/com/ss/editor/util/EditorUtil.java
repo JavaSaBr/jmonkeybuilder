@@ -1,12 +1,14 @@
 package com.ss.editor.util;
 
-import static com.ss.rlib.util.ClassUtils.cast;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.cast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
@@ -19,6 +21,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
 import com.ss.editor.JfxApplication;
@@ -29,21 +32,26 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
-import javafx.scene.control.Alert;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
+import javafx.application.HostServices;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
@@ -51,13 +59,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -68,35 +76,25 @@ import java.util.List;
  */
 public abstract class EditorUtil {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
 
-    /**
-     * The constant JAVA_PARAM.
-     */
-    @NotNull
-    public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
-
-    /**
-     * Represents a list of files.
-     */
+    public static final DataFormat JAVA_PARAM = new DataFormat("jMB.javaParam");
     public static final DataFormat GNOME_FILES = new DataFormat("x-special/gnome-copied-files");
 
-    @NotNull
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
             new SimpleDateFormat("HH:mm:ss:SSS"));
 
-    @NotNull
-    private static JmeApplication jmeApplication;
+    private static ThreadLocal<ObjectDictionary<Class<?>, Enum<?>[]>> ENUM_VALUES_LOCAL =
+            ThreadLocal.withInitial(DictionaryFactory::newObjectDictionary);
 
-    @NotNull
+    private static JmeApplication jmeApplication;
     private static JfxApplication jfxApplication;
 
-    public static void setJmeApplication(@NotNull final JmeApplication jmeApplication) {
+    public static void setJmeApplication(@NotNull JmeApplication jmeApplication) {
         EditorUtil.jmeApplication = jmeApplication;
     }
 
-    public static void setJfxApplication(@NotNull final JfxApplication jfxApplication) {
+    public static void setJfxApplication(@NotNull JfxApplication jfxApplication) {
         EditorUtil.jfxApplication = jfxApplication;
     }
 
@@ -222,7 +220,7 @@ public abstract class EditorUtil {
      * @param progressAdapter the progress adapter
      */
     @JmeThread
-    public static void updateGlobalLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+    public static void updateGlobalLightProbe(@NotNull JobProgressAdapter<LightProbe> progressAdapter) {
         jmeApplication.updateLightProbe(progressAdapter);
     }
 
@@ -257,6 +255,16 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Get the host services.
+     *
+     * @return the host services.
+     */
+    @FxThread
+    public static @NotNull HostServices getHostServices() {
+        return jfxApplication.getHostServices();
+    }
+
+    /**
      * Get the current stage of JavaFX.
      *
      * @return the current stage of JavaFX.
@@ -272,7 +280,7 @@ public abstract class EditorUtil {
      * @param window the opened new window.
      */
     @FromAnyThread
-    public static void addFxWindow(@NotNull final Window window) {
+    public static void addFxWindow(@NotNull Window window) {
         jfxApplication.addWindow(window);
     }
 
@@ -282,7 +290,7 @@ public abstract class EditorUtil {
      * @param window the closed window.
      */
     @FromAnyThread
-    public static void removeFxWindow(@NotNull final Window window) {
+    public static void removeFxWindow(@NotNull Window window) {
         jfxApplication.removeWindow(window);
     }
 
@@ -301,27 +309,30 @@ public abstract class EditorUtil {
      * @param content the content to store.
      */
     @FxThread
-    public static void addCopiedFile(@NotNull final Array<Path> paths, @NotNull final ClipboardContent content) {
+    public static @NotNull ClipboardContent addCopiedFile(
+            @NotNull Array<Path> paths,
+            @NotNull ClipboardContent content
+    ) {
 
-        final List<File> files = paths.stream()
+        var files = paths.stream()
                 .map(Path::toFile)
                 .collect(toList());
 
         content.putFiles(files);
         content.put(EditorUtil.JAVA_PARAM, "copy");
 
-        final Platform platform = JmeSystem.getPlatform();
+        var platform = JmeSystem.getPlatform();
 
         if (platform == Platform.Linux64 || platform == Platform.Linux32) {
 
-            final StringBuilder builder = new StringBuilder("copy\n");
+            var builder = new StringBuilder("copy\n");
 
             paths.forEach(builder, (path, b) ->
                     b.append(path.toUri().toASCIIString()).append('\n'));
 
             builder.delete(builder.length() - 1, builder.length());
 
-            final ByteBuffer buffer = ByteBuffer.allocate(builder.length());
+            var buffer = ByteBuffer.allocate(builder.length());
 
             for (int i = 0, length = builder.length(); i < length; i++) {
                 buffer.put((byte) builder.charAt(i));
@@ -331,6 +342,8 @@ public abstract class EditorUtil {
 
             content.put(GNOME_FILES, buffer);
         }
+
+        return content;
     }
 
     /**
@@ -340,8 +353,8 @@ public abstract class EditorUtil {
      * @return true if the resource is exists.
      */
     @FromAnyThread
-    public static boolean checkExists(@NotNull final String path) {
-        final Class<EditorUtil> cs = EditorUtil.class;
+    public static boolean checkExists(@NotNull String path) {
+        var cs = EditorUtil.class;
         return cs.getResource(path) != null || cs.getResource("/" + path) != null;
     }
 
@@ -353,7 +366,7 @@ public abstract class EditorUtil {
      * @return true if the resource is exists.
      */
     @FromAnyThread
-    public static boolean checkExists(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+    public static boolean checkExists(@NotNull String path, @NotNull ClassLoader classLoader) {
         return classLoader.getResource(path) != null || classLoader.getResource("/" + path) != null;
     }
 
@@ -365,13 +378,13 @@ public abstract class EditorUtil {
      * @return the external form or null.
      */
     @FromAnyThread
-    public static @Nullable String toExternal(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+    public static @Nullable String toExternal(@NotNull String path, @NotNull ClassLoader classLoader) {
 
         if (!checkExists(path, classLoader)) {
             return null;
         }
 
-        URL resource = classLoader.getResource(path);
+        var resource = classLoader.getResource(path);
         if (resource == null) {
             resource = classLoader.getResource("/" + path);
         }
@@ -388,18 +401,21 @@ public abstract class EditorUtil {
      * @return the angle between these points.
      */
     @FromAnyThread
-    public static float getAngle(@NotNull final Vector2f center, @NotNull final Vector2f first,
-                                 @NotNull final Vector2f second) {
+    public static float getAngle(
+            @NotNull Vector2f center,
+            @NotNull Vector2f first,
+            @NotNull Vector2f second
+    ) {
 
-        final float x = center.getX();
-        final float y = center.getY();
+        var x = center.getX();
+        var y = center.getY();
 
-        final float ax = first.getX() - x;
-        final float ay = first.getY() - y;
-        final float bx = second.getX() - x;
-        final float by = second.getY() - y;
+        var ax = first.getX() - x;
+        var ay = first.getY() - y;
+        var bx = second.getX() - x;
+        var by = second.getY() - y;
 
-        final float delta = (float) ((ax * bx + ay * by) / Math.sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
+        var delta = (float) ((ax * bx + ay * by) / Math.sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
 
         if (delta > 1.0) {
             return 0.0F;
@@ -411,25 +427,36 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Gets input stream.
+     * Get an input stream.
      *
      * @param path the path to resource.
      * @return the input stream of the resource or null.
      */
     @FromAnyThread
-    public static @Nullable InputStream getInputStream(@NotNull final String path) {
+    public static @Nullable InputStream getInputStream(@NotNull String path) {
         return JfxApplication.class.getResourceAsStream(path);
     }
 
     /**
-     * Gets input stream.
+     * Get an input stream or throw an exception.
+     *
+     * @param path the path to resource.
+     * @return the input stream of the resource or null.
+     */
+    @FromAnyThread
+    public static @NotNull InputStream requireInputStream(@NotNull String path) {
+        return notNull(JfxApplication.class.getResourceAsStream(path));
+    }
+
+    /**
+     * Get the input stream.
      *
      * @param path        the path to resource.
      * @param classLoader the class loader.
      * @return the input stream of the resource or null.
      */
     @FromAnyThread
-    public static @Nullable InputStream getInputStream(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+    public static @Nullable InputStream getInputStream(@NotNull String path, @NotNull ClassLoader classLoader) {
         return classLoader.getResourceAsStream(path);
     }
 
@@ -451,15 +478,15 @@ public abstract class EditorUtil {
      * @return true of we can see the position on the screen.
      */
     @FromAnyThread
-    public static boolean isVisibleOnScreen(@NotNull final Vector3f position, @NotNull final Camera camera) {
+    public static boolean isVisibleOnScreen(@NotNull Vector3f position, @NotNull Camera camera) {
 
-        final int maxHeight = camera.getHeight();
-        final int maxWidth = camera.getWidth();
+        var maxHeight = camera.getHeight();
+        var maxWidth = camera.getWidth();
 
-        final boolean isBottom = position.getY() < 0;
-        final boolean isTop = position.getY() > maxHeight;
-        final boolean isLeft = position.getX() < 0;
-        final boolean isRight = position.getX() > maxWidth;
+        var isBottom = position.getY() < 0;
+        var isTop = position.getY() > maxHeight;
+        var isLeft = position.getX() < 0;
+        var isRight = position.getX() > maxWidth;
 
         return !isBottom && !isLeft && !isTop && !isRight && position.getZ() < 1F;
     }
@@ -473,8 +500,12 @@ public abstract class EditorUtil {
      * @param length the distance.
      */
     @FromAnyThread
-    public static void movePoint(@NotNull final Vector3f first, @NotNull final Vector3f second,
-                                 @NotNull final Vector3f store, final int length) {
+    public static void movePoint(
+            @NotNull Vector3f first,
+            @NotNull Vector3f second,
+            @NotNull Vector3f store,
+            int length
+    ) {
         store.x = first.x + (second.x - first.x) * length;
         store.y = first.y + (second.y - first.y) * length;
         store.z = first.z + (second.z - first.z) * length;
@@ -487,8 +518,8 @@ public abstract class EditorUtil {
      * @return the string presentation.
      */
     @FromAnyThread
-    public static @NotNull String timeFormat(final long time) {
-        final SimpleDateFormat format = LOCATE_DATE_FORMAT.get();
+    public static @NotNull String timeFormat(long time) {
+        var format = LOCATE_DATE_FORMAT.get();
         return format.format(new Date(time));
     }
 
@@ -500,7 +531,7 @@ public abstract class EditorUtil {
      * @return the relative path.
      */
     @FromAnyThread
-    public static @NotNull Path getAssetFile(@NotNull final Path assetFolder, @NotNull final Path file) {
+    public static @NotNull Path getAssetFile(@NotNull Path assetFolder, @NotNull Path file) {
         return assetFolder.relativize(file);
     }
 
@@ -511,17 +542,17 @@ public abstract class EditorUtil {
      * @return the relative path.
      */
     @FromAnyThread
-    public static @Nullable Path getAssetFile(@NotNull final Path file) {
+    public static @Nullable Path getAssetFile(@NotNull Path file) {
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) {
             return null;
         }
 
         try {
             return currentAsset.relativize(file);
-        } catch (final IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.warning("Can't create asset file of the " + file + " for asset folder " + currentAsset);
             LOGGER.warning(e);
             return null;
@@ -535,10 +566,14 @@ public abstract class EditorUtil {
      * @return the absolute path to the file.
      */
     @FromAnyThread
-    public static @Nullable Path getRealFile(@NotNull final Path assetFile) {
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return null;
+    public static @Nullable Path getRealFile(@NotNull Path assetFile) {
+
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) {
+            return null;
+        }
+
         return currentAsset.resolve(assetFile);
     }
 
@@ -549,10 +584,14 @@ public abstract class EditorUtil {
      * @return the absolute path to the file.
      */
     @FromAnyThread
-    public static @Nullable Path getRealFile(@NotNull final String assetFile) {
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return null;
+    public static @Nullable Path getRealFile(@NotNull String assetFile) {
+
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) {
+            return null;
+        }
+
         return currentAsset.resolve(assetFile);
     }
 
@@ -563,35 +602,43 @@ public abstract class EditorUtil {
      * @return the valid asset path for the file.
      */
     @FromAnyThread
-    public static @NotNull String toAssetPath(@NotNull final Path path) {
-        if (File.separatorChar == '/') return path.toString();
+    public static @NotNull String toAssetPath(@NotNull Path path) {
+
+        if (File.separatorChar == '/') {
+            return path.toString();
+        }
+
         return path.toString().replace("\\", "/");
     }
 
     /**
      * Handle exception.
      *
-     * @param logger the logger
-     * @param owner  the owner
-     * @param e      the e
+     * @param logger the logger.
+     * @param owner  the owner.
+     * @param e      the exception.
      */
     @FromAnyThread
-    public static void handleException(@Nullable final Logger logger, @Nullable final Object owner,
-                                       @NotNull final Exception e) {
+    public static void handleException(@Nullable Logger logger, @Nullable Object owner, @NotNull Exception e) {
         handleException(logger, owner, e, null);
     }
 
     /**
      * Handle exception.
      *
-     * @param logger   the logger
-     * @param owner    the owner
-     * @param e        the e
-     * @param callback the callback
+     * @param logger   the logger.
+     * @param owner    the owner.
+     * @param e        the exception.
+     * @param callback the callback.
      */
     @FromAnyThread
-    public static void handleException(@Nullable Logger logger, @Nullable final Object owner,
-                                       @NotNull final Exception e, @Nullable final Runnable callback) {
+    public static void handleException(
+            @Nullable Logger logger,
+            @Nullable Object owner,
+            @NotNull Exception e,
+            @Nullable Runnable callback
+    ) {
+
         if (logger == null) {
             logger = LOGGER;
         }
@@ -602,15 +649,15 @@ public abstract class EditorUtil {
             logger.warning(owner, e);
         }
 
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() -> {
 
             GAnalytics.sendException(e, false);
 
-            final String localizedMessage = e.getLocalizedMessage();
-            final String stackTrace = buildStackTrace(e);
+            var localizedMessage = e.getLocalizedMessage();
+            var stackTrace = buildStackTrace(e);
 
-            final Alert alert = UiUtils.createErrorAlert(e, localizedMessage, stackTrace);
+            var alert = UiUtils.createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
             alert.setWidth(500);
             alert.setHeight(220);
@@ -628,18 +675,18 @@ public abstract class EditorUtil {
      * @return the built stack trace.
      */
     @FromAnyThread
-    public static String buildStackTrace(@NotNull final Exception exception) {
+    public static String buildStackTrace(@NotNull Exception exception) {
 
-        StringWriter writer = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(writer);
+        var writer = new StringWriter();
+        var printWriter = new PrintWriter(writer);
 
         exception.printStackTrace(printWriter);
 
-        String stackTrace = writer.toString();
+        var stackTrace = writer.toString();
 
-        int level = 0;
+        var level = 0;
 
-        for (Throwable cause = exception.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
+        for (var cause = exception.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
 
             writer = new StringWriter();
             printWriter = new PrintWriter(writer);
@@ -658,10 +705,10 @@ public abstract class EditorUtil {
      * @param path the path
      */
     @FromAnyThread
-    public static void openFileInExternalEditor(@NotNull final Path path) {
+    public static void openFileInExternalEditor(@NotNull Path path) {
 
-        final Platform platform = JmeSystem.getPlatform();
-        final List<String> commands = new ArrayList<>();
+        var platform = JmeSystem.getPlatform();
+        var commands = new ArrayList<String>();
 
         if (platform == Platform.MacOSX64 || platform == Platform.MacOSX_PPC64) {
             commands.add("open");
@@ -673,24 +720,26 @@ public abstract class EditorUtil {
             commands.add("xdg-open");
         }
 
-        if (commands.isEmpty()) return;
+        if (commands.isEmpty()) {
+            return;
+        }
 
-        final String url;
+        String url;
         try {
             url = path.toUri().toURL().toString();
-        } catch (final MalformedURLException e) {
+        } catch (MalformedURLException e) {
             handleException(LOGGER, null, e);
             return;
         }
 
         commands.add(url);
 
-        final ProcessBuilder processBuilder = new ProcessBuilder();
+        var processBuilder = new ProcessBuilder();
         processBuilder.command(commands);
 
         try {
             processBuilder.start();
-        } catch (final IOException e) {
+        } catch (IOException e) {
             handleException(LOGGER, null, e);
         }
     }
@@ -703,8 +752,8 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static void openFileInSystemExplorer(@NotNull Path path) {
 
-        final Platform platform = JmeSystem.getPlatform();
-        final List<String> commands = new ArrayList<>();
+        var platform = JmeSystem.getPlatform();
+        var commands = new ArrayList<String>();
 
         if (platform == Platform.MacOSX64 || platform == Platform.MacOSX_PPC64) {
             commands.add("open");
@@ -730,34 +779,34 @@ public abstract class EditorUtil {
             return;
         }
 
-        final String url;
+        String url;
         try {
             url = path.toUri().toURL().toString();
-        } catch (final MalformedURLException e) {
+        } catch (MalformedURLException e) {
             handleException(LOGGER, null, e);
             return;
         }
 
         commands.add(url);
 
-        final ProcessBuilder processBuilder = new ProcessBuilder();
+        var processBuilder = new ProcessBuilder();
         processBuilder.command(commands);
         try {
             processBuilder.start();
-        } catch (final IOException e) {
+        } catch (IOException e) {
             handleException(LOGGER, null, e);
         }
     }
 
     @FromAnyThread
-    private static boolean isAppExists(@NotNull final String command) {
+    private static boolean isAppExists(@NotNull String command) {
 
-        final Runtime runtime = Runtime.getRuntime();
-        final int result;
+        var runtime = Runtime.getRuntime();
+        int result;
         try {
-            final Process exec = runtime.exec(command);
+            var exec = runtime.exec(command);
             result = exec.waitFor();
-        } catch (final InterruptedException | IOException e) {
+        } catch (InterruptedException | IOException e) {
             return false;
         }
 
@@ -771,13 +820,16 @@ public abstract class EditorUtil {
      * @return the byte array.
      */
     @FromAnyThread
-    public static @NotNull byte[] serialize(@NotNull final Serializable object) {
-        final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        try (final ObjectOutputStream out = new ObjectOutputStream(bout)) {
+    public static @NotNull byte[] serialize(@NotNull Serializable object) {
+
+        var bout = new ByteArrayOutputStream();
+
+        try (var out = new ObjectOutputStream(bout)) {
             out.writeObject(object);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOGGER.warning(e);
         }
+
         return bout.toByteArray();
     }
 
@@ -789,11 +841,13 @@ public abstract class EditorUtil {
      * @return the result object.
      */
     @FromAnyThread
-    public static <T> @NotNull T deserialize(@NotNull final byte[] bytes) {
-        final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-        try (final ObjectInputStream in = new ExtObjectInputStream(bin)) {
+    public static <T> @NotNull T deserialize(@NotNull byte[] bytes) {
+
+        var bin = new ByteArrayInputStream(bytes);
+
+        try (var in = new ExtObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
-        } catch (final ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -818,11 +872,16 @@ public abstract class EditorUtil {
      * @return the array of enum values.
      */
     @FromAnyThread
-    public static <E extends Enum<?>> @NotNull E[] getAvailableValues(@NotNull final E value) {
-        final Class<? extends Enum> valueClass = value.getClass();
-        if (!valueClass.isEnum()) throw new RuntimeException("The class " + valueClass + " isn't enum.");
-        final Enum<?>[] enumConstants = valueClass.getEnumConstants();
-        return ClassUtils.unsafeCast(enumConstants);
+    public static <E extends Enum<?>> @NotNull E[] getAvailableValues(@NotNull E value) {
+
+        var valueClass = value.getClass();
+        if (!valueClass.isEnum()) {
+            throw new RuntimeException("The class " + valueClass + " isn't enum.");
+        }
+
+        var enumConstants = valueClass.getEnumConstants();
+
+        return unsafeCast(enumConstants);
     }
 
     /**
@@ -835,32 +894,35 @@ public abstract class EditorUtil {
      * @return the new instance or null.
      */
     @FromAnyThread
-    public static <T> @Nullable T tryToCreateUserObject(@NotNull final Object owner, @NotNull final String className,
-                                                        @NotNull final Class<T> resultType) {
+    public static <T> @Nullable T tryToCreateUserObject(
+            @NotNull Object owner,
+            @NotNull String className,
+            @NotNull Class<T> resultType
+    ) {
 
-        final ResourceManager resourceManager = ResourceManager.getInstance();
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+        var resourceManager = ResourceManager.getInstance();
+        var classpathManager = ClasspathManager.getInstance();
 
         Object newExample = null;
         try {
             newExample = ClassUtils.newInstance(className);
-        } catch (final RuntimeException e) {
+        } catch (RuntimeException e) {
 
-            final Array<URLClassLoader> classLoaders = resourceManager.getClassLoaders();
+            var classLoaders = resourceManager.getClassLoaders();
 
-            for (final URLClassLoader classLoader : classLoaders) {
+            for (var classLoader : classLoaders) {
                 try {
-                    final Class<?> targetClass = classLoader.loadClass(className);
+                    var targetClass = classLoader.loadClass(className);
                     newExample = ClassUtils.newInstance(targetClass);
-                } catch (final ClassNotFoundException ex) {
+                } catch (ClassNotFoundException ex) {
                     LOGGER.warning(owner, e);
                 }
             }
 
-            final URLClassLoader librariesLoader = classpathManager.getLibrariesLoader();
+            var librariesLoader = classpathManager.getLibrariesLoader();
             if (librariesLoader != null) {
                 try {
-                    final Class<?> targetClass = librariesLoader.loadClass(className);
+                    var targetClass = librariesLoader.loadClass(className);
                     newExample = ClassUtils.newInstance(targetClass);
                 } catch (final ClassNotFoundException ex) {
                     LOGGER.warning(owner, e);
@@ -878,19 +940,104 @@ public abstract class EditorUtil {
      * @return the default layer or null.
      */
     @FromAnyThread
-    public static @Nullable SceneLayer getDefaultLayer(@NotNull final ChangeConsumer consumer) {
+    public static @Nullable SceneLayer getDefaultLayer(@NotNull ChangeConsumer consumer) {
 
         if (!(consumer instanceof SceneChangeConsumer)) {
             return null;
         }
 
-        final SceneNode sceneNode = ((SceneChangeConsumer) consumer).getCurrentModel();
-        final List<SceneLayer> layers = sceneNode.getLayers();
+        var sceneNode = ((SceneChangeConsumer) consumer).getCurrentModel();
+        var layers = sceneNode.getLayers();
 
         if (layers.isEmpty()) {
             return null;
         }
 
         return layers.get(0);
+    }
+
+    /**
+     * Return true if the asset key is null or empty.
+     *
+     * @param assetKey the asset key.
+     * @return true if the asset key is null or empty.
+     */
+    public static boolean isEmpty(@Nullable AssetKey<?> assetKey) {
+        return assetKey == null || StringUtils.isEmpty(assetKey.getName());
+    }
+
+    /**
+     * Open the asset resource in an editor.
+     *
+     * @param assetKey the asset key.
+     */
+    @FromAnyThread
+    public static void openInEditor(@Nullable AssetKey<?> assetKey) {
+
+        if (assetKey == null) {
+            return;
+        }
+
+        var assetPath = assetKey.getName();
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
+
+        var assetFile = Paths.get(assetPath);
+        var realFile = notNull(getRealFile(assetFile));
+        if (!Files.exists(realFile)) {
+            return;
+        }
+
+        FxEventManager.getInstance()
+                .notify(new RequestedOpenFileEvent(realFile));
+    }
+
+    /**
+     * Get the list of files in the current dragboard.
+     *
+     * @param dragboard the current dragboard.
+     * @return the list of files.
+     */
+    @FromAnyThread
+    public static @NotNull List<File> getFiles(@NotNull Dragboard dragboard) {
+        List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+        return files == null ? Collections.emptyList() : files;
+    }
+
+    /**
+     * Get an array of enum constants by the class.
+     *
+     * @param enumType the enum's class.
+     * @param <T>      the enum's type.
+     * @return the array of enum's constants.
+     */
+    @FromAnyThread
+    public static <T> T[] getEnumValues(@NotNull Class<?> enumType) {
+
+        if(!enumType.isEnum()) {
+            throw new IllegalArgumentException("The type " + enumType + " isn't a enum.");
+        }
+
+        return unsafeCast(ENUM_VALUES_LOCAL.get()
+                .get(enumType, type -> (Enum<?>[]) type.getEnumConstants()));
+    }
+
+    /**
+     * Find a root key of the spatial.
+     *
+     * @param spatial the spatial.
+     * @return the root key or null.
+     */
+    public static @Nullable String findRootKey(@Nullable Spatial spatial) {
+
+        if(spatial == null) {
+            return null;
+        }
+
+        return NodeUtils.<Spatial>findParentOpt(spatial, sp -> sp.getKey() != null)
+                .map(Spatial::getKey)
+                .map(AssetKey::getName)
+                .orElse(null);
     }
 }

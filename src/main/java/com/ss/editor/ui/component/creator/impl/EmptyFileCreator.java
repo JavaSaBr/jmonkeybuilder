@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.creator.impl;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

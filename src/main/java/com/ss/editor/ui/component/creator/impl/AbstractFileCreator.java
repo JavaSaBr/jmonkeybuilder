@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import com.ss.editor.Messages;
@@ -18,11 +18,11 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.Utils;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.Utils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;

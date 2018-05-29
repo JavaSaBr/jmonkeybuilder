@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FxThread;

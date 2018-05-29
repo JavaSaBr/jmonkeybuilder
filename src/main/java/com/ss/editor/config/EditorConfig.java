@@ -2,23 +2,23 @@ package com.ss.editor.config;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
+import com.jme3.jfx.injfx.JmeToJfxIntegrator;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
-import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.dictionary.ConcurrentObjectDictionary;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.DictionaryUtils;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -41,7 +40,6 @@ import java.util.prefs.Preferences;
  */
 public final class EditorConfig implements AssetEventListener {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorConfig.class);
 
     private static final String SCREEN_ALIAS = "screen";
@@ -70,8 +68,7 @@ public final class EditorConfig implements AssetEventListener {
         if (instance == null) {
             synchronized (EditorConfig.class) {
                 if (instance == null) {
-                    final EditorConfig config = new EditorConfig();
-                    instance = config;
+                    instance = new EditorConfig();
                 }
             }
         }
@@ -152,9 +149,9 @@ public final class EditorConfig implements AssetEventListener {
      * @return the setting's value or default.
      */
     @FromAnyThread
-    private <T> @Nullable T get(@NotNull final String id, @NotNull final Class<T> type, @Nullable T def) {
+    private <T> @Nullable T get(@NotNull String id, @NotNull Class<T> type, @Nullable T def) {
 
-        final Object value = DictionaryUtils.getInReadLock(settings, id, (objects, s) -> objects.get(id));
+        var value = DictionaryUtils.getInReadLock(settings, id, (objects, s) -> objects.get(id));
         if (value == null) {
             return def;
         } else if (type.isInstance(value)) {
@@ -173,21 +170,21 @@ public final class EditorConfig implements AssetEventListener {
             }
         } else if (type == Vector3f.class) {
             if (value instanceof String) {
-                final String[] values = value.toString().split(",");
-                final float x = Float.parseFloat(values[0]);
-                final float y = Float.parseFloat(values[1]);
-                final float z = Float.parseFloat(values[2]);
+                var values = value.toString().split(",");
+                var x = Float.parseFloat(values[0]);
+                var y = Float.parseFloat(values[1]);
+                var z = Float.parseFloat(values[2]);
                 result = unsafeCast(new Vector3f(x, y, z));
             }
         } else if (Enum.class.isAssignableFrom(type)) {
             final Class<Enum> enumType = unsafeCast(type);
             if (value instanceof String) {
-                final Enum enumValue = Enum.valueOf(enumType, value.toString());
+                var enumValue = Enum.valueOf(enumType, value.toString());
                 result = unsafeCast(enumValue);
             }
         } else if (Path.class.isAssignableFrom(type)) {
             if (value instanceof String) {
-                final URI uri = Utils.get(value.toString(), URI::new);
+                var uri = Utils.get(value.toString(), URI::new);
                 result = unsafeCast(Paths.get(uri));
             }
         }
@@ -207,8 +204,8 @@ public final class EditorConfig implements AssetEventListener {
      * @param value the setting's value.
      */
     @FromAnyThread
-    public void set(@NotNull final String id, @Nullable final Object value) {
-        final long stamp = settings.writeLock();
+    public void set(@NotNull String id, @Nullable Object value) {
+        var stamp = settings.writeLock();
         try {
 
             if (value == null) {
@@ -223,47 +220,47 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     @FromAnyThread
-    public boolean getBoolean(@NotNull final String id, final boolean def) {
+    public boolean getBoolean(@NotNull String id, boolean def) {
         return Boolean.TRUE.equals(get(id, Boolean.class, def));
     }
 
     @FromAnyThread
-    public @Nullable Boolean getBoolean(@NotNull final String id) {
+    public @Nullable Boolean getBoolean(@NotNull String id) {
         return get(id, Boolean.class, null);
     }
 
     @FromAnyThread
-    public int getInteger(@NotNull final String id, final int def) {
+    public int getInteger(@NotNull String id, int def) {
         return notNull(get(id, Integer.class, def));
     }
 
     @FromAnyThread
-    public @Nullable Integer getInteger(@NotNull final String id) {
+    public @Nullable Integer getInteger(@NotNull String id) {
         return get(id, Integer.class, null);
     }
 
     @FromAnyThread
-    public <T extends Enum<T>> @Nullable T getEnum(@NotNull final String id, @NotNull final Class<T> type) {
+    public <T extends Enum<T>> @Nullable T getEnum(@NotNull String id, @NotNull Class<T> type) {
         return get(id, type, null);
     }
 
     @FromAnyThread
-    public <T extends Enum<T>> @NotNull T getEnum(@NotNull final String id, @NotNull final T def) {
+    public <T extends Enum<T>> @NotNull T getEnum(@NotNull String id, @NotNull T def) {
         return notNull(get(id, unsafeCast(def.getClass()), def));
     }
 
     @FromAnyThread
-    public @NotNull Vector3f getVector3f(@NotNull final String id, @NotNull final Vector3f def) {
+    public @NotNull Vector3f getVector3f(@NotNull String id, @NotNull Vector3f def) {
         return notNull(get(id, Vector3f.class, def));
     }
 
     @FromAnyThread
-    public @Nullable Path getFile(@NotNull final String id) {
+    public @Nullable Path getFile(@NotNull String id) {
         return get(id, Path.class, null);
     }
 
     @FromAnyThread
-    public @Nullable String getString(@NotNull final String id) {
+    public @Nullable String getString(@NotNull String id) {
         return get(id, String.class, null);
     }
 
@@ -283,10 +280,10 @@ public final class EditorConfig implements AssetEventListener {
      * @param currentAsset the current asset
      */
     @FromAnyThread
-    public synchronized void addOpenedAsset(@NotNull final Path currentAsset) {
+    public synchronized void addOpenedAsset(@NotNull Path currentAsset) {
 
-        final String filePath = currentAsset.toString();
-        final List<String> lastOpenedAssets = getLastOpenedAssets();
+        var filePath = currentAsset.toString();
+        var lastOpenedAssets = getLastOpenedAssets();
         lastOpenedAssets.remove(filePath);
         lastOpenedAssets.add(0, filePath);
 
@@ -296,15 +293,15 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     @Override
-    public void assetDependencyNotFound(@Nullable final AssetKey parentKey, @Nullable final AssetKey dependentAssetKey) {
+    public void assetDependencyNotFound(@Nullable AssetKey parentKey, @Nullable AssetKey dependentAssetKey) {
     }
 
     @Override
-    public void assetLoaded(@NotNull final AssetKey key) {
+    public void assetLoaded(@NotNull AssetKey key) {
     }
 
     @Override
-    public void assetRequested(@NotNull final AssetKey key) {
+    public void assetRequested(@NotNull AssetKey key) {
         if (key instanceof TextureKey) {
             ((TextureKey) key).setAnisotropy(getInteger(PREF_ANISOTROPY, PREF_DEFAULT_ANISOTROPY));
         }
@@ -326,7 +323,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param currentAsset the current asset folder.
      */
     @FromAnyThread
-    public void setCurrentAsset(@Nullable final Path currentAsset) {
+    public void setCurrentAsset(@Nullable Path currentAsset) {
         this.currentAsset = currentAsset;
     }
 
@@ -336,7 +333,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param screenHeight the height of this screen.
      */
     @FromAnyThread
-    public void setScreenHeight(final int screenHeight) {
+    public void setScreenHeight(int screenHeight) {
         this.screenHeight = screenHeight;
     }
 
@@ -346,7 +343,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param screenWidth the width of this screen.
      */
     @FromAnyThread
-    public void setScreenWidth(final int screenWidth) {
+    public void setScreenWidth(int screenWidth) {
         this.screenWidth = screenWidth;
     }
 
@@ -386,7 +383,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param maximized true is the editor's window is maximized.
      */
     @FromAnyThread
-    public void setMaximized(final boolean maximized) {
+    public void setMaximized(boolean maximized) {
         this.maximized = maximized;
     }
 
@@ -416,7 +413,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param globalLeftToolWidth the global left tool width.
      */
     @FromAnyThread
-    public void setGlobalLeftToolWidth(final int globalLeftToolWidth) {
+    public void setGlobalLeftToolWidth(int globalLeftToolWidth) {
         this.globalLeftToolWidth = globalLeftToolWidth;
     }
 
@@ -426,7 +423,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param globalBottomToolHeight the global bottom tool height.
      */
     @FromAnyThread
-    public void setGlobalBottomToolHeight(final int globalBottomToolHeight) {
+    public void setGlobalBottomToolHeight(int globalBottomToolHeight) {
         this.globalBottomToolHeight = globalBottomToolHeight;
     }
 
@@ -436,7 +433,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param globalLeftToolCollapsed flag is for collapsing the global left tool.
      */
     @FromAnyThread
-    public void setGlobalLeftToolCollapsed(final boolean globalLeftToolCollapsed) {
+    public void setGlobalLeftToolCollapsed(boolean globalLeftToolCollapsed) {
         this.globalLeftToolCollapsed = globalLeftToolCollapsed;
     }
 
@@ -446,7 +443,7 @@ public final class EditorConfig implements AssetEventListener {
      * @param globalBottomToolCollapsed flag is for collapsing the global bottom tool.
      */
     @FromAnyThread
-    public void setGlobalBottomToolCollapsed(final boolean globalBottomToolCollapsed) {
+    public void setGlobalBottomToolCollapsed(boolean globalBottomToolCollapsed) {
         this.globalBottomToolCollapsed = globalBottomToolCollapsed;
     }
 
@@ -484,7 +481,7 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @param analyticsQuestion true if the question was showed.
      */
-    public void setAnalyticsQuestion(final boolean analyticsQuestion) {
+    public void setAnalyticsQuestion(boolean analyticsQuestion) {
         this.analyticsQuestion = analyticsQuestion;
     }
 
@@ -496,17 +493,17 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public AppSettings getSettings() {
 
-        final GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        final GraphicsDevice device = graphicsEnvironment.getDefaultScreenDevice();
-        final DisplayMode displayMode = device.getDisplayMode();
+        var graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        var device = graphicsEnvironment.getDefaultScreenDevice();
+        var displayMode = device.getDisplayMode();
 
-        final AppSettings settings = new AppSettings(true);
+        var settings = new AppSettings(true);
         settings.setFrequency(displayMode.getRefreshRate());
         settings.setGammaCorrection(getBoolean(PREF_GAMMA_CORRECTION, PREF_DEFAULT_GAMMA_CORRECTION));
         settings.setResizable(true);
         // settings.putBoolean("GraphicsDebug", true);
 
-        JmeToJFXIntegrator.prepareSettings(settings, getInteger(PREF_FRAME_RATE, PREF_DEFAULT_FRAME_RATE));
+        JmeToJfxIntegrator.prepareSettings(settings, getInteger(PREF_FRAME_RATE, PREF_DEFAULT_FRAME_RATE));
 
         return settings;
     }
@@ -516,15 +513,15 @@ public final class EditorConfig implements AssetEventListener {
      */
     private void init() {
 
-        final Preferences prefs = Preferences.userNodeForPackage(JmeApplication.class);
-        final long stamp = settings.writeLock();
+        var prefs = Preferences.userNodeForPackage(JmeApplication.class);
+        var stamp = settings.writeLock();
         try {
 
-            for (final String key : prefs.keys()) {
+            for (var key : prefs.keys()) {
                 settings.put(key, prefs.get(key, null));
             }
 
-        } catch (final BackingStoreException e) {
+        } catch (BackingStoreException e) {
             throw new RuntimeException(e);
         } finally {
             settings.writeUnlock(stamp);
@@ -539,7 +536,7 @@ public final class EditorConfig implements AssetEventListener {
         this.globalBottomToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
         this.analyticsQuestion = prefs.getBoolean(PREF_OTHER_ANALYTICS_QUESTION, false);
 
-        final String currentAssetUri = prefs.get(PREF_ASSET_CURRENT_ASSET, null);
+        var currentAssetUri = prefs.get(PREF_ASSET_CURRENT_ASSET, null);
 
         if (currentAssetUri != null) {
             this.currentAsset = Utils.get(currentAssetUri, uri -> Paths.get(new URI(uri)));
@@ -549,31 +546,31 @@ public final class EditorConfig implements AssetEventListener {
             this.currentAsset = null;
         }
 
-        final int cameraAngle = getInteger(PREF_CAMERA_ANGLE, PREF_DEFAULT_CAMERA_ANGLE);
+        var cameraAngle = getInteger(PREF_CAMERA_ANGLE, PREF_DEFAULT_CAMERA_ANGLE);
 
         System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(cameraAngle));
 
-        final byte[] byteArray = prefs.getByteArray(PREF_ASSET_LAST_OPENED_ASSETS, null);
+        var byteArray = prefs.getByteArray(PREF_ASSET_LAST_OPENED_ASSETS, null);
         if (byteArray == null) {
             return;
         }
 
-        final List<String> lastOpenedAssets = getLastOpenedAssets();
+        var lastOpenedAssets = getLastOpenedAssets();
         try {
 
             lastOpenedAssets.addAll(EditorUtil.deserialize(byteArray));
 
-            for (Iterator<String> iterator = lastOpenedAssets.iterator(); iterator.hasNext(); ) {
+            for (var iterator = lastOpenedAssets.iterator(); iterator.hasNext(); ) {
 
-                final String assetUrl = iterator.next();
-                final Path assetPath = Utils.get(assetUrl, uri -> Paths.get(uri));
+                var assetUrl = iterator.next();
+                var assetPath = Utils.get(assetUrl, uri -> Paths.get(uri));
 
                 if (!Files.exists(assetPath)) {
                     iterator.remove();
                 }
             }
 
-        } catch (final RuntimeException e) {
+        } catch (RuntimeException e) {
             LOGGER.warning(e);
         }
     }
@@ -584,9 +581,9 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public synchronized void save() {
 
-        final Preferences prefs = Preferences.userNodeForPackage(JmeApplication.class);
+        var prefs = Preferences.userNodeForPackage(JmeApplication.class);
 
-        final long stamp = settings.readLock();
+        var stamp = settings.readLock();
         try {
 
             settings.forEach((key, value) -> {
@@ -629,12 +626,12 @@ public final class EditorConfig implements AssetEventListener {
             prefs.remove(PREF_ASSET_CURRENT_ASSET);
         }
 
-        final List<String> lastOpenedAssets = getLastOpenedAssets();
+        prefs.putByteArray(PREF_ASSET_LAST_OPENED_ASSETS,
+                EditorUtil.serialize((Serializable) getLastOpenedAssets()));
 
-        prefs.putByteArray(PREF_ASSET_LAST_OPENED_ASSETS, EditorUtil.serialize((Serializable) lastOpenedAssets));
         try {
             prefs.flush();
-        } catch (final BackingStoreException e) {
+        } catch (BackingStoreException e) {
             throw new RuntimeException(e);
         }
     }

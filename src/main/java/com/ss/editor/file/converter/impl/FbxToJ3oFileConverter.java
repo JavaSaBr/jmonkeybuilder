@@ -6,8 +6,8 @@ import com.ss.editor.file.converter.FileConverterDescription;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 
 /**
  * The implementation of {@link AbstractFileConverter} to convert .fbx file to .j3o.

@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
@@ -14,9 +14,7 @@ import javafx.scene.input.ClipboardContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 
 /**
  * The action to cut a file.
@@ -25,37 +23,42 @@ import java.util.List;
  */
 public class CutFileAction extends FileAction {
 
-    public CutFileAction(@NotNull final Array<ResourceElement> elements) {
+    @FxThread
+    public static void applyFor(@NotNull Array<ResourceElement> elements) {
+        new CutFileAction(elements).getOnAction().handle(null);
+    }
+
+    public CutFileAction(@NotNull Array<ResourceElement> elements) {
         super(elements);
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.CUT_16;
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE;
     }
 
-    @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    @FxThread
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final List<File> files = getElements().stream()
+        var files = getElements().stream()
                 .map(ResourceElement::getFile)
                 .map(Path::toFile)
                 .collect(toList());
 
-        final ClipboardContent content = new ClipboardContent();
+        var content = new ClipboardContent();
         content.putFiles(files);
         content.put(EditorUtil.JAVA_PARAM, "cut");
 
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        var clipboard = Clipboard.getSystemClipboard();
         clipboard.setContent(content);
     }
 }

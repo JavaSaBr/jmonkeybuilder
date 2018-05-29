@@ -14,7 +14,7 @@ import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.node.material.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

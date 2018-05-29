@@ -9,8 +9,8 @@ import com.ss.editor.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to remove a layer from a scene.

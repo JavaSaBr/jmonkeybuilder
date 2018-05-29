@@ -5,7 +5,7 @@ import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.system.AppSettings;
-import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.common.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

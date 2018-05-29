@@ -6,7 +6,7 @@ import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIP
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
@@ -41,7 +41,7 @@ import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.MaterialUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;

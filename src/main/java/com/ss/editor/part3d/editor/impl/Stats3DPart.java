@@ -1,6 +1,6 @@
 package com.ss.editor.part3d.editor.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -12,8 +12,8 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.ArrayUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;

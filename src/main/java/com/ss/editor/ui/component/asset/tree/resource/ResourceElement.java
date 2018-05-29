@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.array.Array;
+import com.ss.editor.annotation.FxThread;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.Tooltip;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +30,12 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     @NotNull
     protected final Path file;
 
-    public ResourceElement(@NotNull final Path file) {
+    public ResourceElement(@NotNull Path file) {
         this.file = file;
     }
 
     /**
-     * Create tooltip to preview this element.
+     * Create a tooltip to preview this element.
      *
      * @return the tooltip.
      */
@@ -45,7 +45,7 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     }
 
     /**
-     * Gets file.
+     * Get the file.
      *
      * @return the reference to the file.
      */
@@ -55,42 +55,42 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     }
 
     /**
-     * Gets children.
+     * Get children of this file.
      *
-     * @param extensionFilter the extension filter
-     * @param onlyFolders     the only folders
+     * @param extensionFilter the extension filter.
+     * @param onlyFolders     true if needs only folders.
      * @return list of children resource elements.
      */
     @FromAnyThread
-    public @Nullable Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
+    public @Nullable Array<ResourceElement> getChildren(@NotNull Array<String> extensionFilter, boolean onlyFolders) {
         return null;
     }
 
     /**
-     * Has children boolean.
+     * Return true if this element has children.
      *
-     * @param extensionFilter the extension filter
-     * @param onlyFolders     the only folders
+     * @param extensionFilter the extension filter.
+     * @param onlyFolders     true if needs only folders.
      * @return true if this element has children.
      */
     @FromAnyThread
-    public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
+    public boolean hasChildren(@NotNull Array<String> extensionFilter, boolean onlyFolders) {
         return false;
     }
 
     @Override
-    public int compareTo(@Nullable final ResourceElement other) {
+    public int compareTo(@Nullable ResourceElement other) {
         if (other == null) return -1;
-        final Path file = getFile();
-        final Path otherFile = other.getFile();
+        var file = getFile();
+        var otherFile = other.getFile();
         return file.getNameCount() - otherFile.getNameCount();
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o instanceof Path) return file.equals(o);
-        final ResourceElement that = (ResourceElement) o;
+        var that = (ResourceElement) o;
         return file.equals(that.file);
     }
 

@@ -21,12 +21,12 @@ public class EditorThread extends Thread {
         this.localObjects = new LocalObjects();
     }
 
-    public EditorThread(@NotNull final Runnable target) {
+    public EditorThread(@NotNull Runnable target) {
         super(target);
         this.localObjects = new LocalObjects();
     }
 
-    public EditorThread(@NotNull final ThreadGroup group, @NotNull final Runnable target, @NotNull final String name) {
+    public EditorThread(@NotNull ThreadGroup group, @NotNull Runnable target, @NotNull String name) {
         super(group, target, name);
         this.localObjects = new LocalObjects();
     }

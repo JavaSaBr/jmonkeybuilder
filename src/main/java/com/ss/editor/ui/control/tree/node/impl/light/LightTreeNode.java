@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node.impl.light;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -10,7 +10,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.RemoveLightAction;
 import com.ss.editor.model.undo.impl.RenameLightOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;

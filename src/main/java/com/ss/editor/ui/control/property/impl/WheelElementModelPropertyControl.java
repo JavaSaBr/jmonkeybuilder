@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
@@ -18,18 +18,22 @@ import org.jetbrains.annotations.Nullable;
  */
 public class WheelElementModelPropertyControl extends SpatialElementModelPropertyControl<Spatial, VehicleWheel> {
 
-    public WheelElementModelPropertyControl(@Nullable final Spatial propertyValue, @NotNull final String propertyName,
-                                            @NotNull final ModelChangeConsumer changeConsumer) {
+    public WheelElementModelPropertyControl(
+            @Nullable Spatial propertyValue,
+            @NotNull String propertyName,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
+
         super(Spatial.class, propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
     protected @NotNull NodeSelectorDialog<Spatial> createNodeSelectorDialog() {
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        final Spatial currentModel = changeConsumer.getCurrentModel();
-        final Spatial root = NodeUtils.findSpatial(currentModel, this::checkSpatial);
-        return new NodeSelectorDialog<>(notNull(root), type, this::processAdd);
+        var changeConsumer = getChangeConsumer();
+        var currentModel = changeConsumer.getCurrentModel();
+        var root = NodeUtils.findSpatial(currentModel, this::checkSpatial);
+        return new NodeSelectorDialog<>(notNull(root), type, this::addElement);
     }
 
     /**
@@ -38,17 +42,17 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
      * @param spatial the spatial.
      * @return true if the spatial has this wheel.
      */
-    private boolean checkSpatial(@NotNull final Spatial spatial) {
+    private boolean checkSpatial(@NotNull Spatial spatial) {
 
-        final VehicleControl control = spatial.getControl(VehicleControl.class);
+        var control = spatial.getControl(VehicleControl.class);
         if (control == null) {
             return false;
         }
 
-        final int numWheels = control.getNumWheels();
+        var numWheels = control.getNumWheels();
 
-        for (int i = 0; i < numWheels; i++) {
-            final VehicleWheel wheel = control.getWheel(i);
+        for (var i = 0; i < numWheels; i++) {
+            var wheel = control.getWheel(i);
             if (wheel == getEditObject()) {
                 return true;
             }

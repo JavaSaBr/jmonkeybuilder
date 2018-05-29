@@ -1,8 +1,7 @@
 package com.ss.editor.ui.util;
 
 import static com.ss.editor.util.EditorUtil.getFxScene;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.util.ReflectionUtils.getStaticField;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FromAnyThread;
@@ -14,11 +13,10 @@ import com.ss.editor.ui.dialog.asset.file.FileAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
@@ -41,8 +39,6 @@ import org.jetbrains.annotations.Nullable;
 import org.reactfx.util.TriConsumer;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +48,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * The utility class with utility UI methods.
@@ -63,6 +60,15 @@ public abstract class UiUtils {
     @NotNull
     private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
 
+    @NotNull
+    private static final Duration TOOLTIP_HIDE_DELAY = new Duration(100);
+
+    @NotNull
+    private static final Duration TOOLTIP_SHOW_DELAY = new Duration(1000);
+
+    @NotNull
+    private static final Duration TOOLTIP_SHOW_DURATION = new Duration(5000);
+
     /**
      * Add binding pseudo focus of the pane to focus state of the controls.
      *
@@ -70,9 +76,9 @@ public abstract class UiUtils {
      * @param controls  the controls.
      */
     @FxThread
-    public static void addFocusBinding(@NotNull final Pane pane, @NotNull final Control... controls) {
+    public static @NotNull BooleanProperty addFocusBinding(@NotNull Pane pane, @NotNull Control... controls) {
 
-        final BooleanProperty focused = new BooleanPropertyBase(false) {
+        var focused = new BooleanPropertyBase(true) {
 
             @Override
             public void invalidated() {
@@ -90,23 +96,20 @@ public abstract class UiUtils {
             }
         };
 
-        final ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
-
-            boolean result = newValue;
-
-            if (!result) {
-                for (final Control control : controls) {
-                    result = control.isFocused();
-                    if (result) break;
-                }
-            }
-
-            focused.setValue(result);
+        ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
+            focused.setValue(newValue || Arrays.stream(controls)
+                    .anyMatch(Node::isFocused));
         };
 
-        for (final Control control : controls) {
+        for (var control : controls) {
             control.focusedProperty().addListener(listener);
+            control.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> control.requestFocus());
         }
+
+        focused.setValue(Arrays.stream(controls)
+                .anyMatch(Node::isFocused));
+
+        return focused;
     }
 
     /**
@@ -266,48 +269,17 @@ public abstract class UiUtils {
     }
 
     /**
-     * Override tooltip timeout.
+     * Update behaviour of the tooltip.
      *
-     * @param openDelayInMillis       the open delay in millis
-     * @param visibleDurationInMillis the visible duration in millis
-     * @param closeDelayInMillis      the close delay in millis
+     * @param tooltip the tooltip.
+     * @return the updated tooltip.
      */
-    public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis,
-                                               int closeDelayInMillis) {
-        try {
-
-            // fix auto hiding tooltips
-            final Field xOffsetField = getStaticField(Tooltip.class, "TOOLTIP_XOFFSET");
-            xOffsetField.setAccessible(true);
-            xOffsetField.set(null, 14);
-
-            final Field yOffsetField = getStaticField(Tooltip.class, "TOOLTIP_YOFFSET");
-            yOffsetField.setAccessible(true);
-            yOffsetField.set(null, 14);
-
-            final Class<?> tooltipBehaviourClass = Arrays.stream(Tooltip.class.getDeclaredClasses())
-                    .filter(type -> type.getCanonicalName().equals(Tooltip.class.getName() + ".TooltipBehavior"))
-                    .findAny().orElse(null);
-
-            if (tooltipBehaviourClass == null) {
-                return;
-            }
-
-            final Constructor<?> constructor = tooltipBehaviourClass.
-                    getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
-            constructor.setAccessible(true);
-
-            final Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis),
-                    new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
-
-            final Field field = getStaticField(Tooltip.class, "BEHAVIOR");
-            field.setAccessible(true);
-            field.get(Tooltip.class);
-            field.set(Tooltip.class, tooltipBehaviour);
-
-        } catch (final Exception e) {
-            System.out.println("Aborted setup due to error:" + e.getMessage());
-        }
+    @FxThread
+    public static <T extends Tooltip> T updateTooltip(final T tooltip) {
+        tooltip.setHideDelay(TOOLTIP_HIDE_DELAY);
+        tooltip.setShowDelay(TOOLTIP_SHOW_DELAY);
+        tooltip.setShowDuration(TOOLTIP_SHOW_DURATION);
+        return tooltip;
     }
 
     /**
@@ -469,10 +441,24 @@ public abstract class UiUtils {
      * @return the list with all items.
      */
     @FxThread
-    public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeItem<T> root) {
+    public static <T> Array<TreeItem<T>> getAllItems(@NotNull TreeItem<T> root) {
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
         collectAllItems(container, root);
         return container;
+    }
+
+    /**
+     * Collect all elements of tree items.
+     *
+     * @param <T>  the type parameter
+     * @param root the tree item.
+     * @return the list with all items.
+     */
+    @FxThread
+    public static <T> Stream<TreeItem<T>> allItems(@NotNull TreeItem<T> root) {
+        Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
+        collectAllItems(container, root);
+        return container.stream();
     }
 
     /**

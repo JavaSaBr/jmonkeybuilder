@@ -1,15 +1,12 @@
 package com.ss.editor.executor.impl;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.util.EditorUtil;
-import com.sun.javafx.application.PlatformImpl;
-
+import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.common.util.array.Array;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
-
-import com.ss.rlib.concurrent.util.ConcurrentUtils;
-import com.ss.rlib.concurrent.util.ThreadUtils;
-import com.ss.rlib.util.array.Array;
 
 /**
  * The executor to execute tasks in the FX UI Thread.
@@ -29,36 +26,41 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
     public FxEditorTaskExecutor() {
         setName(FxEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
-        PlatformImpl.startup(this::start);
+        try {
+            Platform.startup(this::start);
+        } catch (IllegalStateException e) {
+            start();
+        }
     }
 
     @Override
     @FxThread
-    protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
+    protected void doExecute(@NotNull Array<Runnable> execute, @NotNull Array<Runnable> executed) {
 
-        final Runnable[] array = execute.array();
+        var array = execute.array();
 
         for (int i = 0, length = execute.size(); i < length; ) {
             try {
 
                 for (int count = 0; count < EXECUTE_LIMIT && i < length; count++, i++) {
 
-                    final Runnable task = array[i];
+                    var task = array[i];
                     try {
                         task.run();
-                    } catch (final Exception e) {
+                    } catch (Exception e) {
                         EditorUtil.handleException(LOGGER, this, e);
                     }
 
                     executed.add(task);
                 }
 
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning(e);
             }
         }
-    }
 
+        ConcurrentUtils.notifyAll(fxTask);
+    }
 
     @Override
     public void run() {
@@ -109,14 +111,9 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
 
     @FromAnyThread
     private void executeInFxUiThread() {
-        while (true) {
-            try {
-                PlatformImpl.runAndWait(fxTask);
-                break;
-            } catch (final IllegalStateException e) {
-                LOGGER.warning(this, e);
-                ThreadUtils.sleep(1000);
-            }
+        synchronized (fxTask) {
+            Platform.runLater(fxTask);
+            ConcurrentUtils.waitInSynchronize(fxTask);
         }
     }
 }

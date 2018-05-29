@@ -1,18 +1,18 @@
 package com.ss.editor.ui.scene;
 
 import static com.ss.editor.ui.util.UiUtils.fillComponents;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import com.jme3x.jfx.injfx.input.JFXMouseInput;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import com.jme3.jfx.injfx.input.JfxMouseInput;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CssIds;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import javafx.collections.ObservableList;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class EditorFxScene extends Scene {
 
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -84,13 +83,13 @@ public class EditorFxScene extends Scene {
     @Nullable
     private Node focused;
 
-    public EditorFxScene(@NotNull final Group root) {
+    public EditorFxScene(@NotNull Group root) {
         super(root);
 
         this.canvas = new EditorFxImageView();
         this.canvas.setMouseTransparent(true);
         this.canvas.getProperties()
-                .put(JFXMouseInput.PROP_USE_LOCAL_COORDS, true);
+                .put(JfxMouseInput.PROP_USE_LOCAL_COORDS, true);
 
         this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
@@ -103,12 +102,10 @@ public class EditorFxScene extends Scene {
         this.loadingLayer.setId(CssIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
-        final Pane background = new Pane();
+        var background = new Pane();
         background.setId(CssIds.ROOT);
 
-        FXUtils.addDebugBorderTo(canvas);
-
-        root.getChildren().addAll(hideLayer, background, container, loadingLayer);
+        FxUtils.addChild(root, hideLayer, background, container, loadingLayer);
 
         FXUtils.bindFixedWidth(background, widthProperty());
         FXUtils.bindFixedHeight(background, heightProperty());
@@ -137,8 +134,10 @@ public class EditorFxScene extends Scene {
     @FxThread
     public void hideCanvas() {
 
-        final ObservableList<Node> children = hideLayer.getChildren();
-        if (children.contains(canvas)) return;
+        var children = hideLayer.getChildren();
+        if (children.contains(canvas)) {
+            return;
+        }
 
         children.add(canvas);
     }
@@ -151,14 +150,14 @@ public class EditorFxScene extends Scene {
      * @return the component or null.
      */
     @FxThread
-    public <T extends ScreenComponent> @Nullable T findComponent(@NotNull final String id) {
-        final Array<ScreenComponent> components = getComponents();
+    public <T extends ScreenComponent> @Nullable T findComponent(@NotNull String id) {
+        var components = getComponents();
         return unsafeCast(components.search(id, (component, toCheck) ->
                 StringUtils.equals(toCheck, component.getComponentId())));
     }
 
     /**
-     * Gets components.
+     * Gets the list of components.
      *
      * @return the list of components.
      */
@@ -168,7 +167,7 @@ public class EditorFxScene extends Scene {
     }
 
     /**
-     * Get the container.
+     * Get the container of this scene.
      *
      * @return the container of this scene.
      */
@@ -224,16 +223,17 @@ public class EditorFxScene extends Scene {
     private void showLoading() {
         focused = getFocusOwner();
 
-        final VBox loadingLayer = getLoadingLayer();
+        var loadingLayer = getLoadingLayer();
         loadingLayer.setVisible(true);
+        loadingLayer.setManaged(true);
         loadingLayer.toFront();
 
         progressIndicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
         progressIndicator.setId(CssIds.EDITOR_LOADING_PROGRESS);
 
-        FXUtils.addToPane(progressIndicator, loadingLayer);
+        FxUtils.addChild(loadingLayer, progressIndicator);
 
-        final StackPane container = getContainer();
+        var container = getContainer();
         container.setDisable(true);
     }
 
@@ -243,13 +243,14 @@ public class EditorFxScene extends Scene {
     @FxThread
     private void hideLoading() {
 
-        final VBox loadingLayer = getLoadingLayer();
+        var loadingLayer = getLoadingLayer();
         loadingLayer.setVisible(false);
+        loadingLayer.setManaged(false);
         loadingLayer.getChildren().clear();
 
         progressIndicator = null;
 
-        final StackPane container = getContainer();
+        var container = getContainer();
         container.setDisable(false);
 
         if (focused != null) {
@@ -266,11 +267,11 @@ public class EditorFxScene extends Scene {
     @FxThread
     public void notifyFinishBuild() {
 
-        final Array<ScreenComponent> components = getComponents();
+        var components = getComponents();
         fillComponents(components, getContainer());
         components.forEach(ScreenComponent::notifyFinishBuild);
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
+        var initializationManager = InitializationManager.getInstance();
         initializationManager.onFinishLoading();
     }
 }

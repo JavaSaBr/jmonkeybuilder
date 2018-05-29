@@ -2,8 +2,8 @@ package com.ss.editor.plugin.api.property;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,10 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyDefinition {
 
-    @NotNull
     private static final Array<Object> EMPTY_OPTIONS = ArrayFactory.asArray();
-
-    @NotNull
     private static final Array<String> EMPTY_DEPENDENCIES = ArrayFactory.newArray(String.class);
 
     /**
@@ -72,14 +69,22 @@ public class PropertyDefinition {
      */
     private final float max;
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue
+    ) {
         this(propertyType, null, name, id, defaultValue);
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType,
-                              @Nullable final Array<String> dependencies, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @Nullable Array<String> dependencies,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -91,16 +96,24 @@ public class PropertyDefinition {
         this.dependencies = dependencies == null ? EMPTY_DEPENDENCIES : dependencies;
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue,
-                              @Nullable final String extension) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            @Nullable String extension
+    ) {
         this(propertyType, null, name, id, defaultValue, extension);
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType,
-                              @Nullable final Array<String> dependencies, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue,
-                              @Nullable final String extension) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @Nullable Array<String> dependencies,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            @Nullable String extension
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -112,9 +125,13 @@ public class PropertyDefinition {
         this.dependencies = dependencies == null ? EMPTY_DEPENDENCIES : dependencies;
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue,
-                              @NotNull final Array<?> options) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull final String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            @NotNull Array<?> options
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
@@ -126,9 +143,14 @@ public class PropertyDefinition {
         this.dependencies = EMPTY_DEPENDENCIES;
     }
 
-    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, @Nullable final Object defaultValue, final float min,
-                              final float max) {
+    public PropertyDefinition(
+            @NotNull EditablePropertyType propertyType,
+            @NotNull String name,
+            @NotNull String id,
+            @Nullable Object defaultValue,
+            float min,
+            float max
+    ) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;

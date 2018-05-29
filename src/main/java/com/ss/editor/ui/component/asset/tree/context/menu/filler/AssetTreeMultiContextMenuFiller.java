@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.filler;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.MenuItem;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -15,11 +15,7 @@ import java.nio.file.Path;
  */
 public class FileChangedEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<FileChangedEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {
@@ -47,7 +43,7 @@ public class FileChangedEvent extends SceneEvent {
      *
      * @param file the file.
      */
-    public void setFile(@NotNull final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 }

@@ -5,8 +5,8 @@ import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiC
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -4,7 +4,7 @@ import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_FIELD_FILENAME;
 import static com.ss.editor.Messages.SAVE_AS_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UiUtils.findItemForValue;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -18,12 +18,11 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import javafx.event.Event;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -62,13 +61,13 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
-    private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
+    private final EventHandler<CreatedFileEvent> createdFileHandler = this::processEvent;
 
     @NotNull
-    private final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
+    private final EventHandler<RequestSelectFileEvent> selectFileHandle = this::processEvent;
 
     @NotNull
-    private final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
+    private final EventHandler<DeletedFileEvent> deletedFileHandler = this::processEvent;
 
     /**
      * The list of waited files to select.

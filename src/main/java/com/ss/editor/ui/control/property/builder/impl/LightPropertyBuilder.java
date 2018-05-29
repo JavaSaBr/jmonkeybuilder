@@ -15,8 +15,8 @@ import com.ss.editor.ui.control.property.impl.DirectionLightPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.ColorPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,8 +87,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         final Vector3f position = light.getPosition().clone();
         final float radius = light.getRadius();
 
-        final Vector3FPropertyControl<ModelChangeConsumer, PointLight> positionControl =
-                new Vector3FPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, PointLight> positionControl =
+                new Vector3fPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         positionControl.setApplyHandler(PointLight::setPosition);
         positionControl.setSyncHandler(PointLight::getPosition);
         positionControl.setEditObject(light);
@@ -122,8 +122,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         directionControl.setSyncHandler(SpotLight::getDirection);
         directionControl.setEditObject(light);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, SpotLight> positionControl =
-                new Vector3FPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, SpotLight> positionControl =
+                new Vector3fPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         positionControl.setApplyHandler(SpotLight::setPosition);
         positionControl.setSyncHandler(SpotLight::getPosition);
         positionControl.setEditObject(light);

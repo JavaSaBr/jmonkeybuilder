@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node.impl.control.motion;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.cinematic.MotionPath;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
@@ -13,8 +13,8 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link TreeNode} to show a {@link MotionPath} in the tree.

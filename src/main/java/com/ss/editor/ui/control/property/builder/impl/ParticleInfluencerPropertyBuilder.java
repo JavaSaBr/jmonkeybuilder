@@ -11,8 +11,8 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,8 +48,8 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
 
         final float velocityVariation = influencer.getVelocityVariation();
 
-        final Vector3FPropertyControl<ModelChangeConsumer, ParticleInfluencer> initialVelocityControl =
-                new Vector3FPropertyControl<>(initialVelocity, Messages.MODEL_PROPERTY_INITIAL_VELOCITY, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, ParticleInfluencer> initialVelocityControl =
+                new Vector3fPropertyControl<>(initialVelocity, Messages.MODEL_PROPERTY_INITIAL_VELOCITY, changeConsumer);
 
         initialVelocityControl.setSyncHandler(ParticleInfluencer::getInitialVelocity);
         initialVelocityControl.setApplyHandler(ParticleInfluencer::setInitialVelocity);
@@ -106,8 +106,8 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         horizontalControl.setApplyHandler(RadialParticleInfluencer::setHorizontal);
         horizontalControl.setEditObject(influencer);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, RadialParticleInfluencer> originControl =
-                new Vector3FPropertyControl<>(origin, Messages.MODEL_PROPERTY_ORIGIN, changeConsumer);
+        final Vector3fPropertyControl<ModelChangeConsumer, RadialParticleInfluencer> originControl =
+                new Vector3fPropertyControl<>(origin, Messages.MODEL_PROPERTY_ORIGIN, changeConsumer);
 
         originControl.setSyncHandler(RadialParticleInfluencer::getOrigin);
         originControl.setApplyHandler(RadialParticleInfluencer::setOrigin);

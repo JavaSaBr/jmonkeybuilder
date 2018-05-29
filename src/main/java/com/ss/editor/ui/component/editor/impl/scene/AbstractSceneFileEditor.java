@@ -5,8 +5,8 @@ import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.editor.util.NodeUtils.findParent;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -70,10 +70,10 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.*;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
@@ -1170,11 +1170,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      */
     @FxThread
     protected void refreshTree() {
-
-        final M currentModel = getCurrentModel();
-
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.fill(currentModel);
+        getModelNodeTree().fill(notNull(getCurrentModel()));
     }
 
     /**

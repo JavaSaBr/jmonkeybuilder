@@ -1,6 +1,5 @@
 package com.ss.editor.util;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.BoneTrack;
@@ -8,8 +7,8 @@ import com.jme3.animation.Track;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -34,7 +33,7 @@ public class AnimationUtils {
             ANIMATIONS_MAP_FIELD = AnimControl.class.getDeclaredField("animationMap");
             ANIMATIONS_MAP_FIELD.setAccessible(true);
 
-        } catch (final NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
@@ -49,18 +48,22 @@ public class AnimationUtils {
      * @return the new sub animation.
      */
     @FromAnyThread
-    public static @NotNull Animation extractAnimation(@NotNull final Animation source, @NotNull final String newName,
-                                                      final int startFrame, final int endFrame) {
+    public static @NotNull Animation extractAnimation(
+            @NotNull Animation source,
+            @NotNull String newName,
+            int startFrame,
+            int endFrame
+    ) {
 
-        final Track[] sourceTracks = source.getTracks();
-        final BoneTrack firstSourceTrack = (BoneTrack) sourceTracks[0];
-        final float[] sourceTimes = firstSourceTrack.getTimes();
+        var sourceTracks = source.getTracks();
+        var firstSourceTrack = (BoneTrack) sourceTracks[0];
+        var sourceTimes = firstSourceTrack.getTimes();
 
-        final float newLength = (source.getLength() / (float) sourceTimes.length) * (float) (endFrame - startFrame);
-        final Animation result = new Animation(newName, newLength);
-        final Array<Track> newTracks = ArrayFactory.newArray(Track.class);
+        var newLength = (source.getLength() / (float) sourceTimes.length) * (float) (endFrame - startFrame);
+        var result = new Animation(newName, newLength);
+        var newTracks = ArrayFactory.<Track>newArray(Track.class);
 
-        for (final Track sourceTrack : sourceTracks) {
+        for (var sourceTrack : sourceTracks) {
             if (sourceTrack instanceof BoneTrack) {
                 newTracks.add(extractBoneTrack((BoneTrack) sourceTrack, startFrame, endFrame));
             }
@@ -79,22 +82,22 @@ public class AnimationUtils {
      * @param endFrame   the end frame.
      * @return the extracted bone track.
      */
-    private static @NotNull BoneTrack extractBoneTrack(@NotNull final BoneTrack boneTrack, final int startFrame,
-                                                       final int endFrame) {
+    @FromAnyThread
+    private static @NotNull BoneTrack extractBoneTrack(@NotNull BoneTrack boneTrack, int startFrame, int endFrame) {
 
-        final float[] sourceTimes = boneTrack.getTimes();
+        var sourceTimes = boneTrack.getTimes();
 
-        final Vector3f[] newTranslations = new Vector3f[endFrame - startFrame];
-        final Quaternion[] newRotations = new Quaternion[endFrame - startFrame];
-        final Vector3f[] newScales = new Vector3f[endFrame - startFrame];
-        final float[] newTimes = new float[endFrame - startFrame];
+        var newTranslations = new Vector3f[endFrame - startFrame];
+        var newRotations = new Quaternion[endFrame - startFrame];
+        var newScales = new Vector3f[endFrame - startFrame];
+        var newTimes = new float[endFrame - startFrame];
 
         for (int i = startFrame; i < endFrame; i++) {
 
-            final int newFrame = i - startFrame;
-            final Vector3f sourceTranslation = boneTrack.getTranslations()[i];
-            final Vector3f sourceScale = boneTrack.getScales()[i];
-            final Quaternion sourceRotation = boneTrack.getRotations()[i];
+            var newFrame = i - startFrame;
+            var sourceTranslation = boneTrack.getTranslations()[i];
+            var sourceScale = boneTrack.getScales()[i];
+            var sourceRotation = boneTrack.getRotations()[i];
 
             newTimes[newFrame] = sourceTimes[i] - sourceTimes[startFrame];
             newTranslations[newFrame] = sourceTranslation.clone();
@@ -102,7 +105,8 @@ public class AnimationUtils {
             newScales[newFrame] = sourceScale.clone();
         }
 
-        return new BoneTrack(boneTrack.getTargetBoneIndex(), newTimes, newTranslations, newRotations, newScales);
+        return new BoneTrack(boneTrack.getTargetBoneIndex(), newTimes,
+                newTranslations, newRotations, newScales);
     }
 
     /**
@@ -114,11 +118,15 @@ public class AnimationUtils {
      * @param newName   the new name.
      */
     @FromAnyThread
-    public static void changeName(@NotNull final AnimControl control, @NotNull final Animation animation,
-                                  @NotNull final String oldName, @NotNull final String newName) {
+    public static void changeName(
+            @NotNull AnimControl control,
+            @NotNull Animation animation,
+            @NotNull String oldName,
+            @NotNull String newName
+    ) {
         try {
 
-            final Map<String, Animation> animationMap = unsafeCast(ANIMATIONS_MAP_FIELD.get(control));
+            var animationMap = ClassUtils.<Map<String, Animation>>unsafeCast(ANIMATIONS_MAP_FIELD.get(control));
 
             if (!animationMap.containsKey(oldName)) {
                 throw new IllegalArgumentException("Given animation does not exist " + "in this AnimControl");
@@ -133,7 +141,7 @@ public class AnimationUtils {
             animationMap.remove(oldName);
             animationMap.put(newName, animation);
 
-        } catch (final IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -145,12 +153,12 @@ public class AnimationUtils {
      * @return the frame count or -1.
      */
     @FromAnyThread
-    public static int getFrameCount(@NotNull final Animation animation) {
+    public static int getFrameCount(@NotNull Animation animation) {
 
-        int min = Integer.MAX_VALUE;
+        var min = Integer.MAX_VALUE;
 
-        final Track[] tracks = animation.getTracks();
-        for (final Track track : tracks) {
+        var tracks = animation.getTracks();
+        for (var track : tracks) {
             if (track instanceof BoneTrack) {
                 min = Math.min(min, ((BoneTrack) track).getTimes().length);
             }
@@ -167,7 +175,7 @@ public class AnimationUtils {
      * @return the free name.
      */
     @FromAnyThread
-    public static @NotNull String findFreeName(@NotNull final AnimControl control, @NotNull final String base) {
+    public static @NotNull String findFreeName(@NotNull AnimControl control, @NotNull String base) {
 
         if (control.getAnim(base) == null) {
             return base;

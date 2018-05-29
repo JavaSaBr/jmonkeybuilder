@@ -4,8 +4,8 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.impl.*;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +64,7 @@ public class PropertyBuilderRegistry {
      * @param builder the property builder.
      */
     @FromAnyThread
-    public void register(@NotNull final PropertyBuilder builder) {
+    public void register(@NotNull PropertyBuilder builder) {
         builders.add(builder);
         builders.sort(PropertyBuilder::compareTo);
     }
@@ -75,7 +75,7 @@ public class PropertyBuilderRegistry {
      * @param filter the property builder filter.
      */
     @FromAnyThread
-    public void register(@NotNull final PropertyBuilderFilter filter) {
+    public void register(@NotNull PropertyBuilderFilter filter) {
         filters.add(filter);
     }
 
@@ -88,14 +88,18 @@ public class PropertyBuilderRegistry {
      * @param changeConsumer the consumer to work between controls and editor.
      */
     @FxThread
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                         @NotNull final ChangeConsumer changeConsumer) {
+    public void buildFor(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ChangeConsumer changeConsumer
+    ) {
 
-        for (final PropertyBuilder builder : builders) {
+        for (var builder : builders) {
 
             boolean needSkip = false;
 
-            for (final PropertyBuilderFilter filter : filters) {
+            for (var filter : filters) {
                 if (filter.skip(builder, object, parent)) {
                     needSkip = true;
                     break;

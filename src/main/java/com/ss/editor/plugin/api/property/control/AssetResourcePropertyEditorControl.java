@@ -1,12 +1,12 @@
 package com.ss.editor.plugin.api.property.control;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -19,15 +19,15 @@ import java.util.function.Predicate;
  */
 public abstract class AssetResourcePropertyEditorControl<T> extends ResourcePropertyEditorControl<T> {
 
-    @NotNull
     private static final Predicate<Class<?>> DEFAULT_ACTION_TESTER = type -> false;
 
-    @NotNull
     private static final Array<String> DEFAULT_EXTENSIONS = ArrayFactory.newArray(String.class);
 
-    protected AssetResourcePropertyEditorControl(@NotNull final VarTable vars,
-                                                 @NotNull final PropertyDefinition definition,
-                                                 @NotNull final Runnable validationCallback) {
+    protected AssetResourcePropertyEditorControl(
+            @NotNull final VarTable vars,
+            @NotNull final PropertyDefinition definition,
+            @NotNull final Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
@@ -53,18 +53,18 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
 
     @Override
     @FxThread
-    protected void processSelect() {
-        super.processSelect();
-        UiUtils.openFileAssetDialog(this::processSelect, getExtensions(), getActionTester());
+    protected void chooseNew() {
+        super.chooseNew();
+        UiUtils.openFileAssetDialog(this::chooseNew, getExtensions(), getActionTester());
     }
 
     /**
-     * Handles the selected file.
+     * Choose the new resource by the file.
      *
      * @param file the selected file.
      */
     @FxThread
-    protected void processSelect(@NotNull final Path file) {
+    protected void chooseNew(@NotNull Path file) {
         change();
         reload();
     }

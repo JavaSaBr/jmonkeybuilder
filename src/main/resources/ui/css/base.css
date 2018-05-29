@@ -24,6 +24,7 @@
 
     -var-default-label-height: 22px;
     -var-default-field-height: 26px;
+    -var-default-field-inner-height: 22px;
     -var-default-field-preview-height: 24px;
     -var-default-inner-field-height: 22px;
     -var-default-cell-height: 22px;
@@ -32,7 +33,6 @@
 
 /* Make popups transparent */
 .root.popup {
-    -fx-background-color: transparent;
 }
 
 /*******************************************************************************

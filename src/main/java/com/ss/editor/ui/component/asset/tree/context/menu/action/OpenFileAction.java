@@ -15,24 +15,20 @@ import org.jetbrains.annotations.Nullable;
  */
 public class OpenFileAction extends FileAction {
 
-    public OpenFileAction(@NotNull final ResourceElement element) {
+    public OpenFileAction(@NotNull ResourceElement element) {
         super(element);
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
     }
 
-    @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    @FxThread
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
-
-        final RequestedOpenFileEvent newEvent = new RequestedOpenFileEvent();
-        newEvent.setFile(getElement().getFile());
-
-        FX_EVENT_MANAGER.notify(newEvent);
+        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(getElement().getFile()));
     }
 }

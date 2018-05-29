@@ -16,7 +16,6 @@ import java.io.InputStream;
  */
 public class SvgImageLoaderFactory implements ImageLoaderFactory {
 
-    @NotNull
     private static final ImageLoaderFactory INSTANCE = new SvgImageLoaderFactory();
 
     @FxThread
@@ -37,7 +36,7 @@ public class SvgImageLoaderFactory implements ImageLoaderFactory {
 
     @Override
     @FxThread
-    public ImageLoader createImageLoader(@NotNull final InputStream input) throws IOException {
+    public ImageLoader createImageLoader(@NotNull InputStream input) throws IOException {
         return new SvgImageLoader(input);
     }
 }

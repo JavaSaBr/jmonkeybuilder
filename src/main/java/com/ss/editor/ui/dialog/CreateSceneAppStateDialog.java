@@ -1,8 +1,8 @@
 package com.ss.editor.ui.dialog;
 
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -15,11 +15,11 @@ import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.model.undo.impl.AddAppStateOperation;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

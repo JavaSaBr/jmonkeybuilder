@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.editor.part3d;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;

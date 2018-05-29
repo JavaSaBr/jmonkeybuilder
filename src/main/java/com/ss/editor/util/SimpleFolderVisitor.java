@@ -15,14 +15,15 @@ import java.nio.file.attribute.BasicFileAttributes;
 public interface SimpleFolderVisitor extends SimpleFileVisitor {
 
     @Override
-    default @NotNull FileVisitResult preVisitDirectory(@NotNull final Path dir,
-                                                       @NotNull final BasicFileAttributes attrs) throws IOException {
+    default @NotNull FileVisitResult preVisitDirectory(
+            @NotNull Path dir, @NotNull BasicFileAttributes attrs
+    ) throws IOException {
         visit(dir, attrs);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    default @NotNull FileVisitResult visitFile(@NotNull final Path file, @NotNull final BasicFileAttributes attrs)
+    default @NotNull FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attrs)
             throws IOException {
         return FileVisitResult.CONTINUE;
     }

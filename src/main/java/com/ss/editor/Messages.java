@@ -1,12 +1,8 @@
 package com.ss.editor;
 
-import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
 import static java.util.ResourceBundle.getBundle;
-import com.ss.rlib.util.PropertyLoader;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import com.ss.rlib.common.util.PropertyLoader;
 
-import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -479,6 +475,23 @@ public class Messages {
     public static final String MODEL_PROPERTY_COLOR_SPACE;
     public static final String MODEL_PROPERTY_LANGUAGE;
     public static final String MODEL_PROPERTY_TEXTURE;
+    public static final String MODEL_PROPERTY_BRUSH_SIZE;
+    public static final String MODEL_PROPERTY_BRUSH_POWER;
+    public static final String MODEL_PROPERTY_SMOOTHLY;
+    public static final String MODEL_PROPERTY_LIMITED;
+    public static final String MODEL_PROPERTY_USE_MARKER;
+    public static final String MODEL_PROPERTY_ROUGHNESS;
+    public static final String MODEL_PROPERTY_FREQUENCY;
+    public static final String MODEL_PROPERTY_LACUNARITY;
+    public static final String MODEL_PROPERTY_OCTAVES;
+    public static final String MODEL_PROPERTY_MIN_SCALE;
+    public static final String MODEL_PROPERTY_MAX_SCALE;
+    public static final String MODEL_PROPERTY_PADDING;
+    public static final String MODEL_PROPERTY_TRI_PLANAR;
+    public static final String MODEL_PROPERTY_SHININESS;
+    public static final String MODEL_PROPERTY_MODEL;
+    public static final String MODEL_PROPERTY_METHOD;
+
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS;
@@ -640,23 +653,6 @@ public class Messages {
     public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
     public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
 
-    public static final String PAINTING_COMPONENT_BRUSH_SIZE;
-    public static final String PAINTING_COMPONENT_BRUSH_POWER;
-    public static final String PAINTING_COMPONENT_SMOOTHLY;
-    public static final String PAINTING_COMPONENT_LIMITED;
-    public static final String PAINTING_COMPONENT_USE_MARKER;
-    public static final String PAINTING_COMPONENT_LEVEL;
-    public static final String PAINTING_COMPONENT_ROUGHNESS;
-    public static final String PAINTING_COMPONENT_FREQUENCY;
-    public static final String PAINTING_COMPONENT_LACUNARITY;
-    public static final String PAINTING_COMPONENT_OCTAVES;
-    public static final String PAINTING_COMPONENT_SCALE;
-    public static final String PAINTING_COMPONENT_TRI_PLANAR;
-    public static final String PAINTING_COMPONENT_SHININESS;
-    public static final String PAINTING_COMPONENT_LAYER;
-    public static final String PAINTING_COMPONENT_MODEL;
-    public static final String PAINTING_COMPONENT_METHOD;
-
     public static final String MODEL_CONVERTER_DIALOG_TITLE;
     public static final String MODEL_CONVERTER_DIALOG_RESULT_NAME;
     public static final String MODEL_CONVERTER_DIALOG_DESTINATION_FOLDER;
@@ -705,19 +701,6 @@ public class Messages {
     public static final String PAINTING_COMPONENT_SPAWN_MODELS_METHOD_BATCH;
 
     static {
-
-        final Locale locale = Locale.getDefault();
-        final ClassLoader classLoader = ControlResources.class.getClassLoader();
-
-        final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                locale, classLoader, PropertyLoader.getInstance());
-
-        final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                PropertyLoader.getInstance());
-
-        final Map<String, String> override = getUnsafeFieldValue(overrideBundle, "lookup");
-        final Map<String, String> original = getUnsafeFieldValue(controlBundle, "lookup");
-        original.putAll(override);
 
         final ResourceBundle bundle = getBundle(BUNDLE_NAME, PropertyLoader.getInstance());
 
@@ -1181,6 +1164,22 @@ public class Messages {
         MODEL_PROPERTY_COLOR_SPACE = bundle.getString("ModelPropertyColorSpace");
         MODEL_PROPERTY_LANGUAGE = bundle.getString("ModelPropertyLanguage");
         MODEL_PROPERTY_TEXTURE = bundle.getString("ModelPropertyTexture");
+        MODEL_PROPERTY_BRUSH_SIZE = bundle.getString("ModelPropertyBrushSize");
+        MODEL_PROPERTY_BRUSH_POWER = bundle.getString("ModelPropertyBrushPower");
+        MODEL_PROPERTY_SMOOTHLY = bundle.getString("ModelPropertySmoothly");
+        MODEL_PROPERTY_LIMITED = bundle.getString("ModelPropertyLimited");
+        MODEL_PROPERTY_USE_MARKER = bundle.getString("ModelPropertyUseMarker");
+        MODEL_PROPERTY_ROUGHNESS = bundle.getString("ModelPropertyRoughness");
+        MODEL_PROPERTY_FREQUENCY = bundle.getString("ModelPropertyFrequency");
+        MODEL_PROPERTY_LACUNARITY = bundle.getString("ModelPropertyLacunarity");
+        MODEL_PROPERTY_OCTAVES = bundle.getString("ModelPropertyOctaves");
+        MODEL_PROPERTY_MIN_SCALE = bundle.getString("ModelPropertyMinScale");
+        MODEL_PROPERTY_MAX_SCALE = bundle.getString("ModelPropertyMaxScale");
+        MODEL_PROPERTY_PADDING = bundle.getString("ModelPropertyPadding");
+        MODEL_PROPERTY_TRI_PLANAR = bundle.getString("ModelPropertyTriPlanar");
+        MODEL_PROPERTY_SHININESS = bundle.getString("ModelPropertyShininess");
+        MODEL_PROPERTY_MODEL = bundle.getString("ModelPropertyModel");
+        MODEL_PROPERTY_METHOD = bundle.getString("ModelPropertyMethod");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_TEXTURE_SETTINGS = bundle.getString("MaterialModelPropertyControlTextureSettings");
@@ -1342,23 +1341,6 @@ public class Messages {
         CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterQuadShapeDialogTitle");
         CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTorusShapeDialogTitle");
         CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTriangleShapeDialogTitle");
-
-        PAINTING_COMPONENT_BRUSH_SIZE = bundle.getString("PaintingComponentBrushSize");
-        PAINTING_COMPONENT_BRUSH_POWER = bundle.getString("PaintingComponentBrushPower");
-        PAINTING_COMPONENT_SMOOTHLY = bundle.getString("PaintingComponentSmoothly");
-        PAINTING_COMPONENT_LIMITED = bundle.getString("PaintingComponentLimited");
-        PAINTING_COMPONENT_USE_MARKER = bundle.getString("PaintingComponentUseMarker");
-        PAINTING_COMPONENT_LEVEL = bundle.getString("PaintingComponentLevel");
-        PAINTING_COMPONENT_ROUGHNESS = bundle.getString("PaintingComponentRoughness");
-        PAINTING_COMPONENT_FREQUENCY = bundle.getString("PaintingComponentFrequency");
-        PAINTING_COMPONENT_LACUNARITY = bundle.getString("PaintingComponentLacunarity");
-        PAINTING_COMPONENT_OCTAVES = bundle.getString("PaintingComponentOctaves");
-        PAINTING_COMPONENT_SCALE = bundle.getString("PaintingComponentScale");
-        PAINTING_COMPONENT_TRI_PLANAR = bundle.getString("PaintingComponentTriPlanar");
-        PAINTING_COMPONENT_SHININESS = bundle.getString("PaintingComponentShininess");
-        PAINTING_COMPONENT_LAYER = bundle.getString("PaintingComponentLayer");
-        PAINTING_COMPONENT_MODEL = bundle.getString("PaintingComponentModel");
-        PAINTING_COMPONENT_METHOD = bundle.getString("PaintingComponentMethod");
 
         MODEL_CONVERTER_DIALOG_TITLE = bundle.getString("ModelConverterDialogTitle");
         MODEL_CONVERTER_DIALOG_RESULT_NAME = bundle.getString("ModelConverterDialogResultName");

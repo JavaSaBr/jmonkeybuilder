@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -8,7 +8,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -19,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link PropertyControl} to edit an elements from scene.
  *
- * @param <C> the change consumer's type.
- * @param <D> the edited object's type.
- * @param <T> the element's type.
+ * @param <C> the type of a change consumer.
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends PropertyControl<C, D, T> {
@@ -44,61 +44,68 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     @Nullable
     private Label elementLabel;
 
-    public ElementPropertyControl(@NotNull final Class<T> type, @Nullable final T propertyValue,
-                                  @NotNull final String propertyName, @NotNull final C changeConsumer) {
+    public ElementPropertyControl(
+            @NotNull Class<T> type,
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull C changeConsumer
+    ) {
         super(propertyValue, propertyName, changeConsumer);
         this.type = type;
     }
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull final HBox container) {
+    protected void createComponents(@NotNull HBox container) {
         super.createComponents(container);
 
         elementLabel = new Label(NO_ELEMENT);
-        elementLabel.prefWidthProperty().bind(container.widthProperty());
+        elementLabel.prefWidthProperty()
+            .bind(container.widthProperty());
 
-        final Button changeButton = new Button();
+        var changeButton = new Button();
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
-        changeButton.setOnAction(event -> processAdd());
+        changeButton.setOnAction(event -> addElement());
 
-        final Button editButton = new Button();
+        var editButton = new Button();
         editButton.setGraphic(new ImageView(Icons.REMOVE_12));
-        editButton.disableProperty().bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
-        editButton.setOnAction(event -> processRemove());
+        editButton.setOnAction(event -> removeElement());
+        editButton.disableProperty()
+            .bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
 
-        FXUtils.addToPane(elementLabel, container);
-        FXUtils.addToPane(changeButton, container);
-        FXUtils.addToPane(editButton, container);
+        FxUtils.addClass(container,
+                    CssClasses.TEXT_INPUT_CONTAINER,
+                    CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
+            .addClass(elementLabel,
+                    CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
+            .addClass(changeButton, editButton,
+                    CssClasses.FLAT_BUTTON,
+                    CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
-        FXUtils.addClassesTo(container, CssClasses.TEXT_INPUT_CONTAINER,
-                CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
-        FXUtils.addClassTo(elementLabel, CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
-        FXUtils.addClassesTo(changeButton, editButton, CssClasses.FLAT_BUTTON,
-                CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FxUtils.addChild(container, elementLabel, changeButton, editButton);
 
         DynamicIconSupport.addSupport(changeButton, editButton);
     }
 
     /**
-     * Show dialog to choose an element.
+     * Show a dialog to choose an element.
      */
     @FxThread
-    protected void processAdd() {
+    protected void addElement() {
     }
 
     /**
-     * Open this material in the material editor.
+     * Remove the current element.
      */
     @FxThread
-    protected void processRemove() {
+    protected void removeElement() {
         changed(null, getPropertyValue());
     }
 
     /**
-     * Gets element label.
+     * Get the element label.
      *
-     * @return the label with name of the material.
+     * @return the element label.
      */
     @FxThread
     protected @NotNull Label getElementLabel() {

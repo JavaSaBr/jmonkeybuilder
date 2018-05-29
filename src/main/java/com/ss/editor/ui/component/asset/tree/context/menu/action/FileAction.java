@@ -1,12 +1,12 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FxEventManager;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;

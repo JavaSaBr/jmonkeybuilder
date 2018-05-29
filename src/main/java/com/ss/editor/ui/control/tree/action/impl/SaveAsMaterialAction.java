@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.tree.action.impl;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;

@@ -1,7 +1,7 @@
 package com.ss.editor.control.painting.terrain;
 
 import static com.ss.editor.util.PaintingUtils.isContains;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;

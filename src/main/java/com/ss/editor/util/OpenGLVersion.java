@@ -19,11 +19,9 @@ public enum OpenGLVersion {
     GL_44(AppSettings.LWJGL_OPENGL44, "4.4 with core profile"),
     GL_45(AppSettings.LWJGL_OPENGL45, "4.5 with core profile");
 
-    @NotNull
     private static final OpenGLVersion[] VERSIONS = values();
 
-    @NotNull
-    public static OpenGLVersion valueOf(final int index) {
+    public static @NotNull OpenGLVersion valueOf(int index) {
         return VERSIONS[index];
     }
 
@@ -39,20 +37,23 @@ public enum OpenGLVersion {
     @NotNull
     private final String label;
 
-    OpenGLVersion(@NotNull final String render, @NotNull final String label) {
+    OpenGLVersion(@NotNull String render, @NotNull String label) {
         this.render = render;
         this.label = label;
     }
 
     /**
+     * Get the value for render.
+     *
      * @return the value for render.
      */
-    @NotNull
-    public String getRender() {
+    public @NotNull String getRender() {
         return render;
     }
 
     /**
+     * Get the label for UI.
+     *
      * @return the label for UI.
      */
     @Override

@@ -24,14 +24,13 @@ class OpenFileByEditorAction extends FileAction {
     @NotNull
     private final EditorDescription description;
 
-    public OpenFileByEditorAction(@NotNull final ResourceElement element,
-                                  @NotNull final EditorDescription description) {
+    public OpenFileByEditorAction(@NotNull ResourceElement element, @NotNull EditorDescription description) {
         super(element);
         this.description = description;
 
         setText(description.getEditorName());
 
-        final Image icon = description.getIcon();
+        var icon = description.getIcon();
 
         if (icon != null) {
             setGraphic(new ImageView(icon));
@@ -46,11 +45,10 @@ class OpenFileByEditorAction extends FileAction {
 
     @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final RequestedOpenFileEvent newEvent = new RequestedOpenFileEvent();
-        newEvent.setFile(getElement().getFile());
+        var newEvent = new RequestedOpenFileEvent(getElement().getFile());
         newEvent.setDescription(description);
 
         FX_EVENT_MANAGER.notify(newEvent);

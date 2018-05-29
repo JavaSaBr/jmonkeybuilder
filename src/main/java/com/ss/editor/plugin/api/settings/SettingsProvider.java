@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.settings;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,7 +26,7 @@ public interface SettingsProvider {
      * @return true if need restart to apply changes for this property.
      */
     @FxThread
-    default boolean isRequiredRestart(@NotNull final String propertyId) {
+    default boolean isRequiredRestart(@NotNull String propertyId) {
         return false;
     }
 
@@ -37,7 +37,7 @@ public interface SettingsProvider {
      * @return true if need to update classpath to apply changes for this property.
      */
     @FxThread
-    default boolean isRequiredUpdateClasspath(@NotNull final String propertyId) {
+    default boolean isRequiredUpdateClasspath(@NotNull String propertyId) {
         return false;
     }
 
@@ -48,7 +48,7 @@ public interface SettingsProvider {
      * @return true if need to reshape 3D view to apply changes for this property.
      */
     @FxThread
-    default boolean isRequiredReshape3DView(@NotNull final String propertyId) {
+    default boolean isRequiredReshape3DView(@NotNull String propertyId) {
         return false;
     }
 }

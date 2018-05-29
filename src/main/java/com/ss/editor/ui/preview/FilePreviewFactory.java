@@ -1,7 +1,7 @@
 package com.ss.editor.ui.preview;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
 /**

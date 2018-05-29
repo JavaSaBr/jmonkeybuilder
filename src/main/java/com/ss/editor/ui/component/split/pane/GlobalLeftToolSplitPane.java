@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.split.pane;
 
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 
@@ -15,32 +16,31 @@ import javafx.scene.control.SplitPane;
  */
 public class GlobalLeftToolSplitPane extends TabToolSplitPane<EditorConfig> {
 
-    /**
-     * Instantiates a new Global left tool split pane.
-     *
-     * @param scene the scene
-     */
-    public GlobalLeftToolSplitPane(@NotNull final Scene scene) {
+    public GlobalLeftToolSplitPane(@NotNull Scene scene) {
         super(scene, EditorConfig.getInstance());
     }
 
     @Override
+    @FxThread
     protected boolean loadCollapsed() {
         return getConfig().isGlobalLeftToolCollapsed();
     }
 
     @Override
+    @FxThread
     protected int loadSize() {
         return getConfig().getGlobalLeftToolWidth();
     }
 
     @Override
-    protected void saveCollapsed(final boolean collapsed) {
+    @FxThread
+    protected void storeCollapsed(boolean collapsed) {
         getConfig().setGlobalLeftToolCollapsed(collapsed);
     }
 
     @Override
-    protected void saveSize(final int size) {
+    @FxThread
+    protected void storeSize(int size) {
         getConfig().setGlobalLeftToolWidth(size);
     }
 }

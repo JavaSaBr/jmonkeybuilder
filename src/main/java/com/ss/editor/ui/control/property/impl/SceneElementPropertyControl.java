@@ -9,42 +9,44 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link ElementPropertyControl} to edit elements from scenes.
  *
- * @param <D> the edited object's type.
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public abstract class SceneElementPropertyControl<D, T> extends ElementPropertyControl<SceneChangeConsumer, D, T> {
 
-    public SceneElementPropertyControl(@NotNull final Class<T> type, @Nullable final T propertyValue,
-                                       @NotNull final String propertyName,
-                                       @NotNull final SceneChangeConsumer changeConsumer) {
+    public SceneElementPropertyControl(
+            @NotNull Class<T> type,
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull SceneChangeConsumer changeConsumer
+    ) {
         super(type, propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    protected void processAdd() {
-        final SceneSelectorDialog<T> dialog = createSceneSelectorDialog();
-        dialog.show(this);
+    protected void addElement() {
+        createSceneSelectorDialog().show(this);
     }
 
     /**
-     * Create scene selector dialog node selector dialog.
+     * Create a scene selector dialog.
      *
      * @return the scene selector dialog.
      */
     @FxThread
     protected @NotNull SceneSelectorDialog<T> createSceneSelectorDialog() {
-        final SceneChangeConsumer changeConsumer = getChangeConsumer();
-        return new SceneSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
+        return new SceneSelectorDialog<>(getChangeConsumer().getCurrentModel(), type, this::addElement);
     }
 
     /**
-     * Process adding the new element.
+     * Add the chosen element.
      *
      * @param newElement the new element.
      */
     @FxThread
-    protected void processAdd(@NotNull final T newElement) {
+    protected void addElement(@NotNull T newElement) {
         changed(newElement, getPropertyValue());
     }
 }

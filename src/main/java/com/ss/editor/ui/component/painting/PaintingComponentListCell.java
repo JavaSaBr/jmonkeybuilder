@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.painting;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
@@ -21,14 +21,14 @@ public class PaintingComponentListCell extends ListCell<PaintingComponent> {
     @NotNull
     private final ImageView imageView;
 
-    public PaintingComponentListCell(@Nullable final ListView<PaintingComponent> listView) {
+    public PaintingComponentListCell(@Nullable ListView<PaintingComponent> listView) {
         this.imageView = new ImageView();
         setGraphic(imageView);
     }
 
     @Override
     @FxThread
-    protected void updateItem(@Nullable final PaintingComponent item, final boolean empty) {
+    protected void updateItem(@Nullable PaintingComponent item, boolean empty) {
         super.updateItem(item, empty);
 
         if (item == null) {

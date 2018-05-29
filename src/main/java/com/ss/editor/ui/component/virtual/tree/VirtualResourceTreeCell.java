@@ -4,7 +4,7 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.virtual.tree.resource.FolderVirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;

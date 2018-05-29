@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.geometry.lod;
 
-import static com.ss.editor.ui.FXConstants.DIALOG_LIST_WIDTH_PERCENT;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.editor.ui.FxConstants.DIALOG_LIST_WIDTH_PERCENT;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -19,7 +19,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -193,7 +193,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         levelsList.prefWidthProperty().bind(widthProperty().multiply(DIALOG_LIST_WIDTH_PERCENT));
         levelsList.maxWidthProperty().bind(widthProperty().multiply(DIALOG_LIST_WIDTH_PERCENT));
         levelsList.getItems().addListener((ListChangeListener<? super Number>) c -> updateButtonOk());
-        levelsList.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
+        levelsList.setFixedCellSize(FxConstants.LIST_CELL_HEIGHT);
 
         FXUtils.addToPane(levelsList, root);
 

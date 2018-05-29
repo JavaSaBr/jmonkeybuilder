@@ -4,8 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.dialog.file.chooser.ExternalFileEditorDialog;
-import com.ss.rlib.util.VarTable;
-import javafx.scene.control.Label;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,19 +24,21 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
     @Nullable
     private final String extension;
 
-    public ExternalFileResourcePropertyControl(@NotNull final VarTable vars,
-                                               @NotNull final PropertyDefinition definition,
-                                               @NotNull final Runnable validationCallback) {
+    public ExternalFileResourcePropertyControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
         this.extension = definition.getExtension();
     }
 
     @Override
     @FxThread
-    protected void processSelect() {
-        super.processSelect();
+    protected void chooseNew() {
+        super.chooseNew();
 
-        final ExternalFileEditorDialog dialog = new ExternalFileEditorDialog(this::openExternalFile);
+        var dialog = new ExternalFileEditorDialog(this::openExternalFile);
         dialog.setTitleText(Messages.ASSET_EDITOR_DIALOG_TITLE);
         dialog.setInitDirectory(Paths.get(System.getProperty("user.home")));
         dialog.show();
@@ -49,7 +50,7 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
      * @param path the selected file.
      */
     @FxThread
-    private void openExternalFile(@NotNull final Path path) {
+    private void openExternalFile(@NotNull Path path) {
         setPropertyValue(path);
         change();
         reload();
@@ -60,8 +61,8 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
     @FxThread
     public void reload() {
 
-        final Path resource = getPropertyValue();
-        final Label resourceLabel = getResourceLabel();
+        var resource = getPropertyValue();
+        var resourceLabel = getResourceLabel();
         resourceLabel.setText(resource == null ? NOT_SELECTED : resource.toString());
 
         super.reload();

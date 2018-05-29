@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
@@ -10,9 +10,9 @@ import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.scene.control.Button;

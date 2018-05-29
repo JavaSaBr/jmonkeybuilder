@@ -1,12 +1,11 @@
 package com.ss.editor.ui.component.painting.terrain;
 
+import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
+import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import static com.ss.editor.ui.component.painting.PaintingComponentContainer.FIELD_PERCENT;
 import static com.ss.editor.ui.component.painting.PaintingComponentContainer.LABEL_PERCENT;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.array.ArrayFactory.toArray;
-import com.jme3.material.MatParam;
-import com.jme3.material.Material;
-import com.jme3.material.MaterialDef;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
@@ -16,24 +15,24 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.terrain.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
+import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
+import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
 import com.ss.editor.ui.component.painting.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
-import javafx.collections.ObservableList;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -42,8 +41,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,13 +52,28 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, TerrainPaintingStateWithEditorTool, TerrainToolControl> {
+public class TerrainPaintingComponent extends
+        PropertiesBasedPaintingComponent<Node, TerrainPaintingStateWithEditorTool, TerrainToolControl> {
 
-    /**
-     * The constant TERRAIN_PARAM.
-     */
-    @NotNull
     public static final String TERRAIN_PARAM = "terrainParam";
+
+    private static final String CATEGORY_RAISE_LOWER = "RaiseLower";
+    private static final String CATEGORY_ROUGH = "Rough";
+    private static final String CATEGORY_SLOPE = "Slope";
+    private static final String CATEGORY_LEVEL = "Level";
+    private static final String CATEGORY_SMOOTH = "Smooth";
+    private static final String CATEGORY_PAINT = "Paint";
+
+    private static final String PROPERTY_SLOPE_SMOOTHLY = "slope.smoothly";
+    private static final String PROPERTY_SLOPE_LIMITED = "slope.limited";
+    private static final String PROPERTY_LEVEL_SMOOTHLY = "level.smoothly";
+    private static final String PROPERTY_LEVEL_USE_MARKER = "level.useMarker";
+    private static final String PROPERTY_LEVEL_VALUE = "level.level";
+    private static final String PROPERTY_ROUGH_ROUGHNESS = "rough.roughness";
+    private static final String PROPERTY_ROUGH_FREQUENCY = "rough.frequency";
+    private static final String PROPERTY_ROUGH_LACUNARITY = "rough.lacunarity";
+    private static final String PROPERTY_ROUGH_OCTAVES = "rough.octaves";
+    private static final String PROPERTY_ROUGH_SCALE = "rough.scale";
 
     @NotNull
     private static final Function<Integer, String> LAYER_TO_SCALE_NAME = layer -> "DiffuseMap_" + layer + "_scale";
@@ -119,10 +131,11 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     private final ObjectDictionary<ToggleButton, TerrainToolControl> buttonToControl;
 
     /**
-     * The map with mapping toggle button to its settings.
+     * The map with mapping toggle button to properties category.
      */
     @NotNull
-    private final ObjectDictionary<ToggleButton, Pane> buttonToSettings;
+    private final ObjectDictionary<ToggleButton, String> buttonToCategory;
+
 
     /**
      * The control to raise/lowe terrain.
@@ -197,90 +210,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     private ToggleButton paintButton;
 
     /**
-     * The container of control settings.
-     */
-    @Nullable
-    private VBox controlSettings;
-
-    /**
-     * The settings of level control.
-     */
-    @Nullable
-    private GridPane levelControlSettings;
-
-    /**
-     * The setting of using smoothly changing of terrain height.
-     */
-    @Nullable
-    private CheckBox levelControlSmoothly;
-
-    /**
-     * The setting of using marker to detect a level.
-     */
-    @Nullable
-    private CheckBox levelControlUseMarker;
-
-    /**
-     * The setting of target level.
-     */
-    @Nullable
-    private FloatTextField levelControlLevelField;
-
-    /**
-     * The settings of rough control.
-     */
-    @Nullable
-    private GridPane roughControlSettings;
-
-    /**
-     * The settings of roughness.
-     */
-    @Nullable
-    private FloatTextField roughControlRoughnessField;
-
-    /**
-     * The settings of frequency.
-     */
-    @Nullable
-    private FloatTextField roughControlFrequencyField;
-
-    /**
-     * The settings of lacunarity.
-     */
-    @Nullable
-    private FloatTextField roughControlLacunarityField;
-
-    /**
-     * The settings of octaves.
-     */
-    @Nullable
-    private FloatTextField roughControlOctavesField;
-
-    /**
-     * The settings of scale.
-     */
-    @Nullable
-    private FloatTextField roughControlScaleField;
-
-    /**
-     * The settings of slope control.
-     */
-    @Nullable
-    private GridPane slopeControlSettings;
-
-    /**
-     * The setting of using smoothly changing of terrain height.
-     */
-    @Nullable
-    private CheckBox slopeControlSmoothly;
-
-    /**
-     * The setting of using limited between markers.
-     */
-    @Nullable
-    private CheckBox slopeControlLimited;
-
-    /**
      * The settings of painting control.
      */
     @Nullable
@@ -304,11 +233,11 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @Nullable
     private FloatTextField shininessField;
 
-    public TerrainPaintingComponent(@NotNull final PaintingComponentContainer container) {
+    public TerrainPaintingComponent(@NotNull PaintingComponentContainer container) {
         super(container);
 
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
-        this.buttonToSettings = DictionaryFactory.newObjectDictionary();
+        this.buttonToCategory = DictionaryFactory.newObjectDictionary();
         this.raiseLowerToolControl = new RaiseLowerTerrainToolControl(this);
         this.smoothToolControl = new SmoothTerrainToolControl(this);
         this.roughToolControl = new RoughTerrainToolControl(this);
@@ -322,24 +251,32 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         this.toggleButtons.addAll(toArray(raiseLowerButton, smoothButton, roughButton, levelButton,
                 slopeButton, paintButton));
 
-        final ToggleButton raiseLowerButton = getRaiseLowerButton();
+        var raiseLowerButton = getRaiseLowerButton();
+        var slopeButton = getSlopeButton();
+        var levelButton = getLevelButton();
+        var roughButton = getRoughButton();
+        var smoothButton = getSmoothButton();
+        var paintButton = getPaintButton();
 
         buttonToControl.put(raiseLowerButton, raiseLowerToolControl);
-        buttonToControl.put(getSmoothButton(), smoothToolControl);
-        buttonToControl.put(getRoughButton(), roughToolControl);
-        buttonToControl.put(getLevelButton(), levelToolControl);
-        buttonToControl.put(getSlopeButton(), slopeToolControl);
-        buttonToControl.put(getPaintButton(), paintToolControl);
-        buttonToSettings.put(getSlopeButton(), slopeControlSettings);
-        buttonToSettings.put(getLevelButton(), levelControlSettings);
-        buttonToSettings.put(getRoughButton(), roughControlSettings);
-        buttonToSettings.put(getPaintButton(), paintControlSettings);
+        buttonToControl.put(smoothButton, smoothToolControl);
+        buttonToControl.put(roughButton, roughToolControl);
+        buttonToControl.put(levelButton, levelToolControl);
+        buttonToControl.put(slopeButton, slopeToolControl);
+        buttonToControl.put(paintButton, paintToolControl);
+        buttonToCategory.put(raiseLowerButton, CATEGORY_RAISE_LOWER);
+        buttonToCategory.put(slopeButton, CATEGORY_SLOPE);
+        buttonToCategory.put(levelButton, CATEGORY_LEVEL);
+        buttonToCategory.put(roughButton, CATEGORY_ROUGH);
+        buttonToCategory.put(smoothButton, CATEGORY_SMOOTH);
+        buttonToCategory.put(paintButton, CATEGORY_PAINT);
 
         raiseLowerButton.setSelected(true);
 
         setToolControl(raiseLowerToolControl);
+        showCategory(CATEGORY_RAISE_LOWER);
 
-        FXUtils.addClassTo(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
+        FxUtils.addClass(this, CssClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
     }
 
     @Override
@@ -355,19 +292,34 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     }
 
     @Override
-    @FxThread
-    public void loadState(@NotNull final EditorState editorState) {
-        super.loadState(editorState);
-        getLevelControlLevelField().setValue(state.getLevelValue());
-        getLevelControlUseMarker().setSelected(state.isLevelUseMarker());
-        getLevelControlSmoothly().setSelected(state.isLevelSmoothly());
-        getSlopeControlLimited().setSelected(state.isSlopeLimited());
-        getSlopeControlSmoothly().setSelected(state.isSlopeSmoothly());
-        getRoughControlFrequencyField().setValue(state.getRoughtFrequency());
-        getRoughControlLacunarityField().setValue(state.getRoughtLacunarity());
-        getRoughControlOctavesField().setValue(state.getRoughtOctaves());
-        getRoughControlRoughnessField().setValue(state.getRoughtRoughness());
-        getRoughControlScaleField().setValue(state.getRoughtScale());
+    protected @NotNull Array<PaintingPropertyDefinition> getPaintingProperties() {
+
+        var result = ArrayFactory.<PaintingPropertyDefinition>newArray(PaintingPropertyDefinition.class);
+
+        result.add(new PaintingPropertyDefinition(CATEGORY_SLOPE, BOOLEAN, Messages.MODEL_PROPERTY_SMOOTHLY,
+                PROPERTY_SLOPE_SMOOTHLY, false));
+        result.add(new PaintingPropertyDefinition(CATEGORY_SLOPE, BOOLEAN, Messages.MODEL_PROPERTY_LIMITED,
+                PROPERTY_SLOPE_LIMITED, false));
+
+        result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_ROUGHNESS,
+                PROPERTY_ROUGH_ROUGHNESS, 0F, 0F, Integer.MAX_VALUE));
+        result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_FREQUENCY,
+                PROPERTY_ROUGH_FREQUENCY, 0F, 0.1F, Integer.MAX_VALUE));
+        result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_LACUNARITY,
+                PROPERTY_ROUGH_LACUNARITY, 0F, 1.1F, Integer.MAX_VALUE));
+        result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_OCTAVES,
+                PROPERTY_ROUGH_OCTAVES, 0F, 0F, Integer.MAX_VALUE));
+        result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_MIN_SCALE,
+                PROPERTY_ROUGH_SCALE, 0F, 0F, Integer.MAX_VALUE));
+
+        result.add(new PaintingPropertyDefinition(CATEGORY_LEVEL, FLOAT, Messages.MODEL_PROPERTY_LEVEL,
+                PROPERTY_LEVEL_VALUE, 1F, 0F, Integer.MAX_VALUE));
+        result.add(new PaintingPropertyDefinition(CATEGORY_LEVEL, BOOLEAN, Messages.MODEL_PROPERTY_SMOOTHLY,
+                PROPERTY_LEVEL_SMOOTHLY, false));
+        result.add(new PaintingPropertyDefinition(CATEGORY_LEVEL, BOOLEAN, Messages.MODEL_PROPERTY_USE_MARKER,
+                PROPERTY_LEVEL_USE_MARKER, false));
+
+        return result;
     }
 
     /**
@@ -401,23 +353,13 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     }
 
     /**
-     * Get the map with mapping toggle button to its settings.
+     * Get the map with mapping toggle button to properties category.
      *
-     * @return the map with mapping toggle button to its settings.
+     * @return the map with mapping toggle button to properties category.
      */
     @FxThread
-    private @NotNull ObjectDictionary<ToggleButton, Pane> getButtonToSettings() {
-        return buttonToSettings;
-    }
-
-    /**
-     * Get the container of control settings.
-     *
-     * @return the container of control settings.
-     */
-    @FxThread
-    private @NotNull VBox getControlSettings() {
-        return notNull(controlSettings);
+    private @NotNull ObjectDictionary<ToggleButton, String> getButtonToCategory() {
+        return buttonToCategory;
     }
 
     /**
@@ -483,7 +425,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @Override
     @FxThread
     protected void createComponents() {
-        super.createComponents();
 
         raiseLowerButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_UP_32));
         raiseLowerButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
@@ -503,7 +444,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         paintButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_PAINT_32));
         paintButton.setOnAction(event -> switchMode((ToggleButton) event.getSource()));
 
-        final GridPane buttonsContainer = new GridPane();
+        var buttonsContainer = new GridPane();
         buttonsContainer.setAlignment(Pos.CENTER);
         buttonsContainer.setPadding(new Insets(2, 4, 2, 4));
         buttonsContainer.add(raiseLowerButton, 0, 0);
@@ -514,172 +455,86 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         buttonsContainer.add(paintButton, 5, 0);
         buttonsContainer.prefWidthProperty().bind(widthProperty());
 
-        FXUtils.addClassTo(buttonsContainer, CssClasses.DEF_GRID_PANE);
+        FxUtils.addChild(this, buttonsContainer);
 
-        controlSettings = new VBox();
-        controlSettings.prefWidthProperty().bind(widthProperty());
+        super.createComponents();
 
-        FXUtils.addToPane(buttonsContainer, this);
-        FXUtils.addToPane(createBrushSettings(), this);
-        FXUtils.addToPane(controlSettings, this);
-
-        createLevelControlSettings();
-        createSlopeControlSettings();
-        createRoughControlSettings();
         createPaintControlSettings();
 
-        FXUtils.addClassesTo(raiseLowerButton, smoothButton, roughButton, levelButton, slopeButton, paintButton,
-                CssClasses.MEDIUM_TOGGLE_BUTTON);
-
-        FXUtils.addClassTo(controlSettings, CssClasses.DEF_VBOX);
+        FxUtils.addClass(raiseLowerButton, smoothButton, roughButton, CssClasses.MEDIUM_TOGGLE_BUTTON)
+                .addClass(levelButton, slopeButton, paintButton, CssClasses.MEDIUM_TOGGLE_BUTTON)
+                .addClass(buttonsContainer, CssClasses.DEF_GRID_PANE);
     }
 
-    /**
-     * Create settings of slope control.
-     */
-    @FxThread
-    private void createSlopeControlSettings() {
+    @Override
+    protected void readState(@NotNull TerrainPaintingStateWithEditorTool state, @NotNull VarTable vars) {
+        super.readState(state, vars);
 
-        final Label smoothlyLabel = new Label(Messages.PAINTING_COMPONENT_SMOOTHLY + ":");
-        smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        slopeControlSmoothly = new CheckBox();
-        slopeControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlSmoothly.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
-
-        final Label limitedLabel = new Label(Messages.PAINTING_COMPONENT_LIMITED + ":");
-        limitedLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        slopeControlLimited = new CheckBox();
-        slopeControlLimited.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlLimited.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeSlopeControlLimited(newValue));
-
-        slopeControlSettings = new GridPane();
-        slopeControlSettings.add(smoothlyLabel, 0, 0);
-        slopeControlSettings.add(slopeControlSmoothly, 1, 0);
-        slopeControlSettings.add(limitedLabel, 0, 1);
-        slopeControlSettings.add(slopeControlLimited, 1, 1);
-
-        FXUtils.addClassTo(slopeControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(smoothlyLabel, limitedLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        vars.set(PROPERTY_SLOPE_LIMITED, state.isSlopeLimited());
+        vars.set(PROPERTY_SLOPE_SMOOTHLY, state.isSlopeSmoothly());
+        vars.set(PROPERTY_LEVEL_VALUE, state.getLevelValue());
+        vars.set(PROPERTY_LEVEL_SMOOTHLY, state.isLevelSmoothly());
+        vars.set(PROPERTY_LEVEL_USE_MARKER, state.isLevelUseMarker());
     }
 
-    /**
-     * Create settings of level control.
-     */
-    @FxThread
-    private void createLevelControlSettings() {
+    @Override
+    protected void syncValues(@NotNull VarTable vars, @NotNull TerrainPaintingStateWithEditorTool state) {
 
-        final Label smoothlyLabel = new Label(Messages.PAINTING_COMPONENT_SMOOTHLY + ":");
-        smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var slopeLimited = vars.getBoolean(PROPERTY_SLOPE_LIMITED);
+        var slopeSmoothly = vars.getBoolean(PROPERTY_SLOPE_SMOOTHLY);
+        var levelUseMarker = vars.getBoolean(PROPERTY_LEVEL_USE_MARKER);
+        var levelSmoothly = vars.getBoolean(PROPERTY_LEVEL_SMOOTHLY);
+        var levelValue = vars.getFloat(PROPERTY_LEVEL_VALUE);
+        var roughFrequency = vars.getFloat(PROPERTY_ROUGH_FREQUENCY);
+        var roughLacunarity = vars.getFloat(PROPERTY_ROUGH_LACUNARITY);
+        var roughRoughness = vars.getFloat(PROPERTY_ROUGH_ROUGHNESS);
+        var roughScale = vars.getFloat(PROPERTY_ROUGH_SCALE);
+        var roughOctaves = vars.getFloat(PROPERTY_ROUGH_OCTAVES);
 
-        levelControlSmoothly = new CheckBox();
-        levelControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlSmoothly.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
+        state.setSlopeLimited(slopeLimited);
+        state.setSlopeSmoothly(slopeSmoothly);
+        state.setLevelSmoothly(levelSmoothly);
+        state.setLevelUseMarker(levelUseMarker);
+        state.setLevelValue(levelValue);
+        state.setRoughtFrequency(roughFrequency);
+        state.setRoughtLacunarity(roughLacunarity);
+        state.setRoughtScale(roughScale);
+        state.setRoughtOctaves(roughOctaves);
+        state.setRoughtRoughness(roughRoughness);
 
-        final Label useMarkerLabel = new Label(Messages.PAINTING_COMPONENT_USE_MARKER + ":");
-        useMarkerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        levelControlUseMarker = new CheckBox();
-        levelControlUseMarker.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlUseMarker.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
-
-        final Label levelLabel = new Label(Messages.PAINTING_COMPONENT_LEVEL + ":");
-        levelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        levelControlLevelField = new FloatTextField();
-        levelControlLevelField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlLevelField.setMinMax(0F, Integer.MAX_VALUE);
-        levelControlLevelField.addChangeListener((observable, oldValue, newValue) -> changeLevelControlLevel(newValue));
-        levelControlLevelField.disableProperty()
-                .bind(levelControlUseMarker.selectedProperty());
-
-        levelControlSettings = new GridPane();
-        levelControlSettings.add(smoothlyLabel, 0, 0);
-        levelControlSettings.add(levelControlSmoothly, 1, 0);
-        levelControlSettings.add(useMarkerLabel, 0, 1);
-        levelControlSettings.add(levelControlUseMarker, 1, 1);
-        levelControlSettings.add(levelLabel, 0, 2);
-        levelControlSettings.add(levelControlLevelField, 1, 2);
-
-        FXUtils.addClassTo(smoothlyLabel, useMarkerLabel, levelLabel,
-                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-
-        FXUtils.addClassesTo(levelControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(levelControlLevelField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        super.syncValues(vars, state);
     }
 
-    /**
-     * Create settings of rough control.
-     */
-    @FxThread
-    private void createRoughControlSettings() {
+    @Override
+    @JmeThread
+    protected void syncValues(
+            @NotNull TerrainPaintingStateWithEditorTool state,
+            @NotNull TerrainToolControl toolControl) {
 
-        final Label roughnessLabel = new Label(Messages.PAINTING_COMPONENT_ROUGHNESS + ":");
-        roughnessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var brushPower = state.getBrushPower();
+        var brushSize = state.getBrushSize();
 
-        roughControlRoughnessField = new FloatTextField();
-        roughControlRoughnessField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        roughControlRoughnessField.setMinMax(0F, Integer.MAX_VALUE);
-        roughControlRoughnessField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlRoughness(newValue));
+        var toolControls = getToolControls();
+        toolControls.forEach(brushSize, TerrainToolControl::setBrushSize);
+        toolControls.forEach(brushPower, TerrainToolControl::setBrushPower);
 
-        final Label frequencyLabel = new Label(Messages.PAINTING_COMPONENT_FREQUENCY + ":");
-        frequencyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var slopeToolControl = getSlopeToolControl();
+        slopeToolControl.setLock(state.isSlopeLimited());
+        slopeToolControl.setPrecision(state.isSlopeSmoothly());
 
-        roughControlFrequencyField = new FloatTextField();
-        roughControlFrequencyField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        roughControlFrequencyField.setMinMax(0.1F, Integer.MAX_VALUE);
-        roughControlFrequencyField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlFrequency(newValue));
+        var levelToolControl = getLevelToolControl();
+        levelToolControl.setLevel(state.getLevelValue());
+        levelToolControl.setPrecision(state.isLevelSmoothly());
+        levelToolControl.setUseMarker(state.isLevelUseMarker());
 
-        final Label lacunarityLabel = new Label(Messages.PAINTING_COMPONENT_LACUNARITY + ":");
-        lacunarityLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var roughToolControl = getRoughToolControl();
+        roughToolControl.setFrequency(state.getRoughtFrequency());
+        roughToolControl.setLacunarity(state.getRoughtLacunarity());
+        roughToolControl.setOctaves(state.getRoughtOctaves());
+        roughToolControl.setScale(state.getRoughtScale());
+        roughToolControl.setRoughness(state.getRoughtRoughness());
 
-        roughControlLacunarityField = new FloatTextField();
-        roughControlLacunarityField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        roughControlLacunarityField.setMinMax(1.1F, Integer.MAX_VALUE);
-        roughControlLacunarityField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlLacunarity(newValue));
-
-        final Label octavesLabel = new Label(Messages.PAINTING_COMPONENT_OCTAVES + ":");
-        octavesLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        roughControlOctavesField = new FloatTextField();
-        roughControlOctavesField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        roughControlOctavesField.setMinMax(0F, Integer.MAX_VALUE);
-        roughControlOctavesField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlOctaves(newValue));
-
-        final Label scaleLabel = new Label(Messages.PAINTING_COMPONENT_SCALE + ":");
-        scaleLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
-
-        roughControlScaleField = new FloatTextField();
-        roughControlScaleField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        roughControlScaleField.setMinMax(0F, Integer.MAX_VALUE);
-        roughControlScaleField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlScale(newValue));
-
-        roughControlSettings = new GridPane();
-        roughControlSettings.add(roughnessLabel, 0, 0);
-        roughControlSettings.add(roughControlRoughnessField, 1, 0);
-        roughControlSettings.add(frequencyLabel, 0, 1);
-        roughControlSettings.add(roughControlFrequencyField, 1, 1);
-        roughControlSettings.add(lacunarityLabel, 0, 2);
-        roughControlSettings.add(roughControlLacunarityField, 1, 2);
-        roughControlSettings.add(octavesLabel, 0, 3);
-        roughControlSettings.add(roughControlOctavesField, 1, 3);
-        roughControlSettings.add(scaleLabel, 0, 4);
-        roughControlSettings.add(roughControlScaleField, 1, 4);
-
-        FXUtils.addClassTo(roughnessLabel, frequencyLabel, lacunarityLabel, octavesLabel, scaleLabel,
-                CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-
-
-        FXUtils.addClassesTo(roughControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(roughControlRoughnessField, roughControlFrequencyField, roughControlLacunarityField,
-                roughControlOctavesField, roughControlScaleField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        super.syncValues(state, toolControl);
     }
 
     /**
@@ -688,21 +543,24 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     @FxThread
     private void createPaintControlSettings() {
 
-        final Label triPlanarLabelLabel = new Label(Messages.PAINTING_COMPONENT_TRI_PLANAR + ":");
-        triPlanarLabelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+        var triPlanarLabelLabel = new Label(Messages.MODEL_PROPERTY_TRI_PLANAR + ":");
+        triPlanarLabelLabel.prefWidthProperty()
+                .bind(widthProperty().multiply(LABEL_PERCENT));
 
         triPlanarCheckBox = new CheckBox();
-        triPlanarCheckBox.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        triPlanarCheckBox.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
+        triPlanarCheckBox.prefWidthProperty()
+                .bind(widthProperty().multiply(FIELD_PERCENT));
 
-        final Label shininessLabel = new Label(Messages.PAINTING_COMPONENT_SHININESS + ":");
+        var shininessLabel = new Label(Messages.MODEL_PROPERTY_SHININESS + ":");
         shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         shininessField = new FloatTextField();
-        shininessField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         shininessField.setMinMax(0F, Integer.MAX_VALUE);
-        shininessField.addChangeListener((observable, oldValue, newValue) -> changePaintControlShininess(newValue));
+        shininessField.prefWidthProperty()
+                .bind(widthProperty().multiply(FIELD_PERCENT));
+
+        FxControlUtils.onSelectedChange(triPlanarCheckBox, this::changePaintControlTriPlanar);
+        FxControlUtils.onValueChange(shininessField, this::changePaintControlShininess);
 
         textureLayerSettings = new TextureLayerSettings(this);
 
@@ -713,10 +571,10 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         paintControlSettings.add(triPlanarCheckBox, 1, 1);
         paintControlSettings.add(textureLayerSettings, 0, 2, 2, 1);
 
-        FXUtils.addClassesTo(paintControlSettings, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(shininessLabel, triPlanarLabelLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(triPlanarCheckBox, CssClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
-        FXUtils.addClassTo(shininessField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FxUtils.addClass(paintControlSettings, CssClasses.DEF_GRID_PANE)
+                .addClass(shininessLabel, triPlanarLabelLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
+                .addClass(triPlanarCheckBox, CssClasses.PROPERTY_CONTROL_CHECK_BOX)
+                .addClass(shininessField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -763,152 +621,46 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
      * Change the shininess value.
      */
     @FromAnyThread
-    private void changePaintControlShininess(@NotNull final Float newValue) {
+    private void changePaintControlShininess(@NotNull Float newValue) {
 
         if (isIgnoreListeners()) {
             return;
         }
 
-        final Node paintedObject = notNull(getPaintedObject());
-        final Material material = NodeUtils.findMateial(paintedObject, mat -> mat.getParam("Shininess") != null);
-        final MatParam param = material == null ? null : material.getParam("Shininess");
-        final float shininess = param == null ? 0F : (float) param.getValue();
+        var paintedObject = notNull(getPaintedObject());
+        var material = NodeUtils.findMateial(paintedObject, mat -> mat.getParam("Shininess") != null);
+        var param = material == null ? null : material.getParam("Shininess");
+        var shininess = param == null ? 0F : (float) param.getValue();
 
-        final PropertyOperation<ChangeConsumer, Node, Float> operation =
-                new PropertyOperation<>(paintedObject, TERRAIN_PARAM, newValue, shininess);
+        var operation = new PropertyOperation<ChangeConsumer, Node, Float>(paintedObject, TERRAIN_PARAM,
+                newValue, shininess);
 
         operation.setApplyHandler((terrainQuad, value) ->
                 NodeUtils.visitMaterials(terrainQuad, mat ->
                         MaterialUtils.safeSet(mat, "Shininess", value)));
 
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        changeConsumer.execute(operation);
+        getChangeConsumer().execute(operation);
     }
 
     /**
      * Change using tri-planar textures.
      */
     @FromAnyThread
-    private void changePaintControlTriPlanar(@NotNull final Boolean newValue) {
+    private void changePaintControlTriPlanar(@NotNull Boolean newValue) {
 
         if (isIgnoreListeners()) {
             return;
         }
 
-        final Node paintedObject = notNull(getPaintedObject());
-        final PropertyOperation<ChangeConsumer, Node, Boolean> operation =
-                new PropertyOperation<>(paintedObject, TERRAIN_PARAM, newValue, !newValue);
+        var paintedObject = notNull(getPaintedObject());
+        var operation = new PropertyOperation<ChangeConsumer, Node, Boolean>(paintedObject, TERRAIN_PARAM,
+                newValue, !newValue);
 
         operation.setApplyHandler((terrainQuad, value) ->
                 NodeUtils.visitMaterials(terrainQuad, mat ->
                         MaterialUtils.safeSet(mat, "useTriPlanarMapping", value)));
 
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        changeConsumer.execute(operation);
-    }
-
-    /**
-     * Change using smoothly editing.
-     */
-    @FromAnyThread
-    private void changeLevelControlSmoothly(@NotNull final Boolean newValue) {
-        if (state != null) state.setLevelSmoothly(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setPrecision(!newValue));
-    }
-
-    /**
-     * Change using marker for level control.
-     */
-    @FromAnyThread
-    private void changeLevelControlUseMarker(@NotNull final Boolean newValue) {
-        if (state != null) state.setLevelUseMarker(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setUseMarker(newValue));
-    }
-
-    /**
-     * Change a level of a level control.
-     */
-    @FromAnyThread
-    private void changeLevelControlLevel(@NotNull final Float newLevel) {
-        if (state != null) state.setLevelValue(newLevel);
-        EXECUTOR_MANAGER.addJmeTask(() -> getLevelToolControl().setLevel(newLevel));
-    }
-
-    /**
-     * Change using smoothly editing.
-     */
-    @FromAnyThread
-    private void changeSlopeControlSmoothly(@NotNull final Boolean newValue) {
-        if (state != null) state.setSlopeSmoothly(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getSlopeToolControl().setPrecision(!newValue));
-    }
-
-    /**
-     * Change using limited editing.
-     */
-    @FromAnyThread
-    private void changeSlopeControlLimited(@NotNull final Boolean newValue) {
-        if (state != null) state.setSlopeLimited(newValue);
-        EXECUTOR_MANAGER.addJmeTask(() -> getSlopeToolControl().setLock(newValue));
-    }
-
-    /**
-     * Change scale of a rough control.
-     */
-    @FromAnyThread
-    private void changeRoughControlScale(@NotNull final Float newScale) {
-        if (state != null) state.setRoughtScale(newScale);
-        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setScale(newScale));
-    }
-
-    /**
-     * Change frequency of a rough control.
-     */
-    @FromAnyThread
-    private void changeRoughControlFrequency(@NotNull final Float newFrequency) {
-        if (state != null) state.setRoughtFrequency(newFrequency);
-        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setFrequency(newFrequency));
-    }
-
-    /**
-     * Change lacunarity of a rough control.
-     */
-    @FromAnyThread
-    private void changeRoughControlLacunarity(@NotNull final Float newLacunarity) {
-        if (state != null) state.setRoughtLacunarity(newLacunarity);
-        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setLacunarity(newLacunarity));
-    }
-
-    /**
-     * Change octaves of a rough control.
-     */
-    @FromAnyThread
-    private void changeRoughControlOctaves(@NotNull final Float newOctaves) {
-        if (state != null) state.setRoughtOctaves(newOctaves);
-        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setOctaves(newOctaves));
-    }
-
-    /**
-     * Change roughness of a rough control.
-     */
-    @FromAnyThread
-    private void changeRoughControlRoughness(@NotNull final Float newRoughness) {
-        if (state != null) state.setRoughtRoughness(newRoughness);
-        EXECUTOR_MANAGER.addJmeTask(() -> getRoughToolControl().setRoughness(newRoughness));
-    }
-
-    @Override
-    @JmeThread
-    protected void setBrushSize(@NotNull final Float size) {
-        final Array<TerrainToolControl> toolControls = getToolControls();
-        toolControls.forEach(size, TerrainToolControl::setBrushSize);
-    }
-
-    @Override
-    @JmeThread
-    protected void setBrushPower(@NotNull final Float power) {
-        final Array<TerrainToolControl> toolControls = getToolControls();
-        toolControls.forEach(power, TerrainToolControl::setBrushPower);
+        getChangeConsumer().execute(operation);
     }
 
     /**
@@ -932,106 +684,6 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     }
 
     /**
-     * Get the setting of using smoothly changing of terrain height.
-     *
-     * @return the setting of using smoothly changing of terrain height.
-     */
-    @FxThread
-    private @NotNull CheckBox getLevelControlSmoothly() {
-        return notNull(levelControlSmoothly);
-    }
-
-    /**
-     * Get the setting of using marker to detect a level.
-     *
-     * @return the setting of using marker to detect a level.
-     */
-    @FxThread
-    private @NotNull CheckBox getLevelControlUseMarker() {
-        return notNull(levelControlUseMarker);
-    }
-
-    /**
-     * Get the setting of target level.
-     *
-     * @return the setting of target level.
-     */
-    @FxThread
-    private @NotNull FloatTextField getLevelControlLevelField() {
-        return notNull(levelControlLevelField);
-    }
-
-    /**
-     * Get the setting of using limited between markers.
-     *
-     * @return the setting of using limited between markers.
-     */
-    @FxThread
-    private @NotNull CheckBox getSlopeControlLimited() {
-        return notNull(slopeControlLimited);
-    }
-
-    /**
-     * Get the setting of using smoothly changing of terrain height.
-     *
-     * @return the setting of using smoothly changing of terrain height.
-     */
-    @FxThread
-    private @NotNull CheckBox getSlopeControlSmoothly() {
-        return notNull(slopeControlSmoothly);
-    }
-
-    /**
-     * Get the settings of frequency.
-     *
-     * @return the settings of frequency.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlFrequencyField() {
-        return notNull(roughControlFrequencyField);
-    }
-
-    /**
-     * Get the settings of lacunarity.
-     *
-     * @return the settings of lacunarity.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlLacunarityField() {
-        return notNull(roughControlLacunarityField);
-    }
-
-    /**
-     * Get the settings of octaves.
-     *
-     * @return the settings of octaves.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlOctavesField() {
-        return notNull(roughControlOctavesField);
-    }
-
-    /**
-     * Get the settings of roughness.
-     *
-     * @return the settings of roughness.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlRoughnessField() {
-        return notNull(roughControlRoughnessField);
-    }
-
-    /**
-     * Get the settings of scale.
-     *
-     * @return the settings of scale.
-     */
-    @FxThread
-    private @NotNull FloatTextField getRoughControlScaleField() {
-        return notNull(roughControlScaleField);
-    }
-
-    /**
      * Get the settings of painting control.
      *
      * @return the settings of painting control.
@@ -1042,32 +694,41 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
     }
 
     /**
+     * Get the paint control settings.
+     *
+     * @return the paint control settings.
+     */
+    @FxThread
+    private @NotNull GridPane getPaintControlSettings() {
+        return notNull(paintControlSettings);
+    }
+
+    /**
      * Switch editing mode.
      */
     @FxThread
-    private void switchMode(@NotNull final ToggleButton source) {
+    private void switchMode(@NotNull ToggleButton source) {
 
         if (!source.isSelected()) {
             source.setSelected(true);
             return;
         }
 
-        getToggleButtons().forEach(source, (button, arg) -> button !=
-                arg, (toggleButton, arg) -> toggleButton.setSelected(false));
+        getToggleButtons().forEach(source,
+                (button, arg) -> button != arg,
+                (toDeselect, arg) -> toDeselect.setSelected(false));
 
-        final ObjectDictionary<ToggleButton, Pane> buttonToSettings = getButtonToSettings();
-        final Pane settings = buttonToSettings.get(source);
+        var category = notNull(getButtonToCategory().get(source));
 
-        final VBox controlSettings = getControlSettings();
-        final ObservableList<javafx.scene.Node> children = controlSettings.getChildren();
-        children.clear();
+        showCategory(category);
 
-        if (settings != null) {
-            children.add(settings);
+        if (CATEGORY_PAINT.equals(category)) {
+            FxUtils.addChild(this, getPaintControlSettings());
+        } else {
+            FxUtils.removeChild(this, getPaintControlSettings());
         }
 
-        final ObjectDictionary<ToggleButton, TerrainToolControl> buttonToControl = getButtonToControl();
-        final TerrainToolControl toolControl = buttonToControl.get(source);
+        var toolControl = getButtonToControl().get(source);
 
         setToolControl(toolControl);
 
@@ -1076,7 +737,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         }
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Node cursorNode = getCursorNode();
+            var cursorNode = getCursorNode();
             cursorNode.removeControl(TerrainToolControl.class);
             cursorNode.addControl(toolControl);
         });
@@ -1084,19 +745,19 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
     @Override
     @FxThread
-    public void startPainting(@NotNull final Object object) {
+    public void startPainting(@NotNull Object object) {
         super.startPainting(object);
 
         refreshProperties();
 
-        final TextureLayerSettings settings = getTextureLayerSettings();
-        final ToggleButton paintButton = getPaintButton();
+        var settings = getTextureLayerSettings();
+        var paintButton = getPaintButton();
 
         if (object instanceof Terrain) {
 
-            final Terrain terrain = (Terrain) object;
-            final Material material = terrain.getMaterial();
-            final MaterialDef materialDef = material.getMaterialDef();
+            var terrain = (Terrain) object;
+            var material = terrain.getMaterial();
+            var materialDef = material.getMaterialDef();
 
             if (materialDef.getAssetName().equals("Common/MatDefs/Terrain/TerrainLighting.j3md")) {
                 settings.setLayerToScaleName(LAYER_TO_SCALE_NAME);
@@ -1117,7 +778,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
             if (paintButton.isSelected()) {
 
-                final ToggleButton raiseLowerButton = getRaiseLowerButton();
+                var raiseLowerButton = getRaiseLowerButton();
                 raiseLowerButton.setSelected(true);
 
                 switchMode(raiseLowerButton);
@@ -1133,18 +794,15 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
         setIgnoreListeners(true);
         try {
 
-            final Node paintedObject = notNull(getPaintedObject());
-            final Material material = NodeUtils.findMateial(paintedObject, mat -> mat.getParam("Shininess") != null);
-            final MatParam shininessParam = material == null ? null : material.getParam("Shininess");
-            final MatParam triPlanarMappingParam = material == null ? null : material.getParam("useTriPlanarMapping");
-            final float shininess = shininessParam == null ? 0F : (float) shininessParam.getValue();
-            final boolean triPlanarMapping = triPlanarMappingParam != null && (boolean) triPlanarMappingParam.getValue();
+            var paintedObject = notNull(getPaintedObject());
+            var material = NodeUtils.findMateial(paintedObject, mat -> mat.getParam("Shininess") != null);
+            var shininessParam = material == null ? null : material.getParam("Shininess");
+            var triPlanarMappingParam = material == null ? null : material.getParam("useTriPlanarMapping");
+            var shininess = shininessParam == null ? 0F : (float) shininessParam.getValue();
+            var triPlanarMapping = triPlanarMappingParam != null && (boolean) triPlanarMappingParam.getValue();
 
-            final FloatTextField shininessField = getShininessField();
-            shininessField.setValue(shininess);
-
-            final CheckBox triPlanarCheckBox = getTriPlanarCheckBox();
-            triPlanarCheckBox.setSelected(triPlanarMapping);
+            getShininessField().setValue(shininess);
+            getTriPlanarCheckBox().setSelected(triPlanarMapping);
 
         } finally {
             setIgnoreListeners(false);
@@ -1153,7 +811,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
     @Override
     @FxThread
-    public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName) {
         refreshProperties();
 
         if (getPaintedObject() instanceof Terrain) {
@@ -1163,7 +821,7 @@ public class TerrainPaintingComponent extends AbstractPaintingComponent<Node, Te
 
     @Override
     @FxThread
-    public boolean isSupport(@NotNull final Object object) {
+    public boolean isSupport(@NotNull Object object) {
         return object instanceof Node &&
                 NodeUtils.findSpatial((Node) object, TerrainQuad.class::isInstance) != null;
     }

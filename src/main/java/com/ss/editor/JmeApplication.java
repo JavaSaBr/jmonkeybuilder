@@ -3,12 +3,10 @@ package com.ss.editor;
 import static com.jme3.environment.LightProbeFactory.makeProbe;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.DebugKeysAppState;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.asset.plugins.ClasspathLocator;
-import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
@@ -16,7 +14,7 @@ import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.environment.util.EnvMapUtils;
 import com.jme3.font.BitmapFont;
-import com.jme3.light.LightList;
+import com.jme3.jfx.injfx.JmeToJfxApplication;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.material.TechniqueDef;
@@ -29,8 +27,6 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.system.AppSettings;
-import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
@@ -47,9 +43,9 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.os.OperatingSystem;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.os.OperatingSystem;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,17 +57,16 @@ import java.util.concurrent.locks.StampedLock;
  *
  * @author JavaSaBr
  */
-public class JmeApplication extends JmeToJFXApplication {
+public class JmeApplication extends JmeToJfxApplication {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JmeApplication.class);
 
     /**
      * The empty job adapter for handling creating {@link LightProbe}.
      */
     @NotNull
-    private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<LightProbe>() {
-        public void done(final LightProbe result) {
+    private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<>() {
+        public void done(@NotNull LightProbe result) {
         }
     };
 
@@ -103,15 +98,15 @@ public class JmeApplication extends JmeToJFXApplication {
 
         try {
 
-            final EditorConfig config = EditorConfig.getInstance();
-            final AppSettings settings = config.getSettings();
+            var config = EditorConfig.getInstance();
+            var settings = config.getSettings();
 
             JME_APPLICATION.setSettings(settings);
             JME_APPLICATION.setShowSettings(false);
             JME_APPLICATION.setDisplayStatView(false);
             JME_APPLICATION.setDisplayFps(false);
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             LOGGER.warning(e);
             throw new RuntimeException(e);
         }
@@ -207,7 +202,7 @@ public class JmeApplication extends JmeToJFXApplication {
      * @param stamp the stamp
      */
     @FromAnyThread
-    public final void asyncUnlock(final long stamp) {
+    public final void asyncUnlock(long stamp) {
         lock.unlockRead(stamp);
     }
 
@@ -216,7 +211,7 @@ public class JmeApplication extends JmeToJFXApplication {
     public void destroy() {
         super.destroy();
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        var workspaceManager = WorkspaceManager.getInstance();
         workspaceManager.save();
 
         System.exit(0);
@@ -238,12 +233,12 @@ public class JmeApplication extends JmeToJFXApplication {
 
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final OperatingSystem system = new OperatingSystem();
+        var editorConfig = EditorConfig.getInstance();
+        var system = new OperatingSystem();
 
         LOGGER.debug(this, "OS: " + system.getDistribution());
 
-        final AssetManager assetManager = getAssetManager();
+        var assetManager = getAssetManager();
         assetManager.unregisterLocator("", ClasspathLocator.class);
         assetManager.unregisterLocator("/", ClasspathLocator.class);
         assetManager.registerLocator("", FolderAssetLocator.class);
@@ -251,7 +246,7 @@ public class JmeApplication extends JmeToJFXApplication {
         assetManager.registerLocator("", ClasspathLocator.class);
         assetManager.addAssetEventListener(EditorConfig.getInstance());
 
-        final AudioRenderer audioRenderer = getAudioRenderer();
+        var audioRenderer = getAudioRenderer();
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
@@ -267,7 +262,7 @@ public class JmeApplication extends JmeToJFXApplication {
         previewViewPort.attachScene(previewNode);
         previewViewPort.setBackgroundColor(viewPort.getBackgroundColor());
 
-        final Node guiNode = getGuiNode();
+        var guiNode = getGuiNode();
         guiNode.detachAllChildren();
 
         ExecutorManager.getInstance();
@@ -275,7 +270,7 @@ public class JmeApplication extends JmeToJFXApplication {
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
 
-        final FilterPostProcessor postProcessor = getPostProcessor();
+        var postProcessor = getPostProcessor();
 
         fxaaFilter = new EditorFxaaFilter();
         fxaaFilter.setEnabled(editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER));
@@ -303,7 +298,7 @@ public class JmeApplication extends JmeToJFXApplication {
         createLightProbes();
         stateManager.detach(stateManager.getState(DebugKeysAppState.class));
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
+        var initializationManager = InitializationManager.getInstance();
         initializationManager.onAfterCreateJmeContext();
 
         new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch").start();
@@ -325,7 +320,7 @@ public class JmeApplication extends JmeToJFXApplication {
      * @param stamp the stamp of the lock.
      */
     @FromAnyThread
-    public void syncUnlock(final long stamp) {
+    public void syncUnlock(long stamp) {
         lock.unlockWrite(stamp);
     }
 
@@ -344,10 +339,10 @@ public class JmeApplication extends JmeToJFXApplication {
     public void loseFocus() {
         super.loseFocus();
 
-        final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
+        var event = new WindowChangeFocusEvent();
         event.setFocused(false);
 
-        final FxEventManager eventManager = FxEventManager.getInstance();
+        var eventManager = FxEventManager.getInstance();
         eventManager.notify(event);
     }
 
@@ -356,16 +351,16 @@ public class JmeApplication extends JmeToJFXApplication {
     public void gainFocus() {
         super.gainFocus();
 
-        final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
+        var event = new WindowChangeFocusEvent();
         event.setFocused(true);
 
-        final FxEventManager eventManager = FxEventManager.getInstance();
+        var eventManager = FxEventManager.getInstance();
         eventManager.notify(event);
     }
 
     @Override
     @JmeThread
-    public void simpleUpdate(final float tpf) {
+    public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
 
         previewNode.updateLogicalState(tpf);
@@ -375,10 +370,11 @@ public class JmeApplication extends JmeToJFXApplication {
     @Override
     @JmeThread
     public void update() {
-        final long stamp = syncLock();
+
+        var stamp = syncLock();
         try {
 
-            final JmeThreadExecutor executor = JmeThreadExecutor.getInstance();
+            var executor = JmeThreadExecutor.getInstance();
             executor.execute();
 
             //System.out.println(cam.getRotation());
@@ -388,8 +384,9 @@ public class JmeApplication extends JmeToJFXApplication {
                 super.update();
             }
 
-        } catch (final AssetNotFoundException | RendererException | AssertionError | ArrayIndexOutOfBoundsException |
-                NullPointerException | StackOverflowError | IllegalStateException | UnsupportedOperationException e) {
+        } catch (AssetNotFoundException | NoSuchMethodError | RendererException | AssertionError |
+                ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError |
+                IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
             finishWorkOnError(e);
         } finally {
@@ -401,12 +398,12 @@ public class JmeApplication extends JmeToJFXApplication {
     }
 
     @JmeThread
-    private void finishWorkOnError(@NotNull final Throwable e) {
+    private void finishWorkOnError(@NotNull Throwable e) {
 
         GAnalytics.sendException(e, true);
         GAnalytics.waitForSend();
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        var workspaceManager = WorkspaceManager.getInstance();
         workspaceManager.clear();
 
         System.exit(2);
@@ -428,8 +425,8 @@ public class JmeApplication extends JmeToJFXApplication {
     @JmeThread
     private void createLightProbes() {
 
-        final EnvironmentCamera environmentCamera = getEnvironmentCamera();
-        final EnvironmentCamera previewEnvironmentCamera = getPreviewEnvironmentCamera();
+        var environmentCamera = getEnvironmentCamera();
+        var previewEnvironmentCamera = getPreviewEnvironmentCamera();
 
         if (environmentCamera == null || previewEnvironmentCamera == null) {
             return;
@@ -444,7 +441,7 @@ public class JmeApplication extends JmeToJFXApplication {
         lightProbe = makeProbe(environmentCamera, rootNode, EnvMapUtils.GenerationType.Fast, EMPTY_JOB_ADAPTER);
         previewLightProbe = makeProbe(previewEnvironmentCamera, previewNode, EnvMapUtils.GenerationType.Fast, EMPTY_JOB_ADAPTER);
 
-        BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
+        var bounds = (BoundingSphere) lightProbe.getBounds();
         bounds.setRadius(100);
 
         bounds = (BoundingSphere) previewLightProbe.getBounds();
@@ -460,17 +457,18 @@ public class JmeApplication extends JmeToJFXApplication {
      * @param progressAdapter the progress adapter
      */
     @JmeThread
-    public void updateLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+    public void updateLightProbe(@NotNull JobProgressAdapter<LightProbe> progressAdapter) {
 
-        final LightProbe lightProbe = getLightProbe();
-        final EnvironmentCamera environmentCamera = getEnvironmentCamera();
+        var lightProbe = getLightProbe();
+        var environmentCamera = getEnvironmentCamera();
 
         if (lightProbe == null || environmentCamera == null) {
             progressAdapter.done(null);
             return;
         }
 
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, EnvMapUtils.GenerationType.Fast, progressAdapter);
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode,
+                EnvMapUtils.GenerationType.Fast, progressAdapter);
     }
 
     /**
@@ -479,7 +477,7 @@ public class JmeApplication extends JmeToJFXApplication {
     @JmeThread
     public void disableLightProbe() {
 
-        final LightProbe lightProbe = getLightProbe();
+        var lightProbe = getLightProbe();
 
         if (lightProbe != null) {
             rootNode.removeLight(lightProbe);
@@ -492,12 +490,12 @@ public class JmeApplication extends JmeToJFXApplication {
     @JmeThread
     public void enableLightProbe() {
 
-        final LightProbe lightProbe = getLightProbe();
+        var lightProbe = getLightProbe();
         if (lightProbe == null) {
             return;
         }
 
-        final LightList lightList = rootNode.getLocalLightList();
+        var lightList = rootNode.getLocalLightList();
 
         for (int i = 0; i < lightList.size(); i++) {
             if (lightList.get(i) == lightProbe) {
@@ -514,17 +512,18 @@ public class JmeApplication extends JmeToJFXApplication {
      * @param progressAdapter the progress adapter
      */
     @JmeThread
-    public void updatePreviewLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+    public void updatePreviewLightProbe(@NotNull JobProgressAdapter<LightProbe> progressAdapter) {
 
-        final LightProbe lightProbe = getPreviewLightProbe();
-        final EnvironmentCamera environmentCamera = getPreviewEnvironmentCamera();
+        var lightProbe = getPreviewLightProbe();
+        var environmentCamera = getPreviewEnvironmentCamera();
 
         if (lightProbe == null || environmentCamera == null) {
             progressAdapter.done(null);
             return;
         }
 
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, previewNode, EnvMapUtils.GenerationType.Fast, progressAdapter);
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, previewNode,
+                EnvMapUtils.GenerationType.Fast, progressAdapter);
     }
 
     /**
@@ -623,7 +622,7 @@ public class JmeApplication extends JmeToJFXApplication {
      * @param paused true if this app is paused.
      */
     @JmeThread
-    void setPaused(final boolean paused) {
+    void setPaused(boolean paused) {
         this.paused = paused;
     }
 

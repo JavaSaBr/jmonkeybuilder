@@ -1,12 +1,13 @@
 package com.ss.editor.ui.event;
 
-import static com.ss.rlib.util.array.ArrayFactory.newArray;
+import static com.ss.rlib.common.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -32,7 +33,7 @@ public class FxEventManager {
      * The table of event handlers.
      */
     @NotNull
-    private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers;
+    private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? extends Event>>> eventHandlers;
 
     public FxEventManager() {
         this.eventHandlers = DictionaryFactory.newObjectDictionary();
@@ -45,8 +46,10 @@ public class FxEventManager {
      * @param eventHandler the event handler.
      */
     @FxThread
-    public void addEventHandler(@NotNull final EventType<? extends Event> eventType,
-                                @NotNull final EventHandler<? super Event> eventHandler) {
+    public <T extends Event> void addEventHandler(
+            @NotNull EventType<T> eventType,
+            @NotNull EventHandler<T> eventHandler
+    ) {
         getEventHandlers().get(eventType, () -> newArray(EventHandler.class))
                 .add(eventHandler);
     }
@@ -58,20 +61,21 @@ public class FxEventManager {
      * @param eventHandler the event handler.
      */
     @FxThread
-    public void removeEventHandler(@NotNull final EventType<? extends Event> eventType,
-                                   @NotNull final EventHandler<? super Event> eventHandler) {
-
-        final Array<EventHandler<? super Event>> handlers = getEventHandlers().get(eventType);
-        if (handlers != null) {
-            handlers.slowRemove(eventHandler);
-        }
+    public void removeEventHandler(
+            @NotNull EventType<?> eventType,
+            @NotNull EventHandler<?> eventHandler
+    ) {
+        getEventHandlers().getOptional(eventType)
+                .ifPresent(handlers -> handlers.slowRemove(eventHandler));
     }
 
     /**
+     * Get the table of event handlers.
+     *
      * @return the table of event handlers.
      */
     @FxThread
-    private @NotNull ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> getEventHandlers() {
+    private @NotNull ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? extends Event>>> getEventHandlers() {
         return eventHandlers;
     }
 
@@ -81,11 +85,11 @@ public class FxEventManager {
      * @param event the new event.
      */
     @FromAnyThread
-    public void notify(@NotNull final Event event) {
+    public void notify(@NotNull Event event) {
         if (Platform.isFxApplicationThread()) {
             notifyImpl(event);
         } else {
-            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            var executorManager = ExecutorManager.getInstance();
             executorManager.addFxTask(() -> notifyImpl(event));
         }
     }
@@ -94,22 +98,23 @@ public class FxEventManager {
      * The process of handling a new event.
      */
     @FxThread
-    private void notifyImpl(@NotNull final Event event) {
+    private void notifyImpl(@NotNull Event event) {
 
-        final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
+        var eventHandlers = getEventHandlers();
 
         for (EventType<? extends Event> eventType = event.getEventType(); eventType != null; eventType = eventType.getSuperType()) {
 
-            final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
+            var handlers = eventHandlers.get(eventType);
             if (handlers == null || handlers.isEmpty()) {
                 continue;
             }
 
-            handlers.forEach(event, EventHandler::handle);
+            handlers.forEach(event, (handler, toHandle) ->
+                    handler.handle(ClassUtils.unsafeCast(event)));
         }
 
         if (event instanceof ConsumableEvent && !event.isConsumed()) {
-            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            var executorManager = ExecutorManager.getInstance();
             executorManager.addFxTask(() -> notifyImpl(event));
         }
     }

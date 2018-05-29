@@ -2,7 +2,6 @@ package com.ss.editor.ui.builder;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
-import static javafx.application.Platform.runLater;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
@@ -17,14 +16,10 @@ import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.css.CssRegistry;
-import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
-import javafx.collections.ObservableList;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Group;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -37,34 +32,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditorFxSceneBuilder {
 
-    /**
-     * The CSS registry.
-     */
-    @NotNull
     private static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
 
     /**
      * The path to the base CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_BASE = "ui/css/base.css";
 
     /**
      * The path to the external CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_EXTERNAL = "ui/css/external.css";
 
     /**
      * The path to the custom ids CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_CUSTOM_IDS = "ui/css/custom_ids.css";
 
     /**
      * The path to the custom classes CSS styles.
      */
-    @NotNull
     public static final String CSS_FILE_CUSTOM_CLASSES = "ui/css/custom_classes.css";
 
     static {
@@ -81,28 +68,24 @@ public class EditorFxSceneBuilder {
      * @return the editor fx scene
      */
     @FxThread
-    public static @NotNull EditorFxScene build(@NotNull final Stage stage) {
+    public static @NotNull EditorFxScene build(@NotNull Stage stage) {
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+        var editorConfig = EditorConfig.getInstance();
+        var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
-        final Group root = new Group();
-        //root.getTransforms().add(new Scale(1.5, 1.5));
+        var root = new Group();
 
-        final EditorFxScene scene = new EditorFxScene(root);
+        var scene = new EditorFxScene(root);
         scene.setFill(TRANSPARENT);
         scene.setRoot(root);
 
-        final ObservableList<String> stylesheets = scene.getStylesheets();
+        var stylesheets = scene.getStylesheets();
         stylesheets.addAll(CSS_REGISTRY.getAvailableCssFiles());
         stylesheets.add(theme.getCssFile());
 
-        final StackPane container = scene.getContainer();
+        var container = scene.getContainer();
 
         build(scene, container, stage);
-
-        //TODO implement scalling
-        //bindFixedSize(container, scene.widthProperty().divide(1.5), scene.heightProperty().divide(1.5));
 
         stage.setScene(scene);
 
@@ -110,38 +93,36 @@ public class EditorFxSceneBuilder {
     }
 
     @FxThread
-    private static void build(@NotNull final EditorFxScene scene,
-                              @NotNull final StackPane container,
-                              @NotNull final Stage stage) {
+    private static void build(@NotNull EditorFxScene scene, @NotNull StackPane container, @NotNull Stage stage) {
 
-        final ImageView canvas = scene.getCanvas();
-        final EditorMenuBarComponent barComponent = new EditorMenuBarComponent();
-        final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
+        var canvas = scene.getCanvas();
+        var barComponent = new EditorMenuBarComponent();
+        var editorAreaComponent = new EditorAreaComponent();
 
         new EventRedirector(editorAreaComponent, canvas, stage);
 
-        final GlobalLeftToolSplitPane leftSplitContainer = new GlobalLeftToolSplitPane(scene);
-        leftSplitContainer.prefHeightProperty().bind(container.heightProperty());
+        var leftSplitContainer = new GlobalLeftToolSplitPane(scene);
+        leftSplitContainer.prefHeightProperty()
+                .bind(container.heightProperty());
 
-        final GlobalBottomToolSplitPane bottomSplitContainer = new GlobalBottomToolSplitPane(scene);
-        final GlobalLeftToolComponent globalLeftToolComponent = new GlobalLeftToolComponent(leftSplitContainer);
+        var bottomSplitContainer = new GlobalBottomToolSplitPane(scene);
+        var globalLeftToolComponent = new GlobalLeftToolComponent(leftSplitContainer);
         globalLeftToolComponent.addComponent(new AssetComponent(), Messages.EDITOR_TOOL_ASSET);
 
-        final GlobalBottomToolComponent globalBottomToolComponent = new GlobalBottomToolComponent(bottomSplitContainer);
+        var globalBottomToolComponent = new GlobalBottomToolComponent(bottomSplitContainer);
         globalBottomToolComponent.addComponent(LogView.getInstance(), Messages.LOG_VIEW_TITLE);
 
         leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
         bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
 
-        // to fix with layout bottom panel
-        bottomSplitContainer.heightProperty()
-                .addListener((observable, oldValue, newValue) -> runLater(editorAreaComponent::requestLayout));
+        FxUtils.addClass(leftSplitContainer, bottomSplitContainer,
+                CssClasses.MAIN_SPLIT_PANEL);
 
-        FXUtils.addToPane(new VBox(barComponent, leftSplitContainer), container);
-        FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
-        FXUtils.bindFixedWidth(barComponent, container.widthProperty());
-        FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CssClasses.MAIN_SPLIT_PANEL);
+        FxUtils.addChild(container, new VBox(barComponent, leftSplitContainer));
 
-        UiUtils.overrideTooltipBehavior(1000, 5000, 100);
+        leftSplitContainer.prefWidthProperty()
+                .bind(container.widthProperty());
+        barComponent.prefWidthProperty()
+                .bind(container.widthProperty());
     }
 }

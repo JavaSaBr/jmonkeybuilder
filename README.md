@@ -1,4 +1,4 @@
-# jMonkeyBuilder 1.7.2 #
+# jMonkeyBuilder 1.8.0 #
 ### It's 3D Editor to prepare/work/create graphics content for jMonkeyEngine 3.2 ###
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -12,6 +12,15 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/5nX8HXYdENU) ##
+
+##### java compiler options
+```bash
+--add-exports javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED 
+--add-exports javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED 
+--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED 
+--add-exports javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED
+```
+
 
 Model Editor:
 

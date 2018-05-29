@@ -1,20 +1,17 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.jme3.math.*;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.impl.*;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,53 +26,60 @@ import java.util.List;
  */
 public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends AbstractPropertyBuilder<C> {
 
-    protected EditableObjectPropertyBuilder(@NotNull final Class<? extends C> type) {
+    protected EditableObjectPropertyBuilder(@NotNull Class<? extends C> type) {
         super(type);
     }
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final C changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull C changeConsumer
+    ) {
 
-        final List<EditableProperty<?, ?>> properties = getProperties(object, parent, changeConsumer);
+        var properties = getProperties(object, parent, changeConsumer);
         if (properties == null || properties.isEmpty()) {
             return;
         }
 
-        for (final EditableProperty<?, ?> description : properties) {
+        for (var description : properties) {
             buildFor(container, changeConsumer, description);
         }
     }
 
     @FxThread
-    protected void buildFor(@NotNull final VBox container, @NotNull final C changeConsumer,
-                            @NotNull final EditableProperty<?, ?> description) {
+    protected void buildFor(
+            @NotNull VBox container,
+            @NotNull C changeConsumer,
+            @NotNull EditableProperty<?, ?> description
+    ) {
 
-        final EditablePropertyType type = description.getType();
+        var type = description.getType();
 
         switch (type) {
             case BOOLEAN: {
 
-                final EditableProperty<Boolean, ?> property = cast(description);
-                final Boolean currentValue = property.getValue();
+                EditableProperty<Boolean, ?> property = cast(description);
+                var currentValue = property.getValue();
 
-                final BooleanPropertyControl<C, EditableProperty<Boolean, ?>> propertyControl =
-                        new BooleanPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var propertyControl = new BooleanPropertyControl<C, EditableProperty<Boolean, ?>>(currentValue,
+                        property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case FLOAT: {
 
-                final EditableProperty<Float, ?> property = cast(description);
-                final Float currentValue = property.getValue();
+                EditableProperty<Float, ?> property = cast(description);
+                var currentValue = property.getValue();
 
-                final FloatPropertyControl<C, EditableProperty<Float, ?>> propertyControl =
-                        new FloatPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var propertyControl = new FloatPropertyControl<C, EditableProperty<Float, ?>>(currentValue,
+                        property.getName(), changeConsumer);
 
-                final float scrollPower = propertyControl.getScrollPower();
-                final float mod = property.getScrollPower();
+                var scrollPower = propertyControl.getScrollPower();
+                var mod = property.getScrollPower();
 
                 propertyControl.setScrollPower(scrollPower * mod);
                 propertyControl.setMinMax(property.getMinValue(), property.getMaxValue());
@@ -85,8 +89,9 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
             }
             case COLOR: {
 
-                final EditableProperty<ColorRGBA, ?> property = cast(description);
-                final Object undefine = description.getValue();
+                EditableProperty<ColorRGBA, ?> property = cast(description);
+                var undefine = description.getValue();
+
                 final ColorRGBA color;
 
                 // for some cases with materials
@@ -97,86 +102,120 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                     color = (ColorRGBA) undefine;
                 }
 
-                final ColorPropertyControl<C, EditableProperty<ColorRGBA, ?>> propertyControl =
-                        new ColorPropertyControl<>(color, property.getName(), changeConsumer);
+                var propertyControl = new ColorPropertyControl<C, EditableProperty<ColorRGBA, ?>>(color,
+                        property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case INTEGER: {
 
-                final EditableProperty<Integer, ?> property = cast(description);
-                final Integer currentValue = property.getValue();
+                EditableProperty<Integer, ?> property = cast(description);
+                var currentValue = property.getValue();
 
-                final IntegerPropertyControl<C, EditableProperty<Integer, ?>> propertyControl =
-                        new IntegerPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var propertyControl = new IntegerPropertyControl<C, EditableProperty<Integer, ?>>(currentValue,
+                        property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case STRING: {
 
-                final EditableProperty<String, ?> property = cast(description);
-                final String currentValue = property.getValue();
+                EditableProperty<String, ?> property = cast(description);
+                var currentValue = property.getValue();
 
-                final StringPropertyControl<C, EditableProperty<String, ?>> propertyControl =
-                        new StringPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var propertyControl = new StringPropertyControl<C, EditableProperty<String, ?>>(currentValue,
+                        property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case READ_ONLY_STRING: {
 
-                final EditableProperty<Object, ?> property = cast(description);
-                final Object currentValue = property.getValue();
+                EditableProperty<Object, ?> property = cast(description);
+                var currentValue = property.getValue();
 
-                final DefaultSinglePropertyControl<C, EditableProperty<Object, ?>, Object> propertyControl =
-                        new DefaultSinglePropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var propertyControl = new DefaultSinglePropertyControl<C, EditableProperty<Object, ?>, Object>(
+                        currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case VECTOR_2F: {
 
-                final EditableProperty<Vector2f, ?> property = cast(description);
-                final Vector2f currentValue = property.getValue();
+                EditableProperty<Vector2f, ?> property = cast(description);
+                var currentValue = property.getValue();
+                var propertyControl = new Vector2fPropertyControl<C, EditableProperty<Vector2f, ?>>(currentValue,
+                        property.getName(), changeConsumer);
 
-                final Vector2FPropertyControl<C, EditableProperty<Vector2f, ?>> propertyControl =
-                        new Vector2FPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var scrollPower = propertyControl.getScrollPower();
+                var mod = property.getScrollPower();
+
+                propertyControl.setMinMax(property.getMinValue(), property.getMaxValue());
+                propertyControl.setScrollPower(scrollPower * mod);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+            case MIN_MAX_2F: {
+
+                EditableProperty<Vector2f, ?> property = cast(description);
+
+                var value = property.getValue();
+                var propertyControl = new MinMaxPropertyControl<C, EditableProperty<Vector2f, ?>>(
+                        value, property.getName(), changeConsumer);
+
+
+                var scrollPower = propertyControl.getScrollPower();
+                var mod = property.getScrollPower();
+
+                propertyControl.setMinMax(property.getMinValue(), property.getMaxValue());
+                propertyControl.setScrollPower(scrollPower * mod);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case VECTOR_3F: {
 
-                final EditableProperty<Vector3f, ?> property = cast(description);
-                final Vector3f currentValue = property.getValue();
+                EditableProperty<Vector3f, ?> property = cast(description);
+                var currentValue = property.getValue();
 
-                final Vector3FPropertyControl<C, EditableProperty<Vector3f, ?>> propertyControl =
-                        new Vector3FPropertyControl<>(currentValue, property.getName(), changeConsumer);
+                var propertyControl = new Vector3fPropertyControl<C, EditableProperty<Vector3f, ?>>(currentValue,
+                        property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+            case QUATERNION: {
+
+                EditableProperty<Quaternion, ?> property = cast(description);
+                var currentValue = property.getValue();
+
+                var propertyControl = new QuaternionPropertyControl<C, EditableProperty<Quaternion, ?>>(
+                    currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case ENUM: {
 
-                final EditableProperty<Enum<?>, ?> property = cast(description);
-                final Enum<?> value = notNull(property.getValue(), "Enum value can't be null.");
-                final Enum<?>[] availableValues = EditorUtil.getAvailableValues(value);
+                EditableProperty<Enum<?>, ?> property = cast(description);
+                var value = notNull(property.getValue(), "Enum value can't be null.");
+                var availableValues = EditorUtil.getAvailableValues(value);
 
-                final EnumPropertyControl<C, EditableProperty<Enum<?>, ?>, Enum<?>> propertyControl =
-                        new EnumPropertyControl<>(value, property.getName(), changeConsumer, availableValues);
+                var propertyControl = new EnumPropertyControl<C, EditableProperty<Enum<?>, ?>, Enum<?>>(value,
+                        property.getName(), changeConsumer, availableValues);
 
                 addControl(container, property, propertyControl);
                 break;
             }
             case TEXTURE_2D: {
 
-                final EditableProperty<Texture2D, ?> property = cast(description);
-                final Texture2D value = property.getValue();
+                EditableProperty<Texture2D, ?> property = cast(description);
+                var value = property.getValue();
 
-                final Texture2DPropertyControl<C, EditableProperty<Texture2D, ?>> propertyControl =
-                        new Texture2DPropertyControl<>(value, property.getName(), changeConsumer);
+                var propertyControl = new Texture2dPropertyControl<C, EditableProperty<Texture2D, ?>>(value,
+                        property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -200,15 +239,18 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @param propertyControl the property control.
      */
     @FxThread
-    protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
-                                  @NotNull final PropertyControl<? extends C, EditableProperty<T, ?>, T> propertyControl) {
+    protected <T> void addControl(
+            @NotNull VBox container,
+            @NotNull EditableProperty<T, ?> property,
+            @NotNull PropertyControl<? extends C, EditableProperty<T, ?>, T> propertyControl
+    ) {
 
         propertyControl.setApplyHandler(EditableProperty::setValue);
         propertyControl.setSyncHandler(EditableProperty::getValue);
         propertyControl.setEditObject(property);
         propertyControl.setDisable(property.isReadOnly());
 
-        FXUtils.addToPane(propertyControl, container);
+        FxUtils.addChild(container, propertyControl);
     }
 
     /**
@@ -220,9 +262,11 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @return the list of properties or null.
      */
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object,
-                                                                   @Nullable final Object parent,
-                                                                   @NotNull final C changeConsumer) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull C changeConsumer
+    ) {
         return getProperties(object);
     }
 
@@ -233,12 +277,12 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
      * @return the list of properties or null.
      */
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
         return null;
     }
 
     @FxThread
-    protected @NotNull <T> EditableProperty<T, ?> cast(@NotNull final EditableProperty<?, ?> property) {
+    protected @NotNull <T> EditableProperty<T, ?> cast(@NotNull EditableProperty<?, ?> property) {
         return ClassUtils.unsafeCast(property);
     }
 }

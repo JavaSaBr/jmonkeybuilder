@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog.sky;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
@@ -33,9 +33,9 @@ import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.StringUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
@@ -325,7 +325,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(skyTypeLabel, normalScaleLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
         FXUtils.addClassTo(skyTypeComboBox, CssClasses.DIALOG_FIELD);
         FXUtils.addClassesTo(normalScaleXField, normalScaleYField, normalScaleZField,
-                CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD, CssClasses.TRANSPARENT_TEXT_FIELD);
+                CssClasses.PROPERTY_CONTROL_VECTOR_3F_FIELD, CssClasses.TRANSPARENT_TEXT_FIELD);
 
         UiUtils.addFocusBinding(normalScaleContainer, normalScaleXField, normalScaleYField, normalScaleZField);
     }

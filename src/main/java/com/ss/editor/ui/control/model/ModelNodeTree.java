@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.impl.multi.RemoveElementsAction;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.SelectionMode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

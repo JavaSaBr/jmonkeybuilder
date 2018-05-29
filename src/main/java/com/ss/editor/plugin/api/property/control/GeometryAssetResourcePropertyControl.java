@@ -3,11 +3,10 @@ package com.ss.editor.plugin.api.property.control;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,16 +17,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GeometryAssetResourcePropertyControl extends SpatialAssetResourcePropertyControl<Geometry> {
 
-    public GeometryAssetResourcePropertyControl(@NotNull final VarTable vars,
-                                                @NotNull final PropertyDefinition definition,
-                                                @NotNull final Runnable validationCallback) {
+    public GeometryAssetResourcePropertyControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
     @Override
     @FxThread
-    protected @Nullable Geometry findResource(@NotNull final AssetManager assetManager, @NotNull final ModelKey modelKey) {
-        final Spatial spatial = assetManager.loadModel(modelKey);
-        return NodeUtils.findGeometry(spatial);
+    protected @Nullable Geometry findResource(@NotNull AssetManager assetManager, @NotNull ModelKey modelKey) {
+        return NodeUtils.findGeometry(assetManager.loadModel(modelKey));
     }
 }

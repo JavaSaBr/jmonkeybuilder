@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.action.impl.geometry;
 
 import static com.ss.editor.util.EditorUtil.getDefaultLayer;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;

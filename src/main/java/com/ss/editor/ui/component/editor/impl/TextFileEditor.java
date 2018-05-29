@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
@@ -8,8 +8,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.FileUtils;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;

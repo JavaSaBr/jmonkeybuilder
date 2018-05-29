@@ -2,12 +2,12 @@ package com.ss.editor.ui.component.virtual.tree.resource;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.virtual.tree.VirtualResourceTree;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
 /**

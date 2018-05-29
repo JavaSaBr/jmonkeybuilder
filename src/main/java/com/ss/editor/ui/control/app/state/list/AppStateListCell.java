@@ -7,7 +7,7 @@ import com.ss.editor.model.undo.impl.DisableAppStateOperation;
 import com.ss.editor.model.undo.impl.EnableAppStateOperation;
 import com.ss.editor.ui.control.list.AbstractListCell;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

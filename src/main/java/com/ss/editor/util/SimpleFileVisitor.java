@@ -17,35 +17,32 @@ import java.nio.file.attribute.BasicFileAttributes;
 public interface SimpleFileVisitor extends FileVisitor<Path> {
 
     @Override
-    default FileVisitResult preVisitDirectory(@NotNull final Path dir, @NotNull final BasicFileAttributes attrs)
+    default FileVisitResult preVisitDirectory(@NotNull Path dir, @NotNull BasicFileAttributes attrs)
             throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    default FileVisitResult visitFile(@NotNull final Path file, @NotNull final BasicFileAttributes attrs)
-            throws IOException {
+    default FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attrs) throws IOException {
         visit(file, attrs);
         return FileVisitResult.CONTINUE;
     }
 
     /**
-     * Visit.
+     * Visit the file.
      *
-     * @param file  the file
-     * @param attrs the attrs
+     * @param file  the file.
+     * @param attrs the attributes of the file.
      */
-    void visit(@NotNull final Path file, @NotNull final BasicFileAttributes attrs);
+    void visit(@NotNull Path file, @NotNull BasicFileAttributes attrs);
 
     @Override
-    default FileVisitResult visitFileFailed(@NotNull final Path file, @Nullable final IOException exc)
-            throws IOException {
+    default FileVisitResult visitFileFailed(@NotNull Path file, @Nullable IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    default FileVisitResult postVisitDirectory(@NotNull final Path dir, @Nullable final IOException exc)
-            throws IOException {
+    default FileVisitResult postVisitDirectory(@NotNull Path dir, @Nullable IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 }

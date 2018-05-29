@@ -2,7 +2,7 @@ package com.ss.editor.ui.tooltip;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;

@@ -1,9 +1,11 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
@@ -11,28 +13,55 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+apply plugin: 'application'
 
 group = 'com.spaceshift'
-version = '1.7.2'
+version = '1.8.0'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+compileJava {
+    options.encoding = "UTF-8"
+    options.incremental = true
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED"
+    ])
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED"
+    ])
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"
+    ])
+    options.compilerArgs.addAll([
+            "--add-exports",
+            "javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED"
+    ])
+}
+
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
 
 compileTestJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.10
+    targetCompatibility = 1.10
     options.compilerArgs += '-parameters'
 }
+
+mainClassName = "com.ss.editor.JfxApplication"
 
 ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
-ext.jmeVersion = "v3.3.dev-SNAPSHOT"
-ext.jmbExtVersion = "2.1.1"
+ext.jmeVersion = "3.2.1-SNAPSHOT"
+ext.jmbExtVersion = "2.3.1"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
+ext.bintrayVersion = version
 
 junitPlatform {
     filters {
@@ -45,9 +74,49 @@ junitPlatform {
 }
 
 repositories {
-    mavenCentral()
     jcenter()
-    maven { url 'https://jitpack.io' }
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven {
+        url 'https://dl.bintray.com/javasabr/maven'
+    }
+}
+
+publishing {
+    publications {
+        JmbArtifact(MavenPublication) {
+            from components.java
+            groupId 'com.spaceshift'
+            artifactId 'jmonkeybuilder'
+            version bintrayVersion
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintray {
+    user = System.getProperty('bintrayUser')
+    key = System.getProperty('bintrayKey')
+    publications = ['JmbArtifact']
+    pkg {
+        repo = 'maven'
+        name = 'com.spaceshift.jmonkeybuilder'
+        licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/JavaSaBr/jmonkeybuilder'
+        vcsUrl = 'https://github.com/JavaSaBr/jmonkeybuilder.git'
+        issueTrackerUrl = 'https://github.com/JavaSaBr/jmonkeybuilder/issues'
+        githubRepo = 'JavaSaBr/jmonkeybuilder'
+        githubReleaseNotesFile = 'README.md'
+        version {
+            name = bintrayVersion
+            desc = bintrayVersion
+            released  = new Date()
+        }
+    }
 }
 
 javadoc {
@@ -57,12 +126,11 @@ javadoc {
 dependencies {
 
     // base
-    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.8.1'
-    compile 'org.controlsfx:controlsfx:8.40.14'
-
-    compile 'com.github.JavaSaBr:RlibFX:4.1.3'
-    compile 'com.github.JavaSaBr:RLib:6.7.7'
-    compile ("com.github.JavaSaBr:JME3-JFX:1.7.4") {
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.9.0'
+    compile 'org.controlsfx:controlsfx:9.0.0'
+    compile 'com.spaceshift:rlib.fx:5.0.2'
+    compile 'com.spaceshift:rlib.common:7.1.2'
+    compile ('com.jme3:jfx:2.0.0') {
         exclude group: 'org.jmonkeyengine'
     }
 
@@ -101,7 +169,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ("com.github.JavaSaBr:jmonkeybuilder-extension:$jmbExtVersion") {
+    compile ("com.spaceshift:jmonkeybuilder-extension:$jmbExtVersion") {
         exclude group: 'org.jmonkeyengine'
     }
 
@@ -110,11 +178,11 @@ dependencies {
     }
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-beta-1'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.13'
 
     // TESTS
     testRuntime "com.github.JavaSaBr.jmonkeyengine:jme3-lwjgl3:$jmeVersion"
-    testCompile ("com.github.JavaSaBr:jmonkeybuilder-extension:$jmbExtVersion") {
+    testCompile ("com.spaceshift:jmonkeybuilder-extension:$jmbExtVersion") {
         exclude group: 'org.jmonkeyengine'
         exclude group: 'com.github.JavaSaB.jmonkeyengine'
     }
@@ -164,28 +232,5 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.5.1'
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-defaultTasks 'clean', 'install'
-
-// To specify a license in the pom:
-install {
-    repositories.mavenInstaller {
-        pom.version = version
-        pom.artifactId = 'jmonkeybuilder'
-        pom.project {
-            licenses {
-                license {
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-        }
-    }
+    gradleVersion = '4.7'
 }

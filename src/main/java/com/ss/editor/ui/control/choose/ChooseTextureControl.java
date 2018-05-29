@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.choose;
 
 import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.JavaFxImageManager;
@@ -14,7 +14,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;

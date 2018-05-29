@@ -18,7 +18,7 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 3;
+    public static final long serialVersionUID = 4;
 
     /**
      * The selected models.
@@ -27,10 +27,22 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
     private String[] selectedModels;
 
     /**
-     * The models scale.
+     * The models min scale.
      */
     @NotNull
-    private Vector3f scale;
+    private Vector3f minScale;
+
+    /**
+     * The models max scale.
+     */
+    @NotNull
+    private Vector3f maxScale;
+
+    /**
+     * The models padding.
+     */
+    @NotNull
+    private Vector3f padding;
 
     /**
      * The spawn method.
@@ -40,7 +52,9 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
     public SpawnPaintingStateWithEditorTool() {
         this.method = SpawnMethod.BATCH.ordinal();
         this.selectedModels = new String[SpawnPaintingComponent.AVAILABLE_MODELS];
-        this.scale = new Vector3f(Vector3f.UNIT_XYZ);
+        this.minScale = Vector3f.UNIT_XYZ.clone();
+        this.maxScale = Vector3f.UNIT_XYZ.clone();
+        this.padding = Vector3f.ZERO.clone();
     }
 
     /**
@@ -49,7 +63,7 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
      * @param method the spawn method.
      */
     @FxThread
-    public void setMethod(final int method) {
+    public void setMethod(int method) {
         final boolean changed = getMethod() != method;
         this.method = method;
         if (changed) notifyChange();
@@ -66,23 +80,69 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
     }
 
     /**
-     * Get the models scale.
+     * Set the models min scale.
      *
-     * @param scale the models scale.
+     * @param minScale the models min scale.
      */
     @FxThread
-    public void setScale(@NotNull final Vector3f scale) {
-        this.scale = scale;
+    public void setMinScale(@NotNull Vector3f minScale) {
+        final boolean changed = !minScale.equals(getMinScale());
+        this.minScale = minScale;
+        if (changed) notifyChange();
     }
 
     /**
-     * Set the models scale.
+     * Set the models max scale.
      *
-     * @return the models scale.
+     * @param maxScale the models max scale.
      */
     @FxThread
-    public @NotNull Vector3f getScale() {
-        return scale;
+    public void setMaxScale(@NotNull Vector3f maxScale) {
+        final boolean changed = !maxScale.equals(getMaxScale());
+        this.maxScale = maxScale;
+        if (changed) notifyChange();
+    }
+
+    /**
+     * Set the models padding.
+     *
+     * @param padding the models padding.
+     */
+    @FxThread
+    public void setPadding(@NotNull Vector3f padding) {
+        final boolean changed = !padding.equals(getPadding());
+        this.padding = padding;
+        if (changed) notifyChange();
+    }
+
+    /**
+     * Get the models min scale.
+     *
+     * @return the models min scale.
+     */
+    @FxThread
+    public @NotNull Vector3f getMinScale() {
+        return minScale;
+    }
+
+    /**
+     * Get the models max scale.
+     *
+     * @return the models max scale.
+     */
+    @FxThread
+    public @NotNull Vector3f getMaxScale() {
+        return maxScale;
+    }
+
+    /**
+     * Get the models padding.
+     *
+     * @return the models padding.
+     */
+    @FxThread
+    public @NotNull Vector3f getPadding() {
+        return padding;
     }
 
     /**
@@ -91,7 +151,7 @@ public class SpawnPaintingStateWithEditorTool extends AbstractPaintingStateWithE
      * @param selectedModels the selected models.
      */
     @FxThread
-    public void setSelectedModels(@NotNull final String[] selectedModels) {
+    public void setSelectedModels(@NotNull String[] selectedModels) {
         final boolean changed = !Arrays.equals(getSelectedModels(), selectedModels);
         this.selectedModels = selectedModels;
         if (changed) notifyChange();

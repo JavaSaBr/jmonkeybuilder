@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog.node.selector;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
@@ -9,8 +9,8 @@ import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.GridPane;

@@ -12,8 +12,8 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link TreeNode} to represent the {@link Mesh} in the editor.

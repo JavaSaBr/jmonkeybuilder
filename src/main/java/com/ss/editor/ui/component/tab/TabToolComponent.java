@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.tab;
 
 import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;

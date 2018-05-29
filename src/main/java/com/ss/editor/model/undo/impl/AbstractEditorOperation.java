@@ -1,12 +1,12 @@
 package com.ss.editor.model.undo.impl;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 /**

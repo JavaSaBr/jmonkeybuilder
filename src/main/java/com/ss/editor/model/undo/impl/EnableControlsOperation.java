@@ -4,7 +4,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.util.ControlUtils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
 /**

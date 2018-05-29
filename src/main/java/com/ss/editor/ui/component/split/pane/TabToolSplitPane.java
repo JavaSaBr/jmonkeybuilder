@@ -1,9 +1,12 @@
 package com.ss.editor.ui.component.split.pane;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.tab.TabToolComponent;
+import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
@@ -13,10 +16,12 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link SplitPane} for the {@link TabToolComponent}.
  *
- * @param <C> the type parameter
+ * @param <C> the config's type.
  * @author JavaSaBr
  */
 public abstract class TabToolSplitPane<C> extends SplitPane {
+
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The scene.
@@ -46,13 +51,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      */
     private boolean collapsed;
 
-    /**
-     * Instantiates a new Tab tool split pane.
-     *
-     * @param scene  the scene
-     * @param config the config
-     */
-    protected TabToolSplitPane(@NotNull final Scene scene, @Nullable C config) {
+    protected TabToolSplitPane(@NotNull Scene scene, @Nullable C config) {
         this.scene = scene;
         this.config = config;
         if (config != null) {
@@ -62,11 +61,12 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
-     * Update this pane for the new config.
+     * Update this pane to use the new config.
      *
-     * @param config the config
+     * @param config the config.
      */
-    public void updateFor(@NotNull final C config) {
+    @FxThread
+    public void updateFor(@NotNull C config) {
         this.config = config;
         this.size = loadSize();
         this.collapsed = loadCollapsed();
@@ -74,87 +74,97 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
-     * Load collapsed boolean.
+     * Load stored collapsed state of this pane.
      *
-     * @return the stored flag of collapsed.
+     * @return true of this pane was collapsed.
      */
+    @FxThread
     protected boolean loadCollapsed() {
         return false;
     }
 
     /**
-     * Load size int.
+     * Load stored size of this pane.
      *
-     * @return the stored size of the tool component.
+     * @return the stored size of this pane.
      */
+    @FxThread
     protected int loadSize() {
         return 1;
     }
 
     /**
-     * @return true if the tool collapsed.
+     * Return true if the tool is collapsed.
+     *
+     * @return true if the tool is collapsed.
      */
+    @FxThread
     private boolean isCollapsed() {
         return collapsed;
     }
 
     /**
+     * Get the tool component.
+     *
      * @return the tool component.
      */
-    @NotNull
-    private TabToolComponent getToolComponent() {
+    @FxThread
+    private @NotNull TabToolComponent getToolComponent() {
         return notNull(toolComponent);
     }
 
     /**
-     * Gets config.
+     * Get the current config.
      *
-     * @return the config.
+     * @return the current config.
      */
-    @NotNull
-    public C getConfig() {
+    @FxThread
+    public @NotNull C getConfig() {
         return notNull(config);
     }
 
     /**
      * Init this split pane for the tool component.
      *
-     * @param toolComponent the tool component
-     * @param other         the other
+     * @param toolComponent the tool component.
+     * @param another       the another node.
      */
-    public void initFor(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
+    @FxThread
+    public void initFor(@NotNull TabToolComponent toolComponent, @NotNull Node another) {
         this.toolComponent = toolComponent;
-        addElements(toolComponent, other);
+        addElements(toolComponent, another);
         addListeners(toolComponent);
         bindToScene();
         update();
     }
 
     /**
-     * Add with listener to handle size changes.
+     * Add a width listener to handle changes of the tool component's size.
      *
-     * @param toolComponent the tool component
+     * @param toolComponent the tool component.
      */
-    protected void addListeners(@NotNull final TabToolComponent toolComponent) {
-        toolComponent.widthProperty()
-                .addListener((observable, oldValue, newValue) -> handleToolChanged(newValue));
+    @FxThread
+    protected void addListeners(@NotNull TabToolComponent toolComponent) {
+        ObservableUtils.onChange(toolComponent.widthProperty(), this::handleToolChanged);
     }
 
     /**
      * Bind to the scene.
      */
+    @FxThread
     protected void bindToScene() {
-        scene.widthProperty()
-                .addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneSize()));
+        ObservableUtils.onChange(scene.widthProperty(),
+                () -> handleSceneChanged(getSceneSize()));
     }
 
     /**
-     * Add an element to the tool component.
+     * Add the tool component to this pane.
      *
      * @param toolComponent the tool component.
      * @param other         the element.
      */
-    protected void addElements(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
+    @FxThread
+    protected void addElements(@NotNull TabToolComponent toolComponent, @NotNull Node other) {
         getItems().addAll(toolComponent, other);
     }
 
@@ -162,7 +172,10 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      * Update.
      */
     protected void update() {
-        if (config == null) return;
+
+        if (config == null) {
+            return;
+        }
 
         if (isCollapsed()) {
             getToolComponent().collapse();
@@ -176,24 +189,29 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      *
      * @param newValue the new value
      */
-    protected void handleToolChanged(@NotNull final Number newValue) {
-        if (config == null) return;
+    protected void handleToolChanged(@NotNull Number newValue) {
+
+        if (config == null) {
+            return;
+        }
+
+        var toolComponent = getToolComponent();
 
         this.collapsed = toolComponent.isCollapsed();
-        saveCollapsed(collapsed);
+
+        storeCollapsed(isCollapsed());
 
         if (!isCollapsed()) {
             int abs = Math.abs(size - newValue.intValue());
             size = abs > 2 ? newValue.intValue() : size;
-            saveSize(size);
+            storeSize(size);
         }
 
         toolComponent.setExpandPosition(getExpandPosition(size, getSceneSize()));
-        handleSceneChanged(getSceneSize());
     }
 
     /**
-     * Gets scene size.
+     * Get the current scene size.
      *
      * @return the scene size.
      */
@@ -202,19 +220,19 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
-     * Save the flag of collapsed.
+     * Store the current collapsed state.
      *
-     * @param collapsed the collapsed
+     * @param collapsed the current collapsed state.
      */
-    protected void saveCollapsed(final boolean collapsed) {
+    protected void storeCollapsed(boolean collapsed) {
     }
 
     /**
-     * Save the size of the tool component.
+     * Save the current size.
      *
-     * @param size the size
+     * @param size the current size.
      */
-    protected void saveSize(final int size) {
+    protected void storeSize(int size) {
     }
 
     /**
@@ -222,10 +240,11 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      *
      * @param newSize the new size
      */
-    protected void handleSceneChanged(@NotNull final Number newSize) {
-        if (config == null) return;
+    protected void handleSceneChanged(@NotNull Number newSize) {
 
-        if (isCollapsed()) {
+        if (config == null) {
+            return;
+        } else if (isCollapsed()) {
             setDividerPosition(getDividerIndex(), getCollapsedPosition());
             return;
         }
@@ -234,7 +253,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
-     * Gets collapsed position.
+     * Get the collapsed position.
      *
      * @return the collapsed position.
      */
@@ -243,6 +262,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
+     * Get the divider index.
+     *
      * @return the divider index.
      */
     private int getDividerIndex() {
@@ -256,7 +277,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      * @param sceneSize the scene size
      * @return the expand position
      */
-    protected double getExpandPosition(final double toolSize, final double sceneSize) {
+    protected double getExpandPosition(double toolSize, double sceneSize) {
         return min(1, max(0.1, toolSize / sceneSize));
     }
 }

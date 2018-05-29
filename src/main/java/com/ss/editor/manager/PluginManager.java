@@ -1,6 +1,6 @@
 package com.ss.editor.manager;
 
-import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
+import static com.ss.rlib.common.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
@@ -9,16 +9,16 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.manager.InitializeManager;
-import com.ss.rlib.plugin.ConfigurablePluginSystem;
-import com.ss.rlib.plugin.Plugin;
-import com.ss.rlib.plugin.PluginContainer;
-import com.ss.rlib.plugin.exception.PreloadPluginException;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.plugin.ConfigurablePluginSystem;
+import com.ss.rlib.common.plugin.Plugin;
+import com.ss.rlib.common.plugin.PluginContainer;
+import com.ss.rlib.common.plugin.exception.PreloadPluginException;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,16 +59,16 @@ public class PluginManager {
         this.pluginSystem = newBasePluginSystem(getClass().getClassLoader());
         this.pluginSystem.setAppVersion(Config.APP_VERSION);
 
-        final Path folderInUserHome = Config.getAppFolderInUserHome();
-        final String embeddedPath = System.getProperty("editor.embedded.plugins.path");
+        var folderInUserHome = Config.getAppFolderInUserHome();
+        var embeddedPath = System.getProperty("editor.embedded.plugins.path");
 
-        if (embeddedPath != null) {
-            final Path embeddedPluginPath = Paths.get(embeddedPath);
+        if (embeddedPath != null && Files.exists(Paths.get(embeddedPath))) {
+            var embeddedPluginPath = Paths.get(embeddedPath);
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
         } else {
-            final Path rootFolder = Utils.getRootFolderFromClass(JmeApplication.class);
-            final Path embeddedPluginPath = rootFolder.resolve("embedded-plugins");
+            var rootFolder = Utils.getRootFolderFromClass(JmeApplication.class);
+            var embeddedPluginPath = rootFolder.resolve("embedded-plugins");
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             if (Files.exists(embeddedPluginPath)) {
                 pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
@@ -77,31 +77,31 @@ public class PluginManager {
             }
         }
 
-        final Path userPluginsFolder = folderInUserHome.resolve("plugins");
+        var userPluginsFolder = folderInUserHome.resolve("plugins");
 
         LOGGER.debug(this, "installation plugin path: " + userPluginsFolder);
 
         if (!Files.exists(userPluginsFolder)) {
-            Utils.run(() -> Files.createDirectories(userPluginsFolder));
+            FileUtils.createDirectories(userPluginsFolder);
         }
 
         pluginSystem.configureInstallationPluginsPath(userPluginsFolder);
 
         try {
             pluginSystem.preLoad();
-        } catch (final PreloadPluginException e) {
+        } catch (PreloadPluginException e) {
             FileUtils.delete(e.getPath());
             throw e;
         }
 
         pluginSystem.initialize();
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
-        initializationManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
-        initializationManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
-        initializationManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
-        initializationManager.addOnFinishLoading(this::onFinishLoading);
+        var initManager = InitializationManager.getInstance();
+        initManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
+        initManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
+        initManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
+        initManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
+        initManager.addOnFinishLoading(this::onFinishLoading);
     }
 
     /**
@@ -109,7 +109,7 @@ public class PluginManager {
      *
      * @param path the path to the plugin.
      */
-    public void installPlugin(@NotNull final Path path) {
+    public void installPlugin(@NotNull Path path) {
         pluginSystem.installPlugin(path, false);
     }
 
@@ -118,7 +118,7 @@ public class PluginManager {
      *
      * @param plugin the plugin.
      */
-    public void removePlugin(@NotNull final EditorPlugin plugin) {
+    public void removePlugin(@NotNull EditorPlugin plugin) {
         pluginSystem.removePlugin(plugin);
     }
 
@@ -127,8 +127,8 @@ public class PluginManager {
      */
     @JmeThread
     private void onBeforeCreateJmeContext() {
-        final Array<Plugin> plugins = pluginSystem.getPlugins();
-        plugins.stream().filter(EditorPlugin.class::isInstance)
+        pluginSystem.getPlugins().stream()
+                .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> editorPlugin.onBeforeCreateJmeContext(pluginSystem));
     }
@@ -138,15 +138,16 @@ public class PluginManager {
      */
     @JmeThread
     private void onAfterCreateJmeContext() {
-        final Array<Plugin> plugins = pluginSystem.getPlugins();
-        plugins.stream().filter(EditorPlugin.class::isInstance)
+        pluginSystem.getPlugins().stream()
+                .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> {
+
                     editorPlugin.onAfterCreateJmeContext(pluginSystem);
 
-                    final PluginContainer container = editorPlugin.getContainer();
-                    final URLClassLoader classLoader = container.getClassLoader();
-                    final AssetManager assetManager = EditorUtil.getAssetManager();
+                    var container = editorPlugin.getContainer();
+                    var classLoader = container.getClassLoader();
+                    var assetManager = EditorUtil.getAssetManager();
                     assetManager.addClassLoader(classLoader);
                 });
     }
@@ -156,8 +157,8 @@ public class PluginManager {
      */
     @FxThread
     private void onBeforeCreateJavaFxContext() {
-        final Array<Plugin> plugins = pluginSystem.getPlugins();
-        plugins.stream().filter(EditorPlugin.class::isInstance)
+        pluginSystem.getPlugins().stream()
+                .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFxContext(pluginSystem));
     }
@@ -167,8 +168,8 @@ public class PluginManager {
      */
     @FxThread
     private void onAfterCreateJavaFxContext() {
-        final Array<Plugin> plugins = pluginSystem.getPlugins();
-        plugins.stream().filter(EditorPlugin.class::isInstance)
+        pluginSystem.getPlugins().stream()
+                .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFxContext(pluginSystem));
     }
@@ -178,8 +179,8 @@ public class PluginManager {
      */
     @FxThread
     private void onFinishLoading() {
-        final Array<Plugin> plugins = pluginSystem.getPlugins();
-        plugins.stream().filter(EditorPlugin.class::isInstance)
+        pluginSystem.getPlugins().stream()
+                .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> editorPlugin.onFinishLoading(pluginSystem));
     }
@@ -190,9 +191,9 @@ public class PluginManager {
      * @param consumer the consumer.
      */
     @FromAnyThread
-    public void handlePlugins(@NotNull final Consumer<EditorPlugin> consumer) {
-        final Array<Plugin> plugins = pluginSystem.getPlugins();
-        plugins.stream().filter(EditorPlugin.class::isInstance)
+    public void handlePlugins(@NotNull Consumer<EditorPlugin> consumer) {
+        pluginSystem.getPlugins().stream()
+                .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(consumer);
     }

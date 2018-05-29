@@ -1876,7 +1876,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      *
      * @param visible the visible
      */
-    public void setVisible(final boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
 }

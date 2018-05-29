@@ -3,13 +3,13 @@ package com.ss.editor.executor.impl;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
-import com.ss.rlib.concurrent.lock.LockFactory;
-import com.ss.rlib.concurrent.lock.Lockable;
-import com.ss.rlib.concurrent.util.ConcurrentUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.concurrent.lock.LockFactory;
+import com.ss.rlib.common.concurrent.lock.Lockable;
+import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -81,7 +81,6 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     public void execute(@NotNull final Runnable task) {
         lock();
         try {
-
             waitTasks.add(task);
             if (!wait.get()) {
                 return;
@@ -95,6 +94,16 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
 
         } finally {
             unlock();
+        }
+
+        if (!wait.get()) {
+            return;
+        }
+
+        synchronized (wait) {
+            if (wait.compareAndSet(true, false)) {
+                ConcurrentUtils.notifyAllInSynchronize(wait);
+            }
         }
     }
 

@@ -9,33 +9,35 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link ElementPropertyControl} to edit elements from models.
  *
- * @param <D> the edited object's type.
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyControl<ModelChangeConsumer, D, T> {
 
-    public ElementModelPropertyControl(@NotNull final Class<T> type, @Nullable final T propertyValue,
-                                       @NotNull final String propertyName,
-                                       @NotNull final ModelChangeConsumer changeConsumer) {
+    public ElementModelPropertyControl(
+            @NotNull Class<T> type,
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
         super(type, propertyValue, propertyName, changeConsumer);
     }
 
     @Override
     @FxThread
-    protected void processAdd() {
-        final NodeSelectorDialog<T> dialog = createNodeSelectorDialog();
-        dialog.show(this);
+    protected void addElement() {
+        createNodeSelectorDialog().show(this);
     }
 
     /**
      * Create node selector dialog node selector dialog.
      *
-     * @return the node selector dialog
+     * @return the node selector dialog.
      */
     @FxThread
     protected @NotNull NodeSelectorDialog<T> createNodeSelectorDialog() {
-        final ModelChangeConsumer changeConsumer = getChangeConsumer();
-        return new NodeSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
+        return new NodeSelectorDialog<>(getChangeConsumer().getCurrentModel(), type, this::addElement);
     }
 
     /**
@@ -44,7 +46,7 @@ public abstract class ElementModelPropertyControl<D, T> extends ElementPropertyC
      * @param newElement the new element.
      */
     @FxThread
-    protected void processAdd(@NotNull final T newElement) {
+    protected void addElement(@NotNull T newElement) {
         changed(newElement, getPropertyValue());
     }
 }

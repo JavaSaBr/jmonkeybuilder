@@ -134,6 +134,7 @@
     -fx-border-radius: 1px;
     -fx-padding: 1px 1px 1px 4px;
     -fx-min-height: -var-default-field-height;
+    -fx-alignment: center;
 }
 
 .text-input-container:focused {
@@ -699,26 +700,70 @@
 
 /*******************************************************************************
  *                                                                             *
- * Abstract Property Component                                                 *
+ * Property Editor                                                            *
  *                                                                             *
  ******************************************************************************/
 
-.abstract-param-control-container {
-    -fx-alignment: top-center;
-    -fx-padding: 2px 6px 4px 4px;
+.property-editor {
 }
 
-.abstract-param-control-container-split-line {
+.property-editor-container {
+    -fx-alignment: top-center;
+    -fx-padding: 2px 2px 2px 2px;
+    -fx-spacing: 2px;
+}
+
+.property-editor-container-split-line {
     -fx-padding: 6px 0px 6px 0px;
 }
 
-.abstract-param-control-container-split-line > .hbox {
+.property-editor-container-split-line > .hbox {
+
     -fx-border-color: -var-border-color transparent transparent transparent,
-    transparent transparent transparent transparent;
+                        transparent transparent transparent transparent;
+
     -fx-border-insets: 0, 1 0 0 0;
     -fx-border-style: none;
     -fx-padding: 0px;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Property Control                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
+
+.property-control-resource {
+
+}
+
+.property-control-resource > .hbox {
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+.property-control-combo-box {
+}
+
+.property-control-vector-3f-field {
+    -fx-min-height: -var-default-field-inner-height;
+}
+
+.property-control-vector-3f-field:focused {
+    -fx-min-height: -var-default-field-inner-height;
+}
+
+.property-control-check-box {
+}
+
+.property-control-check-box-color-picker {
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Abstract Property Component                                                 *
+ *                                                                             *
+ ******************************************************************************/
 
 .abstract-param-control {
     -fx-padding: 1px 0px 1px 0px;
@@ -726,7 +771,7 @@
 }
 
 .abstract-param-control > .hbox {
-    -fx-spacing: 2px;
+     -fx-spacing: 2px;
 }
 
 .abstract-param-control-multi-value-container {
@@ -771,20 +816,10 @@
     -fx-max-height: -var-default-inner-field-height;
 }
 
-.abstract-param-control-param-color-picker {
-}
-
-.abstract-param-control-checkbox {
-}
-
-.abstract-param-control-combobox {
-}
 
 .abstract-param-control-vector2f-field {
 }
 
-.abstract-param-control-vector3f-field {
-}
 
 .abstract-param-control-label-value {
     -fx-alignment: center-left;
@@ -807,39 +842,6 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: -var-default-field-preview-height;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-.abstract-param-control-influencer-element {
-    -fx-spacing: 2px;
-    -fx-padding: 0px;
-}
-
-.abstract-param-control-influencer-element > .hbox {
-    -fx-spacing: 2px;
-}
-
-.abstract-param-control-influencer {
-    -fx-padding: 4px 0px 0px 0px;
-    -fx-alignment: top-center;
-    -fx-spacing: 4px;
-}
-
-.abstract-param-control-influencer > .vbox {
-    -fx-spacing: 2px;
-}
-
-.abstract-param-control-influencer > .hbox {
-    -fx-alignment: center;
-    -fx-padding: 4px 0px 0px 0px;
-}
-
-.abstract-param-control-influencer > .hbox > .button {
-    -fx-min-height: -var-default-toolbar-button-size;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: -var-default-toolbar-button-size;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -1243,25 +1245,11 @@
 
 /*******************************************************************************
  *                                                                             *
- * Abstract Resource Property Control                                          *
+ * Property Editor Control                                                     *
  *                                                                             *
  ******************************************************************************/
 
-.abstract-resource-property-control {
-
-}
-
-.abstract-resource-property-control > .hbox {
-    -fx-padding: 0px 0px 0px 4px;
-}
-
-/*******************************************************************************
- *                                                                             *
- * Abstract Param Editor Control                                               *
- *                                                                             *
- ******************************************************************************/
-
-.abstract-param-editor-control {
+.property-editor-control {
     -fx-padding: 1px 0px 1px 0px;
     -fx-spacing: 2px;
 }

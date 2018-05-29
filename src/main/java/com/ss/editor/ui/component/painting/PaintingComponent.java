@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.painting;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.rlib.util.HasName;
+import com.ss.rlib.common.util.HasName;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,5 +111,6 @@ public interface PaintingComponent extends HasName {
      * @param propertyName the property name
      */
     @FxThread
-    void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);
+    default void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+    }
 }

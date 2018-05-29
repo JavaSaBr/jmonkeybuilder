@@ -1,7 +1,7 @@
 package com.ss.editor.part3d.editor.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import static com.ss.rlib.util.array.ArrayFactory.toArray;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.InputManager;
@@ -22,11 +22,11 @@ import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
-import com.ss.rlib.function.BooleanFloatConsumer;
-import com.ss.rlib.function.FloatFloatConsumer;
-import com.ss.rlib.logging.LoggerLevel;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.function.BooleanFloatConsumer;
+import com.ss.rlib.common.function.FloatFloatConsumer;
+import com.ss.rlib.common.logging.LoggerLevel;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -4,7 +4,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.EditorToolConfig;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.component.tab.TabToolComponent;
-import javafx.application.Platform;
+import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
@@ -24,23 +24,24 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     @NotNull
     private final Region root;
 
-    public EditorToolSplitPane(@NotNull final Scene scene, @NotNull final Region root) {
+    public EditorToolSplitPane(@NotNull Scene scene, @NotNull Region root) {
         super(scene, null);
         this.root = root;
     }
 
     @Override
     @FxThread
-    public void initFor(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
-        super.initFor(toolComponent, other);
-        root.widthProperty().addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneSize()));
+    public void initFor(@NotNull TabToolComponent toolComponent, @NotNull Node another) {
+        super.initFor(toolComponent, another);
+        ObservableUtils.onChange(root.widthProperty(),
+                () -> handleSceneChanged(getSceneSize()));
     }
 
     @Override
     @FxThread
-    protected void handleSceneChanged(@NotNull final Number newSize) {
+    protected void handleSceneChanged(@NotNull Number newSize) {
         super.handleSceneChanged(newSize);
-        Platform.runLater(this::requestLayout);
+        EXECUTOR_MANAGER.addFxTask(this::requestLayout);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
 
     @Override
     @FxThread
-    protected void addElements(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
+    protected void addElements(@NotNull TabToolComponent toolComponent, @NotNull Node other) {
         getItems().setAll(other, toolComponent);
     }
 
@@ -68,13 +69,13 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
 
     @Override
     @FxThread
-    protected void saveCollapsed(final boolean collapsed) {
+    protected void storeCollapsed(boolean collapsed) {
         getConfig().setToolCollapsed(collapsed);
     }
 
     @Override
     @FxThread
-    protected void saveSize(final int size) {
+    protected void storeSize(int size) {
         getConfig().setToolWidth(size);
     }
 
@@ -87,13 +88,13 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     @Override
     @FxThread
     protected double getSceneSize() {
-        final double width = root.getWidth();
-        return width == 0 ? scene.getWidth() : width;
+        var width = root.getWidth();
+        return Double.compare(width, 0D) == 0 ? scene.getWidth() : width;
     }
 
     @Override
     @FxThread
-    protected double getExpandPosition(final double toolSize, final double sceneSize) {
+    protected double getExpandPosition(double toolSize, double sceneSize) {
         return 1D - super.getExpandPosition(toolSize, sceneSize);
     }
 }

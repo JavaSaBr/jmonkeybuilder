@@ -1,13 +1,13 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;

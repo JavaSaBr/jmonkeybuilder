@@ -1,6 +1,6 @@
 package com.ss.editor.control.transform;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.abs;
 import com.jme3.input.InputManager;
 import com.jme3.math.Transform;

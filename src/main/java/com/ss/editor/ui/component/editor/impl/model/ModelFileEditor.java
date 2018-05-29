@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor.impl.model;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
@@ -30,9 +30,9 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -168,18 +168,18 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     @Override
     @FxThread
-    protected void doOpenFile(@NotNull final Path file) throws IOException {
+    protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 
-        final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
-        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
+        var assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
+        var modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Spatial model = assetManager.loadAsset(modelKey);
+        var assetManager = EditorUtil.getAssetManager();
+        var model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditor3DPart editor3DPart = getEditor3DPart();
+        var editor3DPart = getEditor3DPart();
         editor3DPart.openModel(model);
 
         handleAddedObject(model);
@@ -188,8 +188,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
         setIgnoreListeners(true);
         try {
 
-            final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
-            fastSkyComboBox.getSelectionModel().select(FAST_SKY_LIST.first());
+            getFastSkyComboBox().getSelectionModel()
+                    .select(FAST_SKY_LIST.first());
 
             refreshTree();
 

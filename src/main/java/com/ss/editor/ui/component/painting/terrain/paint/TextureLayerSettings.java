@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.painting.terrain.paint;
 
 import static com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent.TERRAIN_PARAM;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
@@ -21,9 +21,9 @@ import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.beans.binding.DoubleBinding;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;

@@ -6,8 +6,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 /**

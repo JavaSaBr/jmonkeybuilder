@@ -4,13 +4,12 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.network.ConnectionOwner;
-import com.ss.rlib.network.annotation.PacketDescription;
-import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.common.network.ConnectionOwner;
+import com.ss.rlib.common.network.annotation.PacketDescription;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -21,17 +20,17 @@ import java.nio.file.Paths;
 @PacketDescription(id = 3)
 public class LoadLocalClassesClientCommand extends ClientCommand {
 
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @Override
     @BackgroundThread
-    protected void readImpl(@NotNull final ConnectionOwner owner, @NotNull final ByteBuffer buffer) {
+    protected void readImpl(@NotNull ConnectionOwner owner, @NotNull ByteBuffer buffer) {
 
-        final String outputPath = readString(buffer);
-        final Path output = StringUtils.isEmpty(outputPath) ? null : Paths.get(outputPath);
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        classpathManager.loadLocalClasses(output);
+        var outputPath = readString(buffer);
+        var output = StringUtils.isEmpty(outputPath) ? null : Paths.get(outputPath);
+
+        ClasspathManager.getInstance()
+                .loadLocalClasses(output);
 
         EXECUTOR_MANAGER.addJmeTask(() -> EditorUtil.getAssetManager().clearCache());
     }

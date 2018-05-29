@@ -2,21 +2,21 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_CLASSES_FOLDER;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_LIBRARY_FOLDER;
-import static com.ss.rlib.util.array.ArrayFactory.toArray;
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.classpath.ClassPathScanner;
-import com.ss.rlib.classpath.ClassPathScannerFactory;
-import com.ss.rlib.manager.InitializeManager;
-import com.ss.rlib.plugin.PluginContainer;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.Utils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.classpath.ClassPathScanner;
+import com.ss.rlib.common.classpath.ClassPathScannerFactory;
+import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.plugin.PluginContainer;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -274,7 +274,7 @@ public class ClasspathManager {
      * Load local libraries.
      */
     @FromAnyThread
-    public synchronized void loadLocalLibraries(@NotNull final Array<Path> libraries) {
+    public synchronized @NotNull ClasspathManager loadLocalLibraries(@NotNull Array<Path> libraries) {
 
         final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalLibrariesLoader();
@@ -286,7 +286,7 @@ public class ClasspathManager {
 
         if (libraries.isEmpty()) {
             this.localLibrariesScanner = null;
-            return;
+            return this;
         }
 
         final URL[] urlArray = libraries.stream()
@@ -310,13 +310,14 @@ public class ClasspathManager {
         scanner.scan();
 
         this.localLibrariesScanner = scanner;
+        return this;
     }
 
     /**
      * Load local classes.
      */
     @FromAnyThread
-    public synchronized void loadLocalClasses(@Nullable final Path output) {
+    public synchronized @NotNull ClasspathManager loadLocalClasses(@Nullable final Path output) {
 
         final AssetManager assetManager = EditorUtil.getAssetManager();
         final URLClassLoader currentClassLoader = getLocalClassesLoader();
@@ -328,7 +329,7 @@ public class ClasspathManager {
 
         if (output == null || !Files.exists(output)) {
             this.localClassesScanner = null;
-            return;
+            return this;
         }
 
         final Array<Path> folders = ArrayFactory.newArray(Path.class);
@@ -365,6 +366,7 @@ public class ClasspathManager {
         scanner.scan();
 
         this.localClassesScanner = scanner;
+        return this;
     }
 
     /**

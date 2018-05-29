@@ -1,22 +1,20 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.AudioKeyPropertyControl;
 import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
+import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
 import com.ss.editor.util.AudioNodeUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,12 +31,12 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
         if (audioKey == null) {
             audioNode.setAudioData(null, null);
         } else {
-            final AudioData audioData = assetManager.loadAudio(audioKey);
+            var audioData = assetManager.loadAudio(audioKey);
             AudioNodeUtils.updateData(audioNode, audioData, audioKey);
         }
     };
@@ -62,8 +60,12 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
 
         if (!(object instanceof AudioNode)) return;
 
@@ -189,14 +191,14 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         audioKeyControl.setSyncHandler(AudioNodeUtils::getAudioKey);
         audioKeyControl.setEditObject(audioNode);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3FPropertyControl<>(velocity,
+        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3fPropertyControl<>(velocity,
                 Messages.MODEL_PROPERTY_VELOCITY, changeConsumer);
 
         velocityControl.setApplyHandler(AudioNode::setVelocity);
         velocityControl.setSyncHandler(AudioNode::getVelocity);
         velocityControl.setEditObject(audioNode);
 
-        final Vector3FPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3FPropertyControl<>(direction,
+        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3fPropertyControl<>(direction,
                 Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
 
         directionControl.setApplyHandler(AudioNode::setDirection);

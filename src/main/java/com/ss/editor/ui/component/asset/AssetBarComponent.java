@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.asset;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;

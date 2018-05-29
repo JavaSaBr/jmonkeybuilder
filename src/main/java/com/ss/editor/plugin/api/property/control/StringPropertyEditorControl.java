@@ -1,11 +1,12 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.VarTable;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,8 +24,11 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     @Nullable
     private TextField valueField;
 
-    protected StringPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                          @NotNull final Runnable validationCallback) {
+    protected StringPropertyEditorControl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
+    ) {
         super(vars, definition, validationCallback);
     }
 
@@ -34,14 +38,18 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
         super.createComponents();
 
         valueField = new TextField();
-        valueField.textProperty().addListener((observable, oldValue, newValue) -> change());
-        valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        valueField.prefWidthProperty()
+                .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addClassTo(valueField, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        FXUtils.addToPane(valueField, this);
+        FxControlUtils.onTextChange(valueField, this::change);
+
+        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addChild(this, valueField);
     }
 
     /**
+     * Get the value field.
+     *
      * @return the value field.
      */
     @FxThread
@@ -53,7 +61,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     @FxThread
     public void reload() {
         super.reload();
-        final String value = getPropertyValue();
+        var value = getPropertyValue();
         getValueField().setText(value == null ? "" : value);
     }
 
