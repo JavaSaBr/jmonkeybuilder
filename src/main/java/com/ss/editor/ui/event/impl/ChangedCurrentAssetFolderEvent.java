@@ -15,11 +15,7 @@ import java.nio.file.Path;
  */
 public class ChangedCurrentAssetFolderEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<ChangedCurrentAssetFolderEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {
@@ -33,7 +29,7 @@ public class ChangedCurrentAssetFolderEvent extends SceneEvent {
         super(EVENT_TYPE);
     }
 
-    public ChangedCurrentAssetFolderEvent(@NotNull final Path assetFolder) {
+    public ChangedCurrentAssetFolderEvent(@NotNull Path assetFolder) {
         super(EVENT_TYPE);
         setNewAssetFolder(assetFolder);
     }
@@ -52,7 +48,7 @@ public class ChangedCurrentAssetFolderEvent extends SceneEvent {
      *
      * @param newAssetFolder the new asset folder.
      */
-    public void setNewAssetFolder(@NotNull final Path newAssetFolder) {
+    public void setNewAssetFolder(@NotNull Path newAssetFolder) {
         set(ASSET, newAssetFolder);
     }
 }

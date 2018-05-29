@@ -129,7 +129,7 @@ dependencies {
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.9.0'
     compile 'org.controlsfx:controlsfx:9.0.0'
     compile 'com.spaceshift:rlib.fx:5.0.2'
-    compile 'com.spaceshift:rlib.common:7.1.2'
+    compile 'com.spaceshift:rlib.common:7.1.3'
     compile ('com.jme3:jfx:2.0.0') {
         exclude group: 'org.jmonkeyengine'
     }
