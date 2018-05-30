@@ -1,0 +1,11 @@
+{
+  "Graphics.enablePBR": true,
+  "Graphics.enable3D": true,
+  "Dev.debug": false,
+  "Dev.cameraDebug": false,
+  "Dev.transformsDebug": false,
+  "Dev.jfxMouseInput": false,
+  "Dev.jfxKeyInput": false,
+  "Dev.debugJFX": false,
+  "Dev.debugStartup": true
+}

@@ -16,6 +16,7 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FxEventManager;
@@ -23,6 +24,7 @@ import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -33,6 +35,7 @@ import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayComparator;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import com.ss.rlib.common.util.ref.Reference;
@@ -55,25 +58,23 @@ import java.util.concurrent.TimeUnit;
  */
 public class ResourceManager extends EditorThread implements AssetEventListener {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(ResourceManager.class);
 
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
-    @NotNull
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
 
-    @NotNull
     private static final WatchService WATCH_SERVICE;
 
     static {
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
+                .start();
+
         try {
             WATCH_SERVICE = FileSystems.getDefault().newWatchService();
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOGGER.warning(e);
             throw new RuntimeException(e);
         }
@@ -104,7 +105,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * The table with interested resources in the classpath.
      */
     @NotNull
-    private final ObjectDictionary<String, Array<String>> interestedResourcesInClasspath;
+    private final ConcurrentObjectDictionary<String, Array<String>> interestedResourcesInClasspath;
 
     /**
      * The list of additional ENVs.
@@ -133,7 +134,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+        var classpathManager = ClasspathManager.getInstance();
 
         this.assetCacheTable = DictionaryFactory.newObjectDictionary();
         this.additionalEnvs = ArrayFactory.newArray(Path.class);
@@ -141,26 +142,31 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
         this.resourcesInClasspath = classpathManager.getAllResources();
         this.interestedResources = DictionaryFactory.newObjectDictionary();
-        this.interestedResourcesInClasspath = DictionaryFactory.newObjectDictionary();
+        this.interestedResourcesInClasspath = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
-        final InitializationManager initializationManager = InitializationManager.getInstance();
+        var initializationManager = InitializationManager.getInstance();
         initializationManager.addOnFinishLoading(() -> {
-            prepareClasspathResources();
-            final FxEventManager fxEventManager = FxEventManager.getInstance();
+            var fxEventManager = FxEventManager.getInstance();
             fxEventManager.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
             fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
-            fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
-            fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
+            fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, this::processEvent);
+            fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent);
         });
 
         initializationManager.addOnAfterCreateJmeContext(() -> {
-            final AssetManager assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtil.getAssetManager();
             assetManager.addAssetEventListener(this);
         });
 
         registerInterestedFileType(FileExtensions.JME_MATERIAL_DEFINITION);
         updateAdditionalEnvs();
         start();
+
+        AsyncEventManager.getInstance()
+                .addEventHandler(PluginsRegisteredResourcesEvent.EVENT_TYPE, event -> prepareClasspathResources());
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
+                .finish(() -> "Initialized ResourceManager");
     }
 
     /**
@@ -220,7 +226,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the table with interested resources in the classpath.
      */
     @FromAnyThread
-    private @NotNull ObjectDictionary<String, Array<String>> getInterestedResourcesInClasspath() {
+    private @NotNull ConcurrentObjectDictionary<String, Array<String>> getInterestedResourcesInClasspath() {
         return interestedResourcesInClasspath;
     }
 
@@ -404,23 +410,26 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Prepare classpath resources.
      */
-    @FromAnyThread
+    @BackgroundThread
     private void prepareClasspathResources() {
 
-        final ObjectDictionary<String, Array<String>> resources = getInterestedResourcesInClasspath();
-        final Array<String> resourcesInClasspath = getResourcesInClasspath();
-        resourcesInClasspath.forEach(resource -> {
-            final String extension = FileUtils.getExtension(resource);
-            final Array<String> toStore = resources.get(extension);
-            if (toStore != null) {
-                toStore.add(resource);
+        var interestedResources = getInterestedResourcesInClasspath();
+        var stamp = interestedResources.writeLock();
+        try {
+
+            for (var resource : getResourcesInClasspath()) {
+                interestedResources.getOptional(FileUtils.getExtension(resource))
+                        .ifPresent(resources -> resources.add(resource));
             }
-        });
+
+        } finally {
+            interestedResources.writeUnlock(stamp);
+        }
     }
 
-    /**
+    /**x
      * Gets class loaders.
-     *
+     *W
      * @return the list of an additional classpath.
      */
     @FromAnyThread

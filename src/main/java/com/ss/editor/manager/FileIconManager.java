@@ -10,6 +10,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.editor.util.svg.SvgImageLoader;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -39,18 +40,18 @@ import java.util.function.BiFunction;
  */
 public class FileIconManager {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
-    /**
-     * The constant DEFAULT_FILE_ICON_SIZE.
-     */
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
-    @NotNull
-    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE = DictionaryFactory.newObjectDictionary();
+    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE =
+            DictionaryFactory.newObjectDictionary();
 
     static {
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
+                .start();
+
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_JPEG, "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_JPG, "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_TIFF, "image-tiff");
@@ -102,7 +103,6 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_XBUF, "image-svg+xml-compressed");
     }
 
-    @NotNull
     private static final Array<Path> MIME_TYPES_FOLDERS = ArrayFactory.newArray(Path.class);
 
     static {
@@ -145,10 +145,14 @@ public class FileIconManager {
 
     private FileIconManager() {
         InitializeManager.valid(getClass());
+
         this.iconFinders = ArrayFactory.newArray(BiFunction.class);
         this.imageCache = DictionaryFactory.newIntegerDictionary();
         this.extensionToUrl = DictionaryFactory.newObjectDictionary();
         this.originalImageCache = DictionaryFactory.newObjectDictionary();
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
+                .finish(() -> "Initialized FileIconManager");
     }
 
     /**

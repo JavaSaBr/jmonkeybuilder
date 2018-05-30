@@ -14,6 +14,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -127,6 +128,9 @@ public class JavaFxImageManager {
     private JavaFxImageManager() {
         InitializeManager.valid(getClass());
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .start();
+
         var appFolder = Config.getAppFolderInUserHome();
 
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
@@ -137,6 +141,9 @@ public class JavaFxImageManager {
                 FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent));
         executorManager.addFxTask(() ->
                 FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent));
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .finish(() -> "Initialized JavaFxImageManager");
     }
 
     /**

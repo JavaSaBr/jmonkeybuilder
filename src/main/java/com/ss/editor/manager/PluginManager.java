@@ -1,7 +1,6 @@
 package com.ss.editor.manager;
 
 import static com.ss.rlib.common.plugin.impl.PluginSystemFactory.newBasePluginSystem;
-import com.jme3.asset.AssetManager;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -9,20 +8,17 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.plugin.ConfigurablePluginSystem;
-import com.ss.rlib.common.plugin.Plugin;
-import com.ss.rlib.common.plugin.PluginContainer;
 import com.ss.rlib.common.plugin.exception.PreloadPluginException;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
-import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,14 +31,12 @@ import java.util.function.Consumer;
  */
 public class PluginManager {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(PluginManager.class);
 
     @Nullable
     private static PluginManager instance;
 
-    @NotNull
-    public static PluginManager getInstance() {
+    public static @NotNull PluginManager getInstance() {
         if (instance == null) instance = new PluginManager();
         return instance;
     }
@@ -56,11 +50,14 @@ public class PluginManager {
     private PluginManager() {
         InitializeManager.valid(getClass());
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .start();
+
         this.pluginSystem = newBasePluginSystem(getClass().getClassLoader());
         this.pluginSystem.setAppVersion(Config.APP_VERSION);
 
         var folderInUserHome = Config.getAppFolderInUserHome();
-        var embeddedPath = System.getProperty("editor.embedded.plugins.path");
+        var embeddedPath = System.getProperty("editor.embedded.plugins.path2");
 
         if (embeddedPath != null && Files.exists(Paths.get(embeddedPath))) {
             var embeddedPluginPath = Paths.get(embeddedPath);
@@ -102,6 +99,9 @@ public class PluginManager {
         initManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
         initManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
         initManager.addOnFinishLoading(this::onFinishLoading);
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .finish(() -> "Initialized PluginManager");
     }
 
     /**

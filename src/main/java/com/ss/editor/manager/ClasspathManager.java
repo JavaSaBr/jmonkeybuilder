@@ -13,10 +13,10 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ClasspathReloadedEvent;
 import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.classpath.ClassPathScanner;
 import com.ss.rlib.common.classpath.ClassPathScannerFactory;
 import com.ss.rlib.common.manager.InitializeManager;
-import com.ss.rlib.common.plugin.PluginContainer;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
@@ -130,6 +130,9 @@ public class ClasspathManager {
     private ClasspathManager() {
         InitializeManager.valid(getClass());
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .start();
+
         this.coreScanner = ClassPathScannerFactory.newDefaultScanner();
         this.librariesLoader = new AtomicReference<>();
         this.classesLoader = new AtomicReference<>();
@@ -137,6 +140,9 @@ public class ClasspathManager {
 
         ExecutorManager.getInstance()
             .addBackgroundTask(this::scanCoreClasses);
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .finish(() -> "Initialized ClasspathManager");
     }
 
     /**
@@ -162,11 +168,11 @@ public class ClasspathManager {
 
         this.coreScanner = coreScanner;
 
-        FxEventManager.getInstance()
+        AsyncEventManager.getInstance()
                 .notify(new CoreClassesScannedEvent());
 
-        ExecutorManager.getInstance()
-                .addJmeTask(this::reloadInBackground);
+        InitializationManager.getInstance()
+                .addOnAfterCreateJmeContext(this::reload);
     }
 
     /**
@@ -226,10 +232,7 @@ public class ClasspathManager {
      * @return the list of resources.
      */
     public @NotNull Array<String> getAllResources() {
-        //TODO update API
-        final Array<String> result = ArrayFactory.newArray(String.class);
-        coreScanner.getAllResources(result);
-        return result;
+        return coreScanner.getFoundResources();
     }
 
     /**
@@ -304,13 +307,16 @@ public class ClasspathManager {
             return;
         }
 
+        var executorManager = ExecutorManager.getInstance();
         var assetManager = EditorUtil.getAssetManager();
 
         if (currentLoader != null) {
-            assetManager.removeClassLoader(currentLoader);
+            executorManager.addJmeTask(() ->
+                    assetManager.removeClassLoader(currentLoader));
         }
 
-        assetManager.addClassLoader(newLoader);
+        executorManager.addJmeTask(() ->
+                assetManager.addClassLoader(newLoader));
     }
 
     /**
@@ -325,13 +331,16 @@ public class ClasspathManager {
             return;
         }
 
+        var executorManager = ExecutorManager.getInstance();
         var assetManager = EditorUtil.getAssetManager();
 
         if (currentLoader != null) {
-            assetManager.removeClassLoader(currentLoader);
+            executorManager.addJmeTask(() ->
+                    assetManager.removeClassLoader(currentLoader));
         }
 
-        assetManager.addClassLoader(newLoader);
+        executorManager.addJmeTask(() ->
+                assetManager.addClassLoader(newLoader));
     }
 
     /**

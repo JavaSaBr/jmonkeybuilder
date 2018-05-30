@@ -1,31 +1,30 @@
-package com.ss.editor.ui.event;
+package com.ss.editor.manager;
 
 import static com.ss.rlib.common.util.array.ArrayFactory.newArray;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.event.ConsumableEvent;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
-import com.ss.rlib.common.util.dictionary.ObjectDictionary;
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The class to manage javaFX events.
+ * The class to manage async events.
  *
  * @author JavaSaBr
  */
-public class FxEventManager {
+public class AsyncEventManager {
 
-    private static final FxEventManager INSTANCE = new FxEventManager();
+    private static final AsyncEventManager INSTANCE = new AsyncEventManager();
 
     @FromAnyThread
-    public static @NotNull FxEventManager getInstance() {
+    public static @NotNull AsyncEventManager getInstance() {
         return INSTANCE;
     }
 
@@ -33,11 +32,12 @@ public class FxEventManager {
      * The table of event handlers.
      */
     @NotNull
-    private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? extends Event>>> eventHandlers;
+    private final ConcurrentObjectDictionary<EventType<? extends Event>,
+            Array<EventHandler<? extends Event>>> eventHandlers;
 
-    public FxEventManager() {
+    public AsyncEventManager() {
         InitializeManager.valid(getClass());
-        this.eventHandlers = DictionaryFactory.newObjectDictionary();
+        this.eventHandlers = DictionaryFactory.newConcurrentAtomicObjectDictionary();
     }
 
     /**
@@ -46,13 +46,21 @@ public class FxEventManager {
      * @param eventType    the event type.
      * @param eventHandler the event handler.
      */
-    @FxThread
+    @FromAnyThread
     public <T extends Event> void addEventHandler(
             @NotNull EventType<T> eventType,
             @NotNull EventHandler<T> eventHandler
     ) {
-        getEventHandlers().get(eventType, () -> newArray(EventHandler.class))
-                .add(eventHandler);
+        var eventHandlers = getEventHandlers();
+        var stamp = eventHandlers.writeLock();
+        try {
+
+            eventHandlers.get(eventType, () -> newArray(EventHandler.class))
+                    .add(eventHandler);
+
+        } finally {
+            eventHandlers.writeUnlock(stamp);
+        }
     }
 
     /**
@@ -61,13 +69,21 @@ public class FxEventManager {
      * @param eventType    the event type.
      * @param eventHandler the event handler.
      */
-    @FxThread
+    @FromAnyThread
     public void removeEventHandler(
             @NotNull EventType<?> eventType,
             @NotNull EventHandler<?> eventHandler
     ) {
-        getEventHandlers().getOptional(eventType)
-                .ifPresent(handlers -> handlers.slowRemove(eventHandler));
+        var eventHandlers = getEventHandlers();
+        var stamp = eventHandlers.writeLock();
+        try {
+
+            eventHandlers.getOptional(eventType)
+                    .ifPresent(handlers -> handlers.slowRemove(eventHandler));
+
+        } finally {
+            eventHandlers.writeUnlock(stamp);
+        }
     }
 
     /**
@@ -75,8 +91,9 @@ public class FxEventManager {
      *
      * @return the table of event handlers.
      */
-    @FxThread
-    private @NotNull ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? extends Event>>> getEventHandlers() {
+    @FromAnyThread
+    private @NotNull ConcurrentObjectDictionary<EventType<? extends Event>,
+            Array<EventHandler<? extends Event>>> getEventHandlers() {
         return eventHandlers;
     }
 
@@ -87,21 +104,18 @@ public class FxEventManager {
      */
     @FromAnyThread
     public void notify(@NotNull Event event) {
-        if (Platform.isFxApplicationThread()) {
-            notifyImpl(event);
-        } else {
-            var executorManager = ExecutorManager.getInstance();
-            executorManager.addFxTask(() -> notifyImpl(event));
-        }
+        ExecutorManager.getInstance()
+                .addBackgroundTask(() -> notifyImpl(event));
     }
 
     /**
      * The process of handling a new event.
      */
-    @FxThread
+    @BackgroundThread
     private void notifyImpl(@NotNull Event event) {
 
         var eventHandlers = getEventHandlers();
+        var executorManager = ExecutorManager.getInstance();
 
         for (EventType<? extends Event> eventType = event.getEventType(); eventType != null; eventType = eventType.getSuperType()) {
 
@@ -110,13 +124,13 @@ public class FxEventManager {
                 continue;
             }
 
-            handlers.forEach(event, (handler, toHandle) ->
-                    handler.handle(ClassUtils.unsafeCast(event)));
+            handlers.forEach(handler ->
+                    executorManager.addBackgroundTask(() ->
+                            handler.handle(ClassUtils.unsafeCast(event))));
         }
 
         if (event instanceof ConsumableEvent && !event.isConsumed()) {
-            var executorManager = ExecutorManager.getInstance();
-            executorManager.addFxTask(() -> notifyImpl(event));
+            executorManager.addBackgroundTask(() -> notifyImpl(event));
         }
     }
 }

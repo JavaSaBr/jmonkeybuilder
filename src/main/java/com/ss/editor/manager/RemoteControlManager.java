@@ -1,24 +1,24 @@
 package com.ss.editor.manager;
 
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.manager.ClasspathManager.Scope;
-import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
+import com.ss.editor.util.TimeTracker;
+import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.network.NetworkConfig;
 import com.ss.rlib.common.network.NetworkFactory;
 import com.ss.rlib.common.network.packet.ReadablePacket;
 import com.ss.rlib.common.network.packet.ReadablePacketRegistry;
 import com.ss.rlib.common.network.server.AcceptHandler;
 import com.ss.rlib.common.network.server.ServerNetwork;
-import com.ss.rlib.common.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-
-import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 
 /**
  * The manager to process remote control.
@@ -66,10 +66,27 @@ public class RemoteControlManager {
     private volatile boolean canStart;
 
     private RemoteControlManager() {
-        InitializationManager.getInstance()
-                .addOnAfterCreateJmeContext(this::start);
-        FxEventManager.getInstance()
-                .addEventHandler(CoreClassesScannedEvent.EVENT_TYPE, event -> createPacketRegistry());
+        InitializeManager.valid(getClass());
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .start();
+
+        try {
+
+            if (Config.REMOTE_CONTROL_PORT == -1) {
+                return;
+            }
+
+            InitializationManager.getInstance()
+                    .addOnAfterCreateJmeContext(this::start);
+            AsyncEventManager.getInstance()
+                    .addEventHandler(CoreClassesScannedEvent.EVENT_TYPE, event -> createPacketRegistry());
+
+        } finally {
+
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                    .finish(() -> "Initialized RemoteControlManager");
+        }
     }
 
     /**
@@ -102,16 +119,10 @@ public class RemoteControlManager {
     }
 
     /**
-     * Start the remote control if need.
+     * Start the remote control in background.
      */
-    @FromAnyThread
-    private synchronized void start() {
-        canStart = true;
-
-        var packetRegistry = getPacketRegistry();
-        if (packetRegistry == null || Config.REMOTE_CONTROL_PORT == -1) {
-            return;
-        }
+    @BackgroundThread
+    private void startInBackground() {
 
         var serverNetwork = NetworkFactory.newDefaultAsyncServerNetwork(NETWORK_CONFIG,
                 packetRegistry, AcceptHandler.newDefault());
@@ -123,5 +134,21 @@ public class RemoteControlManager {
         }
 
         this.serverNetwork = serverNetwork;
+    }
+
+    /**
+     * Start the remote control if need.
+     */
+    @FromAnyThread
+    private synchronized void start() {
+        canStart = true;
+
+        var packetRegistry = getPacketRegistry();
+        if (packetRegistry == null) {
+            return;
+        }
+
+        ExecutorManager.getInstance()
+                .addBackgroundTask(this::startInBackground);
     }
 }

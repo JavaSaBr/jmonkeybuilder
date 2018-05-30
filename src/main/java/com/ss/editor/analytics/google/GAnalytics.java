@@ -270,7 +270,7 @@ public class GAnalytics extends EditorThread {
      */
     private static void doSend(@NotNull final Map<String, Object> parameters) {
 
-        final OperatingSystem operatingSystem = Config.OPERATING_SYSTEM;
+        final OperatingSystem operatingSystem = Config.getOperatingSystem();
 
         final String distribution = operatingSystem.getDistribution();
         final String os = StringUtils.isEmpty(distribution) ? operatingSystem.getName() + " " + operatingSystem.getVersion() : distribution;

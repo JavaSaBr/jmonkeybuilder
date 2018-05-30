@@ -5,9 +5,11 @@ import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
 import com.ss.editor.executor.impl.FxEditorTaskExecutor;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.concurrent.atomic.AtomicInteger;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.manager.InitializeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,10 +24,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ExecutorManager {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(ExecutorManager.class);
 
-    @NotNull
     private static final Runtime RUNTIME = Runtime.getRuntime();
 
     private static final int PROP_BACKGROUND_TASK_EXECUTORS = RUNTIME.availableProcessors();
@@ -69,6 +69,10 @@ public class ExecutorManager {
     private final AtomicInteger nextBackgroundTaskExecutor;
 
     private ExecutorManager() {
+        InitializeManager.valid(getClass());
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .start();
 
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.backgroundTaskExecutors = new EditorTaskExecutor[PROP_BACKGROUND_TASK_EXECUTORS];
@@ -82,7 +86,10 @@ public class ExecutorManager {
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
 
-        LOGGER.debug("initialized.");
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .finish(() -> "Initialized ExecutorManager");
+
+        LOGGER.info("initialized.");
     }
 
     /**

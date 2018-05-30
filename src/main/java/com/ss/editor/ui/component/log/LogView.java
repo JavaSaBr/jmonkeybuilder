@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
  */
 public class LogView extends CodeArea {
 
-    @NotNull
     private static final LogView INSTANCE = new LogView();
 
     private static final int MAX_LENGTH = 8000;
@@ -36,7 +35,6 @@ public class LogView extends CodeArea {
         return INSTANCE;
     }
 
-    @NotNull
     private static final String[] FRAMEWORKS = {
             "log4j",
             "java.lang.",
@@ -49,7 +47,6 @@ public class LogView extends CodeArea {
             "com.ss.editor.model.",
     };
 
-    @NotNull
     private static final String[] CLASSES = {
             BufferOverflowException.class.getName(),
             NullPointerException.class.getName(),
@@ -72,16 +69,10 @@ public class LogView extends CodeArea {
             "WARN", "INFO", "ERROR", "DEBUG", "WARNING"
     };
 
-    @NotNull
     private static final String SEVERITY_PATTERN = "\\b(" + String.join("|", SEVERITIES) + ")\\b";
-
-    @NotNull
     private static final String FRAMEWORK_PATTERN = "\\b(" + String.join("|", FRAMEWORKS) + ")\\b";
-
-    @NotNull
     private static final String CLASS_PATTERN = "\\b(" + String.join("|", CLASSES) + ")\\b";
 
-    @NotNull
     private static final Pattern PATTERN = Pattern.compile(
             "(?<SEVERITY>" + SEVERITY_PATTERN + ")"
                     + "|(?<FRAMEWORK>" + FRAMEWORK_PATTERN + ")"

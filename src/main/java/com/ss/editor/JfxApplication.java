@@ -29,16 +29,16 @@ import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
-import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
-import com.ss.editor.util.svg.SvgImageLoaderFactory;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerLevel;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -49,10 +49,10 @@ import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.scene.control.ComboBoxBase;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -61,7 +61,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.Configuration;
 
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -98,7 +97,10 @@ public class JfxApplication extends Application {
      */
     public static void main(@NotNull String[] args) {
 
-        long time = Config.DEV_DEBUG_STARTUP ? System.currentTimeMillis() : 0L;
+        TimeTracker.getStartupTracker()
+                .start();
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
+                .start();
 
         configureLogger();
 
@@ -132,6 +134,12 @@ public class JfxApplication extends Application {
             return;
         }
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
+                .finishAndStart(() -> "Initialized configuration");
+
+        InitializeManager.register(ExecutorManager.class);
+        InitializeManager.register(AsyncEventManager.class);
+        InitializeManager.register(FxEventManager.class);
         InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFxImageManager.class);
@@ -141,8 +149,13 @@ public class JfxApplication extends Application {
         InitializeManager.register(RemoteControlManager.class);
         InitializeManager.initialize();
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
+                .finish(() -> "Initialized all managers");
+
         new EditorThread(new ThreadGroup("LWJGL"),
                 () -> startJmeApplication(application), "LWJGL Render").start();
+        new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch")
+                .start();
     }
 
     @FxThread
@@ -180,8 +193,16 @@ public class JfxApplication extends Application {
     @JmeThread
     private static void startJmeApplication(@NotNull JmeToJfxApplication application) {
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
+                .start();
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .start();
+
         var initializationManager = InitializationManager.getInstance();
         initializationManager.onBeforeCreateJmeContext();
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finish(() -> "onBeforeCreateJmeContext()");
 
         application.start();
 
@@ -318,27 +339,53 @@ public class JfxApplication extends Application {
     @Override
     @FxThread
     public void start(@NotNull Stage stage) throws Exception {
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finish(() -> "Initialized jFX thread");
+
         JfxApplication.instance = this;
         this.stage = stage;
 
         addWindow(stage);
         try {
 
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .start();
+
             // initialize javaFX events in javaFX thread.
-            ArrayFactory.asArray(ComboBoxBase.ON_SHOWN);
+            //ArrayFactory.asArray(ComboBoxBase.ON_SHOWN);
+
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "Initialized control events");
 
             var resourceManager = ResourceManager.getInstance();
-            resourceManager.reload();
+            //resourceManager.reload();
+
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "Reloaded the resource manager");
 
             var initializationManager = InitializationManager.getInstance();
             initializationManager.onBeforeCreateJavaFxContext();
 
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "onBeforeCreateJavaFxContext()");
+
             var pluginManager = PluginManager.getInstance();
             pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CssRegistry.getInstance()));
 
-            LogView.getInstance();
-            SvgImageLoaderFactory.install();
-            ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "handlePlugins()");
+
+            //LogView.getInstance();
+
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "Initialized log view");
+
+            //SvgImageLoaderFactory.install();
+            //ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
+
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "Initialized images IO");
 
             var icons = stage.getIcons();
             icons.add(new Image("/ui/icons/app/256x256.png"));
@@ -350,6 +397,9 @@ public class JfxApplication extends Application {
             icons.add(new Image("/ui/icons/app/24x24.png"));
             icons.add(new Image("/ui/icons/app/16x16.png"));
 
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "Loaded app icons");
+
             var config = EditorConfig.getInstance();
 
             stage.initStyle(StageStyle.DECORATED);
@@ -360,7 +410,6 @@ public class JfxApplication extends Application {
             stage.setMaximized(config.isMaximized());
             stage.setTitle(Config.TITLE);
             stage.show();
-
 
             if (!stage.isMaximized()) {
                 stage.centerOnScreen();
@@ -375,15 +424,25 @@ public class JfxApplication extends Application {
                 config.setScreenHeight(newValue.intValue());
             });
 
-            stage.maximizedProperty()
-                    .addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
+            ObservableUtils.onChange(stage.maximizedProperty(), config::setMaximized);
 
-            buildScene();
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finishAndStart(() -> "Initialized a stage");
+
+            //buildScene();
+
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+                    .finish(() -> "Finished building a scene");
 
         } catch (Throwable e) {
             LOGGER.error(this, e);
             throw e;
         }
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
+                .finish(() -> "Initialized jFX application");
+        TimeTracker.getStartupTracker()
+                .finish(() -> "Initialized editor");
     }
 
     @Override

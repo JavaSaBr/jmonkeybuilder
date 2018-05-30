@@ -37,12 +37,12 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.filter.EditorFxaaFilter;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.os.OperatingSystem;
@@ -228,6 +228,9 @@ public class JmeApplication extends JmeToJfxApplication {
     public void simpleInitApp() {
         super.simpleInitApp();
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .start();
+
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(10);
 
@@ -265,8 +268,6 @@ public class JmeApplication extends JmeToJfxApplication {
         var guiNode = getGuiNode();
         guiNode.detachAllChildren();
 
-        ExecutorManager.getInstance();
-
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
 
@@ -301,7 +302,13 @@ public class JmeApplication extends JmeToJfxApplication {
         var initializationManager = InitializationManager.getInstance();
         initializationManager.onAfterCreateJmeContext();
 
-        new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch").start();
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finishAndStart(() -> "Initialized jME simpleInit() phase");
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
+                .finishAndStart(() -> "Initialized jME application");
+
+        //new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch")
+        //        .start();
     }
 
     /**

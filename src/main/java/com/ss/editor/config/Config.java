@@ -1,15 +1,20 @@
 package com.ss.editor.config;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.plugin.Version;
 import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.os.OperatingSystem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -24,7 +29,7 @@ public final class Config {
      * The path to config file in classpath.
      */
     @NotNull
-    private static final String CONFIG_RESOURCE_PATH = "/app-config.xml";
+    private static final String CONFIG_RESOURCE_PATH = "/app-config.json";
 
     /**
      * The name of editor's folder in user home folder.
@@ -42,7 +47,7 @@ public final class Config {
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.8.0");
+    public static final Version APP_VERSION = new Version("1.9.0");
 
     /**
      * The string version.
@@ -65,14 +70,14 @@ public final class Config {
     /**
      * The graphics adapter.
      */
-    @NotNull
-    public static final GraphicsDevice GRAPHICS_DEVICE;
+    @Nullable
+    private static GraphicsDevice graphicsDevice;
 
     /**
      * The operation system.
      */
-    @NotNull
-    public static final OperatingSystem OPERATING_SYSTEM;
+    @Nullable
+    private static OperatingSystem operatingSystem;
 
     /**
      * The remote control port.
@@ -126,11 +131,16 @@ public final class Config {
 
     static {
 
-        var graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        var device = graphicsEnvironment.getDefaultScreenDevice();
+        var vars = VarTable.newInstance();
 
-        var vars = new DocumentConfig(EditorUtil.requireInputStream(CONFIG_RESOURCE_PATH))
-                .parse();
+        try (var reader = new InputStreamReader(EditorUtil.requireInputStream(CONFIG_RESOURCE_PATH))) {
+
+            var object = (JsonObject) Json.parse(reader);
+            object.forEach(member -> vars.set(member.getName(), member.getValue().toString()));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
         DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
@@ -138,13 +148,12 @@ public final class Config {
         DEV_DEBUG_JFX_MOUSE_INPUT = vars.getBoolean("Dev.jfxMouseInput", false);
         DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
+        DEV_DEBUG_STARTUP = vars.getBoolean("Dev.debugStartup", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
         ENABLE_3D = vars.getBoolean("Graphics.enable3D", true);
 
-        GRAPHICS_DEVICE = device;
-        OPERATING_SYSTEM = new OperatingSystem();
-
-        PROJECT_PATH = Utils.getRootFolderFromClass(JmeApplication.class).toString();
+        PROJECT_PATH = Utils.getRootFolderFromClass(JmeApplication.class)
+                .toString();
     }
 
     /**
@@ -166,5 +175,39 @@ public final class Config {
     public static @NotNull Path getAppFolderInUserHome() {
         var userHome = System.getProperty("user.home");
         return Paths.get(userHome, EDITOR_FOLDER_IN_USER_HOME);
+    }
+
+    /**
+     * Get the information about OS.
+     *
+     * @return the information about OS.
+     */
+    @FromAnyThread
+    public synchronized static @NotNull OperatingSystem getOperatingSystem() {
+
+        if (operatingSystem == null) {
+            System.out.println("Resolve OS");
+            operatingSystem = new OperatingSystem();
+        }
+
+        return operatingSystem;
+    }
+
+    /**
+     * Get the information about used graphics device.
+     *
+     * @return the information about used graphics device.
+     */
+    @FromAnyThread
+    public synchronized static GraphicsDevice getGraphicsDevice() {
+
+
+        if (graphicsDevice == null) {
+            System.out.println("Resolve Graphics Device");
+            var graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
+        }
+
+        return graphicsDevice;
     }
 }
