@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
+@Deprecated
 public class InitializationManager {
 
     @NotNull
@@ -20,6 +21,12 @@ public class InitializationManager {
     public static @NotNull InitializationManager getInstance() {
         return INSTANCE;
     }
+
+    /**
+     * The list of actions to execute after initialization all managers.
+     */
+    @NotNull
+    private final Array<Runnable> onAfterInitializeManagers;
 
     /**
      * The list of actions to execute before creating jME context.
@@ -57,6 +64,17 @@ public class InitializationManager {
         this.onBeforeCreateJavaFxContext = ArrayFactory.newArray(Runnable.class);
         this.onAfterCreateJavaFxContext = ArrayFactory.newArray(Runnable.class);
         this.onFinishLoading = ArrayFactory.newArray(Runnable.class);
+        this.onAfterInitializeManagers = ArrayFactory.newArray(Runnable.class);
+    }
+
+    /**
+     * Do something after when {@link com.ss.rlib.common.manager.InitializeManager} creates all managers.
+     *
+     * @param runnable the action.
+     */
+    @FromAnyThread
+    public synchronized void addOnAfterInitializeManagers(@NotNull Runnable runnable) {
+        onAfterCreateJavaFxContext.add(runnable);
     }
 
     /**
@@ -107,6 +125,14 @@ public class InitializationManager {
     @FromAnyThread
     public synchronized void addOnFinishLoading(@NotNull final Runnable runnable) {
         this.onFinishLoading.add(runnable);
+    }
+
+    /**
+     * Execute all actions before when jME context will be created.
+     */
+    @FromAnyThread
+    public synchronized void onAfterInitializeManagers() {
+        onAfterInitializeManagers.forEach(Runnable::run);
     }
 
     /**

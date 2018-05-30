@@ -33,7 +33,8 @@ public class FxEventManager {
      * The table of event handlers.
      */
     @NotNull
-    private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? extends Event>>> eventHandlers;
+    private final ObjectDictionary<EventType<? extends Event>,
+            Array<EventHandler<? extends Event>>> eventHandlers;
 
     public FxEventManager() {
         InitializeManager.valid(getClass());
@@ -76,7 +77,8 @@ public class FxEventManager {
      * @return the table of event handlers.
      */
     @FxThread
-    private @NotNull ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? extends Event>>> getEventHandlers() {
+    private @NotNull ObjectDictionary<EventType<? extends Event>,
+            Array<EventHandler<? extends Event>>> getEventHandlers() {
         return eventHandlers;
     }
 
@@ -103,7 +105,8 @@ public class FxEventManager {
 
         var eventHandlers = getEventHandlers();
 
-        for (EventType<? extends Event> eventType = event.getEventType(); eventType != null; eventType = eventType.getSuperType()) {
+        for (EventType<? extends Event> eventType = event.getEventType(); eventType != null;
+             eventType = eventType.getSuperType()) {
 
             var handlers = eventHandlers.get(eventType);
             if (handlers == null || handlers.isEmpty()) {

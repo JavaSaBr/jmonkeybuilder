@@ -162,7 +162,7 @@ public class FileIconManager {
      * @param iconFinder the icon finder.
      */
     @FromAnyThread
-    public void register(@NotNull final BiFunction<Path, String, String> iconFinder) {
+    public void register(@NotNull BiFunction<Path, String, String> iconFinder) {
         this.iconFinders.add(iconFinder);
     }
 
@@ -174,7 +174,7 @@ public class FileIconManager {
      * @return the icon.
      */
     @FxThread
-    public @NotNull Image getIcon(@NotNull final Path path, int size) {
+    public @NotNull Image getIcon(@NotNull Path path, int size) {
         return getIcon(path, Files.isDirectory(path), true, size);
     }
 
@@ -188,22 +188,22 @@ public class FileIconManager {
      * @return the icon.
      */
     @FxThread
-    public @NotNull Image getIcon(@NotNull final Path path, final boolean directory, final boolean tryToGetContentType,
-                                  int size) {
+    public @NotNull Image getIcon(@NotNull Path path, boolean directory, boolean tryToGetContentType, int size) {
 
-        final String extension = directory ? "folder" : FileUtils.getExtension(path);
-        final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
+        var extension = directory ? "folder" : FileUtils.getExtension(path);
+        var iconFinders = getIconFinders();
 
-        String url = extensionToUrl.get(extension);
+        var url = extensionToUrl.get(extension);
         if (url != null) {
             return getImage(url, size);
         }
 
         if (!iconFinders.isEmpty()) {
-            for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
+            for (var iconFinder : iconFinders) {
+
                 url = iconFinder.apply(path, extension);
 
-                final ClassLoader classLoader = iconFinder.getClass().getClassLoader();
+                var classLoader = iconFinder.getClass().getClassLoader();
                 if (url == null || !EditorUtil.checkExists(url, classLoader)) {
                     continue;
                 }
@@ -225,7 +225,7 @@ public class FileIconManager {
             if (contentType == null && tryToGetContentType) {
                 try {
                     contentType = Files.probeContentType(path);
-                } catch (final IOException e) {
+                } catch (IOException e) {
                     LOGGER.warning(e);
                 }
             }
@@ -240,7 +240,7 @@ public class FileIconManager {
             contentType = "none";
         }
 
-        for (final Path mimeTypes : MIME_TYPES_FOLDERS) {
+        for (var mimeTypes : MIME_TYPES_FOLDERS) {
 
             Path iconPath = mimeTypes.resolve(contentType + ".svg");
             url = toAssetPath(iconPath);
@@ -280,7 +280,7 @@ public class FileIconManager {
      * @return the image.
      */
     @FxThread
-    public @NotNull Image getImage(@NotNull final String url) {
+    public @NotNull Image getImage(@NotNull String url) {
         return getImage(url, 16);
     }
 
@@ -292,7 +292,7 @@ public class FileIconManager {
      * @return the image.
      */
     @FxThread
-    public @NotNull Image getImage(@NotNull final String url, final int size) {
+    public @NotNull Image getImage(@NotNull String url, int size) {
         return getImage(url, size, true);
     }
 
@@ -305,7 +305,7 @@ public class FileIconManager {
      * @return the image.
      */
     @FxThread
-    public @NotNull Image getImage(@NotNull final String url, @NotNull final ClassLoader classLoader, final int size) {
+    public @NotNull Image getImage(@NotNull String url, @NotNull ClassLoader classLoader, int size) {
         return getImage(url, classLoader, size, true);
     }
 
@@ -318,7 +318,7 @@ public class FileIconManager {
      * @return the image.
      */
     @FxThread
-    public @NotNull Image getImage(@NotNull final String url, final int size, final boolean useCache) {
+    public @NotNull Image getImage(@NotNull String url, int size, boolean useCache) {
         return getImage(url, getClass().getClassLoader(), size, useCache);
     }
 
@@ -332,8 +332,8 @@ public class FileIconManager {
      * @return the image.
      */
     @FxThread
-    public @NotNull Image getImage(@NotNull final String url, @NotNull final ClassLoader classLoader, final int size,
-                                   final boolean useCache) {
+    public @NotNull Image getImage(@NotNull String url, @NotNull ClassLoader classLoader, int size, boolean useCache) {
+
         if (!useCache) {
             return buildImage(url, classLoader, size);
         }
@@ -343,15 +343,14 @@ public class FileIconManager {
     }
 
     @FxThread
-    private @NotNull Image buildImage(@NotNull final String url, @NotNull final ClassLoader classLoader,
-                                      final int size) {
+    private @NotNull Image buildImage(@NotNull String url, @NotNull ClassLoader classLoader, int size) {
         return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
     }
 
     @FxThread
-    private @NotNull Image buildImage(@NotNull final String url, @Nullable final InputStream in, final int size) {
+    private @NotNull Image buildImage(@NotNull String url, @Nullable InputStream in, int size) {
 
-        final Image image;
+        Image image;
 
         if (in != null) {
             image = new Image(in, size, size, false, true);
@@ -364,14 +363,15 @@ public class FileIconManager {
             return image;
         }
 
-        final EditorConfig config = EditorConfig.getInstance();
-        final CssColorTheme theme = config.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+        var config = EditorConfig.getInstance();
+        var theme = config.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
         if (theme.needRepaintIcons()) {
             try {
 
-                final Color iconColor = theme.getIconColor();
-                final Image coloredImage;
+                var iconColor = theme.getIconColor();
+
+                Image coloredImage;
 
                 SvgImageLoader.OVERRIDE_COLOR.set(iconColor);
                 try {
@@ -390,7 +390,7 @@ public class FileIconManager {
 
                 return coloredImage;
 
-            } catch (final Throwable e) {
+            } catch (Throwable e) {
                 LOGGER.warning(e);
             }
         }
@@ -407,7 +407,7 @@ public class FileIconManager {
      * @return the original image.
      */
     @FromAnyThread
-    public @NotNull Image getOriginal(@NotNull final Image image) {
+    public @NotNull Image getOriginal(@NotNull Image image) {
         return notNull(originalImageCache.get(image), "not found original for " + image.getUrl());
     }
 

@@ -51,6 +51,7 @@ public class JavaFxImageManager {
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFxImageManager.class);
 
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
+    private static final InitializationManager INITIALIZATION_MANAGER = InitializationManager.getInstance();
 
     private static final String PREVIEW_CACHE_FOLDER = "preview-cache";
 
@@ -136,11 +137,10 @@ public class JavaFxImageManager {
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
         this.smallImageCache = DictionaryFactory.newIntegerDictionary();
 
-        var executorManager = ExecutorManager.getInstance();
-        executorManager.addFxTask(() ->
-                FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent));
-        executorManager.addFxTask(() ->
-                FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent));
+        INITIALIZATION_MANAGER.addOnFinishLoading(() -> {
+            FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent);
+            FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent);
+        });
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
                 .finish(() -> "Initialized JavaFxImageManager");

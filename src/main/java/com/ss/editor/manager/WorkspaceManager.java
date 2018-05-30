@@ -62,9 +62,13 @@ public class WorkspaceManager {
      */
     @FromAnyThread
     public @Nullable Workspace getCurrentWorkspace() {
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return null;
+
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) {
+            return null;
+        }
+
         return getWorkspace(currentAsset);
     }
 
@@ -74,17 +78,20 @@ public class WorkspaceManager {
      * @return the workspace.
      */
     @FromAnyThread
-    private synchronized @NotNull Workspace getWorkspace(@NotNull final Path assetFolder) {
+    private synchronized @NotNull Workspace getWorkspace(@NotNull Path assetFolder) {
 
-        final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
-        final Workspace exists = workspaces.get(assetFolder);
-        if (exists != null) return exists;
+        var workspaces = getWorkspaces();
+        var exists = workspaces.get(assetFolder);
+        if (exists != null) {
+            return exists;
+        }
 
-        final Path workspaceFile = assetFolder.resolve(FOLDER_EDITOR).resolve(FILE_WORKSPACE);
+        var workspaceFile = assetFolder.resolve(FOLDER_EDITOR)
+                .resolve(FILE_WORKSPACE);
 
         if (!Files.exists(workspaceFile)) {
 
-            final Workspace workspace = new Workspace();
+            var workspace = new Workspace();
             workspace.notifyRestored();
             workspace.setAssetFolder(assetFolder);
             workspaces.put(assetFolder, workspace);
@@ -95,7 +102,7 @@ public class WorkspaceManager {
         Workspace workspace;
         try {
             workspace = EditorUtil.deserialize(notNull(get(workspaceFile, Files::readAllBytes)));
-        } catch (final RuntimeException e) {
+        } catch (RuntimeException e) {
             workspace = new Workspace();
         }
 
@@ -111,7 +118,7 @@ public class WorkspaceManager {
      */
     @FromAnyThread
     public synchronized void clear() {
-        final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
+        var workspaces = getWorkspaces();
         workspaces.forEach(Workspace::clear);
         workspaces.forEach((path, workspace) -> workspace.save(true));
     }

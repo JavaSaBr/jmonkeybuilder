@@ -83,7 +83,6 @@ public class PluginManager {
         }
 
         pluginSystem.configureInstallationPluginsPath(userPluginsFolder);
-
         try {
             pluginSystem.preLoad();
         } catch (PreloadPluginException e) {

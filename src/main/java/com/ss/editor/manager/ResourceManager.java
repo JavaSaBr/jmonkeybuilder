@@ -2,14 +2,12 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.FileExtensions.*;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FAST_SKY_FOLDER;
-import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ArrayUtils.contains;
 import static com.ss.rlib.common.util.FileUtils.getFiles;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import static com.ss.rlib.common.util.Utils.get;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
-import static com.ss.rlib.common.util.ref.ReferenceFactory.newRef;
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.in;
 import static java.nio.file.StandardWatchEventKinds.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
@@ -18,8 +16,12 @@ import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.SceneEvent;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
@@ -35,10 +37,10 @@ import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayComparator;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
-import com.ss.rlib.common.util.dictionary.DictionaryFactory;
-import com.ss.rlib.common.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.dictionary.*;
 import com.ss.rlib.common.util.ref.Reference;
+import com.ss.rlib.common.util.ref.ReferenceFactory;
 import com.ss.rlib.common.util.ref.ReferenceType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,7 +49,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.*;
-import java.nio.file.attribute.FileTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -60,25 +62,12 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
     private static final Logger LOGGER = LoggerManager.getLogger(ResourceManager.class);
 
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
 
-    private static final WatchService WATCH_SERVICE;
-
-    static {
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
-                .start();
-
-        try {
-            WATCH_SERVICE = FileSystems.getDefault().newWatchService();
-        } catch (IOException e) {
-            LOGGER.warning(e);
-            throw new RuntimeException(e);
-        }
-    }
+    private static final WatchService WATCH_SERVICE = FileUtils.newDefaultWatchService();
 
     @Nullable
     private static ResourceManager instance;
@@ -93,80 +82,105 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * The table with last modify dates.
      */
     @NotNull
-    private final ObjectDictionary<String, Reference> assetCacheTable;
+    private final ConcurrentObjectDictionary<String, Reference> assetCacheTable;
 
     /**
      * The table with interested resources.
      */
     @NotNull
-    private final ObjectDictionary<String, Array<String>> interestedResources;
+    private final ConcurrentObjectDictionary<String, ConcurrentArray<String>> interestedResources;
 
     /**
      * The table with interested resources in the classpath.
      */
     @NotNull
-    private final ConcurrentObjectDictionary<String, Array<String>> interestedResourcesInClasspath;
+    private final ConcurrentObjectDictionary<String, ConcurrentArray<String>> interestedResourcesInClasspath;
 
     /**
      * The list of additional ENVs.
      */
     @NotNull
-    private final Array<Path> additionalEnvs;
+    private final ConcurrentArray<Path> additionalEnvs;
 
     /**
      * The list of an additional classpath.
      */
     @NotNull
-    private final Array<URLClassLoader> classLoaders;
+    private final ConcurrentArray<URLClassLoader> classLoaders;
 
     /**
      * The list of resources in the classpath.
      */
     @NotNull
-    private final Array<String> resourcesInClasspath;
+    private final ConcurrentArray<String> resourcesInClasspath;
 
     /**
      * The list of keys for watching to folders.
      */
     @NotNull
-    private final Array<WatchKey> watchKeys;
+    private final ConcurrentArray<WatchKey> watchKeys;
 
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
-        var classpathManager = ClasspathManager.getInstance();
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
+            .start();
 
-        this.assetCacheTable = DictionaryFactory.newObjectDictionary();
-        this.additionalEnvs = ArrayFactory.newArray(Path.class);
-        this.watchKeys = ArrayFactory.newArray(WatchKey.class);
-        this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
-        this.resourcesInClasspath = classpathManager.getAllResources();
-        this.interestedResources = DictionaryFactory.newObjectDictionary();
+        this.assetCacheTable = DictionaryFactory.newConcurrentAtomicObjectDictionary();
+        this.additionalEnvs = ArrayFactory.newConcurrentStampedLockArray(Path.class);
+        this.watchKeys = ArrayFactory.newConcurrentStampedLockArray(WatchKey.class);
+        this.classLoaders = ArrayFactory.newConcurrentStampedLockArray(URLClassLoader.class);
+        this.resourcesInClasspath = ArrayFactory.newConcurrentAtomicARSWLockArray(String.class);
+        this.interestedResources = DictionaryFactory.newConcurrentAtomicObjectDictionary();
         this.interestedResourcesInClasspath = DictionaryFactory.newConcurrentAtomicObjectDictionary();
-
-        var initializationManager = InitializationManager.getInstance();
-        initializationManager.addOnFinishLoading(() -> {
-            var fxEventManager = FxEventManager.getInstance();
-            fxEventManager.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
-            fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
-            fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, this::processEvent);
-            fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent);
-        });
-
-        initializationManager.addOnAfterCreateJmeContext(() -> {
-            var assetManager = EditorUtil.getAssetManager();
-            assetManager.addAssetEventListener(this);
-        });
 
         registerInterestedFileType(FileExtensions.JME_MATERIAL_DEFINITION);
         updateAdditionalEnvs();
         start();
 
-        AsyncEventManager.getInstance()
-                .addEventHandler(PluginsRegisteredResourcesEvent.EVENT_TYPE, event -> prepareClasspathResources());
+        CombinedAsyncEventHandlerBuilder.of(this::registerFxListeners)
+                .add(EditorFinishedLoadingEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        CombinedAsyncEventHandlerBuilder.of(this::registerAssetListenerAndReload)
+                .add(ManagersInitializedEvent.EVENT_TYPE)
+                .add(JmeContextCreatedEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        CombinedAsyncEventHandlerBuilder.of(this::prepareClasspathResources)
+                .add(CoreClassesScannedEvent.EVENT_TYPE)
+                .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
+                .buildAndRegister();
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
                 .finish(() -> "Initialized ResourceManager");
+    }
+
+    /**
+     * Register all FX listeners.
+     */
+    @BackgroundThread
+    private void registerFxListeners() {
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
+            FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processChangeAsset);
+            FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, this::processRefreshAsset);
+            FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, this::processEvent);
+            FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent);
+        });
+    }
+
+    /**
+     * Register an asset listener and reload this manager.
+     */
+    @BackgroundThread
+    private void registerAssetListenerAndReload() {
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addJmeTask(() -> {
+            var assetManager = EditorUtil.getAssetManager();
+            assetManager.addAssetEventListener(this);
+            reload();
+        });
     }
 
     /**
@@ -176,14 +190,14 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the URL or null.
      */
     @FromAnyThread
-    public @Nullable URL tryToFindResource(@NotNull final String resourcePath) {
+    public @Nullable URL tryToFindResource(@NotNull String resourcePath) {
 
-        final Array<@NotNull ClassLoader> classLoaders = ArrayFactory.newArray(ClassLoader.class);
+        var classLoaders = ArrayFactory.<ClassLoader>newArray(ClassLoader.class);
         classLoaders.add(getClass().getClassLoader());
 
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        final URLClassLoader classesLoader = classpathManager.getClassesLoader();
-        final URLClassLoader librariesLoader = classpathManager.getLibrariesLoader();
+        var classpathManager = ClasspathManager.getInstance();
+        var classesLoader = classpathManager.getClassesLoader();
+        var librariesLoader = classpathManager.getLibrariesLoader();
 
         if (classesLoader != null) {
             classLoaders.add(classesLoader);
@@ -193,14 +207,14 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             classLoaders.add(librariesLoader);
         }
 
-        final PluginManager pluginManager = PluginManager.getInstance();
+        var pluginManager = PluginManager.getInstance();
         pluginManager.handlePlugins(plugin -> classLoaders.add(plugin.getClassLoader()));
 
-        final String altResourcePath = "/" + resourcePath;
+        var altResourcePath = "/" + resourcePath;
 
         URL url = null;
 
-        for (final ClassLoader classLoader : classLoaders) {
+        for (var classLoader : classLoaders) {
             url = classLoader.getResource(resourcePath);
             if (url != null) break;
             url = classLoader.getResource(altResourcePath);
@@ -215,18 +229,22 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
+     * Get the table with interested resources.
+     *
      * @return the table with interested resources.
      */
     @FromAnyThread
-    private @NotNull ObjectDictionary<String, Array<String>> getInterestedResources() {
+    private @NotNull ConcurrentObjectDictionary<String, ConcurrentArray<String>> getInterestedResources() {
         return interestedResources;
     }
 
     /**
+     * Get the table with interested resources in the classpath.
+     *
      * @return the table with interested resources in the classpath.
      */
     @FromAnyThread
-    private @NotNull ConcurrentObjectDictionary<String, Array<String>> getInterestedResourcesInClasspath() {
+    private @NotNull ConcurrentObjectDictionary<String, ConcurrentArray<String>> getInterestedResourcesInClasspath() {
         return interestedResourcesInClasspath;
     }
 
@@ -236,101 +254,107 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @param fileExtension the file type.
      */
     @FromAnyThread
-    public synchronized void registerInterestedFileType(@NotNull final String fileExtension) {
+    public void registerInterestedFileType(@NotNull String fileExtension) {
 
-        ObjectDictionary<String, Array<String>> resources = getInterestedResources();
+        getInterestedResources().runInWriteLock(fileExtension, (dictionary, extension) -> {
+            if (!dictionary.containsKey(extension)) {
+                dictionary.put(extension, ArrayFactory.newConcurrentStampedLockArray(String.class));
+            }
+        });
 
-        if(!resources.containsKey(fileExtension)) {
-            resources.put(fileExtension, ArrayFactory.newArray(String.class));
-        }
-
-        resources = getInterestedResourcesInClasspath();
-
-        if(!resources.containsKey(fileExtension)) {
-            resources.put(fileExtension, ArrayFactory.newArray(String.class));
-        }
+        getInterestedResourcesInClasspath().runInWriteLock(fileExtension, (dictionary, extension) -> {
+            if (!dictionary.containsKey(extension)) {
+                dictionary.put(extension, ArrayFactory.newConcurrentStampedLockArray(String.class));
+            }
+        });
     }
 
     @Override
-    @FromAnyThread
-    public synchronized void assetLoaded(@NotNull final AssetKey key) {
+    @JmeThread
+    public void assetLoaded(@NotNull AssetKey key) {
 
         if (key.getCacheType() == null) {
             return;
         }
 
-        final String extension = key.getExtension();
+        var extension = key.getExtension();
         if (StringUtils.isEmpty(extension)) {
             return;
         }
 
-        final ObjectDictionary<String, Reference> table = getAssetCacheTable();
-        final Reference reference = notNull(table.get(key.getName(), () -> newRef(ReferenceType.LONG)));
+        var reference = getAssetCacheTable()
+                .getInReadLock(key.getName(), (references, name) ->
+                        references.get(name, () -> ReferenceFactory.newRef(ReferenceType.LONG)));
+
         reference.setLong(currentTimeMillis());
     }
 
     @Override
-    @FromAnyThread
-    public synchronized void assetRequested(@NotNull final AssetKey key) {
+    @JmeThread
+    public void assetRequested(@NotNull AssetKey key) {
 
         if (key.getCacheType() == null) {
             return;
         }
 
-        final String extension = key.getExtension();
+        var extension = key.getExtension();
         if (StringUtils.isEmpty(extension)){
             return;
         }
 
-        final ObjectDictionary<String, Reference> table = getAssetCacheTable();
-        final Reference reference = table.get(key.getName());
+        var reference = getAssetCacheTable()
+                .getInReadLock(key.getName(), ObjectDictionary::get);
+
         if (reference == null) {
             return;
         }
 
-        final Path realFile = getRealFile(Paths.get(key.getName()));
+        var realFile = EditorUtil.getRealFile(Paths.get(key.getName()));
         if (realFile == null || !Files.exists(realFile)) {
             return;
         }
 
-        try {
+        var timestamp = reference.getLong();
 
-            final long timestamp = reference.getLong();
-
-            final FileTime lastModifiedTime = Files.getLastModifiedTime(realFile);
-            if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) {
-                return;
-            }
-
-            final AssetManager assetManager = EditorUtil.getAssetManager();
-            assetManager.deleteFromCache(key);
-
-        } catch (final IOException e) {
-            LOGGER.warning(e);
+        var lastModifiedTime = FileUtils.getLastModifiedTime(realFile);
+        if (lastModifiedTime.to(TimeUnit.MILLISECONDS) <= timestamp) {
+            return;
         }
+
+        EditorUtil.getAssetManager()
+                .deleteFromCache(key);
     }
 
     @Override
     @FromAnyThread
-    public void assetDependencyNotFound(@NotNull final AssetKey parentKey, @NotNull final AssetKey dependentAssetKey) {
+    public void assetDependencyNotFound(@NotNull AssetKey parentKey, @NotNull AssetKey dependentAssetKey) {
     }
 
     /**
      * Update the list with additional ENVs.
      */
     @FromAnyThread
-    public synchronized void updateAdditionalEnvs() {
+    public void updateAdditionalEnvs() {
+        EXECUTOR_MANAGER.addBackgroundTask(this::updateAdditionalEnvsInBackground);
+    }
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Array<Path> additionalEnvs = getAdditionalEnvs();
-        additionalEnvs.clear();
+    /**
+     * Update the list of additional ENVs textures.
+     */
+    @BackgroundThread
+    private void updateAdditionalEnvsInBackground() {
 
-        final Path folder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
+        var editorConfig = EditorConfig.getInstance();
+        var additionalEnvs = getAdditionalEnvs();
+        additionalEnvs.runInWriteLock(Collection::clear);
+
+        var folder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
         if (folder == null) {
             return;
         }
 
-        additionalEnvs.addAll(getFiles(folder, IMAGE_HDR, IMAGE_TGA, IMAGE_PNG));
+        additionalEnvs.runInWriteLock(paths ->
+                paths.addAll(getFiles(folder, IMAGE_HDR, IMAGE_TGA, IMAGE_PNG)));
     }
 
     /**
@@ -339,71 +363,80 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the list.
      */
     @FromAnyThread
-    public @NotNull Array<Path> getAdditionalEnvs() {
+    public @NotNull ConcurrentArray<Path> getAdditionalEnvs() {
         return additionalEnvs;
     }
 
     /**
+     * Get the table with last modify dates.
+     *
      * @return the table with last modify dates.
      */
     @FromAnyThread
-    private @NotNull ObjectDictionary<String, Reference> getAssetCacheTable() {
+    private @NotNull ConcurrentObjectDictionary<String, Reference> getAssetCacheTable() {
         return assetCacheTable;
     }
 
     /**
      * Handle a removed file.
      */
-    @FromAnyThread
-    private synchronized void processEvent(@NotNull final DeletedFileEvent event) {
+    @FxThread
+    private void processEvent(@NotNull DeletedFileEvent event) {
 
         if (event.isDirectory()) {
             return;
         }
 
-        final Path file = event.getFile();
-        final String extension = FileUtils.getExtension(file);
+        var file = event.getFile();
+        var extension = FileUtils.getExtension(file);
 
-        final ObjectDictionary<String, Array<String>> interestedResources = getInterestedResources();
-        final Array<String> resources = interestedResources.get(extension);
+        var resources = getInterestedResources()
+                .getInReadLock(extension, ObjectDictionary::get);
 
-        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
-        final String assetPath = toAssetPath(assetFile);
+        var assetFile = notNull(EditorUtil.getAssetFile(file));
+        var assetPath = EditorUtil.toAssetPath(assetFile);
 
         if (resources != null) {
-            resources.fastRemove(assetPath);
+            resources.runInWriteLock(assetPath, Array::fastRemove);
         }
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            final AssetManager assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtil.getAssetManager();
+            var url = FileUtils.getUrl(file);
 
-            final URL url = FileUtils.getUrl(file);
-            final Array<URLClassLoader> classLoaders = getClassLoaders();
+            var classLoaders = getClassLoaders();
+            classLoaders.runInWriteLock(urlClassLoaders -> {
 
-            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
+                var oldLoader = urlClassLoaders.search(url,
+                        (loader, toCheck) -> contains(loader.getURLs(), toCheck));
 
-            if (oldLoader != null) {
-                classLoaders.fastRemove(oldLoader);
-                assetManager.removeClassLoader(oldLoader);
-            }
+                if (oldLoader != null) {
+                    urlClassLoaders.fastRemove(oldLoader);
+                    EXECUTOR_MANAGER.addJmeTask(() ->
+                            assetManager.removeClassLoader(oldLoader));
+                }
+            });
         }
     }
 
     /**
      * Handle a created file.
      */
-    @FromAnyThread
-    private synchronized void processEvent(@NotNull final CreatedFileEvent event) {
-        if (event.isDirectory()) return;
-        handleFile(event.getFile());
+    @FxThread
+    private void processEvent(@NotNull CreatedFileEvent event) {
+        if (!event.isDirectory()) {
+            handleFile(event.getFile());
+        }
     }
 
     /**
+     * Get the list of resources in the classpath.
+     *
      * @return the list of resources in the classpath.
      */
     @FromAnyThread
-    private @NotNull Array<String> getResourcesInClasspath() {
+    private @NotNull ConcurrentArray<String> getResourcesInClasspath() {
         return resourcesInClasspath;
     }
 
@@ -413,27 +446,31 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @BackgroundThread
     private void prepareClasspathResources() {
 
-        var interestedResources = getInterestedResourcesInClasspath();
-        var stamp = interestedResources.writeLock();
-        try {
+        var classpathManager = ClasspathManager.getInstance();
 
-            for (var resource : getResourcesInClasspath()) {
-                interestedResources.getOptional(FileUtils.getExtension(resource))
-                        .ifPresent(resources -> resources.add(resource));
-            }
+        var resourcesInClasspath = getResourcesInClasspath();
+        resourcesInClasspath.runInWriteLock(array ->
+                array.addAll(classpathManager.getAllResources()));
 
-        } finally {
-            interestedResources.writeUnlock(stamp);
-        }
+        getInterestedResourcesInClasspath().runInWriteLock(dictionary -> {
+            resourcesInClasspath.runInReadLock(array -> {
+                for (var resource : array) {
+                    var resources = dictionary.get(FileUtils.getExtension(resource));
+                    if (resources != null) {
+                        resources.runInWriteLock(resource, Collection::add);
+                    }
+                }
+            });
+        });
     }
 
-    /**x
-     * Gets class loaders.
-     *W
-     * @return the list of an additional classpath.
+    /**
+     * Get the list of class loaders.
+     *
+     * @return the list of class loaders.
      */
     @FromAnyThread
-    public @NotNull Array<URLClassLoader> getClassLoaders() {
+    public @NotNull ConcurrentArray<URLClassLoader> getClassLoaders() {
         return classLoaders;
     }
 
@@ -444,8 +481,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the list of all available material definitions.
      */
     @FromAnyThread
-    public synchronized @NotNull Array<String> getAvailableResources(@NotNull final String extension) {
-        final Array<String> result = ArrayFactory.newArray(String.class);
+    public @NotNull Array<String> getAvailableResources(@NotNull String extension) {
+        var result = ArrayFactory.<String>newArraySet(String.class);
         addAvailableResources(result, extension);
         return result;
     }
@@ -457,23 +494,22 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @param extension the interested extension.
      */
     @FromAnyThread
-    public synchronized void addAvailableResources(@NotNull final Array<String> result,
-                                                   @NotNull final String extension) {
+    public void addAvailableResources(@NotNull Array<String> result, @NotNull String extension) {
 
-        final ObjectDictionary<String, Array<String>> resourcesInClasspath = getInterestedResourcesInClasspath();
-        final ObjectDictionary<String, Array<String>> resources = getInterestedResources();
+        var resourcesInClasspath = getInterestedResourcesInClasspath();
+        var resources = getInterestedResources();
 
-        final Array<String> inAsset = resources.get(extension);
-        final Array<String> inClassPath = resourcesInClasspath.get(extension);
+        var inAsset = resources.getInReadLock(extension, ObjectDictionary::get);
+        var inClassPath = resourcesInClasspath.getInReadLock(extension, ObjectDictionary::get);
 
         if (inAsset != null) {
-            result.addAll(inAsset);
+            inAsset.runInReadLock(result,
+                    (res, toStore) -> toStore.addAll(res));
         }
 
         if (inClassPath != null) {
-            inClassPath.forEach(result,
-                    (resource, toStore) -> !toStore.contains(resource),
-                    (resource, toStore) -> toStore.add(resource));
+            inClassPath.runInReadLock(result,
+                (res, toStore) -> toStore.addAll(res));
         }
 
         result.sort(STRING_ARRAY_COMPARATOR);
@@ -482,82 +518,109 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Reload available resources.
      */
+    @BackgroundThread
+    private void reloadInBackground() {
+
+        var lastModifyTable = getAssetCacheTable();
+        lastModifyTable.runInWriteLock(Dictionary::clear);
+
+        var watchKeys = getWatchKeys();
+        watchKeys.runInWriteLock(keys -> {
+            keys.forEach(WatchKey::cancel);
+            keys.clear();
+        });
+
+        var classLoadersCopy = ArrayFactory.<ClassLoader>newArray(ClassLoader.class);
+        var classLoaders = getClassLoaders();
+        classLoaders.runInWriteLock(classLoadersCopy, (urlClassLoaders, toStore) -> {
+            toStore.addAll(urlClassLoaders);
+            urlClassLoaders.clear();
+        });
+
+        EXECUTOR_MANAGER.addJmeTask(() -> {
+            var assetManager = EditorUtil.getAssetManager();
+            classLoadersCopy.forEach(assetManager::removeClassLoader);
+            assetManager.clearCache();
+        });
+
+        var interestedResources = getInterestedResources();
+        interestedResources.runInWriteLock(resources -> resources.forEach(Collection::clear));
+
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) {
+            return;
+        }
+
+        FileUtils.walkFileTree(currentAsset, (SimpleFileVisitor)
+                (file, attrs) -> handleFile(file));
+
+        watchKeys.add(Utils.get(currentAsset, toRegister ->
+                toRegister.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
+
+        FileUtils.walkFileTree(currentAsset, (SimpleFolderVisitor)
+                (file, attrs) -> registerFiles(watchKeys, file));
+    }
+
+    /**
+     * Reload available resources.
+     */
     @FromAnyThread
-    public synchronized void reload() {
-
-        final ObjectDictionary<String, Reference> lastModifyTable = getAssetCacheTable();
-        lastModifyTable.clear();
-
-        final Array<WatchKey> watchKeys = getWatchKeys();
-        watchKeys.forEach(WatchKey::cancel);
-        watchKeys.clear();
-
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-
-        final Array<URLClassLoader> classLoaders = getClassLoaders();
-        classLoaders.forEach(assetManager, (loader, manager) -> manager.removeClassLoader(loader));
-        classLoaders.clear();
-
-        assetManager.clearCache();
-
-        final ObjectDictionary<String, Array<String>> interestedResources = getInterestedResources();
-        interestedResources.forEach((extension, resources) -> resources.clear());
-
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) return;
-
-        try {
-            Files.walkFileTree(currentAsset, (SimpleFileVisitor) (file, attrs) -> handleFile(file));
-        } catch (IOException e) {
-            LOGGER.warning(e);
-        }
-
-        try {
-            watchKeys.add(currentAsset.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY));
-            Files.walkFileTree(currentAsset, (SimpleFolderVisitor) (file, attrs) -> registerFiles(watchKeys, file));
-        } catch (final IOException e) {
-            LOGGER.warning(e);
-        }
+    public void reload() {
+        EXECUTOR_MANAGER.addBackgroundTask(this::reloadInBackground);
     }
 
     @FromAnyThread
-    private static void registerFiles(@NotNull final Array<WatchKey> watchKeys, @NotNull final Path file) {
-        watchKeys.add(get(file, toRegister -> toRegister.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
+    private static void registerFiles(@NotNull Array<WatchKey> watchKeys, @NotNull Path file) {
+        watchKeys.add(Utils.get(file, toRegister ->
+                toRegister.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
     }
 
     /**
      * Handle a file event in an asset folder.
      */
     @FromAnyThread
-    private synchronized void handleFile(@NotNull final Path file) {
+    private void handleFile(@NotNull Path file) {
 
         if (Files.isDirectory(file)) {
             return;
         }
 
-        final String extension = FileUtils.getExtension(file);
-
-        final ObjectDictionary<String, Array<String>> interestedResources = getInterestedResources();
-        final Array<String> toStore = interestedResources.get(extension);
+        var extension = FileUtils.getExtension(file);
+        var toStore = getInterestedResources()
+                .getInReadLock(extension, ObjectDictionary::get);
 
         if (toStore != null) {
-            final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
-            toStore.add(toAssetPath(assetFile));
+            var assetFile = notNull(EditorUtil.getAssetFile(file));
+            var assetPath = EditorUtil.toAssetPath(assetFile);
+            toStore.runInWriteLock(assetPath, Collection::add);
         }
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            final AssetManager assetManager = EditorUtil.getAssetManager();
-            final URL url = get(file, FileUtils::getUrl);
+            var assetManager = EditorUtil.getAssetManager();
+            var url = Utils.get(file, FileUtils::getUrl);
 
-            final Array<URLClassLoader> classLoaders = getClassLoaders();
-            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
-            if (oldLoader != null) return;
+            var classLoaders = getClassLoaders();
+            long stamp = classLoaders.writeLock();
+            try {
 
-            final URLClassLoader newLoader = new URLClassLoader(toArray(url), getClass().getClassLoader());
-            classLoaders.add(newLoader);
-            assetManager.addClassLoader(newLoader);
+                var oldLoader = classLoaders.search(url,
+                        (loader, toCheck) -> contains(loader.getURLs(), toCheck));
+
+                if (oldLoader != null) {
+                    return;
+                }
+
+                var newLoader = new URLClassLoader(toArray(url), getClass().getClassLoader());
+                classLoaders.add(newLoader);
+
+                EXECUTOR_MANAGER.addJmeTask(() ->
+                        assetManager.addClassLoader(newLoader));
+
+            } finally {
+                classLoaders.writeUnlock(stamp);
+            }
         }
     }
 
@@ -566,34 +629,46 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         super.run();
 
         while (true) {
+
             ThreadUtils.sleep(200);
 
-            final Array<WatchKey> watchKeys = getWatchKeys();
+            var watchKeys = getWatchKeys();
 
             List<WatchEvent<?>> watchEvents = null;
             WatchKey watchKey = null;
 
-            synchronized (this) {
-                for (final WatchKey key : watchKeys) {
+            long stamp = watchKeys.readLock();
+            try {
+
+                for (var key : watchKeys) {
+
                     watchKey = key;
                     watchEvents = key.pollEvents();
-                    if (!watchEvents.isEmpty()) break;
+
+                    if (!watchEvents.isEmpty()) {
+                        break;
+                    }
                 }
+
+            } finally {
+                watchKeys.readUnlock(stamp);
             }
 
-            if (watchEvents == null || watchEvents.isEmpty()) continue;
+            if (watchEvents == null || watchEvents.isEmpty()) {
+                continue;
+            }
 
-            for (final WatchEvent<?> watchEvent : watchEvents) {
+            for (var watchEvent : watchEvents) {
 
-                final Path file = (Path) watchEvent.context();
-                final Path folder = (Path) watchKey.watchable();
-                final Path realFile = folder.resolve(file);
+                var file = (Path) watchEvent.context();
+                var folder = (Path) watchKey.watchable();
+                var realFile = folder.resolve(file);
 
                 if (watchEvent.kind() == ENTRY_CREATE) {
 
-                    final boolean directory = Files.isDirectory(realFile);
+                    var directory = Files.isDirectory(realFile);
 
-                    final CreatedFileEvent event = new CreatedFileEvent();
+                    var event = new CreatedFileEvent();
                     event.setFile(realFile);
                     event.setNeedSelect(false);
                     event.setDirectory(directory);
@@ -606,9 +681,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
                 } else if (watchEvent.kind() == ENTRY_DELETE) {
 
-                    final boolean directory = Files.isDirectory(realFile);
+                    var directory = Files.isDirectory(realFile);
 
-                    final DeletedFileEvent event = new DeletedFileEvent();
+                    var event = new DeletedFileEvent();
                     event.setFile(realFile);
                     event.setDirectory(directory);
 
@@ -618,7 +693,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
                 } else if (watchEvent.kind() == ENTRY_MODIFY) {
 
-                    final FileChangedEvent event = new FileChangedEvent();
+                    var event = new FileChangedEvent();
                     event.setFile(realFile);
 
                     FX_EVENT_MANAGER.notify(event);
@@ -634,9 +709,18 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the watch key or null.
      */
     @FromAnyThread
-    private synchronized @Nullable WatchKey findWatchKey(@NotNull final Path path) {
-        final Array<WatchKey> watchKeys = getWatchKeys();
-        return watchKeys.search(path, (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
+    private @Nullable WatchKey findWatchKey(@NotNull Path path) {
+
+        var watchKeys = getWatchKeys();
+        var stamp = watchKeys.readLock();
+        try {
+
+            return watchKeys.search(path,
+                    (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
+
+        } finally {
+            watchKeys.readUnlock(stamp);
+        }
     }
 
     /**
@@ -645,15 +729,15 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @param path the file.
      */
     @FromAnyThread
-    private synchronized void removeWatchKeyFor(@NotNull final Path path) {
+    private void removeWatchKeyFor(@NotNull Path path) {
 
-        final WatchKey watchKey = findWatchKey(path);
+        var watchKey = findWatchKey(path);
         if (watchKey == null) {
             return;
         }
 
-        final Array<WatchKey> watchKeys = getWatchKeys();
-        watchKeys.fastRemove(watchKey);
+        getWatchKeys().runInWriteLock(watchKey, Array::fastRemove);
+
         watchKey.cancel();
     }
 
@@ -663,15 +747,25 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @param path the file.
      */
     @FromAnyThread
-    private synchronized void registerWatchKey(@NotNull final Path path) {
-        Utils.run(() -> getWatchKeys().add(path.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
+    private void registerWatchKey(@NotNull Path path) {
+
+        var watchKeys = getWatchKeys();
+        var stamp = watchKeys.writeLock();
+        try {
+
+            watchKeys.add(Utils.get(path, f ->
+                    f.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
+
+        } finally {
+            watchKeys.writeUnlock(stamp);
+        }
     }
 
     /**
      * Handle refreshing asset folder.
      */
     @FromAnyThread
-    private void processRefreshAsset() {
+    private void processRefreshAsset(@NotNull RequestedRefreshAssetEvent event) {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
     }
 
@@ -679,15 +773,17 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * Handle changing asset folder.
      */
     @FromAnyThread
-    private void processChangeAsset() {
+    private void processChangeAsset(@NotNull ChangedCurrentAssetFolderEvent event) {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
     }
 
     /**
+     * Get the list of keys for watching to folders.
+     *
      * @return the list of keys for watching to folders.
      */
     @FromAnyThread
-    private @NotNull Array<WatchKey> getWatchKeys() {
+    private @NotNull ConcurrentArray<WatchKey> getWatchKeys() {
         return watchKeys;
     }
 }

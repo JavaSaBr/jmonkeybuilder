@@ -9,9 +9,11 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
+import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
 import com.ss.editor.ui.event.impl.ClasspathReloadedEvent;
 import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
+import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.classpath.ClassPathScanner;
@@ -41,6 +43,10 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ClasspathManager {
 
+    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private static final AsyncEventManager ASYNC_EVENT_MANAGER = AsyncEventManager.getInstance();
+
     public enum Scope {
         CORE,
         CUSTOM,
@@ -53,8 +59,6 @@ public class ClasspathManager {
         public static final Set<Scope> CORE_AND_CUSTOM_AND_LOCAL =
             EnumSet.of(CORE, CUSTOM, LOCAL_CLASSES, LOCAL_LIBRARIES);
     }
-
-    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     private static final String[] JAR_EXTENSIONS = toArray(FileExtensions.JAVA_LIBRARY);
 
@@ -138,8 +142,14 @@ public class ClasspathManager {
         this.classesLoader = new AtomicReference<>();
         this.customScanner = new AtomicReference<>();
 
-        ExecutorManager.getInstance()
-            .addBackgroundTask(this::scanCoreClasses);
+        CombinedAsyncEventHandlerBuilder.of(this::scanCoreClasses)
+                .add(ManagersInitializedEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        CombinedAsyncEventHandlerBuilder.of(this::reload)
+                .add(CoreClassesScannedEvent.EVENT_TYPE)
+                .add(JmeContextCreatedEvent.EVENT_TYPE)
+                .buildAndRegister();
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
                 .finish(() -> "Initialized ClasspathManager");
@@ -168,11 +178,7 @@ public class ClasspathManager {
 
         this.coreScanner = coreScanner;
 
-        AsyncEventManager.getInstance()
-                .notify(new CoreClassesScannedEvent());
-
-        InitializationManager.getInstance()
-                .addOnAfterCreateJmeContext(this::reload);
+        ASYNC_EVENT_MANAGER.notify(new CoreClassesScannedEvent());
     }
 
     /**
@@ -184,7 +190,6 @@ public class ClasspathManager {
         var userLibrariesLoader = createUserLibrariesLoader();
         var userClassesLoader = createUserClassesLoader(userLibrariesLoader);
         var currentScanner = getCustomScanner();
-
         try {
 
             if (userLibrariesLoader == null && userClassesLoader == null) {
@@ -205,10 +210,10 @@ public class ClasspathManager {
             }
 
             var paths = urls.stream()
-                .map(url -> Utils.get(url, URL::toURI))
-                .map(Paths::get)
-                .map(Path::toString)
-                .toArray(String[]::new);
+                    .map(url -> Utils.get(url, URL::toURI))
+                    .map(Paths::get)
+                    .map(Path::toString)
+                    .toArray(String[]::new);
 
             scanner.addAdditionalPaths(paths);
             scanner.setUseSystemClasspath(false);
@@ -217,12 +222,9 @@ public class ClasspathManager {
             customScanner.compareAndSet(currentScanner, scanner);
 
         } finally {
-
             updateLibrariesLoader(userLibrariesLoader);
             updateClassesLoader(userClassesLoader);
-
-            FxEventManager.getInstance()
-                    .notify(new ClasspathReloadedEvent());
+            ASYNC_EVENT_MANAGER.notify(new ClasspathReloadedEvent());
         }
     }
 
@@ -240,8 +242,7 @@ public class ClasspathManager {
      */
     @FromAnyThread
     public void reload() {
-        ExecutorManager.getInstance()
-                .addBackgroundTask(this::reloadInBackground);
+        EXECUTOR_MANAGER.addBackgroundTask(this::reloadInBackground);
     }
 
     /**
@@ -307,15 +308,14 @@ public class ClasspathManager {
             return;
         }
 
-        var executorManager = ExecutorManager.getInstance();
         var assetManager = EditorUtil.getAssetManager();
 
         if (currentLoader != null) {
-            executorManager.addJmeTask(() ->
+            EXECUTOR_MANAGER.addJmeTask(() ->
                     assetManager.removeClassLoader(currentLoader));
         }
 
-        executorManager.addJmeTask(() ->
+        EXECUTOR_MANAGER.addJmeTask(() ->
                 assetManager.addClassLoader(newLoader));
     }
 
@@ -331,15 +331,14 @@ public class ClasspathManager {
             return;
         }
 
-        var executorManager = ExecutorManager.getInstance();
         var assetManager = EditorUtil.getAssetManager();
 
         if (currentLoader != null) {
-            executorManager.addJmeTask(() ->
+            EXECUTOR_MANAGER.addJmeTask(() ->
                     assetManager.removeClassLoader(currentLoader));
         }
 
-        executorManager.addJmeTask(() ->
+        EXECUTOR_MANAGER.addJmeTask(() ->
                 assetManager.addClassLoader(newLoader));
     }
 

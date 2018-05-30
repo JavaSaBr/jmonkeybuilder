@@ -34,6 +34,7 @@ import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
@@ -148,6 +149,9 @@ public class JfxApplication extends Application {
         InitializeManager.register(PluginManager.class);
         InitializeManager.register(RemoteControlManager.class);
         InitializeManager.initialize();
+
+        AsyncEventManager.getInstance()
+                .notify(new ManagersInitializedEvent());
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .finish(() -> "Initialized all managers");
@@ -358,12 +362,6 @@ public class JfxApplication extends Application {
             TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
                     .finishAndStart(() -> "Initialized control events");
 
-            var resourceManager = ResourceManager.getInstance();
-            //resourceManager.reload();
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Reloaded the resource manager");
-
             var initializationManager = InitializationManager.getInstance();
             initializationManager.onBeforeCreateJavaFxContext();
 
@@ -414,6 +412,8 @@ public class JfxApplication extends Application {
             if (!stage.isMaximized()) {
                 stage.centerOnScreen();
             }
+
+            stage.setAlwaysOnTop(true);
 
             stage.widthProperty().addListener((observable, oldValue, newValue) -> {
                 if (stage.isMaximized()) return;

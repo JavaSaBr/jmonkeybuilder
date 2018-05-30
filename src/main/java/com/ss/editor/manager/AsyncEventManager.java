@@ -5,8 +5,11 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.event.ConsumableEvent;
 import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import javafx.event.Event;
@@ -20,6 +23,122 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public class AsyncEventManager {
+
+    /**
+     * Builder to build a combined async events handler.
+     *
+     * @author JavaSaBr
+     */
+    public static class CombinedAsyncEventHandlerBuilder {
+
+        /**
+         * Create a builder for the handler.
+         *
+         * @param handler the result handler.
+         * @return the new builder.
+         */
+        @FromAnyThread
+        public static @NotNull CombinedAsyncEventHandlerBuilder of(@NotNull Runnable handler) {
+            return new CombinedAsyncEventHandlerBuilder(handler);
+        }
+
+        /**
+         * The list of listened event types.
+         */
+        @NotNull
+        private final Array<EventType<Event>> eventTypes;
+
+        /**
+         * The result handler.
+         */
+        @NotNull
+        private final Runnable handler;
+
+        public CombinedAsyncEventHandlerBuilder(@NotNull Runnable handler) {
+            this.handler = handler;
+            this.eventTypes = ArrayFactory.newArray(EventType.class);
+        }
+
+        /**
+         * Add listening the additional event type.
+         *
+         * @param eventType the additional event type.
+         * @return this builder.
+         */
+        @FromAnyThread
+        public @NotNull CombinedAsyncEventHandlerBuilder add(@NotNull EventType<? extends Event> eventType) {
+            return add(eventType, 1);
+        }
+
+        /**
+         * Add listening the additional event type.
+         *
+         * @param eventType the additional event type.
+         * @param count     the count of expected events of the type.
+         * @return this builder.
+         */
+        @FromAnyThread
+        public @NotNull CombinedAsyncEventHandlerBuilder add(@NotNull EventType<? extends Event> eventType, int count) {
+
+            for (int i = 0; i < count; i++) {
+                eventTypes.add(ClassUtils.unsafeCast(eventType));
+            }
+
+            return this;
+        }
+
+        @FromAnyThread
+        public void buildAndRegister() {
+
+            if (eventTypes.isEmpty()) {
+                throw new IllegalStateException("The list of listened events should not be null.");
+            }
+
+            var resultHandler = new CombinedEventHandler(eventTypes, handler);
+            var eventManager = getInstance();
+
+            var eventTypesSet = resultHandler.eventTypesSet;
+            eventTypesSet.forEach(eventType ->
+                eventManager.addEventHandler(eventType, resultHandler));
+        }
+    }
+
+    private static class CombinedEventHandler implements EventHandler<Event> {
+
+        @NotNull
+        private final ConcurrentArray<EventType<Event>> eventTypes;
+
+        @NotNull
+        private final Array<EventType<Event>> eventTypesSet;
+
+        @NotNull
+        private final Runnable handler;
+
+        public CombinedEventHandler(@NotNull Array<EventType<Event>> eventTypes, @NotNull Runnable handler) {
+            this.eventTypes = ArrayFactory.newConcurrentStampedLockArray(EventType.class);
+            this.eventTypes.addAll(eventTypes);
+            this.eventTypesSet = ArrayFactory.newArraySet(EventType.class);
+            this.eventTypesSet.addAll(eventTypes);
+            this.handler = handler;
+        }
+
+        @Override
+        public void handle(@NotNull Event event) {
+
+            ArrayUtils.runInWriteLock(eventTypes, event.getEventType(), Array::remove);
+
+            if (!eventTypes.isEmpty()) {
+                return;
+            }
+
+            handler.run();
+
+            var eventManager = getInstance();
+
+            eventTypesSet.forEach(eventType ->
+                    eventManager.removeEventHandler(eventType, this));
+        }
+    }
 
     private static final AsyncEventManager INSTANCE = new AsyncEventManager();
 
@@ -117,7 +236,8 @@ public class AsyncEventManager {
         var eventHandlers = getEventHandlers();
         var executorManager = ExecutorManager.getInstance();
 
-        for (EventType<? extends Event> eventType = event.getEventType(); eventType != null; eventType = eventType.getSuperType()) {
+        for (EventType<? extends Event> eventType = event.getEventType(); eventType != null;
+             eventType = eventType.getSuperType()) {
 
             var handlers = eventHandlers.get(eventType);
             if (handlers == null || handlers.isEmpty()) {

@@ -11,10 +11,7 @@ import javafx.event.EventType;
  */
 public class RequestedRefreshAssetEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<RequestedRefreshAssetEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {
