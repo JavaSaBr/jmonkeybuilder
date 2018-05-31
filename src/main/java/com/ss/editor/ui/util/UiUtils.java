@@ -145,30 +145,35 @@ public abstract class UiUtils {
     /**
      * Fill a list of components.
      *
-     * @param container the container
-     * @param node      the node
+     * @param container the container.
+     * @param node      the node.
      */
-    @FxThread
-    public static void fillComponents(@NotNull final Array<ScreenComponent> container, @NotNull final Node node) {
+    @FromAnyThread
+    public static @NotNull Array<ScreenComponent> fillComponents(
+            @NotNull Array<ScreenComponent> container,
+            @NotNull Node node
+    ) {
 
         if (node instanceof ScreenComponent) {
             container.add((ScreenComponent) node);
         }
 
         if (node instanceof SplitPane) {
-            final ObservableList<Node> items = ((SplitPane) node).getItems();
+            var items = ((SplitPane) node).getItems();
             items.forEach(child -> fillComponents(container, child));
         } else if (node instanceof TabPane) {
-            final ObservableList<Tab> tabs = ((TabPane) node).getTabs();
+            var tabs = ((TabPane) node).getTabs();
             tabs.forEach(tab -> fillComponents(container, tab.getContent()));
         }
 
         if (!(node instanceof Parent)) {
-            return;
+            return container;
         }
 
-        final ObservableList<Node> nodes = ((Parent) node).getChildrenUnmodifiable();
+        var nodes = ((Parent) node).getChildrenUnmodifiable();
         nodes.forEach(child -> fillComponents(container, child));
+
+        return container;
     }
 
     /**

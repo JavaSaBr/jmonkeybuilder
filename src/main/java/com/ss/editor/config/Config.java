@@ -186,7 +186,6 @@ public final class Config {
     public synchronized static @NotNull OperatingSystem getOperatingSystem() {
 
         if (operatingSystem == null) {
-            System.out.println("Resolve OS");
             operatingSystem = new OperatingSystem();
         }
 
@@ -203,7 +202,6 @@ public final class Config {
 
 
         if (graphicsDevice == null) {
-            System.out.println("Resolve Graphics Device");
             var graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
         }

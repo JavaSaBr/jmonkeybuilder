@@ -1,9 +1,26 @@
 package com.ss.editor.ui.css;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.rlib.common.util.array.Array;
+import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.AsyncEventManager;
+import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.PluginManager;
+import com.ss.editor.ui.builder.EditorFxSceneBuilder;
+import com.ss.editor.ui.event.impl.CssAppliedEvent;
+import com.ss.editor.ui.event.impl.FxSceneCreatedEvent;
+import com.ss.editor.ui.event.impl.PluginCssLoadedEvent;
+import com.ss.editor.ui.event.impl.PluginsLoadedEvent;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -15,7 +32,28 @@ import java.net.URL;
  */
 public class CssRegistry {
 
-    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(CssRegistry.class);
+
+    /**
+     * The path to the base CSS styles.
+     */
+    public static final String CSS_FILE_BASE = "ui/css/base.css";
+
+    /**
+     * The path to the external CSS styles.
+     */
+    public static final String CSS_FILE_EXTERNAL = "ui/css/external.css";
+
+    /**
+     * The path to the custom ids CSS styles.
+     */
+    public static final String CSS_FILE_CUSTOM_IDS = "ui/css/custom_ids.css";
+
+    /**
+     * The path to the custom classes CSS styles.
+     */
+    public static final String CSS_FILE_CUSTOM_CLASSES = "ui/css/custom_classes.css";
+
     private static final CssRegistry INSTANCE = new CssRegistry();
 
     @FromAnyThread
@@ -27,10 +65,73 @@ public class CssRegistry {
      * The list of available css files.
      */
     @NotNull
-    private final Array<String> availableCssFiles;
+    private final ConcurrentArray<String> availableCssFiles;
 
     private CssRegistry() {
-        this.availableCssFiles = ArrayFactory.newArray(String.class);
+        InitializeManager.valid(getClass());
+
+        this.availableCssFiles = ArrayFactory.newConcurrentStampedLockArray(String.class);
+
+        register(CSS_FILE_BASE, EditorFxSceneBuilder.class.getClassLoader());
+        register(CSS_FILE_EXTERNAL, EditorFxSceneBuilder.class.getClassLoader());
+        register(CSS_FILE_CUSTOM_IDS, EditorFxSceneBuilder.class.getClassLoader());
+        register(CSS_FILE_CUSTOM_CLASSES, EditorFxSceneBuilder.class.getClassLoader());
+
+        CombinedAsyncEventHandlerBuilder.of(this::loadPluginsCss)
+                .add(PluginsLoadedEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        // if a scene was created before when we loaded plugin's css.
+        CombinedAsyncEventHandlerBuilder.of(this::applyCssToScene)
+                .add(FxSceneCreatedEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        CombinedAsyncEventHandlerBuilder.of(this::applyCssToScene)
+                .add(PluginCssLoadedEvent.EVENT_TYPE)
+                .add(FxSceneCreatedEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        LOGGER.info("initialized.");
+    }
+
+    /**
+     * Apply all loaded CSS files to the main scene.
+     */
+    @BackgroundThread
+    private void applyCssToScene() {
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
+
+            var editorConfig = EditorConfig.getInstance();
+            var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+
+            var scene = EditorUtil.getFxScene();
+            var stylesheets = scene.getStylesheets();
+            stylesheets.clear();
+
+            getAvailableCssFiles().runInReadLock(stylesheets::addAll);
+
+            stylesheets.add(theme.getCssFile());
+
+            AsyncEventManager.getInstance()
+                    .notify(new CssAppliedEvent());
+
+            LOGGER.info("applied CSS to the main scene.");
+        });
+    }
+
+    /**
+     * Load CSS files from plugins.
+     */
+    @FromAnyThread
+    private void loadPluginsCss() {
+
+        LOGGER.info("started loading CSS from plugins.");
+
+        var eventManager = AsyncEventManager.getInstance();
+        var pluginManager = PluginManager.getInstance();
+        pluginManager.handlePluginsInBackground(editorPlugin -> editorPlugin.register(this),
+                () -> eventManager.notify(new PluginCssLoadedEvent()));
     }
 
     /**
@@ -39,8 +140,8 @@ public class CssRegistry {
      * @param cssFile the URL to the CSS file.
      */
     @FromAnyThread
-    public void register(@NotNull final URL cssFile) {
-        availableCssFiles.add(cssFile.toExternalForm());
+    public void register(@NotNull URL cssFile) {
+        availableCssFiles.runInWriteLock(array -> array.add(cssFile.toExternalForm()));
     }
 
     /**
@@ -50,7 +151,7 @@ public class CssRegistry {
      * @param classLoader the class loader which can load this path.
      */
     @FromAnyThread
-    public void register(@NotNull final String cssFile, @NotNull final ClassLoader classLoader) {
+    public void register(@NotNull String cssFile, @NotNull ClassLoader classLoader) {
         register(notNull(classLoader.getResource(cssFile)));
     }
 
@@ -60,7 +161,7 @@ public class CssRegistry {
      * @return the list of available css files.
      */
     @FromAnyThread
-    public @NotNull Array<String> getAvailableCssFiles() {
+    public @NotNull ConcurrentArray<String> getAvailableCssFiles() {
         return availableCssFiles;
     }
 }

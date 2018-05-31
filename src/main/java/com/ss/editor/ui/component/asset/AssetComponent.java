@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.asset;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
@@ -291,7 +292,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     @Override
-    @FxThread
+    @BackgroundThread
     public void notifyFinishBuild() {
         loadAssetFolder();
     }
@@ -305,6 +306,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
             return;
         }
 
-        getResourceTree().fill(currentAsset);
+        ExecutorManager.getInstance()
+                .addFxTask(() -> getResourceTree().fill(currentAsset));
     }
 }

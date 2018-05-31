@@ -1,6 +1,5 @@
 package com.ss.editor.manager;
 
-import static com.ss.rlib.common.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.event.ConsumableEvent;
@@ -12,10 +11,13 @@ import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * The class to manage async events.
@@ -152,7 +154,7 @@ public class AsyncEventManager {
      */
     @NotNull
     private final ConcurrentObjectDictionary<EventType<? extends Event>,
-            Array<EventHandler<? extends Event>>> eventHandlers;
+            ConcurrentArray<EventHandler<? extends Event>>> eventHandlers;
 
     public AsyncEventManager() {
         InitializeManager.valid(getClass());
@@ -170,16 +172,22 @@ public class AsyncEventManager {
             @NotNull EventType<T> eventType,
             @NotNull EventHandler<T> eventHandler
     ) {
+
         var eventHandlers = getEventHandlers();
-        var stamp = eventHandlers.writeLock();
-        try {
+        var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
 
-            eventHandlers.get(eventType, () -> newArray(EventHandler.class))
-                    .add(eventHandler);
-
-        } finally {
-            eventHandlers.writeUnlock(stamp);
+        if (handlers != null) {
+            handlers.runInWriteLock(eventHandler, Collection::add);
+            return;
         }
+
+        eventHandlers.runInWriteLock(dictionary -> {
+
+            var newHandlers = dictionary.get(eventType,
+                    () -> ArrayFactory.newConcurrentStampedLockArray(EventHandler.class));
+
+            newHandlers.runInWriteLock(eventHandler, Collection::add);
+        });
     }
 
     /**
@@ -193,15 +201,12 @@ public class AsyncEventManager {
             @NotNull EventType<?> eventType,
             @NotNull EventHandler<?> eventHandler
     ) {
+
         var eventHandlers = getEventHandlers();
-        var stamp = eventHandlers.writeLock();
-        try {
+        var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
 
-            eventHandlers.getOptional(eventType)
-                    .ifPresent(handlers -> handlers.slowRemove(eventHandler));
-
-        } finally {
-            eventHandlers.writeUnlock(stamp);
+        if (handlers != null) {
+            handlers.runInWriteLock(eventHandler, Collection::remove);
         }
     }
 
@@ -212,7 +217,7 @@ public class AsyncEventManager {
      */
     @FromAnyThread
     private @NotNull ConcurrentObjectDictionary<EventType<? extends Event>,
-            Array<EventHandler<? extends Event>>> getEventHandlers() {
+            ConcurrentArray<EventHandler<? extends Event>>> getEventHandlers() {
         return eventHandlers;
     }
 
@@ -234,22 +239,28 @@ public class AsyncEventManager {
     private void notifyImpl(@NotNull Event event) {
 
         var eventHandlers = getEventHandlers();
-        var executorManager = ExecutorManager.getInstance();
 
         for (EventType<? extends Event> eventType = event.getEventType(); eventType != null;
              eventType = eventType.getSuperType()) {
 
-            var handlers = eventHandlers.get(eventType);
+            var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
             if (handlers == null || handlers.isEmpty()) {
                 continue;
             }
 
-            handlers.forEach(handler ->
+            handlers.runInReadLock(event, (array, toHandle) -> {
+
+                var executorManager = ExecutorManager.getInstance();
+
+                for (var eventHandler : array) {
                     executorManager.addBackgroundTask(() ->
-                            handler.handle(ClassUtils.unsafeCast(event))));
+                            eventHandler.handle(ClassUtils.unsafeCast(event)));
+                }
+            });
         }
 
         if (event instanceof ConsumableEvent && !event.isConsumed()) {
+            var executorManager = ExecutorManager.getInstance();
             executorManager.addBackgroundTask(() -> notifyImpl(event));
         }
     }

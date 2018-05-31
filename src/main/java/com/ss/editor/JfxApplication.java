@@ -14,6 +14,7 @@ import com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.jme3.util.LWJGLBufferAllocator;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
@@ -34,6 +35,7 @@ import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.impl.FxSceneCreatedEvent;
 import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFxScene;
@@ -146,6 +148,7 @@ public class JfxApplication extends Application {
         InitializeManager.register(JavaFxImageManager.class);
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
+        InitializeManager.register(CssRegistry.class);
         InitializeManager.register(PluginManager.class);
         InitializeManager.register(RemoteControlManager.class);
         InitializeManager.initialize();
@@ -199,14 +202,6 @@ public class JfxApplication extends Application {
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .start();
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
-                .start();
-
-        var initializationManager = InitializationManager.getInstance();
-        initializationManager.onBeforeCreateJmeContext();
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
-                .finish(() -> "onBeforeCreateJmeContext()");
 
         application.start();
 
@@ -356,34 +351,10 @@ public class JfxApplication extends Application {
             TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
                     .start();
 
-            // initialize javaFX events in javaFX thread.
-            //ArrayFactory.asArray(ComboBoxBase.ON_SHOWN);
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Initialized control events");
-
-            var initializationManager = InitializationManager.getInstance();
-            initializationManager.onBeforeCreateJavaFxContext();
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "onBeforeCreateJavaFxContext()");
-
-            var pluginManager = PluginManager.getInstance();
-            pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CssRegistry.getInstance()));
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "handlePlugins()");
-
             //LogView.getInstance();
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Initialized log view");
 
             //SvgImageLoaderFactory.install();
             //ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Initialized images IO");
 
             var icons = stage.getIcons();
             icons.add(new Image("/ui/icons/app/256x256.png"));
@@ -394,9 +365,6 @@ public class JfxApplication extends Application {
             icons.add(new Image("/ui/icons/app/32x32.png"));
             icons.add(new Image("/ui/icons/app/24x24.png"));
             icons.add(new Image("/ui/icons/app/16x16.png"));
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Loaded app icons");
 
             var config = EditorConfig.getInstance();
 
@@ -415,24 +383,19 @@ public class JfxApplication extends Application {
 
             stage.setAlwaysOnTop(true);
 
-            stage.widthProperty().addListener((observable, oldValue, newValue) -> {
-                if (stage.isMaximized()) return;
-                config.setScreenWidth(newValue.intValue());
-            });
-            stage.heightProperty().addListener((observable, oldValue, newValue) -> {
-                if (stage.isMaximized()) return;
-                config.setScreenHeight(newValue.intValue());
-            });
+            ObservableUtils.onChangeIf(stage.widthProperty(), number -> !stage.isMaximized(),
+                    number -> config.setScreenWidth(number.intValue()));
+
+            ObservableUtils.onChangeIf(stage.heightProperty(), number -> !stage.isMaximized(),
+                    number -> config.setScreenHeight(number.intValue()));
 
             ObservableUtils.onChange(stage.maximizedProperty(), config::setMaximized);
 
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Initialized a stage");
-
-            //buildScene();
+            ExecutorManager.getInstance()
+                    .addBackgroundTask(this::buildScene);
 
             TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finish(() -> "Finished building a scene");
+                    .finishAndStart(() -> "Initialized FX stage");
 
         } catch (Throwable e) {
             LOGGER.error(this, e);
@@ -479,15 +442,19 @@ public class JfxApplication extends Application {
     /**
      * Build the scene.
      */
-    @FxThread
+    @BackgroundThread
     private void buildScene() {
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .start();
+
         this.scene = EditorFxSceneBuilder.build(notNull(stage));
 
-        var initializationManager = InitializationManager.getInstance();
-        initializationManager.onAfterCreateJavaFxContext();
+        AsyncEventManager.getInstance()
+                .notify(new FxSceneCreatedEvent());
 
         var pluginManager = PluginManager.getInstance();
-        pluginManager.handlePlugins(editorPlugin -> {
+        pluginManager.handlePluginsNow(editorPlugin -> {
             editorPlugin.register(FileCreatorRegistry.getInstance());
             editorPlugin.register(EditorRegistry.getInstance());
             editorPlugin.register(FileIconManager.getInstance());
@@ -512,6 +479,9 @@ public class JfxApplication extends Application {
 
         var executorManager = ExecutorManager.getInstance();
         executorManager.addBackgroundTask(new CheckNewVersionTask());
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .finishAndStart(() -> "Created FX scene");
 
         var editorConfig = EditorConfig.getInstance();
         if (editorConfig.isAnalyticsQuestion()) {

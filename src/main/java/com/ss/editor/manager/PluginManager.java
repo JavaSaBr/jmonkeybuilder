@@ -7,6 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
+import com.ss.editor.ui.event.impl.PluginsLoadedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
@@ -32,12 +33,19 @@ import java.util.function.Consumer;
 public class PluginManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(PluginManager.class);
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @Nullable
     private static PluginManager instance;
 
     public static @NotNull PluginManager getInstance() {
-        if (instance == null) instance = new PluginManager();
+
+        if (instance == null) {
+            instance = new PluginManager();
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsLoadedEvent());
+        }
+
         return instance;
     }
 
@@ -185,12 +193,41 @@ public class PluginManager {
     }
 
     /**
-     * Handle each loaded plugin.
+     * Handle each loaded plugin now.
      *
      * @param consumer the consumer.
      */
     @FromAnyThread
-    public void handlePlugins(@NotNull Consumer<EditorPlugin> consumer) {
+    public void handlePluginsNow(@NotNull Consumer<EditorPlugin> consumer) {
+        handlePlugins(consumer);
+    }
+
+    /**
+     * Handle each loaded plugin in background.
+     *
+     * @param consumer the consumer.
+     */
+    @FromAnyThread
+    public void handlePluginsInBackground(@NotNull Consumer<EditorPlugin> consumer) {
+        EXECUTOR_MANAGER.addBackgroundTask(() -> handlePlugins(consumer));
+    }
+
+    /**
+     * Handle each loaded plugin in background and execute the result task in result.
+     *
+     * @param consumer the consumer.
+     * @param result   the result task.
+     */
+    @FromAnyThread
+    public void handlePluginsInBackground(@NotNull Consumer<EditorPlugin> consumer, @NotNull Runnable result) {
+        EXECUTOR_MANAGER.addBackgroundTask(() -> {
+            handlePlugins(consumer);
+            result.run();
+        });
+    }
+
+    @FromAnyThread
+    private void handlePlugins(@NotNull Consumer<EditorPlugin> consumer) {
         pluginSystem.getPlugins().stream()
                 .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)

@@ -18,6 +18,8 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.classpath.ClassPathScanner;
 import com.ss.rlib.common.classpath.ClassPathScannerFactory;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
@@ -42,6 +44,8 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author JavaSaBr
  */
 public class ClasspathManager {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(ClasspathManager.class);
 
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -153,6 +157,8 @@ public class ClasspathManager {
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
                 .finish(() -> "Initialized ClasspathManager");
+
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -179,6 +185,8 @@ public class ClasspathManager {
         this.coreScanner = coreScanner;
 
         ASYNC_EVENT_MANAGER.notify(new CoreClassesScannedEvent());
+
+        LOGGER.info("scanned core classes.");
     }
 
     /**
@@ -225,6 +233,7 @@ public class ClasspathManager {
             updateLibrariesLoader(userLibrariesLoader);
             updateClassesLoader(userClassesLoader);
             ASYNC_EVENT_MANAGER.notify(new ClasspathReloadedEvent());
+            LOGGER.info("reloaded.");
         }
     }
 
@@ -580,7 +589,7 @@ public class ClasspathManager {
 
         if (scope.contains(Scope.PLUGINS)) {
             var pluginManager = PluginManager.getInstance();
-            pluginManager.handlePlugins(plugin -> {
+            pluginManager.handlePluginsNow(plugin -> {
                 var container = plugin.getContainer();
                 container.getScanner().findImplements(result, interfaceClass);
             });

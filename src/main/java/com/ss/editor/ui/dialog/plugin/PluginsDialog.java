@@ -99,7 +99,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     public PluginsDialog() {
         this.originalIds = ArrayFactory.newArray(String.class);
         refreshPlugins();
-        PLUGIN_MANAGER.handlePlugins(plugin -> originalIds.add(plugin.getId()));
+        PLUGIN_MANAGER.handlePluginsNow(plugin -> originalIds.add(plugin.getId()));
     }
 
     @Override
@@ -367,7 +367,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         final ObservableList<EditorPlugin> items = pluginListView.getItems();
         items.clear();
 
-        PLUGIN_MANAGER.handlePlugins(items::add);
+        PLUGIN_MANAGER.handlePluginsNow(items::add);
     }
 
     /**
@@ -404,7 +404,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
 
         final Array<String> newIds = ArrayFactory.newArray(String.class);
 
-        PLUGIN_MANAGER.handlePlugins(plugin -> newIds.add(plugin.getId()));
+        PLUGIN_MANAGER.handlePluginsNow(plugin -> newIds.add(plugin.getId()));
 
         final String[] original = newIds.toArray(String.class);
         final String[] toCompare = originalIds.toArray(String.class);

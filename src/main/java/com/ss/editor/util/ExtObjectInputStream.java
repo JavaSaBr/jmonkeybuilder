@@ -32,7 +32,7 @@ public class ExtObjectInputStream extends ObjectInputStream {
             try (var ref = ReferenceFactory.takeFromTLPool(ReferenceType.OBJECT)) {
 
                 var pluginManager = PluginManager.getInstance();
-                pluginManager.handlePlugins(plugin -> {
+                pluginManager.handlePluginsNow(plugin -> {
 
                     if (ref.getObject() != null) {
                         return;

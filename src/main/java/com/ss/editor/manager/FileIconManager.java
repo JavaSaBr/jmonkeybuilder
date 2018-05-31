@@ -8,7 +8,6 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.editor.util.svg.SvgImageLoader;
@@ -22,7 +21,6 @@ import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.IntegerDictionary;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -153,6 +151,8 @@ public class FileIconManager {
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
                 .finish(() -> "Initialized FileIconManager");
+
+        LOGGER.info("initialized.");
     }
 
     /**

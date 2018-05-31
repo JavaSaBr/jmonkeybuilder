@@ -1,13 +1,13 @@
 package com.ss.editor.ui.scene;
 
-import static com.ss.editor.ui.util.UiUtils.fillComponents;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.jfx.injfx.input.JfxMouseInput;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CssIds;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -264,14 +264,9 @@ public class EditorFxScene extends Scene {
     /**
      * Notify all components about finished building.
      */
-    @FxThread
+    @BackgroundThread
     public void notifyFinishBuild() {
-
-        var components = getComponents();
-        fillComponents(components, getContainer());
-        components.forEach(ScreenComponent::notifyFinishBuild);
-
-        var initializationManager = InitializationManager.getInstance();
-        initializationManager.onFinishLoading();
+        UiUtils.fillComponents(getComponents(), getContainer())
+                .forEach(ScreenComponent::notifyFinishBuild);
     }
 }

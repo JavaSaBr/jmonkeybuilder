@@ -144,6 +144,8 @@ public class JavaFxImageManager {
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
                 .finish(() -> "Initialized JavaFxImageManager");
+
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -299,7 +301,7 @@ public class JavaFxImageManager {
         if (FX_FORMATS.contains(extension)) {
             return readFxImage(width, height, externalForm, cachedImage);
         } else if (JME_FORMATS.contains(extension)) {
-            return readJMETexture(width, height, externalForm, cachedImage);
+            return readJmeTexture(width, height, externalForm, cachedImage);
         } else if (IMAGE_IO_FORMATS.contains(extension)) {
             return readIOImage(url, width, height, cachedImage);
         } else if (FileExtensions.IMAGE_DDS.equals(extension)) {
@@ -381,7 +383,7 @@ public class JavaFxImageManager {
     }
 
     @FxThread
-    private @NotNull Image readJMETexture(
+    private @NotNull Image readJmeTexture(
             int width,
             int height,
             @NotNull String externalForm,
@@ -419,7 +421,7 @@ public class JavaFxImageManager {
             } else if (imageWidth > imageHeight) {
                 float mod = imageHeight * 1F / imageWidth;
                 image = new Image(externalForm, width, height * mod, false, false);
-            } else if (imageHeight > imageWidth) {
+            } else {
                 float mod = imageWidth * 1F / imageHeight;
                 image = new Image(externalForm, width * mod, height, false, false);
             }

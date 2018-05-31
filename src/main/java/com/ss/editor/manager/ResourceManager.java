@@ -7,11 +7,9 @@ import static com.ss.rlib.common.util.FileUtils.getFiles;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import static java.lang.System.currentTimeMillis;
-import static java.lang.System.in;
 import static java.nio.file.StandardWatchEventKinds.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
-import com.jme3.asset.AssetManager;
 import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.BackgroundThread;
@@ -21,7 +19,6 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.SceneEvent;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
@@ -38,14 +35,16 @@ import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayComparator;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
-import com.ss.rlib.common.util.dictionary.*;
+import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
+import com.ss.rlib.common.util.dictionary.Dictionary;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import com.ss.rlib.common.util.ref.Reference;
 import com.ss.rlib.common.util.ref.ReferenceFactory;
 import com.ss.rlib.common.util.ref.ReferenceType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.*;
@@ -154,6 +153,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
                 .finish(() -> "Initialized ResourceManager");
+
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -167,6 +168,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, this::processRefreshAsset);
             FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, this::processEvent);
             FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent);
+            LOGGER.info("registered FX listeners.");
         });
     }
 
@@ -180,6 +182,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             var assetManager = EditorUtil.getAssetManager();
             assetManager.addAssetEventListener(this);
             reload();
+            LOGGER.info("registered an asset listener and reloaded.");
         });
     }
 
@@ -208,7 +211,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         }
 
         var pluginManager = PluginManager.getInstance();
-        pluginManager.handlePlugins(plugin -> classLoaders.add(plugin.getClassLoader()));
+        pluginManager.handlePluginsNow(plugin -> classLoaders.add(plugin.getClassLoader()));
 
         var altResourcePath = "/" + resourcePath;
 
@@ -462,6 +465,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
                 }
             });
         });
+
+        LOGGER.info("prepared classpath resources.");
     }
 
     /**

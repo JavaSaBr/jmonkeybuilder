@@ -591,7 +591,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void loadOpenedFiles() {
 
         var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-        if (workspace == null) {
+        //FIXME
+        if (workspace == null || true) {
             return;
         }
 

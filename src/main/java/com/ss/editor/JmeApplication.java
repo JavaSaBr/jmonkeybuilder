@@ -37,9 +37,11 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.filter.EditorFxaaFilter;
+import com.ss.editor.manager.AsyncEventManager;
 import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FxEventManager;
+import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
@@ -64,7 +66,6 @@ public class JmeApplication extends JmeToJfxApplication {
     /**
      * The empty job adapter for handling creating {@link LightProbe}.
      */
-    @NotNull
     private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<>() {
         public void done(@NotNull LightProbe result) {
         }
@@ -307,6 +308,8 @@ public class JmeApplication extends JmeToJfxApplication {
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .finishAndStart(() -> "Initialized jME application");
 
+        AsyncEventManager.getInstance()
+                .notify(new JmeContextCreatedEvent());
         //new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch")
         //        .start();
     }
