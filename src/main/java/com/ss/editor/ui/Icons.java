@@ -13,6 +13,14 @@ public interface Icons {
 
     @NotNull FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
+    class T {
+        static {
+            Thread.dumpStack();
+        }
+    }
+
+    T t = new T();
+
     @NotNull Image REMOVE_12 = ICON_MANAGER.getImage("/ui/icons/svg/horizontal-line-remove-button.svg", 12, false);
     @NotNull Image ADD_12 = ICON_MANAGER.getImage("/ui/icons/svg/add-plus-button.svg", 12, false);
 

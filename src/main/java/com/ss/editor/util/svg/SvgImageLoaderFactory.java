@@ -36,7 +36,7 @@ public class SvgImageLoaderFactory implements ImageLoaderFactory {
 
     @Override
     @FxThread
-    public ImageLoader createImageLoader(@NotNull InputStream input) throws IOException {
+    public ImageLoader createImageLoader(@NotNull InputStream input) {
         return new SvgImageLoader(input);
     }
 }

@@ -4,8 +4,11 @@ import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.ClasspathManager.Scope;
 import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
+import com.ss.editor.ui.event.impl.FxContextCreatedEvent;
+import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.network.NetworkConfig;
@@ -68,25 +71,18 @@ public class RemoteControlManager {
     private RemoteControlManager() {
         InitializeManager.valid(getClass());
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .start();
-
-        try {
-
-            if (Config.REMOTE_CONTROL_PORT == -1) {
-                return;
-            }
-
-            InitializationManager.getInstance()
-                    .addOnAfterCreateJmeContext(this::start);
-            AsyncEventManager.getInstance()
-                    .addEventHandler(CoreClassesScannedEvent.EVENT_TYPE, event -> createPacketRegistry());
-
-        } finally {
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                    .finish(() -> "Initialized RemoteControlManager");
+        if (Config.REMOTE_CONTROL_PORT == -1) {
+            return;
         }
+
+        CombinedAsyncEventHandlerBuilder.of(this::createPacketRegistry)
+                .add(CoreClassesScannedEvent.EVENT_TYPE)
+                .buildAndRegister();
+
+        CombinedAsyncEventHandlerBuilder.of(this::start)
+                .add(JmeContextCreatedEvent.EVENT_TYPE)
+                .add(FxContextCreatedEvent.EVENT_TYPE)
+                .buildAndRegister();
     }
 
     /**
@@ -102,7 +98,7 @@ public class RemoteControlManager {
     /**
      * Create a packet registry when the {@link ClasspathManager} will be initialized.
      */
-    @FromAnyThread
+    @BackgroundThread
     private synchronized void createPacketRegistry() {
 
         var classpathManager = ClasspathManager.getInstance();

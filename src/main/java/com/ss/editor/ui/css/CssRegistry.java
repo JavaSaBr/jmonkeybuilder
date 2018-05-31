@@ -107,6 +107,12 @@ public class CssRegistry {
 
             var scene = EditorUtil.getFxScene();
             var stylesheets = scene.getStylesheets();
+
+            // check if we have nothing new
+            if (stylesheets.size() == getAvailableCssFiles().size() + 1) {
+                return;
+            }
+
             stylesheets.clear();
 
             getAvailableCssFiles().runInReadLock(stylesheets::addAll);

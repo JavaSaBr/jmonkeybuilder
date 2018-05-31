@@ -31,6 +31,69 @@ public class AsyncEventManager {
      *
      * @author JavaSaBr
      */
+    public static class SingleAsyncEventHandlerBuilder {
+
+        /**
+         * Create a builder for the event type.
+         *
+         * @param eventType the event type.
+         * @return the new builder.
+         */
+        @FromAnyThread
+        public static @NotNull SingleAsyncEventHandlerBuilder of(@NotNull EventType<? extends Event> eventType) {
+            return new SingleAsyncEventHandlerBuilder(eventType);
+        }
+
+        /**
+         * The list of listened event types.
+         */
+        @NotNull
+        private final EventType<Event> eventType;
+
+        /**
+         * The result handler.
+         */
+        @NotNull
+        private final Array<Runnable> handlers;
+
+        public SingleAsyncEventHandlerBuilder(@NotNull EventType<? extends Event> eventType) {
+            this.handlers = ArrayFactory.newArray(Runnable.class);
+            this.eventType = ClassUtils.unsafeCast(eventType);
+        }
+
+        /**
+         * Add the handler.
+         *
+         * @param handler the handler.
+         * @return this builder.
+         */
+        @FromAnyThread
+        public @NotNull SingleAsyncEventHandlerBuilder add(@NotNull Runnable handler) {
+            handlers.add(handler);
+            return this;
+        }
+
+        @FromAnyThread
+        public void buildAndRegister() {
+
+            if (handlers.isEmpty()) {
+                throw new IllegalStateException("The list of handlers should not be empty.");
+            }
+
+            var resultHandler = new CombinedEventHandler(Array.of(eventType), handlers);
+            var eventManager = getInstance();
+
+            var eventTypesSet = resultHandler.eventTypesSet;
+            eventTypesSet.forEach(eventType ->
+                eventManager.addEventHandler(eventType, resultHandler));
+        }
+    }
+
+    /**
+     * Builder to build a combined async events handler.
+     *
+     * @author JavaSaBr
+     */
     public static class CombinedAsyncEventHandlerBuilder {
 
         /**
@@ -93,10 +156,10 @@ public class AsyncEventManager {
         public void buildAndRegister() {
 
             if (eventTypes.isEmpty()) {
-                throw new IllegalStateException("The list of listened events should not be null.");
+                throw new IllegalStateException("The list of listened events should not be empty.");
             }
 
-            var resultHandler = new CombinedEventHandler(eventTypes, handler);
+            var resultHandler = new CombinedEventHandler(eventTypes, Array.of(handler));
             var eventManager = getInstance();
 
             var eventTypesSet = resultHandler.eventTypesSet;
@@ -114,14 +177,14 @@ public class AsyncEventManager {
         private final Array<EventType<Event>> eventTypesSet;
 
         @NotNull
-        private final Runnable handler;
+        private final Array<Runnable> handlers;
 
-        public CombinedEventHandler(@NotNull Array<EventType<Event>> eventTypes, @NotNull Runnable handler) {
+        public CombinedEventHandler(@NotNull Array<EventType<Event>> eventTypes, @NotNull Array<Runnable> handlers) {
             this.eventTypes = ArrayFactory.newConcurrentStampedLockArray(EventType.class);
             this.eventTypes.addAll(eventTypes);
             this.eventTypesSet = ArrayFactory.newArraySet(EventType.class);
             this.eventTypesSet.addAll(eventTypes);
-            this.handler = handler;
+            this.handlers = handlers;
         }
 
         @Override
@@ -133,7 +196,7 @@ public class AsyncEventManager {
                 return;
             }
 
-            handler.run();
+            handlers.forEach(Runnable::run);
 
             var eventManager = getInstance();
 
@@ -157,7 +220,6 @@ public class AsyncEventManager {
             ConcurrentArray<EventHandler<? extends Event>>> eventHandlers;
 
     public AsyncEventManager() {
-        InitializeManager.valid(getClass());
         this.eventHandlers = DictionaryFactory.newConcurrentAtomicObjectDictionary();
     }
 

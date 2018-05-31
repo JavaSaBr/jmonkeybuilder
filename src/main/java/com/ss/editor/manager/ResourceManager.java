@@ -122,9 +122,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
-            .start();
-
         this.assetCacheTable = DictionaryFactory.newConcurrentAtomicObjectDictionary();
         this.additionalEnvs = ArrayFactory.newConcurrentStampedLockArray(Path.class);
         this.watchKeys = ArrayFactory.newConcurrentStampedLockArray(WatchKey.class);
@@ -150,9 +147,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
                 .add(CoreClassesScannedEvent.EVENT_TYPE)
                 .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
                 .buildAndRegister();
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
-                .finish(() -> "Initialized ResourceManager");
 
         LOGGER.info("initialized.");
     }

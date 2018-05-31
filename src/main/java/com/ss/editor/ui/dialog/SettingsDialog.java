@@ -72,7 +72,7 @@ public class SettingsDialog extends EditorDialog {
     private Label messageLabel;
 
     public SettingsDialog() {
-        FXUtils.addClassTo(getContainer(), CssClasses.SETTINGS_DIALOG);
+        FxUtils.addClass(getContainer(), CssClasses.SETTINGS_DIALOG);
         validate();
     }
 

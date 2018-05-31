@@ -2,7 +2,6 @@ package com.ss.editor.test.internal;
 
 import com.ss.editor.JfxApplication;
 import com.ss.editor.config.CommandLineConfig;
-import com.ss.editor.manager.InitializationManager;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;

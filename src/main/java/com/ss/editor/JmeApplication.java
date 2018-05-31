@@ -38,11 +38,11 @@ import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.filter.EditorFxaaFilter;
 import com.ss.editor.manager.AsyncEventManager;
-import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
@@ -82,36 +82,6 @@ public class JmeApplication extends JmeToJfxApplication {
     @Deprecated
     @FromAnyThread
     public static @NotNull JmeApplication getInstance() {
-        return JME_APPLICATION;
-    }
-
-    /**
-     * Prepare to start editor.
-     *
-     * @return the editor
-     */
-    @JmeThread
-    static @NotNull JmeApplication prepareToStart() {
-
-        if (Config.DEV_DEBUG) {
-            System.err.println("config was loaded.");
-        }
-
-        try {
-
-            var config = EditorConfig.getInstance();
-            var settings = config.getSettings();
-
-            JME_APPLICATION.setSettings(settings);
-            JME_APPLICATION.setShowSettings(false);
-            JME_APPLICATION.setDisplayStatView(false);
-            JME_APPLICATION.setDisplayFps(false);
-
-        } catch (Exception e) {
-            LOGGER.warning(e);
-            throw new RuntimeException(e);
-        }
-
         return JME_APPLICATION;
     }
 
@@ -183,8 +153,17 @@ public class JmeApplication extends JmeToJfxApplication {
 
     private JmeApplication() {
         EditorUtil.setJmeApplication(this);
+
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
+
+        var config = EditorConfig.getInstance();
+        var settings = config.getSettings();
+
+        setDisplayFps(false);
+        setSettings(settings);
+        setShowSettings(false);
+        setDisplayStatView(false);
     }
 
     /**
@@ -229,9 +208,6 @@ public class JmeApplication extends JmeToJfxApplication {
     public void simpleInitApp() {
         super.simpleInitApp();
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
-                .start();
-
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(10);
 
@@ -253,7 +229,9 @@ public class JmeApplication extends JmeToJfxApplication {
         var audioRenderer = getAudioRenderer();
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
-        viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
+        var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+
+        viewPort.setBackgroundColor(UiUtils.from(theme.getBackgroundColor()));
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, Integer.MAX_VALUE);
 
         defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -300,18 +278,13 @@ public class JmeApplication extends JmeToJfxApplication {
         createLightProbes();
         stateManager.detach(stateManager.getState(DebugKeysAppState.class));
 
-        var initializationManager = InitializationManager.getInstance();
-        initializationManager.onAfterCreateJmeContext();
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
-                .finishAndStart(() -> "Initialized jME simpleInit() phase");
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
-                .finishAndStart(() -> "Initialized jME application");
+                .finishAndStart(() -> "initializing of jME application");
+
+        LOGGER.info("initialized.");
 
         AsyncEventManager.getInstance()
                 .notify(new JmeContextCreatedEvent());
-        //new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch")
-        //        .start();
     }
 
     /**

@@ -58,11 +58,12 @@ public class PluginManager {
     private PluginManager() {
         InitializeManager.valid(getClass());
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .start();
-
         this.pluginSystem = newBasePluginSystem(getClass().getClassLoader());
         this.pluginSystem.setAppVersion(Config.APP_VERSION);
+
+        if(true) {
+            return;
+        }
 
         var folderInUserHome = Config.getAppFolderInUserHome();
         var embeddedPath = System.getProperty("editor.embedded.plugins.path2");
@@ -100,15 +101,13 @@ public class PluginManager {
 
         pluginSystem.initialize();
 
+        /*
         var initManager = InitializationManager.getInstance();
         initManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
         initManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
         initManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
         initManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
-        initManager.addOnFinishLoading(this::onFinishLoading);
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .finish(() -> "Initialized PluginManager");
+        initManager.addOnFinishLoading(this::onFinishLoading);*/
     }
 
     /**

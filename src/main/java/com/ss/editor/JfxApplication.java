@@ -24,8 +24,11 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.*;
+import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
+import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.task.CheckNewVersionTask;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
@@ -35,19 +38,20 @@ import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.FxSceneCreatedEvent;
-import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
+import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.TimeTracker;
+import com.ss.editor.util.svg.SvgImageLoaderFactory;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerLevel;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.logging.impl.FolderFileListener;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.ArrayUtils;
+import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -56,6 +60,7 @@ import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -64,6 +69,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.Configuration;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -128,20 +134,19 @@ public class JfxApplication extends Application {
 
         CommandLineConfig.args(args);
 
-        JmeToJfxApplication application;
-        try {
-            application = JmeApplication.prepareToStart();
-        } catch (Throwable e) {
-            printError(e);
-            System.exit(-1);
-            return;
-        }
-
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
-                .finishAndStart(() -> "Initialized configuration");
+                .finishAndStart(() -> "initialized configuration");
+
+        new EditorThread(new ThreadGroup("JavaFX"),
+                JfxApplication::start, "JavaFX Launch").start();
+
+        CombinedAsyncEventHandlerBuilder.of(JfxApplication::createSceneProcessor)
+                .add(JmeContextCreatedEvent.EVENT_TYPE)
+                .add(FxContextCreatedEvent.EVENT_TYPE)
+                .add(ImageSystemInitializedEvent.EVENT_TYPE)
+                .buildAndRegister();
 
         InitializeManager.register(ExecutorManager.class);
-        InitializeManager.register(AsyncEventManager.class);
         InitializeManager.register(FxEventManager.class);
         InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
@@ -157,16 +162,17 @@ public class JfxApplication extends Application {
                 .notify(new ManagersInitializedEvent());
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
-                .finish(() -> "Initialized all managers");
+                .finish(() -> "initializing of all managers");
 
         new EditorThread(new ThreadGroup("LWJGL"),
-                () -> startJmeApplication(application), "LWJGL Render").start();
-        new EditorThread(new ThreadGroup("JavaFX"), JfxApplication::start, "JavaFX Launch")
-                .start();
+                JfxApplication::startJmeApplication, "LWJGL Render").start();
     }
 
     @FxThread
     private static void configureLogger() {
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .start();
 
         // disable the standard logger
         if (!Config.DEV_DEBUG) {
@@ -184,25 +190,27 @@ public class JfxApplication extends Application {
         var logFolder = Config.getFolderForLog();
 
         if (!Files.exists(logFolder)) {
-            run(() -> createDirectories(logFolder));
+            FileUtils.createDirectories(logFolder);
         }
 
         if (!LoggerLevel.DEBUG.isEnabled()) {
             LoggerManager.addListener(new FolderFileListener(logFolder));
         }
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finish(() -> "configuring of the logger");
     }
 
     /**
      * Start the new jME application.
-     *
-     * @param application the new jME application.
      */
     @JmeThread
-    private static void startJmeApplication(@NotNull JmeToJfxApplication application) {
+    private static void startJmeApplication() {
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .start();
 
+        var application = JmeApplication.getInstance();
         application.start();
 
         var context = application.getContext();
@@ -246,26 +254,40 @@ public class JfxApplication extends Application {
         };
     }
 
+    @BackgroundThread
+    private static void createSceneProcessor() {
+        ExecutorManager.getInstance()
+                .addFxTask(JfxApplication::createSceneProcessorImpl);
+    }
+
+    @FxThread
+    private static void createSceneProcessorImpl() {
+
+        var jfxApplication = getInstance();
+        var jmeApplication = JmeApplication.getInstance();
+
+        var scene = jfxApplication.getScene();
+        var stage = jfxApplication.getStage();
+
+        var sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
+        sceneProcessor.setEnabled(false);
+        sceneProcessor.setTransferMode(ON_CHANGES);
+
+        jfxApplication.sceneProcessor = sceneProcessor;
+
+        stage.focusedProperty()
+                .addListener(makeFocusedListener());
+
+        ExecutorManager.getInstance()
+                .addBackgroundTask(scene::notifyFinishBuild);
+    }
+
     /**
      * Start.
      */
     @FromAnyThread
     public static void start() {
         launch();
-    }
-
-    @FromAnyThread
-    private static void printError(@NotNull Throwable throwable) {
-        throwable.printStackTrace();
-
-        var userHome = System.getProperty("user.home");
-        var fileName = "jmonkeybuilder-error.log";
-
-        try (var out = new PrintStream(newOutputStream(Paths.get(userHome, fileName)))) {
-            throwable.printStackTrace(out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -337,29 +359,18 @@ public class JfxApplication extends Application {
 
     @Override
     @FxThread
-    public void start(@NotNull Stage stage) throws Exception {
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
-                .finish(() -> "Initialized jFX thread");
-
+    public void start(@NotNull Stage stage) {
         JfxApplication.instance = this;
         this.stage = stage;
 
         addWindow(stage);
         try {
 
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
                     .start();
-
-            //LogView.getInstance();
-
-            //SvgImageLoaderFactory.install();
-            //ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
 
             var icons = stage.getIcons();
             icons.add(new Image("/ui/icons/app/256x256.png"));
-            icons.add(new Image("/ui/icons/app/128x128.png"));
-            icons.add(new Image("/ui/icons/app/96x96.png"));
             icons.add(new Image("/ui/icons/app/64x64.png"));
             icons.add(new Image("/ui/icons/app/48x48.png"));
             icons.add(new Image("/ui/icons/app/32x32.png"));
@@ -381,21 +392,22 @@ public class JfxApplication extends Application {
                 stage.centerOnScreen();
             }
 
-            stage.setAlwaysOnTop(true);
+            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finishAndStart(() -> "initialized of the FX stage");
 
             ObservableUtils.onChangeIf(stage.widthProperty(), number -> !stage.isMaximized(),
                     number -> config.setScreenWidth(number.intValue()));
-
             ObservableUtils.onChangeIf(stage.heightProperty(), number -> !stage.isMaximized(),
                     number -> config.setScreenHeight(number.intValue()));
 
             ObservableUtils.onChange(stage.maximizedProperty(), config::setMaximized);
 
+            SingleAsyncEventHandlerBuilder.of(FxSceneAttachedEvent.EVENT_TYPE)
+                    .add(this::initializeImageSystem)
+                    .buildAndRegister();
+
             ExecutorManager.getInstance()
                     .addBackgroundTask(this::buildScene);
-
-            TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_4)
-                    .finishAndStart(() -> "Initialized FX stage");
 
         } catch (Throwable e) {
             LOGGER.error(this, e);
@@ -403,9 +415,33 @@ public class JfxApplication extends Application {
         }
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
-                .finish(() -> "Initialized jFX application");
+                .finish(() -> "initializing of jFX application");
         TimeTracker.getStartupTracker()
-                .finish(() -> "Initialized editor");
+                .finish(() -> "showing of the main window editor");
+    }
+
+    /**
+     * Initialize the image system.
+     */
+    @BackgroundThread
+    private void initializeImageSystem() {
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
+
+            SvgImageLoaderFactory.install();
+            try {
+                ImageIO.read(getClass().getResourceAsStream("/ui/icons/svg/picture.svg"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            Icons.REMOVE_12.hashCode();
+
+            LOGGER.info("image system is initialized.");
+
+            AsyncEventManager.getInstance()
+                    .notify(new ImageSystemInitializedEvent());
+        });
     }
 
     @Override
@@ -450,6 +486,9 @@ public class JfxApplication extends Application {
 
         this.scene = EditorFxSceneBuilder.build(notNull(stage));
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
+                .finishAndStart(() -> "creating of the FX scene");
+
         AsyncEventManager.getInstance()
                 .notify(new FxSceneCreatedEvent());
 
@@ -466,22 +505,11 @@ public class JfxApplication extends Application {
             editorPlugin.register(SettingsProviderRegistry.getInstance());
         });
 
-        var scene = getScene();
-
-        var jmeApplication = JmeApplication.getInstance();
-        var executor = JmeThreadExecutor.getInstance();
-        executor.addToExecute(() -> createSceneProcessor(scene, jmeApplication));
-
-        JmeFilePreviewManager.getInstance();
-
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.APPLICATION_LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
 
         var executorManager = ExecutorManager.getInstance();
         executorManager.addBackgroundTask(new CheckNewVersionTask());
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .finishAndStart(() -> "Created FX scene");
 
         var editorConfig = EditorConfig.getInstance();
         if (editorConfig.isAnalyticsQuestion()) {
@@ -504,21 +532,6 @@ public class JfxApplication extends Application {
 
             confirmDialog.show(stage);
         });
-    }
-
-    @FxThread
-    private void createSceneProcessor(@NotNull EditorFxScene scene, @NotNull JmeApplication jmeApplication) {
-
-        var sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
-        sceneProcessor.setEnabled(false);
-        sceneProcessor.setTransferMode(ON_CHANGES);
-
-        this.sceneProcessor = sceneProcessor;
-
-        var stage = notNull(getStage());
-        stage.focusedProperty().addListener(makeFocusedListener());
-
-        Platform.runLater(scene::notifyFinishBuild);
     }
 
     /**

@@ -5,6 +5,7 @@ import com.eclipsesource.json.JsonObject;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.plugin.Version;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.VarTable;
@@ -117,7 +118,7 @@ public final class Config {
     /**
      * The flag to enable startup debug mode.
      */
-    public static boolean DEV_DEBUG_STARTUP;
+    public static boolean DEV_DEBUG_STARTUP = true;
 
     /**
      * The flag to enable PBR render.
@@ -130,6 +131,9 @@ public final class Config {
     public static boolean ENABLE_3D;
 
     static {
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .start();
 
         var vars = VarTable.newInstance();
 
@@ -154,6 +158,10 @@ public final class Config {
 
         PROJECT_PATH = Utils.getRootFolderFromClass(JmeApplication.class)
                 .toString();
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finish(() -> "loading of the root config");
+
     }
 
     /**

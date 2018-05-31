@@ -13,6 +13,7 @@ import com.jme3.system.AppSettings;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.Utils;
@@ -513,6 +514,9 @@ public final class EditorConfig implements AssetEventListener {
      */
     private void init() {
 
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .start();
+
         var prefs = Preferences.userNodeForPackage(JmeApplication.class);
         var stamp = settings.writeLock();
         try {
@@ -573,6 +577,9 @@ public final class EditorConfig implements AssetEventListener {
         } catch (RuntimeException e) {
             LOGGER.warning(e);
         }
+
+        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
+                .finish(() -> "loading of the editor config");
     }
 
     /**

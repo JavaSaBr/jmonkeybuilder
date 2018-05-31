@@ -71,9 +71,6 @@ public class ExecutorManager {
     private ExecutorManager() {
         InitializeManager.valid(getClass());
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .start();
-
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.backgroundTaskExecutors = new EditorTaskExecutor[PROP_BACKGROUND_TASK_EXECUTORS];
 
@@ -85,9 +82,6 @@ public class ExecutorManager {
         this.fxEditorTaskExecutor = new FxEditorTaskExecutor();
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .finish(() -> "Initialized ExecutorManager");
 
         LOGGER.info("initialized.");
     }

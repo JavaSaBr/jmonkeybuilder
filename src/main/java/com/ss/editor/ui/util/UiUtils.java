@@ -492,8 +492,12 @@ public abstract class UiUtils {
      * @return the jme color
      */
     @FxThread
-    public static @Nullable ColorRGBA from(@Nullable final Color color) {
-        if (color == null) return null;
+    public static @Nullable ColorRGBA from(@Nullable Color color) {
+
+        if (color == null) {
+            return null;
+        }
+
         return new ColorRGBA((float) color.getRed(), (float) color.getGreen(),
                 (float) color.getBlue(), (float) color.getOpacity());
     }

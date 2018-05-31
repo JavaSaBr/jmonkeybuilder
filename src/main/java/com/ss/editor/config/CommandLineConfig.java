@@ -12,19 +12,14 @@ import java.util.Map;
  */
 public class CommandLineConfig {
 
-    @NotNull
     public static final String PREF_SERVER_API_PORT = "Server.api.port";
-
-    @NotNull
     public static final String PREF_SERVER_API_VERSION = "Server.api.version";
-
-    @NotNull
     public static final String PREF_EDITOR_ASSET_FOLDER = "Editor.assetFolder";
 
     /**
      * @param args the args
      */
-    public static void args(final String[] args) {
+    public static void args(@NotNull String[] args) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
 
@@ -34,13 +29,13 @@ public class CommandLineConfig {
                 continue;
             }
 
-            final String[] values = arg.split("=");
+            var values = arg.split("=");
             if (values.length != 2) {
                 continue;
             }
 
-            final String name = values[0];
-            final String value = values[1];
+            var name = values[0];
+            var value = values[1];
 
             if ("Dev.debug".equals(name)) {
                 Config.DEV_DEBUG = Boolean.parseBoolean(value);
@@ -63,7 +58,7 @@ public class CommandLineConfig {
             }
         }
 
-        final Map<String, String> env = System.getenv();
+        var env = System.getenv();
 
         if (env.containsKey(PREF_SERVER_API_VERSION)) {
             final int version = Integer.parseInt(env.get(PREF_SERVER_API_VERSION));

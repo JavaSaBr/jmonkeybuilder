@@ -138,9 +138,6 @@ public class ClasspathManager {
     private ClasspathManager() {
         InitializeManager.valid(getClass());
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .start();
-
         this.coreScanner = ClassPathScannerFactory.newDefaultScanner();
         this.librariesLoader = new AtomicReference<>();
         this.classesLoader = new AtomicReference<>();
@@ -154,9 +151,6 @@ public class ClasspathManager {
                 .add(CoreClassesScannedEvent.EVENT_TYPE)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .buildAndRegister();
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .finish(() -> "Initialized ClasspathManager");
 
         LOGGER.info("initialized.");
     }
@@ -324,8 +318,10 @@ public class ClasspathManager {
                     assetManager.removeClassLoader(currentLoader));
         }
 
-        EXECUTOR_MANAGER.addJmeTask(() ->
-                assetManager.addClassLoader(newLoader));
+        if (newLoader != null) {
+            EXECUTOR_MANAGER.addJmeTask(() ->
+                    assetManager.addClassLoader(newLoader));
+        }
     }
 
     /**
@@ -347,8 +343,10 @@ public class ClasspathManager {
                     assetManager.removeClassLoader(currentLoader));
         }
 
-        EXECUTOR_MANAGER.addJmeTask(() ->
-                assetManager.addClassLoader(newLoader));
+        if (newLoader != null) {
+            EXECUTOR_MANAGER.addJmeTask(() ->
+                    assetManager.addClassLoader(newLoader));
+        }
     }
 
     /**

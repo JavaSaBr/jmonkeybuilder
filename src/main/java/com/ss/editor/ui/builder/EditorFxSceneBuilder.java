@@ -1,9 +1,12 @@
 package com.ss.editor.ui.builder;
 
+import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.AsyncEventManager;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.ExecutorManager;
@@ -17,9 +20,7 @@ import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.EventRedirector;
-import com.ss.editor.ui.event.impl.CssAppliedEvent;
-import com.ss.editor.ui.event.impl.FxContextCreatedEvent;
-import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
+import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -27,6 +28,7 @@ import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Group;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,14 +50,17 @@ public class EditorFxSceneBuilder {
     @FxThread
     public static @NotNull EditorFxScene build(@NotNull Stage window) {
 
+        var editorConfig = EditorConfig.getInstance();
+        var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+
         var root = new Group();
         var scene = new EditorFxScene(root);
-        scene.setFill(TRANSPARENT);
+        scene.setFill(theme.getBackgroundColor());
         scene.setRoot(root);
         scene.incrementLoading();
 
         CombinedAsyncEventHandlerBuilder.of(() -> build(scene, window))
-                .add(JmeContextCreatedEvent.EVENT_TYPE)
+                .add(FxSceneCreatedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
         CombinedAsyncEventHandlerBuilder.of(() -> attachScene(window, scene))
@@ -75,8 +80,16 @@ public class EditorFxSceneBuilder {
      */
     @BackgroundThread
     private static void attachScene(@NotNull Stage window, @NotNull EditorFxScene scene) {
-        ExecutorManager.getInstance()
-                .addFxTask(() -> window.setScene(scene));
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
+
+            window.setScene(scene);
+
+            LOGGER.info("The main scene is attached.");
+
+            AsyncEventManager.getInstance()
+                    .notify(new FxSceneAttachedEvent());
+        });
     }
 
     /**
@@ -120,23 +133,17 @@ public class EditorFxSceneBuilder {
         LOGGER.info("created the main components.");
 
         ExecutorManager.getInstance()
-                .addFxTask(() -> finishBuildingScene(scene, container, barComponent, leftSplitContainer));
+                .addFxTask(() -> finishBuildingScene(container, barComponent, leftSplitContainer));
     }
 
     @FxThread
     private static void finishBuildingScene(
-            @NotNull EditorFxScene scene,
             @NotNull StackPane container,
             @NotNull EditorMenuBarComponent barComponent,
             @NotNull GlobalLeftToolSplitPane leftSplitContainer
     ) {
 
         FxUtils.addChild(container, new VBox(barComponent, leftSplitContainer));
-
-        scene.decrementLoading();
-
-        ExecutorManager.getInstance()
-                .addBackgroundTask(scene::notifyFinishBuild);
 
         LOGGER.info("put main components to the main scene.");
 

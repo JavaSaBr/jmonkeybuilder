@@ -9,10 +9,12 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.file.reader.DdsReader;
 import com.ss.editor.file.reader.TgaReader;
+import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
+import com.ss.editor.ui.event.impl.FxContextCreatedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
@@ -51,7 +53,6 @@ public class JavaFxImageManager {
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFxImageManager.class);
 
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-    private static final InitializationManager INITIALIZATION_MANAGER = InitializationManager.getInstance();
 
     private static final String PREVIEW_CACHE_FOLDER = "preview-cache";
 
@@ -129,21 +130,15 @@ public class JavaFxImageManager {
     private JavaFxImageManager() {
         InitializeManager.valid(getClass());
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .start();
-
         var appFolder = Config.getAppFolderInUserHome();
 
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
         this.smallImageCache = DictionaryFactory.newIntegerDictionary();
 
-        INITIALIZATION_MANAGER.addOnFinishLoading(() -> {
-            FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent);
-            FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent);
-        });
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_5)
-                .finish(() -> "Initialized JavaFxImageManager");
+        SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
+                .add(() -> FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent))
+                .add(() -> FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent))
+                .buildAndRegister();
 
         LOGGER.info("initialized.");
     }

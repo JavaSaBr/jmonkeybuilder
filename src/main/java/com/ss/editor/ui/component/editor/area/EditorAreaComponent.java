@@ -62,7 +62,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final String KEY_EDITOR = "editor";
 
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
-    private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
     private static final WorkspaceManager WORKSPACE_MANAGER = WorkspaceManager.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
@@ -298,9 +297,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @FxThread
     private void processCreateFile(@NotNull RequestedCreateFileEvent event) {
 
+        var registry = FileCreatorRegistry.getInstance();
         var file = event.getFile();
         var description = event.getDescription();
-        var fileCreator = CREATOR_REGISTRY.newCreator(description, file);
+        var fileCreator = registry.newCreator(description, file);
 
         if (fileCreator != null) {
             fileCreator.start(file);
@@ -574,14 +574,17 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     @Override
-    @FxThread
+    @BackgroundThread
     public void notifyFinishBuild() {
-        setIgnoreOpenedFiles(true);
-        try {
-            loadOpenedFiles();
-        } finally {
-            setIgnoreOpenedFiles(false);
-        }
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
+            setIgnoreOpenedFiles(true);
+            try {
+                loadOpenedFiles();
+            } finally {
+                setIgnoreOpenedFiles(false);
+            }
+        });
     }
 
     /**
@@ -591,8 +594,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void loadOpenedFiles() {
 
         var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-        //FIXME
-        if (workspace == null || true) {
+
+        if (workspace == null) {
             return;
         }
 

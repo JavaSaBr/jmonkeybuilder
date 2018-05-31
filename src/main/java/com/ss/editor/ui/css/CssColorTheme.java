@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public enum CssColorTheme {
-    LIGHT("/ui/css/light-color.css", "White", Color.web("#5d626e")),
-    SHADOW("/ui/css/shadow-color.css", "Shadow", Color.web("#c8d2e1")),
-    DARK("/ui/css/dark-color.css", "Dark", Color.web("#c8dae2")),;
+    LIGHT("/ui/css/light-color.css", "White", Color.web("#5d626e"), Color.web("#ffffff")),
+    SHADOW("/ui/css/shadow-color.css", "Shadow", Color.web("#c8d2e1"), Color.web("#404552")),
+    DARK("/ui/css/dark-color.css", "Dark", Color.web("#c8dae2"), Color.web("#3c3f41")),;
 
     @NotNull
     public static final CssColorTheme[] VALUES = values();
@@ -29,6 +29,12 @@ public enum CssColorTheme {
     private final Color iconColor;
 
     /**
+     * The background color.
+     */
+    @NotNull
+    private final Color backgroundColor;
+
+    /**
      * The css file.
      */
     @NotNull
@@ -40,13 +46,21 @@ public enum CssColorTheme {
     @NotNull
     private final String name;
 
-    CssColorTheme(@NotNull final String cssFile, @NotNull final String name, @NotNull final Color iconColor) {
+    CssColorTheme(
+            @NotNull String cssFile,
+            @NotNull String name,
+            @NotNull Color iconColor,
+            @NotNull Color backgroundColor
+    ) {
         this.cssFile = cssFile;
         this.name = name;
         this.iconColor = iconColor;
+        this.backgroundColor = backgroundColor;
     }
 
     /**
+     * Get the name of this theme.
+     *
      * @return the name of this theme.
      */
     @FromAnyThread
@@ -55,6 +69,8 @@ public enum CssColorTheme {
     }
 
     /**
+     * Get the css file.
+     *
      * @return the css file.
      */
     @FromAnyThread
@@ -63,6 +79,8 @@ public enum CssColorTheme {
     }
 
     /**
+     * Get the icon color.
+     *
      * @return the icon color.
      */
     @FromAnyThread
@@ -71,6 +89,18 @@ public enum CssColorTheme {
     }
 
     /**
+     * Get the background color.
+     *
+     * @return the background color.
+     */
+    @FromAnyThread
+    public @NotNull Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    /**
+     * Return true if this theme is dark.
+     *
      * @return true if this theme is dark.
      */
     @FromAnyThread

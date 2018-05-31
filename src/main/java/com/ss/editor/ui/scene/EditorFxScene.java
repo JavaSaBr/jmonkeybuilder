@@ -266,7 +266,11 @@ public class EditorFxScene extends Scene {
      */
     @BackgroundThread
     public void notifyFinishBuild() {
+
         UiUtils.fillComponents(getComponents(), getContainer())
                 .forEach(ScreenComponent::notifyFinishBuild);
+
+        ExecutorManager.getInstance()
+                .addFxTask(this::decrementLoading);
     }
 }

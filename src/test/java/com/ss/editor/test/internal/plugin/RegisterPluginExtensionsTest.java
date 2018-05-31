@@ -1,7 +1,6 @@
 package com.ss.editor.test.internal.plugin;
 
 import com.jme3.post.filters.FXAAFilter;
-import com.ss.editor.manager.InitializationManager;
 import com.ss.editor.plugin.api.RenderFilterExtension;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;

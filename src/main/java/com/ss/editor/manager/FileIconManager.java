@@ -47,9 +47,6 @@ public class FileIconManager {
 
     static {
 
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
-                .start();
-
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_JPEG, "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_JPG, "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_TIFF, "image-tiff");
@@ -148,9 +145,6 @@ public class FileIconManager {
         this.imageCache = DictionaryFactory.newIntegerDictionary();
         this.extensionToUrl = DictionaryFactory.newObjectDictionary();
         this.originalImageCache = DictionaryFactory.newObjectDictionary();
-
-        TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_6)
-                .finish(() -> "Initialized FileIconManager");
 
         LOGGER.info("initialized.");
     }

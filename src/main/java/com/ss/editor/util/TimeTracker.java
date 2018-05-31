@@ -3,6 +3,7 @@ package com.ss.editor.util;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerLevel;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,10 @@ import java.util.function.Supplier;
 public class TimeTracker {
 
     private static final Logger LOGGER = LoggerManager.getLogger(TimeTracker.class);
+
+    static {
+        LOGGER.setEnabled(LoggerLevel.INFO, true);
+    }
 
     public static final int STARTPUL_LEVEL_1 = 0;
     public static final int STARTPUL_LEVEL_2 = 1;

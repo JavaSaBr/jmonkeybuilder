@@ -595,8 +595,8 @@
  ******************************************************************************/
 
 .settings-dialog {
-    -fx-min-height: 500px;
-    -fx-min-width: 800px;
+    -fx-min-height: 400px;
+    -fx-min-width: 700px;
 }
 
 .settings-dialog-container {
