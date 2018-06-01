@@ -2,20 +2,24 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.common.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.ss.editor.JmeApplication;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
+import com.ss.editor.ui.event.impl.EditorFinishedLoadingEvent;
 import com.ss.editor.ui.event.impl.PluginsLoadedEvent;
+import com.ss.editor.ui.event.impl.PluginsRegisteredResourcesEvent;
 import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.plugin.ConfigurablePluginSystem;
 import com.ss.rlib.common.plugin.exception.PreloadPluginException;
 import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 /**
@@ -42,31 +47,58 @@ public class PluginManager {
 
         if (instance == null) {
             instance = new PluginManager();
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsLoadedEvent());
         }
 
         return instance;
     }
 
+    @NotNull
+    private final CountDownLatch waiter;
+
     /**
      * The plugin system.
      */
-    @NotNull
-    private final ConfigurablePluginSystem pluginSystem;
+    @Nullable
+    private volatile ConfigurablePluginSystem pluginSystem;
 
     private PluginManager() {
         InitializeManager.valid(getClass());
 
-        this.pluginSystem = newBasePluginSystem(getClass().getClassLoader());
-        this.pluginSystem.setAppVersion(Config.APP_VERSION);
+        this.waiter = new CountDownLatch(1);
 
-        if(true) {
-            return;
-        }
+        ExecutorManager.getInstance()
+                .addBackgroundTask(this::loadPluginsInBackground);
+
+        SingleAsyncEventHandlerBuilder.of(EditorFinishedLoadingEvent.EVENT_TYPE)
+                .add(this::onFinishLoading);
+
+        /*
+        var initManager = InitializationManager.getInstance();
+        initManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
+        initManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
+        initManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
+        initManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
+        initManager.addOnFinishLoading(this::onFinishLoading);*/
+    }
+
+    /**
+     * Get the plugin system.
+     *
+     * @return the plugin system.
+     */
+    @FromAnyThread
+    private @NotNull ConfigurablePluginSystem getPluginSystem() {
+        return ObjectUtils.notNull(pluginSystem);
+    }
+
+    @BackgroundThread
+    private void loadPluginsInBackground() {
+
+        var pluginSystem = newBasePluginSystem(getClass().getClassLoader());
+        pluginSystem.setAppVersion(Config.APP_VERSION);
 
         var folderInUserHome = Config.getAppFolderInUserHome();
-        var embeddedPath = System.getProperty("editor.embedded.plugins.path2");
+        var embeddedPath = System.getProperty("editor.embedded.plugins.path");
 
         if (embeddedPath != null && Files.exists(Paths.get(embeddedPath))) {
             var embeddedPluginPath = Paths.get(embeddedPath);
@@ -101,13 +133,17 @@ public class PluginManager {
 
         pluginSystem.initialize();
 
-        /*
-        var initManager = InitializationManager.getInstance();
-        initManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
-        initManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
-        initManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
-        initManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
-        initManager.addOnFinishLoading(this::onFinishLoading);*/
+        this.pluginSystem = pluginSystem;
+
+        waiter.countDown();
+
+        var eventManager = AsyncEventManager.getInstance();
+        eventManager.notify(new PluginsLoadedEvent());
+
+        handlePlugins(editorPlugin ->
+                editorPlugin.register(ResourceManager.getInstance()));
+
+        eventManager.notify(new PluginsRegisteredResourcesEvent());
     }
 
     /**
@@ -183,8 +219,12 @@ public class PluginManager {
     /**
      * Do some things before when the editor is ready to work.
      */
-    @FxThread
+    @BackgroundThread
     private void onFinishLoading() {
+
+        Utils.run(waiter, CountDownLatch::await);
+
+        var pluginSystem = getPluginSystem();
         pluginSystem.getPlugins().stream()
                 .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
@@ -227,7 +267,7 @@ public class PluginManager {
 
     @FromAnyThread
     private void handlePlugins(@NotNull Consumer<EditorPlugin> consumer) {
-        pluginSystem.getPlugins().stream()
+        getPluginSystem().getPlugins().stream()
                 .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(consumer);

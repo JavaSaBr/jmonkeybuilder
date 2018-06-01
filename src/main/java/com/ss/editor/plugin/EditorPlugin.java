@@ -1,10 +1,12 @@
 package com.ss.editor.plugin;
 
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.FileIconManager;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
@@ -34,11 +36,20 @@ public class EditorPlugin extends BasePlugin {
     }
 
     /**
+     * Register this plugin's specific resources in the manager.
+     *
+     * @param resourceManager the resource manager.
+     */
+    @BackgroundThread
+    public void register(@NotNull ResourceManager resourceManager) {
+    }
+
+    /**
      * Register this plugin's own CSS files.
      *
      * @param registry the CSS registry.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull CssRegistry registry) {
     }
 
@@ -173,7 +184,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @FxThread
+    @BackgroundThread
     public void onFinishLoading(@NotNull PluginSystem pluginSystem) {
     }
 

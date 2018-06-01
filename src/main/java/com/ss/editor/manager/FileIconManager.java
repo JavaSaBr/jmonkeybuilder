@@ -9,7 +9,6 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.TimeTracker;
 import com.ss.editor.util.svg.SvgImageLoader;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -265,7 +264,6 @@ public class FileIconManager {
 
         return getImage(url, size);
     }
-
 
     /**
      * Get an image by the URL.

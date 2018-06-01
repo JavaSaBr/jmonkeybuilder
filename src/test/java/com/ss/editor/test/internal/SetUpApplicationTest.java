@@ -31,8 +31,9 @@ public class SetUpApplicationTest {
         try {
 
             final Path asset = Files.createTempDirectory("asset");
-            final InitializationManager initializationManager = InitializationManager.getInstance();
-            initializationManager.addOnFinishLoading(COUNT_DOWN_LATCH::countDown);
+            //FIXME
+            //final InitializationManager initializationManager = InitializationManager.getInstance();
+            //initializationManager.addOnFinishLoading(COUNT_DOWN_LATCH::countDown);
 
             JfxApplication.main(ArrayFactory.toArray(
                     CommandLineConfig.PREF_EDITOR_ASSET_FOLDER + "=" + asset.toString()));

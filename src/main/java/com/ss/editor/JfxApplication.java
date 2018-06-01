@@ -6,10 +6,6 @@ import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import static com.ss.rlib.common.util.Utils.run;
-import static java.nio.file.Files.createDirectories;
-import static java.nio.file.Files.newOutputStream;
-import com.jme3.jfx.injfx.JmeToJfxApplication;
 import com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.jme3.util.LWJGLBufferAllocator;
 import com.ss.editor.analytics.google.GAEvent;
@@ -22,24 +18,15 @@ import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
-import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.*;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
-import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.task.CheckNewVersionTask;
-import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.builder.EditorFxSceneBuilder;
-import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
-import com.ss.editor.ui.component.creator.FileCreatorRegistry;
-import com.ss.editor.ui.component.editor.EditorRegistry;
-import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.OpenGLVersion;
@@ -60,7 +47,6 @@ import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -71,9 +57,7 @@ import org.lwjgl.system.Configuration;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
@@ -393,7 +377,7 @@ public class JfxApplication extends Application {
             }
 
             TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_3)
-                .finishAndStart(() -> "initialized of the FX stage");
+                    .finishAndStart(() -> "initialized of the FX stage");
 
             ObservableUtils.onChangeIf(stage.widthProperty(), number -> !stage.isMaximized(),
                     number -> config.setScreenWidth(number.intValue()));
@@ -434,8 +418,6 @@ public class JfxApplication extends Application {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            Icons.REMOVE_12.hashCode();
 
             LOGGER.info("image system is initialized.");
 
@@ -491,19 +473,6 @@ public class JfxApplication extends Application {
 
         AsyncEventManager.getInstance()
                 .notify(new FxSceneCreatedEvent());
-
-        var pluginManager = PluginManager.getInstance();
-        pluginManager.handlePluginsNow(editorPlugin -> {
-            editorPlugin.register(FileCreatorRegistry.getInstance());
-            editorPlugin.register(EditorRegistry.getInstance());
-            editorPlugin.register(FileIconManager.getInstance());
-            editorPlugin.register(FileConverterRegistry.getInstance());
-            editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance());
-            editorPlugin.register(TreeNodeFactoryRegistry.getInstance());
-            editorPlugin.register(PropertyBuilderRegistry.getInstance());
-            editorPlugin.register(FilePreviewFactoryRegistry.getInstance());
-            editorPlugin.register(SettingsProviderRegistry.getInstance());
-        });
 
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.APPLICATION_LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);

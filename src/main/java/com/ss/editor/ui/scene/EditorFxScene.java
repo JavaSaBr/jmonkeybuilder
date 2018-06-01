@@ -4,9 +4,11 @@ import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.jfx.injfx.input.JfxMouseInput;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.AsyncEventManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CssIds;
+import com.ss.editor.ui.event.impl.EditorFinishedLoadingEvent;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -272,5 +274,8 @@ public class EditorFxScene extends Scene {
 
         ExecutorManager.getInstance()
                 .addFxTask(this::decrementLoading);
+
+        AsyncEventManager.getInstance()
+                .notify(new EditorFinishedLoadingEvent());
     }
 }

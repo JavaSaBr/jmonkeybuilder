@@ -2,7 +2,6 @@ package com.ss.editor.ui.builder;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
-import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
@@ -28,7 +27,6 @@ import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Group;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +59,7 @@ public class EditorFxSceneBuilder {
 
         CombinedAsyncEventHandlerBuilder.of(() -> build(scene, window))
                 .add(FxSceneCreatedEvent.EVENT_TYPE)
+                .add(ImageSystemInitializedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
         CombinedAsyncEventHandlerBuilder.of(() -> attachScene(window, scene))

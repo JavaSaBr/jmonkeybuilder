@@ -1,14 +1,11 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
 import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.FxEventManager;
@@ -85,13 +82,10 @@ public class EditorDialog {
         container = new VBox();
         container.setAlignment(CENTER);
 
-        var editorConfig = EditorConfig.getInstance();
-        var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
-
+        var mainScene = EditorUtil.getFxScene();
         var scene = new Scene(container);
         var stylesheets = scene.getStylesheets();
-        stylesheets.addAll(CSS_REGISTRY.getAvailableCssFiles());
-        stylesheets.add(theme.getCssFile());
+        stylesheets.addAll(mainScene.getStylesheets());
 
         createControls(container);
 

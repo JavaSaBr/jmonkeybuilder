@@ -134,10 +134,11 @@ public class CssRegistry {
 
         LOGGER.info("started loading CSS from plugins.");
 
-        var eventManager = AsyncEventManager.getInstance();
-        var pluginManager = PluginManager.getInstance();
-        pluginManager.handlePluginsInBackground(editorPlugin -> editorPlugin.register(this),
-                () -> eventManager.notify(new PluginCssLoadedEvent()));
+        PluginManager.getInstance()
+                .handlePluginsNow(plugin -> plugin.register(this));
+
+        AsyncEventManager.getInstance()
+                .notify(new PluginCssLoadedEvent());
     }
 
     /**
