@@ -5,15 +5,14 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.code.BaseCodeArea;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -127,13 +126,13 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) throws IOException {
+    public void doSave(@NotNull Path toStore) throws Throwable {
         super.doSave(toStore);
 
-        final CodeArea codeArea = getCodeArea();
-        final String newContent = codeArea.getText();
+        var codeArea = getCodeArea();
+        var newContent = codeArea.getText();
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
+        try (var out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(newContent);
         }
     }

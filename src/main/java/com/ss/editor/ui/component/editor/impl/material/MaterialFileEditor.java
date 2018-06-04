@@ -7,8 +7,6 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.TextureKey;
@@ -123,13 +121,13 @@ public class MaterialFileEditor extends
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) throws IOException {
+    public void doSave(@NotNull final Path toStore) throws Throwable {
         super.doSave(toStore);
 
-        final Material currentMaterial = getCurrentMaterial();
-        final String content = MaterialSerializer.serializeToString(currentMaterial);
+        var currentMaterial = getCurrentMaterial();
+        var content = MaterialSerializer.serializeToString(currentMaterial);
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
+        try (var out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(content);
         }
     }

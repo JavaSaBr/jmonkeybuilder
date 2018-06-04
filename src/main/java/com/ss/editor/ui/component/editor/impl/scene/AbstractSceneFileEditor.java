@@ -70,10 +70,10 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.*;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
@@ -88,8 +88,6 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -929,29 +927,27 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) throws IOException {
+    public void doSave(@NotNull Path toStore) throws Throwable {
         super.doSave(toStore);
 
-        final M currentModel = getCurrentModel();
-
+        var currentModel = getCurrentModel();
         try {
             NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
-        } catch (final Exception e) {
-            EditorUtil.handleException(LOGGER, this, e);
-            return;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         PRE_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         try {
 
-            final BinaryExporter exporter = BinaryExporter.getInstance();
+            var exporter = BinaryExporter.getInstance();
 
-            try (final OutputStream out = Files.newOutputStream(toStore)) {
+            try (var out = Files.newOutputStream(toStore)) {
                 exporter.save(currentModel, out);
             }
 
-        } catch (final Exception e) {
-            EditorUtil.handleException(LOGGER, this, e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             POST_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
         }

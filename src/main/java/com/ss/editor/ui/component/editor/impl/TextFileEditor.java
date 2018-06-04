@@ -3,20 +3,19 @@ package com.ss.editor.ui.component.editor.impl;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -137,13 +136,13 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) throws IOException {
+    public void doSave(@NotNull Path toStore) throws Throwable {
         super.doSave(toStore);
 
-        final TextArea textArea = getTextArea();
-        final String newContent = textArea.getText();
+        var textArea = getTextArea();
+        var newContent = textArea.getText();
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
+        try (var out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(newContent);
         }
     }

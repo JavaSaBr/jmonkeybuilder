@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.editor.impl;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import com.jme3.math.Vector3f;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -20,6 +19,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
@@ -44,7 +44,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -137,7 +136,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * The flag of saving process.
      */
-    private boolean saving;
+    private volatile boolean saving;
 
     /**
      * Instantiates a new Abstract file editor.
@@ -338,40 +337,47 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FxThread
-    public void save(@Nullable final Consumer<@NotNull FileEditor> callback) {
-        if(isSaving()) return;
+    public void save(@Nullable Consumer<FileEditor> callback) {
+
+        if (isSaving()) {
+            return;
+        }
 
         this.saveCallback = callback;
+
         notifyStartSaving();
 
-        EXECUTOR_MANAGER.addBackgroundTask(() -> {
+        EXECUTOR_MANAGER.addBackgroundTask(this::saveInBackground);
+    }
 
-            final EditorDescription description = getDescription();
-            final String editorId = description.getEditorId();
+    @BackgroundThread
+    protected void saveInBackground() {
 
-            final Path tempFile = Utils.get(editorId, prefix -> Files.createTempFile(prefix, "toSave.tmp"));
-            final JmeApplication jmeApplication = JmeApplication.getInstance();
-            final long stamp = jmeApplication.asyncLock();
-            try {
+        var editorId = getDescription()
+                .getEditorId();
 
-                final Path editFile = getEditFile();
+        var tempFile = Utils.get(editorId,
+                prefix -> Files.createTempFile(prefix, "toSave.tmp"));
 
-                doSave(tempFile);
-                try (final OutputStream out = Files.newOutputStream(editFile, TRUNCATE_EXISTING)) {
-                    Files.copy(tempFile, out);
-                } finally {
-                    FileUtils.delete(tempFile);
-                }
+        var stamp = EditorUtil.renderLock();
+        try {
 
-            } catch (final IOException e) {
-                LOGGER.warning(this, e);
-                EXECUTOR_MANAGER.addFxTask(this::notifyFinishSaving);
+            doSave(tempFile);
+
+            try (var out = Files.newOutputStream(getEditFile(), TRUNCATE_EXISTING)) {
+                Files.copy(tempFile, out);
             } finally {
-                jmeApplication.asyncUnlock(stamp);
+                FileUtils.delete(tempFile);
             }
 
-            EXECUTOR_MANAGER.addFxTask(this::postSave);
-        });
+        } catch (Throwable e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            EXECUTOR_MANAGER.addFxTask(this::notifyFinishSaving);
+        } finally {
+            EditorUtil.renderUnlock(stamp);
+        }
+
+        EXECUTOR_MANAGER.addFxTask(this::postSave);
     }
 
     /**
@@ -381,7 +387,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @throws IOException if was some problem with writing to the to store file.
      */
     @BackgroundThread
-    protected void doSave(@NotNull final Path toStore) throws IOException {
+    protected void doSave(@NotNull Path toStore) throws Throwable {
     }
 
     /**
@@ -579,10 +585,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param event the event
      */
     @FxThread
-    protected void processChangedFile(@NotNull final FileChangedEvent event) {
+    protected void processChangedFile(@NotNull FileChangedEvent event) {
 
-        final Path file = event.getFile();
-        final Path editFile = getEditFile();
+        var file = event.getFile();
+        var editFile = getEditFile();
 
         if (!file.equals(editFile)) {
             return;
@@ -715,7 +721,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FxThread
     protected void notifyFinishSaving() {
         setSaving(false);
+
         UiUtils.decrementLoading();
+
         if (saveCallback != null) {
             saveCallback.accept(this);
             saveCallback = null;

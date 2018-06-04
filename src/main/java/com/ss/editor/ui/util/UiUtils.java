@@ -940,19 +940,22 @@ public abstract class UiUtils {
      * Create a dialog for showing the exception.
      */
     @FxThread
-    public static @NotNull Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
-                                                  @Nullable final String stackTrace) {
+    public static @NotNull Alert createErrorAlert(
+            @NotNull Throwable e,
+            @Nullable String localizedMessage,
+            @Nullable String stackTrace
+    ) {
 
-        final TextArea textArea = new TextArea(stackTrace);
+        var textArea = new TextArea(stackTrace);
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
         VBox.setMargin(textArea, new Insets(2, 5, 2, 5));
 
-        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        var alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
 
-        final DialogPane dialogPane = alert.getDialogPane();
+        var dialogPane = alert.getDialogPane();
         dialogPane.setExpandableContent(new VBox(textArea));
         dialogPane.expandedProperty().addListener((observable, oldValue, newValue) -> {
 

@@ -58,7 +58,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the file creator registry.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull FileCreatorRegistry registry) {
     }
 
@@ -157,7 +157,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param pluginSystem the plugin system.
      */
-    @JmeThread
+    @BackgroundThread
     public void onAfterCreateJmeContext(@NotNull PluginSystem pluginSystem) {
     }
 

@@ -619,7 +619,7 @@ public abstract class EditorUtil {
      * @param e      the exception.
      */
     @FromAnyThread
-    public static void handleException(@Nullable Logger logger, @Nullable Object owner, @NotNull Exception e) {
+    public static void handleException(@Nullable Logger logger, @Nullable Object owner, @NotNull Throwable e) {
         handleException(logger, owner, e, null);
     }
 
@@ -635,7 +635,7 @@ public abstract class EditorUtil {
     public static void handleException(
             @Nullable Logger logger,
             @Nullable Object owner,
-            @NotNull Exception e,
+            @NotNull Throwable e,
             @Nullable Runnable callback
     ) {
 
@@ -675,7 +675,7 @@ public abstract class EditorUtil {
      * @return the built stack trace.
      */
     @FromAnyThread
-    public static String buildStackTrace(@NotNull Exception exception) {
+    public static String buildStackTrace(@NotNull Throwable exception) {
 
         var writer = new StringWriter();
         var printWriter = new PrintWriter(writer);
@@ -1039,5 +1039,25 @@ public abstract class EditorUtil {
                 .map(Spatial::getKey)
                 .map(AssetKey::getName)
                 .orElse(null);
+    }
+
+    /**
+     * Lock the render phase in jME.
+     *
+     * @return the lock stamp.
+     */
+    @FromAnyThread
+    public static long renderLock() {
+        return jmeApplication.asyncLock();
+    }
+
+    /**
+     * Unlock the render phase in jME.
+     *
+     * @param stamp the lock stamp.
+     */
+    @FromAnyThread
+    public static void renderUnlock(long stamp) {
+        jmeApplication.asyncUnlock(stamp);
     }
 }

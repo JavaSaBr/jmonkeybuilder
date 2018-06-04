@@ -1,19 +1,22 @@
 package com.ss.editor.ui.component.creator;
 
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.creator.impl.*;
+import com.ss.editor.ui.component.creator.impl.EmptyFileCreator;
+import com.ss.editor.ui.component.creator.impl.EmptyModelCreator;
+import com.ss.editor.ui.component.creator.impl.EmptySceneCreator;
+import com.ss.editor.ui.component.creator.impl.FolderCreator;
 import com.ss.editor.ui.component.creator.impl.material.MaterialFileCreator;
 import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefinitionFileCreator;
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.concurrent.Callable;
+import java.util.Collection;
 
 /**
  * The registry with file creators.
@@ -22,19 +25,12 @@ import java.util.concurrent.Callable;
  */
 public class FileCreatorRegistry {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileCreatorRegistry.class);
 
-    @NotNull
     private static final FileCreatorRegistry INSTANCE = new FileCreatorRegistry();
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static FileCreatorRegistry getInstance() {
+    @FromAnyThread
+    public @NotNull static FileCreatorRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -42,13 +38,10 @@ public class FileCreatorRegistry {
      * The list of file creator descriptions.
      */
     @NotNull
-    private final Array<FileCreatorDescription> descriptions;
+    private final ConcurrentArray<FileCreatorDescription> descriptions;
 
-    /**
-     * Instantiates a new File creator registry.
-     */
     private FileCreatorRegistry() {
-        this.descriptions = ArrayFactory.newArray(FileCreatorDescription.class);
+        this.descriptions = ArrayFactory.newConcurrentStampedLockArray(FileCreatorDescription.class);
         register(MaterialFileCreator.DESCRIPTION);
         register(MaterialDefinitionFileCreator.DESCRIPTION);
         register(EmptyFileCreator.DESCRIPTION);
@@ -64,8 +57,8 @@ public class FileCreatorRegistry {
      * @param description the new description.
      */
     @FromAnyThread
-    public void register(@NotNull final FileCreatorDescription description) {
-        this.descriptions.add(description);
+    public void register(@NotNull FileCreatorDescription description) {
+        descriptions.runInWriteLock(description, Collection::add);
     }
 
     /**
@@ -73,8 +66,8 @@ public class FileCreatorRegistry {
      *
      * @return the list of file creator descriptions.
      */
-    @NotNull
-    public Array<FileCreatorDescription> getDescriptions() {
+    @FromAnyThread
+    public @NotNull ConcurrentArray<FileCreatorDescription> getDescriptions() {
         return descriptions;
     }
 
@@ -85,13 +78,13 @@ public class FileCreatorRegistry {
      * @param file        the file.
      * @return the file creator.
      */
-    @Nullable
-    public FileCreator newCreator(@NotNull final FileCreatorDescription description, @NotNull final Path file) {
+    @FromAnyThread
+    public @Nullable FileCreator newCreator(@NotNull FileCreatorDescription description, @NotNull Path file) {
 
-        final Callable<FileCreator> constructor = description.getConstructor();
+        var constructor = description.getConstructor();
         try {
             return constructor.call();
-        } catch (final Exception e) {
+        } catch (Exception e) {
             LOGGER.warning(e);
         }
 

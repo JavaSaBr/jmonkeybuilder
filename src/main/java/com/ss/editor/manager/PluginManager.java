@@ -9,9 +9,8 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
-import com.ss.editor.ui.event.impl.EditorFinishedLoadingEvent;
-import com.ss.editor.ui.event.impl.PluginsLoadedEvent;
-import com.ss.editor.ui.event.impl.PluginsRegisteredResourcesEvent;
+import com.ss.editor.ui.component.creator.FileCreatorRegistry;
+import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -71,6 +70,8 @@ public class PluginManager {
 
         SingleAsyncEventHandlerBuilder.of(EditorFinishedLoadingEvent.EVENT_TYPE)
                 .add(this::onFinishLoading);
+        SingleAsyncEventHandlerBuilder.of(JmeContextCreatedEvent.EVENT_TYPE)
+                .add(this::onAfterCreateJmeContext);
 
         /*
         var initManager = InitializationManager.getInstance();
@@ -144,6 +145,11 @@ public class PluginManager {
                 editorPlugin.register(ResourceManager.getInstance()));
 
         eventManager.notify(new PluginsRegisteredResourcesEvent());
+
+        handlePlugins(editorPlugin ->
+                editorPlugin.register(FileCreatorRegistry.getInstance()));
+
+        eventManager.notify(new PluginsFileCreatorsRegisteredEvent());
     }
 
     /**
@@ -178,20 +184,20 @@ public class PluginManager {
     /**
      * Do some things after when JME context was created.
      */
-    @JmeThread
+    @BackgroundThread
     private void onAfterCreateJmeContext() {
-        pluginSystem.getPlugins().stream()
-                .filter(EditorPlugin.class::isInstance)
-                .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> {
+        handlePlugins(editorPlugin -> {
 
-                    editorPlugin.onAfterCreateJmeContext(pluginSystem);
+            editorPlugin.onAfterCreateJmeContext(getPluginSystem());
 
-                    var container = editorPlugin.getContainer();
-                    var classLoader = container.getClassLoader();
-                    var assetManager = EditorUtil.getAssetManager();
-                    assetManager.addClassLoader(classLoader);
-                });
+            var classLoader = editorPlugin.getContainer().
+                    getClassLoader();
+
+            EXECUTOR_MANAGER.addFxTask(() -> {
+                var assetManager = EditorUtil.getAssetManager();
+                assetManager.addClassLoader(classLoader);
+            });
+        });
     }
 
     /**
