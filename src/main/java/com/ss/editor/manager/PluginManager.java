@@ -10,6 +10,7 @@ import com.ss.editor.config.Config;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
+import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
@@ -150,6 +151,11 @@ public class PluginManager {
                 editorPlugin.register(FileCreatorRegistry.getInstance()));
 
         eventManager.notify(new PluginsFileCreatorsRegisteredEvent());
+
+        handlePlugins(editorPlugin ->
+                editorPlugin.register(EditorRegistry.getInstance()));
+
+        eventManager.notify(new PluginsEditorsRegisteredEvent());
     }
 
     /**
@@ -158,7 +164,7 @@ public class PluginManager {
      * @param path the path to the plugin.
      */
     public void installPlugin(@NotNull Path path) {
-        pluginSystem.installPlugin(path, false);
+        getPluginSystem().installPlugin(path, false);
     }
 
     /**

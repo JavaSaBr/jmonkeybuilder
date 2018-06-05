@@ -1,16 +1,18 @@
 package com.ss.editor.ui.component.editor;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import static com.ss.rlib.common.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.impl.*;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.Callable;
+import java.util.Collection;
 
 /**
  * THe registry of editors.
@@ -27,25 +29,13 @@ import java.util.concurrent.Callable;
  */
 public class EditorRegistry {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorRegistry.class);
 
-    /**
-     * The constant ALL_FORMATS.
-     */
-    @NotNull
     public static final String ALL_FORMATS = "*";
 
-    @NotNull
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    @NotNull
-    public static EditorRegistry getInstance() {
+    public static @NotNull EditorRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -53,26 +43,24 @@ public class EditorRegistry {
      * The table with editor descriptions.
      */
     @NotNull
-    private final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions;
+    private final ConcurrentObjectDictionary<String, ConcurrentArray<EditorDescription>> editorDescriptions;
 
     /**
      * The table with mapping editor id to editor description.
      */
     @NotNull
-    private final ObjectDictionary<String, EditorDescription> editorIdToDescription;
+    private final ConcurrentObjectDictionary<String, EditorDescription> editorIdToDescription;
 
-    /**
-     * Instantiates a new Editor registry.
-     */
-    public EditorRegistry() {
-        this.editorDescriptions = DictionaryFactory.newObjectDictionary();
-        this.editorIdToDescription = DictionaryFactory.newObjectDictionary();
+    private EditorRegistry() {
+        this.editorDescriptions = DictionaryFactory.newConcurrentAtomicObjectDictionary();
+        this.editorIdToDescription = DictionaryFactory.newConcurrentAtomicObjectDictionary();
         loadDescriptions();
     }
 
     /**
      * Load available descriptors.
      */
+    @FromAnyThread
     private void loadDescriptions() {
         register(TextFileEditor.DESCRIPTION);
         register(MaterialFileEditor.DESCRIPTION);
@@ -85,18 +73,22 @@ public class EditorRegistry {
     }
 
     /**
+     * Get the table with editor descriptions.
+     *
      * @return the table with editor descriptions.
      */
-    @NotNull
-    private ObjectDictionary<String, Array<EditorDescription>> getEditorDescriptions() {
+    @FromAnyThread
+    private @NotNull ConcurrentObjectDictionary<String, ConcurrentArray<EditorDescription>> getEditorDescriptions() {
         return editorDescriptions;
     }
 
     /**
+     * Get the table with mapping editor id to editor description.
+     *
      * @return the table with mapping editor id to editor description.
      */
-    @NotNull
-    private ObjectDictionary<String, EditorDescription> getEditorIdToDescription() {
+    @FromAnyThread
+    private @NotNull ConcurrentObjectDictionary<String, EditorDescription> getEditorIdToDescription() {
         return editorIdToDescription;
     }
 
@@ -106,36 +98,41 @@ public class EditorRegistry {
      * @param description the description of an editor.
      */
     @FromAnyThread
-    public void register(@NotNull final EditorDescription description) {
+    public void register(@NotNull EditorDescription description) {
 
-        final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
+        description.getExtensions()
+                .forEach(description, this::register);
 
-        final Array<String> extensions = description.getExtensions();
-        extensions.forEach(extension -> register(description, extension, editorDescriptions));
-
-        final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
-        editorIdToDescription.put(description.getEditorId(), description);
+        getEditorIdToDescription()
+                .runInWriteLock(description.getEditorId(), description, ObjectDictionary::put);
     }
 
     @FromAnyThread
-    private void register(@NotNull final EditorDescription description, @NotNull final String extension,
-                          @NotNull final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions) {
-        final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> newArray(EditorDescription.class));
-        notNull(descriptions);
-        descriptions.add(description);
+    private void register(@NotNull String extension, @NotNull EditorDescription description) {
+
+        var descriptions = getEditorDescriptions();
+
+        long stamp = descriptions.writeLock();
+        try {
+
+            descriptions.get(extension, () -> ConcurrentArray.of(EditorDescription.class))
+                    .runInWriteLock(description, Collection::add);
+
+        } finally {
+            descriptions.writeUnlock(stamp);
+        }
     }
 
     /**
-     * Gets description.
+     * Get an editor description by the editor id.
      *
-     * @param editorId the editor id
-     * @return the description for the editor id or null.
+     * @param editorId the editor id.
+     * @return the description or null.
      */
-    @Nullable
     @FromAnyThread
-    public EditorDescription getDescription(@NotNull final String editorId) {
-        final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
-        return editorIdToDescription.get(editorId);
+    public @Nullable EditorDescription getDescription(@NotNull String editorId) {
+        return getEditorIdToDescription()
+                .getInReadLock(editorId, ObjectDictionary::get);
     }
 
     /**
@@ -144,31 +141,36 @@ public class EditorRegistry {
      * @param file the edited file.
      * @return the editor for this file or null.
      */
-    @Nullable
     @FromAnyThread
-    public FileEditor createEditorFor(@NotNull final Path file) {
-        if (Files.isDirectory(file)) return null;
+    public @Nullable FileEditor createEditorFor(@NotNull Path file) {
 
-        final String extension = FileUtils.getExtension(file);
-        final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
+        if (Files.isDirectory(file)) {
+            return null;
+        }
 
-        Array<EditorDescription> descriptions = editorDescriptions.get(extension);
+        var extension = FileUtils.getExtension(file);
+        var editorDescriptions = getEditorDescriptions();
+
+        var descriptions = editorDescriptions.get(extension);
+
         EditorDescription description;
 
         if (descriptions != null) {
-            description = descriptions.first();
+            description = descriptions.getInReadLock(Array::first);
         } else {
             descriptions = editorDescriptions.get(ALL_FORMATS);
-            description = descriptions == null ? null : descriptions.first();
+            description = descriptions == null ? null : descriptions.getInReadLock(Array::first);
         }
 
-        if (description == null) return null;
+        if (description == null) {
+            return null;
+        }
 
-        final Callable<FileEditor> constructor = description.getConstructor();
+        var constructor = description.getConstructor();
         try {
             return constructor.call();
         } catch (Exception e) {
-            LOGGER.warning(e);
+            EditorUtil.handleException(LOGGER, this, e);
         }
 
         return null;
@@ -181,12 +183,9 @@ public class EditorRegistry {
      * @param file        the edited file.
      * @return the editor or null.
      */
-    @Nullable
     @FromAnyThread
-    public FileEditor createEditorFor(@NotNull final EditorDescription description, @NotNull final Path file) {
-
-        final Callable<FileEditor> constructor = description.getConstructor();
-
+    public @Nullable FileEditor createEditorFor(@NotNull EditorDescription description, @NotNull Path file) {
+        var constructor = description.getConstructor();
         try {
             return constructor.call();
         } catch (final Exception e) {
@@ -200,24 +199,25 @@ public class EditorRegistry {
      * @param file the file
      * @return the list of available editors for the file.
      */
-    @NotNull
     @FromAnyThread
-    public Array<EditorDescription> getAvailableEditorsFor(@NotNull final Path file) {
+    public @NotNull Array<EditorDescription> getAvailableEditorsFor(@NotNull Path file) {
 
-        final Array<EditorDescription> result = newArray(EditorDescription.class);
-        final String extension = FileUtils.getExtension(file);
+        var result = ArrayFactory.<EditorDescription>newArray(EditorDescription.class);
+        var extension = FileUtils.getExtension(file);
 
-        final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
-        final Array<EditorDescription> descriptions = editorDescriptions.get(extension);
+        var editorDescriptions = getEditorDescriptions();
+        var descriptions = editorDescriptions.get(extension);
 
         if (descriptions != null) {
-            result.addAll(descriptions);
+            descriptions.runInReadLock(result,
+                    (source, destination) -> destination.addAll(source));
         }
 
-        final Array<EditorDescription> universal = editorDescriptions.get(ALL_FORMATS);
+        var universal = editorDescriptions.get(ALL_FORMATS);
 
         if (universal != null) {
-            result.addAll(universal);
+            universal.runInReadLock(result,
+                    (source, destination) -> destination.addAll(source));
         }
 
         return result;

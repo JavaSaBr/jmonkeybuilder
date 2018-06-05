@@ -5,7 +5,7 @@ import javafx.event.EventType;
 
 /**
  * The event about that all plugins are already registered all
- * file creators.
+ * their file creators.
  *
  * @author JavaSaBr
  */

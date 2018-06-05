@@ -67,7 +67,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the file creator registry.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull EditorRegistry registry) {
     }
 
