@@ -16,6 +16,7 @@ import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.IntegerDictionary;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.function.BiFunction;
 
 /**
@@ -39,6 +41,15 @@ public class FileIconManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
+    interface IconFinder extends BiFunction<Path, String, String> {
+
+        @Override
+        default @Nullable String apply(@NotNull Path file, @NotNull String extension) {
+            return findIcon(file, extension);
+        }
+
+        @Nullable String findIcon(@NotNull Path file, @NotNull String extension);
+    }
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
     private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE =
@@ -97,12 +108,10 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_XBUF, "image-svg+xml-compressed");
     }
 
-    private static final Array<Path> MIME_TYPES_FOLDERS = ArrayFactory.newArray(Path.class);
-
-    static {
-        MIME_TYPES_FOLDERS.add(Paths.get("/ui/icons/filetypes/emerald/mimetypes"));
-        MIME_TYPES_FOLDERS.add(Paths.get("/ui/icons/filetypes/"));
-    }
+    private static final Array<Path> MIME_TYPES_FOLDERS = Array.of(
+            Paths.get("/ui/icons/filetypes/emerald/mimetypes"),
+            Paths.get("/ui/icons/filetypes/")
+    );
 
     @Nullable
     private static FileIconManager instance;
@@ -135,12 +144,12 @@ public class FileIconManager {
      * The list of icon finders.
      */
     @NotNull
-    private final Array<BiFunction<Path, String, String>> iconFinders;
+    private final ConcurrentArray<IconFinder> iconFinders;
 
     private FileIconManager() {
         InitializeManager.valid(getClass());
 
-        this.iconFinders = ArrayFactory.newArray(BiFunction.class);
+        this.iconFinders = ConcurrentArray.of(IconFinder.class);
         this.imageCache = DictionaryFactory.newIntegerDictionary();
         this.extensionToUrl = DictionaryFactory.newObjectDictionary();
         this.originalImageCache = DictionaryFactory.newObjectDictionary();
@@ -155,8 +164,8 @@ public class FileIconManager {
      * @param iconFinder the icon finder.
      */
     @FromAnyThread
-    public void register(@NotNull BiFunction<Path, String, String> iconFinder) {
-        this.iconFinders.add(iconFinder);
+    public void register(@NotNull IconFinder iconFinder) {
+        iconFinders.runInWriteLock(iconFinder, Collection::add);
     }
 
     /**
@@ -192,18 +201,25 @@ public class FileIconManager {
         }
 
         if (!iconFinders.isEmpty()) {
-            for (var iconFinder : iconFinders) {
+            var stamp = iconFinders.readLock();
+            try {
 
-                url = iconFinder.apply(path, extension);
+                for (var iconFinder : iconFinders) {
 
-                var classLoader = iconFinder.getClass().getClassLoader();
-                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
-                    continue;
+                    url = iconFinder.apply(path, extension);
+
+                    var classLoader = iconFinder.getClass().getClassLoader();
+                    if (url == null || !EditorUtil.checkExists(url, classLoader)) {
+                        continue;
+                    }
+
+                    extensionToUrl.put(extension, url);
+
+                    return getImage(url, classLoader, size);
                 }
 
-                extensionToUrl.put(extension, url);
-
-                return getImage(url, classLoader, size);
+            } finally {
+                iconFinders.readUnlock(stamp);
             }
         }
 
@@ -409,7 +425,7 @@ public class FileIconManager {
      * @return the list of icon finders.
      */
     @FromAnyThread
-    private @NotNull Array<BiFunction<Path, String, String>> getIconFinders() {
+    private @NotNull ConcurrentArray<IconFinder> getIconFinders() {
         return iconFinders;
     }
 }

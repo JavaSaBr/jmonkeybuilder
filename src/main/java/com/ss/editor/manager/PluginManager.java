@@ -156,6 +156,11 @@ public class PluginManager {
                 editorPlugin.register(EditorRegistry.getInstance()));
 
         eventManager.notify(new PluginsEditorsRegisteredEvent());
+
+        handlePlugins(editorPlugin ->
+            editorPlugin.register(EditorRegistry.getInstance()));
+
+        eventManager.notify(new PluginsFileIconFindersRegisteredEvent());
     }
 
     /**
