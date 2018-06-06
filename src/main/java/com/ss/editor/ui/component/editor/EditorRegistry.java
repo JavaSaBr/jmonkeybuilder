@@ -10,10 +10,8 @@ import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
-import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,8 +50,8 @@ public class EditorRegistry {
     private final ConcurrentObjectDictionary<String, EditorDescription> editorIdToDescription;
 
     private EditorRegistry() {
-        this.editorDescriptions = DictionaryFactory.newConcurrentAtomicObjectDictionary();
-        this.editorIdToDescription = DictionaryFactory.newConcurrentAtomicObjectDictionary();
+        this.editorDescriptions = ConcurrentObjectDictionary.of(String.class, ConcurrentArray.class);
+        this.editorIdToDescription = ConcurrentObjectDictionary.of(String.class, EditorDescription.class);
         loadDescriptions();
     }
 
@@ -202,7 +200,7 @@ public class EditorRegistry {
     @FromAnyThread
     public @NotNull Array<EditorDescription> getAvailableEditorsFor(@NotNull Path file) {
 
-        var result = ArrayFactory.<EditorDescription>newArray(EditorDescription.class);
+        var result = Array.<EditorDescription>of(EditorDescription.class);
         var extension = FileUtils.getExtension(file);
 
         var editorDescriptions = getEditorDescriptions();

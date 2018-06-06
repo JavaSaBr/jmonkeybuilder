@@ -1,14 +1,15 @@
 package com.ss.editor.ui.control.property.builder;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.impl.*;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * The factory to build property controls for an object.
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyBuilderRegistry {
 
-    @NotNull
     private static final PropertyBuilderRegistry INSTANCE = new PropertyBuilderRegistry();
 
     @FromAnyThread
@@ -29,17 +29,17 @@ public class PropertyBuilderRegistry {
      * The list of property builders.
      */
     @NotNull
-    private final Array<PropertyBuilder> builders;
+    private final ConcurrentArray<PropertyBuilder> builders;
 
     /**
      * THe list of filters.
      */
     @NotNull
-    private final Array<PropertyBuilderFilter> filters;
+    private final ConcurrentArray<PropertyBuilderFilter> filters;
 
     private PropertyBuilderRegistry() {
-        builders = ArrayFactory.newArray(PropertyBuilder.class);
-        filters = ArrayFactory.newArray(PropertyBuilderFilter.class);
+        builders = ConcurrentArray.of(PropertyBuilder.class);
+        filters = ConcurrentArray.of(PropertyBuilderFilter.class);
         register(AudioNodePropertyBuilder.getInstance());
         register(ParticleEmitterPropertyBuilder.getInstance());
         register(GeometryPropertyBuilder.getInstance());
@@ -65,8 +65,13 @@ public class PropertyBuilderRegistry {
      */
     @FromAnyThread
     public void register(@NotNull PropertyBuilder builder) {
-        builders.add(builder);
-        builders.sort(PropertyBuilder::compareTo);
+        var stamp = builders.writeLock();
+        try {
+            builders.add(builder);
+            builders.sort(PropertyBuilder::compareTo);
+        } finally {
+            builders.writeUnlock(stamp);
+        }
     }
 
     /**
@@ -76,7 +81,7 @@ public class PropertyBuilderRegistry {
      */
     @FromAnyThread
     public void register(@NotNull PropertyBuilderFilter filter) {
-        filters.add(filter);
+        filters.runInWriteLock(filter, Collection::add);
     }
 
     /**
@@ -95,22 +100,29 @@ public class PropertyBuilderRegistry {
             @NotNull ChangeConsumer changeConsumer
     ) {
 
-        for (var builder : builders) {
+        long stamp = builders.readLock();
+        try {
 
-            boolean needSkip = false;
+            for (var builder : builders) {
 
-            for (var filter : filters) {
-                if (filter.skip(builder, object, parent)) {
-                    needSkip = true;
-                    break;
+                boolean needSkip = false;
+
+                for (var filter : filters) {
+                    if (filter.skip(builder, object, parent)) {
+                        needSkip = true;
+                        break;
+                    }
                 }
+
+                if (needSkip) {
+                    continue;
+                }
+
+                builder.buildFor(object, parent, container, changeConsumer);
             }
 
-            if (needSkip) {
-                continue;
-            }
-
-            builder.buildFor(object, parent, container, changeConsumer);
+        } finally {
+            builders.readUnlock(stamp);
         }
     }
 }

@@ -76,7 +76,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param iconManager the icon manager.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull FileIconManager iconManager) {
     }
 
@@ -103,7 +103,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the registry of tree node factories.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull TreeNodeFactoryRegistry registry) {
     }
 
@@ -112,7 +112,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the registry of property builders.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull PropertyBuilderRegistry registry) {
     }
 

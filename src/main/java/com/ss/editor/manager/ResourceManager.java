@@ -23,7 +23,6 @@ import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
-import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -37,7 +36,6 @@ import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.Dictionary;
-import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import com.ss.rlib.common.util.ref.Reference;
 import com.ss.rlib.common.util.ref.ReferenceFactory;
@@ -122,13 +120,13 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
-        this.assetCacheTable = DictionaryFactory.newConcurrentAtomicObjectDictionary();
-        this.additionalEnvs = ArrayFactory.newConcurrentStampedLockArray(Path.class);
-        this.watchKeys = ArrayFactory.newConcurrentStampedLockArray(WatchKey.class);
-        this.classLoaders = ArrayFactory.newConcurrentStampedLockArray(URLClassLoader.class);
-        this.resourcesInClasspath = ArrayFactory.newConcurrentAtomicARSWLockArray(String.class);
-        this.interestedResources = DictionaryFactory.newConcurrentAtomicObjectDictionary();
-        this.interestedResourcesInClasspath = DictionaryFactory.newConcurrentAtomicObjectDictionary();
+        this.assetCacheTable = ConcurrentObjectDictionary.of(String.class, Reference.class);
+        this.additionalEnvs = ConcurrentArray.of(Path.class);
+        this.watchKeys = ConcurrentArray.of(WatchKey.class);
+        this.classLoaders = ConcurrentArray.of(URLClassLoader.class);
+        this.resourcesInClasspath = ConcurrentArray.of(String.class);
+        this.interestedResources = ConcurrentObjectDictionary.of(String.class, ConcurrentArray.class);
+        this.interestedResourcesInClasspath = ConcurrentObjectDictionary.of(String.class, ConcurrentArray.class);
 
         registerInterestedFileType(FileExtensions.JME_MATERIAL_DEFINITION);
         updateAdditionalEnvs();

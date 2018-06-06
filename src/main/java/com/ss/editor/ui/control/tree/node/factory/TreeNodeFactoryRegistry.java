@@ -1,12 +1,11 @@
 package com.ss.editor.ui.control.tree.node.factory;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.node.factory.impl.MaterialSettingsTreeNodeFactory;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.impl.*;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,17 +18,15 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class TreeNodeFactoryRegistry {
 
-    @NotNull
     private static final TreeNodeFactoryRegistry INSTANCE = new TreeNodeFactoryRegistry();
 
     /**
-     * The node id generator.
+     * The node's id generator.
      */
-    @NotNull
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
-    @NotNull
-    public static TreeNodeFactoryRegistry getInstance() {
+    @FromAnyThread
+    public static @NotNull TreeNodeFactoryRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -37,10 +34,10 @@ public class TreeNodeFactoryRegistry {
      * The list of available factories.
      */
     @NotNull
-    private final Array<TreeNodeFactory> factories;
+    private final ConcurrentArray<TreeNodeFactory> factories;
 
     private TreeNodeFactoryRegistry() {
-        this.factories = ArrayFactory.newArray(TreeNodeFactory.class);
+        this.factories = ConcurrentArray.of(TreeNodeFactory.class);
         register(new PrimitiveTreeNodeFactory());
         register(new LegacyAnimationTreeNodeFactory());
         register(new CollisionTreeNodeFactory());
@@ -57,10 +54,15 @@ public class TreeNodeFactoryRegistry {
      *
      * @param factory the tree node factory.
      */
-    @FxThread
-    public void register(@NotNull final TreeNodeFactory factory) {
-        this.factories.add(factory);
-        this.factories.sort(TreeNodeFactory::compareTo);
+    @FromAnyThread
+    public void register(@NotNull TreeNodeFactory factory) {
+        var stamp = factories.writeLock();
+        try {
+            factories.add(factory);
+            factories.sort(TreeNodeFactory::compareTo);
+        } finally {
+            factories.writeUnlock(stamp);
+        }
     }
 
     /**
@@ -68,36 +70,43 @@ public class TreeNodeFactoryRegistry {
      *
      * @return the list of available tree node factories.
      */
-    @FxThread
-    private @NotNull Array<TreeNodeFactory> getFactories() {
+    @FromAnyThread
+    private @NotNull ConcurrentArray<TreeNodeFactory> getFactories() {
         return factories;
     }
 
     /**
-     * Create a tree node for an element.
+     * Create a tree node for the element.
      *
-     * @param <T>     the type of an element.
-     * @param <V>     the type of a tree node
+     * @param <T>     the element's type.
+     * @param <V>     the tree node's type.
      * @param element the element
-     * @return the tree node.
+     * @return the created tree node or null.
      */
     @FxThread
-    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element) {
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable T element) {
 
         if (element instanceof TreeNode) {
             return unsafeCast(element);
         }
 
-        final long objectId = ID_GENERATOR.incrementAndGet();
+        var factories = getFactories();
+        var objectId = ID_GENERATOR.incrementAndGet();
 
         V result = null;
 
-        final Array<TreeNodeFactory> factories = getFactories();
-        for (final TreeNodeFactory factory : factories) {
-            result = factory.createFor(element, objectId);
-            if (result != null) {
-                break;
+        long stamp = factories.readLock();
+        try {
+
+            for (var factory : factories) {
+                result = factory.createFor(element, objectId);
+                if (result != null) {
+                    break;
+                }
             }
+
+        } finally {
+            factories.readUnlock(stamp);
         }
 
         return result;

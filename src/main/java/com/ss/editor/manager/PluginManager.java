@@ -11,6 +11,8 @@ import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
@@ -73,6 +75,11 @@ public class PluginManager {
                 .add(this::onFinishLoading);
         SingleAsyncEventHandlerBuilder.of(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(this::onAfterCreateJmeContext);
+
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
+                .add(FxSceneCreatedEvent.EVENT_TYPE)
+                .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
+                .buildAndRegister();
 
         /*
         var initManager = InitializationManager.getInstance();
@@ -147,6 +154,16 @@ public class PluginManager {
 
         eventManager.notify(new PluginsRegisteredResourcesEvent());
 
+    }
+
+    /**
+     * Register all extension of all plugins.
+     */
+    @BackgroundThread
+    private void registeredExtensions() {
+
+        var eventManager = AsyncEventManager.getInstance();
+
         handlePlugins(editorPlugin ->
                 editorPlugin.register(FileCreatorRegistry.getInstance()));
 
@@ -158,9 +175,19 @@ public class PluginManager {
         eventManager.notify(new PluginsEditorsRegisteredEvent());
 
         handlePlugins(editorPlugin ->
-            editorPlugin.register(EditorRegistry.getInstance()));
+            editorPlugin.register(FileIconManager.getInstance()));
 
         eventManager.notify(new PluginsFileIconFindersRegisteredEvent());
+
+        handlePlugins(editorPlugin ->
+                editorPlugin.register(TreeNodeFactoryRegistry.getInstance()));
+
+        eventManager.notify(new PluginsTreeNodeFactoriesRegisteredEvent());
+
+        handlePlugins(editorPlugin ->
+                editorPlugin.register(PropertyBuilderRegistry.getInstance()));
+
+        eventManager.notify(new PluginsPropertyBuildersRegisteredEvent());
     }
 
     /**
@@ -287,6 +314,15 @@ public class PluginManager {
         getPluginSystem().getPlugins().stream()
                 .filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(consumer);
+                .forEach(editorPlugin -> safeApply(consumer, editorPlugin));
+    }
+
+    @FromAnyThread
+    private void safeApply(@NotNull Consumer<EditorPlugin> consumer, @NotNull EditorPlugin editorPlugin) {
+        try {
+            consumer.accept(editorPlugin);
+        } catch (Throwable e) {
+            LOGGER.warning(e.getMessage(), e);
+        }
     }
 }

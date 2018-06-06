@@ -15,7 +15,6 @@ import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.IntegerDictionary;
@@ -50,10 +49,10 @@ public class FileIconManager {
 
         @Nullable String findIcon(@NotNull Path file, @NotNull String extension);
     }
+
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
-    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE =
-            DictionaryFactory.newObjectDictionary();
+    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE = ObjectDictionary.of(String.class);
 
     static {
 
@@ -150,9 +149,9 @@ public class FileIconManager {
         InitializeManager.valid(getClass());
 
         this.iconFinders = ConcurrentArray.of(IconFinder.class);
-        this.imageCache = DictionaryFactory.newIntegerDictionary();
-        this.extensionToUrl = DictionaryFactory.newObjectDictionary();
-        this.originalImageCache = DictionaryFactory.newObjectDictionary();
+        this.imageCache = IntegerDictionary.of(ObjectDictionary.class);
+        this.extensionToUrl = ObjectDictionary.of(String.class);
+        this.originalImageCache = ObjectDictionary.of(Image.class);
 
         LOGGER.info("initialized.");
     }

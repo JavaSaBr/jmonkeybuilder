@@ -10,7 +10,6 @@ import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefin
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +40,7 @@ public class FileCreatorRegistry {
     private final ConcurrentArray<FileCreatorDescription> descriptions;
 
     private FileCreatorRegistry() {
-        this.descriptions = ArrayFactory.newConcurrentStampedLockArray(FileCreatorDescription.class);
+        this.descriptions = ConcurrentArray.of(FileCreatorDescription.class);
         register(MaterialFileCreator.DESCRIPTION);
         register(MaterialDefinitionFileCreator.DESCRIPTION);
         register(EmptyFileCreator.DESCRIPTION);
