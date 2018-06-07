@@ -37,7 +37,7 @@ public class TreeNodeFactoryRegistry {
     private final ConcurrentArray<TreeNodeFactory> factories;
 
     private TreeNodeFactoryRegistry() {
-        this.factories = ConcurrentArray.of(TreeNodeFactory.class);
+        this.factories = ConcurrentArray.ofType(TreeNodeFactory.class);
         register(new PrimitiveTreeNodeFactory());
         register(new LegacyAnimationTreeNodeFactory());
         register(new CollisionTreeNodeFactory());

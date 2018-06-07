@@ -322,7 +322,7 @@ public class PluginManager {
         try {
             consumer.accept(editorPlugin);
         } catch (Throwable e) {
-            LOGGER.warning(e.getMessage(), e);
+            LOGGER.warning(e);
         }
     }
 }

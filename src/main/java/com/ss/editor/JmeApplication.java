@@ -18,7 +18,6 @@ import com.jme3.jfx.injfx.JmeToJfxApplication;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.material.TechniqueDef;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
@@ -201,6 +200,11 @@ public class JmeApplication extends JmeToJfxApplication {
     @FromAnyThread
     public @NotNull Camera getCamera() {
         return super.getCamera();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
     }
 
     @Override

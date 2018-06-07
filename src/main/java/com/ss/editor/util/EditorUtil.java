@@ -58,6 +58,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.lang.StackWalker.Option;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
@@ -91,10 +92,26 @@ public abstract class EditorUtil {
     private static JfxApplication jfxApplication;
 
     public static void setJmeApplication(@NotNull JmeApplication jmeApplication) {
+
+        Class<?> callerClass = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE)
+                .getCallerClass();
+
+        if (callerClass != JmeApplication.class) {
+            throw new IllegalArgumentException();
+        }
+
         EditorUtil.jmeApplication = jmeApplication;
     }
 
     public static void setJfxApplication(@NotNull JfxApplication jfxApplication) {
+
+        Class<?> callerClass = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE)
+                .getCallerClass();
+
+        if (callerClass != JfxApplication.class) {
+            throw new IllegalArgumentException();
+        }
+
         EditorUtil.jfxApplication = jfxApplication;
     }
 

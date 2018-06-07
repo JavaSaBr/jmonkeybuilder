@@ -50,8 +50,8 @@ public class EditorRegistry {
     private final ConcurrentObjectDictionary<String, EditorDescription> editorIdToDescription;
 
     private EditorRegistry() {
-        this.editorDescriptions = ConcurrentObjectDictionary.of(String.class, ConcurrentArray.class);
-        this.editorIdToDescription = ConcurrentObjectDictionary.of(String.class, EditorDescription.class);
+        this.editorDescriptions = ConcurrentObjectDictionary.ofType(String.class, ConcurrentArray.class);
+        this.editorIdToDescription = ConcurrentObjectDictionary.ofType(String.class, EditorDescription.class);
         loadDescriptions();
     }
 
@@ -113,7 +113,7 @@ public class EditorRegistry {
         long stamp = descriptions.writeLock();
         try {
 
-            descriptions.get(extension, () -> ConcurrentArray.of(EditorDescription.class))
+            descriptions.get(extension, () -> ConcurrentArray.ofType(EditorDescription.class))
                     .runInWriteLock(description, Collection::add);
 
         } finally {
@@ -200,7 +200,7 @@ public class EditorRegistry {
     @FromAnyThread
     public @NotNull Array<EditorDescription> getAvailableEditorsFor(@NotNull Path file) {
 
-        var result = Array.<EditorDescription>of(EditorDescription.class);
+        var result = Array.<EditorDescription>ofType(EditorDescription.class);
         var extension = FileUtils.getExtension(file);
 
         var editorDescriptions = getEditorDescriptions();

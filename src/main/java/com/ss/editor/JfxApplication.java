@@ -121,9 +121,6 @@ public class JfxApplication extends Application {
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .finishAndStart(() -> "initialized configuration");
 
-        new EditorThread(new ThreadGroup("JavaFX"),
-                JfxApplication::start, "JavaFX Launch").start();
-
         CombinedAsyncEventHandlerBuilder.of(JfxApplication::createSceneProcessor)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(FxContextCreatedEvent.EVENT_TYPE)
@@ -142,14 +139,16 @@ public class JfxApplication extends Application {
         InitializeManager.register(RemoteControlManager.class);
         InitializeManager.initialize();
 
+        new EditorThread(new ThreadGroup("JavaFX"),
+                JfxApplication::start, "JavaFX Launch").start();
+        new EditorThread(new ThreadGroup("LWJGL"),
+                JfxApplication::startJmeApplication, "LWJGL Render").start();
+
         AsyncEventManager.getInstance()
                 .notify(new ManagersInitializedEvent());
 
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .finish(() -> "initializing of all managers");
-
-        new EditorThread(new ThreadGroup("LWJGL"),
-                JfxApplication::startJmeApplication, "LWJGL Render").start();
     }
 
     @FxThread

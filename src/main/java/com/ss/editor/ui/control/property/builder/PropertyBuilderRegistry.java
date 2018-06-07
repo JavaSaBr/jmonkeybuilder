@@ -38,8 +38,8 @@ public class PropertyBuilderRegistry {
     private final ConcurrentArray<PropertyBuilderFilter> filters;
 
     private PropertyBuilderRegistry() {
-        builders = ConcurrentArray.of(PropertyBuilder.class);
-        filters = ConcurrentArray.of(PropertyBuilderFilter.class);
+        builders = ConcurrentArray.ofType(PropertyBuilder.class);
+        filters = ConcurrentArray.ofType(PropertyBuilderFilter.class);
         register(AudioNodePropertyBuilder.getInstance());
         register(ParticleEmitterPropertyBuilder.getInstance());
         register(GeometryPropertyBuilder.getInstance());

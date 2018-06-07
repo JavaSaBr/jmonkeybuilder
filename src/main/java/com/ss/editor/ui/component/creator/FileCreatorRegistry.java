@@ -40,7 +40,7 @@ public class FileCreatorRegistry {
     private final ConcurrentArray<FileCreatorDescription> descriptions;
 
     private FileCreatorRegistry() {
-        this.descriptions = ConcurrentArray.of(FileCreatorDescription.class);
+        this.descriptions = ConcurrentArray.ofType(FileCreatorDescription.class);
         register(MaterialFileCreator.DESCRIPTION);
         register(MaterialDefinitionFileCreator.DESCRIPTION);
         register(EmptyFileCreator.DESCRIPTION);

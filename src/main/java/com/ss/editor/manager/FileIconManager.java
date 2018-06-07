@@ -52,7 +52,8 @@ public class FileIconManager {
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
-    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE = ObjectDictionary.of(String.class);
+    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE =
+            ObjectDictionary.ofType(String.class);
 
     static {
 
@@ -148,10 +149,10 @@ public class FileIconManager {
     private FileIconManager() {
         InitializeManager.valid(getClass());
 
-        this.iconFinders = ConcurrentArray.of(IconFinder.class);
-        this.imageCache = IntegerDictionary.of(ObjectDictionary.class);
-        this.extensionToUrl = ObjectDictionary.of(String.class);
-        this.originalImageCache = ObjectDictionary.of(Image.class);
+        this.iconFinders = ConcurrentArray.ofType(IconFinder.class);
+        this.imageCache = IntegerDictionary.ofType(ObjectDictionary.class);
+        this.extensionToUrl = ObjectDictionary.ofType(String.class);
+        this.originalImageCache = ObjectDictionary.ofType(Image.class);
 
         LOGGER.info("initialized.");
     }

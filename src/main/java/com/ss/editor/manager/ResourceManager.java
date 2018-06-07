@@ -120,13 +120,13 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
-        this.assetCacheTable = ConcurrentObjectDictionary.of(String.class, Reference.class);
-        this.additionalEnvs = ConcurrentArray.of(Path.class);
-        this.watchKeys = ConcurrentArray.of(WatchKey.class);
-        this.classLoaders = ConcurrentArray.of(URLClassLoader.class);
-        this.resourcesInClasspath = ConcurrentArray.of(String.class);
-        this.interestedResources = ConcurrentObjectDictionary.of(String.class, ConcurrentArray.class);
-        this.interestedResourcesInClasspath = ConcurrentObjectDictionary.of(String.class, ConcurrentArray.class);
+        this.assetCacheTable = ConcurrentObjectDictionary.ofType(String.class, Reference.class);
+        this.additionalEnvs = ConcurrentArray.ofType(Path.class);
+        this.watchKeys = ConcurrentArray.ofType(WatchKey.class);
+        this.classLoaders = ConcurrentArray.ofType(URLClassLoader.class);
+        this.resourcesInClasspath = ConcurrentArray.ofType(String.class);
+        this.interestedResources = ConcurrentObjectDictionary.ofType(String.class, ConcurrentArray.class);
+        this.interestedResourcesInClasspath = ConcurrentObjectDictionary.ofType(String.class, ConcurrentArray.class);
 
         registerInterestedFileType(FileExtensions.JME_MATERIAL_DEFINITION);
         updateAdditionalEnvs();
