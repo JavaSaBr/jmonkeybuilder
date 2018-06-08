@@ -7,24 +7,24 @@ import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.model.undo.impl.RemoveAppStateOperation;
 import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.dialog.CreateSceneAppStateDialog;
-import com.ss.editor.model.undo.impl.RemoveAppStateOperation;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.dialog.CreateSceneAppStateDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.collections.ObservableList;
+import com.ss.editor.util.JmbEditorEnvoriment;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -52,12 +52,14 @@ public class AppStateList extends VBox {
     @Nullable
     private ListView<EditableSceneAppState> listView;
 
-    public AppStateList(@NotNull final Consumer<EditableSceneAppState> selectHandler,
-                        @NotNull final SceneChangeConsumer changeConsumer) {
+    public AppStateList(
+            @NotNull Consumer<EditableSceneAppState> selectHandler,
+            @NotNull SceneChangeConsumer changeConsumer
+    ) {
         this.changeConsumer = changeConsumer;
         this.selectHandler = selectHandler;
         createComponents();
-        FXUtils.addClassTo(this, CssClasses.SCENE_APP_STATE_CONTAINER);
+        FxUtils.addClass(this, CssClasses.SCENE_APP_STATE_CONTAINER);
     }
 
     /**
@@ -74,28 +76,27 @@ public class AppStateList extends VBox {
         listView.prefWidthProperty().bind(widthProperty());
         listView.setFixedCellSize(FxConstants.LIST_CELL_HEIGHT);
 
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) ->
-                selectHandler.accept(newValue));
+        FxControlUtils.onSelectedItemChange(listView, selectHandler);
 
-        final Button addButton = new Button();
+        var selectionModel = listView.getSelectionModel();
+
+        var addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> addAppState());
 
-        final Button removeButton = new Button();
+        var removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> removeAppState());
         removeButton.disableProperty().bind(selectionModel.selectedItemProperty().isNull());
 
-        final HBox buttonContainer = new HBox(addButton, removeButton);
+        var buttonContainer = new HBox(addButton, removeButton);
 
-        FXUtils.addToPane(listView, this);
-        FXUtils.addToPane(buttonContainer, this);
+        FxUtils.addClass(buttonContainer, CssClasses.DEF_HBOX)
+                .addClass(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
+                .addClass(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER)
+                .addClass(listView, CssClasses.TRANSPARENT_LIST_VIEW);
 
-        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(listView, CssClasses.TRANSPARENT_LIST_VIEW);
+        FxUtils.addChild(this, listView, buttonContainer);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -106,16 +107,16 @@ public class AppStateList extends VBox {
      * @param sceneNode the scene node
      */
     @FxThread
-    public void fill(@NotNull final SceneNode sceneNode) {
+    public void fill(@NotNull SceneNode sceneNode) {
 
-        final ListView<EditableSceneAppState> listView = getListView();
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
-        final EditableSceneAppState selected = selectionModel.getSelectedItem();
+        var listView = getListView();
+        var selectionModel = listView.getSelectionModel();
+        var selected = selectionModel.getSelectedItem();
 
-        final ObservableList<EditableSceneAppState> items = listView.getItems();
+        var items = listView.getItems();
         items.clear();
 
-        final List<SceneAppState> appStates = sceneNode.getAppStates();
+        var appStates = sceneNode.getAppStates();
         appStates.stream().filter(EditableSceneAppState.class::isInstance)
                 .map(EditableSceneAppState.class::cast)
                 .forEach(items::add);
@@ -123,6 +124,35 @@ public class AppStateList extends VBox {
         if (selected != null && appStates.contains(selected)) {
             selectionModel.select(selected);
         }
+    }
+
+    /**
+     * Get the context menu for the element.
+     *
+     * @param requestedNode the requested node.
+     * @return the context menu.
+     */
+    @FxThread
+    public @Nullable ContextMenu getContextMenu(@Nullable SceneAppState appState) {
+
+        if (!(appState instanceof EditableSceneAppState)) {
+            return null;
+        }
+
+        var actions = ((EditableSceneAppState) appState)
+                .getModifyingActions(JmbEditorEnvoriment.getInstance());
+
+        if (actions.isEmpty()) {
+            return null;
+        }
+
+        var contextMenu = new ContextMenu();
+        var items = contextMenu.getItems();
+
+        actions.
+
+
+        return contextMenu;
     }
 
     /**
@@ -140,7 +170,7 @@ public class AppStateList extends VBox {
      */
     @FxThread
     public void clearSelection() {
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
+        var selectionModel = getListView().getSelectionModel();
         selectionModel.select(null);
     }
 
@@ -151,8 +181,9 @@ public class AppStateList extends VBox {
      */
     @FxThread
     public @Nullable EditableSceneAppState getSelected() {
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
-        return selectionModel.getSelectedItem();
+        return getListView()
+                .getSelectionModel()
+                .getSelectedItem();
     }
 
     /**
@@ -160,7 +191,7 @@ public class AppStateList extends VBox {
      */
     @FxThread
     private void addAppState() {
-        final CreateSceneAppStateDialog dialog = new CreateSceneAppStateDialog(changeConsumer);
+        var dialog = new CreateSceneAppStateDialog(changeConsumer);
         dialog.show();
     }
 
@@ -170,9 +201,11 @@ public class AppStateList extends VBox {
     @FxThread
     private void removeAppState() {
 
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
-        final EditableSceneAppState appState = selectionModel.getSelectedItem();
-        final SceneNode sceneNode = changeConsumer.getCurrentModel();
+        var appState = getListView()
+                .getSelectionModel()
+                .getSelectedItem();
+
+        var sceneNode = changeConsumer.getCurrentModel();
 
         changeConsumer.execute(new RemoveAppStateOperation(appState, sceneNode));
     }

@@ -21,13 +21,15 @@ public class ModelNodeTree extends NodeTree<ModelChangeConsumer> {
         register(RemoveElementsAction.ACTION_FILLER);
     }
 
-    public ModelNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler,
-                         @Nullable final ModelChangeConsumer consumer) {
+    public ModelNodeTree(@NotNull Consumer<Array<Object>> selectionHandler, @Nullable ModelChangeConsumer consumer) {
         super(selectionHandler, consumer, SelectionMode.MULTIPLE);
     }
 
-    public ModelNodeTree(@NotNull final Consumer<Array<Object>> selectionHandler,
-                          @Nullable final ModelChangeConsumer consumer, @NotNull final SelectionMode selectionMode) {
+    public ModelNodeTree(
+            @NotNull Consumer<Array<Object>> selectionHandler,
+            @Nullable ModelChangeConsumer consumer,
+            @NotNull SelectionMode selectionMode
+    ) {
         super(selectionHandler, consumer, selectionMode);
     }
 }

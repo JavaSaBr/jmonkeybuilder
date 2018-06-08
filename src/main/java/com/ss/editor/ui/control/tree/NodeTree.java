@@ -8,13 +8,11 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.common.function.TripleConsumer;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayCollectors;
-import com.ss.rlib.common.util.array.ArrayFactory;
-import javafx.beans.value.ObservableValue;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -33,24 +31,23 @@ import java.util.function.Consumer;
  */
 public class NodeTree<C extends ChangeConsumer> extends VBox {
 
-    /**
-     * The executor manager.
-     */
-    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The tree node factory.
-     */
-    @NotNull
     protected static final TreeNodeFactoryRegistry FACTORY_REGISTRY = TreeNodeFactoryRegistry.getInstance();
 
+    @FunctionalInterface
+    interface MultiItemActionFiller {
+
+        @FxThread
+        void fill(
+                @NotNull NodeTree<?> nodeTree,
+                @NotNull List<MenuItem> menuItems,
+                @NotNull Array<TreeNode<?>> treeNodes
+        );
+    }
     /**
      * The list of action fillers.
      */
-    @NotNull
-    private static final Array<TripleConsumer<NodeTree<?>, List<MenuItem>, Array<TreeNode<?>>>> MULTI_ITEMS_ACTION_FILLERS =
-            ArrayFactory.newArray(TripleConsumer.class);
+    private static final Array<MultiItemActionFiller> MULTI_ITEMS_ACTION_FILLERS = Array.ofType(TripleConsumer.class);
 
     /**
      * Register the new multi items action filler.
@@ -58,7 +55,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param actionFiller the new multi items action filler.
      */
     @FxThread
-    public static void register(@NotNull final TripleConsumer<NodeTree<?>, List<MenuItem>, Array<TreeNode<?>>> actionFiller) {
+    public static void register(@NotNull MultiItemActionFiller actionFiller) {
         MULTI_ITEMS_ACTION_FILLERS.add(actionFiller);
     }
 
@@ -86,17 +83,20 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     @Nullable
     private TreeView<TreeNode<?>> treeView;
 
-    public NodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer) {
+    public NodeTree(@NotNull Consumer<Array<Object>> selectionHandler, @Nullable C consumer) {
         this(selectionHandler, consumer, SelectionMode.SINGLE);
     }
 
-    public NodeTree(@NotNull final Consumer<Array<Object>> selectionHandler, @Nullable final C consumer,
-                    @NotNull final SelectionMode selectionMode) {
+    public NodeTree(
+            @NotNull Consumer<Array<Object>> selectionHandler,
+            @Nullable C consumer,
+            @NotNull SelectionMode selectionMode
+    ) {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
         this.selectionMode = selectionMode;
         createComponents();
-        FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CONTAINER);
+        FxUtils.addClass(this, CssClasses.ABSTRACT_NODE_TREE_CONTAINER);
     }
 
     /**
@@ -113,11 +113,12 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
         treeView.prefHeightProperty().bind(heightProperty());
         treeView.prefWidthProperty().bind(widthProperty());
 
-        final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
+        var selectionModel = treeView.getSelectionModel();
         selectionModel.setSelectionMode(selectionMode);
-        selectionModel.selectedItemProperty().addListener(this::updateSelection);
 
-        FXUtils.addToPane(treeView, this);
+        FxControlUtils.onSelectedItemChange(treeView, treeNodeTreeItem -> updateSelection());
+
+        FxUtils.addChild(this, treeView);
     }
 
     /**
@@ -134,21 +135,14 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * Select the item.
      */
     @FxThread
-    private void updateSelection(@NotNull final ObservableValue<? extends TreeItem<TreeNode<?>>> observable,
-                                 @Nullable final TreeItem<TreeNode<?>> oldValue,
-                                 @Nullable final TreeItem<TreeNode<?>> treeItem) {
+    private void updateSelection() {
 
-        final ObservableList<TreeItem<TreeNode<?>>> selectedItems = getTreeView()
+        var objects = getTreeView()
                 .getSelectionModel()
-                .getSelectedItems();
-
-        final Array<Object> objects = LocalObjects.get().nextObjectArray();
-        objects.clear();
-
-        for (final TreeItem<TreeNode<?>> selectedItem : selectedItems) {
-            if (selectedItem == null) continue;
-            objects.add(selectedItem.getValue());
-        }
+                .getSelectedItems()
+                .stream()
+                .map(TreeItem::getValue)
+                .collect(ArrayCollectors.<Object>toArray(Object.class));
 
         selectionHandler.accept(objects);
     }
@@ -216,7 +210,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param level the level.
      */
     @FxThread
-    public void expandToLevel(final int level) {
+    public void expandToLevel(int level) {
         expandToLevel(getTreeView().getRoot(), 0, level);
     }
 
@@ -228,7 +222,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param level        the level.
      */
     @FxThread
-    private void expandToLevel(final TreeItem<TreeNode<?>> item, final int currentLevel, final int level) {
+    private void expandToLevel(TreeItem<TreeNode<?>> item, int currentLevel, int level) {
         item.setExpanded(currentLevel <= level);
         item.getChildren().forEach(child -> expandToLevel(child, currentLevel + 1, level));
     }
@@ -239,26 +233,26 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param object the object.
      */
     @FxThread
-    public void refresh(@NotNull final Object object) {
+    public void refresh(@NotNull Object object) {
 
-        final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), object);
+        var treeItem = findItemForValue(getTreeView(), object);
         if (treeItem == null) {
             return;
         }
 
-        final TreeNode<?> treeNode = treeItem.getValue();
-        final ObservableList<TreeItem<TreeNode<?>>> items = treeItem.getChildren();
+        var treeNode = treeItem.getValue();
+        var items = treeItem.getChildren();
         items.clear();
 
-        final boolean expanded = treeItem.isExpanded();
-        final TreeNode<?> selected = getSelected();
+        var expanded = treeItem.isExpanded();
+        var selected = getSelected();
 
-        final TreeNode<?> element = treeItem.getValue();
+        var element = treeItem.getValue();
         if (!element.hasChildren(this)) {
             return;
         }
 
-        final Array<TreeNode<?>> children = element.getChildren(this);
+        var children = element.getChildren(this);
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
         items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, false, -1));
@@ -275,9 +269,9 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param treeNode the model node
      */
     @FxThread
-    public void update(@NotNull final TreeNode<?> treeNode) {
+    public void update(@NotNull TreeNode<?> treeNode) {
 
-        final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), treeNode);
+        var treeItem = findItemForValue(getTreeView(), treeNode);
         if (treeItem == null) {
             return;
         }
@@ -293,14 +287,14 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @return the context menu.
      */
     @FxThread
-    public ContextMenu getContextMenu(@Nullable final TreeNode<?> requestedNode) {
+    public ContextMenu getContextMenu(@Nullable TreeNode<?> requestedNode) {
 
-        final C changeConsumer = getChangeConsumer();
+        var changeConsumer = getChangeConsumer();
         if (changeConsumer == null) {
             return null;
         }
 
-        final ObservableList<TreeItem<TreeNode<?>>> selectedItems = getTreeView()
+        var selectedItems = getTreeView()
                 .getSelectionModel()
                 .getSelectedItems();
 
@@ -308,8 +302,8 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
             return null;
         }
 
-        final ContextMenu contextMenu = new ContextMenu();
-        final ObservableList<MenuItem> items = contextMenu.getItems();
+        var contextMenu = new ContextMenu();
+        var items = contextMenu.getItems();
 
         if (selectedItems.size() == 1 && requestedNode != null) {
 
@@ -323,11 +317,11 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
 
         } else {
 
-            final Array<TreeNode<?>> treeNodes = selectedItems.stream()
+            var treeNodes = selectedItems.stream()
                     .map(TreeItem::getValue)
-                    .collect(ArrayCollectors.toArray(TreeNode.class));
+                    .collect(ArrayCollectors.<TreeNode<?>>toArray(TreeNode.class));
 
-            MULTI_ITEMS_ACTION_FILLERS.forEach(filler -> filler.accept(this, items, treeNodes));
+            MULTI_ITEMS_ACTION_FILLERS.forEach(filler -> filler.fill(this, items, treeNodes));
         }
 
         return contextMenu;
@@ -342,34 +336,41 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
      * @param index      the index
      */
     @FxThread
-    public void notifyMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
-                            @NotNull final Object node, final int index) {
-        notifyMoved(FACTORY_REGISTRY.createFor(prevParent), FACTORY_REGISTRY.createFor(newParent),
-                FACTORY_REGISTRY.createFor(node), index);
+    public void notifyMoved(@NotNull Object prevParent, @NotNull Object newParent, @NotNull Object node, int index) {
+        notifyMoved(
+                FACTORY_REGISTRY.createFor(prevParent),
+                FACTORY_REGISTRY.createFor(newParent),
+                FACTORY_REGISTRY.createFor(node),
+                index
+        );
     }
 
     /**
      * Notify about moving the element.
      */
     @FxThread
-    private void notifyMoved(@Nullable final TreeNode<?> prevParent, @Nullable final TreeNode<?> newParent,
-                             @Nullable final TreeNode<?> node, final int index) {
+    private void notifyMoved(
+            @Nullable TreeNode<?> prevParent,
+            @Nullable TreeNode<?> newParent,
+            @Nullable TreeNode<?> node,
+            int index
+    ) {
 
-        final TreeView<TreeNode<?>> treeView = getTreeView();
-        final TreeItem<TreeNode<?>> prevParentItem = findItemForValue(treeView, prevParent);
-        final TreeItem<TreeNode<?>> newParentItem = findItemForValue(treeView, newParent);
-        final TreeItem<TreeNode<?>> nodeItem = findItemForValue(treeView, node);
+        var treeView = getTreeView();
+        var prevParentItem = findItemForValue(treeView, prevParent);
+        var newParentItem = findItemForValue(treeView, newParent);
+        var nodeItem = findItemForValue(treeView, node);
 
         if (prevParentItem == null || newParentItem == null || nodeItem == null) {
             return;
         }
 
-        final TreeNode<?> prevParenTreeNode = prevParentItem.getValue();
+        var prevParenTreeNode = prevParentItem.getValue();
         prevParenTreeNode.notifyChildPreRemove(node);
         prevParentItem.getChildren().remove(nodeItem);
         prevParenTreeNode.notifyChildRemoved(node);
 
-        final TreeNode<?> newParentTreeNode = newParentItem.getValue();
+        var newParentTreeNode = newParentItem.getValue();
         newParentTreeNode.notifyChildAdded(node);
 
         if (index >= 0) {
