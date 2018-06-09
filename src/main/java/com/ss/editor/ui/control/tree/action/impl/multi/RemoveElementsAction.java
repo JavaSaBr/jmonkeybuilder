@@ -42,9 +42,9 @@ public class RemoveElementsAction extends AbstractNodeAction<ModelChangeConsumer
         AVAILABLE_TYPES.add(AnimationTreeNode.class);
     }
 
-    public static final TripleConsumer<NodeTree<?>, List<MenuItem>, Array<TreeNode<?>>> ACTION_FILLER = (nodeTree, menuItems, treeNodes) -> {
+    public static final NodeTree.MultiItemActionFiller ACTION_FILLER = (nodeTree, menuItems, treeNodes) -> {
 
-        final TreeNode<?> unexpectedItem = treeNodes.search(treeNode ->
+        var unexpectedItem = treeNodes.search(treeNode ->
                 AVAILABLE_TYPES.search(treeNode, Class::isInstance) == null || !treeNode.canRemove());
 
         if (unexpectedItem == null) {
@@ -52,7 +52,7 @@ public class RemoveElementsAction extends AbstractNodeAction<ModelChangeConsumer
         }
     };
 
-    public RemoveElementsAction(@NotNull final NodeTree<?> nodeTree, @NotNull final Array<TreeNode<?>> nodes) {
+    public RemoveElementsAction(@NotNull NodeTree<?> nodeTree, @NotNull Array<TreeNode<?>> nodes) {
         super(nodeTree, nodes);
     }
 
@@ -73,23 +73,21 @@ public class RemoveElementsAction extends AbstractNodeAction<ModelChangeConsumer
     public void process() {
         super.process();
 
-        final Array<TreeNode<?>> nodes = getNodes();
-        final Array<Element> toRemove = nodes.stream()
+        var nodes = getNodes();
+        var toRemove = nodes.stream()
                 .filter(treeNode -> treeNode.getParent() != null)
                 .map(this::convert)
                 .collect(ArrayCollectors.toArray(Element.class));
 
-
-        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new RemoveElementsOperation(toRemove));
+        getNodeTree().requireChangeConsumer()
+                .execute(new RemoveElementsOperation(toRemove));
     }
 
     @FxThread
-    private @NotNull Element convert(@NotNull final TreeNode<?> treeNode) {
-        final Object value = treeNode.getElement();
-        final TreeNode<?> parentNode = notNull(treeNode.getParent());
-        final Object parent = parentNode.getElement();
+    private @NotNull Element convert(@NotNull TreeNode<?> treeNode) {
+        var value = treeNode.getElement();
+        var parentNode = notNull(treeNode.getParent());
+        var parent = parentNode.getElement();
         return new Element(value, parent);
     }
 }

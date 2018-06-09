@@ -2,12 +2,11 @@ package com.ss.editor.ui.control.app.state.list;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.model.undo.impl.DisableAppStateOperation;
 import com.ss.editor.model.undo.impl.EnableAppStateOperation;
 import com.ss.editor.ui.control.list.AbstractListCell;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,9 +23,10 @@ public class AppStateListCell extends AbstractListCell<EditableSceneAppState> {
     @NotNull
     private final AppStateList stateList;
 
-    public AppStateListCell(@NotNull final AppStateList stateList) {
+    public AppStateListCell(@NotNull AppStateList stateList) {
+        super(stateList::getContextMenu);
         this.stateList = stateList;
-        FXUtils.addClassTo(this, CssClasses.SCENE_APP_STATE_LIST_CELL);
+        FxUtils.addClass(this, CssClasses.SCENE_APP_STATE_LIST_CELL);
     }
 
     /**
@@ -43,9 +43,9 @@ public class AppStateListCell extends AbstractListCell<EditableSceneAppState> {
     @FxThread
     protected void processHideImpl() {
 
-        final EditableSceneAppState item = getItem();
-        final AppStateList stateList = getStateList();
-        final SceneChangeConsumer changeConsumer = stateList.getChangeConsumer();
+        var item = getItem();
+        var stateList = getStateList();
+        var changeConsumer = stateList.getChangeConsumer();
 
         if (item.isEnabled()) {
             changeConsumer.execute(new DisableAppStateOperation(item));
@@ -56,13 +56,13 @@ public class AppStateListCell extends AbstractListCell<EditableSceneAppState> {
 
     @Override
     @FxThread
-    protected boolean isEnabled(@Nullable final EditableSceneAppState item) {
+    protected boolean isEnabled(@Nullable EditableSceneAppState item) {
         return item != null && item.isEnabled();
     }
 
     @Override
     @FxThread
-    protected @NotNull String getName(@Nullable final EditableSceneAppState item) {
+    protected @NotNull String getName(@Nullable EditableSceneAppState item) {
         return item == null ? "" : item.getName();
     }
 }

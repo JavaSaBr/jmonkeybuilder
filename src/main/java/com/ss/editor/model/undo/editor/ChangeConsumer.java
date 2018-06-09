@@ -35,6 +35,24 @@ public interface ChangeConsumer {
     }
 
     /**
+     * Notify about changed the object in the jME thread.
+     *
+     * @param object the object.
+     */
+    @JmeThread
+    default void notifyJmeObjectChanged(@NotNull Object object) {
+    }
+
+    /**
+     * Notify about changed the object in the Fx thread.
+     *
+     * @param object the object.
+     */
+    @FxThread
+    default void notifyFxObjectChanged(@NotNull Object object) {
+    }
+
+    /**
      * Notify about changed property from jME thread.
      *
      * @param object       the object
@@ -97,8 +115,13 @@ public interface ChangeConsumer {
      * @param needDeepExpand true of need to expand new node deeply.
      */
     @FxThread
-    default void notifyFxReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild,
-                                  boolean needExpand, boolean needDeepExpand) {
+    default void notifyFxReplaced(
+            @NotNull Object parent,
+            @Nullable Object oldChild,
+            @Nullable Object newChild,
+            boolean needExpand,
+            boolean needDeepExpand
+    ) {
     }
 
     /**
@@ -111,8 +134,13 @@ public interface ChangeConsumer {
      * @param needSelect true if need select this object.
      */
     @FxThread
-    default void notifyFxMoved(@NotNull Object prevParent, @NotNull Object newParent, @NotNull Object child, int index,
-                               boolean needSelect) {
+    default void notifyFxMoved(
+            @NotNull Object prevParent,
+            @NotNull Object newParent,
+            @NotNull Object child,
+            int index,
+            boolean needSelect
+    ) {
     }
 
     /**

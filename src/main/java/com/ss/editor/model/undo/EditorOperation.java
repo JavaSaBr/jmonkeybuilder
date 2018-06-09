@@ -17,7 +17,7 @@ public interface EditorOperation {
      * @param editor the editor.
      */
     @FxThread
-    default void redo(@NotNull final UndoableEditor editor) {
+    default void redo(@NotNull UndoableEditor editor) {
     }
 
     /**
@@ -26,6 +26,6 @@ public interface EditorOperation {
      * @param editor the editor.
      */
     @FxThread
-    default void undo(@NotNull final UndoableEditor editor) {
+    default void undo(@NotNull UndoableEditor editor) {
     }
 }

@@ -8,7 +8,6 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.common.function.TripleConsumer;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayCollectors;
 import com.ss.rlib.fx.util.FxControlUtils;
@@ -21,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -35,7 +35,7 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     protected static final TreeNodeFactoryRegistry FACTORY_REGISTRY = TreeNodeFactoryRegistry.getInstance();
 
     @FunctionalInterface
-    interface MultiItemActionFiller {
+    public interface MultiItemActionFiller {
 
         @FxThread
         void fill(
@@ -47,7 +47,8 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * The list of action fillers.
      */
-    private static final Array<MultiItemActionFiller> MULTI_ITEMS_ACTION_FILLERS = Array.ofType(TripleConsumer.class);
+    private static final Array<MultiItemActionFiller> MULTI_ITEMS_ACTION_FILLERS =
+            Array.ofType(MultiItemActionFiller.class);
 
     /**
      * Register the new multi items action filler.
@@ -728,5 +729,25 @@ public class NodeTree<C extends ChangeConsumer> extends VBox {
     @FxThread
     public @Nullable C getChangeConsumer() {
         return changeConsumer;
+    }
+
+    /**
+     * Require a change consumer.
+     *
+     * @return the change consumer.
+     */
+    @FxThread
+    public @NotNull C requireChangeConsumer() {
+        return notNull(changeConsumer);
+    }
+
+    /**
+     * Get an option of a change consumer.
+     *
+     * @return the change consumer.
+     */
+    @FxThread
+    public @NotNull Optional<C> getChangeConsumerOpt() {
+        return Optional.ofNullable(changeConsumer);
     }
 }

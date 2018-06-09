@@ -10,6 +10,7 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.model.undo.impl.RemoveAppStateOperation;
 import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.action.MenuModifyingAction;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.CreateSceneAppStateDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -127,10 +128,10 @@ public class AppStateList extends VBox {
     }
 
     /**
-     * Get the context menu for the element.
+     * Get a context menu for the app state.
      *
-     * @param requestedNode the requested node.
-     * @return the context menu.
+     * @param appState the requested app state.
+     * @return the context menu or null.
      */
     @FxThread
     public @Nullable ContextMenu getContextMenu(@Nullable SceneAppState appState) {
@@ -149,8 +150,9 @@ public class AppStateList extends VBox {
         var contextMenu = new ContextMenu();
         var items = contextMenu.getItems();
 
-        actions.
-
+        actions.stream()
+                .map(action -> new MenuModifyingAction(action, getChangeConsumer(), owner))
+                .forEach(items::add);
 
         return contextMenu;
     }

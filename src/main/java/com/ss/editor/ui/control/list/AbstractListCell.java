@@ -1,11 +1,14 @@
 package com.ss.editor.ui.control.list;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.fx.util.FxUtils;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.ImageView;
@@ -14,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 /**
  * The base implementation of list cell.
@@ -40,7 +45,14 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
     @NotNull
     private final ImageView visibleIcon;
 
-    public AbstractListCell() {
+    /**
+     * The context menu factory.
+     */
+    @NotNull
+    private final Function<T, ContextMenu> contextMenuFactory;
+
+    public AbstractListCell(@NotNull Function<T, ContextMenu> contextMenuFactory) {
+        this.contextMenuFactory = contextMenuFactory;
         this.content = new HBox();
         this.text = new Label();
         this.visibleIcon = new ImageView();
@@ -48,19 +60,44 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
         this.visibleIcon.setOnMouseReleased(this::processHide);
         this.visibleIcon.setPickOnBounds(true);
 
-        FXUtils.addToPane(visibleIcon, content);
-        FXUtils.addToPane(text, content);
+        setOnMouseClicked(this::processClick);
+
+        FxUtils.addClass(content, CssClasses.DEF_HBOX);
+        FxUtils.addChild(content, visibleIcon, text);
 
         setEditable(false);
+    }
 
-        FXUtils.addClassTo(content, CssClasses.DEF_HBOX);
+    /**
+     * Handle a mouse click.
+     */
+    @FxThread
+    private void processClick(@NotNull MouseEvent event) {
+
+        T item = getItem();
+        if (item == null) {
+            return;
+        }
+
+        var button = event.getButton();
+        if (button != MouseButton.SECONDARY) {
+            return;
+        }
+
+        var contextMenu = contextMenuFactory.apply(item);
+        if (contextMenu == null) {
+            return;
+        }
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
     }
 
     /**
      * Update hide status.
      */
     @FxThread
-    private void processHide(@NotNull final MouseEvent event) {
+    private void processHide(@NotNull MouseEvent event) {
         event.consume();
 
         if (event.getButton() != MouseButton.PRIMARY) {
@@ -78,7 +115,7 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
 
     @Override
     @FxThread
-    public void updateItem(@Nullable final T item, final boolean empty) {
+    public void updateItem(@Nullable T item, boolean empty) {
         super.updateItem(item, empty);
 
         if (item == null) {
@@ -107,12 +144,12 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
      * @return the name.
      */
     @FxThread
-    protected abstract @NotNull String getName(@Nullable final T item);
+    protected abstract @NotNull String getName(@Nullable T item);
 
     /**
      * @param item the item which needs to check.
      * @return true if the item is enabled.
      */
     @FxThread
-    protected abstract boolean isEnabled(@Nullable final T item);
+    protected abstract boolean isEnabled(@Nullable T item);
 }

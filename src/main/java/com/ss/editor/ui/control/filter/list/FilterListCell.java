@@ -30,6 +30,7 @@ public class FilterListCell extends AbstractListCell<EditableSceneFilter> {
      * @param stateList the state list
      */
     public FilterListCell(@NotNull final FilterList stateList) {
+        super(filter -> null);
         this.stateList = stateList;
         FXUtils.addClassTo(this, CssClasses.SCENE_FILTER_LIST_CELL);
     }
