@@ -1,7 +1,10 @@
 package com.ss.editor.ui.control.list;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.extension.EditableName;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.model.undo.impl.RenameEditableNameOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -15,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +30,31 @@ import java.util.function.Function;
  * @author JavaSaBr
  */
 public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
+
+    @NotNull
+    private final StringConverter<T> stringConverter = new StringConverter<>() {
+
+        @Override
+        public String toString(@Nullable T object) {
+            return getName(object);
+        }
+
+        @Override
+        public T fromString(@NotNull String newName) {
+
+            var item = getItem();
+            if (item == null) {
+                return null;
+            }
+
+            var object = (EditableName) item;
+            var currentName = object.getName();
+
+            changeConsumer.execute(new RenameEditableNameOperation(currentName, newName, object));
+
+            return item;
+        }
+    };
 
     /**
      * The content box.
@@ -46,12 +75,22 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
     private final ImageView visibleIcon;
 
     /**
+     * The change consumer.
+     */
+    @NotNull
+    private final ChangeConsumer changeConsumer;
+
+    /**
      * The context menu factory.
      */
     @NotNull
     private final Function<T, ContextMenu> contextMenuFactory;
 
-    public AbstractListCell(@NotNull Function<T, ContextMenu> contextMenuFactory) {
+    public AbstractListCell(
+            @NotNull ChangeConsumer changeConsumer,
+            @NotNull Function<T, ContextMenu> contextMenuFactory
+    ) {
+        this.changeConsumer = changeConsumer;
         this.contextMenuFactory = contextMenuFactory;
         this.content = new HBox();
         this.text = new Label();
@@ -61,6 +100,7 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
         this.visibleIcon.setPickOnBounds(true);
 
         setOnMouseClicked(this::processClick);
+        setConverter(stringConverter);
 
         FxUtils.addClass(content, CssClasses.DEF_HBOX);
         FxUtils.addChild(content, visibleIcon, text);
@@ -80,6 +120,11 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
         }
 
         var button = event.getButton();
+        if (button == MouseButton.PRIMARY && event.getClickCount() > 1 && isEditable()) {
+            //startEdit();
+            return;
+        }
+
         if (button != MouseButton.SECONDARY) {
             return;
         }
@@ -121,6 +166,7 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
         if (item == null) {
             setText(StringUtils.EMPTY);
             setGraphic(null);
+            setEditable(false);
             return;
         }
 
@@ -135,6 +181,7 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
 
         setText(StringUtils.EMPTY);
         setGraphic(content);
+        setEditable(item instanceof EditableName);
     }
 
     /**

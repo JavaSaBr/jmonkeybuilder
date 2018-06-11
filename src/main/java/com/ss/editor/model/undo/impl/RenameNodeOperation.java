@@ -2,8 +2,6 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,9 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
-    /**
-     * The constant PROPERTY_NAME.
-     */
     public static final String PROPERTY_NAME = "name";
 
     /**

@@ -1,11 +1,17 @@
 package com.ss.editor.model.scene;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Sphere;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.ScenePresentable;
+import com.ss.editor.extension.scene.ScenePresentable.PresentationType;
+import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,10 +24,9 @@ public class EditorPresentableNode extends Node {
 
     private class EditedNode extends Node implements VisibleOnlyWhenSelected, NoSelection, WrapperNode {
 
-        private EditedNode(@NotNull final String name) {
+        private EditedNode(@NotNull String name) {
             super(name);
         }
-
 
         @Override
         @FromAnyThread
@@ -31,11 +36,17 @@ public class EditorPresentableNode extends Node {
 
         @Override
         @JmeThread
-        public void setCullHint(final CullHint hint) {
+        public void setCullHint(CullHint hint) {
             super.setCullHint(hint);
             notNull(getModel()).setCullHint(hint);
         }
     }
+
+    /**
+     * The node to edit.
+     */
+    @NotNull
+    private final EditedNode editedNode;
 
     /**
      * The presented object.
@@ -44,10 +55,10 @@ public class EditorPresentableNode extends Node {
     private ScenePresentable object;
 
     /**
-     * The node to edit.
+     * Previous presentation type.
      */
-    @NotNull
-    private final EditedNode editedNode;
+    @Nullable
+    private PresentationType prevPresentationType;
 
     /**
      * The view model.
@@ -66,7 +77,7 @@ public class EditorPresentableNode extends Node {
      * @param object the object.
      */
     @JmeThread
-    public void setObject(@Nullable final ScenePresentable object) {
+    public void setObject(@Nullable ScenePresentable object) {
         this.object = object;
     }
 
@@ -106,7 +117,7 @@ public class EditorPresentableNode extends Node {
      * @param model the model.
      */
     @JmeThread
-    public void setModel(@Nullable final Geometry model) {
+    public void setModel(@Nullable Geometry model) {
         this.model = model;
     }
 
@@ -114,10 +125,10 @@ public class EditorPresentableNode extends Node {
     @JmeThread
     public void updateGeometricState() {
 
-        final ScenePresentable object = getObject();
+        var object = getObject();
 
         if (object != null) {
-            final Node editedNode = getEditedNode();
+            var editedNode = getEditedNode();
             object.setRotation(editedNode.getLocalRotation());
             object.setLocation(editedNode.getLocalTranslation());
             object.setScale(editedNode.getLocalScale());
@@ -132,9 +143,9 @@ public class EditorPresentableNode extends Node {
     @JmeThread
     public void sync() {
 
-        final ScenePresentable object = getObject();
+        var object = notNull(getObject());
 
-        final Node editedNode = getEditedNode();
+        var editedNode = getEditedNode();
         editedNode.setLocalRotation(object.getRotation());
         editedNode.setLocalTranslation(object.getLocation());
         editedNode.setLocalScale(object.getScale());
@@ -146,9 +157,12 @@ public class EditorPresentableNode extends Node {
     @JmeThread
     public void updateModel() {
 
-        final ScenePresentable object = getObject();
-        final Geometry model = getModel();
-        if (model == null || object == null) return;
+        var object = getObject();
+        var model = getModel();
+
+        if (model == null || object == null) {
+            return;
+        }
 
         // TODO implement getting parent
         /*final Node parent = object.getParent();
@@ -159,9 +173,61 @@ public class EditorPresentableNode extends Node {
             setLocalScale(parent.getWorldScale());
         }*/
 
-        final Node editedNode = getEditedNode();
+        var editedNode = getEditedNode();
+
         model.setLocalTranslation(editedNode.getWorldTranslation());
         model.setLocalRotation(editedNode.getWorldRotation());
         model.setLocalScale(editedNode.getWorldScale());
+    }
+
+    /**
+     * Update a geometry of presentation.
+     */
+    @JmeThread
+    public void updateGeometry() {
+
+        var presentationType = notNull(getObject()).getPresentationType();
+        if (presentationType == prevPresentationType) {
+            return;
+        }
+
+        var prevModel = getModel();
+        var newModel = createGeometry(presentationType);
+
+        setModel(newModel);
+
+        if (prevModel != null) {
+            Node parent = prevModel.getParent();
+            prevModel.removeFromParent();
+            if (parent != null) {
+                parent.attachChild(newModel);
+            }
+        }
+
+        this.prevPresentationType = presentationType;
+    }
+
+    @JmeThread
+    private @NotNull Geometry createGeometry(@NotNull PresentationType presentationType) {
+
+        var material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color", ColorRGBA.Yellow);
+        material.getAdditionalRenderState().setWireframe(true);
+
+        Geometry geometry;
+
+        switch (presentationType) {
+            case SPHERE: {
+                geometry = new Geometry("Sphere", new Sphere(8, 8, 1));
+                break;
+            }
+            default: {
+                geometry = new Geometry("Box", new Box(1, 1, 1));
+            }
+        }
+
+        geometry.setMaterial(material);
+
+        return geometry;
     }
 }

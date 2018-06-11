@@ -13,8 +13,8 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.css.PseudoClass;
@@ -40,31 +40,24 @@ import java.util.Set;
  */
 public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<TreeNode<?>> {
 
-    @NotNull
     public static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
 
-    @NotNull
     private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
-
-    @NotNull
     private static final PseudoClass DRAGGED_PSEUDO_CLASS = PseudoClass.getPseudoClass("dragged");
-
-    @NotNull
     private static final PseudoClass EDITING_PSEUDO_CLASS = PseudoClass.getPseudoClass("editing");
 
-    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private final StringConverter<TreeNode<?>> stringConverter = new StringConverter<TreeNode<?>>() {
+    private final StringConverter<TreeNode<?>> stringConverter = new StringConverter<>() {
 
         @Override
-        public String toString(@Nullable final TreeNode<?> object) {
+        public String toString(@Nullable TreeNode<?> object) {
             return object == null ? "" : object.getName();
         }
 
         @Override
-        public TreeNode<?> fromString(@NotNull final String string) {
+        public TreeNode<?> fromString(@NotNull String string) {
 
             final TreeNode<?> item = getItem();
             if (item == null) {
@@ -82,6 +75,8 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      */
     @NotNull
     private final BooleanProperty dragged = new BooleanPropertyBase(false) {
+
+        @Override
         public void invalidated() {
             pseudoClassStateChanged(DRAGGED_PSEUDO_CLASS, get());
         }
@@ -102,6 +97,8 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      */
     @NotNull
     private final BooleanProperty dropAvailable = new BooleanPropertyBase(false) {
+
+        @Override
         public void invalidated() {
             pseudoClassStateChanged(DROP_AVAILABLE_PSEUDO_CLASS, get());
         }
@@ -122,6 +119,8 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      */
     @NotNull
     private final BooleanProperty editing = new BooleanPropertyBase(false) {
+
+        @Override
         public void invalidated() {
             pseudoClassStateChanged(EDITING_PSEUDO_CLASS, get());
         }
@@ -172,7 +171,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      */
     private boolean ignoreUpdate;
 
-    public NodeTreeCell(@NotNull final M nodeTree) {
+    public NodeTreeCell(@NotNull M nodeTree) {
         this.nodeTree = nodeTree;
         this.icon = new ImageView();
         this.content = new HBox();
@@ -182,6 +181,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
         this.visibleIcon.setOnMouseReleased(this::processHide);
         this.visibleIcon.setPickOnBounds(true);
 
+        setConverter(stringConverter);
         setOnMouseClicked(this::processClick);
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
@@ -192,14 +192,10 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
             if (isEditing()) event.consume();
         });
 
-        FXUtils.addToPane(icon, content);
-        FXUtils.addToPane(visibleIcon, content);
-        FXUtils.addToPane(text, content);
+        FxUtils.addClass(content, CssClasses.DEF_HBOX)
+                .addClass(this, CssClasses.ABSTRACT_NODE_TREE_CELL);
 
-        setConverter(stringConverter);
-
-        FXUtils.addClassTo(content, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(this, CssClasses.ABSTRACT_NODE_TREE_CELL);
+        FxUtils.addChild(content, icon, visibleIcon, text);
     }
 
     /**
@@ -228,6 +224,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     @Override
     @FxThread
     public void startEdit() {
+
         if (!isEditable()) {
             return;
         }
@@ -249,6 +246,8 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     }
 
     /**
+     * Return true if need to ignore update.
+     *
      * @return true if need to ignore update.
      */
     @FxThread
@@ -257,10 +256,12 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
     }
 
     /**
-     * @param ignoreUpdate the flag of ignoring updates.
+     * Set true if need to ignore update.
+     *
+     * @param ignoreUpdate true if need to ignore update.
      */
     @FxThread
-    private void setIgnoreUpdate(final boolean ignoreUpdate) {
+    private void setIgnoreUpdate(boolean ignoreUpdate) {
         this.ignoreUpdate = ignoreUpdate;
     }
 
@@ -313,11 +314,15 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
             return;
         }
 
-        final ImageView icon = getIcon();
+        var icon = getIcon();
 
         if (item == null) {
-            final TreeItem<TreeNode<?>> treeItem = getTreeItem();
-            if (treeItem != null) treeItem.setGraphic(null);
+
+            var treeItem = getTreeItem();
+            if (treeItem != null) {
+                treeItem.setGraphic(null);
+            }
+
             setText(StringUtils.EMPTY);
             setEditable(false);
             return;
@@ -327,8 +332,10 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
 
         DynamicIconSupport.updateListener(this, icon, selectedProperty());
 
-        final TreeItem<TreeNode<?>> treeItem = getTreeItem();
-        if (treeItem != null) treeItem.setGraphic(content);
+        var treeItem = getTreeItem();
+        if (treeItem != null) {
+            treeItem.setGraphic(content);
+        }
 
         HideableNode hideable = null;
 
@@ -367,32 +374,32 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      * Handle a mouse click.
      */
     @FxThread
-    private void processClick(@NotNull final MouseEvent event) {
+    private void processClick(@NotNull MouseEvent event) {
 
-        final TreeNode<?> item = getItem();
+        var item = getItem();
         if (item == null) {
             return;
         }
 
-        final MouseButton button = event.getButton();
+        var button = event.getButton();
         if (button != MouseButton.SECONDARY) {
             return;
         }
 
-        final M nodeTree = getNodeTree();
-        final ContextMenu contextMenu = nodeTree.getContextMenu(item);
+        var contextMenu = getNodeTree().getContextMenu(item);
         if (contextMenu == null) {
             return;
         }
 
-        EXECUTOR_MANAGER.addFxTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
+        EXECUTOR_MANAGER.addFxTask(() ->
+                contextMenu.show(this, Side.BOTTOM, 0, 0));
     }
 
     /**
      * Handle stopping dragging.
      */
     @FxThread
-    private void stopDrag(@NotNull final DragEvent event) {
+    private void stopDrag(@NotNull DragEvent event) {
         dragged.setValue(false);
         setCursor(Cursor.DEFAULT);
         event.consume();
@@ -402,7 +409,7 @@ public class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> exten
      * Handle starting dragging.
      */
     @FxThread
-    private void startDrag(@NotNull final MouseEvent mouseEvent) {
+    private void startDrag(@NotNull MouseEvent mouseEvent) {
 
         final TreeNode<?> item = getItem();
         if (item == null) {

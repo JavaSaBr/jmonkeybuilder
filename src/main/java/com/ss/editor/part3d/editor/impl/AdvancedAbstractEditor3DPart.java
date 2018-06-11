@@ -1143,7 +1143,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
     }
 
     @JmeThread
-    protected void postCameraUpdate(final float tpf) {
+    protected void postCameraUpdate(float tpf) {
 
         final DirectionalLight lightForCamera = getLightForCamera();
         final EditorCamera editorCamera = getEditorCamera();

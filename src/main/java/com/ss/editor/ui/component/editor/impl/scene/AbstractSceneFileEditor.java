@@ -44,7 +44,6 @@ import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.scene.EditorAudioNode;
 import com.ss.editor.model.scene.EditorLightNode;
-import com.ss.editor.model.scene.EditorPresentableNode;
 import com.ss.editor.model.scene.WrapperNode;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -90,6 +89,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -112,9 +112,6 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private static final Array<String> ACCEPTED_FILES = ArrayFactory.asArray(
             FileExtensions.JME_MATERIAL,
             FileExtensions.JME_OBJECT);
-
-    @NotNull
-    private static final Array<Spatial> EMPTY_SELECTION = ArrayFactory.newArray(Spatial.class);
 
     @NotNull
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
@@ -768,12 +765,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param object the selected object.
      */
     @FxThread
-    public void selectNodeFromTree(@Nullable final Object object) {
-
-        final Array<Object> objects = LocalObjects.get().nextObjectArray();
-        objects.add(object);
-
-        selectNodesFromTree(objects);
+    public void selectNodeFromTree(@Nullable Object object) {
+        selectNodesFromTree(object == null ? Array.empty() : Array.of(object));
     }
 
     /**
@@ -782,10 +775,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param objects the selected objects.
      */
     @FxThread
-    public void selectNodesFromTree(@NotNull final Array<?> objects) {
+    public void selectNodesFromTree(@NotNull Array<?> objects) {
 
-        final MA editor3DPart = getEditor3DPart();
-        editor3DPart.select(EMPTY_SELECTION);
+        var editor3DPart = getEditor3DPart();
+        editor3DPart.select(Array.empty());
 
         if (objects.size() > 1) {
             multiSelectNodesFromTree(objects, editor3DPart);
@@ -793,7 +786,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             singleSelectNodesFromTree(objects, editor3DPart);
             return;
         } else {
-            editor3DPart.select(EMPTY_SELECTION);
+            editor3DPart.select(Array.empty());
         }
 
         getModelPropertyEditor().buildFor(null, null);
@@ -807,71 +800,34 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param editor3DPart the 3D part of this editor.
      */
     @FxThread
-    protected void multiSelectNodesFromTree(@NotNull final Array<?> objects, @NotNull final MA editor3DPart) {
+    protected void multiSelectNodesFromTree(@NotNull Array<?> objects, @NotNull MA editor3DPart) {
 
-        final Array<Spatial> toSelect = ArrayFactory.newArray(Spatial.class);
+        var toSelect = Array.<Spatial>ofType(Spatial.class);
 
-        for (final Object object : objects) {
-
-            Object element;
-
-            if (object instanceof TreeNode<?>) {
-                element = ((TreeNode) object).getElement();
-            } else {
-                element = object;
-            }
-
-            if (element instanceof SceneLayer) {
-                element = null;
-            }
-
-            Spatial spatial = null;
-
-            if (element instanceof AudioNode) {
-                final EditorAudioNode audioNode = editor3DPart.getAudioNode((AudioNode) element);
-                spatial = audioNode == null ? null : audioNode.getEditedNode();
-            } else if (element instanceof Spatial) {
-                spatial = (Spatial) element;
-            } else if (element instanceof Light) {
-                spatial = editor3DPart.getLightNode((Light) element);
-            } else if(element instanceof ScenePresentable) {
-                final EditorPresentableNode presentableNode = editor3DPart.getPresentableNode((ScenePresentable) element);
-                spatial = presentableNode == null? null : presentableNode.getEditedNode();
-            }
-
-            if (spatial != null && !spatial.isVisible()) {
-                spatial = null;
-            }
-
-            if(spatial != null && canSelect(spatial)) {
-                toSelect.add(spatial);
-            }
+        for (var object : objects) {
+            getSpatialToShowSelection(editor3DPart, object)
+                    .ifPresent(toSelect::add);
         }
 
         editor3DPart.select(toSelect);
     }
 
     /**
-     * Handle single select nodes from tree.
+     * Try to get a spatial to show selection of the object.
      *
-     * @param objects the selected objects.
-     * @param editor3DPart the 3D part of this editor.
+     * @param editor3DPart the editor 3D part.
+     * @param object       the object.
+     * @return the optional value of a spatial.
      */
-    @FxThread
-    protected void singleSelectNodesFromTree(@NotNull final Array<?> objects, @NotNull final MA editor3DPart) {
+    @JmeThread
+    protected @NotNull Optional<Spatial> getSpatialToShowSelection(@NotNull MA editor3DPart, Object object) {
 
-        Object parent = null;
         Object element;
 
-        final Object first = objects.first();
-
-        if (first instanceof TreeNode<?>) {
-            final TreeNode treeNode = (TreeNode) first;
-            final TreeNode parentNode = treeNode.getParent();
-            parent = parentNode == null ? null : parentNode.getElement();
-            element = treeNode.getElement();
+        if (object instanceof TreeNode<?>) {
+            element = ((TreeNode) object).getElement();
         } else {
-            element = first;
+            element = object;
         }
 
         if (element instanceof SceneLayer) {
@@ -881,21 +837,57 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         Spatial spatial = null;
 
         if (element instanceof AudioNode) {
-            final EditorAudioNode audioNode = editor3DPart.getAudioNode((AudioNode) element);
+            var audioNode = editor3DPart.getAudioNode((AudioNode) element);
             spatial = audioNode == null ? null : audioNode.getEditedNode();
         } else if (element instanceof Spatial) {
             spatial = (Spatial) element;
-            parent = spatial.getParent();
         } else if (element instanceof Light) {
             spatial = editor3DPart.getLightNode((Light) element);
-        } else if(element instanceof ScenePresentable) {
-            final EditorPresentableNode presentableNode = editor3DPart.getPresentableNode((ScenePresentable) element);
-            spatial = presentableNode == null? null : presentableNode.getEditedNode();
+        } else if (element instanceof ScenePresentable) {
+            var presentableNode = editor3DPart.getPresentableNode((ScenePresentable) element);
+            spatial = presentableNode == null ? null : presentableNode.getEditedNode();
         }
 
         if (spatial != null && !spatial.isVisible()) {
             spatial = null;
         }
+
+        if (spatial != null && canSelect(spatial)) {
+            return Optional.of(spatial);
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Handle single select node from a tree.
+     *
+     * @param objects the selected objects.
+     * @param editor3DPart the 3D part of this editor.
+     */
+    @FxThread
+    protected void singleSelectNodesFromTree(@NotNull Array<?> objects, @NotNull MA editor3DPart) {
+
+        Object parent = null;
+        Object element;
+
+        var first = objects.first();
+
+        if (first instanceof TreeNode<?>) {
+            var treeNode = (TreeNode) first;
+            var parentNode = treeNode.getParent();
+            element = treeNode.getElement();
+            parent = parentNode == null ? null : parentNode.getElement();
+        } else {
+            element = first;
+        }
+
+        if (element instanceof SceneLayer) {
+            element = null;
+        }
+
+        Spatial spatial = getSpatialToShowSelection(editor3DPart, first)
+                .orElse(null);
 
         if (spatial != null && canSelect(spatial)) {
 

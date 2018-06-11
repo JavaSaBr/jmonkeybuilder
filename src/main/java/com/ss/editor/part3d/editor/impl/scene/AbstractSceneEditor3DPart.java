@@ -24,20 +24,19 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.*;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
-import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
-import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.control.transform.*;
-import com.ss.editor.extension.property.SimpleProperty;
+import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.scene.*;
@@ -55,7 +54,6 @@ import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.common.util.array.ArrayIterator;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.KeyCode;
@@ -63,6 +61,7 @@ import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -515,7 +514,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         grid.setMaterial(gridMaterial);
         grid.setQueueBucket(RenderQueue.Bucket.Transparent);
         grid.setShadowMode(RenderQueue.ShadowMode.Off);
-        grid.setCullHint(Spatial.CullHint.Never);
+        grid.setCullHint(CullHint.Never);
         grid.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
 
         final Quad quad = new Quad(gridSize, gridSize);
@@ -523,7 +522,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         gridCollision.setMaterial(createColorMaterial(gridColor));
         gridCollision.setQueueBucket(RenderQueue.Bucket.Transparent);
         gridCollision.setShadowMode(RenderQueue.ShadowMode.Off);
-        gridCollision.setCullHint(Spatial.CullHint.Always);
+        gridCollision.setCullHint(CullHint.Always);
         gridCollision.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
         gridCollision.setLocalRotation(new Quaternion().fromAngles(AngleUtils.degreeToRadians(90), 0, 0));
 
@@ -536,7 +535,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final Geometry gxAxis = new Geometry("XAxis", xAxis);
         gxAxis.setModelBound(new BoundingBox());
         gxAxis.setShadowMode(RenderQueue.ShadowMode.Off);
-        gxAxis.setCullHint(Spatial.CullHint.Never);
+        gxAxis.setCullHint(CullHint.Never);
         gxAxis.setMaterial(xMaterial);
 
         gridNode.attachChild(gxAxis);
@@ -547,7 +546,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         final Geometry gzAxis = new Geometry("ZAxis", zAxis);
         gzAxis.setModelBound(new BoundingBox());
         gzAxis.setShadowMode(RenderQueue.ShadowMode.Off);
-        gzAxis.setCullHint(Spatial.CullHint.Never);
+        gzAxis.setCullHint(CullHint.Never);
         gzAxis.setMaterial(zMaterial);
 
         gridNode.attachChild(gzAxis);
@@ -585,39 +584,39 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         moveTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_move.j3o");
         moveTool.getChild("move_x").setMaterial(redMaterial);
         moveTool.getChild("collision_move_x").setMaterial(redMaterial);
-        moveTool.getChild("collision_move_x").setCullHint(Spatial.CullHint.Always);
+        moveTool.getChild("collision_move_x").setCullHint(CullHint.Always);
         moveTool.getChild("move_y").setMaterial(blueMaterial);
         moveTool.getChild("collision_move_y").setMaterial(blueMaterial);
-        moveTool.getChild("collision_move_y").setCullHint(Spatial.CullHint.Always);
+        moveTool.getChild("collision_move_y").setCullHint(CullHint.Always);
         moveTool.getChild("move_z").setMaterial(greenMaterial);
         moveTool.getChild("collision_move_z").setMaterial(greenMaterial);
-        moveTool.getChild("collision_move_z").setCullHint(Spatial.CullHint.Always);
+        moveTool.getChild("collision_move_z").setCullHint(CullHint.Always);
         moveTool.scale(0.2f);
         moveTool.addControl(new MoveToolControl(this));
 
         rotateTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_rotate.j3o");
         rotateTool.getChild("rot_x").setMaterial(redMaterial);
         rotateTool.getChild("collision_rot_x").setMaterial(redMaterial);
-        rotateTool.getChild("collision_rot_x").setCullHint(Spatial.CullHint.Always);
+        rotateTool.getChild("collision_rot_x").setCullHint(CullHint.Always);
         rotateTool.getChild("rot_y").setMaterial(blueMaterial);
         rotateTool.getChild("collision_rot_y").setMaterial(blueMaterial);
-        rotateTool.getChild("collision_rot_y").setCullHint(Spatial.CullHint.Always);
+        rotateTool.getChild("collision_rot_y").setCullHint(CullHint.Always);
         rotateTool.getChild("rot_z").setMaterial(greenMaterial);
         rotateTool.getChild("collision_rot_z").setMaterial(greenMaterial);
-        rotateTool.getChild("collision_rot_z").setCullHint(Spatial.CullHint.Always);
+        rotateTool.getChild("collision_rot_z").setCullHint(CullHint.Always);
         rotateTool.scale(0.2f);
         rotateTool.addControl(new RotationToolControl(this));
 
         scaleTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_scale.j3o");
         scaleTool.getChild("scale_x").setMaterial(redMaterial);
         scaleTool.getChild("collision_scale_x").setMaterial(redMaterial);
-        scaleTool.getChild("collision_scale_x").setCullHint(Spatial.CullHint.Always);
+        scaleTool.getChild("collision_scale_x").setCullHint(CullHint.Always);
         scaleTool.getChild("scale_y").setMaterial(blueMaterial);
         scaleTool.getChild("collision_scale_y").setMaterial(blueMaterial);
-        scaleTool.getChild("collision_scale_y").setCullHint(Spatial.CullHint.Always);
+        scaleTool.getChild("collision_scale_y").setCullHint(CullHint.Always);
         scaleTool.getChild("scale_z").setMaterial(greenMaterial);
         scaleTool.getChild("collision_scale_z").setMaterial(greenMaterial);
-        scaleTool.getChild("collision_scale_z").setCullHint(Spatial.CullHint.Always);
+        scaleTool.getChild("collision_scale_z").setCullHint(CullHint.Always);
         scaleTool.scale(0.2f);
         scaleTool.addControl(new ScaleToolControl(this));
     }
@@ -843,20 +842,15 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     @Override
-    protected void postCameraUpdate(final float tpf) {
+    protected void postCameraUpdate(float tpf) {
         super.postCameraUpdate(tpf);
 
-        final Array<EditorLightNode> lightNodes = getLightNodes();
-        lightNodes.forEach(EditorLightNode::updateModel);
+        getLightNodes().forEach(EditorLightNode::updateModel);
+        getAudioNodes().forEach(EditorAudioNode::updateModel);
+        getPresentableNodes().forEach(EditorPresentableNode::updateModel);
 
-        final Array<EditorAudioNode> audioNodes = getAudioNodes();
-        audioNodes.forEach(EditorAudioNode::updateModel);
-
-        final Array<EditorPresentableNode> presentableNodes = getPresentableNodes();
-        presentableNodes.forEach(EditorPresentableNode::updateModel);
-
-        final Array<Spatial> selected = getSelected();
-        selected.forEach(this, (spatial, state) -> {
+        var selected = getSelected();
+        selected.forEach(this, (spatial, editor3DPart) -> {
 
             if (spatial instanceof EditorLightNode) {
                 spatial = ((EditorLightNode) spatial).getModel();
@@ -870,19 +864,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
                 return;
             }
 
-            state.updateTransformNode(spatial.getWorldTransform());
+            editor3DPart.updateTransformNode(spatial.getWorldTransform());
 
-            final ObjectDictionary<Spatial, Geometry> selectionShape = state.getSelectionShape();
-            final Geometry shape = selectionShape.get(spatial);
+            var selectionShape = editor3DPart.getSelectionShape();
+            var shape = selectionShape.get(spatial);
             if (shape == null) {
                 return;
             }
 
-            final Vector3f position = shape.getLocalTranslation();
+            var position = shape.getLocalTranslation();
             position.set(spatial.getWorldTranslation());
 
-            final Vector3f center = shape.getUserData(KEY_SHAPE_CENTER);
-            final Vector3f initScale = shape.getUserData(KEY_SHAPE_INIT_SCALE);
+            var center = shape.<Vector3f>getUserData(KEY_SHAPE_CENTER);
+            var initScale = shape.<Vector3f>getUserData(KEY_SHAPE_INIT_SCALE);
 
             if (center != null) {
 
@@ -892,10 +886,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
                     NodeUtils.updateWorldBound(spatial);
 
-                    final BoundingBox bound = (BoundingBox) spatial.getWorldBound();
+                    var bound = (BoundingBox) spatial.getWorldBound();
                     bound.getCenter().subtract(spatial.getWorldTranslation(), center);
 
-                    final WireBox mesh = (WireBox) shape.getMesh();
+                    var mesh = (WireBox) shape.getMesh();
                     mesh.updatePositions(bound.getXExtent(), bound.getYExtent(), bound.getZExtent());
                 }
 
@@ -919,7 +913,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             transformToolNode.attachChild(getScaleTool());
         }
 
-        final Node toolNode = getToolNode();
+        var toolNode = getToolNode();
 
         // FIXME change when will support transform multi-nodes
         if (selected.size() != 1) {
@@ -1115,7 +1109,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param objects the objects.
      */
     @FromAnyThread
-    public void select(@NotNull final Array<Spatial> objects) {
+    public void select(@NotNull Array<Spatial> objects) {
         EXECUTOR_MANAGER.addJmeTask(() -> selectImpl(objects));
     }
 
@@ -1125,14 +1119,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param object the object.
      */
     @FromAnyThread
-    public void select(@NotNull final Spatial object) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-
-            final Array<Spatial> toSelect = LocalObjects.get().nextSpatialArray();
-            toSelect.add(object);
-
-            selectImpl(toSelect);
-        });
+    public void select(@NotNull Spatial object) {
+        EXECUTOR_MANAGER.addJmeTask(() -> selectImpl(Array.of(object)));
     }
 
     /**
@@ -1141,18 +1129,18 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param objects the objects.
      */
     @JmeThread
-    private void selectImpl(@NotNull final Array<Spatial> objects) {
+    private void selectImpl(@NotNull Array<Spatial> objects) {
 
-        final Array<Spatial> selected = getSelected();
+        var selected = getSelected();
 
         if (objects.isEmpty()) {
             selected.forEach(this, (spatial, ed) -> ed.removeFromSelection(spatial));
             selected.clear();
         } else {
 
-            for (final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext(); ) {
+            for (var iterator = selected.iterator(); iterator.hasNext(); ) {
 
-                final Spatial spatial = iterator.next();
+                var spatial = iterator.next();
                 if (objects.contains(spatial)) {
                     continue;
                 }
@@ -1161,7 +1149,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
                 iterator.fastRemove();
             }
 
-            for (final Spatial spatial : objects) {
+            for (var spatial : objects) {
                 if (!selected.contains(spatial)) {
                     addToSelection(spatial);
                 }
@@ -1217,14 +1205,13 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Add the spatial to selection.
      */
     @JmeThread
-    private void addToSelection(@NotNull final Spatial spatial) {
+    private void addToSelection(@NotNull Spatial spatial) {
 
         if (spatial instanceof VisibleOnlyWhenSelected) {
-            spatial.setCullHint(Spatial.CullHint.Dynamic);
+            spatial.setCullHint(CullHint.Dynamic);
         }
 
-        final Array<Spatial> selected = getSelected();
-        selected.add(spatial);
+        getSelected().add(spatial);
 
         if (spatial instanceof NoSelection) {
             return;
@@ -1245,31 +1232,31 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         }
 
         if (isShowSelection()) {
-            final Node toolNode = getToolNode();
-            toolNode.attachChild(shape);
+            getToolNode().attachChild(shape);
         }
 
-        final ObjectDictionary<Spatial, Geometry> selectionShape = getSelectionShape();
-        selectionShape.put(spatial, shape);
+        getSelectionShape().put(spatial, shape);
     }
 
     /**
      * Remove the spatial from the selection.
      */
     @JmeThread
-    private void removeFromSelection(@NotNull final Spatial spatial) {
+    private void removeFromSelection(@NotNull Spatial spatial) {
         setTransformCenter(null);
         setToTransform(null);
 
-        final ObjectDictionary<Spatial, Geometry> selectionShape = getSelectionShape();
+        var shape = getSelectionShape()
+                .remove(spatial);
 
-        final Spatial shape = selectionShape.remove(spatial);
         if (shape != null) {
             shape.removeFromParent();
         }
 
+        getSelected().fastRemove(spatial);
+
         if (spatial instanceof VisibleOnlyWhenSelected) {
-            spatial.setCullHint(Spatial.CullHint.Always);
+            spatial.setCullHint(CullHint.Always);
         }
     }
 
@@ -1827,21 +1814,27 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param name   the property name.
      */
     @JmeThread
-    public void notifyPropertyChanged(@NotNull Object object, @NotNull final String name) {
+    public void notifyPropertyChanged(@NotNull Object object, @NotNull String name) {
 
-        if (object instanceof SimpleProperty) {
-            object = ((SimpleProperty) object).getObject();
+        if (object instanceof EditableProperty) {
+            object = ((EditableProperty<?, ?>) object).getObject();
         }
 
         if (object instanceof AudioNode) {
-            final EditorAudioNode node = getAudioNode((AudioNode) object);
-            if (node != null) node.sync();
+
+            getAudioNodeOpt((AudioNode) object)
+                    .ifPresent(EditorAudioNode::sync);
+
         } else if (object instanceof Light) {
-            final EditorLightNode node = getLightNode((Light) object);
-            if (node != null) node.sync();
+
+            getLightNodeOpt((Light) object)
+                    .ifPresent(EditorLightNode::sync);
+
         } else if (object instanceof ScenePresentable) {
-            final EditorPresentableNode node = getPresentableNode((ScenePresentable) object);
-            if (node != null) node.sync();
+
+            getPresentableNodeOpt((ScenePresentable) object).stream()
+                    .peek(EditorPresentableNode::sync)
+                    .forEach(EditorPresentableNode::updateGeometry);
         }
 
         if (object instanceof Spatial) {
@@ -2165,7 +2158,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param presentable the presentable object.
      */
     @FromAnyThread
-    public void addPresentable(@NotNull final ScenePresentable presentable) {
+    public void addPresentable(@NotNull ScenePresentable presentable) {
         EXECUTOR_MANAGER.addJmeTask(() -> addPresentableImpl(presentable));
     }
 
@@ -2173,22 +2166,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * The process of adding the presentable object.
      */
     @JmeThread
-    private void addPresentableImpl(@NotNull final ScenePresentable presentable) {
+    private void addPresentableImpl(@NotNull ScenePresentable presentable) {
 
-        final ObjectDictionary<ScenePresentable, EditorPresentableNode> cache = getCachedPresentableObjects();
-        final EditorPresentableNode node = notNull(cache.get(presentable, () -> {
-            final EditorPresentableNode result = new EditorPresentableNode();
-            result.setModel(createGeometry(presentable.getPresentationType()));
-            return result;
-        }));
+        var cache = getCachedPresentableObjects();
+        var node = notNull(cache.get(presentable, EditorPresentableNode::new));
 
         node.setObject(presentable);
+        node.updateGeometry();
         node.sync();
 
-        final Node editedNode = node.getEditedNode();
-        editedNode.setCullHint(Spatial.CullHint.Always);
+        var editedNode = node.getEditedNode();
+        editedNode.setCullHint(CullHint.Always);
 
-        final Node presentableNode = getPresentableNode();
+        var presentableNode = getPresentableNode();
         presentableNode.attachChild(node);
         presentableNode.attachChild(node.getModel());
 
@@ -2197,28 +2187,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         getPresentableNodes().add(node);
     }
 
-    @JmeThread
-    protected @NotNull Geometry createGeometry(@NotNull final ScenePresentable.PresentationType presentationType) {
-
-        final Material material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        material.setColor("Color", ColorRGBA.Yellow);
-        material.getAdditionalRenderState().setWireframe(true);
-
-        Geometry geometry;
-
-        switch (presentationType) {
-            case SPHERE: {
-                geometry = new Geometry("Sphere", new Sphere(8, 8, 1));
-                break;
-            }
-            default: {
-                geometry = new Geometry("Box", new Box(1, 1, 1));
-            }
-        }
-
-        geometry.setMaterial(material);
-        return geometry;
-    }
 
     /**
      * Remove the audio node.
@@ -2252,14 +2220,25 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Get a light node for thr light.
+     * Get a light node for the light.
      *
      * @param light the light.
      * @return the light node or null.
      */
     @FromAnyThread
-    public @Nullable EditorLightNode getLightNode(@NotNull final Light light) {
+    public @Nullable EditorLightNode getLightNode(@NotNull Light light) {
         return getLightNodes().search(light, (node, toCheck) -> node.getLight() == toCheck);
+    }
+
+    /**
+     * Get an optional of a light node for the light.
+     *
+     * @param light the light.
+     * @return the optional value.
+     */
+    @FromAnyThread
+    public @NotNull Optional<EditorLightNode> getLightNodeOpt(@NotNull Light light) {
+        return Optional.ofNullable(getLightNode(light));
     }
 
     /**
@@ -2269,19 +2248,31 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the light node or null.
      */
     @FromAnyThread
-    public @Nullable EditorLightNode getLightNode(@NotNull final Spatial model) {
+    public @Nullable EditorLightNode getLightNode(@NotNull Spatial model) {
         return getLightNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
     }
 
     /**
-     * Get an editor audio node for the audio node.
+     * Get an editor audio node of the audio node.
      *
      * @param audioNode the audio node.
      * @return the editor audio node or null.
      */
     @FromAnyThread
-    public @Nullable EditorAudioNode getAudioNode(@NotNull final AudioNode audioNode) {
-        return getAudioNodes().search(audioNode, (node, toCheck) -> node.getAudioNode() == toCheck);
+    public @Nullable EditorAudioNode getAudioNode(@NotNull AudioNode audioNode) {
+        return getAudioNodes().search(audioNode,
+                (node, toCheck) -> node.getAudioNode() == toCheck);
+    }
+
+    /**
+     * Get an optional of an editor audio node for the audio node.
+     *
+     * @param audioNode the audio node.
+     * @return the optional value.
+     */
+    @FromAnyThread
+    public @NotNull Optional<EditorAudioNode> getAudioNodeOpt(@NotNull AudioNode audioNode) {
+        return Optional.ofNullable(getAudioNode(audioNode));
     }
 
     /**
@@ -2291,8 +2282,20 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the editor audio node or null.
      */
     @FromAnyThread
-    public @Nullable EditorAudioNode getAudioNode(@NotNull final Spatial model) {
-        return getAudioNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+    public @Nullable EditorAudioNode getAudioNode(@NotNull Spatial model) {
+        return getAudioNodes().search(model,
+                (node, toCheck) -> node.getModel() == toCheck);
+    }
+
+    /**
+     * Get an optional of an editor audio node for the model.
+     *
+     * @param model the model.
+     * @return the optional value.
+     */
+    @FromAnyThread
+    public @NotNull Optional<EditorAudioNode> getAudioNodeOpt(@NotNull Spatial model) {
+        return Optional.ofNullable(getAudioNode(model));
     }
 
     /**
@@ -2302,8 +2305,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the editor presentable node or null.
      */
     @FromAnyThread
-    public @Nullable EditorPresentableNode getPresentableNode(@NotNull final ScenePresentable presentable) {
+    public @Nullable EditorPresentableNode getPresentableNode(@NotNull ScenePresentable presentable) {
         return getPresentableNodes().search(presentable, (node, toCheck) -> node.getObject() == toCheck);
+    }
+
+    /**
+     * Get an optional of an editor presentable node for the presentable object.
+     *
+     * @param presentable the presentable object.
+     * @return the optional value.
+     */
+    @FromAnyThread
+    public @NotNull Optional<EditorPresentableNode> getPresentableNodeOpt(@NotNull ScenePresentable presentable) {
+        return Optional.ofNullable(getPresentableNode(presentable));
     }
 
     /**

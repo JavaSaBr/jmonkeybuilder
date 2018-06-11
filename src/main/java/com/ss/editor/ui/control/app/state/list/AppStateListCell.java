@@ -24,7 +24,7 @@ public class AppStateListCell extends AbstractListCell<EditableSceneAppState> {
     private final AppStateList stateList;
 
     public AppStateListCell(@NotNull AppStateList stateList) {
-        super(stateList::getContextMenu);
+        super(stateList.getChangeConsumer(), stateList::getContextMenu);
         this.stateList = stateList;
         FxUtils.addClass(this, CssClasses.SCENE_APP_STATE_LIST_CELL);
     }

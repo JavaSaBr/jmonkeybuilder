@@ -71,8 +71,8 @@ public class AppStateList extends VBox {
 
         listView = new ListView<>();
         listView.setCellFactory(param -> new AppStateListCell(this));
-        listView.setEditable(false);
         listView.setFocusTraversable(true);
+        listView.setEditable(true);
         listView.prefHeightProperty().bind(heightProperty());
         listView.prefWidthProperty().bind(widthProperty());
         listView.setFixedCellSize(FxConstants.LIST_CELL_HEIGHT);
@@ -118,7 +118,8 @@ public class AppStateList extends VBox {
         items.clear();
 
         var appStates = sceneNode.getAppStates();
-        appStates.stream().filter(EditableSceneAppState.class::isInstance)
+        appStates.stream()
+                .filter(EditableSceneAppState.class::isInstance)
                 .map(EditableSceneAppState.class::cast)
                 .forEach(items::add);
 
@@ -134,7 +135,7 @@ public class AppStateList extends VBox {
      * @return the context menu or null.
      */
     @FxThread
-    public @Nullable ContextMenu getContextMenu(@Nullable SceneAppState appState) {
+    protected @Nullable ContextMenu getContextMenu(@Nullable SceneAppState appState) {
 
         if (!(appState instanceof EditableSceneAppState)) {
             return null;
@@ -151,7 +152,7 @@ public class AppStateList extends VBox {
         var items = contextMenu.getItems();
 
         actions.stream()
-                .map(action -> new MenuModifyingAction(action, getChangeConsumer(), owner))
+                .map(action -> new MenuModifyingAction(action, getChangeConsumer(), appState))
                 .forEach(items::add);
 
         return contextMenu;
@@ -172,8 +173,8 @@ public class AppStateList extends VBox {
      */
     @FxThread
     public void clearSelection() {
-        var selectionModel = getListView().getSelectionModel();
-        selectionModel.select(null);
+        getListView().getSelectionModel()
+                .select(null);
     }
 
     /**
