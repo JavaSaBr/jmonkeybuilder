@@ -11,9 +11,11 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.FxConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.*;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.function.IntObjectConsumer;
+import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayComparator;
@@ -448,26 +450,23 @@ public class ResourceTree extends TreeView<ResourceElement> {
         var selectedItems = selectionModel.getSelectedItems();
 
         if (selectedItems.size() == 1) {
-            for (var filler : CONTEXT_MENU_FILLER_REGISTRY.getSingleFillers()) {
-                filler.fill(element, items, actionTester);
-            }
+            var fillers = CONTEXT_MENU_FILLER_REGISTRY.getSingleFillers();
+            fillers.runInReadLock(array -> {
+                for (var filler : array) {
+                    filler.fill(element, items, actionTester);
+                }
+            });
         }
 
         if (selectedItems.size() >= 1) {
-
-            updateSelectedElements();
-
-            var selectedElements = getSelectedElements();
-            var stamp = selectedElements.readLock();
-            try {
-
-                for (var filler : CONTEXT_MENU_FILLER_REGISTRY.getMultiFillers()) {
-                    filler.fill(selectedElements, items, actionTester);
-                }
-
-            } finally {
-                selectedElements.readUnlock(stamp);
-            }
+            updateSelectedElements().runInReadLock(resourceElements -> {
+                var fillers = CONTEXT_MENU_FILLER_REGISTRY.getMultiFillers();
+                fillers.runInReadLock(array -> {
+                    for (var filler : array) {
+                        filler.fill(resourceElements, items, actionTester);
+                    }
+                });
+            });
         }
 
         if (items.isEmpty()) {
@@ -591,7 +590,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * Update the list of selected elements.
      */
     @FxThread
-    private void updateSelectedElements() {
+    private @NotNull ConcurrentArray<ResourceElement> updateSelectedElements() {
 
         var elements = getSelectedElements();
         var stamp = elements.writeLock();
@@ -606,6 +605,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         } finally {
             elements.writeUnlock(stamp);
         }
+
+        return elements;
     }
 
     /**

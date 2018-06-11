@@ -68,6 +68,7 @@ public class EditorRegistry {
         register(MaterialDefinitionFileEditor.DESCRIPTION);
         register(AudioViewerEditor.DESCRIPTION);
         register(SceneFileEditor.DESCRIPTION);
+        LOGGER.info("initialized.");
     }
 
     /**

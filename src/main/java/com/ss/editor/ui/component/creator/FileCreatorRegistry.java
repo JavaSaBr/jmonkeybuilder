@@ -48,6 +48,7 @@ public class FileCreatorRegistry {
         register(EmptyModelCreator.DESCRIPTION);
         register(SingleColorTextureFileCreator.DESCRIPTION);
         register(EmptySceneCreator.DESCRIPTION);
+        LOGGER.info("initialized.");
     }
 
     /**

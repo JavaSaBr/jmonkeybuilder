@@ -5,9 +5,12 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
 import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayCollectors;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 /**
@@ -19,6 +22,12 @@ public class PaintingComponentRegistry {
 
     private static final PaintingComponentRegistry INSTANCE = new PaintingComponentRegistry();
 
+    interface Constructor extends Function<PaintingComponentContainer, PaintingComponent> {
+
+        @Override
+        @NotNull PaintingComponent apply(@NotNull PaintingComponentContainer container);
+    }
+
     @FromAnyThread
     public static @NotNull PaintingComponentRegistry getInstance() {
         return INSTANCE;
@@ -28,10 +37,10 @@ public class PaintingComponentRegistry {
      * The list of painting component's constructors.
      */
     @NotNull
-    private final Array<Function<PaintingComponentContainer, PaintingComponent>> constructors;
+    private final ConcurrentArray<Constructor> constructors;
 
     private PaintingComponentRegistry() {
-        this.constructors = ArrayFactory.newArray(Function.class);
+        this.constructors = ConcurrentArray.of(Constructor.class);
         register(TerrainPaintingComponent::new);
         register(SpawnPaintingComponent::new);
     }
@@ -42,8 +51,8 @@ public class PaintingComponentRegistry {
      * @param constructor the new painting component's constructor.
      */
     @FxThread
-    public void register(@NotNull Function<PaintingComponentContainer, PaintingComponent> constructor) {
-        this.constructors.add(constructor);
+    public void register(@NotNull Constructor constructor) {
+        constructors.runInWriteLock(constructor, Collection::add);
     }
 
     /**
@@ -54,12 +63,15 @@ public class PaintingComponentRegistry {
      */
     @FxThread
     public @NotNull Array<PaintingComponent> createComponents(@NotNull PaintingComponentContainer container) {
+        var stamp = constructors.readLock();
+        try {
 
-        var result = ArrayFactory.<PaintingComponent>newArray(PaintingComponent.class);
+            return constructors.stream()
+                .map(constructor -> constructor.apply(container))
+                .collect(ArrayCollectors.toArray(PaintingComponent.class));
 
-        constructors.forEach(result, container,
-                (constructor, components, cont) -> components.add(constructor.apply(cont)));
-
-        return result;
+        } finally {
+            constructors.readUnlock(stamp);
+        }
     }
 }
