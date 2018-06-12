@@ -120,11 +120,6 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
         }
 
         var button = event.getButton();
-        if (button == MouseButton.PRIMARY && event.getClickCount() > 1 && isEditable()) {
-            //startEdit();
-            return;
-        }
-
         if (button != MouseButton.SECONDARY) {
             return;
         }

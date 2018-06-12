@@ -56,7 +56,7 @@ ext.applicationMainClass = "com.ss.editor.JfxApplication"
 ext.applicationVendor = "javasabr@gmail.com"
 ext.applicationTitle = "jMonkeyBuilder"
 ext.jmeVersion = "develop-SNAPSHOT"
-ext.jmbExtVersion = "2.4.0"
+ext.jmbExtVersion = "2.4.1"
 ext.jme3_xbuf_version = '0.9.1'
 ext.junitPlatformVersion = "1.0.0"
 ext.junitJupiterVersion = "5.0.0"
@@ -174,6 +174,7 @@ dependencies {
     // extensions
     compile ("com.spaceshift:jmonkeybuilder-extension:$jmbExtVersion") {
         exclude group: 'org.jmonkeyengine'
+        exclude group: 'com.github.JavaSaB.jmonkeyengine'
     }
 
     compile ("org.xbuf.jme3_xbuf:jme3_xbuf_loader:${jme3_xbuf_version}") {

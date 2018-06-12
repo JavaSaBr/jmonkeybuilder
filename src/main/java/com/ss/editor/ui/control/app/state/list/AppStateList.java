@@ -159,6 +159,23 @@ public class AppStateList extends VBox {
     }
 
     /**
+     * Refresh the app state.
+     *
+     * @param appState the app state.
+     */
+    @FxThread
+    public void refresh(@NotNull EditableSceneAppState appState) {
+
+        var items = getListView().getItems();
+        var index = items.indexOf(appState);
+
+        if (index != -1) {
+            items.add(index, appState);
+            items.remove(index + 1);
+        }
+    }
+
+    /**
      * Get the list view with created scene app states.
      *
      * @return the list view with created scene app states.

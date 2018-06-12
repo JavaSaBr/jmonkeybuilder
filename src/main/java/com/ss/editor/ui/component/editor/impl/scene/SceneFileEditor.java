@@ -20,6 +20,7 @@ import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.node.layer.LayersRoot;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.model.undo.impl.RenameNodeOperation;
 import com.ss.editor.part3d.editor.impl.scene.SceneEditor3DPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -37,8 +38,8 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -543,35 +544,35 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
     @Override
     @FxThread
-    protected void handleAddedObject(@NotNull final Spatial model) {
+    protected void handleAddedObject(@NotNull Spatial model) {
         super.handleAddedObject(model);
 
         if (!(model instanceof SceneNode)) {
             return;
         }
 
-        final SceneNode sceneNode = (SceneNode) model;
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
+        var sceneNode = (SceneNode) model;
+        var editor3DPart = getEditor3DPart();
 
         sceneNode.getFilters().stream()
                 .filter(ScenePresentable.class::isInstance)
-                .forEach(filter -> editor3DState.addPresentable((ScenePresentable) filter));
+                .forEach(filter -> editor3DPart.addPresentable((ScenePresentable) filter));
         sceneNode.getAppStates().stream()
                 .filter(ScenePresentable.class::isInstance)
-                .forEach(state -> editor3DState.addPresentable((ScenePresentable) state));
+                .forEach(state -> editor3DPart.addPresentable((ScenePresentable) state));
     }
 
     @Override
     @FxThread
-    protected void handleRemovedObject(@NotNull final Spatial model) {
+    protected void handleRemovedObject(@NotNull Spatial model) {
         super.handleRemovedObject(model);
 
         if (!(model instanceof SceneNode)) {
             return;
         }
 
-        final SceneNode sceneNode = (SceneNode) model;
-        final SceneEditor3DPart editor3DState = getEditor3DPart();
+        var sceneNode = (SceneNode) model;
+        var editor3DState = getEditor3DPart();
 
         sceneNode.getFilters().stream()
                 .filter(ScenePresentable.class::isInstance)
@@ -616,14 +617,17 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
     @Override
     @FxThread
-    public void notifyFxChangeProperty(@Nullable final Object parent, @NotNull final Object object,
-                                       @NotNull final String propertyName) {
+    public void notifyFxChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName) {
         super.notifyFxChangeProperty(parent, object, propertyName);
 
-        if (object instanceof Spatial && Objects.equals(propertyName, SceneLayer.KEY)) {
+        if (object instanceof EditableProperty) {
+            object = ((EditableProperty) object).getObject();
+        }
 
-            final Spatial spatial = (Spatial) object;
-            final SceneLayer layer = SceneLayer.getLayer(spatial);
+        if (object instanceof Spatial && Objects.equals(propertyName, Messages.MODEL_PROPERTY_LAYER)) {
+
+            var spatial = (Spatial) object;
+            var layer = SceneLayer.getLayer(spatial);
 
             if (layer == null) {
                 spatial.setVisible(true);
@@ -631,22 +635,14 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
                 spatial.setVisible(layer.isShowed());
             }
 
-            final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.notifyChangedLayer(spatial, layer);
+            getLayerNodeTree().notifyChangedLayer(spatial, layer);
         }
 
-        final LayerNodeTree layerNodeTree = getLayerNodeTree();
-        layerNodeTree.notifyChanged(null, object);
-
-        if (!(object instanceof EditableProperty)) {
-            return;
+        if (object instanceof EditableSceneAppState && RenameNodeOperation.PROPERTY_NAME.equals(propertyName)) {
+            getAppStateList().refresh((EditableSceneAppState) object);
         }
 
-        final EditableProperty<?, ?> property = (EditableProperty<?, ?>) object;
-        final Object editObject = property.getObject();
-
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.syncFor(editObject);
+        getLayerNodeTree().notifyChanged(null, object);
     }
 
     @Override

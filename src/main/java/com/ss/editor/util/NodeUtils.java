@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
-import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -481,10 +480,28 @@ public class NodeUtils {
     /**
      * Collect all lights.
      *
+     * @param spatial the spatial.
+     * @return the list of all found lights.
+     */
+    @FromAnyThread
+    public static @NotNull Array<Light> getAllLights(@NotNull Spatial spatial) {
+
+        var lights = Array.<Light>ofType(Light.class);
+
+        spatial.depthFirstTraversal(sp ->
+                sp.getLocalLightList().forEach(lights::add));
+
+        return lights;
+    }
+
+    /**
+     * Collect all lights.
+     *
      * @param spatial   the spatial.
      * @param container the container.
      */
     @FromAnyThread
+    @Deprecated(forRemoval = true)
     public static void addLight(@NotNull Spatial spatial, @NotNull Array<Light> container) {
 
         var lightList = spatial.getLocalLightList();
@@ -504,10 +521,31 @@ public class NodeUtils {
     /**
      * Collect all audio nodes.
      *
+     * @param spatial the spatial.
+     * @return the list of all found audio nodes.
+     */
+    @FromAnyThread
+    public static @NotNull Array<AudioNode> getAllAudioNodes(@NotNull Spatial spatial) {
+
+        var audioNodes = Array.<AudioNode>ofType(AudioNode.class);
+
+        spatial.depthFirstTraversal(sp -> {
+            if (sp instanceof AudioNode) {
+                audioNodes.add((AudioNode) sp);
+            }
+        });
+
+        return audioNodes;
+    }
+
+    /**
+     * Collect all audio nodes.
+     *
      * @param spatial   the spatial.
      * @param container the container.
      */
     @FromAnyThread
+    @Deprecated(forRemoval = true)
     public static void addAudioNodes(@NotNull Spatial spatial, @NotNull Array<AudioNode> container) {
 
         if (!(spatial instanceof Node)) {

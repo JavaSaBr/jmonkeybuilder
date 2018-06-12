@@ -19,7 +19,7 @@ public class SceneAppStatesNode {
     @NotNull
     private final SceneNode sceneNode;
 
-    public SceneAppStatesNode(@NotNull final SceneNode sceneNode) {
+    public SceneAppStatesNode(@NotNull SceneNode sceneNode) {
         this.sceneNode = sceneNode;
     }
 

@@ -39,6 +39,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
+import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.model.editor.ModelEditingProvider;
@@ -402,17 +403,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param model the model
      */
     @FxThread
-    protected void handleAddedObject(@NotNull final Spatial model) {
+    protected void handleAddedObject(@NotNull Spatial model) {
 
-        final MA editor3DPart = getEditor3DPart();
-        final Array<Light> lights = ArrayFactory.newArray(Light.class);
-        final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
+        NodeUtils.getAllLights(model).forEach(getEditor3DPart(),
+                (light, editor3DPart) -> editor3DPart.addLight(light));
 
-        NodeUtils.addLight(model, lights);
-        NodeUtils.addAudioNodes(model, audioNodes);
-
-        lights.forEach(editor3DPart, (light, part) -> part.addLight(light));
-        audioNodes.forEach(editor3DPart, (audioNode, part) -> part.addAudioNode(audioNode));
+        NodeUtils.getAllAudioNodes(model).forEach(getEditor3DPart(),
+                (audioNode, editor3DPart) -> editor3DPart.addAudioNode(audioNode));
     }
 
     /**
@@ -421,17 +418,13 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      * @param model the model
      */
     @FxThread
-    protected void handleRemovedObject(@NotNull final Spatial model) {
+    protected void handleRemovedObject(@NotNull Spatial model) {
 
-        final MA editor3DPart = getEditor3DPart();
-        final Array<Light> lights = ArrayFactory.newArray(Light.class);
-        final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
+        NodeUtils.getAllLights(model).forEach(getEditor3DPart(),
+                (light, editor3DPart) -> editor3DPart.removeLight(light));
 
-        NodeUtils.addLight(model, lights);
-        NodeUtils.addAudioNodes(model, audioNodes);
-
-        lights.forEach(editor3DPart, (light, part) -> part.removeLight(light));
-        audioNodes.forEach(editor3DPart, (audioNode, part) -> part.removeAudioNode(audioNode));
+        NodeUtils.getAllAudioNodes(model).forEach(getEditor3DPart(),
+                (audioNode, editor3DPart) -> editor3DPart.removeAudioNode(audioNode));
     }
 
     @Override
@@ -589,21 +582,24 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    public void notifyFxChangeProperty(@Nullable final Object parent, @NotNull final Object object,
-                                       @NotNull final String propertyName) {
+    public void notifyFxChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName) {
 
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.syncFor(object);
+        if (object instanceof EditableProperty) {
+            object = ((EditableProperty) object).getObject();
+        }
 
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        getModelPropertyEditor()
+                .syncFor(object);
+
+        var modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyChanged(parent, object);
 
         if (object instanceof Geometry && Messages.MODEL_PROPERTY_MATERIAL.equals(propertyName)) {
             modelNodeTree.refresh(object);
         }
 
-        final PaintingComponentContainer editingComponentContainer = getPaintingComponentContainer();
-        editingComponentContainer.notifyChangeProperty(object, propertyName);
+        getPaintingComponentContainer()
+                .notifyChangeProperty(object, propertyName);
     }
 
     @Override
