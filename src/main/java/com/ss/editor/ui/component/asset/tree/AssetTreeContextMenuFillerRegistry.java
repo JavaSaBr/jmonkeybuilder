@@ -7,8 +7,6 @@ import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetT
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,8 +40,8 @@ public class AssetTreeContextMenuFillerRegistry {
     private final ConcurrentArray<AssetTreeMultiContextMenuFiller> multiFillers;
 
     private AssetTreeContextMenuFillerRegistry() {
-        this.singleFillers = ConcurrentArray.of(AssetTreeSingleContextMenuFiller.class);
-        this.multiFillers = ConcurrentArray.of(AssetTreeMultiContextMenuFiller.class);
+        this.singleFillers = ConcurrentArray.ofType(AssetTreeSingleContextMenuFiller.class);
+        this.multiFillers = ConcurrentArray.ofType(AssetTreeMultiContextMenuFiller.class);
         registerSingle(new FileAssetTreeSingleContextMenuFiller());
         registerSingle(new ResourceAssetTreeSingleContextMenuFiller());
         registerMulti(new FileAssetTreeSingleContextMenuFiller());

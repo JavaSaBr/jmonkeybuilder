@@ -58,7 +58,7 @@ public class FilePreviewFactoryRegistry {
     @FxThread
     public Array<FilePreview> createAvailablePreviews() {
 
-        var result = Array.<FilePreview>of(FilePreview.class);
+        var result = Array.<FilePreview>ofType(FilePreview.class);
 
         factories.runInReadLock(result, (previewFactories, toStore) ->
                 previewFactories.forEach(toStore, FilePreviewFactory::createFilePreviews));

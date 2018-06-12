@@ -7,7 +7,6 @@ import com.ss.editor.file.converter.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +36,7 @@ public class FileConverterRegistry {
     private final ConcurrentArray<FileConverterDescription> descriptions;
 
     private FileConverterRegistry() {
-        this.descriptions = ConcurrentArray.of(FileConverterDescription.class);
+        this.descriptions = ConcurrentArray.ofType(FileConverterDescription.class);
         register(BlendToJ3oFileConverter.DESCRIPTION);
         register(FbxToJ3oFileConverter.DESCRIPTION);
         register(ObjToJ3oFileConverter.DESCRIPTION);
