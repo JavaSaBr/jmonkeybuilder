@@ -7,13 +7,18 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
+import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
+import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.component.painting.PaintingComponentRegistry;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.event.impl.*;
+import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -75,19 +80,14 @@ public class PluginManager {
                 .add(this::onFinishLoading);
         SingleAsyncEventHandlerBuilder.of(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(this::onAfterCreateJmeContext);
+        SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
+                .add(this::onAfterCreateJavaFxContext);
 
         AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
                 .add(FxSceneCreatedEvent.EVENT_TYPE)
                 .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
                 .buildAndRegister();
 
-        /*
-        var initManager = InitializationManager.getInstance();
-        initManager.addOnBeforeCreateJmeContext(this::onBeforeCreateJmeContext);
-        initManager.addOnAfterCreateJmeContext(this::onAfterCreateJmeContext);
-        initManager.addOnBeforeCreateJavaFxContext(this::onBeforeCreateJavaFxContext);
-        initManager.addOnAfterCreateJavaFxContext(this::onAfterCreateJavaFxContext);
-        initManager.addOnFinishLoading(this::onFinishLoading);*/
     }
 
     /**
@@ -162,32 +162,105 @@ public class PluginManager {
     @BackgroundThread
     private void registeredExtensions() {
 
-        var eventManager = AsyncEventManager.getInstance();
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addBackgroundTask(() -> {
 
-        handlePlugins(editorPlugin ->
-                editorPlugin.register(FileCreatorRegistry.getInstance()));
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(FileCreatorRegistry.getInstance()));
 
-        eventManager.notify(new PluginsFileCreatorsRegisteredEvent());
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsFileCreatorsRegisteredEvent());
+        });
 
-        handlePlugins(editorPlugin ->
-                editorPlugin.register(EditorRegistry.getInstance()));
+        executorManager.addBackgroundTask(() -> {
 
-        eventManager.notify(new PluginsEditorsRegisteredEvent());
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(EditorRegistry.getInstance()));
 
-        handlePlugins(editorPlugin ->
-            editorPlugin.register(FileIconManager.getInstance()));
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsEditorsRegisteredEvent());
+        });
 
-        eventManager.notify(new PluginsFileIconFindersRegisteredEvent());
+        executorManager.addBackgroundTask(() -> {
 
-        handlePlugins(editorPlugin ->
-                editorPlugin.register(TreeNodeFactoryRegistry.getInstance()));
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(FileIconManager.getInstance()));
 
-        eventManager.notify(new PluginsTreeNodeFactoriesRegisteredEvent());
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsFileIconFindersRegisteredEvent());
+        });
 
-        handlePlugins(editorPlugin ->
-                editorPlugin.register(PropertyBuilderRegistry.getInstance()));
+        executorManager.addBackgroundTask(() -> {
 
-        eventManager.notify(new PluginsPropertyBuildersRegisteredEvent());
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(TreeNodeFactoryRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsTreeNodeFactoriesRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(PropertyBuilderRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsPropertyBuildersRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(FileConverterRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsFileConvertersRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(FilePreviewFactoryRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsFilePreviewFactoriesRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsAssetTreeContextMenuFillersRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsAssetTreeContextMenuFillersRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                editorPlugin.register(SettingsProviderRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                .notify(new PluginsSettingsProvidersRegisteredEvent());
+        });
+
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(PaintingComponentRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginsPaintingComponentsRegisteredEvent());
+        });
     }
 
     /**
@@ -209,17 +282,6 @@ public class PluginManager {
     }
 
     /**
-     * Do some things before when JME context will be created.
-     */
-    @JmeThread
-    private void onBeforeCreateJmeContext() {
-        pluginSystem.getPlugins().stream()
-                .filter(EditorPlugin.class::isInstance)
-                .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJmeContext(pluginSystem));
-    }
-
-    /**
      * Do some things after when JME context was created.
      */
     @BackgroundThread
@@ -236,17 +298,6 @@ public class PluginManager {
                 assetManager.addClassLoader(classLoader);
             });
         });
-    }
-
-    /**
-     * Do some things before when JavaFX context will be created.
-     */
-    @FxThread
-    private void onBeforeCreateJavaFxContext() {
-        pluginSystem.getPlugins().stream()
-                .filter(EditorPlugin.class::isInstance)
-                .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFxContext(pluginSystem));
     }
 
     /**

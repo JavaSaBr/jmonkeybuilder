@@ -2,7 +2,6 @@ package com.ss.editor.plugin;
 
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.FileIconManager;
@@ -85,7 +84,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the converters registry.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull FileConverterRegistry registry) {
     }
 
@@ -94,7 +93,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the menu fillers registry.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull AssetTreeContextMenuFillerRegistry registry) {
     }
 
@@ -121,7 +120,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the registry of file preview factories.
      */
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull FilePreviewFactoryRegistry registry) {
     }
 
@@ -130,7 +129,7 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the registry of settings providers.
      */
-    @FxThread
+    @BackgroundThread
     public void register(@NotNull SettingsProviderRegistry registry) {
     }
 
@@ -139,17 +138,8 @@ public class EditorPlugin extends BasePlugin {
      *
      * @param registry the registry of painting component's constructors.
      */
-    @FxThread
+    @BackgroundThread
     public void register(@NotNull PaintingComponentRegistry registry) {
-    }
-
-    /**
-     * Do some things before when jME context will be created.
-     *
-     * @param pluginSystem the plugin system.
-     */
-    @JmeThread
-    public void onBeforeCreateJmeContext(@NotNull PluginSystem pluginSystem) {
     }
 
     /**
@@ -162,20 +152,11 @@ public class EditorPlugin extends BasePlugin {
     }
 
     /**
-     * Do some things before when JavaFX context will be created.
-     *
-     * @param pluginSystem the plugin system.
-     */
-    @FxThread
-    public void onBeforeCreateJavaFxContext(@NotNull PluginSystem pluginSystem) {
-    }
-
-    /**
      * Do some things after when JavaFX context was created.
      *
      * @param pluginSystem the plugin system.
      */
-    @FxThread
+    @BackgroundThread
     public void onAfterCreateJavaFxContext(@NotNull PluginSystem pluginSystem) {
     }
 

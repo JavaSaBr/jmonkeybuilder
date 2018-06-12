@@ -5,7 +5,10 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.DefaultSettingsProvider;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * The registry of all settings providers.
@@ -25,10 +28,10 @@ public class SettingsProviderRegistry {
      * The list of settings providers.
      */
     @NotNull
-    private final Array<SettingsProvider> providers;
+    private final ConcurrentArray<SettingsProvider> providers;
 
     private SettingsProviderRegistry() {
-        this.providers = ArrayFactory.newArray(SettingsProvider.class);
+        this.providers = ConcurrentArray.of(SettingsProvider.class);
         register(new DefaultSettingsProvider());
     }
 
@@ -37,9 +40,9 @@ public class SettingsProviderRegistry {
      *
      * @param settingsProvider the new settings provider.
      */
-    @FxThread
+    @FromAnyThread
     public void register(@NotNull SettingsProvider settingsProvider) {
-        this.providers.add(settingsProvider);
+        providers.runInWriteLock(settingsProvider, Collection::add);
     }
 
     /**
@@ -50,10 +53,17 @@ public class SettingsProviderRegistry {
     @FxThread
     public @NotNull Array<SettingsPropertyDefinition> getDefinitions() {
 
-        var result = ArrayFactory.<SettingsPropertyDefinition>newArray(SettingsPropertyDefinition.class);
+        var result = Array.<SettingsPropertyDefinition>of(SettingsPropertyDefinition.class);
 
-        providers.forEach(result,
-                (provider, definitions) -> definitions.addAll(provider.getDefinitions()));
+        var stamp = providers.readLock();
+        try {
+
+            providers.forEach(result, (provider, definitions) ->
+                    definitions.addAll(provider.getDefinitions()));
+
+        } finally {
+            providers.readUnlock(stamp);
+        }
 
         return result;
     }
@@ -66,8 +76,15 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredRestart(@NotNull String propertyId) {
-        return providers.search(propertyId,
-                (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+        var stamp = providers.readLock();
+        try {
+
+            return providers.search(propertyId,
+                    (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+
+        } finally {
+            providers.readUnlock(stamp);
+        }
     }
 
     /**
@@ -78,8 +95,15 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredUpdateClasspath(@NotNull String propertyId) {
-        return providers.search(propertyId,
-                (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+        var stamp = providers.readLock();
+        try {
+
+            return providers.search(propertyId,
+                    (provider, id) -> provider.isRequiredUpdateClasspath(propertyId)) != null;
+
+        } finally {
+            providers.readUnlock(stamp);
+        }
     }
 
     /**
@@ -90,7 +114,14 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredReshape3DView(@NotNull String propertyId) {
-        return providers.search(propertyId,
-                (provider, id) -> provider.isRequiredRestart(propertyId)) != null;
+        var stamp = providers.readLock();
+        try {
+
+            return providers.search(propertyId,
+                    (provider, id) -> provider.isRequiredReshape3DView(propertyId)) != null;
+
+        } finally {
+            providers.readUnlock(stamp);
+        }
     }
 }

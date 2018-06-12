@@ -3,6 +3,8 @@ package com.ss.editor.ui.preview;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.preview.impl.DefaultFilePreviewFactory;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -18,7 +20,8 @@ import java.util.Collection;
  */
 public class FilePreviewFactoryRegistry {
 
-    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(FilePreviewFactoryRegistry.class);
+
     private static final FilePreviewFactoryRegistry INSTANCE = new FilePreviewFactoryRegistry();
 
     public static @NotNull FilePreviewFactoryRegistry getInstance() {
@@ -34,6 +37,7 @@ public class FilePreviewFactoryRegistry {
     private FilePreviewFactoryRegistry() {
         this.factories = ArrayFactory.newConcurrentAtomicARSWLockArray(FilePreviewFactory.class);
         register(DefaultFilePreviewFactory.getInstance());
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -42,7 +46,7 @@ public class FilePreviewFactoryRegistry {
      * @param factory the factory.
      */
     @FromAnyThread
-    public void register(@NotNull final FilePreviewFactory factory) {
+    public void register(@NotNull FilePreviewFactory factory) {
         ArrayUtils.runInWriteLock(factories, factory, Collection::add);
     }
 
@@ -54,12 +58,13 @@ public class FilePreviewFactoryRegistry {
     @FxThread
     public Array<FilePreview> createAvailablePreviews() {
 
-        final Array<FilePreview> result = ArrayFactory.newArray(FilePreview.class);
+        var result = Array.<FilePreview>of(FilePreview.class);
 
-        ArrayUtils.runInReadLock(factories, result, (previewFactories, toStore) ->
+        factories.runInReadLock(result, (previewFactories, toStore) ->
                 previewFactories.forEach(toStore, FilePreviewFactory::createFilePreviews));
 
-        result.sort((first, second) -> second.getOrder() - first.getOrder());
+        result.sort((first, second) ->
+                second.getOrder() - first.getOrder());
 
         return result;
     }

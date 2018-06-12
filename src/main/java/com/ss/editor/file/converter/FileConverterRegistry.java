@@ -8,9 +8,11 @@ import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.Collection;
 
 /**
  * The registry of file converters.
@@ -19,12 +21,11 @@ import java.nio.file.Path;
  */
 public class FileConverterRegistry {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileConverterRegistry.class);
 
-    @NotNull
     private static final FileConverterRegistry INSTANCE = new FileConverterRegistry();
 
+    @FromAnyThread
     public static @NotNull FileConverterRegistry getInstance() {
         return INSTANCE;
     }
@@ -33,10 +34,10 @@ public class FileConverterRegistry {
      * The list of converters.
      */
     @NotNull
-    private final Array<FileConverterDescription> descriptions;
+    private final ConcurrentArray<FileConverterDescription> descriptions;
 
     private FileConverterRegistry() {
-        this.descriptions = ArrayFactory.newArray(FileConverterDescription.class);
+        this.descriptions = ConcurrentArray.of(FileConverterDescription.class);
         register(BlendToJ3oFileConverter.DESCRIPTION);
         register(FbxToJ3oFileConverter.DESCRIPTION);
         register(ObjToJ3oFileConverter.DESCRIPTION);
@@ -44,6 +45,7 @@ public class FileConverterRegistry {
         register(MeshXmlToJ3oFileConverter.DESCRIPTION);
         register(XbufToJ3oFileConverter.DESCRIPTION);
         register(GltfToJ3oFileConverter.DESCRIPTION);
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -52,8 +54,8 @@ public class FileConverterRegistry {
      * @param description the new descriptor.
      */
     @FromAnyThread
-    public void register(@NotNull final FileConverterDescription description) {
-        this.descriptions.add(description);
+    public void register(@NotNull FileConverterDescription description) {
+        descriptions.runInWriteLock(description, Collection::add);
     }
 
     /**
@@ -62,7 +64,7 @@ public class FileConverterRegistry {
      * @return the list of converters.
      */
     @FromAnyThread
-    private @NotNull Array<FileConverterDescription> getDescriptions() {
+    private @NotNull ConcurrentArray<FileConverterDescription> getDescriptions() {
         return descriptions;
     }
 
@@ -73,10 +75,18 @@ public class FileConverterRegistry {
      * @return the list of available converters.
      */
     @FromAnyThread
-    public @NotNull Array<FileConverterDescription> getDescriptions(@NotNull final Path path) {
-        return getDescriptions().stream()
+    public @NotNull Array<FileConverterDescription> getDescriptions(@NotNull Path path) {
+        var descriptions = getDescriptions();
+        var stamp = descriptions.readLock();
+        try {
+
+            return descriptions.stream()
                 .filter(desc -> containsExtensions(desc.getExtensions(), path))
                 .collect(toArray(FileConverterDescription.class));
+
+        } finally {
+            descriptions.readUnlock(stamp);
+        }
     }
 
     /**
@@ -87,7 +97,8 @@ public class FileConverterRegistry {
      * @return the new converter.
      */
     @FromAnyThread
-    public FileConverter newCreator(@NotNull final FileConverterDescription description, @NotNull final Path file) {
-        return description.getConstructor().get();
+    public @NotNull FileConverter newCreator(@NotNull FileConverterDescription description, @NotNull Path file) {
+        return description.getConstructor()
+            .get();
     }
 }
