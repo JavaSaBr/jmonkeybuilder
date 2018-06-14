@@ -15,7 +15,7 @@ import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.IntegerDictionary;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
@@ -28,8 +28,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.function.BiFunction;
 
 /**
  * The class to manage file icons.
@@ -40,14 +38,9 @@ public class FileIconManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
-    interface IconFinder extends BiFunction<Path, String, String> {
-
-        @Override
-        default @Nullable String apply(@NotNull Path file, @NotNull String extension) {
-            return findIcon(file, extension);
-        }
-
-        @Nullable String findIcon(@NotNull Path file, @NotNull String extension);
+    @FunctionalInterface
+    public interface IconFinder {
+        @Nullable String find(@NotNull Path file, @NotNull String extension);
     }
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
@@ -144,12 +137,12 @@ public class FileIconManager {
      * The list of icon finders.
      */
     @NotNull
-    private final ConcurrentArray<IconFinder> iconFinders;
+    private final Array<IconFinder> iconFinders;
 
     private FileIconManager() {
         InitializeManager.valid(getClass());
 
-        this.iconFinders = ConcurrentArray.ofType(IconFinder.class);
+        this.iconFinders = ArrayFactory.newCopyOnModifyArray(IconFinder.class);
         this.imageCache = IntegerDictionary.ofType(ObjectDictionary.class);
         this.extensionToUrl = ObjectDictionary.ofType(String.class);
         this.originalImageCache = ObjectDictionary.ofType(Image.class);
@@ -165,7 +158,7 @@ public class FileIconManager {
      */
     @FromAnyThread
     public void register(@NotNull IconFinder iconFinder) {
-        iconFinders.runInWriteLock(iconFinder, Collection::add);
+        iconFinders.add(iconFinder);
     }
 
     /**
@@ -201,25 +194,18 @@ public class FileIconManager {
         }
 
         if (!iconFinders.isEmpty()) {
-            var stamp = iconFinders.readLock();
-            try {
+            for (var iconFinder : iconFinders) {
 
-                for (var iconFinder : iconFinders) {
+                url = iconFinder.find(path, extension);
 
-                    url = iconFinder.apply(path, extension);
-
-                    var classLoader = iconFinder.getClass().getClassLoader();
-                    if (url == null || !EditorUtil.checkExists(url, classLoader)) {
-                        continue;
-                    }
-
-                    extensionToUrl.put(extension, url);
-
-                    return getImage(url, classLoader, size);
+                var classLoader = iconFinder.getClass().getClassLoader();
+                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
+                    continue;
                 }
 
-            } finally {
-                iconFinders.readUnlock(stamp);
+                extensionToUrl.put(extension, url);
+
+                return getImage(url, classLoader, size);
             }
         }
 
@@ -425,7 +411,7 @@ public class FileIconManager {
      * @return the list of icon finders.
      */
     @FromAnyThread
-    private @NotNull ConcurrentArray<IconFinder> getIconFinders() {
+    private @NotNull Array<IconFinder> getIconFinders() {
         return iconFinders;
     }
 }

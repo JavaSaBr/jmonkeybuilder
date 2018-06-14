@@ -7,7 +7,8 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,10 +39,10 @@ public class TreeNodeFactoryRegistry {
      * The list of available factories.
      */
     @NotNull
-    private final ConcurrentArray<TreeNodeFactory> factories;
+    private final Array<TreeNodeFactory> factories;
 
     private TreeNodeFactoryRegistry() {
-        this.factories = ConcurrentArray.ofType(TreeNodeFactory.class);
+        this.factories = ArrayFactory.newCopyOnModifyArray(TreeNodeFactory.class);
         register(new PrimitiveTreeNodeFactory());
         register(new LegacyAnimationTreeNodeFactory());
         register(new CollisionTreeNodeFactory());
@@ -62,13 +63,8 @@ public class TreeNodeFactoryRegistry {
      */
     @FromAnyThread
     public void register(@NotNull TreeNodeFactory factory) {
-        var stamp = factories.writeLock();
-        try {
-            factories.add(factory);
-            factories.sort(TreeNodeFactory::compareTo);
-        } finally {
-            factories.writeUnlock(stamp);
-        }
+        factories.add(factory);
+        factories.sort(TreeNodeFactory::compareTo);
     }
 
     /**
@@ -77,7 +73,7 @@ public class TreeNodeFactoryRegistry {
      * @return the list of available tree node factories.
      */
     @FromAnyThread
-    private @NotNull ConcurrentArray<TreeNodeFactory> getFactories() {
+    private @NotNull Array<TreeNodeFactory> getFactories() {
         return factories;
     }
 
@@ -101,18 +97,11 @@ public class TreeNodeFactoryRegistry {
 
         V result = null;
 
-        long stamp = factories.readLock();
-        try {
-
-            for (var factory : factories) {
-                result = factory.createFor(element, objectId);
-                if (result != null) {
-                    break;
-                }
+        for (var factory : factories) {
+            result = factory.createFor(element, objectId);
+            if (result != null) {
+                break;
             }
-
-        } finally {
-            factories.readUnlock(stamp);
         }
 
         return result;

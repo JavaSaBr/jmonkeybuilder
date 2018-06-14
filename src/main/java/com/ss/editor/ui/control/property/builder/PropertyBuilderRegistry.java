@@ -4,12 +4,11 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.impl.*;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * The factory to build property controls for an object.
@@ -29,17 +28,17 @@ public class PropertyBuilderRegistry {
      * The list of property builders.
      */
     @NotNull
-    private final ConcurrentArray<PropertyBuilder> builders;
+    private final Array<PropertyBuilder> builders;
 
     /**
      * THe list of filters.
      */
     @NotNull
-    private final ConcurrentArray<PropertyBuilderFilter> filters;
+    private final Array<PropertyBuilderFilter> filters;
 
     private PropertyBuilderRegistry() {
-        builders = ConcurrentArray.ofType(PropertyBuilder.class);
-        filters = ConcurrentArray.ofType(PropertyBuilderFilter.class);
+        builders = ArrayFactory.newCopyOnModifyArray(PropertyBuilder.class);
+        filters = ArrayFactory.newCopyOnModifyArray(PropertyBuilderFilter.class);
         register(AudioNodePropertyBuilder.getInstance());
         register(ParticleEmitterPropertyBuilder.getInstance());
         register(GeometryPropertyBuilder.getInstance());
@@ -65,13 +64,8 @@ public class PropertyBuilderRegistry {
      */
     @FromAnyThread
     public void register(@NotNull PropertyBuilder builder) {
-        var stamp = builders.writeLock();
-        try {
-            builders.add(builder);
-            builders.sort(PropertyBuilder::compareTo);
-        } finally {
-            builders.writeUnlock(stamp);
-        }
+        builders.add(builder);
+        builders.sort(PropertyBuilder::compareTo);
     }
 
     /**
@@ -81,7 +75,7 @@ public class PropertyBuilderRegistry {
      */
     @FromAnyThread
     public void register(@NotNull PropertyBuilderFilter filter) {
-        filters.runInWriteLock(filter, Collection::add);
+        filters.add(filter);
     }
 
     /**
@@ -100,29 +94,22 @@ public class PropertyBuilderRegistry {
             @NotNull ChangeConsumer changeConsumer
     ) {
 
-        long stamp = builders.readLock();
-        try {
+        for (var builder : builders) {
 
-            for (var builder : builders) {
+            boolean needSkip = false;
 
-                boolean needSkip = false;
-
-                for (var filter : filters) {
-                    if (filter.skip(builder, object, parent)) {
-                        needSkip = true;
-                        break;
-                    }
+            for (var filter : filters) {
+                if (filter.skip(builder, object, parent)) {
+                    needSkip = true;
+                    break;
                 }
-
-                if (needSkip) {
-                    continue;
-                }
-
-                builder.buildFor(object, parent, container, changeConsumer);
             }
 
-        } finally {
-            builders.readUnlock(stamp);
+            if (needSkip) {
+                continue;
+            }
+
+            builder.buildFor(object, parent, container, changeConsumer);
         }
     }
 }

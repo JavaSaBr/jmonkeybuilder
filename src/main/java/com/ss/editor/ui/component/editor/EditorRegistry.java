@@ -10,7 +10,7 @@ import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.function.Supplier;
 
 /**
  * THe registry of editors.
@@ -33,6 +33,9 @@ public class EditorRegistry {
 
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
+    private static final Supplier<Array<EditorDescription>> ARRAY_FACTORY =
+            () -> ArrayFactory.newCopyOnModifyArray(EditorDescription.class);
+
     public static @NotNull EditorRegistry getInstance() {
         return INSTANCE;
     }
@@ -41,7 +44,7 @@ public class EditorRegistry {
      * The table with editor descriptions.
      */
     @NotNull
-    private final ConcurrentObjectDictionary<String, ConcurrentArray<EditorDescription>> editorDescriptions;
+    private final ConcurrentObjectDictionary<String, Array<EditorDescription>> editorDescriptions;
 
     /**
      * The table with mapping editor id to editor description.
@@ -50,7 +53,7 @@ public class EditorRegistry {
     private final ConcurrentObjectDictionary<String, EditorDescription> editorIdToDescription;
 
     private EditorRegistry() {
-        this.editorDescriptions = ConcurrentObjectDictionary.ofType(String.class, ConcurrentArray.class);
+        this.editorDescriptions = ConcurrentObjectDictionary.ofType(String.class, Array.class);
         this.editorIdToDescription = ConcurrentObjectDictionary.ofType(String.class, EditorDescription.class);
         loadDescriptions();
     }
@@ -77,7 +80,7 @@ public class EditorRegistry {
      * @return the table with editor descriptions.
      */
     @FromAnyThread
-    private @NotNull ConcurrentObjectDictionary<String, ConcurrentArray<EditorDescription>> getEditorDescriptions() {
+    private @NotNull ConcurrentObjectDictionary<String, Array<EditorDescription>> getEditorDescriptions() {
         return editorDescriptions;
     }
 
@@ -108,18 +111,8 @@ public class EditorRegistry {
 
     @FromAnyThread
     private void register(@NotNull String extension, @NotNull EditorDescription description) {
-
-        var descriptions = getEditorDescriptions();
-
-        long stamp = descriptions.writeLock();
-        try {
-
-            descriptions.get(extension, () -> ConcurrentArray.ofType(EditorDescription.class))
-                    .runInWriteLock(description, Collection::add);
-
-        } finally {
-            descriptions.writeUnlock(stamp);
-        }
+        getEditorDescriptions().runInWriteLock(extension, description,
+                (dict, ext, toAdd) -> dict.get(ext, ARRAY_FACTORY).add(toAdd));
     }
 
     /**
@@ -155,10 +148,10 @@ public class EditorRegistry {
         EditorDescription description;
 
         if (descriptions != null) {
-            description = descriptions.getInReadLock(Array::first);
+            description = descriptions.first();
         } else {
             descriptions = editorDescriptions.get(ALL_FORMATS);
-            description = descriptions == null ? null : descriptions.getInReadLock(Array::first);
+            description = descriptions == null ? null : descriptions.first();
         }
 
         if (description == null) {
@@ -208,15 +201,13 @@ public class EditorRegistry {
         var descriptions = editorDescriptions.get(extension);
 
         if (descriptions != null) {
-            descriptions.runInReadLock(result,
-                    (source, destination) -> destination.addAll(source));
+            result.addAll(descriptions);
         }
 
         var universal = editorDescriptions.get(ALL_FORMATS);
 
         if (universal != null) {
-            universal.runInReadLock(result,
-                    (source, destination) -> destination.addAll(source));
+            result.addAll(universal);
         }
 
         return result;

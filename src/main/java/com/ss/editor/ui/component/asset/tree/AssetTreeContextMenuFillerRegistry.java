@@ -7,10 +7,9 @@ import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetT
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 /**
  * The registry class to collect all available context menu filler.
@@ -31,17 +30,17 @@ public class AssetTreeContextMenuFillerRegistry {
      * The list of single fillers.
      */
     @NotNull
-    private final ConcurrentArray<AssetTreeSingleContextMenuFiller> singleFillers;
+    private final Array<AssetTreeSingleContextMenuFiller> singleFillers;
 
     /**
      * The list of multi fillers.
      */
     @NotNull
-    private final ConcurrentArray<AssetTreeMultiContextMenuFiller> multiFillers;
+    private final Array<AssetTreeMultiContextMenuFiller> multiFillers;
 
     private AssetTreeContextMenuFillerRegistry() {
-        this.singleFillers = ConcurrentArray.ofType(AssetTreeSingleContextMenuFiller.class);
-        this.multiFillers = ConcurrentArray.ofType(AssetTreeMultiContextMenuFiller.class);
+        this.singleFillers = ArrayFactory.newCopyOnModifyArray(AssetTreeSingleContextMenuFiller.class);
+        this.multiFillers = ArrayFactory.newCopyOnModifyArray(AssetTreeMultiContextMenuFiller.class);
         registerSingle(new FileAssetTreeSingleContextMenuFiller());
         registerSingle(new ResourceAssetTreeSingleContextMenuFiller());
         registerMulti(new FileAssetTreeSingleContextMenuFiller());
@@ -56,7 +55,7 @@ public class AssetTreeContextMenuFillerRegistry {
      */
     @FromAnyThread
     public void registerSingle(@NotNull AssetTreeSingleContextMenuFiller filler) {
-        singleFillers.runInWriteLock(filler, Collection::add);
+        singleFillers.add(filler);
     }
 
     /**
@@ -66,7 +65,7 @@ public class AssetTreeContextMenuFillerRegistry {
      */
     @FromAnyThread
     public void registerMulti(@NotNull AssetTreeMultiContextMenuFiller filler) {
-        multiFillers.runInWriteLock(filler, Collection::add);
+        multiFillers.add(filler);
     }
 
     /**
@@ -75,7 +74,7 @@ public class AssetTreeContextMenuFillerRegistry {
      * @return the list of single context menu filler.
      */
     @FromAnyThread
-    public @NotNull ConcurrentArray<AssetTreeSingleContextMenuFiller> getSingleFillers() {
+    public @NotNull Array<AssetTreeSingleContextMenuFiller> getSingleFillers() {
         return singleFillers;
     }
 
@@ -85,7 +84,7 @@ public class AssetTreeContextMenuFillerRegistry {
      * @return the list of multiply context menu filler.
      */
     @FromAnyThread
-    public @NotNull ConcurrentArray<AssetTreeMultiContextMenuFiller> getMultiFillers() {
+    public @NotNull Array<AssetTreeMultiContextMenuFiller> getMultiFillers() {
         return multiFillers;
     }
 }

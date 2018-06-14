@@ -10,12 +10,12 @@ import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefin
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.Collection;
 
 /**
  * The registry with file creators.
@@ -37,10 +37,10 @@ public class FileCreatorRegistry {
      * The list of file creator descriptions.
      */
     @NotNull
-    private final ConcurrentArray<FileCreatorDescription> descriptions;
+    private final Array<FileCreatorDescription> descriptions;
 
     private FileCreatorRegistry() {
-        this.descriptions = ConcurrentArray.ofType(FileCreatorDescription.class);
+        this.descriptions = ArrayFactory.newCopyOnModifyArray(FileCreatorDescription.class);
         register(MaterialFileCreator.DESCRIPTION);
         register(MaterialDefinitionFileCreator.DESCRIPTION);
         register(EmptyFileCreator.DESCRIPTION);
@@ -58,7 +58,7 @@ public class FileCreatorRegistry {
      */
     @FromAnyThread
     public void register(@NotNull FileCreatorDescription description) {
-        descriptions.runInWriteLock(description, Collection::add);
+        descriptions.add(description);
     }
 
     /**
@@ -67,7 +67,7 @@ public class FileCreatorRegistry {
      * @return the list of file creator descriptions.
      */
     @FromAnyThread
-    public @NotNull ConcurrentArray<FileCreatorDescription> getDescriptions() {
+    public @NotNull Array<FileCreatorDescription> getDescriptions() {
         return descriptions;
     }
 

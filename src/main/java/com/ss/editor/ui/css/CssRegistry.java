@@ -19,8 +19,8 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -65,12 +65,12 @@ public class CssRegistry {
      * The list of available css files.
      */
     @NotNull
-    private final ConcurrentArray<String> availableCssFiles;
+    private final Array<String> availableCssFiles;
 
     private CssRegistry() {
         InitializeManager.valid(getClass());
 
-        this.availableCssFiles = ArrayFactory.newConcurrentStampedLockArray(String.class);
+        this.availableCssFiles = ArrayFactory.newCopyOnModifyArray(String.class);
 
         register(CSS_FILE_BASE, EditorFxSceneBuilder.class.getClassLoader());
         register(CSS_FILE_EXTERNAL, EditorFxSceneBuilder.class.getClassLoader());
@@ -115,7 +115,8 @@ public class CssRegistry {
 
             stylesheets.clear();
 
-            getAvailableCssFiles().runInReadLock(stylesheets::addAll);
+            getAvailableCssFiles().forEach(stylesheets,
+                    (style, toStore) -> toStore.add(style));
 
             stylesheets.add(theme.getCssFile());
 
@@ -148,7 +149,7 @@ public class CssRegistry {
      */
     @FromAnyThread
     public void register(@NotNull URL cssFile) {
-        availableCssFiles.runInWriteLock(array -> array.add(cssFile.toExternalForm()));
+        availableCssFiles.add(cssFile.toExternalForm());
     }
 
     /**
@@ -168,7 +169,7 @@ public class CssRegistry {
      * @return the list of available css files.
      */
     @FromAnyThread
-    public @NotNull ConcurrentArray<String> getAvailableCssFiles() {
+    public @NotNull Array<String> getAvailableCssFiles() {
         return availableCssFiles;
     }
 }

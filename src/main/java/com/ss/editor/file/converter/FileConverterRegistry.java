@@ -7,11 +7,10 @@ import com.ss.editor.file.converter.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.Collection;
 
 /**
  * The registry of file converters.
@@ -33,10 +32,10 @@ public class FileConverterRegistry {
      * The list of converters.
      */
     @NotNull
-    private final ConcurrentArray<FileConverterDescription> descriptions;
+    private final Array<FileConverterDescription> descriptions;
 
     private FileConverterRegistry() {
-        this.descriptions = ConcurrentArray.ofType(FileConverterDescription.class);
+        this.descriptions = ArrayFactory.newCopyOnModifyArray(FileConverterDescription.class);
         register(BlendToJ3oFileConverter.DESCRIPTION);
         register(FbxToJ3oFileConverter.DESCRIPTION);
         register(ObjToJ3oFileConverter.DESCRIPTION);
@@ -54,7 +53,7 @@ public class FileConverterRegistry {
      */
     @FromAnyThread
     public void register(@NotNull FileConverterDescription description) {
-        descriptions.runInWriteLock(description, Collection::add);
+        descriptions.add(description);
     }
 
     /**
@@ -63,7 +62,7 @@ public class FileConverterRegistry {
      * @return the list of converters.
      */
     @FromAnyThread
-    private @NotNull ConcurrentArray<FileConverterDescription> getDescriptions() {
+    private @NotNull Array<FileConverterDescription> getDescriptions() {
         return descriptions;
     }
 
@@ -75,17 +74,9 @@ public class FileConverterRegistry {
      */
     @FromAnyThread
     public @NotNull Array<FileConverterDescription> getDescriptions(@NotNull Path path) {
-        var descriptions = getDescriptions();
-        var stamp = descriptions.readLock();
-        try {
-
-            return descriptions.stream()
+        return getDescriptions().stream()
                 .filter(desc -> containsExtensions(desc.getExtensions(), path))
                 .collect(toArray(FileConverterDescription.class));
-
-        } finally {
-            descriptions.readUnlock(stamp);
-        }
     }
 
     /**
@@ -98,6 +89,6 @@ public class FileConverterRegistry {
     @FromAnyThread
     public @NotNull FileConverter newCreator(@NotNull FileConverterDescription description, @NotNull Path file) {
         return description.getConstructor()
-            .get();
+                .get();
     }
 }
