@@ -59,20 +59,20 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of installed plugins.
      */
-    @Nullable
-    private ListView<EditorPlugin> pluginListView;
+    @NotNull
+    private final ListView<EditorPlugin> pluginListView;
 
     /**
      * The description area.
      */
-    @Nullable
-    private WebView descriptionArea;
+    @NotNull
+    private final WebView descriptionArea;
 
     /**
      * The remove button.
      */
-    @Nullable
-    private Button removeButton;
+    @NotNull
+    private final Button removeButton;
 
     /**
      * The background color.
@@ -94,6 +94,9 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
 
     public PluginsDialog() {
         this.originalIds = Array.ofType(String.class);
+        this.pluginListView = new ListView<>();
+        this.descriptionArea = new WebView();
+        this.removeButton = new Button();
         PLUGIN_MANAGER.handlePluginsNow(plugin -> originalIds.add(plugin.getId()));
     }
 
@@ -109,13 +112,10 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull GridPane root) {
         super.createContent(root);
 
-        pluginListView = new ListView<>();
         pluginListView.setCellFactory(param -> new PluginListCell());
         pluginListView.setFixedCellSize(FxConstants.LIST_CELL_HEIGHT);
         pluginListView.prefWidthProperty().bind(root.widthProperty().divide(2));
         pluginListView.prefHeightProperty().bind(root.heightProperty());
-
-        descriptionArea = new WebView();
 
         var descriptionContainer = new BorderPane(descriptionArea);
         descriptionContainer.setVisible(false);
@@ -130,7 +130,6 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
-        removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
         removeButton.setDisable(true);
