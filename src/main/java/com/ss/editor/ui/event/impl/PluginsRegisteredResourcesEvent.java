@@ -1,11 +1,12 @@
 package com.ss.editor.ui.event.impl;
 
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.EventType;
 
 /**
- * The event about that all plugins are already registered all
- * interested resources in {@link com.ss.editor.manager.ResourceManager}.
+ * The event about that all plugins have already registered all
+ * interested resources in {@link ResourceManager}.
  *
  * @author JavaSaBr
  */

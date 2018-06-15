@@ -4,7 +4,7 @@ import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.EventType;
 
 /**
- * The event about that all plugins are already registered all their
+ * The event about that all plugins have already registered all their
  * tree node factories.
  *
  * @author JavaSaBr

@@ -23,9 +23,7 @@ public class NewFileAction extends Menu {
 
         var items = getItems();
 
-        var descriptions = CREATOR_REGISTRY.getDescriptions();
-        descriptions.runInReadLock(array -> {
-            array.forEach(description -> items.add(new NewFileByCreatorAction(element, description)));
-        });
+        CREATOR_REGISTRY.getDescriptions()
+                .forEach(description -> items.add(new NewFileByCreatorAction(element, description)));
     }
 }

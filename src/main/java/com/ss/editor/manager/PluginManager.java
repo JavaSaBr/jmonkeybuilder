@@ -5,9 +5,9 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.file.converter.FileConverterRegistry;
+import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
@@ -17,6 +17,7 @@ import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.painting.PaintingComponentRegistry;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.util.EditorUtil;
@@ -83,7 +84,7 @@ public class PluginManager {
         SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
                 .add(this::onAfterCreateJavaFxContext);
 
-        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
+        CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
                 .add(FxSceneCreatedEvent.EVENT_TYPE)
                 .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
                 .buildAndRegister();
@@ -162,7 +163,30 @@ public class PluginManager {
     @BackgroundThread
     private void registeredExtensions() {
 
+        CombinedAsyncEventHandlerBuilder.of(this::notifyAllExtensionRegistered)
+                .add(PluginsFileCreatorsRegisteredEvent.EVENT_TYPE)
+                .add(PluginsEditorsRegisteredEvent.EVENT_TYPE)
+                .add(PluginsFileIconFindersRegisteredEvent.EVENT_TYPE)
+                .add(PluginsTreeNodeFactoriesRegisteredEvent.EVENT_TYPE)
+                .add(PluginsPropertyBuildersRegisteredEvent.EVENT_TYPE)
+                .add(PluginsFileConvertersRegisteredEvent.EVENT_TYPE)
+                .add(PluginCssLoadedEvent.EVENT_TYPE)
+                .add(PluginsFilePreviewFactoriesRegisteredEvent.EVENT_TYPE)
+                .add(PluginsAssetTreeContextMenuFillersRegisteredEvent.EVENT_TYPE)
+                .add(PluginsSettingsProvidersRegisteredEvent.EVENT_TYPE)
+                .add(PluginsPaintingComponentsRegisteredEvent.EVENT_TYPE)
+                .buildAndRegister();
+
         var executorManager = ExecutorManager.getInstance();
+        executorManager.addBackgroundTask(() -> {
+
+            handlePlugins(editorPlugin ->
+                    editorPlugin.register(CssRegistry.getInstance()));
+
+            AsyncEventManager.getInstance()
+                    .notify(new PluginCssLoadedEvent());
+        });
+
         executorManager.addBackgroundTask(() -> {
 
             handlePlugins(editorPlugin ->
@@ -238,15 +262,6 @@ public class PluginManager {
         executorManager.addBackgroundTask(() -> {
 
             handlePlugins(editorPlugin ->
-                    editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsAssetTreeContextMenuFillersRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
                 editorPlugin.register(SettingsProviderRegistry.getInstance()));
 
             AsyncEventManager.getInstance()
@@ -264,6 +279,15 @@ public class PluginManager {
     }
 
     /**
+     * Notify about that all plugin's extensions were registered.
+     */
+    @BackgroundThread
+    private void notifyAllExtensionRegistered() {
+        AsyncEventManager.getInstance()
+                .notify(new AllPluginsExtensionsRegisteredEvent());
+    }
+
+    /**
      * Install a new plugin to the system.
      *
      * @param path the path to the plugin.
@@ -278,7 +302,7 @@ public class PluginManager {
      * @param plugin the plugin.
      */
     public void removePlugin(@NotNull EditorPlugin plugin) {
-        pluginSystem.removePlugin(plugin);
+        getPluginSystem().removePlugin(plugin);
     }
 
     /**
@@ -305,10 +329,8 @@ public class PluginManager {
      */
     @FxThread
     private void onAfterCreateJavaFxContext() {
-        pluginSystem.getPlugins().stream()
-                .filter(EditorPlugin.class::isInstance)
-                .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFxContext(pluginSystem));
+        handlePlugins(editorPlugin ->
+                editorPlugin.onAfterCreateJavaFxContext(getPluginSystem()));
     }
 
     /**
@@ -319,11 +341,8 @@ public class PluginManager {
 
         Utils.run(waiter, CountDownLatch::await);
 
-        var pluginSystem = getPluginSystem();
-        pluginSystem.getPlugins().stream()
-                .filter(EditorPlugin.class::isInstance)
-                .map(EditorPlugin.class::cast)
-                .forEach(editorPlugin -> editorPlugin.onFinishLoading(pluginSystem));
+        handlePlugins(editorPlugin ->
+                editorPlugin.onFinishLoading(getPluginSystem()));
     }
 
     /**

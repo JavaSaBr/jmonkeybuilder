@@ -125,6 +125,7 @@ public class JfxApplication extends Application {
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(FxContextCreatedEvent.EVENT_TYPE)
                 .add(ImageSystemInitializedEvent.EVENT_TYPE)
+                .add(AllPluginsExtensionsRegisteredEvent.EVENT_TYPE)
                 .buildAndRegister();
 
         InitializeManager.register(ExecutorManager.class);

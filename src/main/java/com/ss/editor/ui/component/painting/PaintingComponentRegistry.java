@@ -7,10 +7,8 @@ import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayCollectors;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.function.Function;
 
 /**
@@ -37,10 +35,10 @@ public class PaintingComponentRegistry {
      * The list of painting component's constructors.
      */
     @NotNull
-    private final ConcurrentArray<Constructor> constructors;
+    private final Array<Constructor> constructors;
 
     private PaintingComponentRegistry() {
-        this.constructors = ConcurrentArray.of(Constructor.class);
+        this.constructors = ArrayFactory.newCopyOnModifyArray(Constructor.class);
         register(TerrainPaintingComponent::new);
         register(SpawnPaintingComponent::new);
     }
@@ -52,7 +50,7 @@ public class PaintingComponentRegistry {
      */
     @FxThread
     public void register(@NotNull Constructor constructor) {
-        constructors.runInWriteLock(constructor, Collection::add);
+        constructors.add(constructor);
     }
 
     /**
@@ -63,15 +61,8 @@ public class PaintingComponentRegistry {
      */
     @FxThread
     public @NotNull Array<PaintingComponent> createComponents(@NotNull PaintingComponentContainer container) {
-        var stamp = constructors.readLock();
-        try {
-
-            return constructors.stream()
+        return constructors.stream()
                 .map(constructor -> constructor.apply(container))
                 .collect(ArrayCollectors.toArray(PaintingComponent.class));
-
-        } finally {
-            constructors.readUnlock(stamp);
-        }
     }
 }

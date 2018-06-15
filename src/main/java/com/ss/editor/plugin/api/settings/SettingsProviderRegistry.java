@@ -4,10 +4,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.DefaultSettingsProvider;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ConcurrentArray;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 /**
  * The registry of all settings providers.
@@ -27,10 +25,10 @@ public class SettingsProviderRegistry {
      * The list of settings providers.
      */
     @NotNull
-    private final ConcurrentArray<SettingsProvider> providers;
+    private final Array<SettingsProvider> providers;
 
     private SettingsProviderRegistry() {
-        this.providers = ConcurrentArray.ofType(SettingsProvider.class);
+        this.providers = ArrayFactory.newCopyOnModifyArray(SettingsProvider.class);
         register(new DefaultSettingsProvider());
     }
 
@@ -41,7 +39,7 @@ public class SettingsProviderRegistry {
      */
     @FromAnyThread
     public void register(@NotNull SettingsProvider settingsProvider) {
-        providers.runInWriteLock(settingsProvider, Collection::add);
+        providers.add(settingsProvider);
     }
 
     /**
@@ -54,7 +52,7 @@ public class SettingsProviderRegistry {
 
         var result = Array.<SettingsPropertyDefinition>ofType(SettingsPropertyDefinition.class);
 
-        providers.forEachInReadLock(result, SettingsProvider::getDefinitions,
+        providers.forEach(result, SettingsProvider::getDefinitions,
                 (definitions, container) -> container.addAll(definitions));
 
         return result;
@@ -68,7 +66,7 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredRestart(@NotNull String propertyId) {
-        return providers.searchInReadLock(propertyId,
+        return providers.search(propertyId,
                 SettingsProvider::isRequiredRestart) != null;
     }
 
@@ -80,7 +78,7 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredUpdateClasspath(@NotNull String propertyId) {
-        return providers.searchInReadLock(propertyId,
+        return providers.search(propertyId,
                 SettingsProvider::isRequiredUpdateClasspath) != null;
     }
 
@@ -92,7 +90,7 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredReshape3DView(@NotNull String propertyId) {
-        return providers.searchInReadLock(propertyId,
+        return providers.search(propertyId,
                 SettingsProvider::isRequiredReshape3DView) != null;
     }
 }

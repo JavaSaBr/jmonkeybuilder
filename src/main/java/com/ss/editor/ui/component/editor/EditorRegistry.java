@@ -31,10 +31,10 @@ public class EditorRegistry {
 
     public static final String ALL_FORMATS = "*";
 
-    private static final EditorRegistry INSTANCE = new EditorRegistry();
-
     private static final Supplier<Array<EditorDescription>> ARRAY_FACTORY =
             () -> ArrayFactory.newCopyOnModifyArray(EditorDescription.class);
+
+    private static final EditorRegistry INSTANCE = new EditorRegistry();
 
     public static @NotNull EditorRegistry getInstance() {
         return INSTANCE;

@@ -4,7 +4,7 @@ import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.EventType;
 
 /**
- * The event about that css registry loaded plugin's css files.
+ * The event about that css registry has loaded plugin's css files.
  *
  * @author JavaSaBr
  */

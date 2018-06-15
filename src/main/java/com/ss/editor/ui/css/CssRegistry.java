@@ -9,12 +9,10 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.AsyncEventManager;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.PluginManager;
 import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.event.impl.CssAppliedEvent;
 import com.ss.editor.ui.event.impl.FxSceneCreatedEvent;
 import com.ss.editor.ui.event.impl.PluginCssLoadedEvent;
-import com.ss.editor.ui.event.impl.PluginsLoadedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -72,14 +70,12 @@ public class CssRegistry {
 
         this.availableCssFiles = ArrayFactory.newCopyOnModifyArray(String.class);
 
-        register(CSS_FILE_BASE, EditorFxSceneBuilder.class.getClassLoader());
-        register(CSS_FILE_EXTERNAL, EditorFxSceneBuilder.class.getClassLoader());
-        register(CSS_FILE_CUSTOM_IDS, EditorFxSceneBuilder.class.getClassLoader());
-        register(CSS_FILE_CUSTOM_CLASSES, EditorFxSceneBuilder.class.getClassLoader());
+        var classLoader = EditorFxSceneBuilder.class.getClassLoader();
 
-        CombinedAsyncEventHandlerBuilder.of(this::loadPluginsCss)
-                .add(PluginsLoadedEvent.EVENT_TYPE)
-                .buildAndRegister();
+        register(CSS_FILE_BASE, classLoader);
+        register(CSS_FILE_EXTERNAL, classLoader);
+        register(CSS_FILE_CUSTOM_IDS, classLoader);
+        register(CSS_FILE_CUSTOM_CLASSES, classLoader);
 
         // if a scene was created before when we loaded plugin's css.
         CombinedAsyncEventHandlerBuilder.of(this::applyCssToScene)
@@ -114,10 +110,7 @@ public class CssRegistry {
             }
 
             stylesheets.clear();
-
-            getAvailableCssFiles().forEach(stylesheets,
-                    (style, toStore) -> toStore.add(style));
-
+            stylesheets.addAll(getAvailableCssFiles());
             stylesheets.add(theme.getCssFile());
 
             AsyncEventManager.getInstance()
@@ -125,21 +118,6 @@ public class CssRegistry {
 
             LOGGER.info("applied CSS to the main scene.");
         });
-    }
-
-    /**
-     * Load CSS files from plugins.
-     */
-    @FromAnyThread
-    private void loadPluginsCss() {
-
-        LOGGER.info("started loading CSS from plugins.");
-
-        PluginManager.getInstance()
-                .handlePluginsNow(plugin -> plugin.register(this));
-
-        AsyncEventManager.getInstance()
-                .notify(new PluginCssLoadedEvent());
     }
 
     /**

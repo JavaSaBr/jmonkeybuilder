@@ -1,17 +1,13 @@
 package com.ss.editor.ui.preview;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.preview.impl.DefaultFilePreviewFactory;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.common.util.array.ConcurrentArray;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 /**
  * The registry with available factories of file previews.
@@ -32,10 +28,10 @@ public class FilePreviewFactoryRegistry {
      * The list of available factories.
      */
     @NotNull
-    private final ConcurrentArray<FilePreviewFactory> factories;
+    private final Array<FilePreviewFactory> factories;
 
     private FilePreviewFactoryRegistry() {
-        this.factories = ArrayFactory.newConcurrentAtomicARSWLockArray(FilePreviewFactory.class);
+        this.factories = ArrayFactory.newCopyOnModifyArray(FilePreviewFactory.class);
         register(DefaultFilePreviewFactory.getInstance());
         LOGGER.info("initialized.");
     }
@@ -47,7 +43,7 @@ public class FilePreviewFactoryRegistry {
      */
     @FromAnyThread
     public void register(@NotNull FilePreviewFactory factory) {
-        ArrayUtils.runInWriteLock(factories, factory, Collection::add);
+        factories.add(factory);
     }
 
     /**
@@ -60,8 +56,7 @@ public class FilePreviewFactoryRegistry {
 
         var result = Array.<FilePreview>ofType(FilePreview.class);
 
-        factories.runInReadLock(result, (previewFactories, toStore) ->
-                previewFactories.forEach(toStore, FilePreviewFactory::createFilePreviews));
+        factories.forEach(result, FilePreviewFactory::createFilePreviews);
 
         result.sort((first, second) ->
                 second.getOrder() - first.getOrder());
