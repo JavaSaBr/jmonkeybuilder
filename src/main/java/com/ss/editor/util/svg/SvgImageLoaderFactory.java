@@ -8,7 +8,6 @@ import com.sun.javafx.iio.ImageStorage;
 import de.codecentric.centerdevice.javafxsvg.SvgDescriptor;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

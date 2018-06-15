@@ -5,8 +5,8 @@ import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.PluginManager;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.FxConstants;
@@ -15,20 +15,20 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.common.plugin.Version;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -37,9 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.File;
-import java.net.URL;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * The implementation of a dialog to work with plugins.
@@ -48,10 +46,8 @@ import java.util.List;
  */
 public class PluginsDialog extends AbstractSimpleEditorDialog {
 
-    @NotNull
     private static final Point DIALOG_SIZE = new Point(1200, -1);
 
-    @NotNull
     private static final PluginManager PLUGIN_MANAGER = PluginManager.getInstance();
 
     /**
@@ -97,14 +93,20 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     private Color linkColor;
 
     public PluginsDialog() {
-        this.originalIds = ArrayFactory.newArray(String.class);
-        refreshPlugins();
+        this.originalIds = Array.ofType(String.class);
         PLUGIN_MANAGER.handlePluginsNow(plugin -> originalIds.add(plugin.getId()));
     }
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final GridPane root) {
+    public void construct() {
+        super.construct();
+        refreshPlugins();
+    }
+
+    @Override
+    @FxThread
+    protected void createContent(@NotNull GridPane root) {
         super.createContent(root);
 
         pluginListView = new ListView<>();
@@ -115,14 +117,16 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
 
         descriptionArea = new WebView();
 
-        final BorderPane descriptionContainer = new BorderPane(descriptionArea);
+        var descriptionContainer = new BorderPane(descriptionArea);
         descriptionContainer.setVisible(false);
-        descriptionContainer.prefWidthProperty().bind(root.widthProperty().divide(2));
-        descriptionContainer.backgroundProperty().addListener((observable, oldValue, newValue) -> takeColors(newValue));
+        descriptionContainer.prefWidthProperty()
+                .bind(root.widthProperty().divide(2));
+        descriptionContainer.backgroundProperty()
+                .addListener((observable, oldValue, newValue) -> takeColors(newValue));
 
-        final HBox buttonContainer = new HBox();
+        var buttonContainer = new HBox();
 
-        final Button addButton = new Button();
+        var addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
@@ -131,22 +135,21 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         removeButton.setOnAction(event -> processRemove());
         removeButton.setDisable(true);
 
-        pluginListView.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(this::onSelected);
+        FxControlUtils.onSelectedItemChange(pluginListView, this::onSelected);
 
-        FXUtils.addToPane(addButton, removeButton, buttonContainer);
+        FxUtils.addClass(buttonContainer, CssClasses.DEF_HBOX)
+                .addClass(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
+                .addClass(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER)
+                .addClass(root, CssClasses.PLUGINS_DIALOG)
+                .addClass(descriptionContainer, CssClasses.WEBVIEW_TEXT_AREA);
+
         DynamicIconSupport.addSupport(addButton, removeButton);
 
         root.add(pluginListView, 0, 0, 1, 1);
         root.add(descriptionContainer, 1, 0, 1, 1);
         root.add(buttonContainer, 0, 1, 1, 1);
 
-        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(root, CssClasses.PLUGINS_DIALOG);
-        FXUtils.addClassesTo(descriptionContainer, CssClasses.WEBVIEW_TEXT_AREA);
+        FxUtils.addChild(buttonContainer, addButton, removeButton);
     }
 
     /**
@@ -154,7 +157,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
      *
      * @param newValue the new background.
      */
-    private void takeColors(@Nullable final Background newValue) {
+    private void takeColors(@Nullable Background newValue) {
 
         if (newValue == null) {
             setBackgroundColor(null);
@@ -162,16 +165,16 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
             return;
         }
 
-        final List<BackgroundFill> fills = newValue.getFills();
+        var fills = newValue.getFills();
         if (fills.size() < 3) {
             setBackgroundColor(null);
             setFontColor(null);
             return;
         }
 
-        final Paint background = fills.get(0).getFill();
-        final Paint font = fills.get(1).getFill();
-        final Paint link = fills.get(2).getFill();
+        var background = fills.get(0).getFill();
+        var font = fills.get(1).getFill();
+        var link = fills.get(2).getFill();
 
         if (background instanceof Color) {
             setBackgroundColor((Color) background);
@@ -200,7 +203,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
      *
      * @param backgroundColor the background color.
      */
-    private void setBackgroundColor(@Nullable final Color backgroundColor) {
+    private void setBackgroundColor(@Nullable Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -218,7 +221,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
      *
      * @param fontColor the font color.
      */
-    private void setFontColor(@Nullable final Color fontColor) {
+    private void setFontColor(@Nullable Color fontColor) {
         this.fontColor = fontColor;
     }
 
@@ -236,7 +239,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
      *
      * @param linkColor the link color.
      */
-    private void setLinkColor(@Nullable final Color linkColor) {
+    private void setLinkColor(@Nullable Color linkColor) {
         this.linkColor = linkColor;
     }
 
@@ -261,15 +264,14 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     /**
      * Handle the selected plugin.
      *
-     * @param observable the observable property.
-     * @param oldValue   the old selected plugin.
      * @param newValue   the new selected plugin.
      */
     @FxThread
-    private void onSelected(@NotNull final ObservableValue<? extends EditorPlugin> observable,
-                            @Nullable final EditorPlugin oldValue, @Nullable final EditorPlugin newValue) {
+    private void onSelected(@Nullable EditorPlugin newValue) {
+
         getRemoveButton().setDisable(newValue == null || newValue.isEmbedded());
-        final WebView descriptionArea = getDescriptionArea();
+
+        var descriptionArea = getDescriptionArea();
         descriptionArea.getParent().setVisible(newValue != null);
         descriptionArea.getEngine().loadContent(generateDescription(newValue));
     }
@@ -280,21 +282,24 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
      * @param plugin the plugin.
      * @return the html description.
      */
-    private @NotNull String generateDescription(@Nullable final EditorPlugin plugin) {
-        if (plugin == null) return StringUtils.EMPTY;
+    private @NotNull String generateDescription(@Nullable EditorPlugin plugin) {
 
-        final String name = plugin.getName();
-        final Version version = plugin.getVersion();
-        final String description = plugin.getDescription();
-        final URL homePageUrl = plugin.getHomePageUrl();
-        final String usedGradleDependencies = plugin.getUsedGradleDependencies();
-        final String usedMavenDependencies = plugin.getUsedMavenDependencies();
+        if (plugin == null) {
+            return StringUtils.EMPTY;
+        }
 
-        final StringBuilder result = new StringBuilder("<html>");
+        var name = plugin.getName();
+        var version = plugin.getVersion();
+        var description = plugin.getDescription();
+        var homePageUrl = plugin.getHomePageUrl();
+        var usedGradleDependencies = plugin.getUsedGradleDependencies();
+        var usedMavenDependencies = plugin.getUsedMavenDependencies();
 
-        final Color backgroundColor = getBackgroundColor();
-        final Color fontColor = getFontColor();
-        final Color linkColor = getLinkColor();
+        var result = new StringBuilder("<html>");
+
+        var backgroundColor = getBackgroundColor();
+        var fontColor = getFontColor();
+        var linkColor = getLinkColor();
 
         if (backgroundColor != null && fontColor != null && linkColor != null) {
             result.append("<head><style type=\"text/css\">");
@@ -351,6 +356,8 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the list of installed plugins.
+     *
      * @return the list of installed plugins.
      */
     @FxThread
@@ -364,7 +371,7 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     @FxThread
     private void refreshPlugins() {
 
-        final ObservableList<EditorPlugin> items = pluginListView.getItems();
+        var items = getPluginListView().getItems();
         items.clear();
 
         PLUGIN_MANAGER.handlePluginsNow(items::add);
@@ -376,11 +383,11 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     @FxThread
     private void processRemove() {
 
-        final ListView<EditorPlugin> pluginListView = getPluginListView();
-        final EditorPlugin toRemove = pluginListView.getSelectionModel()
+        var toRemove = getPluginListView()
+                .getSelectionModel()
                 .getSelectedItem();
 
-        if(toRemove.isEmbedded()) {
+        if (toRemove.isEmbedded()) {
             return;
         }
 
@@ -390,6 +397,8 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the list of original plugin ids.
+     *
      * @return the list of original plugin ids.
      */
     @FxThread
@@ -402,21 +411,16 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
     protected void processClose() {
         super.processClose();
 
-        final Array<String> newIds = ArrayFactory.newArray(String.class);
+        var newIds = ArrayFactory.newArray(String.class);
 
         PLUGIN_MANAGER.handlePluginsNow(plugin -> newIds.add(plugin.getId()));
 
-        final String[] original = newIds.toArray(String.class);
-        final String[] toCompare = originalIds.toArray(String.class);
+        var original = newIds.toArray(String.class);
+        var toCompare = originalIds.toArray(String.class);
 
-        if (Arrays.equals(original, toCompare)) {
-            return;
+        if (!Arrays.equals(original, toCompare)) {
+            ConfirmDialog.ifOk(Messages.PLUGINS_DIALOG_QUESTION, Platform::exit);
         }
-
-        final ConfirmDialog dialog = new ConfirmDialog(result -> {
-            if (Boolean.TRUE.equals(result)) Platform.exit();
-        }, Messages.PLUGINS_DIALOG_QUESTION);
-        dialog.show(getDialog());
     }
 
     /**
@@ -428,12 +432,12 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         GAnalytics.sendPageView("PluginChooseDialog", null, "/dialog/PluginChooseDialog");
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "PluginChooseDialog");
 
-        final FileChooser chooser = new FileChooser();
+        var chooser = new FileChooser();
         chooser.setTitle(Messages.PLUGINS_DIALOG_FILE_CHOOSER_TITLE);
         chooser.setSelectedExtensionFilter(new ExtensionFilter(Messages.PLUGINS_DIALOG_FILE_CHOOSER_FILTER, "*.zip"));
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
-        final File result = chooser.showOpenDialog(getDialog());
+        var result = chooser.showOpenDialog(getDialog());
 
         if (result == null) {
             return;

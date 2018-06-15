@@ -1,11 +1,10 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -13,7 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -28,30 +26,36 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final Point DIALOG_SIZE = new Point(600, -1);
 
+    @FxThread
+    public static void ifOk(@NotNull String question, @NotNull Runnable handler) {
+
+        var dialog = new ConfirmDialog(aBoolean -> {
+
+            if (Boolean.TRUE.equals(aBoolean)) {
+                handler.run();
+            }
+
+        }, question);
+
+        dialog.construct();
+        dialog.show();
+    }
+
     /**
      * The handler of an answer.
      */
     @NotNull
-    private final Consumer<@Nullable Boolean> handler;
+    private final Consumer<Boolean> handler;
 
     /**
      * The label.
      */
-    @Nullable
-    private Label questionLabel;
+    @NotNull
+    private final Label questionLabel;
 
-    public ConfirmDialog(@NotNull final Consumer<@Nullable Boolean> handler, @NotNull final String question) {
+    public ConfirmDialog(@NotNull Consumer<Boolean> handler, @NotNull String question) {
         this.handler = handler;
-        final Label questionLabel = getQuestionLabel();
-        questionLabel.setText(question);
-    }
-
-    /**
-     * @return the label.
-     */
-    @FromAnyThread
-    private @NotNull Label getQuestionLabel() {
-        return notNull(questionLabel);
+        this.questionLabel = new Label(question);
     }
 
     @Override
@@ -62,14 +66,14 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
         super.createContent(root);
 
-        questionLabel = new Label();
-        questionLabel.minWidthProperty().bind(widthProperty().multiply(0.9));
+        questionLabel.minWidthProperty()
+                .bind(widthProperty().multiply(0.9));
 
-        FXUtils.addToPane(questionLabel, root);
-        FXUtils.addClassTo(root, CssClasses.CONFIRM_DIALOG);
+        FxUtils.addClass(root, CssClasses.CONFIRM_DIALOG);
+        FxUtils.addChild(root, questionLabel);
     }
 
     @Override
@@ -86,7 +90,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    protected void processKey(@NotNull final KeyEvent event) {
+    protected void processKey(@NotNull KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             processClose();
         }
@@ -122,13 +126,13 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    protected void createAdditionalActions(@NotNull final HBox container) {
+    protected void createAdditionalActions(@NotNull HBox container) {
         super.createAdditionalActions(container);
 
-        final Button closeButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
+        var closeButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
         closeButton.setOnAction(event -> processCancel());
 
-        FXUtils.addClassTo(closeButton, CssClasses.DIALOG_BUTTON);
-        FXUtils.addToPane(closeButton, container);
+        FxUtils.addClass(closeButton, CssClasses.DIALOG_BUTTON);
+        FxUtils.addChild(container, closeButton);
     }
 }

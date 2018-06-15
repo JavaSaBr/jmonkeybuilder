@@ -20,7 +20,6 @@ public class OpenPluginsAction extends MenuItem {
      * Open the plugin dialog.
      */
     private void process() {
-        final PluginsDialog dialog = new PluginsDialog();
-        dialog.show();
+        new PluginsDialog().show();
     }
 }

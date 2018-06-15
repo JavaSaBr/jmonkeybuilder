@@ -1,20 +1,17 @@
 package com.ss.editor.ui.component.creator.impl.material.definition;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL_DEFINITION;
+import static com.ss.editor.extension.property.EditablePropertyType.STRING_FROM_LIST;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static java.nio.file.StandardOpenOption.*;
 import com.jme3.material.TechniqueDef;
 import com.jme3.renderer.Caps;
-import com.jme3.renderer.Renderer;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.creator.FileCreator;
@@ -24,15 +21,12 @@ import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.ArrayCollectors;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.EnumSet;
 
 /**
  * The creator to create a new material definition.
@@ -41,13 +35,8 @@ import java.util.EnumSet;
  */
 public class MaterialDefinitionFileCreator extends GenericFileCreator {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
-    @NotNull
     private static final String PROP_GLSL_VERSION = "glslVersion";
 
     static {
@@ -55,36 +44,30 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         DESCRIPTION.setConstructor(MaterialDefinitionFileCreator::new);
     }
 
-    @NotNull
-    private static final Array<String> AVAILABLE_GLSL;
-
-    static {
-        AVAILABLE_GLSL = ArrayFactory.newArray(String.class);
-
-        final Renderer renderer = EditorUtil.getRenderer();
-        final EnumSet<Caps> caps = renderer.getCaps();
-        caps.stream().filter(cap -> cap.name().startsWith("GLSL"))
-                .map(Enum::name)
-                .sorted(StringUtils::compareIgnoreCase)
-                .forEach(AVAILABLE_GLSL::add);
-    }
-
-    @NotNull
     private static final String MD_TEMPLATE;
-
-    @NotNull
     private static final String FRAG_TEMPLATE;
-
-    @NotNull
     private static final String VERT_TEMPLATE;
 
     static {
-        final InputStream mdResource = FileCreator.class.getResourceAsStream("/template/matdef/empty.j3md");
-        final InputStream fragResource = FileCreator.class.getResourceAsStream("/template/frag/empty.frag");
-        final InputStream vertResource = FileCreator.class.getResourceAsStream("/template/vert/empty.vert");
-        MD_TEMPLATE = FileUtils.read(mdResource);
-        FRAG_TEMPLATE = FileUtils.read(fragResource);
-        VERT_TEMPLATE = FileUtils.read(vertResource);
+        MD_TEMPLATE = FileUtils.read(FileCreator.class.getResourceAsStream("/template/matdef/empty.j3md"));
+        FRAG_TEMPLATE = FileUtils.read(FileCreator.class.getResourceAsStream("/template/frag/empty.frag"));
+        VERT_TEMPLATE = FileUtils.read(FileCreator.class.getResourceAsStream("/template/vert/empty.vert"));
+    }
+
+    /**
+     * The list of available GLSL versions.
+     */
+    @NotNull
+    private final Array<String> availableGlsl;
+
+    private MaterialDefinitionFileCreator() {
+        this.availableGlsl = EditorUtil.getRenderer()
+            .getCaps()
+            .stream()
+            .filter(cap -> cap.name().startsWith("GLSL"))
+            .map(Enum::name)
+            .sorted(StringUtils::compareIgnoreCase)
+            .collect(ArrayCollectors.toArray(String.class));
     }
 
     @Override
@@ -101,11 +84,11 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
 
     @Override
     @FxThread
-    protected boolean validate(@NotNull final VarTable vars) {
+    protected boolean validate(@NotNull VarTable vars) {
 
-        final String glslVersion = vars.get(PROP_GLSL_VERSION, String.class, StringUtils.EMPTY);
+        var glslVersion = vars.get(PROP_GLSL_VERSION, String.class, StringUtils.EMPTY);
 
-        if (glslVersion.isEmpty() || !AVAILABLE_GLSL.contains(glslVersion)) {
+        if (glslVersion.isEmpty() || !availableGlsl.contains(glslVersion)) {
             return false;
         }
 
@@ -116,9 +99,9 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> result = ArrayFactory.newArray(PropertyDefinition.class);
-        result.add(new PropertyDefinition(EditablePropertyType.STRING_FROM_LIST,
-                Messages.MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL, PROP_GLSL_VERSION, Caps.GLSL150.name(), AVAILABLE_GLSL));
+        var result = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        result.add(new PropertyDefinition(STRING_FROM_LIST, Messages.MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL,
+                PROP_GLSL_VERSION, Caps.GLSL150.name(), availableGlsl));
 
         return result;
     }
@@ -128,48 +111,48 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     protected void processOk() {
         super.hide();
 
-        final Path matDefFile = notNull(getFileToCreate());
-        final String filename = FileUtils.getNameWithoutExtension(matDefFile);
+        var matDefFile = notNull(getFileToCreate());
+        var filename = FileUtils.getNameWithoutExtension(matDefFile);
 
-        final Path parent = matDefFile.getParent();
-        final Path fragmentFile = parent.resolve(filename + "." + FileExtensions.GLSL_FRAGMENT);
-        final Path vertexFile = parent.resolve(filename + "." + FileExtensions.GLSL_VERTEX);
+        var parent = matDefFile.getParent();
+        var fragmentFile = parent.resolve(filename + "." + FileExtensions.GLSL_FRAGMENT);
+        var vertexFile = parent.resolve(filename + "." + FileExtensions.GLSL_VERTEX);
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path assetFolder = notNull(editorConfig.getCurrentAsset());
+        var editorConfig = EditorConfig.getInstance();
+        var assetFolder = notNull(editorConfig.getCurrentAsset());
 
-        final Path pathToFragment = assetFolder.relativize(fragmentFile);
-        final Path pathToVertex = assetFolder.relativize(vertexFile);
+        var pathToFragment = assetFolder.relativize(fragmentFile);
+        var pathToVertex = assetFolder.relativize(vertexFile);
 
-        final VarTable vars = getVars();
-        final String glslVersion = vars.getString(PROP_GLSL_VERSION);
+        var vars = getVars();
+        var glslVersion = vars.getString(PROP_GLSL_VERSION);
 
-        final String mdName = filename.length() > 1 ?
+        var mdName = filename.length() > 1 ?
                 toUpperCase(filename.charAt(0)) + filename.substring(1, filename.length()) : filename;
 
-        String mdContent = MD_TEMPLATE.replace("${matdef-name}", mdName);
+        var mdContent = MD_TEMPLATE.replace("${matdef-name}", mdName);
         mdContent = mdContent.replace("${light-mode}", TechniqueDef.LightMode.SinglePass.name());
         mdContent = mdContent.replace("${GLSL-version}", glslVersion);
         mdContent = mdContent.replace("${vertex-path}", pathToVertex.toString());
         mdContent = mdContent.replace("${fragment-path}", pathToFragment.toString());
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(matDefFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
+        try (var out = new PrintWriter(Files.newOutputStream(matDefFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(mdContent);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fragmentFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
+        try (var out = new PrintWriter(Files.newOutputStream(fragmentFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(FRAG_TEMPLATE);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(vertexFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
+        try (var out = new PrintWriter(Files.newOutputStream(vertexFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(VERT_TEMPLATE);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }

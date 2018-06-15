@@ -7,7 +7,6 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
@@ -45,7 +44,6 @@ public class EditorDialog {
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
     protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-    protected static final CssRegistry CSS_REGISTRY = CssRegistry.getInstance();
 
     /**
      * The default dialog size.
@@ -59,7 +57,7 @@ public class EditorDialog {
     private final Stage dialog;
 
     /**
-     * The time when this DIALOG was showed.
+     * The time when this dialog was showed.
      */
     @NotNull
     private volatile LocalTime showedTime;
@@ -76,6 +74,11 @@ public class EditorDialog {
     @Nullable
     private Node focusOwner;
 
+    /**
+     * The flat about that this dialog was full constructed.
+     */
+    private volatile boolean ready;
+
     public EditorDialog() {
         this.showedTime = LocalTime.now();
 
@@ -87,8 +90,6 @@ public class EditorDialog {
         var stylesheets = scene.getStylesheets();
         stylesheets.addAll(mainScene.getStylesheets());
 
-        createControls(container);
-
         dialog = new Stage();
         dialog.setTitle(getTitleText());
         dialog.initStyle(StageStyle.UTILITY);
@@ -99,8 +100,22 @@ public class EditorDialog {
         var fxStage = EditorUtil.getFxStage();
         var icons = dialog.getIcons();
         icons.addAll(fxStage.getIcons());
+    }
 
+    /**
+     * Construct content of this dialog.
+     */
+    @FxThread
+    public void construct() {
+
+        if (ready) {
+            return;
+        }
+
+        createControls(container);
         configureSize(container);
+
+        ready = true;
     }
 
     /**
@@ -285,6 +300,7 @@ public class EditorDialog {
      */
     @FxThread
     public void show(@NotNull Window owner) {
+        construct();
 
         var scene = owner.getScene();
 

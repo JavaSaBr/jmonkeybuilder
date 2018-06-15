@@ -27,7 +27,6 @@ import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -73,6 +72,12 @@ public class SettingsDialog extends EditorDialog {
 
     public SettingsDialog() {
         FxUtils.addClass(getContainer(), CssClasses.SETTINGS_DIALOG);
+    }
+
+    @Override
+    @FxThread
+    public void construct() {
+        super.construct();
         validate();
     }
 

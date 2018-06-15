@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
@@ -26,7 +27,9 @@ public class DeleteFileAction extends FileAction {
 
     @FxThread
     public static void applyFor(@NotNull Array<ResourceElement> elements) {
-        new DeleteFileAction(elements).getOnAction().handle(null);
+        new DeleteFileAction(elements)
+                .getOnAction()
+                .handle(null);
     }
 
     public DeleteFileAction(@NotNull Array<ResourceElement> elements) {
@@ -51,10 +54,10 @@ public class DeleteFileAction extends FileAction {
         super.execute(event);
 
         var elements = getElements();
-        var first = elements.first();
 
         if(elements.size() == 1) {
 
+            var first = notNull(elements.first());
             var file = first.getFile();
 
             var editorConfig = EditorConfig.getInstance();
@@ -66,42 +69,30 @@ public class DeleteFileAction extends FileAction {
             var question = Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION;
             question = question.replace("%file_name%", file.getFileName().toString());
 
-            var confirmDialog = new ConfirmDialog(result -> handle(file, result), question);
-            confirmDialog.show();
+            ConfirmDialog.ifOk(question, () -> deleteFile(file));
 
         } else {
 
             var question = Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILES_QUESTION;
             question = question.replace("%file_count%", String.valueOf(elements.size()));
 
-            var confirmDialog = new ConfirmDialog(result -> handle(elements, result), question);
-            confirmDialog.show();
+            ConfirmDialog.ifOk(question, () -> deleteFiles(elements));
         }
     }
 
-    /**
-     * Handle the answer.
-     */
-    private void handle(@NotNull Path file, @Nullable Boolean result) {
-        if (!Boolean.TRUE.equals(result)) return;
-        deleteFile(file);
-    }
-
+    @FxThread
     private void deleteFile(@NotNull Path file) {
+
         var handlers = FileDeleteHandlerFactory.findFor(file);
         handlers.forEach(file, FileDeleteHandler::preDelete);
+
         FileUtils.delete(file);
+
         handlers.forEach(file, FileDeleteHandler::postDelete);
     }
 
-    /**
-     * Handle the answer.
-     */
-    private void handle(@NotNull Array<ResourceElement> elements, @Nullable Boolean result) {
-
-        if (!Boolean.TRUE.equals(result)) {
-            return;
-        }
+    @FxThread
+    private void deleteFiles(@NotNull Array<ResourceElement> elements) {
 
         var editorConfig = EditorConfig.getInstance();
         var currentAsset = editorConfig.getCurrentAsset();

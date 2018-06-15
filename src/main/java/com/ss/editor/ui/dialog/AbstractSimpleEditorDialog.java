@@ -1,12 +1,12 @@
 package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,45 +23,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
-    /**
-     * The constant DEFAULT_LABEL_W_PERCENT.
-     */
     public static final double DEFAULT_LABEL_W_PERCENT = 0.4;
-
-    /**
-     * The constant DEFAULT_FIELD_W_PERCENT.
-     */
     public static final double DEFAULT_FIELD_W_PERCENT = 0.6;
 
-    /**
-     * The constant DEFAULT_LABEL_W_PERCENT2.
-     */
     public static final double DEFAULT_LABEL_W_PERCENT2 = 0.5;
-
-    /**
-     * The constant DEFAULT_FIELD_W_PERCENT2.
-     */
     public static final double DEFAULT_FIELD_W_PERCENT2 = 0.5;
 
-    /**
-     * The constant DEFAULT_LABEL_W_PERCENT3.
-     */
     public static final double DEFAULT_LABEL_W_PERCENT3 = 0.6;
-
-    /**
-     * The constant DEFAULT_FIELD_W_PERCENT3.
-     */
     public static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
 
-    /**
-     * The constant DEFAULT_FIELD_W_PERCENT4.
-     */
     public static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
 
-    /**
-     * The executing manager.
-     */
-    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -76,32 +48,11 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     @Nullable
     private Button closeButton;
 
-    /**
-     * True if this dialog is ready.
-     */
-    private boolean ready;
-
-    /**
-     * Instantiates a new Abstract simple editor dialog.
-     */
-    public AbstractSimpleEditorDialog() {
-        ready = true;
-    }
-
-    /**
-     * Is ready boolean.
-     *
-     * @return true if this dialog is ready.
-     */
-    protected boolean isReady() {
-        return ready;
-    }
-
     @Override
     @FxThread
-    protected void processKey(@NotNull final KeyEvent event) {
+    protected void processKey(@NotNull KeyEvent event) {
         super.processKey(event);
-        final Button okButton = getOkButton();
+        var okButton = getOkButton();
         if (okButton != null && event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
             processOk();
         }
@@ -109,12 +60,12 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final GridPane root) {
+    protected void createContent(@NotNull GridPane root) {
         super.createContent(root);
     }
 
     /**
-     * Gets the ok button.
+     * Get the ok button.
      *
      * @return the ok button.
      */
@@ -124,7 +75,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     /**
-     * Gets the close button.
+     * Get the close button.
      *
      * @return the close button.
      */
@@ -135,52 +86,54 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
     @Override
     @FxThread
-    protected void createActions(@NotNull final VBox root) {
+    protected void createActions(@NotNull VBox root) {
         super.createActions(root);
 
-        final HBox container = new HBox();
+        var container = new HBox();
 
         createBeforeActions(container);
 
         if (needOkButton()) {
             okButton = new Button(getButtonOkText());
             okButton.setOnAction(event -> safeProcessOk());
-            FXUtils.addClassTo(okButton, CssClasses.DIALOG_BUTTON);
+            FxUtils.addClass(okButton, CssClasses.DIALOG_BUTTON);
         }
 
         if (needCloseButton()) {
             closeButton = new Button(getButtonCloseText());
             closeButton.setOnAction(event -> processClose());
-            FXUtils.addClassTo(closeButton, CssClasses.DIALOG_BUTTON);
+            FxUtils.addClass(closeButton, CssClasses.DIALOG_BUTTON);
         }
 
         if (needOkButton()) {
-            FXUtils.addToPane(okButton, container);
+            FxUtils.addChild(container, okButton);
         }
 
         if (needCloseButton()) {
-            FXUtils.addToPane(closeButton, container);
+            FxUtils.addChild(container, closeButton);
         }
 
         createAdditionalActions(container);
 
         if (!container.getChildren().isEmpty()) {
-            FXUtils.addToPane(container, root);
-            FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
+            FxUtils.addClass(container, CssClasses.DEF_HBOX);
+            FxUtils.addChild(root, container);
         }
     }
 
     @FxThread
-    protected void createBeforeActions(@NotNull final HBox container) {
+    protected void createBeforeActions(@NotNull HBox container) {
 
     }
 
     @FxThread
-    protected void createAdditionalActions(@NotNull final HBox container) {
+    protected void createAdditionalActions(@NotNull HBox container) {
 
     }
 
     /**
+     * Return true if need to add an ok button here.
+     *
      * @return true if need to add an ok button here.
      */
     @FromAnyThread
@@ -189,6 +142,8 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     /**
+     * Return true if need to add a close button here.
+     *
      * @return true if need to add a close button here.
      */
     @FromAnyThread
@@ -200,13 +155,13 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     private void safeProcessOk() {
         try {
             processOk();
-        } catch (final Exception e) {
+        } catch (Exception e) {
             EditorUtil.handleException(LOGGER, this, e);
         }
     }
 
     /**
-     * Gets the button's close text.
+     * Get the button's close text.
      *
      * @return the the button's close text.
      */
@@ -216,7 +171,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     /**
-     * Gets button's ok text.
+     * Get button's ok text.
      *
      * @return the button's ok text.
      */

@@ -10,7 +10,6 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -20,12 +19,13 @@ import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.Utils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -47,28 +47,11 @@ import java.nio.file.Path;
  */
 public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog implements FileCreator {
 
-    /**
-     * The constant LOGGER.
-     */
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileCreator.class);
 
-    /**
-     * The constant DIALOG_SIZE.
-     */
-    @NotNull
     protected static final Point DIALOG_SIZE = new Point(900, -1);
 
-    /**
-     * The constant EXECUTOR_MANAGER.
-     */
-    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The constant FX_EVENT_MANAGER.
-     */
-    @NotNull
     protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
@@ -96,15 +79,15 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     private Path initFile;
 
     @Override
-    public void start(@NotNull final Path file) {
+    public void start(@NotNull Path file) {
         this.initFile = file;
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = notNull(editorConfig.getCurrentAsset());
+        var editorConfig = EditorConfig.getInstance();
+        var currentAsset = notNull(editorConfig.getCurrentAsset());
 
         show();
 
-        final ResourceTree resourceTree = getResourceTree();
+        var resourceTree = getResourceTree();
         resourceTree.setOnLoadHandler(finished -> expand(file, resourceTree, finished));
         resourceTree.fill(currentAsset);
 
@@ -114,12 +97,15 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     @FxThread
-    private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
-                        @NotNull final Boolean finished) {
-        if (finished) resourceTree.expandTo(file, true);
+    private void expand(@NotNull Path file, @NotNull ResourceTree resourceTree, @NotNull Boolean finished) {
+        if (finished) {
+            resourceTree.expandTo(file, true);
+        }
     }
 
     /**
+     * Get the resources tree.
+     *
      * @return the resources tree.
      */
     @FromAnyThread
@@ -128,14 +114,18 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     /**
+     * Set the init file.
+     *
      * @param initFile the init file.
      */
     @FromAnyThread
-    private void setInitFile(@NotNull final Path initFile) {
+    private void setInitFile(@NotNull Path initFile) {
         this.initFile = initFile;
     }
 
     /**
+     * Get the init file.
+     *
      * @return the init file.
      */
     @FromAnyThread
@@ -150,18 +140,23 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     /**
+     * Get the selected file in the resources tree.
+     *
      * @return the selected file in the resources tree.
      */
     @FromAnyThread
     private @NotNull Path getSelectedFile() {
 
-        final ResourceTree resourceTree = getResourceTree();
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
-        if (selectedItem == null) return getInitFile();
+        var selectedItem = getResourceTree()
+                .getSelectionModel()
+                .getSelectedItem();
 
-        final ResourceElement element = selectedItem.getValue();
-        return element.getFile();
+        if (selectedItem == null) {
+            return getInitFile();
+        }
+
+        return selectedItem.getValue()
+                .getFile();
     }
 
     /**
@@ -172,14 +167,17 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     @FromAnyThread
     protected @Nullable Path getFileToCreate() {
 
-        final TextField fileNameField = getFileNameField();
-        final String filename = fileNameField.getText();
-        if (StringUtils.isEmpty(filename)) return null;
+        var fileNameField = getFileNameField();
+        var filename = fileNameField.getText();
 
-        final String fileExtension = getFileExtension();
+        if (StringUtils.isEmpty(filename)) {
+            return null;
+        }
 
-        final Path selectedFile = getSelectedFile();
-        final Path directory = Files.isDirectory(selectedFile) ? selectedFile : selectedFile.getParent();
+        var fileExtension = getFileExtension();
+
+        var selectedFile = getSelectedFile();
+        var directory = Files.isDirectory(selectedFile) ? selectedFile : selectedFile.getParent();
 
         return StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) :
                 directory.resolve(filename + "." + fileExtension);
@@ -204,7 +202,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
 
-            final Path tempFile;
+            Path tempFile;
             try {
                 tempFile = Files.createTempFile("SSEditor", "fileCreator");
             } catch (final IOException e) {
@@ -213,7 +211,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
                 return;
             }
 
-            final Path fileToCreate = notNull(getFileToCreate());
+            Path fileToCreate = notNull(getFileToCreate());
             try {
 
                 writeData(tempFile);
@@ -225,7 +223,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
                 notifyFileCreated(fileToCreate, true);
 
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 Utils.run(tempFile, Files::delete);
                 EditorUtil.handleException(LOGGER, this, e);
             }
@@ -241,61 +239,64 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @throws IOException if was some problem with writing to the result file.
      */
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) throws IOException {
+    protected void writeData(@NotNull Path resultFile) throws IOException {
     }
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
         super.createContent(root);
 
-        final HBox container = new HBox();
+        var container = new HBox();
         container.prefWidthProperty().bind(widthProperty());
 
-        final GridPane settingsContainer = new GridPane();
-        settingsContainer.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
+        var settingsContainer = new GridPane();
+        settingsContainer.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.5));
 
         resourceTree = new ResourceTree(null, true);
-        resourceTree.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
+        resourceTree.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.5));
 
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFileName());
+        FxControlUtils.onSelectedItemChange(resourceTree, this::validateFileName);
 
         createSettings(settingsContainer);
 
-        FXUtils.addToPane(resourceTree, container);
+        FxUtils.addChild(container, resourceTree);
 
         if (needPreview()) {
 
-            final VBox wrapper = new VBox();
+            var wrapper = new VBox();
 
             previewContainer = new BorderPane();
 
-            settingsContainer.prefHeightProperty().bind(container.heightProperty()
-                    .subtract(previewContainer.heightProperty()));
+            settingsContainer.prefHeightProperty()
+                    .bind(container.heightProperty().subtract(previewContainer.heightProperty()));
 
             createPreview(previewContainer);
 
             FXUtils.bindFixedWidth(previewContainer, wrapper.widthProperty());
             FXUtils.bindFixedHeight(previewContainer, wrapper.widthProperty());
 
-            FXUtils.addToPane(settingsContainer, wrapper);
-            FXUtils.addToPane(previewContainer, wrapper);
-            FXUtils.addToPane(wrapper, container);
+            FxUtils.addClass(wrapper, CssClasses.DEF_VBOX)
+                    .addClass(previewContainer, CssClasses.DEF_BORDER_PANE);
 
-            FXUtils.addClassTo(wrapper, CssClasses.DEF_VBOX);
-            FXUtils.addClassTo(previewContainer, CssClasses.DEF_BORDER_PANE);
+            FxUtils.addChild(wrapper, settingsContainer, previewContainer)
+                    .addChild(container, wrapper);
 
         } else {
-            settingsContainer.prefHeightProperty().bind(container.heightProperty());
-            FXUtils.addToPane(settingsContainer, container);
+
+            settingsContainer.prefHeightProperty()
+                    .bind(container.heightProperty());
+
+            FxUtils.addChild(container, settingsContainer);
         }
 
-        FXUtils.addToPane(container, root);
+        FxUtils.addClass(root, CssClasses.FILE_CREATOR_DIALOG)
+                .addClass(container, CssClasses.DEF_HBOX)
+                .addClass(settingsContainer, CssClasses.DEF_GRID_PANE);
 
-        FXUtils.addClassTo(root, CssClasses.FILE_CREATOR_DIALOG);
-        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(settingsContainer, CssClasses.DEF_GRID_PANE);
+        FxUtils.addChild(root, container);
     }
 
     /**

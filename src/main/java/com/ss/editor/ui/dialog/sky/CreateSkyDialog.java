@@ -608,7 +608,11 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @FxThread
     private void validate() {
-        if (!isReady()) return;
+
+        //FIXME
+        /*if (!isReady()) {
+            return;
+        }*/
 
         final ComboBox<SkyType> skyTypeComboBox = getSkyTypeComboBox();
         final SingleSelectionModel<SkyType> selectionModel = skyTypeComboBox.getSelectionModel();

@@ -4,8 +4,8 @@ import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
@@ -26,12 +26,12 @@ public class PluginListCell extends ListCell<EditorPlugin> {
 
     public PluginListCell() {
         this.icon = new ImageView(Icons.PLUGIN_16);
-        FXUtils.addClassTo(this, CssClasses.PLUGIN_LIST_CELL);
+        FxUtils.addClass(this, CssClasses.PLUGIN_LIST_CELL);
         DynamicIconSupport.updateListener(this, icon, selectedProperty());
     }
 
     @Override
-    protected void updateItem(@Nullable final EditorPlugin item, final boolean empty) {
+    protected void updateItem(@Nullable EditorPlugin item, boolean empty) {
         super.updateItem(item, empty);
 
         if(item == null) {

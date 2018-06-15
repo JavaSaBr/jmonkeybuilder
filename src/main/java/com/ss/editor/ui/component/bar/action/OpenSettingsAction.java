@@ -11,9 +11,6 @@ import javafx.scene.control.MenuItem;
  */
 public class OpenSettingsAction extends MenuItem {
 
-    /**
-     * Instantiates a new OpenSettingsAction.
-     */
     public OpenSettingsAction() {
         super(Messages.EDITOR_MENU_OTHER_SETTINGS);
         setOnAction(event -> process());
@@ -23,7 +20,6 @@ public class OpenSettingsAction extends MenuItem {
      * Open the dialog.
      */
     private void process() {
-        final SettingsDialog dialog = new SettingsDialog();
-        dialog.show();
+        new SettingsDialog().show();
     }
 }
