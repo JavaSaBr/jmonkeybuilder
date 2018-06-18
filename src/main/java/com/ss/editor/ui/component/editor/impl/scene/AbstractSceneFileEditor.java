@@ -120,21 +120,21 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     /**
      * The list of pre-save handlers.
      */
-    @NotNull
-    private static final Array<Consumer<Spatial>> PRE_SAVE_HANDLERS = ArrayFactory.newArray(Consumer.class);
+    private static final Array<Consumer<Spatial>> PRE_SAVE_HANDLERS =
+            ArrayFactory.newCopyOnModifyArray(Consumer.class);
 
     /**
      * The list of post-save handlers.
      */
-    @NotNull
-    private static final Array<Consumer<Spatial>> POST_SAVE_HANDLERS = ArrayFactory.newArray(Consumer.class);
+    private static final Array<Consumer<Spatial>> POST_SAVE_HANDLERS =
+            ArrayFactory.newCopyOnModifyArray(Consumer.class);
 
     /**
      * Register the new pre-save handler.
      *
      * @param handler the new pre-save handler.
      */
-    @FxThread
+    @FromAnyThread
     public static void registerPreSaveHandler(@NotNull Consumer<Spatial> handler) {
         PRE_SAVE_HANDLERS.add(handler);
     }
@@ -144,7 +144,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
      *
      * @param handler the new post-save handler.
      */
-    @FxThread
+    @FromAnyThread
     public static void registerPostSaveHandler(@NotNull Consumer<Spatial> handler) {
         PRE_SAVE_HANDLERS.add(handler);
     }

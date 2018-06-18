@@ -63,7 +63,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * The base implementation of the {@link AppState} for the editor.
@@ -99,14 +98,13 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     /**
      * The table with models to present lights on a scene.
      */
-    @NotNull
     private static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
 
     private static final Node AUDIO_NODE_MODEL;
 
     static {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
         AUDIO_NODE_MODEL = (Node) assetManager.loadModel("graphics/models/speaker/speaker.j3o");
 
@@ -116,22 +114,27 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         LIGHT_MODEL_TABLE.put(Light.Type.Spot, (Node) assetManager.loadModel("graphics/models/light/spot_light.j3o"));
     }
 
-    @NotNull
-    private static final Array<Function<@NotNull Object, @Nullable Spatial>> SELECTION_FINDERS = ArrayFactory.newArray(Function.class);
+    @FunctionalInterface
+    public interface SelectionFinder {
+        @Nullable Spatial find(@NotNull Object object);
+    }
 
-    @NotNull
-    private static final Array<Consumer<Spatial>> PRE_TRANSFORM_HANDLERS = ArrayFactory.newArray(Consumer.class);
+    private static final Array<SelectionFinder> SELECTION_FINDERS =
+            ArrayFactory.newCopyOnModifyArray(SelectionFinder.class);
 
-    @NotNull
-    private static final Array<Consumer<Spatial>> POST_TRANSFORM_HANDLERS = ArrayFactory.newArray(Consumer.class);
+    private static final Array<Consumer<Spatial>> PRE_TRANSFORM_HANDLERS =
+            ArrayFactory.newCopyOnModifyArray(Consumer.class);
+
+    private static final Array<Consumer<Spatial>> POST_TRANSFORM_HANDLERS =
+            ArrayFactory.newCopyOnModifyArray(Consumer.class);
 
     /**
      * Register the additional selection object finder.
      *
      * @param finder the additional selection object finder.
      */
-    @JmeThread
-    public static void registerSelectionFinder(@NotNull final Function<Object, Spatial> finder) {
+    @FromAnyThread
+    public static void registerSelectionFinder(@NotNull SelectionFinder finder) {
         SELECTION_FINDERS.add(finder);
     }
 
@@ -140,8 +143,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      *
      * @param handler the pre transform handler.
      */
-    @JmeThread
-    public static void registerPreTransformHandler(@NotNull final Consumer<Spatial> handler) {
+    @FromAnyThread
+    public static void registerPreTransformHandler(@NotNull Consumer<Spatial> handler) {
         PRE_TRANSFORM_HANDLERS.add(handler);
     }
 
@@ -150,8 +153,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      *
      * @param handler the post transform handler.
      */
-    @JmeThread
-    public static void registerPostTransformHandler(@NotNull final Consumer<Spatial> handler) {
+    @FromAnyThread
+    public static void registerPostTransformHandler(@NotNull Consumer<Spatial> handler) {
         POST_TRANSFORM_HANDLERS.add(handler);
     }
 
@@ -1486,10 +1489,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the object
      */
     @JmeThread
-    protected @Nullable Object findToSelect(@NotNull final Object object) {
+    protected @Nullable Object findToSelect(@NotNull Object object) {
 
-        for (final Function<Object, Spatial> finder : SELECTION_FINDERS) {
-            final Spatial spatial = finder.apply(object);
+        for (final SelectionFinder finder : SELECTION_FINDERS) {
+            var spatial = finder.find(object);
             if (spatial != null && spatial.isVisible()) {
                 return spatial;
             }
@@ -1497,26 +1500,30 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         if (object instanceof Geometry) {
 
-            final Spatial spatial = (Spatial) object;
+            var spatial = (Spatial) object;
+            var parent = NodeUtils.findParent(spatial, 2);
 
-            Spatial parent = NodeUtils.findParent(spatial, 2);
+            var lightNode = parent == null ? null : getLightNode(parent);
 
-            final EditorLightNode lightNode = parent == null ? null : getLightNode(parent);
             if (lightNode != null) {
                 return lightNode;
             }
 
-            final EditorAudioNode audioNode = parent == null ? null : getAudioNode(parent);
+            var audioNode = parent == null ? null : getAudioNode(parent);
+
             if (audioNode != null) {
                 return audioNode;
             }
 
             parent = NodeUtils.findParent(spatial, AssetLinkNode.class::isInstance);
+
             if (parent != null) {
                 return parent;
             }
 
-            parent = NodeUtils.findParent(spatial, p -> Boolean.TRUE.equals(p.getUserData(KEY_LOADED_MODEL)));
+            parent = NodeUtils.findParent(spatial,
+                    p -> Boolean.TRUE.equals(p.getUserData(KEY_LOADED_MODEL)));
+
             if (parent != null) {
                 return parent;
             }
@@ -1524,7 +1531,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         if (object instanceof Spatial) {
 
-            final Spatial spatial = (Spatial) object;
+            var spatial = (Spatial) object;
 
             if (!spatial.isVisible()) {
                 return null;

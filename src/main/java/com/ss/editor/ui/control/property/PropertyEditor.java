@@ -195,18 +195,18 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * Return true if need to update property controls.
      *
-     * @param object the object.
+     * @param changedObject the changed object.
      * @return true if need to update property controls.
      */
     @FxThread
-    protected boolean isNeedUpdate(@Nullable Object object) {
+    protected boolean isNeedUpdate(@Nullable Object changedObject) {
 
         var currentObject = getCurrentObject();
-        if (object instanceof EditableProperty) {
-            return currentObject == ((EditableProperty) object).getObject();
+        if (changedObject instanceof EditableProperty) {
+            return currentObject == ((EditableProperty) changedObject).getObject();
         }
 
-        return currentObject == object;
+        return currentObject == changedObject;
     }
 
     /**

@@ -1,7 +1,5 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.editor.util.EditorUtil.clipNumber;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
@@ -18,17 +16,18 @@ import com.ss.editor.ui.control.property.impl.DefaultPropertyControl;
 import com.ss.editor.ui.control.property.impl.LodLevelPropertyControl;
 import com.ss.editor.ui.control.property.impl.MaterialKeyPropertyControl;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.common.util.ExtMath;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Geometry} objects.
@@ -37,69 +36,77 @@ import java.util.function.Predicate;
  */
 public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @FunctionalInterface
+    public interface CanEditMaterialChecker {
+
+        boolean canEdit(@NotNull Geometry geometry);
+
+        default @NotNull CanEditMaterialChecker negate() {
+            return (geometry) -> !canEdit(geometry);
+        }
+    }
     /**
      * The list of additional checkers.
      */
-    @NotNull
-    private static final Array<Predicate<@NotNull Geometry>> CAN_EDIT_MATERIAL_CHECKERS = ArrayFactory.newArray(Predicate.class);
+    private static final Array<CanEditMaterialChecker> CAN_EDIT_MATERIAL_CHECKERS =
+            ArrayFactory.newCopyOnModifyArray(CanEditMaterialChecker.class);
 
     /**
      * Register the additional checker which should return false if we can't edit material for a geometry.
      *
      * @param checker the additional checker.
      */
-    @FxThread
-    public static void registerCanEditMaterialChecker(@NotNull final Predicate<@NotNull Geometry> checker) {
+    @FromAnyThread
+    public static void registerCanEditMaterialChecker(@NotNull CanEditMaterialChecker checker) {
         CAN_EDIT_MATERIAL_CHECKERS.add(checker.negate());
     }
 
-    @NotNull
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
         if (materialKey == null) {
 
-            final Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            var material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             material.setColor("Color", ColorRGBA.Gray);
 
             geometry.setMaterial(material);
 
         } else {
-            final Material material = assetManager.loadAsset(materialKey);
+            var material = assetManager.loadAsset(materialKey);
             geometry.setMaterial(material);
         }
     };
 
-    @NotNull
     private static final Function<Geometry, MaterialKey> MATERIAL_SYNC_HANDLER = geometry -> {
-        final Material material = geometry.getMaterial();
+        var material = geometry.getMaterial();
         return (MaterialKey) material.getKey();
     };
 
-    @NotNull
     private static final Function<BoundingVolume, String> BOUNDING_VOLUME_TO_STRING = boundingVolume -> {
 
         if (boundingVolume instanceof BoundingSphere) {
-            final BoundingSphere boundingSphere = (BoundingSphere) boundingVolume;
-            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE + ": [" +
-                    Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
+
+            var sphere = Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
+            var radius = Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
+            var boundingSphere = (BoundingSphere) boundingVolume;
+
+            return sphere + ": [" + radius + "=" + boundingSphere.getRadius() + "]";
+
         } else if (boundingVolume instanceof BoundingBox) {
 
-            final BoundingBox boundingBox = (BoundingBox) boundingVolume;
+            var box = Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
+            var boundingBox = (BoundingBox) boundingVolume;
+            var xExtent = ExtMath.cut(boundingBox.getXExtent(), 100);
+            var yExtent = ExtMath.cut(boundingBox.getYExtent(), 100);
+            var zExtent = ExtMath.cut(boundingBox.getZExtent(), 100);
 
-            final float xExtent = clipNumber(boundingBox.getXExtent(), 100);
-            final float yExtent = clipNumber(boundingBox.getYExtent(), 100);
-            final float zExtent = clipNumber(boundingBox.getZExtent(), 100);
-
-            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX +
-                    ": [x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
+            return box + ": [x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
         }
 
         return StringUtils.EMPTY;
     };
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new GeometryPropertyBuilder();
 
     @FromAnyThread
@@ -113,14 +120,20 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
 
-        if (!(object instanceof Geometry)) return;
+        if (!(object instanceof Geometry)) {
+            return;
+        }
 
-        final Geometry geometry = (Geometry) object;
-        final BoundingVolume modelBound = geometry.getModelBound();
-        final int lodLevel = geometry.getLodLevel();
+        var geometry = (Geometry) object;
+        var modelBound = geometry.getModelBound();
+        var lodLevel = geometry.getLodLevel();
 
         final DefaultPropertyControl<ModelChangeConsumer, Geometry, BoundingVolume> boundingVolumeControl =
                 new DefaultPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, changeConsumer);
@@ -144,7 +157,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
             FXUtils.addToPane(materialControl, container);
         }
 
-        FXUtils.addToPane(boundingVolumeControl, container);
+        FxUtils.addChild(container, boundingVolumeControl);
 
         buildSplitLine(container);
 
@@ -155,7 +168,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         lodLevelControl.setSyncHandler(Geometry::getLodLevel);
         lodLevelControl.setEditObject(geometry, true);
 
-        FXUtils.addToPane(lodLevelControl, container);
+        FxUtils.addChild(container, lodLevelControl);
     }
 
     /**
@@ -164,8 +177,8 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
      * @param geometry the geometry.
      * @return true if we can editor the material.
      */
-    @FxThread
-    private boolean canEditMaterial(@NotNull final Geometry geometry) {
-        return CAN_EDIT_MATERIAL_CHECKERS.search(geometry, Predicate::test) == null;
+    @FromAnyThread
+    private boolean canEditMaterial(@NotNull Geometry geometry) {
+        return CAN_EDIT_MATERIAL_CHECKERS.search(geometry, CanEditMaterialChecker::canEdit) == null;
     }
 }

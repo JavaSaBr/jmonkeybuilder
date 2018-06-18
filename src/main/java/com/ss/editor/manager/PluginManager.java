@@ -4,7 +4,6 @@ import static com.ss.rlib.common.plugin.impl.PluginSystemFactory.newBasePluginSy
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
@@ -78,11 +77,16 @@ public class PluginManager {
                 .addBackgroundTask(this::loadPluginsInBackground);
 
         SingleAsyncEventHandlerBuilder.of(EditorFinishedLoadingEvent.EVENT_TYPE)
-                .add(this::onFinishLoading);
+                .add(this::onFinishLoading)
+                .buildAndRegister();
+
         SingleAsyncEventHandlerBuilder.of(JmeContextCreatedEvent.EVENT_TYPE)
-                .add(this::onAfterCreateJmeContext);
+                .add(this::onAfterCreateJmeContext)
+                .buildAndRegister();
+
         SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
-                .add(this::onAfterCreateJavaFxContext);
+                .add(this::onAfterCreateJavaFxContext)
+                .buildAndRegister();
 
         CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
                 .add(FxSceneCreatedEvent.EVENT_TYPE)
@@ -327,7 +331,7 @@ public class PluginManager {
     /**
      * Do some things after when JavaFX context was created.
      */
-    @FxThread
+    @BackgroundThread
     private void onAfterCreateJavaFxContext() {
         handlePlugins(editorPlugin ->
                 editorPlugin.onAfterCreateJavaFxContext(getPluginSystem()));

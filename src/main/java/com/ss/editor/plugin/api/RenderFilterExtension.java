@@ -3,10 +3,12 @@ package com.ss.editor.plugin.api;
 import com.jme3.post.Filter;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +22,6 @@ import java.util.function.Consumer;
  */
 public class RenderFilterExtension {
 
-    @NotNull
     private static final RenderFilterExtension INSTANCE = new RenderFilterExtension();
 
     @FromAnyThread
@@ -32,7 +33,7 @@ public class RenderFilterExtension {
      * The map filter to its refresh action.
      */
     @NotNull
-    private final ObjectDictionary<Filter, Consumer<@NotNull ? extends Filter>> refreshActions;
+    private final ConcurrentObjectDictionary<Filter, Consumer<@NotNull ? extends Filter>> refreshActions;
 
     /**
      * The additional filters.
@@ -41,8 +42,8 @@ public class RenderFilterExtension {
     private final Array<Filter> filters;
 
     private RenderFilterExtension() {
-        this.filters = ArrayFactory.newArray(Filter.class);
-        this.refreshActions = DictionaryFactory.newObjectDictionary();
+        this.filters = ArrayFactory.newCopyOnModifyArray(Filter.class);
+        this.refreshActions = DictionaryFactory.newConcurrentAtomicObjectDictionary();
     }
 
     /**
@@ -50,11 +51,14 @@ public class RenderFilterExtension {
      *
      * @param filter the filter.
      */
-    @JmeThread
+    @FromAnyThread
     public void register(@NotNull Filter filter) {
         this.filters.add(filter);
-        EditorUtil.getGlobalFilterPostProcessor()
-                .addFilter(filter);
+
+        var postProcessor = EditorUtil.getGlobalFilterPostProcessor();
+
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> postProcessor.addFilter(filter));
     }
 
     /**
@@ -64,14 +68,14 @@ public class RenderFilterExtension {
      * @param handler the handler.
      * @param <T>     the filter's type.
      */
-    @JmeThread
+    @FromAnyThread
     public <T extends Filter> void setOnRefresh(@NotNull T filter, @NotNull Consumer<T> handler) {
 
         if (!filters.contains(filter)) {
             throw new IllegalArgumentException("The filter " + filter + "isn't registered.");
         }
 
-        refreshActions.put(filter, handler);
+        refreshActions.runInWriteLock(filter, handler, ObjectDictionary::put);
     }
 
     /**
@@ -79,7 +83,7 @@ public class RenderFilterExtension {
      */
     @JmeThread
     public void refreshFilters() {
-        refreshActions.forEach((filter, consumer) -> {
+        refreshActions.forEachInReadLock((filter, consumer) -> {
             var cast = ClassUtils.<Consumer<Filter>>unsafeCast(consumer);
             cast.accept(filter);
         });

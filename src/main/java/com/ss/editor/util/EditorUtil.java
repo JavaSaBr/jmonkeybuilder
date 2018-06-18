@@ -870,18 +870,6 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Format the float number.
-     *
-     * @param value the value
-     * @param mod   the mod
-     * @return the float
-     */
-    @FromAnyThread
-    public static float clipNumber(float value, float mod) {
-        return (int) (value * mod) / mod;
-    }
-
-    /**
      * Get an array of available enum values by an enum value.
      *
      * @param <E>   the type parameter

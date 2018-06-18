@@ -4,6 +4,7 @@ import static com.ss.editor.util.NodeUtils.visitSpatial;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -16,8 +17,6 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
-
 /**
  * The action to reset a {@link ParticleEmitter}.
  *
@@ -25,23 +24,29 @@ import java.util.function.Function;
  */
 public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    @FunctionalInterface
+    public interface AdditionalAction {
+        @Nullable Runnable makeAction(@NotNull Node node);
+    }
+
     /**
      * The list of additional action on executing this action.
      */
     @NotNull
-    private static final Array<Function<@NotNull Node, @Nullable Runnable>> ADDITIONAL_ACTIONS = ArrayFactory.newArray(Function.class);
+    private static final Array<AdditionalAction> ADDITIONAL_ACTIONS =
+            ArrayFactory.newCopyOnModifyArray(AdditionalAction.class);
 
     /**
      * Register the additional action on executing this action.
      *
      * @param action the additional action on executing this action.
      */
-    @FxThread
-    public static void registerAdditionalAction(@NotNull final Function<@NotNull Node, @Nullable Runnable> action) {
+    @FromAnyThread
+    public static void registerAdditionalAction(@NotNull AdditionalAction action) {
         ADDITIONAL_ACTIONS.add(action);
     }
 
-    public ResetParticleEmittersAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public ResetParticleEmittersAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -62,12 +67,14 @@ public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeC
     protected void process() {
         super.process();
 
-        final TreeNode<?> treeNode = getNode();
-        final Node node = (Node) treeNode.getElement();
+        var treeNode = getNode();
+        var node = (Node) treeNode.getElement();
 
-        EXECUTOR_MANAGER.addJmeTask(() -> visitSpatial(node, ParticleEmitter.class, ParticleEmitter::killAllParticles));
+        EXECUTOR_MANAGER.addJmeTask(() ->
+                visitSpatial(node, ParticleEmitter.class, ParticleEmitter::killAllParticles));
+
         ADDITIONAL_ACTIONS.forEach(node, (factory, toCheck) -> {
-            final Runnable action = factory.apply(toCheck);
+            var action = factory.makeAction(toCheck);
             if (action != null) {
                 EXECUTOR_MANAGER.addJmeTask(action);
             }

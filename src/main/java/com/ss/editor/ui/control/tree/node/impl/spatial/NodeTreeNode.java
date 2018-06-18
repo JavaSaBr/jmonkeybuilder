@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-
 import com.jme3.asset.ModelKey;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.scene.AssetLinkNode;
@@ -10,9 +9,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.model.undo.impl.AddChildOperation;
+import com.ss.editor.model.undo.impl.MoveChildOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -25,8 +27,6 @@ import com.ss.editor.ui.control.tree.action.impl.light.CreateAmbientLightAction;
 import com.ss.editor.ui.control.tree.action.impl.light.CreateDirectionLightAction;
 import com.ss.editor.ui.control.tree.action.impl.light.CreatePointLightAction;
 import com.ss.editor.ui.control.tree.action.impl.light.CreateSpotLightAction;
-import com.ss.editor.model.undo.impl.AddChildOperation;
-import com.ss.editor.model.undo.impl.MoveChildOperation;
 import com.ss.editor.ui.control.tree.action.impl.particle.emitter.CreateParticleEmitterAction;
 import com.ss.editor.ui.control.tree.action.impl.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.tree.action.impl.terrain.CreateTerrainAction;
@@ -49,8 +49,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link SpatialTreeNode} for representing the {@link Node} in the editor.
@@ -61,34 +59,24 @@ import java.util.function.Predicate;
 public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
 
     @FunctionalInterface
-    public interface ChildrenFilter extends BiPredicate<Node, Spatial> {
-
-        @Override
-        default boolean test(Node node, Spatial spatial) {
-            return isNeedExclude(node, spatial);
-        }
+    public interface ChildrenFilter {
 
         @FxThread
         boolean isNeedExclude(@NotNull Node node, @NotNull Spatial spatial);
     }
 
     @FunctionalInterface
-    public interface ParticleEmitterFinder extends Predicate<Node> {
-
-        @Override
-        default boolean test(Node node) {
-            return isExist(node);
-        }
+    public interface ParticleEmitterFinder {
 
         @FxThread
         boolean isExist(@NotNull Node node);
     }
 
     private static final Array<ParticleEmitterFinder> PARTICLE_EMITTER_FINDERS =
-            ArrayFactory.newArray(ParticleEmitterFinder.class);
+            ArrayFactory.newCopyOnModifyArray(ParticleEmitterFinder.class);
 
     private static final Array<ChildrenFilter> NODE_CHILDREN_FILTERS =
-            ArrayFactory.newArray(ChildrenFilter.class);
+            ArrayFactory.newCopyOnModifyArray(ChildrenFilter.class);
 
     /**
      * Register the additional particle emitter finder.
@@ -96,7 +84,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      *
      * @param finder the additional particle emitter finder.
      */
-    @FxThread
+    @FromAnyThread
     public static void registerParticleEmitterFinder(@NotNull ParticleEmitterFinder finder) {
         PARTICLE_EMITTER_FINDERS.add(finder);
     }
@@ -107,7 +95,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
      *
      * @param filter the additional children filter.
      */
-    @FxThread
+    @FromAnyThread
     public static void registerNodeChildrenFilter(@NotNull ChildrenFilter filter) {
         NODE_CHILDREN_FILTERS.add(filter);
     }

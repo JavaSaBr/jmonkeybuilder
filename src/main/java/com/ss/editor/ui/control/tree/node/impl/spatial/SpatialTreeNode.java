@@ -3,14 +3,12 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_MODEL_NODE;
-import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.Light;
-import com.jme3.light.LightList;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
@@ -19,6 +17,9 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.InvisibleObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.model.undo.impl.AddControlOperation;
+import com.ss.editor.model.undo.impl.MoveControlOperation;
+import com.ss.editor.model.undo.impl.RenameNodeOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
@@ -33,9 +34,6 @@ import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateCharacter
 import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateRigidBodyControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.CreateStaticRigidBodyControlAction;
 import com.ss.editor.ui.control.tree.action.impl.control.physics.vehicle.CreateVehicleControlAction;
-import com.ss.editor.model.undo.impl.AddControlOperation;
-import com.ss.editor.model.undo.impl.MoveControlOperation;
-import com.ss.editor.model.undo.impl.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
@@ -52,7 +50,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 /**
  * The implementation of the {@link TreeNode} to represent a {@link Spatial} in an editor.
@@ -63,29 +60,29 @@ import java.util.function.BiFunction;
 public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
     @FunctionalInterface
-    public interface ActionFactory extends BiFunction<SpatialTreeNode<?>, NodeTree<?>, MenuItem> {
-
-        @Override
-        @Nullable MenuItem apply(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree);
+    public interface ActionFactory {
 
         @FxThread
-        default @NotNull Optional<MenuItem> create(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree) {
-            return Optional.ofNullable(apply(treeNode, tree));
+        @Nullable MenuItem create(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree);
+
+        @FxThread
+        default @NotNull Optional<MenuItem> createOpt(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree) {
+            return Optional.ofNullable(create(treeNode, tree));
         }
     }
 
     private static final Array<ActionFactory> CREATION_ACTION_FACTORIES =
-            ArrayFactory.newArray(ActionFactory.class);
+            ArrayFactory.newCopyOnModifyArray(ActionFactory.class);
 
     private static final Array<ActionFactory> CREATION_CONTROL_ACTION_FACTORIES =
-            ArrayFactory.newArray(ActionFactory.class);
+            ArrayFactory.newCopyOnModifyArray(ActionFactory.class);
 
     /**
      * Register the additional creation action factory.
      *
      * @param actionFactory the additional creation action factory.
      */
-    @FxThread
+    @FromAnyThread
     public static void registerCreationAction(@NotNull ActionFactory actionFactory) {
         CREATION_ACTION_FACTORIES.add(actionFactory);
     }
@@ -95,7 +92,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
      *
      * @param actionFactory the additional creation control action factory.
      */
-    @FxThread
+    @FromAnyThread
     public static void registerCreationControlAction(@NotNull ActionFactory actionFactory) {
         CREATION_CONTROL_ACTION_FACTORIES.add(actionFactory);
     }
@@ -246,7 +243,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         createControlItems.add(new CreateLightControlAction(nodeTree, this));
 
         for (var factory : CREATION_CONTROL_ACTION_FACTORIES) {
-            factory.create(this, nodeTree)
+            factory.createOpt(this, nodeTree)
                     .ifPresent(createControlItems::add);
         }
 
@@ -261,7 +258,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         resultItems.add(createControlMenu);
 
         for (var factory : CREATION_ACTION_FACTORIES) {
-            factory.create(this, nodeTree)
+            factory.createOpt(this, nodeTree)
                     .ifPresent(resultItems::add);
         }
 
