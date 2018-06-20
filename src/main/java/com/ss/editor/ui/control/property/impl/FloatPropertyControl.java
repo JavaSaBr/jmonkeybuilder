@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.common.util.NumberUtils.zeroIfNull;
+import static com.ss.rlib.common.util.ExtMath.zeroIfNull;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;

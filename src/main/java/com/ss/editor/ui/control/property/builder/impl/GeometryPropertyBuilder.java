@@ -39,8 +39,10 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     @FunctionalInterface
     public interface CanEditMaterialChecker {
 
+        @FxThread
         boolean canEdit(@NotNull Geometry geometry);
 
+        @FromAnyThread
         default @NotNull CanEditMaterialChecker negate() {
             return (geometry) -> !canEdit(geometry);
         }

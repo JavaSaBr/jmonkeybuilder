@@ -13,14 +13,18 @@ import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 /**
  * The class with some extensions to editor's render.
  *
  * @author JavaSaBr
  */
 public class RenderFilterExtension {
+
+    @FunctionalInterface
+    public interface FilterRefresher<F extends Filter> {
+        @JmeThread
+        void refresh(@NotNull F filter);
+    }
 
     private static final RenderFilterExtension INSTANCE = new RenderFilterExtension();
 
@@ -33,7 +37,7 @@ public class RenderFilterExtension {
      * The map filter to its refresh action.
      */
     @NotNull
-    private final ConcurrentObjectDictionary<Filter, Consumer<@NotNull ? extends Filter>> refreshActions;
+    private final ConcurrentObjectDictionary<Filter, FilterRefresher<Filter>> refreshActions;
 
     /**
      * The additional filters.
@@ -64,18 +68,23 @@ public class RenderFilterExtension {
     /**
      * Set the handler to handle refresh events.
      *
-     * @param filter  the filter.
-     * @param handler the handler.
-     * @param <T>     the filter's type.
+     * @param filter    the filter.
+     * @param refresher the refresher.
+     * @param <T>       the filter's type.
      */
     @FromAnyThread
-    public <T extends Filter> void setOnRefresh(@NotNull T filter, @NotNull Consumer<T> handler) {
+    public <T extends Filter> void setOnRefresh(
+            @NotNull T filter,
+            @NotNull RenderFilterExtension.FilterRefresher<T> refresher
+    ) {
 
         if (!filters.contains(filter)) {
             throw new IllegalArgumentException("The filter " + filter + "isn't registered.");
         }
 
-        refreshActions.runInWriteLock(filter, handler, ObjectDictionary::put);
+        var casted = ClassUtils.<FilterRefresher<Filter>>unsafeCast(refresher);
+
+        refreshActions.runInWriteLock(filter, casted, ObjectDictionary::put);
     }
 
     /**
@@ -83,10 +92,19 @@ public class RenderFilterExtension {
      */
     @JmeThread
     public void refreshFilters() {
-        refreshActions.forEachInReadLock((filter, consumer) -> {
-            var cast = ClassUtils.<Consumer<Filter>>unsafeCast(consumer);
-            cast.accept(filter);
-        });
+        refreshActions.forEachInReadLock(RenderFilterExtension::refreshImpl);
+    }
+
+    /**
+     * Refresh the filter using the refresher.
+     *
+     * @param filter the filter.
+     * @param refresher the refresher.
+     */
+    @JmeThread
+    private static void refreshImpl(@NotNull Filter filter, @NotNull FilterRefresher<Filter> refresher) {
+        ClassUtils.<FilterRefresher<Filter>>unsafeCast(refresher)
+                .refresh(filter);
     }
 
     @JmeThread
