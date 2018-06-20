@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'application'
 
 group = 'com.spaceshift'
-version = '1.8.0'
+version = '1.8.1'
 
 compileJava {
     options.encoding = "UTF-8"
@@ -133,6 +133,9 @@ dependencies {
     compile ('com.jme3:jfx:2.0.0') {
         exclude group: 'org.jmonkeyengine'
     }
+
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    compile 'javax.xml.bind:jaxb-api:2.3.0'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'

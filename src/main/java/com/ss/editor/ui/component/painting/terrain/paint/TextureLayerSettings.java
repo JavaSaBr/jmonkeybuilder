@@ -537,27 +537,27 @@ public class TextureLayerSettings extends VBox {
      * @param layer the layer.
      */
     @FromAnyThread
-    public void setTextureScale(final float scale, final int layer) {
+    public void setTextureScale(float scale, int layer) {
 
-        final Function<Integer, String> layerToScaleName = getLayerToScaleName();
+        var layerToScaleName = getLayerToScaleName();
         if (layerToScaleName == null) {
             return;
         }
 
-        final Terrain terrain = getTerrain();
-        final Material material = terrain.getMaterial();
-        final String paramName = layerToScaleName.apply(layer);
-        final MatParam matParam = material.getParam(paramName);
-        final Float current = matParam == null ? null : (Float) matParam.getValue();
+        var terrain = getTerrain();
+        var material = terrain.getMaterial();
+        var paramName = layerToScaleName.apply(layer);
+        var matParam = material.getParam(paramName);
+        var current = matParam == null ? null : (Float) matParam.getValue();
 
-        final PropertyOperation<ChangeConsumer, Node, Float> operation =
-                new PropertyOperation<>(getTerrainNode(), TERRAIN_PARAM, scale, current);
+        var operation = new PropertyOperation<ChangeConsumer, Node, Float>(getTerrainNode(),
+                TERRAIN_PARAM, scale, current);
 
         operation.setApplyHandler((node, newScale) -> {
             NodeUtils.visitGeometry(getTerrainNode(), geometry -> {
 
-                final Material geometryMaterial = geometry.getMaterial();
-                final MatParam param = geometryMaterial.getParam(paramName);
+                var geometryMaterial = geometry.getMaterial();
+                var param = geometryMaterial.getParam(paramName);
 
                 if (param == null && (newScale == null || newScale == -1F)) {
                     return;
@@ -571,8 +571,8 @@ public class TextureLayerSettings extends VBox {
             });
         });
 
-        final ModelChangeConsumer changeConsumer = paintingComponent.getChangeConsumer();
-        changeConsumer.execute(operation);
+        paintingComponent.getChangeConsumer()
+                .execute(operation);
     }
 
     /**

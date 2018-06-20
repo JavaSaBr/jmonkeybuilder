@@ -3,6 +3,9 @@ package com.ss.editor.util.svg;
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_HEIGHT;
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_WIDTH;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import com.sun.javafx.iio.ImageFrame;
 import com.sun.javafx.iio.ImageStorage.ImageType;
 import de.codecentric.centerdevice.javafxsvg.BufferedImageTranscoder;
@@ -25,13 +28,12 @@ import java.nio.ByteBuffer;
  */
 public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgImageLoader {
 
-    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(SvgImageLoader.class);
+
     public static final ThreadLocal<Color> OVERRIDE_COLOR = new ThreadLocal<>();
 
     private static final int DEFAULT_SIZE = 400;
     private static final int BYTES_PER_PIXEL = 4; // RGBA
-
-    private static Float pixelScale;
 
     @NotNull
     private final InputStream input;
@@ -44,12 +46,8 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
     @Override
     @FxThread
     public float getPixelScale() {
-
-        if (pixelScale == null) {
-            pixelScale = calculateMaxRenderScale();
-        }
-
-        return pixelScale;
+        return (float) EditorUtil.getFxStage()
+                .getRenderScaleX();
     }
 
     @Override
@@ -66,23 +64,10 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
 
         try {
             return createImageFrame(imageWidth, imageHeight, getPixelScale());
-        } catch (final TranscoderException ex) {
+        } catch (TranscoderException ex) {
+            LOGGER.error(ex);
             throw new IOException(ex);
         }
-    }
-
-    @Override
-    @FxThread
-    public float calculateMaxRenderScale() {
-
-        var maxRenderScale = 0F;
-        var accessor = ScreenHelper.getScreenAccessor();
-
-        for (var screen : Screen.getScreens()) {
-            maxRenderScale = Math.max(maxRenderScale, accessor.getRenderScale(screen));
-        }
-
-        return maxRenderScale;
     }
 
     @FxThread
@@ -98,10 +83,12 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
 
     @FxThread
     private @NotNull BufferedImage getTranscodedImage(float width, float height) throws TranscoderException {
+
         var trans = new BufferedImageTranscoder(BufferedImage.TYPE_INT_ARGB);
         trans.addTranscodingHint(KEY_WIDTH, width);
         trans.addTranscodingHint(KEY_HEIGHT, height);
         trans.transcode(new TranscoderInput(this.input), null);
+
         return trans.getBufferedImage();
     }
 
@@ -121,6 +108,7 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
 
         var argbData = bufferedImage.getRGB(0, 0, bufferedImage.getWidth(),
                 bufferedImage.getHeight(), null, 0, bufferedImage.getWidth());
+
         var imageData = new byte[getStride(bufferedImage) * bufferedImage.getHeight()];
 
         copyColorToBytes(argbData, imageData);

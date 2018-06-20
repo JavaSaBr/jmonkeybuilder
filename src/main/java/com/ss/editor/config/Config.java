@@ -41,7 +41,7 @@ public final class Config {
      * The editor's version.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("1.8.0");
+    public static final Version APP_VERSION = new Version("1.8.1");
 
     /**
      * The string version.

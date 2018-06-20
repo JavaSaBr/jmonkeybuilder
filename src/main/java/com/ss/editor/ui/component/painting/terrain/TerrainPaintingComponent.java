@@ -244,6 +244,8 @@ public class TerrainPaintingComponent extends
         this.levelToolControl = new LevelTerrainToolControl(this);
         this.slopeToolControl = new SlopeTerrainToolControl(this);
         this.paintToolControl = new PaintTerrainToolControl(this);
+
+        //FIXME replace to use new API
         this.toolControls = ArrayFactory.newArray(TerrainToolControl.class);
         this.toggleButtons = ArrayFactory.newArray(ToggleButton.class);
         this.toolControls.addAll(toArray(raiseLowerToolControl, smoothToolControl, roughToolControl,
@@ -304,9 +306,9 @@ public class TerrainPaintingComponent extends
         result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_ROUGHNESS,
                 PROPERTY_ROUGH_ROUGHNESS, 0F, 0F, Integer.MAX_VALUE));
         result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_FREQUENCY,
-                PROPERTY_ROUGH_FREQUENCY, 0F, 0.1F, Integer.MAX_VALUE));
+                PROPERTY_ROUGH_FREQUENCY, 0.1F, 0.1F, Integer.MAX_VALUE));
         result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_LACUNARITY,
-                PROPERTY_ROUGH_LACUNARITY, 0F, 1.1F, Integer.MAX_VALUE));
+                PROPERTY_ROUGH_LACUNARITY, 1.1F, 1.1F, Integer.MAX_VALUE));
         result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_OCTAVES,
                 PROPERTY_ROUGH_OCTAVES, 0F, 0F, Integer.MAX_VALUE));
         result.add(new PaintingPropertyDefinition(CATEGORY_ROUGH, FLOAT, Messages.MODEL_PROPERTY_MIN_SCALE,
@@ -453,7 +455,8 @@ public class TerrainPaintingComponent extends
         buttonsContainer.add(levelButton, 3, 0);
         buttonsContainer.add(slopeButton, 4, 0);
         buttonsContainer.add(paintButton, 5, 0);
-        buttonsContainer.prefWidthProperty().bind(widthProperty());
+        buttonsContainer.prefWidthProperty()
+                .bind(widthProperty());
 
         FxUtils.addChild(this, buttonsContainer);
 
@@ -475,6 +478,11 @@ public class TerrainPaintingComponent extends
         vars.set(PROPERTY_LEVEL_VALUE, state.getLevelValue());
         vars.set(PROPERTY_LEVEL_SMOOTHLY, state.isLevelSmoothly());
         vars.set(PROPERTY_LEVEL_USE_MARKER, state.isLevelUseMarker());
+        vars.set(PROPERTY_ROUGH_FREQUENCY, state.getRoughtFrequency());
+        vars.set(PROPERTY_ROUGH_LACUNARITY, state.getRoughtLacunarity());
+        vars.set(PROPERTY_ROUGH_ROUGHNESS, state.getRoughtRoughness());
+        vars.set(PROPERTY_ROUGH_SCALE, state.getRoughtScale());
+        vars.set(PROPERTY_ROUGH_OCTAVES, state.getRoughtOctaves());
     }
 
     @Override

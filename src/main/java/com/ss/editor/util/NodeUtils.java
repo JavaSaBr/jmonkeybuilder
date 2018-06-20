@@ -360,7 +360,7 @@ public class NodeUtils {
     @FromAnyThread
     public static void visitGeometry(@NotNull Spatial spatial, @NotNull Consumer<Geometry> consumer) {
         spatial.depthFirstTraversal(sp -> {
-            if (spatial instanceof Geometry) {
+            if (sp instanceof Geometry) {
                 consumer.accept((Geometry) sp);
             }
         }, DFSMode.PRE_ORDER);
