@@ -1,20 +1,21 @@
 package com.ss.editor.part3d.editor.impl.scene.handler;
 
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.util.JmbExtUtils;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 /**
  * The handler to updated positions for physics controls on spatial transformations.
  *
  * @author JavaSaBr
  */
-public class PhysicsControlTransformationHandler implements Consumer<Spatial> {
+public class PhysicsControlTransformationHandler implements AbstractSceneEditor3DPart.TransformationHandler {
 
     @Override
-    public void accept(@NotNull final Spatial spatial) {
-        JmbExtUtils.resetPhysicsControlPositions(spatial);
+    @JmeThread
+    public void handle(@NotNull Spatial object) {
+        JmbExtUtils.resetPhysicsControlPositions(object);
     }
 }

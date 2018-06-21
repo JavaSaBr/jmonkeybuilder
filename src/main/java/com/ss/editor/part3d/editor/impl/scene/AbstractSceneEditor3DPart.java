@@ -20,7 +20,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.*;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.*;
@@ -52,6 +51,8 @@ import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
 import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.geom.util.AngleUtils;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
@@ -62,7 +63,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * The base implementation of the {@link AppState} for the editor.
@@ -73,6 +73,21 @@ import java.util.function.Consumer;
  */
 public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends Advanced3DEditorPart<T> implements EditorTransformSupport {
+
+    /**
+     * @see SelectionFinder
+     */
+    public static final String EP_SELECTION_FINDER = "SceneEditor3DPart#selectionFinder";
+
+    /**
+     * @see TransformationHandler
+     */
+    public static final String EP_PRE_TRANSFORM_HANDLER = "SceneEditor3DPart#preTransfromHandler";
+
+    /**
+     * @see TransformationHandler
+     */
+    public static final String EP_POST_TRANSFORM_HANDLER = "SceneEditor3DPart#postTransformHandler";
 
     public static final String KEY_LOADED_MODEL = "jMB.sceneEditor.loadedModel";
     public static final String KEY_IGNORE_RAY_CAST = "jMB.sceneEditor.ignoreRayCast";
@@ -116,60 +131,40 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @FunctionalInterface
     public interface SelectionFinder {
+
+        @JmeThread
         @Nullable Spatial find(@NotNull Object object);
     }
 
-    private static final Array<SelectionFinder> SELECTION_FINDERS =
-            ArrayFactory.newCopyOnModifyArray(SelectionFinder.class);
+    @FunctionalInterface
+    public interface TransformationHandler {
 
-    private static final Array<Consumer<Spatial>> PRE_TRANSFORM_HANDLERS =
-            ArrayFactory.newCopyOnModifyArray(Consumer.class);
-
-    private static final Array<Consumer<Spatial>> POST_TRANSFORM_HANDLERS =
-            ArrayFactory.newCopyOnModifyArray(Consumer.class);
-
-    /**
-     * Register the additional selection object finder.
-     *
-     * @param finder the additional selection object finder.
-     */
-    @FromAnyThread
-    public static void registerSelectionFinder(@NotNull SelectionFinder finder) {
-        SELECTION_FINDERS.add(finder);
+        @JmeThread
+        void handle(@NotNull Spatial object);
     }
 
-    /**
-     * Register the pre transform handler.
-     *
-     * @param handler the pre transform handler.
-     */
-    @FromAnyThread
-    public static void registerPreTransformHandler(@NotNull Consumer<Spatial> handler) {
-        PRE_TRANSFORM_HANDLERS.add(handler);
-    }
+    private static final ExtensionPoint<SelectionFinder> SELECTION_FINDERS =
+            ExtensionPointManager.register(EP_SELECTION_FINDER);
 
-    /**
-     * Register the post transform handler.
-     *
-     * @param handler the post transform handler.
-     */
-    @FromAnyThread
-    public static void registerPostTransformHandler(@NotNull Consumer<Spatial> handler) {
-        POST_TRANSFORM_HANDLERS.add(handler);
-    }
+    private static final ExtensionPoint<TransformationHandler> PRE_TRANSFORM_HANDLERS =
+            ExtensionPointManager.register(EP_PRE_TRANSFORM_HANDLER);
+
+    private static final ExtensionPoint<TransformationHandler> POST_TRANSFORM_HANDLERS =
+            ExtensionPointManager.register(EP_POST_TRANSFORM_HANDLER);
 
     static {
 
         // default handlers
-        final DisableControlsTransformationHandler disableControlsHandler = new DisableControlsTransformationHandler();
-        final ApplyScaleToPhysicsControlsHandler applyScaleToPhysicsControlsHandler = new ApplyScaleToPhysicsControlsHandler();
+        var disableControlsHandler = new DisableControlsTransformationHandler();
+        var applyScaleToPhysicsControlsHandler = new ApplyScaleToPhysicsControlsHandler();
 
-        registerPreTransformHandler(disableControlsHandler::onPreTransform);
-        registerPostTransformHandler(disableControlsHandler::onPostTransform);
-        registerPostTransformHandler(new ReactivatePhysicsControlsTransformationHandler());
-        registerPostTransformHandler(new PhysicsControlTransformationHandler());
-        registerPreTransformHandler(applyScaleToPhysicsControlsHandler::onPreTransform);
-        registerPostTransformHandler(applyScaleToPhysicsControlsHandler::onPostTransform);
+        PRE_TRANSFORM_HANDLERS.register(disableControlsHandler::onPreTransform)
+                .register(applyScaleToPhysicsControlsHandler::onPreTransform);
+
+        POST_TRANSFORM_HANDLERS.register(disableControlsHandler::onPostTransform)
+                .register(new ReactivatePhysicsControlsTransformationHandler())
+                .register(new PhysicsControlTransformationHandler())
+                .register(applyScaleToPhysicsControlsHandler::onPostTransform);
     }
 
     /**
@@ -381,7 +376,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         this.cursorNode = new Node("Cursor node");
         this.markersNode = new Node("Markers node");
 
-        final EditorCamera editorCamera = notNull(getEditorCamera());
+        var editorCamera = notNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
@@ -401,9 +396,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @Override
     @JmeThread
-    protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
+    protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
-        final T fileEditor = getFileEditor();
+
+        var fileEditor = getFileEditor();
+
         actionHandlers.put(KEY_S, (isPressed, tpf) ->
                 fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
         actionHandlers.put(KEY_G, (isPressed, tpf) ->
@@ -1491,7 +1488,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     @JmeThread
     protected @Nullable Object findToSelect(@NotNull Object object) {
 
-        for (final SelectionFinder finder : SELECTION_FINDERS) {
+        for (var finder : SELECTION_FINDERS.getExtensions()) {
             var spatial = finder.find(object);
             if (spatial != null && spatial.isVisible()) {
                 return spatial;
@@ -1650,13 +1647,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private void endTransform() {
+
         if (!isActiveTransform()) {
             return;
         }
 
-        final Transform originalTransform = getOriginalTransform();
-        final Spatial toTransform = getToTransform();
-        final Spatial currentModel = getCurrentModel();
+        var originalTransform = getOriginalTransform();
+        var toTransform = getToTransform();
+        var currentModel = getCurrentModel();
 
         if (currentModel == null) {
             LOGGER.warning(this, "not found current model for finishing transform...");
@@ -1666,30 +1664,34 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        POST_TRANSFORM_HANDLERS.forEach(toTransform, Consumer::accept);
+        POST_TRANSFORM_HANDLERS.getExtensions()
+                .forEach(handler -> handler.handle(toTransform));
 
-        final Transform oldValue = originalTransform.clone();
-        final Transform newValue = toTransform.getLocalTransform().clone();
+        var oldValue = originalTransform.clone();
+        var newValue = toTransform.getLocalTransform().clone();
 
-        final PropertyOperation<ChangeConsumer, Spatial, Transform> operation =
-                new PropertyOperation<>(toTransform, "internal_transformation", newValue, oldValue);
+        var operation = new PropertyOperation<ChangeConsumer, Spatial, Transform>(toTransform,
+                "internal_transformation", newValue, oldValue);
 
         operation.setApplyHandler((spatial, transform) -> {
-            PRE_TRANSFORM_HANDLERS.forEach(spatial, Consumer::accept);
+
+            var preHandlers = PRE_TRANSFORM_HANDLERS.getExtensions();
+            var postHandlers = POST_TRANSFORM_HANDLERS.getExtensions();
+
+            preHandlers.forEach(handler -> handler.handle(spatial));
             try {
                 spatial.setLocalTransform(transform);
             } finally {
-                POST_TRANSFORM_HANDLERS.forEach(spatial, Consumer::accept);
+                postHandlers.forEach(handler -> handler.handle(spatial));
             }
         });
-
-        final T fileEditor = getFileEditor();
-        fileEditor.execute(operation);
 
         setPickedAxis(PickedAxis.NONE);
         setActiveTransform(false);
         setTransformDeltaX(Float.NaN);
         updateTransformCenter();
+
+        getFileEditor().execute(operation);
     }
 
     /**
@@ -1699,46 +1701,49 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     private boolean startTransform() {
         updateTransformCenter();
 
-        final Camera camera = EditorUtil.getGlobalCamera();
-        final InputManager inputManager = EditorUtil.getInputManager();
-        final Vector2f cursorPosition = inputManager.getCursorPosition();
+        var camera = EditorUtil.getGlobalCamera();
+        var inputManager = EditorUtil.getInputManager();
+        var cursorPosition = inputManager.getCursorPosition();
 
-        final CollisionResults collisionResults = new CollisionResults();
+        var collisionResults = new CollisionResults();
 
-        final Vector3f position = camera.getWorldCoordinates(cursorPosition, 0f);
-        final Vector3f direction = camera.getWorldCoordinates(cursorPosition, 1f);
-        direction.subtractLocal(position).normalizeLocal();
+        var position = camera.getWorldCoordinates(cursorPosition, 0f);
+        var direction = camera.getWorldCoordinates(cursorPosition, 1f)
+                .subtractLocal(position)
+                .normalizeLocal();
 
-        final Ray ray = new Ray();
+        var ray = new Ray();
         ray.setOrigin(position);
         ray.setDirection(direction);
 
-        final Node transformToolNode = getTransformToolNode();
+        var transformToolNode = getTransformToolNode();
         transformToolNode.collideWith(ray, collisionResults);
 
         if (collisionResults.size() < 1) {
             return false;
         }
 
-        final Spatial toTransform = getToTransform();
+        var toTransform = getToTransform();
+
         if (toTransform != null) {
-            PRE_TRANSFORM_HANDLERS.forEach(toTransform, Consumer::accept);
+            PRE_TRANSFORM_HANDLERS.getExtensions().
+                    forEach(handler -> handler.handle(toTransform));
         }
 
-        final CollisionResult collisionResult = collisionResults.getClosestCollision();
-        final TransformType transformType = getTransformType();
+        var collisionResult = collisionResults.getClosestCollision();
+        var transformType = getTransformType();
 
         if (transformType == TransformType.MOVE_TOOL) {
-            final Node moveTool = getMoveTool();
-            final TransformControl control = moveTool.getControl(TransformControl.class);
+            var moveTool = getMoveTool();
+            var control = moveTool.getControl(TransformControl.class);
             control.setCollisionPlane(collisionResult);
         } else if (transformType == TransformType.ROTATE_TOOL) {
-            final Node rotateTool = getRotateTool();
-            final TransformControl control = rotateTool.getControl(TransformControl.class);
+            var rotateTool = getRotateTool();
+            var control = rotateTool.getControl(TransformControl.class);
             control.setCollisionPlane(collisionResult);
         } else if (transformType == TransformType.SCALE_TOOL) {
-            final Node scaleTool = getScaleTool();
-            final TransformControl control = scaleTool.getControl(TransformControl.class);
+            var scaleTool = getScaleTool();
+            var control = scaleTool.getControl(TransformControl.class);
             control.setCollisionPlane(collisionResult);
         }
 
@@ -1806,10 +1811,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param name   the property name.
      */
     @JmeThread
-    public void notifyPropertyPreChanged(@NotNull final Object object, @NotNull final String name) {
+    public void notifyPropertyPreChanged(@NotNull Object object, @NotNull String name) {
         if (object instanceof Spatial) {
             if (isTransformationProperty(name)) {
-                PRE_TRANSFORM_HANDLERS.forEach((Spatial) object, Consumer::accept);
+                PRE_TRANSFORM_HANDLERS.getExtensions()
+                        .forEach(handler -> handler.handle((Spatial) object));
             }
         }
     }
@@ -1846,12 +1852,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         if (object instanceof Spatial) {
             if (isTransformationProperty(name)) {
-                POST_TRANSFORM_HANDLERS.forEach((Spatial) object, Consumer::accept);
+                var transformed = object;
+                POST_TRANSFORM_HANDLERS.getExtensions()
+                        .forEach(handler -> handler.handle((Spatial) transformed));
             }
         }
     }
 
-    protected boolean isTransformationProperty(@NotNull final String name) {
+    protected boolean isTransformationProperty(@NotNull String name) {
         return Messages.MODEL_PROPERTY_LOCATION.equals(name) ||
             Messages.MODEL_PROPERTY_SCALE.equals(name) ||
             Messages.MODEL_PROPERTY_ROTATION.equals(name) ||
@@ -1888,10 +1896,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * The process of showing the model in the scene.
      */
     @JmeThread
-    private void openModelImpl(@NotNull final M model) {
+    private void openModelImpl(@NotNull M model) {
 
-        final Node modelNode = getModelNode();
-        final M currentModel = getCurrentModel();
+        var modelNode = getModelNode();
+        var currentModel = getCurrentModel();
 
         if (currentModel != null) {
             detachPrevModel(modelNode, currentModel);
@@ -1899,7 +1907,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         NodeUtils.visitGeometry(model, geometry -> {
 
-            final RenderManager renderManager = EditorUtil.getRenderManager();
+            var renderManager = EditorUtil.getRenderManager();
             try {
                 renderManager.preloadScene(geometry);
             } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
@@ -1910,9 +1918,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             }
         });
 
-        PRE_TRANSFORM_HANDLERS.forEach(model, Consumer::accept);
+        PRE_TRANSFORM_HANDLERS.getExtensions()
+                .forEach(handler -> handler.handle(model));
+
         attachModel(model, modelNode);
-        POST_TRANSFORM_HANDLERS.forEach(model, Consumer::accept);
+
+        POST_TRANSFORM_HANDLERS.getExtensions()
+                .forEach(handler -> handler.handle(model));
+
         setCurrentModel(model);
     }
 
