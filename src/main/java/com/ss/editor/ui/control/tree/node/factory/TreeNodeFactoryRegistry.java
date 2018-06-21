@@ -7,6 +7,8 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.factory.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -23,37 +25,25 @@ public class TreeNodeFactoryRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(TreeNodeFactoryRegistry.class);
 
-    private static final TreeNodeFactoryRegistry INSTANCE = new TreeNodeFactoryRegistry();
+    public static final String EP_FACTORIES = "TreeNodeFactoryRegistry#factories";
+
+    private static final ExtensionPoint<TreeNodeFactory> FACTORIES =
+            ExtensionPointManager.register(EP_FACTORIES);
 
     /**
      * The node's id generator.
      */
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
+    private static final TreeNodeFactoryRegistry INSTANCE = new TreeNodeFactoryRegistry();
+
     @FromAnyThread
     public static @NotNull TreeNodeFactoryRegistry getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * The list of available factories.
-     */
-    @NotNull
-    private final Array<TreeNodeFactory> factories;
-
     private TreeNodeFactoryRegistry() {
-        this.factories = ArrayFactory.newCopyOnModifyArray(TreeNodeFactory.class);
-        register(new PrimitiveTreeNodeFactory());
-        register(new LegacyAnimationTreeNodeFactory());
-        register(new CollisionTreeNodeFactory());
-        register(new ControlTreeNodeFactory());
-        register(new DefaultParticlesTreeNodeFactory());
-        register(new DefaultTreeNodeFactory());
-        register(new LightTreeNodeFactory());
-        register(new MaterialSettingsTreeNodeFactory());
-        register(new AnimationTreeNodeFactory());
         LOGGER.info("initialized.");
-
     }
 
     /**
@@ -63,18 +53,8 @@ public class TreeNodeFactoryRegistry {
      */
     @FromAnyThread
     public void register(@NotNull TreeNodeFactory factory) {
-        factories.add(factory);
-        factories.sort(TreeNodeFactory::compareTo);
-    }
-
-    /**
-     * Get all available tree node factories.
-     *
-     * @return the list of available tree node factories.
-     */
-    @FromAnyThread
-    private @NotNull Array<TreeNodeFactory> getFactories() {
-        return factories;
+        //FIXME
+        //factories.sort(TreeNodeFactory::compareTo);
     }
 
     /**
@@ -92,7 +72,7 @@ public class TreeNodeFactoryRegistry {
             return unsafeCast(element);
         }
 
-        var factories = getFactories();
+        var factories = FACTORIES.getExtensions();
         var objectId = ID_GENERATOR.incrementAndGet();
 
         V result = null;

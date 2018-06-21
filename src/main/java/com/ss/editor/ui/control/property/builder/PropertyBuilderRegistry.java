@@ -4,6 +4,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.impl.*;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.layout.VBox;
@@ -16,6 +18,9 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class PropertyBuilderRegistry {
+
+    private static final ExtensionPoint<PropertyBuilder> PROPERTY_BUILDERs =
+            ExtensionPointManager.register("PropertyBuilderRegistry#builders");
 
     private static final PropertyBuilderRegistry INSTANCE = new PropertyBuilderRegistry();
 
