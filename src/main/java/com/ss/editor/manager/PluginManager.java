@@ -5,26 +5,18 @@ import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
-import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
-import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
-import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
-import com.ss.editor.ui.component.creator.FileCreatorRegistry;
-import com.ss.editor.ui.component.editor.EditorRegistry;
-import com.ss.editor.ui.component.painting.PaintingComponentRegistry;
-import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.plugin.ConfigurablePluginSystem;
 import com.ss.rlib.common.plugin.exception.PreloadPluginException;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.Utils;
@@ -92,7 +84,6 @@ public class PluginManager {
                 .add(FxSceneCreatedEvent.EVENT_TYPE)
                 .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
                 .buildAndRegister();
-
     }
 
     /**
@@ -167,20 +158,6 @@ public class PluginManager {
     @BackgroundThread
     private void registeredExtensions() {
 
-        CombinedAsyncEventHandlerBuilder.of(this::notifyAllExtensionRegistered)
-                .add(PluginsFileCreatorsRegisteredEvent.EVENT_TYPE)
-                .add(PluginsEditorsRegisteredEvent.EVENT_TYPE)
-                .add(PluginsFileIconFindersRegisteredEvent.EVENT_TYPE)
-                .add(PluginsTreeNodeFactoriesRegisteredEvent.EVENT_TYPE)
-                .add(PluginsPropertyBuildersRegisteredEvent.EVENT_TYPE)
-                .add(PluginsFileConvertersRegisteredEvent.EVENT_TYPE)
-                .add(PluginCssLoadedEvent.EVENT_TYPE)
-                .add(PluginsFilePreviewFactoriesRegisteredEvent.EVENT_TYPE)
-                .add(PluginsAssetTreeContextMenuFillersRegisteredEvent.EVENT_TYPE)
-                .add(PluginsSettingsProvidersRegisteredEvent.EVENT_TYPE)
-                .add(PluginsPaintingComponentsRegisteredEvent.EVENT_TYPE)
-                .buildAndRegister();
-
         var executorManager = ExecutorManager.getInstance();
         executorManager.addBackgroundTask(() -> {
 
@@ -194,101 +171,11 @@ public class PluginManager {
         executorManager.addBackgroundTask(() -> {
 
             handlePlugins(editorPlugin ->
-                    editorPlugin.register(FileCreatorRegistry.getInstance()));
+                editorPlugin.register(ExtensionPointManager.getInstance()));
 
             AsyncEventManager.getInstance()
-                    .notify(new PluginsFileCreatorsRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(EditorRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsEditorsRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(FileIconManager.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsFileIconFindersRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(TreeNodeFactoryRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsTreeNodeFactoriesRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(PropertyBuilderRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsPropertyBuildersRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(FileConverterRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsFileConvertersRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(FilePreviewFactoryRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsFilePreviewFactoriesRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsAssetTreeContextMenuFillersRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                editorPlugin.register(SettingsProviderRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                .notify(new PluginsSettingsProvidersRegisteredEvent());
-        });
-
-        executorManager.addBackgroundTask(() -> {
-
-            handlePlugins(editorPlugin ->
-                    editorPlugin.register(PaintingComponentRegistry.getInstance()));
-
-            AsyncEventManager.getInstance()
-                    .notify(new PluginsPaintingComponentsRegisteredEvent());
-        });
-    }
-
-    /**
-     * Notify about that all plugin's extensions were registered.
-     */
-    @BackgroundThread
-    private void notifyAllExtensionRegistered() {
-        AsyncEventManager.getInstance()
                 .notify(new AllPluginsExtensionsRegisteredEvent());
+        });
     }
 
     /**

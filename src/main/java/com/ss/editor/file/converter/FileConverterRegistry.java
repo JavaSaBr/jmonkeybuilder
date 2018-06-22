@@ -6,6 +6,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.file.converter.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,14 @@ public class FileConverterRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(FileConverterRegistry.class);
 
+    /**
+     * @see FileConverterDescription
+     */
+    public static final String EP_DESCRIPTORS = "FileConverterRegistry#descriptions";
+
+    private static final ExtensionPoint<FileConverterDescription> DESCRIPTIONS =
+            ExtensionPointManager.register(EP_DESCRIPTORS);
+
     private static final FileConverterRegistry INSTANCE = new FileConverterRegistry();
 
     @FromAnyThread
@@ -28,42 +38,17 @@ public class FileConverterRegistry {
         return INSTANCE;
     }
 
-    /**
-     * The list of converters.
-     */
-    @NotNull
-    private final Array<FileConverterDescription> descriptions;
-
     private FileConverterRegistry() {
-        this.descriptions = ArrayFactory.newCopyOnModifyArray(FileConverterDescription.class);
-        register(BlendToJ3oFileConverter.DESCRIPTION);
-        register(FbxToJ3oFileConverter.DESCRIPTION);
-        register(ObjToJ3oFileConverter.DESCRIPTION);
-        register(SceneToJ3oFileConverter.DESCRIPTION);
-        register(MeshXmlToJ3oFileConverter.DESCRIPTION);
-        register(XbufToJ3oFileConverter.DESCRIPTION);
-        register(GltfToJ3oFileConverter.DESCRIPTION);
+
+        DESCRIPTIONS.register(BlendToJ3oFileConverter.DESCRIPTION)
+                .register(FbxToJ3oFileConverter.DESCRIPTION)
+                .register(ObjToJ3oFileConverter.DESCRIPTION)
+                .register(SceneToJ3oFileConverter.DESCRIPTION)
+                .register(MeshXmlToJ3oFileConverter.DESCRIPTION)
+                .register(XbufToJ3oFileConverter.DESCRIPTION)
+                .register(GltfToJ3oFileConverter.DESCRIPTION);
+
         LOGGER.info("initialized.");
-    }
-
-    /**
-     * Add the new file converter descriptor.
-     *
-     * @param description the new descriptor.
-     */
-    @FromAnyThread
-    public void register(@NotNull FileConverterDescription description) {
-        descriptions.add(description);
-    }
-
-    /**
-     * Get the list of converters.
-     *
-     * @return the list of converters.
-     */
-    @FromAnyThread
-    private @NotNull Array<FileConverterDescription> getDescriptions() {
-        return descriptions;
     }
 
     /**
@@ -74,7 +59,7 @@ public class FileConverterRegistry {
      */
     @FromAnyThread
     public @NotNull Array<FileConverterDescription> getDescriptions(@NotNull Path path) {
-        return getDescriptions().stream()
+        return DESCRIPTIONS.getExtensions().stream()
                 .filter(desc -> containsExtensions(desc.getExtensions(), path))
                 .collect(toArray(FileConverterDescription.class));
     }

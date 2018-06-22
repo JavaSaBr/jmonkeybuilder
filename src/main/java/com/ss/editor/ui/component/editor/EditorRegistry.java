@@ -8,6 +8,8 @@ import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 /**
@@ -31,8 +34,16 @@ public class EditorRegistry {
 
     public static final String ALL_FORMATS = "*";
 
+    /**
+     * @see EditorDescription
+     */
+    public static final String EP_DESCRIPTIONS = "EditorRegistry#descriptions";
+
+    private static final ExtensionPoint<EditorDescription> DESCRIPTIONS =
+            ExtensionPointManager.register(EP_DESCRIPTIONS);
+
     private static final Supplier<Array<EditorDescription>> ARRAY_FACTORY =
-            () -> ArrayFactory.newCopyOnModifyArray(EditorDescription.class);
+            Array.supplier(EditorDescription.class);
 
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
@@ -52,26 +63,30 @@ public class EditorRegistry {
     @NotNull
     private final ConcurrentObjectDictionary<String, EditorDescription> editorIdToDescription;
 
+    private final AtomicBoolean initialized;
+
     private EditorRegistry() {
+        this.initialized = new AtomicBoolean(false);
         this.editorDescriptions = ConcurrentObjectDictionary.ofType(String.class, Array.class);
         this.editorIdToDescription = ConcurrentObjectDictionary.ofType(String.class, EditorDescription.class);
-        loadDescriptions();
+
+        DESCRIPTIONS.register(TextFileEditor.DESCRIPTION)
+                .register(MaterialFileEditor.DESCRIPTION)
+                .register(ModelFileEditor.DESCRIPTION)
+                .register(ImageViewerEditor.DESCRIPTION)
+                .register(GLSLFileEditor.DESCRIPTION)
+                .register(MaterialDefinitionFileEditor.DESCRIPTION)
+                .register(AudioViewerEditor.DESCRIPTION)
+                .register(SceneFileEditor.DESCRIPTION);
+
+        LOGGER.info("initialized.");
     }
 
-    /**
-     * Load available descriptors.
-     */
     @FromAnyThread
-    private void loadDescriptions() {
-        register(TextFileEditor.DESCRIPTION);
-        register(MaterialFileEditor.DESCRIPTION);
-        register(ModelFileEditor.DESCRIPTION);
-        register(ImageViewerEditor.DESCRIPTION);
-        register(GLSLFileEditor.DESCRIPTION);
-        register(MaterialDefinitionFileEditor.DESCRIPTION);
-        register(AudioViewerEditor.DESCRIPTION);
-        register(SceneFileEditor.DESCRIPTION);
-        LOGGER.info("initialized.");
+    private void checkAndInitialize() {
+        if (initialized.compareAndSet(false, true)) {
+            DESCRIPTIONS.getExtensions().forEach(this::register);
+        }
     }
 
     /**
@@ -100,7 +115,7 @@ public class EditorRegistry {
      * @param description the description of an editor.
      */
     @FromAnyThread
-    public void register(@NotNull EditorDescription description) {
+    private void register(@NotNull EditorDescription description) {
 
         description.getExtensions()
                 .forEach(description, this::register);
@@ -123,6 +138,7 @@ public class EditorRegistry {
      */
     @FromAnyThread
     public @Nullable EditorDescription getDescription(@NotNull String editorId) {
+        checkAndInitialize();
         return getEditorIdToDescription()
                 .getInReadLock(editorId, ObjectDictionary::get);
     }
@@ -135,6 +151,7 @@ public class EditorRegistry {
      */
     @FromAnyThread
     public @Nullable FileEditor createEditorFor(@NotNull Path file) {
+        checkAndInitialize();
 
         if (Files.isDirectory(file)) {
             return null;
@@ -177,6 +194,8 @@ public class EditorRegistry {
      */
     @FromAnyThread
     public @Nullable FileEditor createEditorFor(@NotNull EditorDescription description, @NotNull Path file) {
+        checkAndInitialize();
+
         var constructor = description.getConstructor();
         try {
             return constructor.call();
@@ -193,6 +212,7 @@ public class EditorRegistry {
      */
     @FromAnyThread
     public @NotNull Array<EditorDescription> getAvailableEditorsFor(@NotNull Path file) {
+        checkAndInitialize();
 
         var result = Array.<EditorDescription>ofType(EditorDescription.class);
         var extension = FileUtils.getExtension(file);

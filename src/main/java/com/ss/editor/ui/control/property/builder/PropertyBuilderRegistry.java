@@ -19,8 +19,21 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyBuilderRegistry {
 
-    private static final ExtensionPoint<PropertyBuilder> PROPERTY_BUILDERs =
-            ExtensionPointManager.register("PropertyBuilderRegistry#builders");
+    /**
+     * @see PropertyBuilder
+     */
+    public static final String EP_PROPERTY_BUILDERS = "PropertyBuilderRegistry#builders";
+
+    /**
+     * @see PropertyBuilderFilter
+     */
+    public static final String EP_PROPERTY_BUILDER_FILTERS = "PropertyBuilderRegistry#builderFilters";
+
+    private static final ExtensionPoint<PropertyBuilder> PROPERTY_BUILDERS =
+            ExtensionPointManager.register(EP_PROPERTY_BUILDERS);
+
+    private static final ExtensionPoint<PropertyBuilderFilter> PROPERTY_BUILDER_FILTERS =
+            ExtensionPointManager.register(EP_PROPERTY_BUILDER_FILTERS);
 
     private static final PropertyBuilderRegistry INSTANCE = new PropertyBuilderRegistry();
 
@@ -29,58 +42,23 @@ public class PropertyBuilderRegistry {
         return INSTANCE;
     }
 
-    /**
-     * The list of property builders.
-     */
-    @NotNull
-    private final Array<PropertyBuilder> builders;
-
-    /**
-     * THe list of filters.
-     */
-    @NotNull
-    private final Array<PropertyBuilderFilter> filters;
-
     private PropertyBuilderRegistry() {
-        builders = ArrayFactory.newCopyOnModifyArray(PropertyBuilder.class);
-        filters = ArrayFactory.newCopyOnModifyArray(PropertyBuilderFilter.class);
-        register(AudioNodePropertyBuilder.getInstance());
-        register(ParticleEmitterPropertyBuilder.getInstance());
-        register(GeometryPropertyBuilder.getInstance());
-        register(LightPropertyBuilder.getInstance());
-        register(SpatialPropertyBuilder.getInstance());
-        register(SceneAppStatePropertyBuilder.getInstance());
-        register(SceneFilterPropertyBuilder.getInstance());
-        register(DefaultControlPropertyBuilder.getInstance());
-        register(EditableControlPropertyBuilder.getInstance());
-        register(CollisionShapePropertyBuilder.getInstance());
-        register(PrimitivePropertyBuilder.getInstance());
-        register(MeshPropertyBuilder.getInstance());
-        register(MaterialPropertyBuilder.getInstance());
-        register(ParticleInfluencerPropertyBuilder.getInstance());
-        register(EmitterShapePropertyBuilder.getInstance());
-        register(MaterialSettingsPropertyBuilder.getInstance());
-    }
-
-    /**
-     * Register a new property builder.
-     *
-     * @param builder the property builder.
-     */
-    @FromAnyThread
-    public void register(@NotNull PropertyBuilder builder) {
-        builders.add(builder);
-        builders.sort(PropertyBuilder::compareTo);
-    }
-
-    /**
-     * Register a new property builder filter.
-     *
-     * @param filter the property builder filter.
-     */
-    @FromAnyThread
-    public void register(@NotNull PropertyBuilderFilter filter) {
-        filters.add(filter);
+        PROPERTY_BUILDERS.register(AudioNodePropertyBuilder.getInstance())
+            .register(ParticleEmitterPropertyBuilder.getInstance())
+            .register(GeometryPropertyBuilder.getInstance())
+            .register(LightPropertyBuilder.getInstance())
+            .register(SpatialPropertyBuilder.getInstance())
+            .register(SceneAppStatePropertyBuilder.getInstance())
+            .register(SceneFilterPropertyBuilder.getInstance())
+            .register(DefaultControlPropertyBuilder.getInstance())
+            .register(EditableControlPropertyBuilder.getInstance())
+            .register(CollisionShapePropertyBuilder.getInstance())
+            .register(PrimitivePropertyBuilder.getInstance())
+            .register(MeshPropertyBuilder.getInstance())
+            .register(MaterialPropertyBuilder.getInstance())
+            .register(ParticleInfluencerPropertyBuilder.getInstance())
+            .register(EmitterShapePropertyBuilder.getInstance())
+            .register(MaterialSettingsPropertyBuilder.getInstance());
     }
 
     /**
@@ -99,11 +77,11 @@ public class PropertyBuilderRegistry {
             @NotNull ChangeConsumer changeConsumer
     ) {
 
-        for (var builder : builders) {
+        for (var builder : PROPERTY_BUILDERS.getExtensions()) {
 
             boolean needSkip = false;
 
-            for (var filter : filters) {
+            for (var filter : PROPERTY_BUILDER_FILTERS.getExtensions()) {
                 if (filter.skip(builder, object, parent)) {
                     needSkip = true;
                     break;

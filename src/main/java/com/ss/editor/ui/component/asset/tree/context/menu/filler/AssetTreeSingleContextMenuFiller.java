@@ -24,6 +24,9 @@ public interface AssetTreeSingleContextMenuFiller {
      * @param actionTester the action tester.
      */
     @FxThread
-    void fill(@NotNull final ResourceElement element, @NotNull final List<MenuItem> items,
-              @NotNull final Predicate<Class<?>> actionTester);
+    void fill(
+            @NotNull ResourceElement element,
+            @NotNull List<MenuItem> items,
+            @NotNull Predicate<Class<?>> actionTester
+    );
 }

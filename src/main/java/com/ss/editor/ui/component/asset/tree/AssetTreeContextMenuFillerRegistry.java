@@ -7,9 +7,11 @@ import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetT
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * The registry class to collect all available context menu filler.
@@ -20,52 +22,38 @@ public class AssetTreeContextMenuFillerRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AssetTreeContextMenuFillerRegistry.class);
 
-    private static final AssetTreeContextMenuFillerRegistry INSTANCE = new AssetTreeContextMenuFillerRegistry();
+    /**
+     * @see AssetTreeSingleContextMenuFiller
+     */
+    public static final String EP_SINGLE_FILLERS = "AssetTreeContextMenuFillerRegistry#singleFillers";
+
+    /**
+     * @see AssetTreeMultiContextMenuFiller
+     */
+    public static final String EP_MULTI_FILLERS = "AssetTreeContextMenuFillerRegistry#multiFillers";
+
+    private static final ExtensionPoint<AssetTreeSingleContextMenuFiller> SINGLE_FILLERS =
+            ExtensionPointManager.register(EP_SINGLE_FILLERS);
+
+    private static final ExtensionPoint<AssetTreeMultiContextMenuFiller> MULTI_FILLERS =
+            ExtensionPointManager.register(EP_MULTI_FILLERS);
+
+    private static final AssetTreeContextMenuFillerRegistry INSTANCE =
+            new AssetTreeContextMenuFillerRegistry();
 
     public static @NotNull AssetTreeContextMenuFillerRegistry getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * The list of single fillers.
-     */
-    @NotNull
-    private final Array<AssetTreeSingleContextMenuFiller> singleFillers;
-
-    /**
-     * The list of multi fillers.
-     */
-    @NotNull
-    private final Array<AssetTreeMultiContextMenuFiller> multiFillers;
-
     private AssetTreeContextMenuFillerRegistry() {
-        this.singleFillers = ArrayFactory.newCopyOnModifyArray(AssetTreeSingleContextMenuFiller.class);
-        this.multiFillers = ArrayFactory.newCopyOnModifyArray(AssetTreeMultiContextMenuFiller.class);
-        registerSingle(new FileAssetTreeSingleContextMenuFiller());
-        registerSingle(new ResourceAssetTreeSingleContextMenuFiller());
-        registerMulti(new FileAssetTreeSingleContextMenuFiller());
-        registerMulti(new ResourceAssetTreeSingleContextMenuFiller());
+
+        SINGLE_FILLERS.register(new FileAssetTreeSingleContextMenuFiller())
+                .register(new ResourceAssetTreeSingleContextMenuFiller());
+
+        MULTI_FILLERS.register(new FileAssetTreeSingleContextMenuFiller())
+                .register(new ResourceAssetTreeSingleContextMenuFiller());
+
         LOGGER.info("initialized.");
-    }
-
-    /**
-     * Register a new single context menu filler.
-     *
-     * @param filler the single context menu filler.
-     */
-    @FromAnyThread
-    public void registerSingle(@NotNull AssetTreeSingleContextMenuFiller filler) {
-        singleFillers.add(filler);
-    }
-
-    /**
-     * Register a new multiply context menu filler.
-     *
-     * @param filler the multiply context menu filler.
-     */
-    @FromAnyThread
-    public void registerMulti(@NotNull AssetTreeMultiContextMenuFiller filler) {
-        multiFillers.add(filler);
     }
 
     /**
@@ -74,8 +62,8 @@ public class AssetTreeContextMenuFillerRegistry {
      * @return the list of single context menu filler.
      */
     @FromAnyThread
-    public @NotNull Array<AssetTreeSingleContextMenuFiller> getSingleFillers() {
-        return singleFillers;
+    public @NotNull List<AssetTreeSingleContextMenuFiller> getSingleFillers() {
+        return SINGLE_FILLERS.getExtensions();
     }
 
     /**
@@ -84,7 +72,7 @@ public class AssetTreeContextMenuFillerRegistry {
      * @return the list of multiply context menu filler.
      */
     @FromAnyThread
-    public @NotNull Array<AssetTreeMultiContextMenuFiller> getMultiFillers() {
-        return multiFillers;
+    public @NotNull List<AssetTreeMultiContextMenuFiller> getMultiFillers() {
+        return MULTI_FILLERS.getExtensions();
     }
 }

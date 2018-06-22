@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.builder;
 
+import com.ss.editor.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,5 +20,6 @@ public interface PropertyBuilderFilter {
      * @param parent  the parent.
      * @return true of we should skip the builder for the object.
      */
+    @FxThread
     boolean skip(@NotNull PropertyBuilder builder, @NotNull Object object, @Nullable Object parent);
 }
