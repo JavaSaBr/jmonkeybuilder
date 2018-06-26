@@ -12,7 +12,6 @@ import com.ss.rlib.common.plugin.extension.ExtensionPoint;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -90,6 +89,21 @@ public class EditorRegistry {
     }
 
     /**
+     * Add the new description.
+     *
+     * @param description the description of the editor.
+     */
+    @FromAnyThread
+    private void register(@NotNull EditorDescription description) {
+
+        description.getExtensions()
+                .forEach(description, this::register);
+
+        getEditorIdToDescription()
+                .runInWriteLock(description.getEditorId(), description, ObjectDictionary::put);
+    }
+
+    /**
      * Get the table with editor descriptions.
      *
      * @return the table with editor descriptions.
@@ -107,21 +121,6 @@ public class EditorRegistry {
     @FromAnyThread
     private @NotNull ConcurrentObjectDictionary<String, EditorDescription> getEditorIdToDescription() {
         return editorIdToDescription;
-    }
-
-    /**
-     * Add new description.
-     *
-     * @param description the description of an editor.
-     */
-    @FromAnyThread
-    private void register(@NotNull EditorDescription description) {
-
-        description.getExtensions()
-                .forEach(description, this::register);
-
-        getEditorIdToDescription()
-                .runInWriteLock(description.getEditorId(), description, ObjectDictionary::put);
     }
 
     @FromAnyThread

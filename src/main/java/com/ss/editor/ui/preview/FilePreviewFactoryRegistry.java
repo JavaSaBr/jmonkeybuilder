@@ -1,12 +1,12 @@
 package com.ss.editor.ui.preview;
 
-import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.preview.impl.DefaultFilePreviewFactory;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,32 +18,23 @@ public class FilePreviewFactoryRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(FilePreviewFactoryRegistry.class);
 
+    /**
+     * @see FilePreviewFactory
+     */
+    public static final String EP_PREVIEW_FACTORIES = "FilePreviewFactoryRegistry#previewFactories";
+
+    private static final ExtensionPoint<FilePreviewFactory> PREVIEW_FACTORIES =
+            ExtensionPointManager.register(EP_PREVIEW_FACTORIES);
+
     private static final FilePreviewFactoryRegistry INSTANCE = new FilePreviewFactoryRegistry();
 
     public static @NotNull FilePreviewFactoryRegistry getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * The list of available factories.
-     */
-    @NotNull
-    private final Array<FilePreviewFactory> factories;
-
     private FilePreviewFactoryRegistry() {
-        this.factories = ArrayFactory.newCopyOnModifyArray(FilePreviewFactory.class);
-        register(DefaultFilePreviewFactory.getInstance());
+        PREVIEW_FACTORIES.register(DefaultFilePreviewFactory.getInstance());
         LOGGER.info("initialized.");
-    }
-
-    /**
-     * Register the new factory.
-     *
-     * @param factory the factory.
-     */
-    @FromAnyThread
-    public void register(@NotNull FilePreviewFactory factory) {
-        factories.add(factory);
     }
 
     /**
@@ -56,7 +47,8 @@ public class FilePreviewFactoryRegistry {
 
         var result = Array.<FilePreview>ofType(FilePreview.class);
 
-        factories.forEach(result, FilePreviewFactory::createFilePreviews);
+        PREVIEW_FACTORIES.getExtensions()
+                .forEach(filePreviewFactory -> filePreviewFactory.createFilePreviews(result));
 
         result.sort((first, second) ->
                 second.getOrder() - first.getOrder());

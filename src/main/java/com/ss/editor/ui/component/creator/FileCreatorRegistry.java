@@ -10,21 +10,30 @@ import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefin
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.List;
 
 /**
- * The registry with file creators.
+ * The registry of available file creators.
  *
  * @author JavaSaBr
  */
 public class FileCreatorRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(FileCreatorRegistry.class);
+
+    /**
+     * @see FileCreatorDescription
+     */
+    public static final String EP_DESCRIPTIONS = "FileCreatorRegistry#descriptions";
+
+    private static final ExtensionPoint<FileCreatorDescription> DESCRIPTIONS =
+            ExtensionPointManager.register(EP_DESCRIPTIONS);
 
     private static final FileCreatorRegistry INSTANCE = new FileCreatorRegistry();
 
@@ -33,46 +42,31 @@ public class FileCreatorRegistry {
         return INSTANCE;
     }
 
-    /**
-     * The list of file creator descriptions.
-     */
-    @NotNull
-    private final Array<FileCreatorDescription> descriptions;
-
     private FileCreatorRegistry() {
-        this.descriptions = ArrayFactory.newCopyOnModifyArray(FileCreatorDescription.class);
-        register(MaterialFileCreator.DESCRIPTION);
-        register(MaterialDefinitionFileCreator.DESCRIPTION);
-        register(EmptyFileCreator.DESCRIPTION);
-        register(FolderCreator.DESCRIPTION);
-        register(EmptyModelCreator.DESCRIPTION);
-        register(SingleColorTextureFileCreator.DESCRIPTION);
-        register(EmptySceneCreator.DESCRIPTION);
+
+        DESCRIPTIONS.register(MaterialFileCreator.DESCRIPTION)
+                .register(MaterialDefinitionFileCreator.DESCRIPTION)
+                .register(EmptyFileCreator.DESCRIPTION)
+                .register(FolderCreator.DESCRIPTION)
+                .register(EmptyModelCreator.DESCRIPTION)
+                .register(SingleColorTextureFileCreator.DESCRIPTION)
+                .register(EmptySceneCreator.DESCRIPTION);
+
         LOGGER.info("initialized.");
     }
 
     /**
-     * Add a new creator description.
+     * Get the available descriptions.
      *
-     * @param description the new description.
+     * @return the available descriptions.
      */
     @FromAnyThread
-    public void register(@NotNull FileCreatorDescription description) {
-        descriptions.add(description);
+    public @NotNull List<FileCreatorDescription> getDescriptions() {
+        return DESCRIPTIONS.getExtensions();
     }
 
     /**
-     * Gets descriptions.
-     *
-     * @return the list of file creator descriptions.
-     */
-    @FromAnyThread
-    public @NotNull Array<FileCreatorDescription> getDescriptions() {
-        return descriptions;
-    }
-
-    /**
-     * Create a new creator of the description for the file.
+     * Create a new creator by the description for the file.
      *
      * @param description the file creator description.
      * @param file        the file.

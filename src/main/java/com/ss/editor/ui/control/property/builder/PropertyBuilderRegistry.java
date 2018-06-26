@@ -4,10 +4,10 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.impl.*;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class PropertyBuilderRegistry {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(PropertyBuilderRegistry.class);
 
     /**
      * @see PropertyBuilder
@@ -43,6 +45,7 @@ public class PropertyBuilderRegistry {
     }
 
     private PropertyBuilderRegistry() {
+
         PROPERTY_BUILDERS.register(AudioNodePropertyBuilder.getInstance())
             .register(ParticleEmitterPropertyBuilder.getInstance())
             .register(GeometryPropertyBuilder.getInstance())
@@ -59,6 +62,8 @@ public class PropertyBuilderRegistry {
             .register(ParticleInfluencerPropertyBuilder.getInstance())
             .register(EmitterShapePropertyBuilder.getInstance())
             .register(MaterialSettingsPropertyBuilder.getInstance());
+
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -77,11 +82,13 @@ public class PropertyBuilderRegistry {
             @NotNull ChangeConsumer changeConsumer
     ) {
 
+        var filters = PROPERTY_BUILDER_FILTERS.getExtensions();
+
         for (var builder : PROPERTY_BUILDERS.getExtensions()) {
 
             boolean needSkip = false;
 
-            for (var filter : PROPERTY_BUILDER_FILTERS.getExtensions()) {
+            for (var filter : filters) {
                 if (filter.skip(builder, object, parent)) {
                     needSkip = true;
                     break;
