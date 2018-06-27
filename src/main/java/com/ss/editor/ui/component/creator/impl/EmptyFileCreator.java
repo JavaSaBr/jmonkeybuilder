@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.creator.impl;
 
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
 import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,16 +13,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EmptyFileCreator extends AbstractFileCreator {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
-    public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
-
-    static {
-        DESCRIPTION.setFileDescription(Messages.EMPTY_FILE_CREATOR_DESCRIPTION);
-        DESCRIPTION.setConstructor(EmptyFileCreator::new);
-    }
+    public static final FileCreatorDescriptor DESCRIPTOR = new FileCreatorDescriptor(
+            Messages.EMPTY_FILE_CREATOR_DESCRIPTION,
+            EmptyFileCreator::new
+    );
 
     @Override
     @FromAnyThread

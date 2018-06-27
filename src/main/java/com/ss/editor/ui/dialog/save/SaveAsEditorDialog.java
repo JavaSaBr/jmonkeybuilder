@@ -48,17 +48,7 @@ import java.util.function.Predicate;
  */
 public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
 
-    /**
-     * The constant DIALOG_SIZE.
-     */
-    @NotNull
     protected static final Point DIALOG_SIZE = new Point(900, -1);
-
-    /**
-     * The event manager.
-     */
-    @NotNull
-    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     @NotNull
     private final EventHandler<CreatedFileEvent> createdFileHandler = this::processEvent;

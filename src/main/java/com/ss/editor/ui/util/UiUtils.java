@@ -6,8 +6,10 @@ import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
+import com.ss.editor.ui.dialog.asset.BaseAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.file.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.file.FileAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
@@ -17,6 +19,7 @@ import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
@@ -46,7 +49,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -615,11 +617,12 @@ public abstract class UiUtils {
      * @param resources the resources.
      */
     @FxThread
-    public static void openResourceAssetDialog(@NotNull final Consumer<String> handler,
-                                               @Nullable final Function<String, String> validator,
-                                               @NotNull final Array<String> resources) {
-        final StringVirtualAssetEditorDialog dialog = new StringVirtualAssetEditorDialog(handler, validator, resources);
-        dialog.show();
+    public static void openResourceAssetDialog(
+            @NotNull Consumer<String> handler,
+            @Nullable BaseAssetEditorDialog.Validator<String> validator,
+            @NotNull Array<String> resources
+    ) {
+        new StringVirtualAssetEditorDialog(handler, validator, resources).show();
     }
 
     /**
@@ -923,17 +926,29 @@ public abstract class UiUtils {
     /**
      * Increment the loading counter.
      */
-    @FxThread
+    @FromAnyThread
     public static void incrementLoading() {
-        getFxScene().incrementLoading();
+
+        if (Platform.isFxApplicationThread()) {
+            getFxScene().incrementLoading();
+        } else {
+            ExecutorManager.getInstance()
+                    .addFxTask(UiUtils::incrementLoading);
+        }
     }
 
     /**
      * Decrement the loading counter.
      */
-    @FxThread
+    @FromAnyThread
     public static void decrementLoading() {
-        getFxScene().decrementLoading();
+
+        if (Platform.isFxApplicationThread()) {
+            getFxScene().decrementLoading();
+        } else {
+            ExecutorManager.getInstance()
+                    .addFxTask(UiUtils::decrementLoading);
+        }
     }
 
     /**

@@ -10,12 +10,11 @@ import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableBooleanValue;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
@@ -29,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * The base implementation of the {@link AbstractSimpleEditorDialog} to choose some asset resource.
@@ -38,17 +36,29 @@ import java.util.function.Function;
  */
 public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
 
+    @FunctionalInterface
+    public interface Validator<C> {
+
+        /**
+         * Return a string with error message if the object isn't valid or null if the object is ok.
+         *
+         * @param object the object to validate.
+         * @return the message or null.
+         */
+        @FxThread
+        @Nullable String validate(@NotNull C object);
+    }
+
     /**
-     * The dialog size.
+     * The dialog.
      */
-    @NotNull
     protected static final Point DIALOG_SIZE = new Point(-1, -1);
 
     /**
-     * The registry of available file previews.
+     * The list of available previews.
      */
     @NotNull
-    protected static final FilePreviewFactoryRegistry FILE_PREVIEW_FACTORY_REGISTRY = FilePreviewFactoryRegistry.getInstance();
+    protected final Array<FilePreview> previews;
 
     /**
      * The function to handle the choose.
@@ -60,50 +70,45 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * The function to validate the choose.
      */
     @Nullable
-    private final Function<@NotNull C, @Nullable String> validator;
-
-    /**
-     * The list of available previews.
-     */
-    @Nullable
-    protected Array<FilePreview> previews;
+    private final Validator<C> validator;
 
     /**
      * The label with any warning.
      */
-    @Nullable
-    private Label warningLabel;
+    @NotNull
+    private final Label warningLabel;
 
-    public BaseAssetEditorDialog(@NotNull final Consumer<C> consumer) {
+    public BaseAssetEditorDialog(@NotNull Consumer<C> consumer) {
         this(consumer, null);
     }
 
-    public BaseAssetEditorDialog(@NotNull final Consumer<C> consumer,
-                                 @Nullable final Function<@NotNull C, @Nullable String> validator) {
+    public BaseAssetEditorDialog(@NotNull Consumer<C> consumer, @Nullable Validator<C> validator) {
         this.consumer = consumer;
         this.validator = validator;
+        this.warningLabel = new Label();
+        this.previews = FilePreviewFactoryRegistry.getInstance()
+                .createAvailablePreviews();
     }
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
 
-        final HBox container = new HBox();
+        var container = new HBox();
 
-        final Region firstPart = buildFirstPart(container);
+        var firstPart = buildFirstPart(container);
         firstPart.prefHeightProperty().bind(root.heightProperty());
         firstPart.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
 
-        final Region secondPart = buildSecondPart(container);
+        var secondPart = buildSecondPart(container);
         secondPart.prefHeightProperty().bind(root.heightProperty());
         secondPart.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
 
-        FXUtils.addToPane(firstPart, container);
-        FXUtils.addToPane(secondPart, container);
-        FXUtils.addToPane(container, root);
+        FxUtils.addClass(container, CssClasses.DEF_HBOX)
+                .addClass(root, CssClasses.ASSET_EDITOR_DIALOG);
 
-        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(root, CssClasses.ASSET_EDITOR_DIALOG);
+        FxUtils.addChild(container, firstPart, secondPart)
+                .addChild(root, container);
     }
 
     /**
@@ -113,7 +118,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @return the built component.
      */
     @FxThread
-    protected @NotNull Region buildFirstPart(@NotNull final HBox container) {
+    protected @NotNull Region buildFirstPart(@NotNull HBox container) {
         throw new RuntimeException("unsupported");
     }
 
@@ -124,14 +129,14 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @return the target object.
      */
     @FxThread
-    protected @Nullable C getObject(@NotNull final T element) {
+    protected @Nullable C getObject(@NotNull T element) {
         throw new RuntimeException("unsupported");
     }
 
     /**
-     * Gets consumer.
+     * Get the function to handle a choose.
      *
-     * @return the function for handling the choose.
+     * @return the function to handle a choose.
      */
     @FromAnyThread
     protected @NotNull Consumer<C> getConsumer() {
@@ -144,11 +149,11 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param newValue the new selected item.
      */
     @FxThread
-    protected void processSelected(@Nullable final TreeItem<T> newValue) {
+    protected void processSelected(@Nullable TreeItem<T> newValue) {
 
-        final T element = newValue == null ? null : newValue.getValue();
-        final String assetPath = element == null ? null : getAssetPath(element);
-        final Path realFile = element == null ? null : getRealFile(element);
+        var element = newValue == null ? null : newValue.getValue();
+        var assetPath = element == null ? null : getAssetPath(element);
+        var realFile = element == null ? null : getRealFile(element);
 
         validate(getWarningLabel(), element);
         try {
@@ -161,7 +166,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
                 updatePreview((String) null);
             }
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             EditorUtil.handleException(LOGGER, this, e);
         }
     }
@@ -173,7 +178,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @return the asset path or null.
      */
     @FxThread
-    protected @Nullable String getAssetPath(@NotNull final T element) {
+    protected @Nullable String getAssetPath(@NotNull T element) {
         return null;
     }
 
@@ -184,7 +189,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @return the real file or null.
      */
     @FxThread
-    protected @Nullable Path getRealFile(@NotNull final T element) {
+    protected @Nullable Path getRealFile(@NotNull T element) {
         return null;
     }
 
@@ -194,10 +199,11 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param file the file.
      */
     @FxThread
-    private void updatePreview(@NotNull final Path file) {
+    private void updatePreview(@NotNull Path file) {
 
-        final Array<FilePreview> previews = getPreviews();
-        final FilePreview preview = previews.search(file, FilePreview::isSupport);
+        var previews = getPreviews();
+
+        var preview = previews.search(file, FilePreview::isSupport);
         previews.forEach(preview, (filePreview, toCheck) -> filePreview != toCheck,
                 (filePreview, tooCheck) -> filePreview.hide());
 
@@ -214,16 +220,16 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param assetPath the asset path of the object.
      */
     @FxThread
-    private void updatePreview(@Nullable final String assetPath) {
+    private void updatePreview(@Nullable String assetPath) {
 
-        final Array<FilePreview> previews = getPreviews();
+        var previews = getPreviews();
 
         if (assetPath == null) {
             previews.forEach(FilePreview::hide);
             return;
         }
 
-        final FilePreview preview = previews.search(assetPath, FilePreview::isSupport);
+        var preview = previews.search(assetPath, FilePreview::isSupport);
         previews.forEach(preview, (filePreview, toCheck) -> filePreview != toCheck,
                 (filePreview, tooCheck) -> filePreview.hide());
 
@@ -241,13 +247,16 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @param element      the element.
      */
     @FxThread
-    protected void validate(@NotNull final Label warningLabel, @Nullable final T element) {
+    protected void validate(@NotNull Label warningLabel, @Nullable T element) {
 
-        final Function<@NotNull C, @Nullable String> validator = getValidator();
-        if (validator == null) return;
+        var validator = getValidator();
 
-        final C object = element == null ? null : getObject(element);
-        final String message = object == null ? null : validator.apply(object);
+        if (validator == null) {
+            return;
+        }
+
+        var object = element == null ? null : getObject(element);
+        var message = object == null ? null : validator.validate(object);
 
         if (message == null) {
             warningLabel.setText(StringUtils.EMPTY);
@@ -265,27 +274,25 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      * @return the parent
      */
     @FxThread
-    protected @NotNull Region buildSecondPart(@NotNull final HBox container) {
+    protected @NotNull Region buildSecondPart(@NotNull HBox container) {
 
-        final StackPane previewContainer = new StackPane();
+        var previewContainer = new StackPane();
 
-        final Array<FilePreview> availablePreviews = FILE_PREVIEW_FACTORY_REGISTRY.createAvailablePreviews();
-        availablePreviews.forEach(previewContainer, FilePreview::initialize);
+        previews.forEach(previewContainer, FilePreview::initialize);
 
-        FXUtils.addClassTo(previewContainer, CssClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
-
-        this.previews = availablePreviews;
+        FxUtils.addClass(previewContainer,
+                CssClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         return previewContainer;
     }
 
     /**
-     * Gets validator.
+     * Get the function to validate a choose.
      *
-     * @return the function for validating the choose.
+     * @return the function to validate a choose.
      */
     @FxThread
-    protected @Nullable Function<@NotNull C, @Nullable String> getValidator() {
+    protected @Nullable Validator<C> getValidator() {
         return validator;
     }
 
@@ -316,23 +323,22 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    protected void createBeforeActions(@NotNull final HBox container) {
+    protected void createBeforeActions(@NotNull HBox container) {
         super.createBeforeActions(container);
 
-        warningLabel = new Label();
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
-        FXUtils.addClassTo(warningLabel, CssClasses.DIALOG_LABEL_WARNING);
-        FXUtils.addToPane(warningLabel, container);
+        FxUtils.addClass(warningLabel, CssClasses.DIALOG_LABEL_WARNING);
+        FxUtils.addChild(container, warningLabel);
     }
 
     @Override
     @FxThread
-    protected void createActions(@NotNull final VBox root) {
+    protected void createActions(@NotNull VBox root) {
         super.createActions(root);
 
-        final Button okButton = notNull(getOkButton());
+        var okButton = notNull(getOkButton());
         okButton.disableProperty().bind(buildDisableCondition());
     }
 
@@ -343,8 +349,8 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
      */
     @FxThread
     protected @NotNull BooleanBinding buildDisableCondition() {
-        final Label warningLabel = getWarningLabel();
-        return warningLabel.visibleProperty().or(buildAdditionalDisableCondition());
+        return getWarningLabel().visibleProperty()
+                .or(buildAdditionalDisableCondition());
     }
 
     /**

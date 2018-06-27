@@ -3,7 +3,6 @@ package com.ss.editor.ui.dialog;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.fx.util.FxUtils;
@@ -33,8 +32,6 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     public static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
 
     public static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
-
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The ok button.

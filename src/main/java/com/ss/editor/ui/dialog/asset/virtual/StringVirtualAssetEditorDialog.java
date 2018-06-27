@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * The implementation to work with string resources.
@@ -18,10 +17,9 @@ import java.util.function.Function;
  */
 public class StringVirtualAssetEditorDialog extends VirtualAssetEditorDialog<String> {
 
-    @NotNull
-    public static final Function<@NotNull String, @Nullable String> DEFAULT_VALIDATOR = resource -> {
+    public static final Validator<String> DEFAULT_VALIDATOR = resource -> {
 
-        final String extension = FileUtils.getExtension(resource);
+        var extension = FileUtils.getExtension(resource);
 
         if (StringUtils.isEmpty(extension)) {
             return Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
@@ -30,14 +28,15 @@ public class StringVirtualAssetEditorDialog extends VirtualAssetEditorDialog<Str
         return null;
     };
 
-    public StringVirtualAssetEditorDialog(@NotNull final Consumer<String> consumer,
-                                          @NotNull final Array<String> resources) {
+    public StringVirtualAssetEditorDialog(@NotNull Consumer<String> consumer, @NotNull Array<String> resources) {
         this(consumer, DEFAULT_VALIDATOR, resources);
     }
 
-    public StringVirtualAssetEditorDialog(@NotNull final Consumer<String> consumer,
-                                          @Nullable final Function<@NotNull String, @Nullable String> validator,
-                                          @NotNull final Array<String> resources) {
+    public StringVirtualAssetEditorDialog(
+            @NotNull Consumer<String> consumer,
+            @Nullable Validator<String> validator,
+            @NotNull Array<String> resources
+    ) {
         super(consumer, validator, resources);
     }
 

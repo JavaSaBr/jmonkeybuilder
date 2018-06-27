@@ -2,16 +2,15 @@ package com.ss.editor.ui.component.creator.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
 import com.ss.editor.util.EditorUtil;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.common.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * The creator to create a folder.
@@ -20,16 +19,10 @@ import java.nio.file.Path;
  */
 public class FolderCreator extends AbstractFileCreator {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
-    public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
-
-    static {
-        DESCRIPTION.setFileDescription(Messages.FOLDER_CREATOR_DESCRIPTION);
-        DESCRIPTION.setConstructor(FolderCreator::new);
-    }
+    public static final FileCreatorDescriptor DESCRIPTOR = new FileCreatorDescriptor(
+            Messages.FOLDER_CREATOR_DESCRIPTION,
+            FolderCreator::new
+    );
 
     @Override
     @FromAnyThread
@@ -54,10 +47,10 @@ public class FolderCreator extends AbstractFileCreator {
     protected void processOk() {
         super.hide();
 
-        final Path fileToCreate = notNull(getFileToCreate());
+        var fileToCreate = notNull(getFileToCreate());
         try {
             Files.createDirectory(fileToCreate);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }

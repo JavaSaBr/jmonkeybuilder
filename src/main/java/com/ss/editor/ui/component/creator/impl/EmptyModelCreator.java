@@ -1,19 +1,16 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
+import static java.nio.file.StandardOpenOption.*;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Node;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -24,16 +21,10 @@ import java.nio.file.Path;
  */
 public class EmptyModelCreator extends AbstractFileCreator {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
-    public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
-
-    static {
-        DESCRIPTION.setFileDescription(Messages.EMPTY_MODEL_CREATOR_DESCRIPTION);
-        DESCRIPTION.setConstructor(EmptyModelCreator::new);
-    }
+    public static final FileCreatorDescriptor DESCRIPTOR = new FileCreatorDescriptor(
+            Messages.EMPTY_MODEL_CREATOR_DESCRIPTION,
+            EmptyModelCreator::new
+    );
 
     @Override
     @FromAnyThread
@@ -49,13 +40,13 @@ public class EmptyModelCreator extends AbstractFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) throws IOException {
+    protected void writeData(@NotNull Path resultFile) throws IOException {
         super.writeData(resultFile);
 
-        final BinaryExporter exporter = BinaryExporter.getInstance();
-        final Node newNode = new Node("Model root");
+        var exporter = BinaryExporter.getInstance();
+        var newNode = new Node("Model root");
 
-        try (final OutputStream out = Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
+        try (var out = Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             exporter.save(newNode, out);
         }
     }

@@ -1,20 +1,18 @@
 package com.ss.editor.ui.dialog.asset.virtual;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.virtual.tree.VirtualResourceTree;
-import com.ss.editor.ui.component.virtual.tree.resource.RootVirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
 import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElementFactory;
 import com.ss.editor.ui.dialog.asset.BaseAssetEditorDialog;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxControlUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Window;
@@ -41,18 +39,21 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     /**
      * The tree with all resources.
      */
-    @Nullable
-    private VirtualResourceTree<C> resourceTree;
+    @NotNull
+    private final VirtualResourceTree<C> resourceTree;
 
-    public VirtualAssetEditorDialog(@NotNull final Consumer<C> consumer, @NotNull final Array<C> resources) {
+    public VirtualAssetEditorDialog(@NotNull Consumer<C> consumer, @NotNull Array<C> resources) {
         this(consumer, null, resources);
     }
 
-    public VirtualAssetEditorDialog(@NotNull final Consumer<C> consumer,
-                                    @Nullable final Function<@NotNull C, @Nullable String> validator,
-                                    @NotNull final Array<C> resources) {
+    public VirtualAssetEditorDialog(
+            @NotNull Consumer<C> consumer,
+            @Nullable Validator<C> validator,
+            @NotNull Array<C> resources
+    ) {
         super(consumer, validator);
         this.resources = resources;
+        this.resourceTree = new VirtualResourceTree<>(getObjectsType());
     }
 
     /**
@@ -60,24 +61,20 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
      * @see VirtualResourceTree#setPathFunction(Function)
      */
     @FromAnyThread
-    public void setPathFunction(@Nullable final Function<C, String> pathFunction) {
+    public void setPathFunction(@Nullable Function<C, String> pathFunction) {
         getResourceTree().setPathFunction(pathFunction);
     }
 
     @Override
     @FxThread
-    protected @Nullable String getAssetPath(@NotNull final VirtualResourceElement<?> element) {
+    protected @Nullable String getAssetPath(@NotNull VirtualResourceElement<?> element) {
         return getResourceTree().getPath(element.getObject());
     }
 
     @Override
     @FxThread
-    protected @NotNull Region buildFirstPart(@NotNull final HBox container) {
-
-        resourceTree = new VirtualResourceTree<>(getObjectsType());
-        resourceTree.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> processSelected(newValue));
-
+    protected @NotNull Region buildFirstPart(@NotNull HBox container) {
+        FxControlUtils.onSelectedItemChange(resourceTree, this::processSelected);
         return resourceTree;
     }
 
@@ -96,25 +93,27 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     public void show(@NotNull final Window owner) {
         super.show(owner);
 
-        final VirtualResourceTree<C> resourceTree = getResourceTree();
-        final RootVirtualResourceElement newRoot =
-                VirtualResourceElementFactory.build(resources, resourceTree);
+        var resourceTree = getResourceTree();
+        var newRoot = VirtualResourceElementFactory.build(resources, resourceTree);
 
         resourceTree.fill(newRoot);
         resourceTree.expandAll();
 
-        EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
+        ExecutorManager.getInstance()
+                .addFxTask(resourceTree::requestFocus);
     }
 
     @Override
     @FxThread
-    protected @Nullable C getObject(@NotNull final VirtualResourceElement<?> element) {
-        final Object object = element.getObject();
-        final Class<C> type = getObjectsType();
+    protected @Nullable C getObject(@NotNull VirtualResourceElement<?> element) {
+        var object = element.getObject();
+        var type = getObjectsType();
         return type.isInstance(object) ? type.cast(object) : null;
     }
 
     /**
+     * Get the tree with all resources.
+     *
      * @return the tree with all resources.
      */
     @FxThread
@@ -126,16 +125,16 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
 
-        final VirtualResourceTree<C> resourceTree = getResourceTree();
-        final MultipleSelectionModel<TreeItem<VirtualResourceElement<?>>> selectionModel = resourceTree.getSelectionModel();
-        final ReadOnlyObjectProperty<TreeItem<VirtualResourceElement<?>>> selectedItemProperty = selectionModel.selectedItemProperty();
+        var resourceTree = getResourceTree();
+        var selectedItemProperty = resourceTree.getSelectionModel()
+                .selectedItemProperty();
 
-        final Class<C> type = getObjectsType();
-        final BooleanBinding typeCondition = new BooleanBinding() {
+        var type = getObjectsType();
+        var typeCondition = new BooleanBinding() {
 
             @Override
             protected boolean computeValue() {
-                final TreeItem<VirtualResourceElement<?>> treeItem = selectedItemProperty.get();
+                var treeItem = selectedItemProperty.get();
                 return treeItem == null || !type.isInstance(treeItem.getValue().getObject());
             }
 
@@ -153,18 +152,18 @@ public class VirtualAssetEditorDialog<C> extends BaseAssetEditorDialog<VirtualRe
     protected void processOk() {
         super.processOk();
 
-        final VirtualResourceTree<C> resourceTree = getResourceTree();
-        final MultipleSelectionModel<TreeItem<VirtualResourceElement<?>>> selectionModel = resourceTree.getSelectionModel();
-        final TreeItem<VirtualResourceElement<?>> selectedItem = selectionModel.getSelectedItem();
+        var selectedItem = getResourceTree()
+                .getSelectionModel()
+                .getSelectedItem();
 
         if (selectedItem == null) {
             hide();
             return;
         }
 
-        final VirtualResourceElement<?> element = selectedItem.getValue();
-        final Object object = element.getObject();
-        final Class<C> type = getObjectsType();
+        var element = selectedItem.getValue();
+        var object = element.getObject();
+        var type = getObjectsType();
 
         if (type.isInstance(object)) {
             getConsumer().accept(type.cast(object));

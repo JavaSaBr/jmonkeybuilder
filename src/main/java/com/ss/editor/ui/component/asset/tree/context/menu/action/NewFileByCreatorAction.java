@@ -3,10 +3,10 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import javafx.event.ActionEvent;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,34 +19,28 @@ import org.jetbrains.annotations.Nullable;
 class NewFileByCreatorAction extends FileAction {
 
     /**
-     * The creator description.
+     * The creator descriptor.
      */
     @NotNull
-    private final FileCreatorDescription description;
+    private final FileCreatorDescriptor descriptor;
 
-    /**
-     * Instantiates a new New file by creator action.
-     *
-     * @param element     the element
-     * @param description the description
-     */
-    NewFileByCreatorAction(@NotNull final ResourceElement element, @NotNull final FileCreatorDescription description) {
+    public NewFileByCreatorAction(@NotNull ResourceElement element, @NotNull FileCreatorDescriptor descriptor) {
         super(element);
-        this.description = description;
-        final Image icon = description.getIcon();
-        setText(description.getFileDescription());
+
+        this.descriptor = descriptor;
+
+        var icon = descriptor.getIcon();
+
+        setText(descriptor.getDescription());
         setGraphic(new ImageView(icon == null ? Icons.NEW_FILE_16 : icon));
     }
 
     @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final RequestedCreateFileEvent newEvent = new RequestedCreateFileEvent();
-        newEvent.setFile(getElement().getFile());
-        newEvent.setDescription(description);
-
-        FX_EVENT_MANAGER.notify(newEvent);
+        FxEventManager.getInstance()
+                .notify(new RequestedCreateFileEvent(getElement().getFile(), descriptor));
     }
 }

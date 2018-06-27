@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.event.FxEventManager;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
@@ -21,14 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class FileAction extends MenuItem {
 
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileAction.class);
-
-    /**
-     * The event manager.
-     */
-    @NotNull
-    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The action element.
@@ -42,22 +34,25 @@ public class FileAction extends MenuItem {
     @Nullable
     private final Array<ResourceElement> elements;
 
-    public FileAction(@NotNull final ResourceElement element) {
+    public FileAction(@NotNull ResourceElement element) {
         this(element, null);
     }
 
-    public FileAction(@NotNull final Array<ResourceElement> elements) {
+    public FileAction(@NotNull Array<ResourceElement> elements) {
         this(null, elements);
     }
 
-    public FileAction(@Nullable final ResourceElement element, @Nullable final Array<ResourceElement> elements) {
+    public FileAction(@Nullable ResourceElement element, @Nullable Array<ResourceElement> elements) {
         this.element = element;
         this.elements = elements;
+
         setText(getName());
         setOnAction(this::execute);
 
-        final Image icon = getIcon();
-        if (icon != null) setGraphic(new ImageView(icon));
+        Image icon = getIcon();
+        if (icon != null) {
+            setGraphic(new ImageView(icon));
+        }
     }
 
     /**
@@ -96,7 +91,7 @@ public class FileAction extends MenuItem {
      * @param event the event.
      */
     @FxThread
-    protected void execute(@Nullable final ActionEvent event) {
+    protected void execute(@Nullable ActionEvent event) {
     }
 
     /**

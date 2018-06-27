@@ -10,7 +10,6 @@ import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +24,6 @@ import java.nio.file.Path;
  * @author JavaSaBr
  */
 public class GenericFileCreator extends AbstractFileCreator {
-
-    @NotNull
-    private static final Array<PropertyDefinition> EMPTY_ARRAY = ArrayFactory.asArray();
 
     /**
      * The settings container.
@@ -143,6 +139,6 @@ public class GenericFileCreator extends AbstractFileCreator {
      */
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
-        return EMPTY_ARRAY;
+        return Array.empty();
     }
 }

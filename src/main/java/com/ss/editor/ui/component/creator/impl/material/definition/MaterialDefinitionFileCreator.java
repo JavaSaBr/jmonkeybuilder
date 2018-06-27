@@ -5,7 +5,7 @@ import static com.ss.editor.extension.property.EditablePropertyType.STRING_FROM_
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
 import static java.nio.file.StandardOpenOption.*;
-import com.jme3.material.TechniqueDef;
+import com.jme3.material.TechniqueDef.LightMode;
 import com.jme3.renderer.Caps;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -14,8 +14,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.component.creator.FileCreator;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
@@ -35,23 +34,20 @@ import java.nio.file.Files;
  */
 public class MaterialDefinitionFileCreator extends GenericFileCreator {
 
-    public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
+    public static final FileCreatorDescriptor DESCRIPTOR = new FileCreatorDescriptor(
+            Messages.MATERIAL_DEFINITION_FILE_CREATOR_FILE_DESCRIPTION,
+            MaterialDefinitionFileCreator::new
+    );
 
     private static final String PROP_GLSL_VERSION = "glslVersion";
-
-    static {
-        DESCRIPTION.setFileDescription(Messages.MATERIAL_DEFINITION_FILE_CREATOR_FILE_DESCRIPTION);
-        DESCRIPTION.setConstructor(MaterialDefinitionFileCreator::new);
-    }
-
     private static final String MD_TEMPLATE;
     private static final String FRAG_TEMPLATE;
     private static final String VERT_TEMPLATE;
 
     static {
-        MD_TEMPLATE = FileUtils.read(FileCreator.class.getResourceAsStream("/template/matdef/empty.j3md"));
-        FRAG_TEMPLATE = FileUtils.read(FileCreator.class.getResourceAsStream("/template/frag/empty.frag"));
-        VERT_TEMPLATE = FileUtils.read(FileCreator.class.getResourceAsStream("/template/vert/empty.vert"));
+        MD_TEMPLATE = FileUtils.readFromClasspath("/template/matdef/empty.j3md");
+        FRAG_TEMPLATE = FileUtils.readFromClasspath("/template/frag/empty.frag");
+        VERT_TEMPLATE = FileUtils.readFromClasspath("/template/vert/empty.vert");
     }
 
     /**
@@ -131,7 +127,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
                 toUpperCase(filename.charAt(0)) + filename.substring(1, filename.length()) : filename;
 
         var mdContent = MD_TEMPLATE.replace("${matdef-name}", mdName);
-        mdContent = mdContent.replace("${light-mode}", TechniqueDef.LightMode.SinglePass.name());
+        mdContent = mdContent.replace("${light-mode}", LightMode.SinglePass.name());
         mdContent = mdContent.replace("${GLSL-version}", glslVersion);
         mdContent = mdContent.replace("${vertex-path}", pathToVertex.toString());
         mdContent = mdContent.replace("${fragment-path}", pathToFragment.toString());

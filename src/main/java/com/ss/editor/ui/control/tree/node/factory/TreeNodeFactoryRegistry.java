@@ -4,13 +4,10 @@ import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.factory.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +22,9 @@ public class TreeNodeFactoryRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(TreeNodeFactoryRegistry.class);
 
+    /**
+     * @see TreeNodeFactory
+     */
     public static final String EP_FACTORIES = "TreeNodeFactoryRegistry#factories";
 
     private static final ExtensionPoint<TreeNodeFactory> FACTORIES =
@@ -44,17 +44,6 @@ public class TreeNodeFactoryRegistry {
 
     private TreeNodeFactoryRegistry() {
         LOGGER.info("initialized.");
-    }
-
-    /**
-     * Register a new tree node factory.
-     *
-     * @param factory the tree node factory.
-     */
-    @FromAnyThread
-    public void register(@NotNull TreeNodeFactory factory) {
-        //FIXME
-        //factories.sort(TreeNodeFactory::compareTo);
     }
 
     /**

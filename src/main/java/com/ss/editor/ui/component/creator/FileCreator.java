@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator;
 
+import com.ss.editor.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -12,9 +13,10 @@ import java.nio.file.Path;
 public interface FileCreator {
 
     /**
-     * Start creating near the file.
+     * Start creating a new file.
      *
-     * @param file the file.
+     * @param file the parent or nearest file.
      */
-    void start(@NotNull final Path file);
+    @FxThread
+    void start(@NotNull Path file);
 }

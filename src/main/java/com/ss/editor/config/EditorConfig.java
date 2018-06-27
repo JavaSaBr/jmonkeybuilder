@@ -319,6 +319,17 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Get the current asset folder with checking not null.
+     *
+     * @return the current asset folder.
+     * @throws NullPointerException id the current asset is null.
+     */
+    @FromAnyThread
+    public @NotNull Path requiredCurrentAsset() {
+        return notNull(currentAsset);
+    }
+
+    /**
      * Set the current asset folder.
      *
      * @param currentAsset the current asset folder.

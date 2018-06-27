@@ -17,11 +17,9 @@ import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import javafx.beans.property.ReadOnlyObjectProperty;
+import com.ss.rlib.fx.util.FxControlUtils;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.EventHandler;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Window;
@@ -30,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -40,18 +37,6 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement, C> {
-
-    /**
-     * The executing manager.
-     */
-    @NotNull
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The event manager.
-     */
-    @NotNull
-    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The handler created files events.
@@ -80,57 +65,53 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     /**
      * The tree with all resources.
      */
-    @Nullable
-    private ResourceTree resourceTree;
+    @NotNull
+    private final ResourceTree resourceTree;
 
-    public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
+    public AssetEditorDialog(@NotNull Consumer<C> consumer) {
         this(consumer, null);
     }
 
-    public AssetEditorDialog(@NotNull final Consumer<C> consumer, @Nullable final Function<C, String> validator) {
+    public AssetEditorDialog(@NotNull Consumer<C> consumer, @Nullable Validator<C> validator) {
         super(consumer, validator);
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
+        this.resourceTree = new ResourceTree(this::processOpen, false);
     }
 
     /**
-     * Sets extension filter.
+     * Set the list of available extensions.
      *
      * @param extensionFilter the list of available extensions.
      */
     @FromAnyThread
-    public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
+    public void setExtensionFilter(@NotNull Array<String> extensionFilter) {
         getResourceTree().setExtensionFilter(extensionFilter);
     }
 
     /**
-     * Sets action tester.
+     * Set the action tester.
      *
      * @param actionTester the action tester.
      */
     @FromAnyThread
-    public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
+    public void setActionTester(@Nullable Predicate<Class<?>> actionTester) {
         getResourceTree().setActionTester(actionTester);
     }
 
     /**
-     * Sets only folders.
+     * Set true if need to show only folders.
      *
      * @param onlyFolders true if need to show only folders.
      */
     @FromAnyThread
-    public void setOnlyFolders(final boolean onlyFolders) {
+    public void setOnlyFolders(boolean onlyFolders) {
         getResourceTree().setOnlyFolders(onlyFolders);
     }
 
     @Override
     @FxThread
-    protected @NotNull Region buildFirstPart(@NotNull final HBox container) {
-
-        resourceTree = new ResourceTree(this::processOpen, false);
-        resourceTree.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> processSelected(newValue));
-
+    protected @NotNull Region buildFirstPart(@NotNull HBox container) {
+        FxControlUtils.onSelectedItemChange(resourceTree, this::processSelected);
         return resourceTree;
     }
 
@@ -140,70 +121,71 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
      * @param element the element
      */
     @FxThread
-    protected void processOpen(@NotNull final ResourceElement element) {
+    protected void processOpen(@NotNull ResourceElement element) {
         hide();
     }
 
     @Override
     @FxThread
-    public void show(@NotNull final Window owner) {
+    public void show(@NotNull Window owner) {
         super.show(owner);
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
+        var currentAsset = EditorConfig.getInstance()
+                .requiredCurrentAsset();
 
-        final ResourceTree resourceTree = getResourceTree();
-        final Path currentAsset = notNull(editorConfig.getCurrentAsset());
+        getResourceTree().fill(currentAsset);
 
-        resourceTree.fill(currentAsset);
+        FxEventManager.getInstance()
+                .addEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler)
+                .addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle)
+                .addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
 
-        FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
-        FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
-        FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
-
-        EXECUTOR_MANAGER.addFxTask(resourceTree::requestFocus);
+        ExecutorManager.getInstance()
+                .addFxTask(resourceTree::requestFocus);
     }
 
     /**
      * Handle creating file event.
      */
     @FxThread
-    private void processEvent(@NotNull final CreatedFileEvent event) {
+    private void processEvent(@NotNull CreatedFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final Array<Path> waitedFilesToSelect = getWaitedFilesToSelect();
-        final boolean waitedSelect = waitedFilesToSelect.contains(file);
+        var waitedFilesToSelect = getWaitedFilesToSelect();
+        var waitedSelect = waitedFilesToSelect.contains(file);
 
-        final ResourceTree resourceTree = getResourceTree();
+        var resourceTree = getResourceTree();
         resourceTree.notifyCreated(file);
 
-        if (waitedSelect) waitedFilesToSelect.fastRemove(file);
-        if (waitedSelect || event.isNeedSelect()) resourceTree.expandTo(file, true);
+        if (waitedSelect) {
+            waitedFilesToSelect.fastRemove(file);
+        }
+
+        if (waitedSelect || event.isNeedSelect()) {
+            resourceTree.expandTo(file, true);
+        }
     }
 
     /**
      * Handle deleting file event.
      */
     @FxThread
-    private void processEvent(@NotNull final DeletedFileEvent event) {
-
-        final Path file = event.getFile();
-
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.notifyDeleted(file);
+    private void processEvent(@NotNull DeletedFileEvent event) {
+        getResourceTree().notifyDeleted(event.getFile());
     }
 
     /**
      * Handle selecting file event.
      */
     @FxThread
-    private void processEvent(@NotNull final RequestSelectFileEvent event) {
+    private void processEvent(@NotNull RequestSelectFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final ResourceTree resourceTree = getResourceTree();
-        final ResourceElement element = createFor(file);
-        final TreeItem<ResourceElement> treeItem = findItemForValue(resourceTree.getRoot(), element);
+        var resourceTree = getResourceTree();
+        var element = createFor(file);
+        var treeItem = findItemForValue(resourceTree.getRoot(), element);
 
         if (treeItem == null) {
             getWaitedFilesToSelect().add(file);
@@ -214,6 +196,8 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     }
 
     /**
+     * Get the list of waited files to select.
+     *
      * @return the list of waited files to select.
      */
     @FromAnyThread
@@ -223,7 +207,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
 
     @Override
     @FxThread
-    protected @Nullable Path getRealFile(@NotNull final ResourceElement element) {
+    protected @Nullable Path getRealFile(@NotNull ResourceElement element) {
         return element.getFile();
     }
 
@@ -231,9 +215,10 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     @FxThread
     public void hide() {
 
-        FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
-        FX_EVENT_MANAGER.removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
-        FX_EVENT_MANAGER.removeEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
+        FxEventManager.getInstance()
+                .removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler)
+                .removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle)
+                .removeEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
 
         super.hide();
     }
@@ -241,13 +226,14 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     @Override
     @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
-        final ResourceTree resourceTree = getResourceTree();
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        final ReadOnlyObjectProperty<TreeItem<ResourceElement>> selectedItemProperty = selectionModel.selectedItemProperty();
-        return selectedItemProperty.isNull();
+        return getResourceTree().getSelectionModel()
+                .selectedItemProperty()
+                .isNull();
     }
 
     /**
+     * Get the tree with all resources.
+     *
      * @return the tree with all resources.
      */
     @FxThread
@@ -260,9 +246,7 @@ public class AssetEditorDialog<C> extends BaseAssetEditorDialog<ResourceElement,
     protected void processOk() {
         super.processOk();
 
-        final ResourceTree resourceTree = getResourceTree();
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
+        var selectedItem = getResourceTree().getSelectionModel().getSelectedItem();
 
         if (selectedItem == null) {
             hide();

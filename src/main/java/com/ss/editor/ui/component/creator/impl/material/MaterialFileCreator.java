@@ -1,7 +1,6 @@
 package com.ss.editor.ui.component.creator.impl.material;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.material.Material;
 import com.ss.editor.FileExtensions;
@@ -13,15 +12,13 @@ import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,24 +32,25 @@ import java.nio.file.Path;
  */
 public class MaterialFileCreator extends GenericFileCreator {
 
-    public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
-
-    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
+    public static final FileCreatorDescriptor DESCRIPTOR = new FileCreatorDescriptor(
+            Messages.MATERIAL_FILE_CREATOR_FILE_DESCRIPTION,
+            MaterialFileCreator::new
+    );
 
     private static final String PBR_MAT_DEF = "Common/MatDefs/Light/PBRLighting.j3md";
     private static final String LIGHTING_MAT_DEF = "Common/MatDefs/Light/Lighting.j3md";
     private static final String PROP_MAT_DEF = "matDef";
 
-    static {
-        DESCRIPTION.setFileDescription(Messages.MATERIAL_FILE_CREATOR_FILE_DESCRIPTION);
-        DESCRIPTION.setConstructor(MaterialFileCreator::new);
-    }
-
     /**
      * The list of available definitions.
      */
-    @Nullable
-    private Array<String> definitions;
+    @NotNull
+    private final Array<String> definitions;
+
+    private MaterialFileCreator() {
+        this.definitions = ResourceManager.getInstance()
+                .getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION);
+    }
 
     @Override
     @FromAnyThread
@@ -70,8 +68,6 @@ public class MaterialFileCreator extends GenericFileCreator {
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        definitions = RESOURCE_MANAGER.getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION);
-
         String def;
 
         if (definitions.contains(PBR_MAT_DEF)) {
@@ -82,11 +78,10 @@ public class MaterialFileCreator extends GenericFileCreator {
             def = definitions.first();
         }
 
-        var result = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
-        result.add(new PropertyDefinition(EditablePropertyType.STRING_FROM_LIST,
-                Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL, PROP_MAT_DEF, def, definitions));
+        var type = new PropertyDefinition(EditablePropertyType.STRING_FROM_LIST,
+                Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL, PROP_MAT_DEF, def, definitions);
 
-        return result;
+        return Array.of(type);
     }
 
     /**
@@ -96,7 +91,7 @@ public class MaterialFileCreator extends GenericFileCreator {
      */
     @FromAnyThread
     private @NotNull Array<String> getDefinitions() {
-        return notNull(definitions);
+        return definitions;
     }
 
     @Override

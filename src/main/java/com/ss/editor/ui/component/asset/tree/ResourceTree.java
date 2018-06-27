@@ -393,8 +393,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param onLoadHandler the on load handler.
      */
     @FromAnyThread
-    public void setOnLoadHandler(@Nullable Consumer<Boolean> onLoadHandler) {
+    public @NotNull ResourceTree setOnLoadHandler(@Nullable Consumer<Boolean> onLoadHandler) {
         this.onLoadHandler = onLoadHandler;
+        return this;
     }
 
     /**
@@ -474,9 +475,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param rootFolder the root folder.
      */
     @FxThread
-    public void fill(@NotNull Path rootFolder) {
+    public @NotNull ResourceTree fill(@NotNull Path rootFolder) {
         prepareToFill();
         EXECUTOR_MANAGER.addBackgroundTask(() -> startBackgroundFill(rootFolder));
+        return this;
     }
 
     /**

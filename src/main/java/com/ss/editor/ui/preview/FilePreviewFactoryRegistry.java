@@ -47,8 +47,7 @@ public class FilePreviewFactoryRegistry {
 
         var result = Array.<FilePreview>ofType(FilePreview.class);
 
-        PREVIEW_FACTORIES.getExtensions()
-                .forEach(filePreviewFactory -> filePreviewFactory.createFilePreviews(result));
+        PREVIEW_FACTORIES.forEach(result, FilePreviewFactory::createFilePreviews);
 
         result.sort((first, second) ->
                 second.getOrder() - first.getOrder());

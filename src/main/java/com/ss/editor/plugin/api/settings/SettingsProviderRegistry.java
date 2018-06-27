@@ -3,8 +3,11 @@ package com.ss.editor.plugin.api.settings;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.DefaultSettingsProvider;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,6 +17,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SettingsProviderRegistry {
 
+    private static final Logger LOGGER = LoggerManager.getLogger(SettingsProviderRegistry.class);
+
+    /**
+     * @see SettingsProvider
+     */
+    public static final String EP_PROVIDERS = "SettingsProviderRegistry#providers";
+
+    private static final ExtensionPoint<SettingsProvider> PROVIDERS =
+            ExtensionPointManager.register(EP_PROVIDERS);
+
     private static final SettingsProviderRegistry INSTANCE = new SettingsProviderRegistry();
 
     @FromAnyThread
@@ -21,25 +34,9 @@ public class SettingsProviderRegistry {
         return INSTANCE;
     }
 
-    /**
-     * The list of settings providers.
-     */
-    @NotNull
-    private final Array<SettingsProvider> providers;
-
     private SettingsProviderRegistry() {
-        this.providers = ArrayFactory.newCopyOnModifyArray(SettingsProvider.class);
-        register(new DefaultSettingsProvider());
-    }
-
-    /**
-     * Register the new settings provider.
-     *
-     * @param settingsProvider the new settings provider.
-     */
-    @FromAnyThread
-    public void register(@NotNull SettingsProvider settingsProvider) {
-        providers.add(settingsProvider);
+        PROVIDERS.register(new DefaultSettingsProvider());
+        LOGGER.info("initialized.");
     }
 
     /**
@@ -52,8 +49,9 @@ public class SettingsProviderRegistry {
 
         var result = Array.<SettingsPropertyDefinition>ofType(SettingsPropertyDefinition.class);
 
-        providers.forEach(result, SettingsProvider::getDefinitions,
-                (definitions, container) -> container.addAll(definitions));
+        for (var settingsProvider : PROVIDERS.getExtensions()) {
+            result.addAll(settingsProvider.getDefinitions());
+        }
 
         return result;
     }
@@ -66,8 +64,8 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredRestart(@NotNull String propertyId) {
-        return providers.search(propertyId,
-                SettingsProvider::isRequiredRestart) != null;
+        return PROVIDERS.getExtensions().stream()
+                .anyMatch(settingsProvider -> settingsProvider.isRequiredRestart(propertyId));
     }
 
     /**
@@ -78,8 +76,8 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredUpdateClasspath(@NotNull String propertyId) {
-        return providers.search(propertyId,
-                SettingsProvider::isRequiredUpdateClasspath) != null;
+        return PROVIDERS.getExtensions().stream()
+                .anyMatch(settingsProvider -> settingsProvider.isRequiredUpdateClasspath(propertyId));
     }
 
     /**
@@ -90,7 +88,7 @@ public class SettingsProviderRegistry {
      */
     @FxThread
     public boolean isRequiredReshape3DView(@NotNull String propertyId) {
-        return providers.search(propertyId,
-                SettingsProvider::isRequiredReshape3DView) != null;
+        return PROVIDERS.getExtensions().stream()
+                .anyMatch(settingsProvider -> settingsProvider.isRequiredReshape3DView(propertyId));
     }
 }

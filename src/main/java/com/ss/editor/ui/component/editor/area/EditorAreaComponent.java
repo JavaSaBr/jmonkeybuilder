@@ -299,7 +299,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         var registry = FileCreatorRegistry.getInstance();
         var file = event.getFile();
-        var description = event.getDescription();
+        var description = event.getDescriptor();
         var fileCreator = registry.newCreator(description, file);
 
         if (fileCreator != null) {

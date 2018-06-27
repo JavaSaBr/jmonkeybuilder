@@ -7,7 +7,6 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.logging.Logger;
@@ -42,8 +41,6 @@ import java.time.LocalTime;
 public class EditorDialog {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
-
-    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
 
     /**
      * The default dialog size.

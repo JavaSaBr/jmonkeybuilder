@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * The implementation of the {@link AssetEditorDialog} to choose the {@link Path} from asset.
@@ -16,28 +15,26 @@ import java.util.function.Function;
  */
 public class FolderAssetEditorDialog extends AssetEditorDialog<Path> {
 
-    public FolderAssetEditorDialog(@NotNull final Consumer<Path> consumer) {
+    public FolderAssetEditorDialog(@NotNull Consumer<Path> consumer) {
         super(consumer);
         setOnlyFolders(true);
     }
 
-    public FolderAssetEditorDialog(@NotNull final Consumer<Path> consumer,
-                                   @Nullable final Function<Path, String> validator) {
+    public FolderAssetEditorDialog(@NotNull Consumer<Path> consumer, @Nullable Validator<Path> validator) {
         super(consumer, validator);
         setOnlyFolders(true);
     }
 
     @Override
     @FxThread
-    protected void processOpen(@NotNull final ResourceElement element) {
+    protected void processOpen(@NotNull ResourceElement element) {
         super.processOpen(element);
-        final Consumer<Path> consumer = getConsumer();
-        consumer.accept(element.getFile());
+        getConsumer().accept(element.getFile());
     }
 
     @Override
     @FxThread
-    protected @Nullable Path getObject(@NotNull final ResourceElement element) {
+    protected @Nullable Path getObject(@NotNull ResourceElement element) {
         return element.getFile();
     }
 }

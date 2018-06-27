@@ -1,7 +1,7 @@
 package com.ss.editor.ui.event.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -16,10 +16,6 @@ import java.nio.file.Path;
  */
 public class RequestedCreateFileEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
     static {
@@ -31,26 +27,28 @@ public class RequestedCreateFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String CREATOR = "creator";
 
-    public RequestedCreateFileEvent() {
+    public RequestedCreateFileEvent(@NotNull Path file, @NotNull FileCreatorDescriptor descriptor) {
         super(EVENT_TYPE);
+        setFile(file);
+        setDescriptor(descriptor);
     }
 
     /**
-     * Get the description.
+     * Get the descriptor.
      *
-     * @return the creator description.
+     * @return the creator's descriptor.
      */
-    public @NotNull FileCreatorDescription getDescription() {
+    public @NotNull FileCreatorDescriptor getDescriptor() {
         return notNull(get(CREATOR));
     }
 
     /**
-     * Set the description.
+     * Set the descriptor.
      *
-     * @param description the creator description.
+     * @param descriptor the creator's descriptor.
      */
-    public void setDescription(@NotNull final FileCreatorDescription description) {
-        set(CREATOR, description);
+    public void setDescriptor(@NotNull FileCreatorDescriptor descriptor) {
+        set(CREATOR, descriptor);
     }
 
     /**
@@ -67,7 +65,7 @@ public class RequestedCreateFileEvent extends SceneEvent {
      *
      * @param file the file.
      */
-    public void setFile(@NotNull final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 }

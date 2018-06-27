@@ -48,12 +48,15 @@ public class FxEventManager {
      * @param eventHandler the event handler.
      */
     @FxThread
-    public <T extends Event> void addEventHandler(
+    public <T extends Event> @NotNull FxEventManager addEventHandler(
             @NotNull EventType<T> eventType,
             @NotNull EventHandler<T> eventHandler
     ) {
+
         getEventHandlers().get(eventType, () -> newArray(EventHandler.class))
                 .add(eventHandler);
+
+        return this;
     }
 
     /**
@@ -63,12 +66,15 @@ public class FxEventManager {
      * @param eventHandler the event handler.
      */
     @FxThread
-    public void removeEventHandler(
+    public @NotNull FxEventManager removeEventHandler(
             @NotNull EventType<?> eventType,
             @NotNull EventHandler<?> eventHandler
     ) {
+
         getEventHandlers().getOptional(eventType)
                 .ifPresent(handlers -> handlers.slowRemove(eventHandler));
+
+        return this;
     }
 
     /**

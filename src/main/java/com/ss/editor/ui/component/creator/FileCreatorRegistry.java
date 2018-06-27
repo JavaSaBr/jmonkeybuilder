@@ -28,12 +28,12 @@ public class FileCreatorRegistry {
     private static final Logger LOGGER = LoggerManager.getLogger(FileCreatorRegistry.class);
 
     /**
-     * @see FileCreatorDescription
+     * @see FileCreatorDescriptor
      */
-    public static final String EP_DESCRIPTIONS = "FileCreatorRegistry#descriptions";
+    public static final String EP_DESCRIPTORS = "FileCreatorRegistry#descriptors";
 
-    private static final ExtensionPoint<FileCreatorDescription> DESCRIPTIONS =
-            ExtensionPointManager.register(EP_DESCRIPTIONS);
+    private static final ExtensionPoint<FileCreatorDescriptor> DESCRIPTORS =
+            ExtensionPointManager.register(EP_DESCRIPTORS);
 
     private static final FileCreatorRegistry INSTANCE = new FileCreatorRegistry();
 
@@ -44,38 +44,38 @@ public class FileCreatorRegistry {
 
     private FileCreatorRegistry() {
 
-        DESCRIPTIONS.register(MaterialFileCreator.DESCRIPTION)
-                .register(MaterialDefinitionFileCreator.DESCRIPTION)
-                .register(EmptyFileCreator.DESCRIPTION)
-                .register(FolderCreator.DESCRIPTION)
-                .register(EmptyModelCreator.DESCRIPTION)
-                .register(SingleColorTextureFileCreator.DESCRIPTION)
-                .register(EmptySceneCreator.DESCRIPTION);
+        DESCRIPTORS.register(MaterialFileCreator.DESCRIPTOR)
+                .register(MaterialDefinitionFileCreator.DESCRIPTOR)
+                .register(EmptyFileCreator.DESCRIPTOR)
+                .register(FolderCreator.DESCRIPTOR)
+                .register(EmptyModelCreator.DESCRIPTOR)
+                .register(SingleColorTextureFileCreator.DESCRIPTOR)
+                .register(EmptySceneCreator.DESCRIPTOR);
 
         LOGGER.info("initialized.");
     }
 
     /**
-     * Get the available descriptions.
+     * Get the available descriptors.
      *
-     * @return the available descriptions.
+     * @return the available descriptors.
      */
     @FromAnyThread
-    public @NotNull List<FileCreatorDescription> getDescriptions() {
-        return DESCRIPTIONS.getExtensions();
+    public @NotNull List<FileCreatorDescriptor> getDescriptors() {
+        return DESCRIPTORS.getExtensions();
     }
 
     /**
-     * Create a new creator by the description for the file.
+     * Create a new creator by the descriptor for the file.
      *
-     * @param description the file creator description.
+     * @param descriptor the file creator descriptor.
      * @param file        the file.
      * @return the file creator.
      */
     @FromAnyThread
-    public @Nullable FileCreator newCreator(@NotNull FileCreatorDescription description, @NotNull Path file) {
+    public @Nullable FileCreator newCreator(@NotNull FileCreatorDescriptor descriptor, @NotNull Path file) {
 
-        var constructor = description.getConstructor();
+        var constructor = descriptor.getConstructor();
         try {
             return constructor.call();
         } catch (Exception e) {

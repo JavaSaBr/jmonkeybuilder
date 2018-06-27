@@ -24,8 +24,9 @@ public class RequestSelectFileEvent extends SceneEvent {
 
     private static final String FILE = "file";
 
-    public RequestSelectFileEvent() {
+    public RequestSelectFileEvent(@NotNull Path file) {
         super(EVENT_TYPE);
+        setFile(file);
     }
 
     /**
