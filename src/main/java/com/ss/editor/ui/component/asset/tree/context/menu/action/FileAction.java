@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
+
 /**
  * The base implementation of a file action.
  *
@@ -63,6 +65,16 @@ public class FileAction extends MenuItem {
     @FxThread
     protected @NotNull ResourceElement getElement() {
         return notNull(element);
+    }
+
+    /**
+     * Get a file of the current resource element.
+     *
+     * @return the file of the current resource element.
+     */
+    @FxThread
+    protected @NotNull Path getFile() {
+        return getElement().getFile();
     }
 
     /**

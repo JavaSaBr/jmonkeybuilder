@@ -5,6 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.FileUtils;
@@ -16,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * The action to rename a file.
@@ -25,30 +25,30 @@ import java.nio.file.Path;
  */
 public class RenameFileAction extends FileAction {
 
-    public RenameFileAction(@NotNull final ResourceElement element) {
+    public RenameFileAction(@NotNull ResourceElement element) {
         super(element);
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected @Nullable Image getIcon() {
         return Icons.EDIT_16;
     }
 
-    @FxThread
     @Override
+    @FxThread
     protected @NotNull String getName() {
         return Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
     }
 
-    @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    @FxThread
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final Path file = getElement().getFile();
+        var file = getFile();
 
-        final RenameDialog renameDialog = new RenameDialog();
+        var renameDialog = new RenameDialog();
         renameDialog.setValidator(this::checkName);
         renameDialog.setHandler(this::processRename);
         renameDialog.setInitName(FileUtils.getNameWithoutExtension(file));
@@ -58,14 +58,17 @@ public class RenameFileAction extends FileAction {
     /**
      * The checking of the new file name.
      */
-    private Boolean checkName(@NotNull final String newFileName) {
-        if (!FileUtils.isValidName(newFileName)) return false;
+    private Boolean checkName(@NotNull String newFileName) {
 
-        final Path file = getElement().getFile();
-        final String extension = FileUtils.getExtension(file);
+        if (!FileUtils.isValidName(newFileName)) {
+            return false;
+        }
 
-        final Path parent = file.getParent();
-        final Path targetFile = parent.resolve(StringUtils.isEmpty(extension) ? newFileName : newFileName + "." + extension);
+        var file = getElement().getFile();
+        var extension = FileUtils.getExtension(file);
+
+        var parent = file.getParent();
+        var targetFile = parent.resolve(StringUtils.isEmpty(extension) ? newFileName : newFileName + "." + extension);
 
         return !Files.exists(targetFile);
     }
@@ -73,26 +76,23 @@ public class RenameFileAction extends FileAction {
     /**
      * The process of renaming.
      */
-    private void processRename(@NotNull final String newFileName) {
+    private void processRename(@NotNull String newFileName) {
 
-        final Path file = getElement().getFile();
+        var file = getFile();
 
-        final String extension = FileUtils.getExtension(file);
-        final String resultName = StringUtils.isEmpty(extension) ? newFileName : newFileName + "." + extension;
+        var extension = FileUtils.getExtension(file);
+        var resultName = StringUtils.isEmpty(extension) ? newFileName : newFileName + "." + extension;
 
-        final Path newFile = file.resolveSibling(resultName);
+        var newFile = file.resolveSibling(resultName);
 
         try {
             Files.move(file, newFile);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(null, this, e);
             return;
         }
 
-        final RenamedFileEvent event = new RenamedFileEvent();
-        event.setNewFile(newFile);
-        event.setPrevFile(file);
-
-        FX_EVENT_MANAGER.notify(event);
+        FxEventManager.getInstance()
+                .notify(new RenamedFileEvent(file, newFile));
     }
 }

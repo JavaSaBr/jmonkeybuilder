@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import javafx.event.ActionEvent;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,8 @@ public class OpenFileAction extends FileAction {
     @FxThread
     protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
-        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(getElement().getFile()));
+
+        FxEventManager.getInstance()
+                .notify(new RequestedOpenFileEvent(getFile()));
     }
 }

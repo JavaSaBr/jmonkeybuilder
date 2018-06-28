@@ -1,12 +1,12 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.scene.control.Button;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -25,8 +25,13 @@ import java.util.function.Function;
  */
 public class RenameDialog extends AbstractSimpleEditorDialog {
 
-    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 0);
+
+    /**
+     * The text field.
+     */
+    @NotNull
+    private final TextField nameField;
 
     /**
      * The function for validation name.
@@ -40,29 +45,29 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private Consumer<String> handler;
 
-    /**
-     * The text field.
-     */
-    @Nullable
-    private TextField nameField;
+    public RenameDialog() {
+        nameField = new TextField();
+    }
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final GridPane root) {
+    protected void createContent(@NotNull GridPane root) {
         super.createContent(root);
 
-        final Label nameLabel = new Label(Messages.RENAME_DIALOG_NEW_NAME_LABEL + ":");
-        nameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        var nameLabel = new Label(Messages.RENAME_DIALOG_NEW_NAME_LABEL + ":");
+        nameLabel.prefWidthProperty()
+                .bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
-        nameField = new TextField();
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> validateName(newValue));
-        nameField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+       nameField.prefWidthProperty()
+               .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+
+        FxControlUtils.onTextChange(nameField, this::validateName);
 
         root.add(nameLabel, 0, 0);
         root.add(nameField, 1, 0);
 
-        FXUtils.addClassTo(nameLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(nameField, CssClasses.DIALOG_FIELD);
+        FxUtils.addClass(nameLabel, CssClasses.DIALOG_DYNAMIC_LABEL)
+                .addClass(nameField, CssClasses.DIALOG_FIELD);
     }
 
     @Override
@@ -73,9 +78,11 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    public void show(@NotNull final Window owner) {
+    public void show(@NotNull Window owner) {
         super.show(owner);
-        EXECUTOR_MANAGER.addFxTask(() -> getNameField().requestFocus());
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> getNameField().requestFocus());
     }
 
     @Override
@@ -85,25 +92,28 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets init name.
+     * Set the initial name.
      *
      * @param initName the initial name.
      */
     @FxThread
-    public void setInitName(@NotNull final String initName) {
-        final TextField nameField = getNameField();
-        nameField.setText(initName);
+    public void setInitName(@NotNull String initName) {
+        getNameField().setText(initName);
     }
 
     /**
+     * Get the text field.
+     *
      * @return the text field.
      */
     @FxThread
     private @NotNull TextField getNameField() {
-        return notNull(nameField);
+        return nameField;
     }
 
     /**
+     * Get the function for validation name.
+     *
      * @return the function for validation name.
      */
     @FxThread
@@ -112,16 +122,18 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets validator.
+     * Set the function for validation name.
      *
      * @param validator the function for validation name.
      */
     @FxThread
-    public void setValidator(@Nullable final Function<String, Boolean> validator) {
+    public void setValidator(@Nullable Function<String, Boolean> validator) {
         this.validator = validator;
     }
 
     /**
+     * Get the function for handling a new name.
+     *
      * @return the function for handling a new name.
      */
     @FxThread
@@ -130,12 +142,12 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets handler.
+     * Set the function for handling a new name.
      *
      * @param handler the function for handling a new name.
      */
     @FxThread
-    public void setHandler(@Nullable final Consumer<String> handler) {
+    public void setHandler(@Nullable Consumer<String> handler) {
         this.handler = handler;
     }
 
@@ -143,10 +155,9 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      * Validate a new name.
      */
     @FxThread
-    private void validateName(@NotNull final String name) {
-        final Function<String, Boolean> validator = getValidator();
-        final Button okButton = getOkButton();
-        okButton.setDisable(!(validator == null || validator.apply(name)));
+    private void validateName(@NotNull String name) {
+        var validator = getValidator();
+        getOkButton().setDisable(!(validator == null || validator.apply(name)));
     }
 
     @Override
@@ -161,19 +172,18 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
         return Messages.RENAME_DIALOG_BUTTON_OK;
     }
 
-    /**
-     * Finish this dialog.
-     */
     @Override
     @FxThread
     protected void processOk() {
         super.processOk();
 
-        final Consumer<String> handler = getHandler();
-        if (handler == null) return;
+        var handler = getHandler();
 
-        final TextField nameField = getNameField();
-        handler.accept(nameField.getText());
+        if (handler == null) {
+            return;
+        }
+
+        handler.accept(getNameField().getText());
     }
 
     @Override

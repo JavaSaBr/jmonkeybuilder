@@ -30,8 +30,10 @@ public class MovedFileEvent extends SceneEvent {
     private static final String PREV_FILE = "prev_file";
     private static final String NEW_FILE = "new_file";
 
-    public MovedFileEvent() {
+    public MovedFileEvent(@NotNull Path prevFile, @NotNull Path newFile) {
         super(EVENT_TYPE);
+        setPrevFile(prevFile);
+        setNewFile(newFile);
     }
 
     /**

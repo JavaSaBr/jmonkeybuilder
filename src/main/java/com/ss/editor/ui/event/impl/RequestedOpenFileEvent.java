@@ -38,6 +38,13 @@ public class RequestedOpenFileEvent extends SceneEvent {
         setFile(file);
     }
 
+    public RequestedOpenFileEvent(@NotNull Path file, @NotNull EditorDescription description) {
+        super(EVENT_TYPE);
+        setNeedShow(true);
+        setFile(file);
+        setDescription(description);
+    }
+
     /**
      * Get the description.
      *

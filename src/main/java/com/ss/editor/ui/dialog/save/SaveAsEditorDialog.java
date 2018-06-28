@@ -9,6 +9,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CssClasses;
@@ -22,12 +23,12 @@ import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -69,7 +70,19 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * The function for handling the choose.
      */
     @NotNull
-    protected final Consumer<@NotNull Path> consumer;
+    protected final Consumer<Path> consumer;
+
+    /**
+     * The tree with all resources.
+     */
+    @NotNull
+    private ResourceTree resourceTree;
+
+    /**
+     * The filename field.
+     */
+    @NotNull
+    private TextField fileNameField;
 
     /**
      * The file extension.
@@ -77,21 +90,11 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private String extension;
 
-    /**
-     * The tree with all resources.
-     */
-    @Nullable
-    private ResourceTree resourceTree;
-
-    /**
-     * The filename field.
-     */
-    @Nullable
-    private TextField fileNameField;
-
-    public SaveAsEditorDialog(@NotNull final Consumer<@NotNull Path> consumer) {
-        this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
+    public SaveAsEditorDialog(@NotNull Consumer<Path> consumer) {
+        this.waitedFilesToSelect = Array.ofType(Path.class);
         this.consumer = consumer;
+        this.resourceTree = new ResourceTree(null, true);
+        this.fileNameField = new TextField();
     }
 
     /**
@@ -110,7 +113,7 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * @param extension the target file extension.
      */
     @FxThread
-    public void setExtension(@NotNull final String extension) {
+    public void setExtension(@NotNull String extension) {
         this.extension = extension;
         getResourceTree().setExtensionFilter(ArrayFactory.asArray(extension));
     }
@@ -131,37 +134,39 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * @param actionTester the action tester.
      */
     @FxThread
-    public void setActionTester(@NotNull final Predicate<@NotNull Class<?>> actionTester) {
+    public void setActionTester(@NotNull Predicate<Class<?>> actionTester) {
         getResourceTree().setActionTester(actionTester);
     }
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
         super.createContent(root);
 
-        final HBox container = new HBox();
-        container.prefWidthProperty().bind(widthProperty());
+        var container = new HBox();
+        container.prefWidthProperty()
+                .bind(widthProperty());
 
-        final GridPane settingsContainer = new GridPane();
-        settingsContainer.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
-        settingsContainer.prefHeightProperty().bind(container.heightProperty());
+        var settingsContainer = new GridPane();
+        settingsContainer.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.5));
 
-        resourceTree = new ResourceTree(null, true);
-        resourceTree.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
+        settingsContainer.prefHeightProperty()
+                .bind(container.heightProperty());
 
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelection(newValue));
+        resourceTree.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.5));
+
+        FxControlUtils.onSelectedItemChange(resourceTree, this::processSelection);
 
         createSettings(settingsContainer);
 
-        FXUtils.addToPane(resourceTree, container);
-        FXUtils.addToPane(settingsContainer, container);
-        FXUtils.addToPane(container, root);
+        FxUtils.addClass(root, CssClasses.SAVE_AS_DIALOG)
+                .addClass(container, CssClasses.DEF_HBOX)
+                .addClass(settingsContainer, CssClasses.DEF_GRID_PANE);
 
-        FXUtils.addClassTo(root, CssClasses.SAVE_AS_DIALOG);
-        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(settingsContainer, CssClasses.DEF_GRID_PANE);
+        FxUtils.addChild(container, resourceTree, settingsContainer)
+                .addChild(root, container);
     }
 
     /**
@@ -170,21 +175,25 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * @param root the root
      */
     @FxThread
-    protected void createSettings(@NotNull final GridPane root) {
+    protected void createSettings(@NotNull GridPane root) {
 
-        final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
-        fileNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        var fileNameLabel = new Label(getFileNameLabelText() + ":");
+        fileNameLabel.prefWidthProperty()
+                .bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
-        fileNameField = new TextField();
-        fileNameField.prefWidthProperty().bind(root.widthProperty());
-        fileNameField.textProperty().addListener((observable, oldValue, newValue) -> validateFileName());
-        fileNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        fileNameField.prefWidthProperty()
+                .bind(root.widthProperty());
+
+        fileNameField.prefWidthProperty()
+                .bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+
+        FxControlUtils.onTextChange(fileNameField, this::validateFileName);
 
         root.add(fileNameLabel, 0, 0);
         root.add(fileNameField, 1, 0);
 
-        FXUtils.addClassTo(fileNameLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(fileNameField, CssClasses.DIALOG_FIELD);
+        FxUtils.addClass(fileNameLabel, CssClasses.DIALOG_DYNAMIC_LABEL)
+                .addClass(fileNameField, CssClasses.DIALOG_FIELD);
     }
 
     /**
@@ -193,17 +202,15 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
      * @param newValue the new selected item.
      */
     @FxThread
-    protected void processSelection(@Nullable final TreeItem<ResourceElement> newValue) {
+    protected void processSelection(@Nullable TreeItem<ResourceElement> newValue) {
 
         if (newValue != null) {
 
-            final TextField fileNameField = getFileNameField();
-
-            final ResourceElement value = newValue.getValue();
-            final Path file = value.getFile();
+            var file = newValue.getValue()
+                    .getFile();
 
             if (!Files.isDirectory(file)) {
-                fileNameField.setText(FileUtils.getNameWithoutExtension(file));
+                getFileNameField().setText(FileUtils.getNameWithoutExtension(file));
             }
         }
 
@@ -216,10 +223,12 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     @FxThread
     protected void validateFileName() {
 
-        final Button okButton = getOkButton();
-        if (okButton == null) return;
+        var okButton = getOkButton();
+        if (okButton == null) {
+            return;
+        }
 
-        final Path fileToCreate = getFileToSave();
+        var fileToCreate = getFileToSave();
 
         if (fileToCreate == null) {
             okButton.setDisable(true);
@@ -230,41 +239,46 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Gets file to create.
+     * Get the file to create.
      *
      * @return the file to creating.
      */
     @FromAnyThread
     protected @Nullable Path getFileToSave() {
 
-        final TextField fileNameField = getFileNameField();
-        final String filename = fileNameField.getText();
-        if (StringUtils.isEmpty(filename)) return null;
+        var filename = getFileNameField().getText();
+        var selectedFile = getSelectedFile();
 
-        final String fileExtension = getExtension();
+        if (StringUtils.isEmpty(filename) || selectedFile == null) {
+            return null;
+        }
 
-        final Path selectedFile = getSelectedFile();
-        if (selectedFile == null) return null;
-
-        final Path directory = Files.isDirectory(selectedFile) ? selectedFile : selectedFile.getParent();
+        var fileExtension = getExtension();
+        var directory = Files.isDirectory(selectedFile) ?
+                selectedFile : selectedFile.getParent();
 
         return StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) :
                 directory.resolve(filename + "." + fileExtension);
     }
 
     /**
+     * Get the selected file in the resources tree.
+     *
      * @return the selected file in the resources tree.
      */
     @FromAnyThread
     private @Nullable Path getSelectedFile() {
 
-        final ResourceTree resourceTree = getResourceTree();
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
-        if (selectedItem == null) return null;
+        var selectedItem = getResourceTree()
+                .getSelectionModel()
+                .getSelectedItem();
 
-        final ResourceElement element = selectedItem.getValue();
-        return element.getFile();
+        if (selectedItem == null) {
+            return null;
+        }
+
+        return selectedItem.getValue()
+                .getFile();
     }
 
     /**
@@ -279,47 +293,55 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    public void show(@NotNull final Window owner) {
+    public void show(@NotNull Window owner) {
         super.show(owner);
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = notNull(editorConfig.getCurrentAsset());
+        var currentAsset = EditorConfig.getInstance()
+                .requiredCurrentAsset();
 
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.setOnLoadHandler(finished -> expand(currentAsset, resourceTree, finished));
-        resourceTree.fill(currentAsset);
+        getResourceTree()
+                .setOnLoadHandler(finished -> expand(currentAsset, finished))
+                .fill(currentAsset);
 
-        FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
-        FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
-        FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
+        FxEventManager.getInstance()
+                .addEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler)
+                .addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle)
+                .addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
 
         validateFileName();
 
-        EXECUTOR_MANAGER.addFxTask(getFileNameField()::requestFocus);
+        ExecutorManager.getInstance()
+                .addFxTask(getFileNameField()::requestFocus);
     }
 
     @FxThread
-    private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
-                        @NotNull final Boolean finished) {
-        if (finished) resourceTree.expandTo(file, true);
+    private void expand(@NotNull Path file, @NotNull Boolean finished) {
+        if (finished) {
+            getResourceTree().expandTo(file, true);
+        }
     }
 
     /**
      * Handle creating file event.
      */
     @FxThread
-    private void processEvent(@NotNull final CreatedFileEvent event) {
+    private void processEvent(@NotNull CreatedFileEvent event) {
 
-        final Path file = event.getFile();
+        var file = event.getFile();
 
-        final Array<Path> waitedFilesToSelect = getWaitedFilesToSelect();
-        final boolean waitedSelect = waitedFilesToSelect.contains(file);
+        var waitedFilesToSelect = getWaitedFilesToSelect();
+        var waitedSelect = waitedFilesToSelect.contains(file);
 
-        final ResourceTree resourceTree = getResourceTree();
+        var resourceTree = getResourceTree();
         resourceTree.notifyCreated(file);
 
-        if (waitedSelect) waitedFilesToSelect.fastRemove(file);
-        if (waitedSelect || event.isNeedSelect()) resourceTree.expandTo(file, true);
+        if (waitedSelect) {
+            waitedFilesToSelect.fastRemove(file);
+        }
+
+        if (waitedSelect || event.isNeedSelect()) {
+            resourceTree.expandTo(file, true);
+        }
     }
 
     /**
@@ -365,14 +387,17 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     @Override
     @FxThread
     public void hide() {
-        FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
-        FX_EVENT_MANAGER.removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
-        FX_EVENT_MANAGER.removeEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
+
+        FxEventManager.getInstance()
+                .removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler)
+                .removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle)
+                .removeEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
+
         super.hide();
     }
 
     /**
-     * Gets consumer.
+     * Get the function for handling the choose.
      *
      * @return the function for handling the choose.
      */
@@ -382,6 +407,8 @@ public class SaveAsEditorDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Get the tree with all resources.
+     *
      * @return the tree with all resources.
      */
     @FxThread

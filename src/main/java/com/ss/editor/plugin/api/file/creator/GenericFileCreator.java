@@ -86,8 +86,8 @@ public class GenericFileCreator extends AbstractFileCreator {
     protected void validateFileName() {
         super.validateFileName();
 
-        var settingsContainer = getSettingsContainer();
-        settingsContainer.getChildren().stream()
+        getSettingsContainer().getChildren()
+                .stream()
                 .filter(PropertyEditorControl.class::isInstance)
                 .map(PropertyEditorControl.class::cast)
                 .forEach(PropertyEditorControl::checkDependency);

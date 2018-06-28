@@ -1,16 +1,16 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
@@ -62,7 +62,7 @@ public class PasteFileAction extends FileAction {
             return;
         }
 
-        List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
+        var files = ClassUtils.<List<File>>unsafeCast(clipboard.getContent(DataFormat.FILES));
         if (files == null || files.isEmpty()) {
             return;
         }
@@ -104,16 +104,13 @@ public class PasteFileAction extends FileAction {
 
         try {
             Files.move(file, newFile);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        var event = new MovedFileEvent();
-        event.setPrevFile(file);
-        event.setNewFile(newFile);
-
-        FX_EVENT_MANAGER.notify(event);
+        FxEventManager.getInstance()
+                .notify(new MovedFileEvent(file, newFile));
     }
 
     /**
@@ -121,8 +118,8 @@ public class PasteFileAction extends FileAction {
      */
     private void processCopy(@NotNull Path targetFolder, @NotNull Path file) {
 
-        Array<Path> toCopy = ArrayFactory.newArray(Path.class);
-        Array<Path> copied = ArrayFactory.newArray(Path.class);
+        var toCopy = Array.<Path>ofType(Path.class);
+        var copied = Array.<Path>ofType(Path.class);
 
         if (Files.isDirectory(file)) {
             toCopy.addAll(FileUtils.getFiles(file, true));
@@ -135,14 +132,13 @@ public class PasteFileAction extends FileAction {
 
         try {
             processCopy(file, toCopy, copied, newFile);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
+            return;
         }
 
-        var event = new RequestSelectFileEvent();
-        event.setFile(newFile);
-
-        FX_EVENT_MANAGER.notify(event);
+        FxEventManager.getInstance()
+                .notify(new RequestSelectFileEvent(newFile));
     }
 
     /**
@@ -165,7 +161,7 @@ public class PasteFileAction extends FileAction {
 
             try {
                 Files.copy(path, targetFile);
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 

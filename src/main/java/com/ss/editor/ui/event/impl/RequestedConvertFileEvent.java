@@ -16,10 +16,6 @@ import java.nio.file.Path;
  */
 public class RequestedConvertFileEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
     static {
@@ -31,8 +27,10 @@ public class RequestedConvertFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String CONVERTER = "converter";
 
-    public RequestedConvertFileEvent() {
+    public RequestedConvertFileEvent(@NotNull FileConverterDescription description, @NotNull Path file) {
         super(EVENT_TYPE);
+        setDescription(description);
+        setFile(file);
     }
 
     /**
@@ -49,7 +47,7 @@ public class RequestedConvertFileEvent extends SceneEvent {
      *
      * @param description the converter description.
      */
-    public void setDescription(@NotNull final FileConverterDescription description) {
+    public void setDescription(@NotNull FileConverterDescription description) {
         set(CONVERTER, description);
     }
 
@@ -67,7 +65,7 @@ public class RequestedConvertFileEvent extends SceneEvent {
      *
      * @param file the file to convert.
      */
-    public void setFile(@NotNull final Path file) {
+    public void setFile(@NotNull Path file) {
         set(FILE, file);
     }
 }

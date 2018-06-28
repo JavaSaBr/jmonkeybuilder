@@ -4,6 +4,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-class ConvertFileByConverterAction extends FileAction {
+public class ConvertFileByConverterAction extends FileAction {
 
     /**
      * The transformer description.
@@ -23,8 +24,10 @@ class ConvertFileByConverterAction extends FileAction {
     @NotNull
     private final FileConverterDescription description;
 
-    public ConvertFileByConverterAction(@NotNull final ResourceElement element,
-                                        @NotNull final FileConverterDescription description) {
+    public ConvertFileByConverterAction(
+            @NotNull ResourceElement element,
+            @NotNull FileConverterDescription description
+    ) {
         super(element);
         this.description = description;
         setText(description.getDescription());
@@ -38,14 +41,10 @@ class ConvertFileByConverterAction extends FileAction {
 
     @FxThread
     @Override
-    protected void execute(@Nullable final ActionEvent event) {
+    protected void execute(@Nullable ActionEvent event) {
         super.execute(event);
 
-        final ResourceElement element = getElement();
-        final RequestedConvertFileEvent newEvent = new RequestedConvertFileEvent();
-        newEvent.setFile(element.getFile());
-        newEvent.setDescription(description);
-
-        FX_EVENT_MANAGER.notify(newEvent);
+        FxEventManager.getInstance()
+                .notify(new RequestedConvertFileEvent(description, getFile()));
     }
 }
