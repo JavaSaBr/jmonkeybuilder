@@ -97,12 +97,16 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
         var container = new HBox();
 
         var firstPart = buildFirstPart(container);
-        firstPart.prefHeightProperty().bind(root.heightProperty());
-        firstPart.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        firstPart.prefHeightProperty()
+                .bind(root.heightProperty());
+        firstPart.prefWidthProperty()
+                .bind(root.widthProperty().multiply(0.5));
 
         var secondPart = buildSecondPart(container);
-        secondPart.prefHeightProperty().bind(root.heightProperty());
-        secondPart.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        secondPart.prefHeightProperty()
+                .bind(root.heightProperty());
+        secondPart.prefWidthProperty()
+                .bind(root.widthProperty().multiply(0.5));
 
         FxUtils.addClass(container, CssClasses.DEF_HBOX)
                 .addClass(root, CssClasses.ASSET_EDITOR_DIALOG);
@@ -203,9 +207,10 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
 
         var previews = getPreviews();
 
-        var preview = previews.search(file, FilePreview::isSupport);
-        previews.forEach(preview, (filePreview, toCheck) -> filePreview != toCheck,
-                (filePreview, tooCheck) -> filePreview.hide());
+        var preview = previews.findAny(file, FilePreview::isSupport);
+        previews.forEach(preview,
+                (filePreview, toCheck) -> filePreview != toCheck,
+                (filePreview, toCheck) -> filePreview.hide());
 
         if (preview == null) {
             return;
@@ -229,9 +234,10 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
             return;
         }
 
-        var preview = previews.search(assetPath, FilePreview::isSupport);
-        previews.forEach(preview, (filePreview, toCheck) -> filePreview != toCheck,
-                (filePreview, tooCheck) -> filePreview.hide());
+        var preview = previews.findAny(assetPath, FilePreview::isSupport);
+        previews.forEach(preview,
+                (filePreview, toCheck) -> filePreview != toCheck,
+                (filePreview, toCheck) -> filePreview.hide());
 
         if (preview == null) {
             return;

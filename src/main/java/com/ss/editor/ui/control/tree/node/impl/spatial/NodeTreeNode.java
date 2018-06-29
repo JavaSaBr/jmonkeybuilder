@@ -9,7 +9,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -35,6 +34,8 @@ import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
@@ -53,7 +54,7 @@ import java.util.Optional;
 /**
  * The implementation of the {@link SpatialTreeNode} for representing the {@link Node} in the editor.
  *
- * @param <T> the type of Node
+ * @param <T> the node's type.
  * @author JavaSaBr
  */
 public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
@@ -72,33 +73,21 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         boolean isExist(@NotNull Node node);
     }
 
-    private static final Array<ParticleEmitterFinder> PARTICLE_EMITTER_FINDERS =
-            ArrayFactory.newCopyOnModifyArray(ParticleEmitterFinder.class);
-
-    private static final Array<ChildrenFilter> NODE_CHILDREN_FILTERS =
-            ArrayFactory.newCopyOnModifyArray(ChildrenFilter.class);
+    /**
+     * @see ParticleEmitterFinder
+     */
+    public static final String EP_PARTICLE_EMITTER_FILTERS = "NodeTreeNode#particleEmitterFinders";
 
     /**
-     * Register the additional particle emitter finder.
-     * The finder should return true when a node contains some particle emitter.
-     *
-     * @param finder the additional particle emitter finder.
+     * @see ChildrenFilter
      */
-    @FromAnyThread
-    public static void registerParticleEmitterFinder(@NotNull ParticleEmitterFinder finder) {
-        PARTICLE_EMITTER_FINDERS.add(finder);
-    }
+    public static final String EP_CHILDREN_FILTERS = "NodeTreeNode#childrenFilters";
 
-    /**
-     * Register the additional node children filter.
-     * The filter should return true when a child should be excluded.
-     *
-     * @param filter the additional children filter.
-     */
-    @FromAnyThread
-    public static void registerNodeChildrenFilter(@NotNull ChildrenFilter filter) {
-        NODE_CHILDREN_FILTERS.add(filter);
-    }
+    private static final ExtensionPoint<ParticleEmitterFinder> PARTICLE_EMITTER_FINDERS =
+            ExtensionPointManager.register(EP_PARTICLE_EMITTER_FILTERS);
+
+    private static final ExtensionPoint<ChildrenFilter> CHILDREN_FILTERS =
+            ExtensionPointManager.register(EP_CHILDREN_FILTERS);
 
     public NodeTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
@@ -118,7 +107,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         var menuOptional = super.createCreationMenu(nodeTree);
 
         if (!menuOptional.isPresent()) {
-            return Optional.empty();
+            return menuOptional;
         }
 
         var createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE,
@@ -165,7 +154,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         var element = getElement();
         var emitter = NodeUtils.findSpatial(element, ParticleEmitter.class::isInstance);
 
-        if (emitter != null || PARTICLE_EMITTER_FINDERS.search(element, ParticleEmitterFinder::isExist) != null) {
+        if (emitter != null || PARTICLE_EMITTER_FINDERS.anyMatch(element, ParticleEmitterFinder::isExist)) {
             items.add(new ResetParticleEmittersAction(nodeTree, this));
         }
 
@@ -187,7 +176,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         var children = getSpatialChildren();
 
         for (var child : children) {
-            if (NODE_CHILDREN_FILTERS.search(element, child, ChildrenFilter::isNeedExclude) == null) {
+            if (!CHILDREN_FILTERS.anyMatch(element, child, ChildrenFilter::isNeedExclude)) {
                 result.add(FACTORY_REGISTRY.createFor(child));
             }
         }

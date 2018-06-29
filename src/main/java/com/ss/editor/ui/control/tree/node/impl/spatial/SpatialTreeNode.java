@@ -39,6 +39,8 @@ import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.light.LightTreeNode;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -64,38 +66,23 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
 
         @FxThread
         @Nullable MenuItem create(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree);
-
-        @FxThread
-        default @NotNull Optional<MenuItem> createOpt(@NotNull SpatialTreeNode<?> treeNode, @NotNull NodeTree<?> tree) {
-            return Optional.ofNullable(create(treeNode, tree));
-        }
-    }
-
-    private static final Array<ActionFactory> CREATION_ACTION_FACTORIES =
-            ArrayFactory.newCopyOnModifyArray(ActionFactory.class);
-
-    private static final Array<ActionFactory> CREATION_CONTROL_ACTION_FACTORIES =
-            ArrayFactory.newCopyOnModifyArray(ActionFactory.class);
-
-    /**
-     * Register the additional creation action factory.
-     *
-     * @param actionFactory the additional creation action factory.
-     */
-    @FromAnyThread
-    public static void registerCreationAction(@NotNull ActionFactory actionFactory) {
-        CREATION_ACTION_FACTORIES.add(actionFactory);
     }
 
     /**
-     * Register the additional creation control action factory.
-     *
-     * @param actionFactory the additional creation control action factory.
+     * @see ActionFactory
      */
-    @FromAnyThread
-    public static void registerCreationControlAction(@NotNull ActionFactory actionFactory) {
-        CREATION_CONTROL_ACTION_FACTORIES.add(actionFactory);
-    }
+    public static final String EP_CREATION_ACTION_FACTORIES = "SpatialTreeNode#creationActionFactories";
+
+    /**
+     * @see ActionFactory
+     */
+    public static final String EP_CREATION_CONTROL_ACTION_FACTORIES = "SpatialTreeNode#creationControlActionFactories";
+
+    private static final ExtensionPoint<ActionFactory> CREATION_ACTION_FACTORIES =
+            ExtensionPointManager.register(EP_CREATION_ACTION_FACTORIES);
+
+    private static final ExtensionPoint<ActionFactory> CREATION_CONTROL_ACTION_FACTORIES =
+            ExtensionPointManager.register(EP_CREATION_CONTROL_ACTION_FACTORIES);
 
     protected SpatialTreeNode(@NotNull T element, long objectId) {
         super(element, objectId);
@@ -243,8 +230,10 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         createControlItems.add(new CreateLightControlAction(nodeTree, this));
 
         for (var factory : CREATION_CONTROL_ACTION_FACTORIES) {
-            factory.createOpt(this, nodeTree)
-                    .ifPresent(createControlItems::add);
+            var menuItem = factory.create(this, nodeTree);
+            if (menuItem != null) {
+                createControlItems.add(menuItem);
+            }
         }
 
         createControlItems.sort(ACTION_COMPARATOR);
@@ -258,8 +247,10 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         resultItems.add(createControlMenu);
 
         for (var factory : CREATION_ACTION_FACTORIES) {
-            factory.createOpt(this, nodeTree)
-                    .ifPresent(resultItems::add);
+            var menuItem = factory.create(this, nodeTree);
+            if (menuItem != null) {
+                resultItems.add(menuItem);
+            }
         }
 
         return Optional.of(menu);

@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.tree.action.impl.control.physics;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ReactivatePhysicsControlAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public ReactivatePhysicsControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public ReactivatePhysicsControlAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -39,11 +40,13 @@ public class ReactivatePhysicsControlAction extends AbstractNodeAction<ModelChan
     @FxThread
     protected void process() {
 
-        final Object element = getNode().getElement();
+        var element = getNode()
+                .getElement();
 
         if (element instanceof RigidBodyControl) {
-            final RigidBodyControl control = (RigidBodyControl) element;
-            EXECUTOR_MANAGER.addJmeTask(control::activate);
+            var control = (RigidBodyControl) element;
+            ExecutorManager.getInstance()
+                    .addJmeTask(control::activate);
         }
     }
 }

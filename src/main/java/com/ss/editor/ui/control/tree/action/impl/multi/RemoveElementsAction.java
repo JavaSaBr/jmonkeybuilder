@@ -44,8 +44,8 @@ public class RemoveElementsAction extends AbstractNodeAction<ModelChangeConsumer
 
     public static final NodeTree.MultiItemActionFiller ACTION_FILLER = (nodeTree, menuItems, treeNodes) -> {
 
-        var unexpectedItem = treeNodes.search(treeNode ->
-                AVAILABLE_TYPES.search(treeNode, Class::isInstance) == null || !treeNode.canRemove());
+        var unexpectedItem = treeNodes.findAny(treeNode ->
+                AVAILABLE_TYPES.findAny(treeNode, Class::isInstance) == null || !treeNode.canRemove());
 
         if (unexpectedItem == null) {
             menuItems.add(new RemoveElementsAction(nodeTree, treeNodes));

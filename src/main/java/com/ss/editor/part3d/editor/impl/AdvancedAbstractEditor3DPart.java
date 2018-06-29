@@ -17,7 +17,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.plugin.api.RenderFilterExtension;
+import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.part3d.editor.Editor3DPart;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.EditorUtil;
@@ -874,7 +874,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
         final Node rootNode = EditorUtil.getGlobalRootNode();
         rootNode.attachChild(getStateNode());
 
-        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
         filterExtension.enableFilters();
 
         final EditorCamera editorCamera = getEditorCamera();
@@ -943,7 +943,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
     public void cleanup() {
         super.cleanup();
 
-        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
         filterExtension.disableFilters();
 
         final Node rootNode = EditorUtil.getGlobalRootNode();

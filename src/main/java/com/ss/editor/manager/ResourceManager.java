@@ -403,7 +403,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             var classLoaders = getClassLoaders();
             classLoaders.runInWriteLock(urlClassLoaders -> {
 
-                var oldLoader = urlClassLoaders.search(url,
+                var oldLoader = urlClassLoaders.findAny(url,
                         (loader, toCheck) -> contains(loader.getURLs(), toCheck));
 
                 if (oldLoader != null) {
@@ -602,7 +602,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             long stamp = classLoaders.writeLock();
             try {
 
-                var oldLoader = classLoaders.search(url,
+                var oldLoader = classLoaders.findAny(url,
                         (loader, toCheck) -> contains(loader.getURLs(), toCheck));
 
                 if (oldLoader != null) {
@@ -712,7 +712,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         var stamp = watchKeys.readLock();
         try {
 
-            return watchKeys.search(path,
+            return watchKeys.findAny(path,
                     (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
 
         } finally {

@@ -154,7 +154,7 @@ public class EditorFxScene extends Scene {
     @FxThread
     public <T extends ScreenComponent> @Nullable T findComponent(@NotNull String id) {
         var components = getComponents();
-        return unsafeCast(components.search(id, (component, toCheck) ->
+        return unsafeCast(components.findAny(id, (component, toCheck) ->
                 StringUtils.equals(toCheck, component.getComponentId())));
     }
 

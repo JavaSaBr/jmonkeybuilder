@@ -187,7 +187,7 @@ public class SettingsDialog extends EditorDialog {
             controls.forEach(PropertyEditorControl::checkDependency);
         }
 
-        var requiredRestart = controls == null ? null : controls.search(control -> {
+        var requiredRestart = controls == null ? null : controls.findAny(control -> {
             var propertyId = control.getPropertyId();
             var registry = SettingsProviderRegistry.getInstance();
             return registry.isRequiredRestart(propertyId) && control.isNotDefault();
@@ -240,19 +240,19 @@ public class SettingsDialog extends EditorDialog {
 
         editorConfig.save();
 
-        var requiredRestart = controls.search(control -> {
+        var requiredRestart = controls.findAny(control -> {
             var propertyId = control.getPropertyId();
             var registry = SettingsProviderRegistry.getInstance();
             return registry.isRequiredRestart(propertyId) && control.isNotDefault();
         });
 
-        var requiredUpdateClasspath = controls.search(control -> {
+        var requiredUpdateClasspath = controls.findAny(control -> {
             var propertyId = control.getPropertyId();
             var registry = SettingsProviderRegistry.getInstance();
             return registry.isRequiredUpdateClasspath(propertyId) && control.isNotDefault();
         });
 
-        var reshape3DView = controls.search(control -> {
+        var reshape3DView = controls.findAny(control -> {
             var propertyId = control.getPropertyId();
             var registry = SettingsProviderRegistry.getInstance();
             return registry.isRequiredReshape3DView(propertyId) && control.isNotDefault();

@@ -51,7 +51,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.part3d.editor.impl.Stats3DPart;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
-import com.ss.editor.plugin.api.RenderFilterExtension;
+import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
@@ -365,7 +365,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
 
-        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
         filterExtension.refreshFilters();
     }
 
@@ -393,7 +393,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
         filterExtension.refreshFilters();
     }
 

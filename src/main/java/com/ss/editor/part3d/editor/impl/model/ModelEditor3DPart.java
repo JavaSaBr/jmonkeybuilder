@@ -10,7 +10,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
-import com.ss.editor.plugin.api.RenderFilterExtension;
+import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.array.Array;
@@ -103,7 +103,7 @@ public class ModelEditor3DPart extends AbstractSceneEditor3DPart<ModelFileEditor
         final Node customSkyNode = getCustomSkyNode();
         customSkyNode.detachAllChildren();
 
-        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
         filterExtension.refreshFilters();
     }
 

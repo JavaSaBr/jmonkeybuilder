@@ -10,12 +10,11 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
 import com.ss.editor.ui.event.impl.ClasspathReloadedEvent;
 import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
 import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
+import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
 import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.classpath.ClassPathScanner;
 import com.ss.rlib.common.classpath.ClassPathScannerFactory;
 import com.ss.rlib.common.logging.Logger;
@@ -167,7 +166,7 @@ public class ClasspathManager {
 
             if (Files.isDirectory(Paths.get(path))) {
                 return true;
-            } else if (CORE_LIBRARIES_NAMES.search(path, (pattern, pth) -> pth.contains(pattern)) == null) {
+            } else if (!CORE_LIBRARIES_NAMES.anyMatch(path, (pattern, pth) -> pth.contains(pattern))) {
                 return false;
             } else if (path.contains("natives")) {
                 return false;

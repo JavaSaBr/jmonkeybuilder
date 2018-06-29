@@ -5,17 +5,14 @@ import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyEditor;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiPredicate;
 
 /**
  * The component to contains property controls in the editor.
@@ -27,52 +24,32 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
     @FunctionalInterface
     public interface IsNeedUpdateChecker {
 
+        @FxThread
         boolean isNeedUpdate(@Nullable Object currentObject, @Nullable Object changedObject);
     }
 
     @FunctionalInterface
     public interface CanEditChecker {
 
+        @FxThread
         boolean canEdit(@Nullable Object object, @Nullable Object parent);
-
-        default @NotNull CanEditChecker negate() {
-            return (object, parent) -> !canEdit(object, parent);
-        }
     }
 
     /**
-     * The list of additional 'isNeedUpdate' checkers.
+     * @see IsNeedUpdateChecker
      */
-    private static final Array<IsNeedUpdateChecker> IS_NEED_UPDATE_CHECKERS =
-            ArrayFactory.newCopyOnModifyArray(IsNeedUpdateChecker.class);
+    public static final String EP_NEED_UPDATE_CHECKERS = "ModelPropertyEditor#needUpdateCheckers";
 
     /**
-     * The list of additional 'canEdit' checkers.
+     * @see CanEditChecker
      */
-    private static final Array<CanEditChecker> CAN_EDIT_CHECKERS =
-            ArrayFactory.newCopyOnModifyArray(BiPredicate.class);
+    public static final String EP_CAN_EDIT_CHECKERS = "ModelPropertyEditor#canEditCheckers";
 
-    /**
-     * Register the additional checker which checks a current object and a changed object and
-     * returns true if need to update this in the property editor.
-     *
-     * @param checker the additional checker.
-     */
-    @FromAnyThread
-    public static void registerIsNeedUpdateChecker(@NotNull IsNeedUpdateChecker checker) {
-        IS_NEED_UPDATE_CHECKERS.add(checker);
-    }
+    private static final ExtensionPoint<IsNeedUpdateChecker> NEED_UPDATE_CHECKERS =
+            ExtensionPointManager.register(EP_NEED_UPDATE_CHECKERS);
 
-    /**
-     * Register the additional checker which checks a checked object and its parent and
-     * returns false if we can't edit this in the property editor.
-     *
-     * @param checker the additional checker.
-     */
-    @FromAnyThread
-    public static void registerCanEditChecker(@NotNull CanEditChecker checker) {
-        CAN_EDIT_CHECKERS.add(checker.negate());
-    }
+    private static final ExtensionPoint<CanEditChecker> CAN_EDIT_CHECKERS =
+            ExtensionPointManager.register(EP_CAN_EDIT_CHECKERS);
 
     public ModelPropertyEditor(@NotNull ModelChangeConsumer changeConsumer) {
         super(changeConsumer);
@@ -88,8 +65,8 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
             changedObject = ((EditableProperty) changedObject).getObject();
         }
 
-        return IS_NEED_UPDATE_CHECKERS.search(currentObject, changedObject, IsNeedUpdateChecker::isNeedUpdate) != null ||
-                super.isNeedUpdate(changedObject);
+        return NEED_UPDATE_CHECKERS.anyMatch(currentObject, changedObject,
+                IsNeedUpdateChecker::isNeedUpdate);
     }
 
     @Override
@@ -112,7 +89,7 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
         } else if (parent instanceof Spatial) {
             var linkNode = findParent((Spatial) parent, AssetLinkNode.class::isInstance);
             return linkNode == null;
-        } else if (CAN_EDIT_CHECKERS.search(object, parent, CanEditChecker::canEdit) != null) {
+        } else if(CAN_EDIT_CHECKERS.anyMatchNot(object, parent, CanEditChecker::canEdit)) {
             return false;
         }
 

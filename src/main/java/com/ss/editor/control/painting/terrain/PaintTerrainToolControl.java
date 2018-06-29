@@ -241,14 +241,15 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     @JmeThread
     protected void change(final int index, @NotNull final ColorRGBA color) {
 
-        final Array<ColorPoint> colorPoints = getColorPoints();
-        final ColorPoint search = colorPoints.search(index, (point, toCheck) -> point.index == toCheck);
+        var colorPoints = getColorPoints();
+        var colorPoint = colorPoints.findAny(index,
+                (point, toCheck) -> point.index == toCheck);
 
-        if (search != null) {
-            search.red = color.r;
-            search.green = color.g;
-            search.blue = color.b;
-            search.alpha = color.a;
+        if (colorPoint != null) {
+            colorPoint.red = color.r;
+            colorPoint.green = color.g;
+            colorPoint.blue = color.b;
+            colorPoint.alpha = color.a;
             return;
         }
 

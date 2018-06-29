@@ -4,8 +4,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.plugin.api.RenderFilterExtension;
+import com.ss.editor.plugin.api.RenderFilterRegistry;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -50,7 +49,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
             parent.attachChildAt(newChild, 0);
             editor.notifyJmeChangedProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
 
-            final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+            final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
             filterExtension.refreshFilters();
 
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(parent, newChild, 0, needSelect));

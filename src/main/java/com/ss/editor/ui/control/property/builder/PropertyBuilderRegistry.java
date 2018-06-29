@@ -24,18 +24,18 @@ public class PropertyBuilderRegistry {
     /**
      * @see PropertyBuilder
      */
-    public static final String EP_PROPERTY_BUILDERS = "PropertyBuilderRegistry#builders";
+    public static final String EP_BUILDERS = "PropertyBuilderRegistry#builders";
 
     /**
      * @see PropertyBuilderFilter
      */
-    public static final String EP_PROPERTY_BUILDER_FILTERS = "PropertyBuilderRegistry#builderFilters";
+    public static final String EP_FILTERS = "PropertyBuilderRegistry#filters";
 
     private static final ExtensionPoint<PropertyBuilder> PROPERTY_BUILDERS =
-            ExtensionPointManager.register(EP_PROPERTY_BUILDERS);
+            ExtensionPointManager.register(EP_BUILDERS);
 
     private static final ExtensionPoint<PropertyBuilderFilter> PROPERTY_BUILDER_FILTERS =
-            ExtensionPointManager.register(EP_PROPERTY_BUILDER_FILTERS);
+            ExtensionPointManager.register(EP_FILTERS);
 
     private static final PropertyBuilderRegistry INSTANCE = new PropertyBuilderRegistry();
 

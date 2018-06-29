@@ -2247,7 +2247,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorLightNode getLightNode(@NotNull Light light) {
-        return getLightNodes().search(light, (node, toCheck) -> node.getLight() == toCheck);
+        return getLightNodes().findAny(light,
+                (node, toCheck) -> node.getLight() == toCheck);
     }
 
     /**
@@ -2269,7 +2270,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorLightNode getLightNode(@NotNull Spatial model) {
-        return getLightNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+        return getLightNodes().findAny(model,
+                (node, toCheck) -> node.getModel() == toCheck);
     }
 
     /**
@@ -2280,7 +2282,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorAudioNode getAudioNode(@NotNull AudioNode audioNode) {
-        return getAudioNodes().search(audioNode,
+        return getAudioNodes().findAny(audioNode,
                 (node, toCheck) -> node.getAudioNode() == toCheck);
     }
 
@@ -2303,7 +2305,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorAudioNode getAudioNode(@NotNull Spatial model) {
-        return getAudioNodes().search(model,
+        return getAudioNodes().findAny(model,
                 (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2326,7 +2328,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorPresentableNode getPresentableNode(@NotNull ScenePresentable presentable) {
-        return getPresentableNodes().search(presentable, (node, toCheck) -> node.getObject() == toCheck);
+        return getPresentableNodes().findAny(presentable,
+                (node, toCheck) -> node.getObject() == toCheck);
     }
 
     /**
@@ -2347,18 +2350,24 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the editor presentable node or null.
      */
     @FromAnyThread
-    public @Nullable EditorPresentableNode getPresentableNode(@NotNull final Spatial model) {
-        return getPresentableNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+    public @Nullable EditorPresentableNode getPresentableNode(@NotNull Spatial model) {
+        return getPresentableNodes().findAny(model,
+                (node, toCheck) -> node.getModel() == toCheck);
     }
 
     @Override
     @JmeThread
-    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                               final float vRotation, final float targetDistance,
-                                               final float cameraSpeed) {
+    protected void notifyChangedCameraSettings(
+            @NotNull Vector3f cameraLocation,
+            float hRotation,
+            float vRotation,
+            float targetDistance,
+            float cameraSpeed
+    ) {
         super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
-        EXECUTOR_MANAGER.addFxTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
-                        vRotation, targetDistance, cameraSpeed));
+
+        EXECUTOR_MANAGER.addFxTask(() ->
+                getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
     }
 
     /**

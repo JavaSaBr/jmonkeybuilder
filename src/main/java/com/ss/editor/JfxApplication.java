@@ -21,6 +21,7 @@ import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.manager.*;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
+import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.task.CheckNewVersionTask;
 import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.css.CssRegistry;
@@ -136,6 +137,7 @@ public class JfxApplication extends Application {
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
         InitializeManager.register(CssRegistry.class);
+        InitializeManager.register(RenderFilterRegistry.class);
         InitializeManager.register(PluginManager.class);
         InitializeManager.register(RemoteControlManager.class);
         InitializeManager.initialize();
@@ -232,7 +234,7 @@ public class JfxApplication extends Application {
 
             var application = JfxApplication.getInstance();
             var window = ArrayUtils.getInReadLock(application.openedWindows,
-                    windows -> windows.search(Window::isFocused));
+                    windows -> windows.findAny(Window::isFocused));
 
             jmeApplication.setPaused(window == null);
         };

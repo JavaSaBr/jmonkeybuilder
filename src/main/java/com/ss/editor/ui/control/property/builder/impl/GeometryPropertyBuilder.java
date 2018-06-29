@@ -16,11 +16,10 @@ import com.ss.editor.ui.control.property.impl.DefaultPropertyControl;
 import com.ss.editor.ui.control.property.impl.LodLevelPropertyControl;
 import com.ss.editor.ui.control.property.impl.MaterialKeyPropertyControl;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.ExtMath;
 import com.ss.rlib.common.util.StringUtils;
-import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -41,27 +40,15 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
 
         @FxThread
         boolean canEdit(@NotNull Geometry geometry);
-
-        @FromAnyThread
-        default @NotNull CanEditMaterialChecker negate() {
-            return (geometry) -> !canEdit(geometry);
-        }
     }
-    /**
-     * The list of additional checkers.
-     */
-    private static final Array<CanEditMaterialChecker> CAN_EDIT_MATERIAL_CHECKERS =
-            ArrayFactory.newCopyOnModifyArray(CanEditMaterialChecker.class);
 
     /**
-     * Register the additional checker which should return false if we can't edit material for a geometry.
-     *
-     * @param checker the additional checker.
+     * @see CanEditMaterialChecker
      */
-    @FromAnyThread
-    public static void registerCanEditMaterialChecker(@NotNull CanEditMaterialChecker checker) {
-        CAN_EDIT_MATERIAL_CHECKERS.add(checker.negate());
-    }
+    public static final String EP_CAN_EDIT_MATERIAL_CHECKERS = "GeometryPropertyBuilder#canEditMaterialCheckers";
+
+    private static final ExtensionPoint<CanEditMaterialChecker> CAN_EDIT_MATERIAL_CHECKERS =
+            ExtensionPointManager.register(EP_CAN_EDIT_MATERIAL_CHECKERS);
 
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
@@ -137,8 +124,8 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         var modelBound = geometry.getModelBound();
         var lodLevel = geometry.getLodLevel();
 
-        final DefaultPropertyControl<ModelChangeConsumer, Geometry, BoundingVolume> boundingVolumeControl =
-                new DefaultPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, changeConsumer);
+        var boundingVolumeControl = new DefaultPropertyControl<ModelChangeConsumer, Geometry, BoundingVolume>(
+                modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, changeConsumer);
 
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
@@ -146,17 +133,17 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
 
         if (canEditMaterial(geometry)) {
 
-            final Material material = geometry.getMaterial();
-            final MaterialKey materialKey = (MaterialKey) material.getKey();
+            var material = geometry.getMaterial();
+            var materialKey = (MaterialKey) material.getKey();
 
-            final MaterialKeyPropertyControl<ModelChangeConsumer, Geometry> materialControl =
-                    new MaterialKeyPropertyControl<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
+            var materialControl = new MaterialKeyPropertyControl<ModelChangeConsumer, Geometry>(materialKey,
+                    Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
 
             materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
             materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
             materialControl.setEditObject(geometry);
 
-            FXUtils.addToPane(materialControl, container);
+            FxUtils.addChild(container, materialControl);
         }
 
         FxUtils.addChild(container, boundingVolumeControl);
@@ -181,6 +168,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
      */
     @FromAnyThread
     private boolean canEditMaterial(@NotNull Geometry geometry) {
-        return CAN_EDIT_MATERIAL_CHECKERS.search(geometry, CanEditMaterialChecker::canEdit) == null;
+        return CAN_EDIT_MATERIAL_CHECKERS.anyMatchNot(geometry, CanEditMaterialChecker::canEdit);
     }
 }

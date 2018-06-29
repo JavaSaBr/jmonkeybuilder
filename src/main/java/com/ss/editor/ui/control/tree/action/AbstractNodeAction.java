@@ -5,14 +5,12 @@ import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,20 +25,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem implements Comparable<MenuItem> {
 
-    /**
-     * The logger.
-     */
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractNodeAction.class);
 
-    /**
-     * The executor manager.
-     */
-    @NotNull
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    @FunctionalInterface
+    public interface AdditionalAction<T> {
 
-    @NotNull
-    private static final Array<TreeNode<?>> EMPTY_NODES = ArrayFactory.newArray(TreeNode.class);
+        @Nullable Runnable makeAction(@NotNull T object);
+    }
 
     /**
      * The component of the node tree.
@@ -60,22 +51,23 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     @NotNull
     private final Array<TreeNode<?>> nodes;
 
-    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
-        this(nodeTree, node, EMPTY_NODES);
+    public AbstractNodeAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
+        this(nodeTree, node, Array.empty());
     }
 
-    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final Array<TreeNode<?>> nodes) {
+    public AbstractNodeAction(@NotNull NodeTree<?> nodeTree, @NotNull Array<TreeNode<?>> nodes) {
         this(nodeTree, notNull(nodes.first()), nodes);
     }
 
-    AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node, @NotNull final Array<TreeNode<?>> nodes) {
+    AbstractNodeAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node, @NotNull Array<TreeNode<?>> nodes) {
         this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
         this.nodes = nodes;
+
         setOnAction(event -> process());
         setText(getName());
 
-        final Image icon = getIcon();
+        var icon = getIcon();
 
         if (icon != null) {
             setGraphic(new ImageView(icon));
@@ -149,7 +141,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     }
 
     @Override
-    public int compareTo(@NotNull final MenuItem item) {
+    public int compareTo(@NotNull MenuItem item) {
         if (!(item instanceof AbstractNodeAction)) {
             return 0;
         } else {
