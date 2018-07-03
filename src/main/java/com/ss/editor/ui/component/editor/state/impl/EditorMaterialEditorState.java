@@ -4,7 +4,7 @@ import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAME
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_LIGHT;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3dPart;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class EditorMaterialEditorState extends Editor3dWithEditorToolEditorState
     private volatile boolean lightEnable;
 
     public EditorMaterialEditorState() {
-        modelType = BaseMaterialEditor3DPart.ModelType.BOX.ordinal();
+        modelType = BaseMaterialEditor3dPart.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
         lightEnable = EDITOR_CONFIG.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
     }
@@ -96,7 +96,7 @@ public class EditorMaterialEditorState extends Editor3dWithEditorToolEditorState
      * @param modelType the model type.
      */
     @FxThread
-    public void setModelType(@NotNull final BaseMaterialEditor3DPart.ModelType modelType) {
+    public void setModelType(@NotNull final BaseMaterialEditor3dPart.ModelType modelType) {
         final boolean changed = getModelType() != modelType.ordinal();
         this.modelType = modelType.ordinal();
         final Runnable changeHandler = getChangeHandler();

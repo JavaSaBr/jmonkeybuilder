@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_LOADED_MODEL;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_LOADED_MODEL;
 import static com.ss.rlib.common.util.ObjectUtils.ifNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;

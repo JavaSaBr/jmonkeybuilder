@@ -9,7 +9,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.editor.Advanced3dFileEditorWithSplitRightTool;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3dPart.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
+public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3dPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
         Advanced3dFileEditorWithSplitRightTool<T, S> {
 
     /**

@@ -3,7 +3,7 @@ package com.ss.editor.part3d.editor.impl.scene.handler;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.util.JmbExtUtils;
-import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class PhysicsControlTransformationHandler implements AbstractSceneEditor3DPart.TransformationHandler {
+public class PhysicsControlTransformationHandler implements AbstractSceneEditor3dPart.TransformationHandler {
 
     @Override
     @JmeThread

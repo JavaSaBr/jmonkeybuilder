@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.tree.node.impl.spatial;
 
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_MODEL_NODE;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_MODEL_NODE;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;

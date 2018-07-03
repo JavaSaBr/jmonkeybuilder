@@ -1,6 +1,6 @@
 package com.ss.editor.control.painting.spawn;
 
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart.KEY_IGNORE_RAY_CAST;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_IGNORE_RAY_CAST;
 import static com.ss.editor.util.EditorUtil.getAssetManager;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;

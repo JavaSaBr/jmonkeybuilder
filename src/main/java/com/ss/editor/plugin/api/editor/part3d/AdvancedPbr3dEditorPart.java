@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public abstract class AdvancedPbr3DEditorPart<T extends Advanced3dFileEditor> extends Advanced3dEditorPart<T> {
+public abstract class AdvancedPbr3dEditorPart<T extends Advanced3dFileEditor> extends Advanced3dEditorPart<T> {
 
     @NotNull
-    private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
+    private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<>() {
 
         @Override
-        public void done(final LightProbe result) {
+        public void done(@NotNull LightProbe result) {
             if (!isInitialized()) return;
             attachModelNode();
         }
@@ -31,21 +31,21 @@ public abstract class AdvancedPbr3DEditorPart<T extends Advanced3dFileEditor> ex
      * The model node.
      */
     @NotNull
-    private final Node modelNode;
+    protected final Node modelNode;
 
     /**
      * The count of frames.
      */
     private int frame;
 
-    public AdvancedPbr3DEditorPart(@NotNull final T fileEditor) {
+    public AdvancedPbr3dEditorPart(@NotNull T fileEditor) {
         super(fileEditor);
         this.modelNode = new Node("ModelNode");
     }
 
     @Override
     @JmeThread
-    public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
+    public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
         super.initialize(stateManager, application);
         frame = 0;
     }
@@ -54,11 +54,7 @@ public abstract class AdvancedPbr3DEditorPart<T extends Advanced3dFileEditor> ex
     @JmeThread
     public void cleanup() {
         super.cleanup();
-
-        final Node modelNode = getModelNode();
         modelNode.detachAllChildren();
-
-        final Node stateNode = getStateNode();
         stateNode.detachChild(modelNode);
     }
 
@@ -67,21 +63,12 @@ public abstract class AdvancedPbr3DEditorPart<T extends Advanced3dFileEditor> ex
      */
     @JmeThread
     private void attachModelNode() {
-        final Node stateNode = getStateNode();
         stateNode.attachChild(modelNode);
-    }
-
-    /**
-     * @return the model node.
-     */
-    @JmeThread
-    protected @NotNull Node getModelNode() {
-        return modelNode;
     }
 
     @Override
     @JmeThread
-    public void update(final float tpf) {
+    public void update(float tpf) {
         super.update(tpf);
 
         if (frame == 2) {

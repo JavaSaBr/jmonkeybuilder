@@ -21,7 +21,7 @@ public abstract class Advanced3dFileEditor<T extends Advanced3dEditorPart, S ext
         var editorState = getEditorState();
 
         if (editorState != null) {
-            loadCameraState(editorState, getEditor3dPart());
+            loadCameraState(editorState, editor3dPart);
         }
     }
 }

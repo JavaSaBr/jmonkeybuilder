@@ -1,6 +1,6 @@
 package com.ss.editor.part3d.editor.impl.material;
 
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart;
+import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3dPart;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class MaterialEditor3dPart extends BaseMaterialEditor3DPart<MaterialFileEditor> {
+public class MaterialEditor3DPart extends BaseMaterialEditor3dPart<MaterialFileEditor> {
 
-    public MaterialEditor3dPart(@NotNull final MaterialFileEditor fileEditor) {
+    public MaterialEditor3DPart(@NotNull final MaterialFileEditor fileEditor) {
         super(fileEditor);
     }
 }

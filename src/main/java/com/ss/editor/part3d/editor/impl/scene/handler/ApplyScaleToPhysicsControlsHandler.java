@@ -6,7 +6,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
@@ -29,7 +29,7 @@ public class ApplyScaleToPhysicsControlsHandler {
     @FromAnyThread
     protected static boolean isModelRoot(@NotNull final Spatial spatial) {
         final Node parent = spatial.getParent();
-        return parent == null || parent.getUserData(AbstractSceneEditor3DPart.KEY_MODEL_NODE) != null;
+        return parent == null || parent.getUserData(AbstractSceneEditor3dPart.KEY_MODEL_NODE) != null;
     }
 
     /**

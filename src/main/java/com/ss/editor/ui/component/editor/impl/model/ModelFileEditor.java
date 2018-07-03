@@ -13,7 +13,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.part3d.editor.impl.model.ModelEditor3dPart;
+import com.ss.editor.part3d.editor.impl.model.ModelEditor3DPart;
 import com.ss.editor.part3d.editor.impl.model.ModelEditorBulletPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescriptor;
@@ -47,7 +47,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3dPart, EditorModelEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DPart, EditorModelEditorState> {
 
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
@@ -114,8 +114,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     @Override
     @FxThread
-    protected @NotNull ModelEditor3dPart create3dEditorPart() {
-        return new ModelEditor3dPart(this);
+    protected @NotNull ModelEditor3DPart create3dEditorPart() {
+        return new ModelEditor3DPart(this);
     }
 
     @Override

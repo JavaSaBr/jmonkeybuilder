@@ -4,7 +4,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class ReactivatePhysicsControlsTransformationHandler implements AbstractSceneEditor3DPart.TransformationHandler {
+public class ReactivatePhysicsControlsTransformationHandler implements AbstractSceneEditor3dPart.TransformationHandler {
 
     @Override
     @JmeThread

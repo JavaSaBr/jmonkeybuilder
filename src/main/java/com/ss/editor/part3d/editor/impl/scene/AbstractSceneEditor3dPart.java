@@ -3,12 +3,10 @@ package com.ss.editor.part3d.editor.impl.scene;
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppState;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
@@ -22,7 +20,10 @@ import com.jme3.math.*;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.*;
+import com.jme3.scene.AssetLinkNode;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
@@ -31,13 +32,13 @@ import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.control.transform.*;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
-import com.ss.editor.model.EditorCamera;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.scene.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -71,7 +72,7 @@ import java.util.Optional;
  * @param <M> the type of edited spatial.
  * @author JavaSaBr
  */
-public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
+public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends Advanced3dEditorPart<T> implements EditorTransformSupport {
 
     /**
@@ -95,10 +96,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     public static final String KEY_SHAPE_CENTER = "jMB.sceneEditor.shapeCenter";
     public static final String KEY_SHAPE_INIT_SCALE = "jMB.sceneEditor.initScale";
 
-    private static final String KEY_S = "SSEditor.sceneEditorState.S";
-    private static final String KEY_G = "SSEditor.sceneEditorState.G";
-    private static final String KEY_R = "SSEditor.sceneEditorState.R";
-    private static final String KEY_DEL = "SSEditor.sceneEditorState.Del";
+    private static final String KEY_S = "jMB.sceneEditor.S";
+    private static final String KEY_G = "jMB.sceneEditor.G";
+    private static final String KEY_R = "jMB.sceneEditor.R";
+    private static final String KEY_DEL = "jMB.sceneEditor.Del";
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
@@ -219,7 +220,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * The node for the placement of controls.
      */
     @NotNull
-    private final Node toolNode;
+    protected final Node toolNode;
 
     /**
      * The node for the placement of transform controls.
@@ -231,19 +232,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * The node for the placement of models.
      */
     @NotNull
-    private final Node modelNode;
+    protected final Node modelNode;
 
     /**
      * The node for the placement of lights.
      */
     @NotNull
-    private final Node lightNode;
+    protected final Node lightNode;
 
     /**
      * The node for the placement of audio nodes.
      */
     @NotNull
-    private final Node audioNode;
+    protected final Node audioNode;
 
     /**
      * The node for the placement of presentable nodes.
@@ -356,7 +357,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     private boolean paintingMode;
 
-    public AbstractSceneEditor3DPart(@NotNull final T fileEditor) {
+    public AbstractSceneEditor3dPart(@NotNull T fileEditor) {
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
         this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
@@ -399,8 +400,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
 
-        var fileEditor = getFileEditor();
-
         actionHandlers.put(KEY_S, (isPressed, tpf) ->
                 fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
         actionHandlers.put(KEY_G, (isPressed, tpf) ->
@@ -413,7 +412,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @Override
     @JmeThread
-    protected void registerActionListener(@NotNull final InputManager inputManager) {
+    protected void registerActionListener(@NotNull InputManager inputManager) {
         super.registerActionListener(inputManager);
         inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
     }
@@ -425,51 +424,21 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Get the light node.
-     *
-     * @return the node to place lights.
-     */
-    @FromAnyThread
-    protected @NotNull Node getLightNode() {
-        return lightNode;
-    }
-
-    /**
-     * Get the audio node.
-     *
-     * @return the node to place audio nodes.
-     */
-    @FromAnyThread
-    protected @NotNull Node getAudioNode() {
-        return audioNode;
-    }
-
-    /**
-     * Get the presentable node.
-     *
-     * @return the node to place presentable nodes.
-     */
-    @FromAnyThread
-    protected @NotNull Node getPresentableNode() {
-        return presentableNode;
-    }
-
-    /**
      * Create collision plane.
      */
     @FromAnyThread
     private void createCollisionPlane() {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
+        var material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
-        final Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        final RenderState renderState = material.getAdditionalRenderState();
+        var renderState = material.getAdditionalRenderState();
         renderState.setFaceCullMode(RenderState.FaceCullMode.Off);
         renderState.setWireframe(true);
 
-        final float size = 20000;
+        var size = 20000F;
 
-        final Geometry geometry = new Geometry("plane", new Quad(size, size));
+        var geometry = new Geometry("plane", new Quad(size, size));
         geometry.setMaterial(material);
         geometry.setLocalTranslation(-size / 2, -size / 2, 0);
 
@@ -486,39 +455,41 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         selectionMaterial = createColorMaterial(new ColorRGBA(1F, 170 / 255F, 64 / 255F, 1F));
         grid = createGrid();
 
-        final Node toolNode = getToolNode();
         toolNode.attachChild(grid);
     }
 
     @FromAnyThread
     private @NotNull Node createGrid() {
 
-        final Node gridNode = new Node("GridNode");
+        var gridNode = new Node("GridNode");
 
-        final ColorRGBA gridColor = new ColorRGBA(0.4f, 0.4f, 0.4f, 0.5f);
-        final ColorRGBA xColor = new ColorRGBA(1.0f, 0.1f, 0.1f, 0.5f);
-        final ColorRGBA zColor = new ColorRGBA(0.1f, 1.0f, 0.1f, 0.5f);
+        var gridColor = new ColorRGBA(0.4f, 0.4f, 0.4f, 0.5f);
+        var xColor = new ColorRGBA(1.0f, 0.1f, 0.1f, 0.5f);
+        var zColor = new ColorRGBA(0.1f, 1.0f, 0.1f, 0.5f);
 
-        final Material gridMaterial = createColorMaterial(gridColor);
-        gridMaterial.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        var gridMaterial = createColorMaterial(gridColor);
+        gridMaterial.getAdditionalRenderState()
+                .setBlendMode(RenderState.BlendMode.Alpha);
 
-        final Material xMaterial = createColorMaterial(xColor);
-        xMaterial.getAdditionalRenderState().setLineWidth(5);
+        var xMaterial = createColorMaterial(xColor);
+        xMaterial.getAdditionalRenderState()
+                .setLineWidth(5);
 
-        final Material zMaterial = createColorMaterial(zColor);
-        zMaterial.getAdditionalRenderState().setLineWidth(5);
+        var zMaterial = createColorMaterial(zColor);
+        zMaterial.getAdditionalRenderState()
+                .setLineWidth(5);
 
-        final int gridSize = getGridSize();
+        var gridSize = getGridSize();
 
-        final Geometry grid = new Geometry("grid", new Grid(gridSize, gridSize, 1.0f));
+        var grid = new Geometry("grid", new Grid(gridSize, gridSize, 1.0f));
         grid.setMaterial(gridMaterial);
         grid.setQueueBucket(RenderQueue.Bucket.Transparent);
         grid.setShadowMode(RenderQueue.ShadowMode.Off);
         grid.setCullHint(CullHint.Never);
         grid.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
 
-        final Quad quad = new Quad(gridSize, gridSize);
-        final Geometry gridCollision = new Geometry("collision", quad);
+        var quad = new Quad(gridSize, gridSize);
+        var gridCollision = new Geometry("collision", quad);
         gridCollision.setMaterial(createColorMaterial(gridColor));
         gridCollision.setQueueBucket(RenderQueue.Bucket.Transparent);
         gridCollision.setShadowMode(RenderQueue.ShadowMode.Off);
@@ -530,9 +501,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         gridNode.attachChild(gridCollision);
 
         // Red line for X axis
-        final Line xAxis = new Line(new Vector3f(-gridSize / 2, 0f, 0f), new Vector3f(gridSize / 2 - 1, 0f, 0f));
+        var xAxis = new Line(new Vector3f(-gridSize / 2, 0f, 0f), new Vector3f(gridSize / 2 - 1, 0f, 0f));
 
-        final Geometry gxAxis = new Geometry("XAxis", xAxis);
+        var gxAxis = new Geometry("XAxis", xAxis);
         gxAxis.setModelBound(new BoundingBox());
         gxAxis.setShadowMode(RenderQueue.ShadowMode.Off);
         gxAxis.setCullHint(CullHint.Never);
@@ -541,9 +512,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         gridNode.attachChild(gxAxis);
 
         // Blue line for Z axis
-        final Line zAxis = new Line(new Vector3f(0f, 0f, -gridSize / 2), new Vector3f(0f, 0f, gridSize / 2 - 1));
+        var zAxis = new Line(new Vector3f(0f, 0f, -gridSize / 2), new Vector3f(0f, 0f, gridSize / 2 - 1));
 
-        final Geometry gzAxis = new Geometry("ZAxis", zAxis);
+        var gzAxis = new Geometry("ZAxis", zAxis);
         gzAxis.setModelBound(new BoundingBox());
         gzAxis.setShadowMode(RenderQueue.ShadowMode.Off);
         gzAxis.setCullHint(CullHint.Never);
@@ -570,15 +541,15 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     @FromAnyThread
     private void createManipulators() {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtil.getAssetManager();
 
-        final Material redMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        var redMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         redMaterial.setColor("Color", ColorRGBA.Red);
 
-        final Material blueMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        var blueMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         blueMaterial.setColor("Color", ColorRGBA.Blue);
 
-        final Material greenMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        var greenMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         greenMaterial.setColor("Color", ColorRGBA.Green);
 
         moveTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_move.j3o");
@@ -625,41 +596,33 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Create the material to present selected models.
      */
     @FromAnyThread
-    private @NotNull Material createColorMaterial(@NotNull final ColorRGBA color) {
-        final Material material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+    private @NotNull Material createColorMaterial(@NotNull ColorRGBA color) {
+
+        var material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.getAdditionalRenderState().setWireframe(true);
         material.setColor("Color", color);
+
         return material;
     }
 
     /**
      * Set the transform type.
      *
-     * @param transformType the current transformation type.
+     * @param transformType the transformation type.
      */
     @FromAnyThread
-    public void setTransformType(@Nullable final TransformType transformType) {
+    public void setTransformType(@Nullable TransformType transformType) {
         this.transformType = transformType;
     }
 
     /**
      * Set the transform mode.
      *
-     * @param transformMode the current transformation mode.
+     * @param transformMode the transformation mode.
      */
     @FromAnyThread
-    public void setTransformMode(@NotNull final TransformationMode transformMode) {
+    public void setTransformMode(@NotNull TransformationMode transformMode) {
         this.transformMode = transformMode;
-    }
-
-    /**
-     * Get the node to place of transform controls.
-     *
-     * @return the node to place of transform controls.
-     */
-    @FromAnyThread
-    private @NotNull Node getTransformToolNode() {
-        return transformToolNode;
     }
 
     /**
@@ -686,7 +649,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @Override
     @JmeThread
-    public void setPickedAxis(@NotNull final PickedAxis axis) {
+    public void setPickedAxis(@NotNull PickedAxis axis) {
         this.pickedAxis = axis;
     }
 
@@ -705,19 +668,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @Override
     @JmeThread
-    public void setTransformDeltaX(final float transformDeltaX) {
+    public void setTransformDeltaX(float transformDeltaX) {
         this.transformDeltaX = transformDeltaX;
     }
 
     @Override
     @JmeThread
-    public void setTransformDeltaY(final float transformDeltaY) {
+    public void setTransformDeltaY(float transformDeltaY) {
         this.transformDeltaY = transformDeltaY;
     }
 
     @Override
     @JmeThread
-    public void setTransformDeltaZ(final float transformDeltaZ) {
+    public void setTransformDeltaZ(float transformDeltaZ) {
         this.transformDeltaZ = transformDeltaZ;
     }
 
@@ -746,19 +709,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Get the tool node.
-     *
-     * @return the node to place tool controls.
-     */
-    @FromAnyThread
-    protected @NotNull Node getToolNode() {
-        return toolNode;
-    }
-
-    /**
      * Get the grid.
      *
-     * @return grid of the scene.
+     * @return the grid.
      */
     @FromAnyThread
     private @NotNull Node getGrid() {
@@ -801,7 +754,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param activeTransform true of we have active transformation.
      */
     @FromAnyThread
-    private void setActiveTransform(final boolean activeTransform) {
+    private void setActiveTransform(boolean activeTransform) {
         this.activeTransform = activeTransform;
     }
 
@@ -816,25 +769,24 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     @Override
-    protected void preCameraUpdate(final float tpf) {
+    protected void preCameraUpdate(float tpf) {
         super.preCameraUpdate(tpf);
 
-        final Node transformToolNode = getTransformToolNode();
-        final Transform selectionCenter = getTransformCenter();
-        final TransformType transformType = getTransformType();
+        var selectionCenter = getTransformCenter();
+        var transformType = getTransformType();
 
         // Transform Selected Objects!
         if (isActiveTransform() && selectionCenter != null) {
             if (transformType == TransformType.MOVE_TOOL) {
-                final TransformControl control = getMoveTool().getControl(TransformControl.class);
+                var control = getMoveTool().getControl(TransformControl.class);
                 transformToolNode.detachAllChildren();
                 control.processTransform();
             } else if (transformType == TransformType.ROTATE_TOOL) {
-                final TransformControl control = getRotateTool().getControl(TransformControl.class);
+                var control = getRotateTool().getControl(TransformControl.class);
                 transformToolNode.detachAllChildren();
                 control.processTransform();
             } else if (transformType == TransformType.SCALE_TOOL) {
-                final TransformControl control = getScaleTool().getControl(TransformControl.class);
+                var control = getScaleTool().getControl(TransformControl.class);
                 transformToolNode.detachAllChildren();
                 control.processTransform();
             }
@@ -845,12 +797,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     protected void postCameraUpdate(float tpf) {
         super.postCameraUpdate(tpf);
 
-        getLightNodes().forEach(EditorLightNode::updateModel);
-        getAudioNodes().forEach(EditorAudioNode::updateModel);
-        getPresentableNodes().forEach(EditorPresentableNode::updateModel);
+        lightNodes.forEach(EditorLightNode::updateModel);
+        audioNodes.forEach(EditorAudioNode::updateModel);
+        presentableNodes.forEach(EditorPresentableNode::updateModel);
 
-        var selected = getSelected();
-        selected.forEach(this, (spatial, editor3DPart) -> {
+        selected.forEach(this, (spatial, editor3dPart) -> {
 
             if (spatial instanceof EditorLightNode) {
                 spatial = ((EditorLightNode) spatial).getModel();
@@ -864,9 +815,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
                 return;
             }
 
-            editor3DPart.updateTransformNode(spatial.getWorldTransform());
+            editor3dPart.updateTransformNode(spatial.getWorldTransform());
 
-            var selectionShape = editor3DPart.getSelectionShape();
+            var selectionShape = editor3dPart.selectionShape;
             var shape = selectionShape.get(spatial);
             if (shape == null) {
                 return;
@@ -913,8 +864,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             transformToolNode.attachChild(getScaleTool());
         }
 
-        var toolNode = getToolNode();
-
         // FIXME change when will support transform multi-nodes
         if (selected.size() != 1) {
             toolNode.detachChild(transformToolNode);
@@ -938,24 +887,25 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        final Node cursorNode = getCursorNode();
-        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
-        final Spatial paintedModel = PaintingUtils.getPaintedModel(control);
+        var control = PaintingUtils.getPaintingControl(cursorNode);
+        var paintedModel = PaintingUtils.getPaintedModel(control);
+
         if (paintedModel == null) {
             return;
         }
 
-        final CollisionResults collisions = GeomUtils.getCollisionsFromCursor(paintedModel, getCamera());
+        var collisions = GeomUtils.getCollisionsFromCursor(paintedModel, getCamera());
+
         if (collisions.size() < 1) {
             return;
         }
 
         CollisionResult result = null;
 
-        for (final CollisionResult collision : collisions) {
+        for (var collision : collisions) {
 
-            final Geometry geometry = collision.getGeometry();
-            final Object parent = NodeUtils.findParent(geometry, spatial ->
+            var geometry = collision.getGeometry();
+            var parent = NodeUtils.findParent(geometry, spatial ->
                     spatial.getUserData(KEY_IGNORE_RAY_CAST) == Boolean.TRUE);
 
             if (parent == null) {
@@ -968,11 +918,11 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             result = collisions.getClosestCollision();
         }
 
-        final Vector3f contactPoint = result.getContactPoint();
-        final Vector3f contactNormal = result.getContactNormal();
+        var contactPoint = result.getContactPoint();
+        var contactNormal = result.getContactNormal();
 
-        final LocalObjects local = LocalObjects.get();
-        final Quaternion rotation = local.nextRotation();
+        var local = LocalObjects.get();
+        var rotation = local.nextRotation();
         rotation.lookAt(contactNormal, Vector3f.UNIT_Y);
 
         cursorNode.setLocalRotation(rotation);
@@ -983,30 +933,29 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Update the transformation node.
      */
     @JmeThread
-    private void updateTransformNode(@Nullable final Transform transform) {
+    private void updateTransformNode(@Nullable Transform transform) {
 
         if (transform == null) {
             return;
         }
 
-        final TransformationMode transformationMode = getTransformationMode();
-        final Vector3f location = transform.getTranslation();
-        final Vector3f positionOnCamera = getPositionOnCamera(location);
+        var transformationMode = getTransformationMode();
+        var location = transform.getTranslation();
+        var positionOnCamera = getPositionOnCamera(location);
 
-        final Node transformToolNode = getTransformToolNode();
         transformToolNode.setLocalTranslation(positionOnCamera);
         transformToolNode.setLocalScale(1.5F);
         transformToolNode.setLocalRotation(transformationMode.getToolRotation(transform, getCamera()));
     }
 
     @JmeThread
-    private @NotNull Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
+    private @NotNull Vector3f getPositionOnCamera(@NotNull Vector3f location) {
 
-        final LocalObjects local = LocalObjects.get();
-        final Camera camera = EditorUtil.getGlobalCamera();
+        var local = LocalObjects.get();
+        var camera = EditorUtil.getGlobalCamera();
 
-        final Vector3f cameraLocation = camera.getLocation();
-        final Vector3f resultPosition = location.subtract(cameraLocation, local.nextVector())
+        var cameraLocation = camera.getLocation();
+        var resultPosition = location.subtract(cameraLocation, local.nextVector())
                 .normalizeLocal()
                 .multLocal(camera.getFrustumNear() + 0.5f);
 
@@ -1024,93 +973,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Get the array of selected models.
-     *
-     * @return the array of selected models.
-     */
-    @FromAnyThread
-    private @NotNull Array<Spatial> getSelected() {
-        return selected;
-    }
-
-    /**
-     * Get the selection models of selected models.
-     *
-     * @return the selection models of selected models.
-     */
-    @FromAnyThread
-    private @NotNull ObjectDictionary<Spatial, Geometry> getSelectionShape() {
-        return selectionShape;
-    }
-
-    /**
-     * Get the array of light nodes.
-     *
-     * @return the array of light nodes.
-     */
-    @FromAnyThread
-    private @NotNull Array<EditorLightNode> getLightNodes() {
-        return lightNodes;
-    }
-
-    /**
-     * Get the array of audio nodes.
-     *
-     * @return the array of audio nodes.
-     */
-    @FromAnyThread
-    private @NotNull Array<EditorAudioNode> getAudioNodes() {
-        return audioNodes;
-    }
-
-    /**
-     * Get the array of presentable nodes.
-     *
-     * @return the array of presentable nodes.
-     */
-    @FromAnyThread
-    private @NotNull Array<EditorPresentableNode> getPresentableNodes() {
-        return presentableNodes;
-    }
-
-    /**
-     * Get the map with cached light nodes.
-     *
-     * @return the map with cached light nodes.
-     */
-    @FromAnyThread
-    private @NotNull ObjectDictionary<Light, EditorLightNode> getCachedLights() {
-        return cachedLights;
-    }
-
-    /**
-     * Get the map with cached audio nodes.
-     *
-     * @return the map with cached audio nodes.
-     */
-    @FromAnyThread
-    private @NotNull ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
-        return cachedAudioNodes;
-    }
-
-    /**
-     * Get the map with cached presentable objects.
-     *
-     * @return the map with cached presentable objects.
-     */
-    @FromAnyThread
-    private @NotNull ObjectDictionary<ScenePresentable, EditorPresentableNode> getCachedPresentableObjects() {
-        return cachedPresentableObjects;
-    }
-
-    /**
      * Select the objects.
      *
      * @param objects the objects.
      */
     @FromAnyThread
     public void select(@NotNull Array<Spatial> objects) {
-        EXECUTOR_MANAGER.addJmeTask(() -> selectImpl(objects));
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> selectInJme(objects));
     }
 
     /**
@@ -1120,18 +990,17 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public void select(@NotNull Spatial object) {
-        EXECUTOR_MANAGER.addJmeTask(() -> selectImpl(Array.of(object)));
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> selectInJme(Array.of(object)));
     }
 
     /**
-     * The process of selecting the objects.
+     * Select the objects in the jMe thread.
      *
      * @param objects the objects.
      */
     @JmeThread
-    private void selectImpl(@NotNull Array<Spatial> objects) {
-
-        var selected = getSelected();
+    private void selectInJme(@NotNull Array<Spatial> objects) {
 
         if (objects.isEmpty()) {
             selected.forEach(this, (spatial, ed) -> ed.removeFromSelection(spatial));
@@ -1164,7 +1033,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     private void updateToTransform() {
-        setToTransform(getSelected().first());
+        setToTransform(selected.first());
     }
 
     /**
@@ -1183,7 +1052,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param originalTransform the original transformation.
      */
     @FromAnyThread
-    private void setOriginalTransform(@Nullable final Transform originalTransform) {
+    private void setOriginalTransform(@Nullable Transform originalTransform) {
         this.originalTransform = originalTransform;
     }
 
@@ -1193,9 +1062,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     @JmeThread
     private void updateTransformCenter() {
 
-        final Spatial toTransform = getToTransform();
-        final Transform transform = toTransform == null ? null : toTransform.getLocalTransform().clone();
-        final Transform originalTransform = transform == null ? null : transform.clone();
+        var toTransform = getToTransform();
+        var transform = toTransform == null ? null : toTransform.getLocalTransform().clone();
+        var originalTransform = transform == null ? null : transform.clone();
 
         setTransformCenter(transform);
         setOriginalTransform(originalTransform);
@@ -1211,7 +1080,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             spatial.setCullHint(CullHint.Dynamic);
         }
 
-        getSelected().add(spatial);
+        selected.add(spatial);
 
         if (spatial instanceof NoSelection) {
             return;
@@ -1232,10 +1101,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         }
 
         if (isShowSelection()) {
-            getToolNode().attachChild(shape);
+            toolNode.attachChild(shape);
         }
 
-        getSelectionShape().put(spatial, shape);
+        selectionShape.put(spatial, shape);
     }
 
     /**
@@ -1246,14 +1115,13 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         setTransformCenter(null);
         setToTransform(null);
 
-        var shape = getSelectionShape()
-                .remove(spatial);
+        var shape = selectionShape.remove(spatial);
 
         if (shape != null) {
             shape.removeFromParent();
         }
 
-        getSelected().fastRemove(spatial);
+        selected.fastRemove(spatial);
 
         if (spatial instanceof VisibleOnlyWhenSelected) {
             spatial.setCullHint(CullHint.Always);
@@ -1264,24 +1132,25 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Build the selection box for the spatial.
      */
     @JmeThread
-    private Geometry buildBoxSelection(@NotNull final Spatial spatial) {
+    private Geometry buildBoxSelection(@NotNull Spatial spatial) {
+
         NodeUtils.updateWorldBound(spatial);
 
-        final BoundingVolume bound = spatial.getWorldBound();
+        var bound = spatial.getWorldBound();
 
         if (bound instanceof BoundingBox) {
 
-            final BoundingBox boundingBox = (BoundingBox) bound;
-            final Vector3f center = boundingBox.getCenter().subtract(spatial.getWorldTranslation());
-            final Vector3f initScale = spatial.getLocalScale().clone();
+            var boundingBox = (BoundingBox) bound;
+            var center = boundingBox.getCenter().subtract(spatial.getWorldTranslation());
+            var initScale = spatial.getLocalScale().clone();
 
-            final Geometry geometry = WireBox.makeGeometry(boundingBox);
+            var geometry = WireBox.makeGeometry(boundingBox);
             geometry.setName("SelectionShape");
             geometry.setMaterial(getSelectionMaterial());
             geometry.setUserData(KEY_SHAPE_CENTER, center);
             geometry.setUserData(KEY_SHAPE_INIT_SCALE, initScale);
 
-            final Vector3f position = geometry.getLocalTranslation();
+            var position = geometry.getLocalTranslation();
             position.addLocal(center);
 
             geometry.setLocalTranslation(position);
@@ -1290,19 +1159,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
         } else if (bound instanceof BoundingSphere) {
 
-            final BoundingSphere boundingSphere = (BoundingSphere) bound;
+            var boundingSphere = (BoundingSphere) bound;
 
-            final WireSphere wire = new WireSphere();
+            var wire = new WireSphere();
             wire.fromBoundingSphere(boundingSphere);
 
-            final Geometry geometry = new Geometry("SelectionShape", wire);
+            var geometry = new Geometry("SelectionShape", wire);
             geometry.setMaterial(getSelectionMaterial());
             geometry.setLocalTranslation(spatial.getWorldTranslation());
 
             return geometry;
         }
 
-        final Geometry geometry = WireBox.makeGeometry(new BoundingBox(Vector3f.ZERO, 1, 1, 1));
+        var geometry = WireBox.makeGeometry(new BoundingBox(Vector3f.ZERO, 1, 1, 1));
         geometry.setName("SelectionShape");
         geometry.setMaterial(getSelectionMaterial());
         geometry.setLocalTranslation(spatial.getWorldTranslation());
@@ -1314,14 +1183,14 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Build selection grid for the geometry.
      */
     @JmeThread
-    private Geometry buildGeometrySelection(@NotNull final Geometry geom) {
+    private Geometry buildGeometrySelection(@NotNull Geometry geom) {
 
-        final Mesh mesh = geom.getMesh();
+        var mesh = geom.getMesh();
         if (mesh == null) {
             return null;
         }
 
-        final Geometry geometry = new Geometry("SelectionShape", mesh);
+        var geometry = new Geometry("SelectionShape", mesh);
         geometry.setMaterial(getSelectionMaterial());
         geometry.setLocalTransform(geom.getWorldTransform());
 
@@ -1329,15 +1198,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * @param showGrid the flag of visibility grid.
+     * Set true if need to show a grid.
+     *
+     * @param showGrid true if need to show a grid.
      */
     @JmeThread
-    private void setShowGrid(final boolean showGrid) {
+    private void setShowGrid(boolean showGrid) {
         this.showGrid = showGrid;
     }
 
     /**
-     * @param showSelection the flag of visibility selection.
+     * Set true if need to show a selection grid.
+     *
+     * @param showSelection true if need to show a selection grid.
      */
     @JmeThread
     private void setShowSelection(final boolean showSelection) {
@@ -1345,6 +1218,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
+     * Return true if the grid is showed.
+     *
      * @return true if the grid is showed.
      */
     @JmeThread
@@ -1353,7 +1228,9 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * @return true if the selection is showed.
+     * Return true if a selection grid is showed.
+     *
+     * @return true if a selection grid is showed.
      */
     @JmeThread
     private boolean isShowSelection() {
@@ -1362,34 +1239,32 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @Override
     @JmeThread
-    public void notifyTransformed(@NotNull final Spatial spatial) {
-        getFileEditor().notifyTransformed(spatial);
+    public void notifyTransformed(@NotNull Spatial spatial) {
+        fileEditor.notifyTransformed(spatial);
     }
 
     /**
-     * Update showing selection.
+     * Update showing state of selection grid.
      *
-     * @param showSelection true if needs to show selection
+     * @param showSelection true if need to show selection grid.
      */
     @FromAnyThread
-    public void updateShowSelection(final boolean showSelection) {
-        EXECUTOR_MANAGER.addJmeTask(() -> updateShowSelectionImpl(showSelection));
+    public void updateShowSelection(boolean showSelection) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> updateShowSelectionInJme(showSelection));
     }
 
     /**
-     * Update showing selection.
+     * Update showing state of selection grid in jME thread.
      *
-     * @param showSelection true if needs to show selection
+     * @param showSelection true if need to show selection grid.
      */
     @JmeThread
-    private void updateShowSelectionImpl(final boolean showSelection) {
+    private void updateShowSelectionInJme(boolean showSelection) {
 
         if (isShowSelection() == showSelection) {
             return;
         }
-
-        final ObjectDictionary<Spatial, Geometry> selectionShape = getSelectionShape();
-        final Node toolNode = getToolNode();
 
         if (showSelection && !selectionShape.isEmpty()) {
             selectionShape.forEach(toolNode::attachChild);
@@ -1402,22 +1277,33 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
     @Override
     @JmeThread
-    protected void onActionImpl(@NotNull final String name, final boolean isPressed, final float tpf) {
+    protected void onActionImpl(@NotNull String name, boolean isPressed, float tpf) {
         super.onActionImpl(name, isPressed, tpf);
+
         if (MOUSE_RIGHT_CLICK.equals(name)) {
-            if(isPaintingMode()) {
-                if (isPressed) startPainting(getPaintingInput(MouseButton.SECONDARY));
-                else finishPainting(getPaintingInput(MouseButton.SECONDARY));
+
+            if (isPaintingMode()) {
+
+                if (isPressed) {
+                    startPainting(getPaintingInput(MouseButton.SECONDARY));
+                } else {
+                    finishPainting(getPaintingInput(MouseButton.SECONDARY));
+                }
+
             } else if(!isPressed) {
                 processSelect();
             }
+
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
+
             if (isPaintingMode()) {
+
                 if (isPressed) {
                     startPainting(getPaintingInput(MouseButton.PRIMARY));
                 } else {
                     finishPainting(getPaintingInput(MouseButton.PRIMARY));
                 }
+
             } else {
                 if (isPressed) {
                     startTransform();
@@ -1435,7 +1321,8 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the painting input.
      */
     @FromAnyThread
-    protected @NotNull PaintingInput getPaintingInput(@NotNull final MouseButton mouseButton) {
+    protected @NotNull PaintingInput getPaintingInput(@NotNull MouseButton mouseButton) {
+
         switch (mouseButton) {
             case SECONDARY: {
 
@@ -1463,20 +1350,20 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        final Node modelNode = notNull(getModelNode());
-        final Geometry anyGeometry = GeomUtils.getGeometryFromCursor(modelNode, getCamera());
-        final M currentModel = notNull(getCurrentModel());
+        var anyGeometry = GeomUtils.getGeometryFromCursor(modelNode, getCamera());
+        var currentModel = notNull(getCurrentModel());
 
         Object toSelect = anyGeometry == null ? null : findToSelect(anyGeometry);
 
         if (toSelect == null && anyGeometry != null) {
-            final Geometry modelGeometry = GeomUtils.getGeometryFromCursor(currentModel, getCamera());
+            var modelGeometry = GeomUtils.getGeometryFromCursor(currentModel, getCamera());
             toSelect = modelGeometry == null ? null : findToSelect(modelGeometry);
         }
 
-        final Object result = toSelect;
+        var result = toSelect;
 
-        EXECUTOR_MANAGER.addFxTask(() -> notifySelected(result));
+        ExecutorManager.getInstance()
+                .addFxTask(() -> notifySelected(result));
     }
 
     /**
@@ -1550,13 +1437,13 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the position on a scene.
      */
     @JmeThread
-    public @Nullable Geometry getGeometryByScreenPos(final float screenX, final float screenY) {
+    public @Nullable Geometry getGeometryByScreenPos(float screenX, float screenY) {
         return GeomUtils.getGeometryFromScreenPos(notNull(getCurrentModel()), getCamera(), screenX, screenY);
     }
 
-    @JmeThread
-    private void notifySelected(@Nullable final Object object) {
-        getFileEditor().notifySelected(object);
+    @FxThread
+    private void notifySelected(@Nullable Object object) {
+        fileEditor.notifySelected(object);
     }
 
     /**
@@ -1567,13 +1454,13 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the position on a scene.
      */
     @JmeThread
-    public @NotNull Vector3f getScenePosByScreenPos(final float screenX, final float screenY) {
+    public @NotNull Vector3f getScenePosByScreenPos(float screenX, float screenY) {
 
-        final Camera camera = getCamera();
-        final M currentModel = notNull(getCurrentModel());
+        var camera = getCamera();
+        var currentModel = notNull(getCurrentModel());
 
-        final Vector3f modelPoint = GeomUtils.getContactPointFromScreenPos(currentModel, camera, screenX, screenY);
-        final Vector3f gridPoint = GeomUtils.getContactPointFromScreenPos(getGrid(), camera, screenX, screenY);
+        var modelPoint = GeomUtils.getContactPointFromScreenPos(currentModel, camera, screenX, screenY);
+        var gridPoint = GeomUtils.getContactPointFromScreenPos(getGrid(), camera, screenX, screenY);
 
         if (modelPoint == null) {
             return gridPoint == null ? Vector3f.ZERO : gridPoint;
@@ -1581,7 +1468,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
             return modelPoint;
         }
 
-        final float distance = modelPoint.distance(camera.getLocation());
+        var distance = modelPoint.distance(camera.getLocation());
 
         if (gridPoint.distance(camera.getLocation()) < distance) {
             return gridPoint;
@@ -1598,40 +1485,36 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @return the normal on the current scene or null.
      */
     @JmeThread
-    public @Nullable Vector3f getSceneNormalByScreenPos(final float screenX, final float screenY) {
-        final Camera camera = getCamera();
-        final M currentModel = notNull(getCurrentModel());
+    public @Nullable Vector3f getSceneNormalByScreenPos(float screenX, float screenY) {
+        var camera = getCamera();
+        var currentModel = notNull(getCurrentModel());
         return GeomUtils.getContactNormalFromScreenPos(currentModel, camera, screenX, screenY);
     }
 
     /**
-     * Get the node to place models.
+     * Update the state of showing a scene's grid.
      *
-     * @return the node to place models.
-     */
-    protected @NotNull Node getModelNode() {
-        return modelNode;
-    }
-
-    /**
-     * Update the showing grid.
-     *
-     * @param showGrid the show grid
+     * @param showGrid true if need to show scene's grid.
      */
     @FromAnyThread
-    public void updateShowGrid(final boolean showGrid) {
-        EXECUTOR_MANAGER.addJmeTask(() -> updateShowGridImpl(showGrid));
+    public void updateShowGrid(boolean showGrid) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> updateShowGridInJme(showGrid));
     }
 
     /**
-     * The process of updating the showing grid.
+     * Update the state of showing a scene's grid in jME thread.
+     *
+     * @param showGrid true if need to show scene's grid.
      */
     @JmeThread
-    private void updateShowGridImpl(final boolean showGrid) {
-        if (isShowGrid() == showGrid) return;
+    private void updateShowGridInJme(boolean showGrid) {
 
-        final Node toolNode = getToolNode();
-        final Node grid = getGrid();
+        if (isShowGrid() == showGrid) {
+            return;
+        }
+
+        var grid = getGrid();
 
         if (showGrid) {
             toolNode.attachChild(grid);
@@ -1691,7 +1574,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         setTransformDeltaX(Float.NaN);
         updateTransformCenter();
 
-        getFileEditor().execute(operation);
+        fileEditor.execute(operation);
     }
 
     /**
@@ -1699,6 +1582,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @JmeThread
     private boolean startTransform() {
+
         updateTransformCenter();
 
         var camera = EditorUtil.getGlobalCamera();
@@ -1716,7 +1600,6 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         ray.setOrigin(position);
         ray.setDirection(direction);
 
-        var transformToolNode = getTransformToolNode();
         transformToolNode.collideWith(ray, collisionResults);
 
         if (collisionResults.size() < 1) {
@@ -1755,11 +1638,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Start painting.
      */
     @JmeThread
-    private void startPainting(@NotNull final PaintingInput input) {
+    private void startPainting(@NotNull PaintingInput input) {
 
-        final Node cursorNode = getCursorNode();
-        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
-        final Spatial paintedModel = PaintingUtils.getPaintedModel(getCursorNode());
+        var control = PaintingUtils.getPaintingControl(cursorNode);
+        var paintedModel = PaintingUtils.getPaintedModel(cursorNode);
 
         if (control == null || paintedModel == null || control.isStartedPainting()) {
             return;
@@ -1772,11 +1654,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Finish painting.
      */
     @JmeThread
-    private void finishPainting(@NotNull final PaintingInput input) {
+    private void finishPainting(@NotNull PaintingInput input) {
 
-        final Node cursorNode = getCursorNode();
-        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
-        final Spatial paintedModel = PaintingUtils.getPaintedModel(control);
+        var control = PaintingUtils.getPaintingControl(cursorNode);
+        var paintedModel = PaintingUtils.getPaintedModel(control);
 
         if (control == null || paintedModel == null) {
             return;
@@ -1791,11 +1672,10 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * Update painting.
      */
     @JmeThread
-    private void updatePainting(final float tpf) {
+    private void updatePainting(float tpf) {
 
-        final Node cursorNode = getCursorNode();
-        final PaintingControl control = PaintingUtils.getPaintingControl(cursorNode);
-        final Spatial model = PaintingUtils.getPaintedModel(control);
+        var control = PaintingUtils.getPaintingControl(cursorNode);
+        var model = PaintingUtils.getPaintedModel(control);
 
         if (control == null || model == null || !control.isStartedPainting()) {
             return;
@@ -1867,38 +1747,44 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
+     * Set the object to transform.
+     *
      * @param toTransform the object to transform.
      */
     @JmeThread
-    private void setToTransform(@Nullable final Spatial toTransform) {
+    private void setToTransform(@Nullable Spatial toTransform) {
         this.toTransform = toTransform;
     }
 
     /**
+     * Set the center of transformation.
+     *
      * @param transformCenter the center of transformation.
      */
     @JmeThread
-    private void setTransformCenter(@Nullable final Transform transformCenter) {
+    private void setTransformCenter(@Nullable Transform transformCenter) {
         this.transformCenter = transformCenter;
     }
 
     /**
-     * Show the model in the scene.
+     * Show the model in this editor.
      *
-     * @param model the model
+     * @param model the model.
      */
     @FromAnyThread
-    public void openModel(@NotNull final M model) {
-        EXECUTOR_MANAGER.addJmeTask(() -> openModelImpl(model));
+    public void openModel(@NotNull M model) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> openModelInJme(model));
     }
 
     /**
-     * The process of showing the model in the scene.
+     * Show the model in this editor in jME thread.
+     *
+     * @param model the model.
      */
     @JmeThread
-    private void openModelImpl(@NotNull M model) {
+    private void openModelInJme(@NotNull M model) {
 
-        var modelNode = getModelNode();
         var currentModel = getCurrentModel();
 
         if (currentModel != null) {
@@ -1930,29 +1816,31 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     @JmeThread
-    protected void detachPrevModel(@NotNull final Node modelNode, @Nullable final M currentModel) {
+    protected void detachPrevModel(@NotNull Node modelNode, @Nullable M currentModel) {
         if (currentModel != null) {
             modelNode.detachChild(currentModel);
         }
     }
 
     @JmeThread
-    protected void attachModel(@NotNull final M model, @NotNull final Node modelNode) {
+    protected void attachModel(@NotNull M model, @NotNull Node modelNode) {
         modelNode.attachChild(model);
     }
 
     /**
-     * @param currentModel current display model.
+     * Set the current model.
+     *
+     * @param currentModel the current model.
      */
     @JmeThread
-    private void setCurrentModel(@Nullable final M currentModel) {
+    private void setCurrentModel(@Nullable M currentModel) {
         this.currentModel = currentModel;
     }
 
     /**
      * Get the current model.
      *
-     * @return current display model.
+     * @return the current model.
      */
     @FromAnyThread
     public @Nullable M getCurrentModel() {
@@ -1960,43 +1848,48 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Add the light.
+     * Add the light to this editor.
      *
      * @param light the light.
      */
     @FromAnyThread
-    public void addLight(@NotNull final Light light) {
-        EXECUTOR_MANAGER.addJmeTask(() -> addLightImpl(light));
+    public void addLight(@NotNull Light light) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> addLightInJme(light));
     }
 
     /**
-     * The process of adding a light.
+     * Add the light to this editor in jME thread.
+     *
+     * @param light the light.
      */
     @JmeThread
-    private void addLightImpl(@NotNull final Light light) {
+    private void addLightInJme(@NotNull Light light) {
 
-        final Node node = LIGHT_MODEL_TABLE.get(light.getType());
-        if (node == null) return;
+        var node = LIGHT_MODEL_TABLE.get(light.getType());
 
-        final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
+        if (node == null) {
+            return;
+        }
 
-        final Camera camera = EditorUtil.getGlobalCamera();
-        final EditorLightNode lightModel = notNull(cachedLights.get(light, () -> {
+        var camera = EditorUtil.getGlobalCamera();
 
-            final Node model = (Node) node.clone();
+        var lightModel = notNull(cachedLights.get(light, () -> {
+
+            var model = (Node) node.clone();
             model.setLocalScale(0.03F);
 
-            final EditorLightNode result = new EditorLightNode(camera);
+            var result = new EditorLightNode(camera);
             result.setModel(model);
 
-            final Geometry geometry = NodeUtils.findGeometry(model, "White");
+            var geometry = NodeUtils.findGeometry(model, "White");
 
             if (geometry == null) {
                 LOGGER.warning(this, "not found geometry for the node " + geometry);
                 return null;
             }
 
-            final Material material = geometry.getMaterial();
+            var material = geometry.getMaterial();
             material.setColor("Color", light.getColor());
 
             return result;
@@ -2005,21 +1898,21 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         lightModel.setLight(light);
         lightModel.sync();
 
-        final Node lightNode = getLightNode();
         lightNode.attachChild(lightModel);
         lightNode.attachChild(lightModel.getModel());
 
-        getLightNodes().add(lightModel);
+        lightNodes.add(lightModel);
     }
 
     /**
-     * Move a camera to a location.
+     * Move editor's camera to the location.
      *
      * @param location the location.
      */
     @FromAnyThread
-    public void moveCameraTo(@NotNull final Vector3f location) {
-        EXECUTOR_MANAGER.addJmeTask(() -> getNodeForCamera().setLocalTranslation(location));
+    public void moveCameraTo(@NotNull Vector3f location) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> getNodeForCamera().setLocalTranslation(location));
     }
 
     /**
@@ -2028,17 +1921,20 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param spatial the spatial.
      */
     @FromAnyThread
-    public void cameraLookAt(@NotNull final Spatial spatial) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    public void cameraLookAt(@NotNull Spatial spatial) {
 
-            final EditorCamera editorCamera = notNull(getEditorCamera());
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addJmeTask(() -> {
 
-            final LocalObjects local = LocalObjects.get();
+            var editorCamera = notNull(getEditorCamera());
+            var local = LocalObjects.get();
+
             float distance;
 
-            final BoundingVolume worldBound = spatial.getWorldBound();
+            var worldBound = spatial.getWorldBound();
 
             if (worldBound != null) {
+
                 distance = worldBound.getVolume();
 
                 if (worldBound instanceof BoundingBox) {
@@ -2059,7 +1955,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
 
             editorCamera.setTargetDistance(distance);
 
-            final Vector3f position = local.nextVector()
+            var position = local.nextVector()
                     .set(spatial.getWorldTranslation());
 
             getNodeForCamera().setLocalTranslation(position);
@@ -2067,65 +1963,68 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Remove the light.
+     * Remove the light from this editor.
      *
      * @param light the light.
      */
     @FromAnyThread
-    public void removeLight(@NotNull final Light light) {
-        EXECUTOR_MANAGER.addJmeTask(() -> removeLightImpl(light));
+    public void removeLight(@NotNull Light light) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> removeLightInJme(light));
     }
 
     /**
-     * The process of removing a light.
+     * Remove the light from this editor in jME thread.
+     *
+     * @param light the light.
      */
     @JmeThread
-    private void removeLightImpl(@NotNull final Light light) {
+    private void removeLightInJme(@NotNull Light light) {
 
-        final Node node = LIGHT_MODEL_TABLE.get(light.getType());
+        var node = LIGHT_MODEL_TABLE.get(light.getType());
+
         if (node == null) {
             return;
         }
 
-        final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
-        final EditorLightNode lightModel = cachedLights.get(light);
+        var lightModel = cachedLights.get(light);
         if (lightModel == null) {
             return;
         }
 
         lightModel.setLight(null);
 
-        final Node lightNode = getLightNode();
         lightNode.detachChild(lightModel);
         lightNode.detachChild(notNull(lightModel.getModel()));
 
-        getLightNodes().fastRemove(lightModel);
+        lightNodes.fastRemove(lightModel);
     }
 
     /**
-     * Add the audio node.
+     * Add the audio node to this editor.
      *
      * @param audioNode the audio node.
      */
     @FromAnyThread
-    public void addAudioNode(@NotNull final AudioNode audioNode) {
-        EXECUTOR_MANAGER.addJmeTask(() -> addAudioNodeImpl(audioNode));
+    public void addAudioNode(@NotNull AudioNode audioNode) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> addAudioNodeInJme(audioNode));
     }
 
     /**
-     * The process of adding the audio node.
+     * Add the audio node to this editor in jME thread.
+     *
+     * @param audio the audio node.
      */
     @JmeThread
-    private void addAudioNodeImpl(@NotNull final AudioNode audio) {
+    private void addAudioNodeInJme(@NotNull AudioNode audio) {
 
-        final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
+        var audioModel = notNull(cachedAudioNodes.get(audio, () -> {
 
-        final EditorAudioNode audioModel = notNull(cachedAudioNodes.get(audio, () -> {
-
-            final Node model = (Node) AUDIO_NODE_MODEL.clone();
+            var model = (Node) AUDIO_NODE_MODEL.clone();
             model.setLocalScale(0.01F);
 
-            final EditorAudioNode result = new EditorAudioNode(getCamera());
+            var result = new EditorAudioNode(getCamera());
             result.setModel(model);
 
             return result;
@@ -2134,62 +2033,65 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         audioModel.setAudioNode(audio);
         audioModel.sync();
 
-        final Node audioNode = getAudioNode();
         audioNode.attachChild(audioModel);
         audioNode.attachChild(audioModel.getModel());
 
-        getAudioNodes().add(audioModel);
+        audioNodes.add(audioModel);
     }
 
     /**
-     * Remove the audio node.
+     * Remove the audio node from this editor.
      *
      * @param audio the audio node.
      */
     @FromAnyThread
-    public void removeAudioNode(@NotNull final AudioNode audio) {
-        EXECUTOR_MANAGER.addJmeTask(() -> removeAudioNodeImpl(audio));
+    public void removeAudioNode(@NotNull AudioNode audio) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> removeAudioNodeInJme(audio));
     }
 
     /**
-     * The process of removing the audio node.
+     * Remove the audio node from this editor in jME thread.
+     *
+     * @param audio the audio node.
      */
     @JmeThread
-    private void removeAudioNodeImpl(@NotNull final AudioNode audio) {
+    private void removeAudioNodeInJme(@NotNull AudioNode audio) {
 
-        final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
-        final EditorAudioNode audioModel = cachedAudioNodes.get(audio);
+        var audioModel = cachedAudioNodes.get(audio);
+
         if (audioModel == null) {
             return;
         }
 
         audioModel.setAudioNode(null);
 
-        final Node audioNode = getAudioNode();
         audioNode.detachChild(audioModel);
         audioNode.detachChild(notNull(audioModel.getModel()));
 
-        getAudioNodes().fastRemove(audioModel);
+        audioNodes.fastRemove(audioModel);
     }
 
     /**
-     * Add the presentable object.
+     * Add the presentable object to this editor.
      *
      * @param presentable the presentable object.
      */
     @FromAnyThread
     public void addPresentable(@NotNull ScenePresentable presentable) {
-        EXECUTOR_MANAGER.addJmeTask(() -> addPresentableImpl(presentable));
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> addPresentableInJme(presentable));
     }
 
     /**
-     * The process of adding the presentable object.
+     * Add the presentable object to this editor in jME.
+     *
+     * @param presentable the presentable object.
      */
     @JmeThread
-    private void addPresentableImpl(@NotNull ScenePresentable presentable) {
+    private void addPresentableInJme(@NotNull ScenePresentable presentable) {
 
-        var cache = getCachedPresentableObjects();
-        var node = notNull(cache.get(presentable, EditorPresentableNode::new));
+        var node = notNull(cachedPresentableObjects.get(presentable, EditorPresentableNode::new));
 
         node.setObject(presentable);
         node.updateGeometry();
@@ -2198,45 +2100,45 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
         var editedNode = node.getEditedNode();
         editedNode.setCullHint(CullHint.Always);
 
-        var presentableNode = getPresentableNode();
         presentableNode.attachChild(node);
         presentableNode.attachChild(node.getModel());
 
         node.setObject(presentable);
 
-        getPresentableNodes().add(node);
+        presentableNodes.add(node);
     }
 
-
     /**
-     * Remove the audio node.
+     * Remove the presentable object from this editor.
      *
      * @param presentable the presentable.
      */
     @FromAnyThread
-    public void removePresentable(@NotNull final ScenePresentable presentable) {
-        EXECUTOR_MANAGER.addJmeTask(() -> removePresentableImpl(presentable));
+    public void removePresentable(@NotNull ScenePresentable presentable) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> removePresentableInJme(presentable));
     }
 
     /**
-     * The process of removing the audio node.
+     * Remove the presentable object from this editor in jME thread.
+     *
+     * @param presentable the presentable.
      */
     @JmeThread
-    private void removePresentableImpl(@NotNull final ScenePresentable presentable) {
+    private void removePresentableInJme(@NotNull ScenePresentable presentable) {
 
-        final ObjectDictionary<ScenePresentable, EditorPresentableNode> presentableNodes = getCachedPresentableObjects();
-        final EditorPresentableNode node = presentableNodes.get(presentable);
+        var node = cachedPresentableObjects.get(presentable);
+
         if (node == null) {
             return;
         }
 
         node.setObject(null);
 
-        final Node presentableNode = getPresentableNode();
         presentableNode.detachChild(node);
         presentableNode.detachChild(notNull(node.getModel()));
 
-        getPresentableNodes().fastRemove(node);
+        presentableNodes.fastRemove(node);
     }
 
     /**
@@ -2247,7 +2149,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorLightNode getLightNode(@NotNull Light light) {
-        return getLightNodes().findAny(light,
+        return lightNodes.findAny(light,
                 (node, toCheck) -> node.getLight() == toCheck);
     }
 
@@ -2270,7 +2172,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorLightNode getLightNode(@NotNull Spatial model) {
-        return getLightNodes().findAny(model,
+        return lightNodes.findAny(model,
                 (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2282,7 +2184,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorAudioNode getAudioNode(@NotNull AudioNode audioNode) {
-        return getAudioNodes().findAny(audioNode,
+        return audioNodes.findAny(audioNode,
                 (node, toCheck) -> node.getAudioNode() == toCheck);
     }
 
@@ -2305,7 +2207,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorAudioNode getAudioNode(@NotNull Spatial model) {
-        return getAudioNodes().findAny(model,
+        return audioNodes.findAny(model,
                 (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2328,7 +2230,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorPresentableNode getPresentableNode(@NotNull ScenePresentable presentable) {
-        return getPresentableNodes().findAny(presentable,
+        return presentableNodes.findAny(presentable,
                 (node, toCheck) -> node.getObject() == toCheck);
     }
 
@@ -2351,7 +2253,7 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      */
     @FromAnyThread
     public @Nullable EditorPresentableNode getPresentableNode(@NotNull Spatial model) {
-        return getPresentableNodes().findAny(model,
+        return presentableNodes.findAny(model,
                 (node, toCheck) -> node.getModel() == toCheck);
     }
 
@@ -2366,22 +2268,23 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
     ) {
         super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
 
-        EXECUTOR_MANAGER.addFxTask(() ->
-                getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() ->
+                fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
     }
 
     /**
-     * Set the flag of painting mode.
+     * Set true if painting mode is enabled.
      *
-     * @param paintingMode the flag of painting mode.
+     * @param paintingMode true if painting mode is enabled.
      */
     @JmeThread
-    private void setPaintingMode(final boolean paintingMode) {
+    private void setPaintingMode(boolean paintingMode) {
         this.paintingMode = paintingMode;
     }
 
     /**
-     * Return the flag of painting mode.
+     * Return true if painting mode is enabled.
      *
      * @return true if painting mode is enabled.
      */
@@ -2396,23 +2299,19 @@ public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEdito
      * @param paintingMode true if painting mode is enabled.
      */
     @FromAnyThread
-    public void changePaintingMode(final boolean paintingMode) {
-        EXECUTOR_MANAGER.addJmeTask(() -> changePaintingModeImpl(paintingMode));
+    public void changePaintingMode(boolean paintingMode) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> changePaintingModeInJme(paintingMode));
     }
 
     /**
-     * Change enabling of painting mode.
+     * Change enabling of painting mode in jME thread.
      *
      * @param paintingMode true if painting mode is enabled.
      */
     @JmeThread
-    private void changePaintingModeImpl(final boolean paintingMode) {
+    private void changePaintingModeInJme(boolean paintingMode) {
         setPaintingMode(paintingMode);
-
-        final Node cursorNode = getCursorNode();
-        final Node markersNode = getMarkersNode();
-        final Node toolNode = getToolNode();
-        final Node transformToolNode = getTransformToolNode();
 
         if (isPaintingMode()) {
             toolNode.attachChild(cursorNode);

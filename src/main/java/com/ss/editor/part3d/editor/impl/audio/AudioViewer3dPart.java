@@ -56,28 +56,26 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
      */
     @FromAnyThread
     public void load(@NotNull AudioData audioData, @NotNull AudioKey audioKey) {
-
         ExecutorManager.getInstance()
-                .addJmeTask(() -> loadImpl(audioData, audioKey));
+                .addJmeTask(() -> loadInJme(audioData, audioKey));
     }
 
     /**
-     * Load the audio data.
+     * Load the audio data in jME thread.
      *
      * @param audioData the audio data.
      * @param audioKey  the audio key.
      */
     @JmeThread
-    private void loadImpl(@NotNull AudioData audioData, @NotNull AudioKey audioKey) {
-
+    private void loadInJme(@NotNull AudioData audioData, @NotNull AudioKey audioKey) {
         removeAudioNode();
 
         setAudioData(audioData);
         setAudioKey(audioKey);
 
-        var stateNode = getStateNode();
         var audioNode = new AudioNode(audioData, audioKey);
         audioNode.setPositional(false);
+
         stateNode.attachChild(audioNode);
 
         setAudioNode(audioNode);
@@ -89,19 +87,19 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
     @JmeThread
     private void removeAudioNode() {
 
-        var currentAudioNode = getAudioNode();
-        if (currentAudioNode == null) {
+        var audioNode = getAudioNode();
+
+        if (audioNode == null) {
             return;
         }
 
-        var stateNode = getStateNode();
-        var status = currentAudioNode.getStatus();
+        var status = audioNode.getStatus();
 
         if (status == Status.Playing || status == Status.Paused) {
-            currentAudioNode.stop();
+            audioNode.stop();
         }
 
-        stateNode.detachChild(currentAudioNode);
+        stateNode.detachChild(audioNode);
 
         setAudioNode(null);
         setPrevStatus(null);
@@ -113,37 +111,37 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
     @FromAnyThread
     public void play() {
         ExecutorManager.getInstance()
-                .addJmeTask(this::playImpl);
+                .addJmeTask(this::playInJme);
     }
 
     /**
      * Play the current audio.
      */
     @JmeThread
-    private void playImpl() {
+    private void playInJme() {
 
-        var currentAudioNode = getAudioNode();
+        var audioNode = getAudioNode();
 
-        if (currentAudioNode != null) {
+        if (audioNode != null) {
 
-            var status = currentAudioNode.getStatus();
+            var status = audioNode.getStatus();
 
             if (status == Status.Paused) {
-                currentAudioNode.play();
+                audioNode.play();
                 return;
             } else if (status == Status.Playing) {
                 return;
             }
         }
 
-        loadImpl(getAudioData(), getAudioKey());
+        loadInJme(getAudioData(), getAudioKey());
         getAudioNode().play();
     }
 
     @Override
     @JmeThread
     public void cleanup() {
-        stopImpl();
+        stopInJme();
         super.cleanup();
     }
 
@@ -153,17 +151,22 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
     @FromAnyThread
     public void pause() {
         ExecutorManager.getInstance()
-                .addJmeTask(this::pauseImpl);
+                .addJmeTask(this::pauseInJme);
     }
 
     /**
-     * Pause the current audio.
+     * Pause the current audio in jME.
      */
     @JmeThread
-    private void pauseImpl() {
-        final AudioNode currentAudioNode = getAudioNode();
-        if (currentAudioNode == null) return;
-        currentAudioNode.pause();
+    private void pauseInJme() {
+
+        var audioNode = getAudioNode();
+
+        if (audioNode == null) {
+            return;
+        }
+
+        audioNode.pause();
     }
 
     /**
@@ -172,19 +175,18 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
     @FromAnyThread
     public void stop() {
         ExecutorManager.getInstance()
-                .addJmeTask(this::stopImpl);
+                .addJmeTask(this::stopInJme);
     }
 
     /**
-     * Stop the current audio.
+     * Stop the current audio in jME thread.
      */
     @JmeThread
-    private void stopImpl() {
-
+    private void stopInJme() {
         removeAudioNode();
 
         ExecutorManager.getInstance()
-                .addFxTask(() -> getFileEditor().notifyChangedStatus(Status.Stopped));
+                .addFxTask(() -> fileEditor.notifyChangedStatus(Status.Stopped));
     }
 
     @Override
@@ -203,7 +205,7 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
         if (status != getPrevStatus()) {
 
             ExecutorManager.getInstance()
-                    .addFxTask(() -> getFileEditor().notifyChangedStatus(status));
+                    .addFxTask(() -> fileEditor.notifyChangedStatus(status));
 
             setPrevStatus(status);
         }
@@ -270,7 +272,7 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
     }
 
     /**
-     * Get previous prev status.
+     * Get the previous status.
      *
      * @return the previous status.
      */
@@ -280,7 +282,7 @@ public class AudioViewer3dPart extends AbstractEditor3dPart<AudioViewerEditor> {
     }
 
     /**
-     * Set previous prev status.
+     * Set previous previous status.
      *
      * @param prevStatus the previous status.
      */
