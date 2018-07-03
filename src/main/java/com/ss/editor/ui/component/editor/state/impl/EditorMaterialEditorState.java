@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState {
+public class EditorMaterialEditorState extends Editor3dWithEditorToolEditorState {
 
     /**
      * The constant serialVersionUID.

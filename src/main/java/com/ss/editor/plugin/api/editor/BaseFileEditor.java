@@ -1,14 +1,14 @@
 package com.ss.editor.plugin.api.editor;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import javafx.event.Event;
@@ -35,7 +35,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * The operation control.
      */
     @NotNull
-    private final EditorOperationControl operationControl;
+    protected final EditorOperationControl operationControl;
 
     /**
      * The changes counter.
@@ -77,9 +77,13 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
 
     @FxThread
     @Override
-    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isShiftDown,
-                                          final boolean isButtonMiddleDown) {
+    protected boolean handleKeyActionImpl(
+            @NotNull KeyCode keyCode,
+            boolean isPressed,
+            boolean isControlDown,
+            boolean isShiftDown,
+            boolean isButtonMiddleDown
+    ) {
 
         if (isPressed && isControlDown && keyCode == KeyCode.Z) {
             undo();
@@ -98,14 +102,14 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     @Override
     @FxThread
     public void incrementChange() {
-        final int result = changeCounter.incrementAndGet();
+        var result = changeCounter.incrementAndGet();
         setDirty(result != 0);
     }
 
     @Override
     @FxThread
     public void decrementChange() {
-        final int result = changeCounter.decrementAndGet();
+        var result = changeCounter.decrementAndGet();
         setDirty(result != 0);
     }
 
@@ -121,28 +125,19 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
         operationControl.undo();
     }
 
-    /**
-     * Get the editor operation control.
-     *
-     * @return the editor operation control.
-     */
-    @FromAnyThread
-    protected @NotNull EditorOperationControl getOperationControl() {
-        return operationControl;
-    }
-
     @Override
-    @FxThread
-    public void openFile(@NotNull final Path file) {
+    @BackgroundThread
+    public void openFile(@NotNull Path file) {
         super.openFile(file);
 
         try {
             doOpenFile(file);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        EXECUTOR_MANAGER.addFxTask(this::loadState);
+        ExecutorManager.getInstance()
+                .addFxTask(this::loadState);
     }
 
     /**
@@ -151,13 +146,14 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
     @FxThread
     protected void loadState() {
 
-        final Supplier<EditorState> stateFactory = getEditorStateFactory();
+        var stateFactory = getEditorStateFactory();
+
         if (stateFactory == null) {
             return;
         }
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = notNull(workspaceManager.getCurrentWorkspace());
+        var currentWorkspace = WorkspaceManager.getInstance()
+                .requiredCurrentWorkspace();
 
         editorState = currentWorkspace.getEditorState(getEditFile(), stateFactory);
     }
@@ -179,19 +175,23 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * @throws IOException if was some problem with writing to the file.
      */
     @FxThread
-    protected void doOpenFile(@NotNull final Path file) throws IOException {
+    protected void doOpenFile(@NotNull Path file) throws IOException {
     }
 
     /**
-     * @param ignoreListeners the flag for ignoring listeners.
+     * Set true if need to ignore listeners.
+     *
+     * @param ignoreListeners true if need to ignore listeners.
      */
     @FromAnyThread
-    protected void setIgnoreListeners(final boolean ignoreListeners) {
+    protected void setIgnoreListeners(boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @return the flag for ignoring listeners.
+     * Return true if need to ignore listeners.
+     *
+     * @return true if need to ignore listeners.
      */
     @FromAnyThread
     protected boolean isIgnoreListeners() {
@@ -206,7 +206,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
 
     @Override
     @FxThread
-    public @Nullable BorderPane get3DArea() {
+    public @Nullable BorderPane get3dArea() {
         return null;
     }
 
@@ -222,7 +222,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
 
     @Override
     @FxThread
-    public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
+    public boolean isInside(double sceneX, double sceneY, @NotNull Class<? extends Event> eventType) {
         return false;
     }
 }

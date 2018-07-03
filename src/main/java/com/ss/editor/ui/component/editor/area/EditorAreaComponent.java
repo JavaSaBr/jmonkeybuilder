@@ -27,7 +27,6 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
-import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -128,7 +127,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             fileEditor.notifyShowed();
 
             newCurrentFile = fileEditor.getEditFile();
-            new3DArea = fileEditor.get3DArea();
+            new3DArea = fileEditor.get3dArea();
         }
 
         if (oldValue != null) {
@@ -137,7 +136,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
             fileEditor.notifyHided();
 
-            current3DArea = fileEditor.get3DArea();
+            current3DArea = fileEditor.get3dArea();
         }
 
         var scene = (EditorFxScene) getScene();
@@ -383,7 +382,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             var fileEditor = (FileEditor) prevTab.getProperties()
                     .get(KEY_EDITOR);
 
-            var states = fileEditor.get3DStates();
+            var states = fileEditor.get3dParts();
             states.forEach(stateManager::detach);
         }
 
@@ -392,7 +391,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             var fileEditor = (FileEditor) newTab.getProperties()
                     .get(KEY_EDITOR);
 
-            var states = fileEditor.get3DStates();
+            var states = fileEditor.get3dParts();
             states.forEach(stateManager::attach);
 
             enabled = states.size() > 0;
@@ -446,8 +445,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @BackgroundThread
     private void processOpenFileImpl(@NotNull RequestedOpenFileEvent event, @NotNull Path file) {
 
-        var scene = EditorUtil.getFxScene();
-
         FileEditor editor;
         try {
 
@@ -458,14 +455,14 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         } catch (Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
-            EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
-            ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
+            UiUtils.decrementLoading();
+            getOpeningFiles().runInWriteLock(file, Array::fastRemove);
             return;
         }
 
         if (editor == null) {
-            EXECUTOR_MANAGER.addFxTask(scene::decrementLoading);
-            ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
+            UiUtils.decrementLoading();
+            getOpeningFiles().runInWriteLock(file, Array::fastRemove);
             return;
         }
 
@@ -477,18 +474,18 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             editor.openFile(file);
         } catch (Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
-            ArrayUtils.runInWriteLock(getOpeningFiles(), file, Array::fastRemove);
+
+            getOpeningFiles().runInWriteLock(file, Array::fastRemove);
 
             var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+
             if (workspace != null) {
                 workspace.removeOpenedFile(file);
             }
 
-            EXECUTOR_MANAGER.addFxTask(() -> {
-                UiUtils.decrementLoading();
-                resultEditor.notifyClosed();
-            });
+            UiUtils.decrementLoading();
 
+            EXECUTOR_MANAGER.addFxTask(resultEditor::notifyClosed);
             return;
 
         } finally {
@@ -524,8 +521,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             getSelectionModel().select(tab);
         }
 
-        DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
-        ArrayUtils.runInWriteLock(getOpeningFiles(), editFile, Array::fastRemove);
+        getOpenedEditors().runInWriteLock(editFile, tab, ObjectDictionary::put);
+        getOpeningFiles().runInWriteLock(editFile, Array::fastRemove);
 
         UiUtils.decrementLoading();
 
@@ -534,6 +531,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
 
         var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+
         if (workspace != null) {
             workspace.addOpenedFile(editFile, editor);
         }

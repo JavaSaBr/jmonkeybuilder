@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import javafx.event.ActionEvent;
@@ -23,9 +23,9 @@ class OpenFileByEditorAction extends FileAction {
      * The editor description.
      */
     @NotNull
-    private final EditorDescription description;
+    private final EditorDescriptor description;
 
-    public OpenFileByEditorAction(@NotNull ResourceElement element, @NotNull EditorDescription description) {
+    public OpenFileByEditorAction(@NotNull ResourceElement element, @NotNull EditorDescriptor description) {
         super(element);
         this.description = description;
 

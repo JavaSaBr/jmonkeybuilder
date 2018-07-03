@@ -5,15 +5,14 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.renderer.Statistics;
-import com.jme3.system.Timer;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.part3d.editor.Editor3DPart;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.ArrayUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -28,12 +27,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public class Stats3DPart extends AbstractAppState implements Editor3DPart {
+public class Stats3dPart extends AbstractAppState implements Editor3dPart {
 
-    @NotNull
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
     private static final AtomicInteger STATISTICS_ENABLED = new AtomicInteger(0);
 
     /**
@@ -162,7 +157,7 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
     private int fps;
     private int prevFps;
 
-    public Stats3DPart(@NotNull final Pane parent) {
+    public Stats3dPart(@NotNull Pane parent) {
         this.parent = parent;
         this.statsContainer = new GridPane();
         this.frameCounter = 0;
@@ -178,46 +173,46 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
     @FxThread
     private void createComponents() {
 
-        final Label frameBuffersMLabel = new Label("FrameBuffers (M)");
+        var frameBuffersMLabel = new Label("FrameBuffers (M)");
         frameBuffersMField = new Label();
 
-        final Label frameBuffersFLabel = new Label("FrameBuffers (F)");
+        var frameBuffersFLabel = new Label("FrameBuffers (F)");
         frameBuffersFField = new Label();
 
-        final Label frameBuffersSLabel = new Label("FrameBuffers (S)");
+        var frameBuffersSLabel = new Label("FrameBuffers (S)");
         frameBuffersSField = new Label();
 
-        final Label texturesMLabel = new Label("Textures (M)");
+        var texturesMLabel = new Label("Textures (M)");
         texturesMField = new Label();
 
-        final Label texturesFLabel = new Label("Textures (F)");
+        var texturesFLabel = new Label("Textures (F)");
         texturesFField = new Label();
 
-        final Label texturesSLabel = new Label("Textures (S)");
+        var texturesSLabel = new Label("Textures (S)");
         texturesSField = new Label();
 
-        final Label shadersMLabel = new Label("Shaders (M)");
+        var shadersMLabel = new Label("Shaders (M)");
         shadersMField = new Label();
 
-        final Label shadersFLabel = new Label("Shaders (F)");
+        var shadersFLabel = new Label("Shaders (F)");
         shadersFField = new Label();
 
-        final Label shadersSLabel = new Label("Shaders (S)");
+        var shadersSLabel = new Label("Shaders (S)");
         shadersSField = new Label();
 
-        final Label objectsLabel = new Label("Objects");
+        var objectsLabel = new Label("Objects");
         objectsField = new Label();
 
-        final Label uniformsLabel = new Label("Uniforms");
+        var uniformsLabel = new Label("Uniforms");
         uniformsField = new Label();
 
-        final Label trianglesLabel = new Label("Triangles");
+        var trianglesLabel = new Label("Triangles");
         trianglesField = new Label();
 
-        final Label verticesLabel = new Label("Vertices");
+        var verticesLabel = new Label("Vertices");
         verticesField = new Label();
 
-        final Label fpsLabel = new Label("Fps");
+        var fpsLabel = new Label("Fps");
         fpsField = new Label();
 
         statsContainer.add(frameBuffersMLabel, 0, 0);
@@ -249,13 +244,14 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
         statsContainer.add(fpsLabel, 0, 13);
         statsContainer.add(fpsField, 1, 13);
 
-        FXUtils.addClassTo(statsContainer, CssClasses.STATS_3D_STATE);
+        FxUtils.addClass(statsContainer, CssClasses.STATS_3D_STATE);
     }
 
     @Override
     @JmeThread
-    public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
+    public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
         super.initialize(stateManager, application);
+
         this.application = application;
         this.statistics = application.getRenderer().getStatistics();
         this.statsData = new int[statistics.getLabels().length];
@@ -263,14 +259,17 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
 
         statistics.setEnabled(STATISTICS_ENABLED.incrementAndGet() > 0);
 
-        EXECUTOR_MANAGER.addFxTask(() -> FXUtils.addToPane(statsContainer, parent));
+        ExecutorManager.getInstance()
+                .addFxTask(() -> FxUtils.addChild(parent, statsContainer));
     }
 
     @Override
     @JmeThread
-    public void setEnabled(final boolean enabled) {
+    public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        EXECUTOR_MANAGER.addFxTask(() -> statsContainer.setVisible(enabled));
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> statsContainer.setVisible(enabled));
     }
 
     /**
@@ -455,13 +454,14 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
 
     @Override
     @JmeThread
-    public void update(final float tpf) {
+    public void update(float tpf) {
+
         if (!isEnabled()) {
             return;
         }
 
-        final Application application = getApplication();
-        final Timer timer = application.getTimer();
+        var application = getApplication();
+        var timer = application.getTimer();
 
         secondCounter += timer.getTimePerFrame();
         frameCounter++;
@@ -476,12 +476,12 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
             }
         }
 
-        final int[] statsData = getStatsData();
+        var statsData = getStatsData();
 
-        final Statistics statistics = getStatistics();
+        var statistics = getStatistics();
         statistics.getData(statsData);
 
-        final int[] prevStatsData = getPrevStatsData();
+        var prevStatsData = getPrevStatsData();
 
         if (Arrays.equals(statsData, prevStatsData)) {
             return;
@@ -489,21 +489,22 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
 
         ArrayUtils.copyTo(statsData, prevStatsData);
 
-        final int vertices = statsData[0];
-        final int triangles = statsData[1];
-        final int uniforms = statsData[2];
-        final int objects = statsData[3];
-        final int shadersS = statsData[4];
-        final int shadersF = statsData[5];
-        final int shadersM = statsData[6];
-        final int texturesS = statsData[7];
-        final int texturesF = statsData[8];
-        final int texturesM = statsData[9];
-        final int frameBuffersS = statsData[10];
-        final int frameBuffersF = statsData[11];
-        final int frameBuffersM = statsData[12];
+        var vertices = statsData[0];
+        var triangles = statsData[1];
+        var uniforms = statsData[2];
+        var objects = statsData[3];
+        var shadersS = statsData[4];
+        var shadersF = statsData[5];
+        var shadersM = statsData[6];
+        var texturesS = statsData[7];
+        var texturesF = statsData[8];
+        var texturesM = statsData[9];
+        var frameBuffersS = statsData[10];
+        var frameBuffersF = statsData[11];
+        var frameBuffersM = statsData[12];
 
-        EXECUTOR_MANAGER.addFxTask(() -> {
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
             getVerticesField().setText(Integer.toString(vertices));
             getTrianglesField().setText(Integer.toString(triangles));
             getUniformsField().setText(Integer.toString(uniforms));
@@ -524,8 +525,10 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
      * Update the FPS value.
      */
     @JmeThread
-    private void updateFps(final int fps) {
-        EXECUTOR_MANAGER.addFxTask(() -> getFpsField().setText(Integer.toString(fps)));
+    private void updateFps(int fps) {
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> getFpsField().setText(Integer.toString(fps)));
     }
 
     @Override
@@ -533,9 +536,9 @@ public class Stats3DPart extends AbstractAppState implements Editor3DPart {
     public void cleanup() {
         super.cleanup();
 
-        final Statistics statistics = getStatistics();
-        statistics.setEnabled(STATISTICS_ENABLED.decrementAndGet() == 0);
+        getStatistics().setEnabled(STATISTICS_ENABLED.decrementAndGet() == 0);
 
-        EXECUTOR_MANAGER.addFxTask(() -> FXUtils.removeFromParent(statsContainer, parent));
+        ExecutorManager.getInstance()
+                .addFxTask(() -> FxUtils.removeChild(parent, statsContainer));
     }
 }

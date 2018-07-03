@@ -73,6 +73,16 @@ public class WorkspaceManager {
     }
 
     /**
+     * Get the current workspace.
+     *
+     * @return the current workspace or null.
+     */
+    @FromAnyThread
+    public @NotNull Workspace requiredCurrentWorkspace() {
+        return notNull(getCurrentWorkspace());
+    }
+
+    /**
      * Get the workspace for the asset folder.
      *
      * @return the workspace.

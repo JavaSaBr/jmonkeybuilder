@@ -4,7 +4,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.control.code.BaseCodeArea;
 import com.ss.editor.ui.control.code.MaterialDefinitionCodeArea;
 import org.jetbrains.annotations.NotNull;
@@ -16,18 +16,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
-    public static final EditorDescription DESCRIPTION = new EditorDescription();
-
-    static {
-        DESCRIPTION.setConstructor(MaterialDefinitionFileEditor::new);
-        DESCRIPTION.setEditorName(Messages.MATERIAL_DEFINITION_FILE_EDITOR_NAME);
-        DESCRIPTION.setEditorId(MaterialDefinitionFileEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL_DEFINITION);
-    }
+    public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
+            MaterialDefinitionFileEditor::new,
+            Messages.MATERIAL_DEFINITION_FILE_EDITOR_NAME,
+            MaterialDefinitionFileEditor.class.getSimpleName(),
+            FileExtensions.JME_MATERIAL_DEFINITION
+    );
 
     @Override
     @FxThread
@@ -37,7 +31,7 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
 
     @Override
     @FromAnyThread
-    public @NotNull EditorDescription getDescription() {
-        return DESCRIPTION;
+    public @NotNull EditorDescriptor getDescriptor() {
+        return DESCRIPTOR;
     }
 }

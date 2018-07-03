@@ -1,21 +1,19 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFxImageManager;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.scene.image.Image;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -26,29 +24,24 @@ import java.nio.file.Path;
  */
 public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
-    public static final EditorDescription DESCRIPTION = new EditorDescription();
-
-    @NotNull
-    private static final JavaFxImageManager JAVA_FX_IMAGE_MANAGER = JavaFxImageManager.getInstance();
+    public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
+            ImageViewerEditor::new,
+            Messages.IMAGE_VIEWER_EDITOR_NAME,
+            ImageViewerEditor.class.getSimpleName(),
+            FileExtensions.IMAGE_EXTENSIONS
+    );
 
     private static final int IMAGE_SIZE = 512;
-
-    static {
-        DESCRIPTION.setConstructor(ImageViewerEditor::new);
-        DESCRIPTION.setEditorName(Messages.IMAGE_VIEWER_EDITOR_NAME);
-        DESCRIPTION.setEditorId(ImageViewerEditor.class.getSimpleName());
-        DESCRIPTION.setExtensions(FileExtensions.IMAGE_EXTENSIONS);
-    }
 
     /**
      * The image view.
      */
-    @Nullable
-    private ImageView imageView;
+    @NotNull
+    private final ImageView imageView;
+
+    private ImageViewerEditor() {
+        this.imageView = new ImageView();
+    }
 
     @Override
     @FxThread
@@ -58,47 +51,38 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
-
-        imageView = new ImageView();
-
-        FXUtils.addToPane(imageView, root);
-        FXUtils.addClassTo(root, CssClasses.IMAGE_VIEW_EDITOR_CONTAINER);
-    }
-
-    /**
-     * @return the image view.
-     */
-    @FxThread
-    private @NotNull ImageView getImageView() {
-        return notNull(imageView);
+    protected void createContent(@NotNull VBox root) {
+        FxUtils.addClass(root, CssClasses.IMAGE_VIEW_EDITOR_CONTAINER);
+        FxUtils.addChild(root, imageView);
     }
 
     @Override
-    @FxThread
-    protected void processChangedFile(@NotNull final FileChangedEvent event) {
-        final Path file = event.getFile();
-        if (!getEditFile().equals(file)) return;
-        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFxTask(() -> showImage(file)), 1000);
+    protected void processChangedFileImpl(@NotNull FileChangedEvent event) {
+        super.processChangedFileImpl(event);
+
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.schedule(() -> executorManager.addFxTask(() -> showImage(getEditFile())), 1000);
     }
 
     @FxThread
-    private void showImage(@NotNull final Path file) {
-        final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(file, IMAGE_SIZE, IMAGE_SIZE);
-        final ImageView imageView = getImageView();
+    private void showImage(@NotNull Path file) {
+
+        var preview = JavaFxImageManager.getInstance()
+                .getImagePreview(file, IMAGE_SIZE, IMAGE_SIZE);
+
         imageView.setImage(preview);
     }
 
     @Override
     @FxThread
-    public void openFile(@NotNull final Path file) {
+    public void openFile(@NotNull Path file) {
         super.openFile(file);
         showImage(file);
     }
 
     @Override
     @FromAnyThread
-    public @NotNull EditorDescription getDescription() {
-        return DESCRIPTION;
+    public @NotNull EditorDescriptor getDescriptor() {
+        return DESCRIPTOR;
     }
 }

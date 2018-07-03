@@ -3,32 +3,21 @@ package com.ss.editor.part3d.editor.impl;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.part3d.editor.Editor3DPart;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The base implementation of the {@link Editor3DPart} to use inside {@link FileEditor}.
+ * The base implementation of the {@link Editor3dPart} to use inside {@link FileEditor}.
  *
  * @param <T> the type of file editor
  * @author JavaSaBr
  */
-public abstract class AbstractEditor3DPart<T extends FileEditor> extends AbstractAppState implements Editor3DPart {
+public abstract class AbstractEditor3dPart<T extends FileEditor> extends AbstractAppState implements Editor3dPart {
 
-    /**
-     * The logger.
-     */
-    @NotNull
-    protected static final Logger LOGGER = LoggerManager.getLogger(Editor3DPart.class);
-
-    /**
-     * The executor manager.
-     */
-    @NotNull
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final Logger LOGGER = LoggerManager.getLogger(Editor3dPart.class);
 
     /**
      * The owner editor.
@@ -42,7 +31,7 @@ public abstract class AbstractEditor3DPart<T extends FileEditor> extends Abstrac
     @NotNull
     private final Node stateNode;
 
-    public AbstractEditor3DPart(@NotNull final T fileEditor) {
+    public AbstractEditor3dPart(@NotNull T fileEditor) {
         this.fileEditor = fileEditor;
         this.stateNode = new Node(getClass().getSimpleName());
     }

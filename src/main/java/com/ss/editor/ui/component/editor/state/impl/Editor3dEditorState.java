@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @author JavaSaBr
  */
-public class Editor3DEditorState extends AbstractEditorState {
+public class Editor3dEditorState extends AbstractEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -47,7 +47,7 @@ public class Editor3DEditorState extends AbstractEditorState {
      */
     protected volatile float cameraTDistance;
 
-    public Editor3DEditorState() {
+    public Editor3dEditorState() {
         this.cameraLocation = new Vector3f();
         this.cameraVRotation = FastMath.PI / 6;
         this.cameraTDistance = 20;

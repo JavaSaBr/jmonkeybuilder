@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.editor;
 
-import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.part3d.editor.Editor3DPart;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.Event;
 import javafx.scene.Parent;
@@ -23,30 +23,31 @@ import java.util.function.Consumer;
 public interface FileEditor {
 
     /**
-     * The Empty states.
+     * Create content of this editor.
      */
-    @NotNull Array<Editor3DPart> EMPTY_3D_STATES = ArrayFactory.newArray(Editor3DPart.class);
+    @BackgroundThread
+    void createContent();
 
     /**
-     * Get the page for showing the editor.
+     * Get a visible page of this editor
      *
-     * @return the page for showing the editor.
+     * @return the visible page of this editor
      */
     @FxThread
     @NotNull Parent getPage();
 
     /**
-     * Gets an area to place 3D scene.
+     * Get an area to place 3D scene.
      *
      * @return the area to place 3D scene.
      */
     @FxThread
-    default @Nullable BorderPane get3DArea() {
+    default @Nullable BorderPane get3dArea() {
         return null;
     }
 
     /**
-     * Gets file name.
+     * Get the file name of the current opened file.
      *
      * @return the file name of the current opened file.
      */
@@ -54,7 +55,7 @@ public interface FileEditor {
     @NotNull String getFileName();
 
     /**
-     * Gets edit file.
+     * Get the editing file.
      *
      * @return the editing file.
      */
@@ -66,8 +67,8 @@ public interface FileEditor {
      *
      * @param file the file.
      */
-    @FxThread
-    void openFile(@NotNull final Path file);
+    @BackgroundThread
+    void openFile(@NotNull Path file);
 
     /**
      * Dirty property boolean property.
@@ -103,13 +104,13 @@ public interface FileEditor {
     }
 
     /**
-     * Gets states.
+     * Get the editor's 3D parts.
      *
-     * @return the 3D part of this editor.
+     * @return the editor's 3D parts.
      */
     @FxThread
-    default @NotNull Array<Editor3DPart> get3DStates() {
-        return EMPTY_3D_STATES;
+    default @NotNull Array<Editor3dPart> get3dParts() {
+        return Array.empty();
     }
 
     /**
@@ -126,7 +127,7 @@ public interface FileEditor {
      * @param newFile  the new file
      */
     @FxThread
-    default void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
+    default void notifyRenamed(@NotNull Path prevFile, @NotNull Path newFile) {
     }
 
     /**
@@ -136,16 +137,16 @@ public interface FileEditor {
      * @param newFile  the new file
      */
     @FxThread
-    default void notifyMoved(@NotNull final Path prevFile, @NotNull final Path newFile) {
+    default void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
     }
 
     /**
-     * Gets description.
+     * Get the editor's descriptor.
      *
-     * @return the description of this editor.
+     * @return the editor's descriptor.
      */
     @FromAnyThread
-    @NotNull EditorDescription getDescription();
+    @NotNull EditorDescriptor getDescriptor();
 
     /**
      * Notify that this editor was showed.
@@ -162,7 +163,7 @@ public interface FileEditor {
     }
 
     /**
-     * Check the coords that it's inside in the editing area of this editor.
+     * Return true if the point is inside in the editing area.
      *
      * @param sceneX    the scene x
      * @param sceneY    the scene y

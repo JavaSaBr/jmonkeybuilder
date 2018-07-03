@@ -10,9 +10,8 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.part3d.editor.Editor3DPart;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.FxEventManager;
@@ -27,6 +26,7 @@ import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
@@ -58,32 +58,16 @@ import java.util.function.Consumer;
  */
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
-    /**
-     * The loggerA.
-     */
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
 
     /**
-     * The executro manager.
+     * The array of editor's 3D parts.
      */
     @NotNull
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private final Array<Editor3dPart> editor3dParts;
 
     /**
-     * The event manager.
-     */
-    @NotNull
-    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-
-    /**
-     * The array of 3D parts of this editor.
-     */
-    @NotNull
-    private final Array<Editor3DPart> editor3DParts;
-
-    /**
-     * The file changes listener.
+     * The editedFile changes listener.
      */
     @NotNull
     private final EventHandler<FileChangedEvent> fileChangedHandler;
@@ -104,19 +88,19 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The save callback.
      */
     @Nullable
-    private Consumer<@NotNull FileEditor> saveCallback;
+    private Consumer<FileEditor> saveCallback;
 
     /**
      * The root element of this editor.
      */
-    @Nullable
-    private R root;
+    @NotNull
+    private final R root;
 
     /**
-     * The edited file.
+     * The edited editedFile.
      */
     @Nullable
-    private Path file;
+    private volatile Path editedFile;
 
     /**
      * Is left button pressed.
@@ -138,45 +122,41 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     private volatile boolean saving;
 
-    /**
-     * Instantiates a new Abstract file editor.
-     */
     protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
-        this.editor3DParts = ArrayFactory.newArray(Editor3DPart.class);
+        this.editor3dParts = ArrayFactory.newArray(Editor3dPart.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         this.fileChangedHandler = this::processChangedFile;
-        createContent();
+        this.root = createRoot();
     }
 
     /**
-     * Add the new 3D part of this editor.
+     * Add the new editor's 3D part.
      *
-     * @param editor3DPart the editor app state
+     * @param editor3dPart the editor's 3D part.
      */
     @FxThread
-    protected void addEditor3DPart(@NotNull final Editor3DPart editor3DPart) {
-        this.editor3DParts.add(editor3DPart);
+    protected void addEditor3dPart(@NotNull Editor3dPart editor3dPart) {
+        this.editor3dParts.add(editor3dPart);
     }
 
     /**
-     * Sets edit file.
+     * Set the edited file.
      *
-     * @param file the edit file.
+     * @param editedFile the edited file.
      */
     @FxThread
-    protected void setEditFile(@NotNull final Path file) {
-        this.file = file;
+    protected void setEditedFile(@NotNull Path editedFile) {
+        this.editedFile = editedFile;
     }
 
-    /**
-     * Create content of this editor.
-     */
+    @Override
     @FxThread
-    protected void createContent() {
+    public void createContent() {
 
-        final VBox container = new VBox();
-        final StackPane page = new StackPane(container);
+        var container = new VBox();
+
+        var page = new StackPane(container);
         page.setPickOnBounds(true);
 
         HBox toolbar = null;
@@ -184,15 +164,15 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         if (needToolbar()) {
 
             toolbar = new HBox();
-            toolbar.prefWidthProperty().bind(container.widthProperty());
+            toolbar.prefWidthProperty()
+                    .bind(container.widthProperty());
 
             createToolbar(toolbar);
 
-            FXUtils.addClassTo(toolbar, CssClasses.FILE_EDITOR_TOOLBAR);
-            FXUtils.addToPane(toolbar, container);
+            FxUtils.addClass(toolbar, CssClasses.FILE_EDITOR_TOOLBAR);
+            FxUtils.addChild(container, toolbar);
         }
 
-        root = createRoot();
 
         if (needListenEventsFromPage()) {
             root.setOnKeyPressed(this::processKeyPressed);
@@ -203,18 +183,23 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         createContent(root);
 
-        FXUtils.addToPane(root, container);
+        FxUtils.addChild(container, root);
 
         if (toolbar != null) {
-            root.prefHeightProperty().bind(container.heightProperty().subtract(toolbar.heightProperty()));
+            root.prefHeightProperty()
+                    .bind(container.heightProperty().subtract(toolbar.heightProperty()));
         } else {
-            root.prefHeightProperty().bind(container.heightProperty());
+            root.prefHeightProperty()
+                    .bind(container.heightProperty());
         }
 
-        root.prefWidthProperty().bind(container.widthProperty());
+        root.prefWidthProperty()
+                .bind(container.widthProperty());
     }
 
     /**
+     * Return true if need to listen to events from root page of this editor.
+     *
      * @return true if need to listen to events from root page of this editor.
      */
     protected boolean needListenEventsFromPage() {
@@ -225,7 +210,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * Handle the mouse released event.
      */
     @FxThread
-    private void processMouseReleased(@NotNull final MouseEvent mouseEvent) {
+    private void processMouseReleased(@NotNull MouseEvent mouseEvent) {
         setButtonLeftDown(mouseEvent.isPrimaryButtonDown());
         setButtonMiddleDown(mouseEvent.isMiddleButtonDown());
         setButtonRightDown(mouseEvent.isSecondaryButtonDown());
@@ -235,7 +220,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * Handle the mouse pressed event.
      */
     @FxThread
-    private void processMousePressed(@NotNull final MouseEvent mouseEvent) {
+    private void processMousePressed(@NotNull MouseEvent mouseEvent) {
         setButtonLeftDown(mouseEvent.isPrimaryButtonDown());
         setButtonMiddleDown(mouseEvent.isMiddleButtonDown());
         setButtonRightDown(mouseEvent.isSecondaryButtonDown());
@@ -247,9 +232,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param event the event
      */
     @FxThread
-    protected void processKeyReleased(@NotNull final KeyEvent event) {
+    protected void processKeyReleased(@NotNull KeyEvent event) {
 
-        final KeyCode code = event.getCode();
+        var code = event.getCode();
 
         if (handleKeyActionImpl(code, false, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
@@ -257,7 +242,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Handle a key code.
+     * Handle a key action.
      *
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
@@ -266,37 +251,47 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param isButtonMiddleDown true if mouse middle button is pressed.
      */
     @FromAnyThread
-    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown,
-                                final boolean isShiftDown, final boolean isButtonMiddleDown) {
-        EXECUTOR_MANAGER.addFxTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
+    public void handleKeyAction(
+            @NotNull KeyCode keyCode,
+            boolean isPressed,
+            boolean isControlDown,
+            boolean isShiftDown,
+            boolean isButtonMiddleDown
+    ) {
+        ExecutorManager.getInstance()
+                .addFxTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
     }
 
     /**
-     * Handle a key code.
+     * Handle a key action.
      *
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
      * @param isControlDown      true if control is down.
      * @param isShiftDown        true if shift is down.
      * @param isButtonMiddleDown true if mouse middle button is pressed.
-     * @return true if need to consume an event.
+     * @return true if need to consume the event.
      */
     @FxThread
-    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isShiftDown,
-                                          final boolean isButtonMiddleDown) {
+    protected boolean handleKeyActionImpl(
+            @NotNull KeyCode keyCode,
+            boolean isPressed,
+            boolean isControlDown,
+            boolean isShiftDown,
+            boolean isButtonMiddleDown
+    ) {
         return false;
     }
 
     /**
      * Handle the key pressed event.
      *
-     * @param event the event
+     * @param event the event.
      */
     @FxThread
-    protected void processKeyPressed(@NotNull final KeyEvent event) {
+    protected void processKeyPressed(@NotNull KeyEvent event) {
 
-        final KeyCode code = event.getCode();
+        var code = event.getCode();
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
             save();
@@ -306,12 +301,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Create toolbar.
+     * Create a toolbar.
      *
-     * @param container the container
+     * @param container the container for the toolbar.
      */
-    @FxThread
-    protected void createToolbar(@NotNull final HBox container) {
+    @FromAnyThread
+    protected void createToolbar(@NotNull HBox container) {
     }
 
     /**
@@ -319,6 +314,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @return the button
      */
+    @FxThread
     protected @NotNull Button createSaveAction() {
 
         final Button action = new Button();
@@ -347,13 +343,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         notifyStartSaving();
 
-        EXECUTOR_MANAGER.addBackgroundTask(this::saveInBackground);
+        ExecutorManager.getInstance()
+                .addBackgroundTask(this::saveInBackground);
     }
 
     @BackgroundThread
     protected void saveInBackground() {
 
-        var editorId = getDescription()
+        var editorId = getDescriptor()
                 .getEditorId();
 
         var tempFile = Utils.get(editorId,
@@ -372,19 +369,23 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         } catch (Throwable e) {
             EditorUtil.handleException(LOGGER, this, e);
-            EXECUTOR_MANAGER.addFxTask(this::notifyFinishSaving);
+
+            ExecutorManager.getInstance()
+                    .addFxTask(this::notifyFinishSaving);
+
         } finally {
             EditorUtil.renderUnlock(stamp);
         }
 
-        EXECUTOR_MANAGER.addFxTask(this::postSave);
+        ExecutorManager.getInstance()
+                .addFxTask(this::postSave);
     }
 
     /**
      * Save new changes.
      *
      * @param toStore the file to store.
-     * @throws IOException if was some problem with writing to the to store file.
+     * @throws IOException if was some problem during writing.
      */
     @BackgroundThread
     protected void doSave(@NotNull Path toStore) throws Throwable {
@@ -399,61 +400,62 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Need toolbar boolean.
+     * Return true if this editor needs a toolbar.
      *
      * @return true if this editor needs a toolbar.
      */
-    @FxThread
+    @FromAnyThread
     protected boolean needToolbar() {
         return false;
     }
 
     /**
-     * Create root r.
+     * Create a root container.
      *
-     * @return the new root.
+     * @return the new root container.
      */
-    @FxThread
+    @FromAnyThread
     protected abstract @NotNull R createRoot();
 
     /**
-     * Create content.
+     * Create editor's content.
      *
-     * @param root the root
+     * @param root the root container.
      */
-    @FxThread
-    protected abstract void createContent(@NotNull final R root);
+    @FromAnyThread
+    protected abstract void createContent(@NotNull R root);
 
     @Override
     @FxThread
     public @NotNull Pane getPage() {
-        final R pane = notNull(root);
-        return (Pane) pane.getParent().getParent();
+        return (Pane) root.getParent()
+                .getParent();
     }
 
     @Override
     @FxThread
     public @NotNull Path getEditFile() {
-        return notNull(file);
+        return notNull(editedFile);
     }
 
     @Override
     @FxThread
     public @NotNull String getFileName() {
-        final Path editFile = getEditFile();
-        final Path fileName = editFile.getFileName();
-        return fileName.toString();
+        return getEditFile().getFileName()
+                .toString();
     }
 
     @Override
-    @FxThread
-    public void openFile(@NotNull final Path file) {
-        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    @BackgroundThread
+    public void openFile(@NotNull Path file) {
 
-        this.file = file;
+        FxEventManager.getInstance()
+                .addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+
+        this.editedFile = file;
         this.showedTime = LocalTime.now();
 
-        final EditorDescription description = getDescription();
+        var description = getDescriptor();
 
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_OPENED,
                 description.getEditorId() + "/" + getFileName());
@@ -479,50 +481,52 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param dirty the dirty
      */
     @FxThread
-    protected void setDirty(final boolean dirty) {
+    protected void setDirty(boolean dirty) {
         this.dirtyProperty.setValue(dirty);
     }
 
     @Override
     @FxThread
-    public @NotNull Array<Editor3DPart> get3DStates() {
-        return editor3DParts;
+    public @NotNull Array<Editor3dPart> get3dParts() {
+        return editor3dParts;
     }
 
     @Override
     @FxThread
-    public void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
+    public void notifyRenamed(@NotNull Path prevFile, @NotNull Path newFile) {
         notifyChangedEditedFile(prevFile, newFile);
     }
 
     @Override
     @FxThread
-    public void notifyMoved(@NotNull final Path prevFile, final @NotNull Path newFile) {
+    public void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
         notifyChangedEditedFile(prevFile, newFile);
     }
 
     /**
      * Notify about changed the edited file.
      *
-     * @param prevFile the prev file.
+     * @param prevFile the previous file.
      * @param newFile  the new file.
      */
     @FxThread
-    private void notifyChangedEditedFile(final @NotNull Path prevFile, final @NotNull Path newFile) {
+    private void notifyChangedEditedFile(@NotNull Path prevFile, @NotNull Path newFile) {
 
-        final Path editFile = getEditFile();
+        var editFile = getEditFile();
 
         if (editFile.equals(prevFile)) {
-            setEditFile(newFile);
+            setEditedFile(newFile);
             return;
         }
 
-        if (!editFile.startsWith(prevFile)) return;
+        if (!editFile.startsWith(prevFile)) {
+            return;
+        }
 
-        final Path relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
-        final Path resultFile = newFile.resolve(relativeFile);
+        var relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
+        var resultFile = newFile.resolve(relativeFile);
 
-        setEditFile(resultFile);
+        setEditedFile(resultFile);
     }
 
     /**
@@ -535,9 +539,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param cameraSpeed    the camera speed.
      */
     @FxThread
-    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                            final float vRotation, final float targetDistance,
-                                            final float cameraSpeed) {
+    public void notifyChangedCameraSettings(
+            @NotNull Vector3f cameraLocation,
+            float hRotation,
+            float vRotation,
+            float targetDistance,
+            float cameraSpeed
+    ) {
     }
 
     @Override
@@ -545,18 +553,20 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     public void notifyShowed() {
         this.showedTime = LocalTime.now();
 
-        final EditorDescription description = getDescription();
-        GAnalytics.sendPageView(description.getEditorId(), null, "/editing/" + description.getEditorId());
+        var description = getDescriptor();
+
+        GAnalytics.sendPageView(description.getEditorId(), null,
+                "/editing/" + description.getEditorId());
     }
 
     @Override
     @FxThread
     public void notifyHided() {
 
-        final Duration duration = Duration.between(showedTime, LocalTime.now());
-        final int seconds = (int) duration.getSeconds();
+        var duration = Duration.between(showedTime, LocalTime.now());
+        var seconds = (int) duration.getSeconds();
 
-        final EditorDescription description = getDescription();
+        var description = getDescriptor();
 
         GAnalytics.sendTiming(GAEvent.Category.EDITOR, GAEvent.Label.WORKING_ON_AN_EDITOR,
                 seconds, description.getEditorId());
@@ -565,12 +575,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Override
     @FxThread
     public void notifyClosed() {
-        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
 
-        final Duration duration = Duration.between(showedTime, LocalTime.now());
-        final int seconds = (int) duration.getSeconds();
+        FxEventManager.getInstance()
+                .removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
 
-        final EditorDescription description = getDescription();
+        var duration = Duration.between(showedTime, LocalTime.now());
+        var seconds = (int) duration.getSeconds();
+
+        var description = getDescriptor();
 
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_CLOSED,
                 description.getEditorId() + "/" + getFileName());
@@ -580,9 +592,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Handle a changed file.
+     * Handle the event about some file was changed.
      *
-     * @param event the event
+     * @param event the file changed event.
      */
     @FxThread
     protected void processChangedFile(@NotNull FileChangedEvent event) {
@@ -594,6 +606,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             return;
         }
 
+        processChangedFileImpl(event);
+
         if (isSaving()) {
             notifyFinishSaving();
             return;
@@ -603,7 +617,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Handle external changes of the edited file.
+     * Handle the event about the edited file was changed.
+     *
+     * @param event the file changed event.
+     */
+    @FxThread
+    protected void processChangedFileImpl(@NotNull FileChangedEvent event) {
+    }
+
+    /**
+     * Handle external changes of the edited editedFile.
      */
     @FxThread
     protected void handleExternalChanges() {
@@ -611,6 +634,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Get the file changes listener.
+     *
      * @return the file changes listener.
      */
     @FxThread
@@ -618,46 +643,38 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return fileChangedHandler;
     }
 
-    @Override
-    public String toString() {
-        return "AbstractFileEditor{" +
-                "dirtyProperty=" + dirtyProperty.get() +
-                ", file=" + file +
-                '}';
-    }
-
     /**
-     * Sets button left down.
+     * Set true if the left button is pressed.
      *
-     * @param buttonLeftDown the left button is pressed.
+     * @param buttonLeftDown true if the left button is pressed.
      */
     @FxThread
-    protected void setButtonLeftDown(final boolean buttonLeftDown) {
+    protected void setButtonLeftDown(boolean buttonLeftDown) {
         this.buttonLeftDown = buttonLeftDown;
     }
 
     /**
-     * Sets button middle down.
+     * Set true if the middle button is pressed.
      *
-     * @param buttonMiddleDown the middle button is pressed.
+     * @param buttonMiddleDown true if the middle button is pressed.
      */
     @FxThread
-    protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
+    protected void setButtonMiddleDown(boolean buttonMiddleDown) {
         this.buttonMiddleDown = buttonMiddleDown;
     }
 
     /**
-     * Sets button right down.
+     * Set true if the right button is pressed.
      *
-     * @param buttonRightDown the right button is pressed.
+     * @param buttonRightDown true if the right button is pressed.
      */
     @FxThread
-    protected void setButtonRightDown(final boolean buttonRightDown) {
+    protected void setButtonRightDown(boolean buttonRightDown) {
         this.buttonRightDown = buttonRightDown;
     }
 
     /**
-     * Is button left down boolean.
+     * Return true if left button is pressed.
      *
      * @return true if left button is pressed.
      */
@@ -667,7 +684,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Is button middle down boolean.
+     * Return true if middle button is pressed.
      *
      * @return true if middle button is pressed.
      */
@@ -677,7 +694,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Is button right down boolean.
+     * Return true if right button is pressed.
      *
      * @return true if right button is pressed.
      */
@@ -687,9 +704,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Is saving boolean.
+     * Return true if saving process is running now.
      *
-     * @return the boolean
+     * @return true if saving process is running now.
      */
     @FxThread
     protected boolean isSaving() {
@@ -697,9 +714,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Sets saving.
+     * Set true if saving process is running now.
      *
-     * @param saving the saving
+     * @param saving true if saving process is running now.
      */
     @FxThread
     protected void setSaving(final boolean saving) {
@@ -729,4 +746,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             saveCallback = null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "AbstractFileEditor{" +
+                "dirtyProperty=" + dirtyProperty.get() +
+                ", editedFile=" + editedFile +
+                '}';
+    }
+
 }

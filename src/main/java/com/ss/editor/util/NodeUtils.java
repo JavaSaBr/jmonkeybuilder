@@ -276,7 +276,20 @@ public class NodeUtils {
     }
 
     /**
-     * Collect all geometries from the asset path.
+     * Collect all geometries with materials from the asset path.
+     *
+     * @param spatial   the spatial.
+     * @param assetPath the asset path.
+     */
+    @FromAnyThread
+    public static Array<Geometry> getGeometriesWithMaterial(@NotNull Spatial spatial, @NotNull String assetPath) {
+        var container = Array.<Geometry>ofType(Geometry.class);
+        addGeometryWithMaterial(spatial, container, assetPath);
+        return container;
+    }
+
+    /**
+     * Collect all geometries with materials from the asset path.
      *
      * @param spatial   the spatial.
      * @param container the container.

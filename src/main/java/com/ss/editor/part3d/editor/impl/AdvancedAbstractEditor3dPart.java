@@ -18,7 +18,7 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.plugin.api.RenderFilterRegistry;
-import com.ss.editor.part3d.editor.Editor3DPart;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.LocalObjects;
@@ -33,12 +33,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The base implementation of the {@link Editor3DPart} for a file editor.
+ * The base implementation of the {@link Editor3dPart} for a file editor.
  *
  * @param <T> the type of a file editor.
  * @author JavaSaBr
  */
-public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends AbstractEditor3DPart<T> {
+public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T> {
 
     /**
      * The constant TRIGGERS.
@@ -385,7 +385,7 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
      */
     private boolean buttonMiddleDown;
 
-    public AdvancedAbstractEditor3DPart(@NotNull final T fileEditor) {
+    public AdvancedAbstractEditor3dPart(@NotNull final T fileEditor) {
         super(fileEditor);
         this.cameraMoving = new AtomicInteger();
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
@@ -897,8 +897,8 @@ public abstract class AdvancedAbstractEditor3DPart<T extends FileEditor> extends
      */
     @JmeThread
     protected void checkAndAddMappings(@NotNull final InputManager inputManager) {
-        TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3DPart::addMapping);
-        MULTI_TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3DPart::addMapping);
+        TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3dPart::addMapping);
+        MULTI_TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3dPart::addMapping);
     }
 
     @JmeThread

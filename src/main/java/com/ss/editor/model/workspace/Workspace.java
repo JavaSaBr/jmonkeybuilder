@@ -6,7 +6,7 @@ import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.util.EditorUtil;
@@ -264,7 +264,7 @@ public class Workspace implements Serializable {
         final Path assetFile = getAssetFile(getAssetFolder(), file);
         final String assetPath = toAssetPath(assetFile);
 
-        final EditorDescription description = fileEditor.getDescription();
+        final EditorDescriptor description = fileEditor.getDescriptor();
 
         final Map<String, String> openedFiles = getOpenedFiles();
         final String previous = openedFiles.put(assetPath, description.getEditorId());

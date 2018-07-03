@@ -1,6 +1,5 @@
 package com.ss.editor.ui.event;
 
-import static com.ss.rlib.common.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
@@ -53,7 +52,15 @@ public class FxEventManager {
             @NotNull EventHandler<T> eventHandler
     ) {
 
-        getEventHandlers().get(eventType, () -> newArray(EventHandler.class))
+        if (!Platform.isFxApplicationThread()) {
+
+            ExecutorManager.getInstance()
+                    .addFxTask(() -> addEventHandler(eventType, eventHandler));
+
+            return this;
+        }
+
+        getEventHandlers().get(eventType, Array.supplier(EventHandler.class))
                 .add(eventHandler);
 
         return this;

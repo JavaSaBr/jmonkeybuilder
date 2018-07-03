@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor, SceneNode> {
+public class SceneEditor3dPart extends AbstractSceneEditor3DPart<SceneFileEditor, SceneNode> {
 
     /**
      * The flag of showing light models.
@@ -39,7 +39,7 @@ public class SceneEditor3DPart extends AbstractSceneEditor3DPart<SceneFileEditor
      */
     private boolean audioShowed;
 
-    public SceneEditor3DPart(@NotNull final SceneFileEditor fileEditor) {
+    public SceneEditor3dPart(@NotNull final SceneFileEditor fileEditor) {
         super(fileEditor);
 
         this.lightShowed = true;

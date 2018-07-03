@@ -15,7 +15,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.part3d.editor.impl.scene.SceneEditor3DPart;
+import com.ss.editor.part3d.editor.impl.scene.SceneEditor3dPart;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.plugin.api.settings.SettingsCategory;
 import com.ss.editor.plugin.api.settings.SettingsPropertyDefinition;
@@ -268,7 +268,7 @@ public class SettingsDialog extends EditorDialog {
 
             var jmeApplication = JmeApplication.getInstance();
             var sceneEditor3DPart = jmeApplication.getStateManager()
-                    .getState(SceneEditor3DPart.class);
+                    .getState(SceneEditor3dPart.class);
 
             var filter = jmeApplication.getToneMapFilter();
             filter.setWhitePoint(editorConfig.getVector3f(PREF_FILTER_TONEMAP_WHITE_POINT,

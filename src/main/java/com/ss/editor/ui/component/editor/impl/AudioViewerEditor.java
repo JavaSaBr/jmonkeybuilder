@@ -2,22 +2,22 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.jme3.audio.AudioSource.Status.Playing;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioSource;
-import com.ss.editor.JmeApplication;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.JmeApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.part3d.editor.impl.audio.AudioViewer3DPart;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.part3d.editor.impl.audio.AudioViewer3dPart;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,7 +26,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -37,70 +36,71 @@ import java.nio.file.Path;
  */
 public class AudioViewerEditor extends AbstractFileEditor<VBox> {
 
-    /**
-     * The constant DESCRIPTION.
-     */
-    @NotNull
-    public static final EditorDescription DESCRIPTION = new EditorDescription();
-
-    static {
-        DESCRIPTION.setConstructor(AudioViewerEditor::new);
-        DESCRIPTION.setEditorName(Messages.AUDIO_VIEWER_EDITOR_NAME);
-        DESCRIPTION.setEditorId(AudioViewerEditor.class.getSimpleName());
-        DESCRIPTION.setExtensions(FileExtensions.AUDIO_EXTENSIONS);
-    }
+    public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
+            AudioViewerEditor::new,
+            Messages.AUDIO_VIEWER_EDITOR_NAME,
+            AudioViewerEditor.class.getSimpleName(),
+            FileExtensions.AUDIO_EXTENSIONS
+    );
 
     /**
-     * The editor app state.
+     * The editor's 3d part.
      */
     @NotNull
-    private final AudioViewer3DPart editorAppState;
+    private final AudioViewer3dPart editor3dPart;
 
     /**
      * The play button.
      */
-    @Nullable
-    private Button playButton;
+    @NotNull
+    private final Button playButton;
 
     /**
      * The stop button.
      */
-    @Nullable
-    private Button stopButton;
+    @NotNull
+    private final Button stopButton;
 
     /**
      * The duration field.
      */
-    @Nullable
-    private TextField durationField;
+    @NotNull
+    private final TextField durationField;
 
     /**
      * The bits per sample field.
      */
-    @Nullable
-    private TextField bitsPerSampleField;
+    @NotNull
+    private final TextField bitsPerSampleField;
 
     /**
      * The channels field.
      */
-    @Nullable
-    private TextField channelsField;
+    @NotNull
+    private final TextField channelsField;
 
     /**
      * The data type field.
      */
-    @Nullable
-    private TextField dataTypeField;
+    @NotNull
+    private final TextField dataTypeField;
 
     /**
      * The sample rate field.
      */
-    @Nullable
-    private TextField sampleRateField;
+    @NotNull
+    private final TextField sampleRateField;
 
     private AudioViewerEditor() {
-        this.editorAppState = new AudioViewer3DPart(this);
-        addEditor3DPart(editorAppState);
+        this.editor3dPart = new AudioViewer3dPart(this);
+        this.bitsPerSampleField = new TextField();
+        this.channelsField = new TextField();
+        this.durationField = new TextField();
+        this.dataTypeField = new TextField();
+        this.playButton = new Button();
+        this.stopButton = new Button();
+        this.sampleRateField = new TextField();
+        addEditor3dPart(editor3dPart);
     }
 
     @Override
@@ -111,30 +111,21 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
 
-        final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
-        final Label bitsPerSampleLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL + ":");
-        final Label channelsLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_CHANNELS_LABEL + ":");
-        final Label dataTypeLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL + ":");
-        final Label sampleRateLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL + ":");
+        var durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
+        var bitsPerSampleLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL + ":");
+        var channelsLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_CHANNELS_LABEL + ":");
+        var dataTypeLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL + ":");
+        var sampleRateLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL + ":");
 
-        durationField = new TextField();
         durationField.setEditable(false);
-
-        bitsPerSampleField = new TextField();
         bitsPerSampleField.setEditable(false);
-
-        channelsField = new TextField();
         channelsField.setEditable(false);
-
-        dataTypeField = new TextField();
         dataTypeField.setEditable(false);
-
-        sampleRateField = new TextField();
         sampleRateField.setEditable(false);
 
-        final GridPane gridPane = new GridPane();
+        var gridPane = new GridPane();
         gridPane.add(durationLabel, 0, 0);
         gridPane.add(bitsPerSampleLabel, 0, 1);
         gridPane.add(channelsLabel, 0, 2);
@@ -146,27 +137,23 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         gridPane.add(dataTypeField, 1, 3);
         gridPane.add(sampleRateField, 1, 4);
 
-        playButton = new Button();
         playButton.setGraphic(new ImageView(Icons.PLAY_128));
         playButton.setOnAction(event -> processPlay());
 
-        stopButton = new Button();
         stopButton.setGraphic(new ImageView(Icons.STOP_128));
         stopButton.setOnAction(event -> processStop());
         stopButton.setDisable(true);
 
-        final HBox container = new HBox();
+        var container = new HBox();
 
-        FXUtils.addToPane(gridPane, container);
-        FXUtils.addToPane(playButton, container);
-        FXUtils.addToPane(stopButton, container);
-        FXUtils.addToPane(container, root);
+        FxUtils.addClass(playButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
+                .addClass(stopButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER)
+                .addClass(container, CssClasses.DEF_HBOX)
+                .addClass(gridPane, CssClasses.DEF_GRID_PANE)
+                .addClass(root, CssClasses.DEF_VBOX, CssClasses.AUDIO_VIEW_EDITOR_CONTAINER);
 
-        FXUtils.addClassTo(playButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(stopButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(container, CssClasses.DEF_HBOX);
-        FXUtils.addClassTo(gridPane, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassesTo(root, CssClasses.DEF_VBOX, CssClasses.AUDIO_VIEW_EDITOR_CONTAINER);
+        FxUtils.addChild(container, gridPane, playButton, stopButton)
+                .addChild(root, container);
 
         DynamicIconSupport.addSupport(playButton, stopButton);
     }
@@ -176,7 +163,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @FxThread
     private void processStop() {
-        getEditorAppState().stop();
+        getEditor3dPart().stop();
     }
 
     /**
@@ -184,54 +171,62 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @FxThread
     private void processPlay() {
-        final AudioViewer3DPart appState = getEditorAppState();
-        if (appState.getPrevStatus() == Playing) {
-            appState.pause();
+
+        var editor3dPart = getEditor3dPart();
+
+        if (editor3dPart.getPrevStatus() == Playing) {
+            editor3dPart.pause();
         } else {
-            appState.play();
+            editor3dPart.play();
         }
     }
 
     @Override
-    @FxThread
-    public void openFile(@NotNull final Path file) {
+    @BackgroundThread
+    public void openFile(@NotNull Path file) {
         super.openFile(file);
 
-        final Path assetFile = notNull(EditorUtil.getAssetFile(file));
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        var assetFile = notNull(EditorUtil.getAssetFile(file));
+        var assetPath = EditorUtil.toAssetPath(assetFile);
 
-        final AudioKey audioKey = new AudioKey(assetPath);
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final AudioData audioData = assetManager.loadAudio(audioKey);
+        var audioKey = new AudioKey(assetPath);
+        var audioData = EditorUtil.getAssetManager()
+                .loadAudio(audioKey);
 
-        final float duration = audioData.getDuration();
-        final int bitsPerSample = audioData.getBitsPerSample();
-        final int channels = audioData.getChannels();
-        final AudioData.DataType dataType = audioData.getDataType();
-        final int sampleRate = audioData.getSampleRate();
+        getEditor3dPart()
+                .load(audioData, audioKey);
 
-        final AudioViewer3DPart editorAppState = getEditorAppState();
-        editorAppState.load(audioData, audioKey);
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addFxTask(() -> {
 
-        getChannelsField().setText(String.valueOf(channels));
-        getDurationField().setText(String.valueOf(duration));
-        getDataTypeField().setText(String.valueOf(dataType));
-        getSampleRateField().setText(String.valueOf(sampleRate));
-        getBitsPerSampleField().setText(String.valueOf(bitsPerSample));
+            var duration = audioData.getDuration();
+            var bitsPerSample = audioData.getBitsPerSample();
+            var channels = audioData.getChannels();
+            var dataType = audioData.getDataType();
+            var sampleRate = audioData.getSampleRate();
+
+            channelsField.setText(String.valueOf(channels));
+            durationField.setText(String.valueOf(duration));
+            dataTypeField.setText(String.valueOf(dataType));
+            sampleRateField.setText(String.valueOf(sampleRate));
+            bitsPerSampleField.setText(String.valueOf(bitsPerSample));
+        });
     }
 
     @Override
     @FromAnyThread
-    public @NotNull EditorDescription getDescription() {
-        return DESCRIPTION;
+    public @NotNull EditorDescriptor getDescriptor() {
+        return DESCRIPTOR;
     }
 
     /**
-     * @return the editor app state.
+     * Get the editor's 3d part.
+     *
+     * @return the editor's 3d part.
      */
     @FromAnyThread
-    private @NotNull AudioViewer3DPart getEditorAppState() {
-        return editorAppState;
+    private @NotNull AudioViewer3dPart getEditor3dPart() {
+        return editor3dPart;
     }
 
     /**
@@ -240,92 +235,33 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * @param status the new status.
      */
     @FxThread
-    public void notifyChangedStatus(final AudioSource.Status status) {
-
-        final Button playButton = getPlayButton();
-        final Button stopButton = getStopButton();
+    public void notifyChangedStatus(@NotNull AudioSource.Status status) {
 
         switch (status) {
             case Playing: {
-                final ImageView graphic = (ImageView) playButton.getGraphic();
+                var graphic = (ImageView) playButton.getGraphic();
                 graphic.setImage(Icons.PAUSE_128);
                 stopButton.setDisable(false);
                 break;
             }
             case Paused: {
-                final ImageView graphic = (ImageView) playButton.getGraphic();
+                var graphic = (ImageView) playButton.getGraphic();
                 graphic.setImage(Icons.PLAY_128);
                 stopButton.setDisable(false);
                 break;
             }
             case Stopped: {
-                final ImageView graphic = (ImageView) playButton.getGraphic();
+                var graphic = (ImageView) playButton.getGraphic();
                 graphic.setImage(Icons.PLAY_128);
                 stopButton.setDisable(true);
             }
         }
     }
 
-    /**
-     * @return the play button.
-     */
-    @FxThread
-    private @NotNull Button getPlayButton() {
-        return notNull(playButton);
-    }
-
-    /**
-     * @return the stop button.
-     */
-    @FxThread
-    private @NotNull Button getStopButton() {
-        return notNull(stopButton);
-    }
-
-    /**
-     * @return the channels field.
-     */
-    @FxThread
-    private @NotNull TextField getChannelsField() {
-        return notNull(channelsField);
-    }
-
-    /**
-     * @return the duration field.
-     */
-    @FxThread
-    private @NotNull TextField getDurationField() {
-        return notNull(durationField);
-    }
-
-    /**
-     * @return the data type field.
-     */
-    @FxThread
-    private @NotNull TextField getDataTypeField() {
-        return notNull(dataTypeField);
-    }
-
-    /**
-     * @return the sample rate field.
-     */
-    @FxThread
-    private @NotNull TextField getSampleRateField() {
-        return notNull(sampleRateField);
-    }
-
-    /**
-     * @return the bits per sample field.
-     */
-    @FxThread
-    private @NotNull TextField getBitsPerSampleField() {
-        return notNull(bitsPerSampleField);
-    }
-
     @Override
     public String toString() {
         return "AudioViewerEditor{" +
-                "editorAppState=" + editorAppState +
+                "editor3dPart=" + editor3dPart +
                 "} " + super.toString();
     }
 }

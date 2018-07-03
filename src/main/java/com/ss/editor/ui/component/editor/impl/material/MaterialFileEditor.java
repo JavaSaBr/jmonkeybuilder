@@ -1,19 +1,14 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
-import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FLIPPED_TEXTURES;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.TextureKey;
-import com.jme3.material.MatParam;
-import com.jme3.material.MatParamTexture;
 import com.jme3.material.Material;
-import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
@@ -22,14 +17,14 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.node.material.RootMaterialSettings;
-import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.part3d.editor.impl.material.MaterialEditor3DPart;
+import com.ss.editor.part3d.editor.impl.material.MaterialEditor3dPart;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialFileEditor;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
@@ -39,8 +34,8 @@ import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.MaterialUtils;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.collections.ObservableList;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
@@ -54,7 +49,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -63,29 +57,20 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class MaterialFileEditor extends
-        BaseMaterialFileEditor<MaterialEditor3DPart, EditorMaterialEditorState, ChangeConsumer> {
+        BaseMaterialFileEditor<MaterialEditor3dPart, EditorMaterialEditorState, ChangeConsumer> {
 
-    /**
-     * The description.
-     */
-    @NotNull
-    public static final EditorDescription DESCRIPTION = new EditorDescription();
-
-    static {
-        DESCRIPTION.setConstructor(MaterialFileEditor::new);
-        DESCRIPTION.setEditorName(MATERIAL_EDITOR_NAME);
-        DESCRIPTION.setEditorId(MaterialFileEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL);
-    }
-
-    @NotNull
-    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
+    public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
+            MaterialFileEditor::new,
+            Messages.MATERIAL_EDITOR_NAME,
+            MaterialFileEditor.class.getSimpleName(),
+            FileExtensions.JME_MATERIAL
+    );
 
     /**
      * The list of material definitions.
      */
-    @Nullable
-    private ComboBox<String> materialDefinitionBox;
+    @NotNull
+    private final ComboBox<String> materialDefinitionBox;
 
     /**
      * The current editing material.
@@ -95,12 +80,13 @@ public class MaterialFileEditor extends
 
     private MaterialFileEditor() {
         super();
+        this.materialDefinitionBox = new ComboBox<>();
     }
 
     @Override
     @FxThread
-    protected @NotNull MaterialEditor3DPart create3DEditorPart() {
-        return new MaterialEditor3DPart(this);
+    protected @NotNull MaterialEditor3dPart create3dEditorPart() {
+        return new MaterialEditor3dPart(this);
     }
 
     @Override
@@ -108,20 +94,21 @@ public class MaterialFileEditor extends
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         super.processChangedFile(event);
 
-        final Material currentMaterial = getCurrentMaterial();
-        final Path file = event.getFile();
+        var currentMaterial = getCurrentMaterial();
+        var file = event.getFile();
 
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addJmeTask(() -> {
+            var newMaterial = updateMaterialIdNeed(file, currentMaterial);
             if (newMaterial != null) {
-                EXECUTOR_MANAGER.addFxTask(() -> reload(newMaterial));
+                executorManager.addFxTask(() -> reload(newMaterial));
             }
         });
     }
 
     @Override
     @BackgroundThread
-    public void doSave(@NotNull final Path toStore) throws Throwable {
+    public void doSave(@NotNull Path toStore) throws Throwable {
         super.doSave(toStore);
 
         var currentMaterial = getCurrentMaterial();
@@ -137,15 +124,14 @@ public class MaterialFileEditor extends
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
-        final Path assetFile = notNull(getAssetFile(getEditFile()));
-        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
+        var assetFile = notNull(getAssetFile(getEditFile()));
+        var materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Material material = assetManager.loadAsset(materialKey);
+        var material = EditorUtil.getAssetManager()
+                .loadAsset(materialKey);
 
         reload(material);
 
-        final EditorOperationControl operationControl = getOperationControl();
         operationControl.clear();
     }
 
@@ -156,21 +142,20 @@ public class MaterialFileEditor extends
      * @param dragEvent the drag event.
      * @param path      the path to the texture.
      */
-    private void applyTexture(@NotNull final MaterialFileEditor editor, @NotNull final DragEvent dragEvent,
-                              @NotNull final Path path) {
+    private void applyTexture(@NotNull MaterialFileEditor editor, @NotNull DragEvent dragEvent, @NotNull Path path) {
 
-        final String textureName = path.getFileName().toString();
-        final int textureType = MaterialUtils.getPossibleTextureType(textureName);
+        var textureName = path.getFileName().toString();
+        var textureType = MaterialUtils.getPossibleTextureType(textureName);
 
         if (textureType == 0) {
             return;
         }
 
-        final String[] paramNames = MaterialUtils.getPossibleParamNames(textureType);
-        final Material currentMaterial = getCurrentMaterial();
-        final MaterialDef materialDef = currentMaterial.getMaterialDef();
+        var paramNames = MaterialUtils.getPossibleParamNames(textureType);
+        var currentMaterial = getCurrentMaterial();
+        var materialDef = currentMaterial.getMaterialDef();
 
-        final Optional<MatParam> param = Arrays.stream(paramNames)
+        var param = Arrays.stream(paramNames)
                 .map(materialDef::getMaterialParam)
                 .filter(Objects::nonNull)
                 .filter(p -> p.getVarType() == VarType.Texture2D)
@@ -180,25 +165,28 @@ public class MaterialFileEditor extends
             return;
         }
 
-        final MatParam matParam = param.get();
+        var matParam = param.get();
 
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+        var executorManager = ExecutorManager.getInstance();
+        executorManager.addJmeTask(() -> {
 
-            final EditorConfig config = EditorConfig.getInstance();
-            final Path assetFile = notNull(getAssetFile(path));
-            final TextureKey textureKey = new TextureKey(toAssetPath(assetFile));
+            var config = EditorConfig.getInstance();
+            var assetFile = EditorUtil.requireAssetFile(path);
+            var textureKey = new TextureKey(EditorUtil.toAssetPath(assetFile));
             textureKey.setFlipY(config.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES));
 
-            final AssetManager assetManager = EditorUtil.getAssetManager();
-            final Texture texture = assetManager.loadTexture(textureKey);
+            var texture = EditorUtil.getAssetManager()
+                    .loadTexture(textureKey);
+
             texture.setWrap(Texture.WrapMode.Repeat);
 
-            final String paramName = matParam.getName();
-            final MatParamTexture textureParam = currentMaterial.getTextureParam(paramName);
-            final Texture currentTexture = textureParam == null? null : textureParam.getTextureValue();
+            var paramName = matParam.getName();
+            var textureParam = currentMaterial.getTextureParam(paramName);
+            var currentTexture = textureParam == null? null : textureParam.getTextureValue();
 
-            PropertyOperation<ChangeConsumer, Material, Texture> operation =
-                    new PropertyOperation<>(currentMaterial, paramName, texture, currentTexture);
+            var operation = new PropertyOperation<ChangeConsumer, Material, Texture>(currentMaterial,
+                    paramName, texture, currentTexture);
+
             operation.setApplyHandler((material, newTexture) -> material.setTexture(paramName, newTexture));
 
             execute(operation);
@@ -207,7 +195,7 @@ public class MaterialFileEditor extends
 
     @Override
     @FxThread
-    protected void handleDragDroppedEvent(@NotNull final DragEvent dragEvent) {
+    protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
         UiUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
                 dragEvent, this::applyTexture);
@@ -215,7 +203,7 @@ public class MaterialFileEditor extends
 
     @Override
     @FxThread
-    protected void handleDragOverEvent(@NotNull final DragEvent dragEvent) {
+    protected void handleDragOverEvent(@NotNull DragEvent dragEvent) {
         super.handleDragOverEvent(dragEvent);
         UiUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
     }
@@ -223,17 +211,16 @@ public class MaterialFileEditor extends
 
     @Override
     @FxThread
-    protected void doOpenFile(@NotNull final Path file) throws IOException {
+    protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 
-        final Path assetFile = notNull(getAssetFile(file));
-        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
+        var assetFile = notNull(getAssetFile(file));
+        var materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Material material = assetManager.loadAsset(materialKey);
+        var material = EditorUtil.getAssetManager()
+                .loadAsset(materialKey);
 
-        final MaterialEditor3DPart editor3DState = getEditor3DPart();
-        editor3DState.changeMode(ModelType.BOX);
+        editor3dPart.changeMode(ModelType.BOX);
 
         reload(material);
     }
@@ -248,81 +235,75 @@ public class MaterialFileEditor extends
      * Reload the material.
      */
     @FxThread
-    private void reload(@NotNull final Material material) {
+    private void reload(@NotNull Material material) {
+
         setCurrentMaterial(material);
         setIgnoreListeners(true);
         try {
 
-            final MaterialEditor3DPart editor3DState = getEditor3DPart();
-            editor3DState.updateMaterial(material);
+            editor3dPart.updateMaterial(material);
+            settingsTree.fill(new RootMaterialSettings(material));
 
-            getSettingsTree().fill(new RootMaterialSettings(material));
+            var materialDef = material.getMaterialDef();
+            var availableResources = ResourceManager.getInstance()
+                    .getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION);
 
-            final ComboBox<String> materialDefinitionBox = getMaterialDefinitionBox();
-            final ObservableList<String> items = materialDefinitionBox.getItems();
+            var items = materialDefinitionBox.getItems();
             items.clear();
-            items.addAll(RESOURCE_MANAGER.getAvailableResources(FileExtensions.JME_MATERIAL_DEFINITION));
+            items.addAll(availableResources);
 
-            final MaterialDef materialDef = material.getMaterialDef();
-            materialDefinitionBox.getSelectionModel().select(materialDef.getAssetName());
+            materialDefinitionBox.getSelectionModel()
+                    .select(materialDef.getAssetName());
 
         } finally {
             setIgnoreListeners(false);
         }
     }
 
-    /**
-     * @return the list of material definitions.
-     */
-    @FromAnyThread
-    private @NotNull ComboBox<String> getMaterialDefinitionBox() {
-        return notNull(materialDefinitionBox);
-    }
-
     @Override
     @FxThread
-    protected void createToolbar(@NotNull final HBox container) {
+    protected void createToolbar(@NotNull HBox container) {
         super.createToolbar(container);
 
-        final Label materialDefinitionLabel = new Label(Messages.MATERIAL_EDITOR_MATERIAL_TYPE_LABEL + ":");
+        var label = new Label(Messages.MATERIAL_EDITOR_MATERIAL_TYPE_LABEL + ":");
 
-        materialDefinitionBox = new ComboBox<>();
-        materialDefinitionBox.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> changeType(newValue));
+        FxControlUtils.onSelectedItemChange(materialDefinitionBox, this::changeType);
 
-        FXUtils.addToPane(materialDefinitionLabel, container);
-        FXUtils.addToPane(materialDefinitionBox, container);
+        FxUtils.addClass(label, CssClasses.FILE_EDITOR_TOOLBAR_LABEL)
+                .addClass(materialDefinitionBox, CssClasses.FILE_EDITOR_TOOLBAR_FIELD);
 
-        FXUtils.addClassTo(materialDefinitionLabel, CssClasses.FILE_EDITOR_TOOLBAR_LABEL);
-        FXUtils.addClassTo(materialDefinitionBox, CssClasses.FILE_EDITOR_TOOLBAR_FIELD);
+        FxUtils.addChild(container, label, materialDefinitionBox);
     }
 
     /**
      * Handle changing the type.
      */
     @FxThread
-    private void changeType(@Nullable final String newType) {
-        if (isIgnoreListeners()) return;
-        processChangeTypeImpl(newType);
+    private void changeType(@Nullable String newType) {
+        if (!isIgnoreListeners()) {
+            processChangeTypeImpl(newType);
+        }
     }
 
     /**
      * Handle changing the type.
      */
     @FxThread
-    private void processChangeTypeImpl(@Nullable final String newType) {
-        if (newType == null) return;
+    private void processChangeTypeImpl(@Nullable String newType) {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Material newMaterial = new Material(assetManager, newType);
+        if (newType == null) {
+            return;
+        }
+
+        var assetManager = EditorUtil.getAssetManager();
+        var newMaterial = new Material(assetManager, newType);
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());
 
-        final EditorOperationControl operationControl = getOperationControl();
         operationControl.clear();
 
         incrementChange();
+
         reload(newMaterial);
     }
 
@@ -332,16 +313,18 @@ public class MaterialFileEditor extends
     }
 
     /**
+     * Set the current editing material.
+     *
      * @param currentMaterial the current editing material.
      */
     @FxThread
-    private void setCurrentMaterial(@NotNull final Material currentMaterial) {
+    private void setCurrentMaterial(@NotNull Material currentMaterial) {
         this.currentMaterial = currentMaterial;
     }
 
     @Override
     @FromAnyThread
-    public @NotNull EditorDescription getDescription() {
-        return DESCRIPTION;
+    public @NotNull EditorDescriptor getDescriptor() {
+        return DESCRIPTOR;
     }
 }

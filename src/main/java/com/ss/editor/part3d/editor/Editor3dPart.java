@@ -7,5 +7,5 @@ import com.jme3.app.state.AppState;
  *
  * @author JavaSaBr
  */
-public interface Editor3DPart extends AppState {
+public interface Editor3dPart extends AppState {
 }

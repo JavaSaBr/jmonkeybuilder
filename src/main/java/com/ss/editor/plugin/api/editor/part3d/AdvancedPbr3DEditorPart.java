@@ -6,7 +6,7 @@ import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
+import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public abstract class AdvancedPbr3DEditorPart<T extends Advanced3DFileEditor> extends Advanced3DEditorPart<T> {
+public abstract class AdvancedPbr3DEditorPart<T extends Advanced3dFileEditor> extends Advanced3dEditorPart<T> {
 
     @NotNull
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {

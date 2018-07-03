@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public class OpenWithFileAction extends Menu {
 
         final ObservableList<MenuItem> items = getItems();
 
-        final Array<EditorDescription> descriptions = EDITOR_REGISTRY.getAvailableEditorsFor(element.getFile());
+        final Array<EditorDescriptor> descriptions = EDITOR_REGISTRY.getAvailableEditorsFor(element.getFile());
         descriptions.forEach(description -> items.add(new OpenFileByEditorAction(element, description)));
     }
 }

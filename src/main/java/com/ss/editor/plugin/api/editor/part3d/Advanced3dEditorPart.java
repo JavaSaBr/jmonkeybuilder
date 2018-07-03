@@ -5,8 +5,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
-import com.ss.editor.part3d.editor.impl.AdvancedAbstractEditor3DPart;
+import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
+import com.ss.editor.part3d.editor.impl.AdvancedAbstractEditor3dPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public abstract class Advanced3DEditorPart<T extends Advanced3DFileEditor> extends AdvancedAbstractEditor3DPart<T> {
+public abstract class Advanced3dEditorPart<T extends Advanced3dFileEditor> extends AdvancedAbstractEditor3dPart<T> {
 
     /**
      * The node on which the camera is looking.
@@ -23,7 +23,7 @@ public abstract class Advanced3DEditorPart<T extends Advanced3DFileEditor> exten
     @Nullable
     private Node cameraNode;
 
-    public Advanced3DEditorPart(@NotNull final T fileEditor) {
+    public Advanced3dEditorPart(@NotNull final T fileEditor) {
         super(fileEditor);
 
         final Node stateNode = getStateNode();

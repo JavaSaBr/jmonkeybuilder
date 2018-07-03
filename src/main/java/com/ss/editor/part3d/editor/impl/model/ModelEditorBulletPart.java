@@ -8,7 +8,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
-import com.ss.editor.part3d.editor.Editor3DPart;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,12 +17,12 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class ModelEditorBulletPart extends EditableBulletSceneAppState implements Editor3DPart {
+public class ModelEditorBulletPart extends EditableBulletSceneAppState implements Editor3dPart {
 
     @NotNull
-    private final ModelEditor3DPart editor3DPart;
+    private final ModelEditor3dPart editor3DPart;
 
-    public ModelEditorBulletPart(@NotNull final ModelEditor3DPart editor3DPart) {
+    public ModelEditorBulletPart(@NotNull final ModelEditor3dPart editor3DPart) {
         this.editor3DPart = editor3DPart;
     }
 

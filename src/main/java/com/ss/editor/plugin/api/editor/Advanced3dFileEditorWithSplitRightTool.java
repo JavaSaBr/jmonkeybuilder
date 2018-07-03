@@ -1,7 +1,8 @@
 package com.ss.editor.plugin.api.editor;
 
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorState;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3dEditorPart;
+import com.ss.editor.ui.component.editor.state.impl.Editor3dWithEditorToolEditorState;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Node;
@@ -11,12 +12,12 @@ import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The base implementation of a file editor without 3D part and with right split tool panel.
+ * The advanced implementation of 3D editor with a split right tool.
  *
  * @author JavaSaBr
  */
-public abstract class BaseFileEditorWithSplitRightTool<S extends EditorWithEditorToolEditorState> extends
-        BaseFileEditorWithRightTool<S> {
+public abstract class Advanced3dFileEditorWithSplitRightTool<T extends Advanced3dEditorPart, S extends Editor3dWithEditorToolEditorState> extends
+        Advanced3dFileEditorWithRightTool<T, S> {
 
     /**
      * Build split component.

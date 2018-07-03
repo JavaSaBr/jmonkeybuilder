@@ -45,7 +45,7 @@ import com.ss.editor.part3d.editor.impl.scene.handler.ApplyScaleToPhysicsControl
 import com.ss.editor.part3d.editor.impl.scene.handler.DisableControlsTransformationHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.PhysicsControlTransformationHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.ReactivatePhysicsControlsTransformationHandler;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorPart;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3dEditorPart;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
@@ -72,7 +72,7 @@ import java.util.Optional;
  * @author JavaSaBr
  */
 public abstract class AbstractSceneEditor3DPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
-        extends Advanced3DEditorPart<T> implements EditorTransformSupport {
+        extends Advanced3dEditorPart<T> implements EditorTransformSupport {
 
     /**
      * @see SelectionFinder

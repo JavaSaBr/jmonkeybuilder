@@ -10,7 +10,7 @@ import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
  *
  * @author JavaSaBr
  */
-public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolEditorState {
+public abstract class BaseEditorSceneEditorState extends Editor3dWithEditorToolEditorState {
 
     /**
      * The constant serialVersionUID.

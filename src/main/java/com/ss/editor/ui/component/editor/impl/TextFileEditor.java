@@ -5,11 +5,12 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.common.util.FileUtils;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,18 +28,18 @@ import java.nio.file.Path;
  */
 public class TextFileEditor extends AbstractFileEditor<VBox> {
 
+    public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
+            TextFileEditor::new,
+            Messages.TEXT_FILE_EDITOR_NAME,
+            TextFileEditor.class.getSimpleName(),
+            EditorRegistry.ALL_FORMATS
+    );
+
     /**
-     * The constant DESCRIPTION.
+     * The text area.
      */
     @NotNull
-    public static final EditorDescription DESCRIPTION = new EditorDescription();
-
-    static {
-        DESCRIPTION.setConstructor(TextFileEditor::new);
-        DESCRIPTION.setEditorName(Messages.TEXT_FILE_EDITOR_NAME);
-        DESCRIPTION.setEditorId(TextFileEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(EditorRegistry.ALL_FORMATS);
-    }
+    private final TextArea textArea;
 
     /**
      * The original content of the opened file.
@@ -46,11 +47,9 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     @Nullable
     private String originalContent;
 
-    /**
-     * The text area.
-     */
-    @Nullable
-    private TextArea textArea;
+    private TextFileEditor() {
+        this.textArea = new TextArea();
+    }
 
     @Override
     @FxThread
@@ -60,22 +59,24 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
 
-        textArea = new TextArea();
-        textArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
-        textArea.prefHeightProperty().bind(root.heightProperty());
-        textArea.prefWidthProperty().bind(root.widthProperty());
+        textArea.prefHeightProperty()
+                .bind(root.heightProperty());
+        textArea.prefWidthProperty()
+                .bind(root.widthProperty());
 
-        FXUtils.addToPane(textArea, root);
-        FXUtils.addClassesTo(textArea, CssClasses.TRANSPARENT_TEXT_AREA);
+        FxControlUtils.onTextChange(textArea, this::updateDirty);
+
+        FxUtils.addClass(textArea, CssClasses.TRANSPARENT_TEXT_AREA);
+        FxUtils.addChild(root, textArea);
     }
 
     /**
      * Update dirty state.
      */
     @FxThread
-    private void updateDirty(final String newContent) {
+    private void updateDirty(@NotNull String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
     }
 
@@ -87,22 +88,14 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
     @Override
     @FxThread
-    protected void createToolbar(@NotNull final HBox container) {
+    protected void createToolbar(@NotNull HBox container) {
         super.createToolbar(container);
-        FXUtils.addToPane(createSaveAction(), container);
-    }
-
-    /**
-     * @return the text area.
-     */
-    @FxThread
-    private @NotNull TextArea getTextArea() {
-        return notNull(textArea);
+        FxUtils.addChild(container, createSaveAction());
     }
 
     @Override
     @FxThread
-    public void openFile(@NotNull final Path file) {
+    public void openFile(@NotNull Path file) {
         super.openFile(file);
 
         setOriginalContent(FileUtils.read(file));
@@ -114,11 +107,12 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
             throw new RuntimeException("This file isn't a text file.", e);
         } */
 
-        final TextArea textArea = getTextArea();
         textArea.setText(getOriginalContent());
     }
 
     /**
+     * Get the original content of the opened file.
+     *
      * @return the original content of the opened file.
      */
     @FxThread
@@ -127,10 +121,12 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
+     * Set the original content of the opened file.
+     *
      * @param originalContent the original content of the opened file.
      */
     @FxThread
-    private void setOriginalContent(@NotNull final String originalContent) {
+    private void setOriginalContent(@NotNull String originalContent) {
         this.originalContent = originalContent;
     }
 
@@ -139,7 +135,6 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     public void doSave(@NotNull Path toStore) throws Throwable {
         super.doSave(toStore);
 
-        var textArea = getTextArea();
         var newContent = textArea.getText();
 
         try (var out = new PrintWriter(Files.newOutputStream(toStore))) {
@@ -152,8 +147,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     protected void postSave() {
         super.postSave();
 
-        final TextArea textArea = getTextArea();
-        final String newContent = textArea.getText();
+        var newContent = textArea.getText();
 
         setOriginalContent(newContent);
         updateDirty(newContent);
@@ -164,19 +158,17 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
-        final String newContent = FileUtils.read(getEditFile());
+        var newContent = FileUtils.read(getEditFile());
+        var currentContent = textArea.getText();
 
-        final TextArea textArea = getTextArea();
-        final String currentContent = textArea.getText();
         textArea.setText(newContent);
-
         setOriginalContent(currentContent);
         updateDirty(newContent);
     }
 
     @Override
     @FromAnyThread
-    public @NotNull EditorDescription getDescription() {
-        return DESCRIPTION;
+    public @NotNull EditorDescriptor getDescriptor() {
+        return DESCRIPTOR;
     }
 }

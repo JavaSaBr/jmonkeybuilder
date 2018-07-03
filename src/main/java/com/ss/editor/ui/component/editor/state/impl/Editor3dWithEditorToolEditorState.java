@@ -9,7 +9,7 @@ import com.ss.editor.ui.component.editor.state.EditorToolConfig;
  *
  * @author JavaSaBr
  */
-public class Editor3DWithEditorToolEditorState extends Editor3DEditorState implements EditorToolConfig {
+public class Editor3dWithEditorToolEditorState extends Editor3dEditorState implements EditorToolConfig {
 
     /**
      * The constant serialVersionUID.
@@ -34,7 +34,7 @@ public class Editor3DWithEditorToolEditorState extends Editor3DEditorState imple
     /**
      * Instantiates a new Abstract editor state.
      */
-    public Editor3DWithEditorToolEditorState() {
+    public Editor3dWithEditorToolEditorState() {
         this.toolWidth = 250;
         this.toolCollapsed = false;
         openedTool = 0;

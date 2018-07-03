@@ -1,17 +1,14 @@
 package com.ss.editor.plugin.api.editor.material;
 
 import static com.jme3.renderer.queue.RenderQueue.Bucket.Inherit;
-import static com.jme3.renderer.queue.RenderQueue.Bucket.values;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.material.Material;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
+import com.ss.editor.plugin.api.editor.Advanced3dFileEditorWithSplitRightTool;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3DPart.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.state.EditorState;
@@ -22,8 +19,9 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxUtils;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -41,7 +39,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart, S extends EditorMaterialEditorState, C extends ChangeConsumer> extends
-        Advanced3DFileEditorWithSplitRightTool<T, S> {
+        Advanced3dFileEditorWithSplitRightTool<T, S> {
 
     /**
      * The default state of editor light.
@@ -51,53 +49,60 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     /**
      * The list of available bucket types.
      */
-    @NotNull
-    protected static final ObservableList<RenderQueue.Bucket> BUCKETS = observableArrayList(values());
+    protected static final ObservableList<RenderQueue.Bucket> BUCKETS =
+            FXCollections.observableArrayList(RenderQueue.Bucket.values());
 
     /**
      * The settings tree.
      */
-    @Nullable
-    private NodeTree<C> settingsTree;
+    @NotNull
+    protected final NodeTree<C> settingsTree;
 
     /**
      * The property editor.
      */
-    @Nullable
-    private PropertyEditor<C> propertyEditor;
+    @NotNull
+    private final PropertyEditor<C> propertyEditor;
 
     /**
      * The button to use a cube.
      */
-    @Nullable
-    private ToggleButton cubeButton;
+    @NotNull
+    private final ToggleButton cubeButton;
 
     /**
      * The button to use a sphere.
      */
-    @Nullable
-    private ToggleButton sphereButton;
+    @NotNull
+    private final ToggleButton sphereButton;
 
     /**
      * The button to use a plane.
      */
-    @Nullable
-    private ToggleButton planeButton;
+    @NotNull
+    private final ToggleButton planeButton;
 
     /**
      * The button to use a light.
      */
-    @Nullable
-    private ToggleButton lightButton;
+    @NotNull
+    private final ToggleButton lightButton;
 
     /**
      * The list of RenderQueue.Bucket.
      */
-    @Nullable
-    private ComboBox<RenderQueue.Bucket> bucketComboBox;
+    @NotNull
+    private final ComboBox<RenderQueue.Bucket> bucketComboBox;
 
     protected BaseMaterialFileEditor() {
         super();
+        this.bucketComboBox = new ComboBox<>(BUCKETS);
+        this.cubeButton = new ToggleButton();
+        this.sphereButton = new ToggleButton();
+        this.planeButton = new ToggleButton();
+        this.lightButton = new ToggleButton();
+        this.settingsTree = new NodeTree<>(this::selectFromTree, getChangeConsumer(), SelectionMode.SINGLE);
+        this.propertyEditor = new PropertyEditor<>(getChangeConsumer());
     }
 
     /**
@@ -112,24 +117,24 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
 
     @Override
     @FxThread
-    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown, final boolean isShiftDown,
-                                          final boolean isButtonMiddleDown) {
+    protected boolean handleKeyActionImpl(
+            @NotNull KeyCode keyCode,
+            boolean isPressed,
+            boolean isControlDown,
+            boolean isShiftDown,
+            boolean isButtonMiddleDown
+    ) {
 
         if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
-            final ToggleButton cubeButton = getCubeButton();
             cubeButton.setSelected(true);
             return true;
         } else if (isPressed && keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
-            final ToggleButton sphereButton = getSphereButton();
             sphereButton.setSelected(true);
             return true;
         } else if (isPressed && keyCode == KeyCode.P && !isControlDown && !isButtonMiddleDown) {
-            final ToggleButton planeButton = getPlaneButton();
             planeButton.setSelected(true);
             return true;
         } else if (isPressed && keyCode == KeyCode.L && !isControlDown && !isButtonMiddleDown) {
-            final ToggleButton lightButton = getLightButton();
             lightButton.setSelected(!lightButton.isSelected());
             return true;
         }
@@ -139,16 +144,16 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
 
     @Override
     @FxThread
-    protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
+    protected void createToolComponents(@NotNull EditorToolComponent container, @NotNull StackPane root) {
         super.createToolComponents(container, root);
 
-        settingsTree = new NodeTree<>(this::selectFromTree, getChangeConsumer(), SelectionMode.SINGLE);
-        propertyEditor = new PropertyEditor<>(getChangeConsumer());
-        propertyEditor.prefHeightProperty().bind(root.heightProperty());
+        propertyEditor.prefHeightProperty()
+                .bind(root.heightProperty());
 
-        container.addComponent(buildSplitComponent(settingsTree, propertyEditor, root), getSettingsTreeToolName());
+        container.addComponent(buildSplitComponent(settingsTree, propertyEditor, root),
+                getSettingsTreeToolName());
 
-        FXUtils.addClassTo(settingsTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
+        FxUtils.addClass(settingsTree.getTreeView(), CssClasses.TRANSPARENT_TREE_VIEW);
     }
 
     /**
@@ -162,44 +167,28 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
     }
 
     /**
-     * @return the settings tree.
-     */
-    @FromAnyThread
-    protected @NotNull NodeTree<C> getSettingsTree() {
-        return notNull(settingsTree);
-    }
-
-    /**
-     * @return the property editor.
-     */
-    @FromAnyThread
-    protected @NotNull PropertyEditor<C> getPropertyEditor() {
-        return notNull(propertyEditor);
-    }
-
-    /**
      * Handle selected objects from tree.
      *
      * @param objects the selected objects.
      */
     @FxThread
-    private void selectFromTree(@NotNull final Array<Object> objects) {
+    private void selectFromTree(@NotNull Array<Object> objects) {
 
-        final Object object = objects.first();
+        Object object = objects.first();
 
         Object parent = null;
         Object element;
 
         if (object instanceof TreeNode<?>) {
-            final TreeNode treeNode = (TreeNode) object;
-            final TreeNode parentNode = treeNode.getParent();
+            var treeNode = (TreeNode) object;
+            var  parentNode = treeNode.getParent();
             parent = parentNode == null ? null : parentNode.getElement();
             element = treeNode.getElement();
         } else {
             element = object;
         }
 
-        getPropertyEditor().buildFor(element, parent);
+        propertyEditor.buildFor(element, parent);
     }
 
     @Override
@@ -209,18 +198,18 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
 
         switch (ModelType.valueOf(editorState.getModelType())) {
             case BOX:
-                getCubeButton().setSelected(true);
+                cubeButton.setSelected(true);
                 break;
             case SPHERE:
-                getSphereButton().setSelected(true);
+                sphereButton.setSelected(true);
                 break;
             case QUAD:
-                getPlaneButton().setSelected(true);
+                planeButton.setSelected(true);
                 break;
         }
 
-        getBucketComboBox().getSelectionModel().select(editorState.getBucketType());
-        getLightButton().setSelected(editorState.isLightEnable());
+        bucketComboBox.getSelectionModel().select(editorState.getBucketType());
+        lightButton.setSelected(editorState.isLightEnable());
     }
 
     @Override
@@ -231,7 +220,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
 
     @Override
     @FxThread
-    protected void calcVSplitSize(@NotNull final SplitPane splitPane) {
+    protected void calcVSplitSize(@NotNull SplitPane splitPane) {
         splitPane.setDividerPosition(0, 0.2);
     }
 
@@ -243,20 +232,19 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
 
     @Override
     @FxThread
-    protected void createToolbar(@NotNull final HBox container) {
+    protected void createToolbar(@NotNull HBox container) {
         super.createToolbar(container);
+
         createActions(container);
 
-        final Label bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
+        var bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
 
-        bucketComboBox = new ComboBox<>(BUCKETS);
         bucketComboBox.getSelectionModel().select(Inherit);
         bucketComboBox.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
 
-        FXUtils.addToPane(bucketLabel, container);
-        FXUtils.addToPane(bucketComboBox, container);
+        FxUtils.addChild(container, bucketLabel, bucketComboBox);
     }
 
     /**
@@ -265,120 +253,75 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
      * @param container the container.
      */
     @FxThread
-    protected void createActions(@NotNull final HBox container) {
+    protected void createActions(@NotNull HBox container) {
 
-        cubeButton = new ToggleButton();
         cubeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_CUBE + " (C)"));
         cubeButton.setGraphic(new ImageView(Icons.CUBE_16));
         cubeButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeModelType(ModelType.BOX, newValue));
 
-        sphereButton = new ToggleButton();
         sphereButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_SPHERE + " (S)"));
         sphereButton.setGraphic(new ImageView(Icons.SPHERE_16));
         sphereButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeModelType(ModelType.SPHERE, newValue));
 
-        planeButton = new ToggleButton();
         planeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_PLANE + " (P)"));
         planeButton.setGraphic(new ImageView(Icons.PLANE_16));
         planeButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeModelType(ModelType.QUAD, newValue));
 
-        lightButton = new ToggleButton();
         lightButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_LIGHT + " (L)"));
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
         lightButton.setSelected(DEFAULT_LIGHT_ENABLED);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
-        FXUtils.addToPane(createSaveAction(), container);
-        FXUtils.addToPane(cubeButton, container);
-        FXUtils.addToPane(sphereButton, container);
-        FXUtils.addToPane(planeButton, container);
-        FXUtils.addToPane(lightButton, container);
+        FxUtils.addClass(cubeButton, sphereButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON)
+                .addClass(planeButton, lightButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+
+        FxUtils.addChild(container, createSaveAction(), cubeButton, sphereButton, planeButton, lightButton);
 
         DynamicIconSupport.addSupport(cubeButton, sphereButton, planeButton, lightButton);
-        FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 
     /**
      * Handle changing the bucket type.
      */
     @FxThread
-    private void changeBucketType(@NotNull final RenderQueue.Bucket newValue) {
+    private void changeBucketType(@NotNull RenderQueue.Bucket newValue) {
 
-        final T editor3DState = getEditor3DPart();
-        editor3DState.changeBucketType(newValue);
+        editor3dPart.changeBucketType(newValue);
 
-        final EditorMaterialEditorState editorState = getEditorState();
-        if (editorState != null) editorState.setBucketType(newValue);
+        var editorState = getEditorState();
+
+        if (editorState != null) {
+            editorState.setBucketType(newValue);
+        }
     }
 
     /**
      * Handle changing the light enabling.
      */
     @FxThread
-    private void changeLight(@NotNull final Boolean newValue) {
+    private void changeLight(@NotNull Boolean newValue) {
 
-        final T editor3DState = getEditor3DPart();
-        editor3DState.updateLightEnabled(newValue);
+        editor3dPart.updateLightEnabled(newValue);
 
-        final EditorMaterialEditorState editorState = getEditorState();
-        if (editorState != null) editorState.setLightEnable(newValue);
-    }
+        var editorState = getEditorState();
 
-    /**
-     * @return the button to use a cube.
-     */
-    @FromAnyThread
-    private @NotNull ToggleButton getCubeButton() {
-        return notNull(cubeButton);
-    }
-
-    /**
-     * @return the button to use a plane.
-     */
-    @FromAnyThread
-    private @NotNull ToggleButton getPlaneButton() {
-        return notNull(planeButton);
-    }
-
-    /**
-     * @return the button to use a sphere.
-     */
-    @FromAnyThread
-    private @NotNull ToggleButton getSphereButton() {
-        return notNull(sphereButton);
-    }
-
-    /**
-     * @return the button to use a light.
-     */
-    @FromAnyThread
-    private @NotNull ToggleButton getLightButton() {
-        return notNull(lightButton);
-    }
-
-    /**
-     * @return the list of RenderQueue.Bucket.
-     */
-    @FromAnyThread
-    private @NotNull ComboBox<RenderQueue.Bucket> getBucketComboBox() {
-        return notNull(bucketComboBox);
+        if (editorState != null) {
+            editorState.setLightEnable(newValue);
+        }
     }
 
     /**
      * Handle the changed model type.
      */
     @FxThread
-    private void changeModelType(@NotNull final ModelType modelType, @NotNull final Boolean newValue) {
-        if (newValue == Boolean.FALSE) return;
+    private void changeModelType(@NotNull ModelType modelType, @NotNull Boolean newValue) {
 
-        final T editor3DState = getEditor3DPart();
-
-        final ToggleButton cubeButton = getCubeButton();
-        final ToggleButton sphereButton = getSphereButton();
-        final ToggleButton planeButton = getPlaneButton();
+        if (newValue == Boolean.FALSE) {
+            return;
+        }
 
         if (modelType == ModelType.BOX) {
             cubeButton.setMouseTransparent(true);
@@ -387,7 +330,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
             cubeButton.setSelected(true);
             sphereButton.setSelected(false);
             planeButton.setSelected(false);
-            editor3DState.changeMode(modelType);
+            editor3dPart.changeMode(modelType);
         } else if (modelType == ModelType.SPHERE) {
             cubeButton.setMouseTransparent(false);
             sphereButton.setMouseTransparent(true);
@@ -395,7 +338,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
             cubeButton.setSelected(false);
             sphereButton.setSelected(true);
             planeButton.setSelected(false);
-            editor3DState.changeMode(modelType);
+            editor3dPart.changeMode(modelType);
         } else if (modelType == ModelType.QUAD) {
             cubeButton.setMouseTransparent(false);
             sphereButton.setMouseTransparent(false);
@@ -403,20 +346,23 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3DPart,
             sphereButton.setSelected(false);
             cubeButton.setSelected(false);
             planeButton.setSelected(true);
-            editor3DState.changeMode(modelType);
+            editor3dPart.changeMode(modelType);
         }
 
-        final EditorMaterialEditorState editorState = getEditorState();
-        if (editorState != null) editorState.setModelType(modelType);
+        var editorState = getEditorState();
+
+        if (editorState != null) {
+            editorState.setModelType(modelType);
+        }
     }
 
     @Override
     @FxThread
-    public void notifyFxChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyFxChangeProperty(@NotNull Object object, @NotNull String propertyName) {
         if (object instanceof Material) {
-            getPropertyEditor().refresh();
+            propertyEditor.refresh();
         } else {
-            getPropertyEditor().syncFor(object);
+            propertyEditor.syncFor(object);
         }
     }
 }

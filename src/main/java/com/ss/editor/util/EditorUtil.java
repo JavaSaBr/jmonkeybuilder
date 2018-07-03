@@ -577,6 +577,17 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Get the path to the file from the current asset folder.
+     *
+     * @param file the file.
+     * @return the relative path.
+     */
+    @FromAnyThread
+    public static @NotNull Path requireAssetFile(@NotNull Path file) {
+        return notNull(getAssetFile(file));
+    }
+
+    /**
      * Get the absolute path to the file in the current asset.
      *
      * @param assetFile the file.

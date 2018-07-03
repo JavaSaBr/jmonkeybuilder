@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.editor;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
@@ -8,7 +7,7 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +21,12 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorToolEditorState> extends BaseFileEditor<S> {
 
     /**
+     * The pane of editor area.
+     */
+    @NotNull
+    private final StackPane editorAreaPane;
+
+    /**
      * The main split container.
      */
     @Nullable
@@ -33,15 +38,13 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     @Nullable
     private ScrollableEditorToolComponent editorToolComponent;
 
-    /**
-     * The pane of editor area.
-     */
-    @Nullable
-    private StackPane editorAreaPane;
+    protected BaseFileEditorWithRightTool() {
+        editorAreaPane = new StackPane();
+    }
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final StackPane root) {
+    protected void createContent(@NotNull StackPane root) {
         createEditorAreaPane();
 
         mainSplitContainer = new EditorToolSplitPane(EditorUtil.getFxScene(), root);
@@ -53,14 +56,16 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
 
         editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
         editorToolComponent.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            final S editorState = getEditorState();
-            if (editorState != null) editorState.setOpenedTool(newValue.intValue());
+            var editorState = getEditorState();
+            if (editorState != null) {
+                editorState.setOpenedTool(newValue.intValue());
+            }
         });
 
-        mainSplitContainer.initFor(editorToolComponent, getEditorAreaPane());
+        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
-        FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addClassTo(mainSplitContainer, CssClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FxUtils.addClass(mainSplitContainer, CssClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FxUtils.addChild(root, mainSplitContainer);
     }
 
     /**
@@ -69,11 +74,10 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     @FxThread
     protected void createEditorAreaPane() {
 
-        editorAreaPane = new StackPane();
         editorAreaPane.setOnDragOver(this::handleDragOverEvent);
         editorAreaPane.setOnDragDropped(this::handleDragDroppedEvent);
 
-        FXUtils.addClassTo(editorAreaPane, CssClasses.FILE_EDITOR_EDITOR_AREA);
+        FxUtils.addClass(editorAreaPane, CssClasses.FILE_EDITOR_EDITOR_AREA);
     }
 
     /**
@@ -83,7 +87,7 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
      * @param newValue the new value
      */
     @FxThread
-    protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
+    protected void processChangeTool(@Nullable Number oldValue, @NotNull Number newValue) {
     }
 
     @Override
@@ -91,21 +95,13 @@ public abstract class BaseFileEditorWithRightTool<S extends EditorWithEditorTool
     protected void loadState() {
         super.loadState();
 
-        final S editorState = getEditorState();
+        var editorState = getEditorState();
         if (editorState == null) {
             return;
         }
 
         editorToolComponent.getSelectionModel().select(editorState.getOpenedTool());
         mainSplitContainer.updateFor(editorState);
-    }
-
-    /**
-     * @return the pane of editor area.
-     */
-    @FxThread
-    protected @NotNull StackPane getEditorAreaPane() {
-        return notNull(editorAreaPane);
     }
 
     /**

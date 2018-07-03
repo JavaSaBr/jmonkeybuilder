@@ -307,7 +307,7 @@ public class EditorDialog {
             container.setFocusTraversable(false);
         }
 
-        focusOwner = scene.getFocusOwner();
+        focusOwner = scene == null ? null : scene.getFocusOwner();
 
         dialog.initOwner(owner);
         dialog.show();

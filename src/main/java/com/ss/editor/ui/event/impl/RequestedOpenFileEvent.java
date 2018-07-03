@@ -1,7 +1,7 @@
 package com.ss.editor.ui.event.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -38,7 +38,7 @@ public class RequestedOpenFileEvent extends SceneEvent {
         setFile(file);
     }
 
-    public RequestedOpenFileEvent(@NotNull Path file, @NotNull EditorDescription description) {
+    public RequestedOpenFileEvent(@NotNull Path file, @NotNull EditorDescriptor description) {
         super(EVENT_TYPE);
         setNeedShow(true);
         setFile(file);
@@ -50,7 +50,7 @@ public class RequestedOpenFileEvent extends SceneEvent {
      *
      * @return the editor descriptor.
      */
-    public @Nullable EditorDescription getDescription() {
+    public @Nullable EditorDescriptor getDescription() {
         return get(EDITOR);
     }
 
@@ -59,7 +59,7 @@ public class RequestedOpenFileEvent extends SceneEvent {
      *
      * @param description the editor descriptor.
      */
-    public void setDescription(@Nullable EditorDescription description) {
+    public void setDescription(@Nullable EditorDescriptor description) {
         if (description == null) {
             remove(EDITOR);
         } else {
