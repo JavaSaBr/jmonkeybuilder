@@ -5,6 +5,7 @@ import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.audio.AudioNode;
@@ -69,6 +70,7 @@ import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -377,10 +379,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     protected void handleRemovedObject(@NotNull Spatial model) {
 
         NodeUtils.getAllLights(model).forEach(editor3dPart,
-                (light, editor3DPart) -> editor3DPart.removeLight(light));
+                (light, editor3dPart) -> editor3dPart.removeLight(light));
 
         NodeUtils.getAllAudioNodes(model).forEach(editor3dPart,
-                (audioNode, editor3DPart) -> editor3DPart.removeAudioNode(audioNode));
+                (audioNode, editor3dPart) -> editor3dPart.removeAudioNode(audioNode));
     }
 
     @Override
@@ -389,7 +391,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         super.loadState();
 
         scriptingComponent.addVariable("root", getCurrentModel());
-        scriptingComponent.addVariable("assetManager", EditorUtil.getAssetManager());
+        scriptingComponent.addVariable("assetManager", EditorUtil.getAssetManager(), AssetManager.class);
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -400,6 +402,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         scriptingComponent.addImport(SpotLight.class);
         scriptingComponent.addImport(Material.class);
         scriptingComponent.addImport(Texture.class);
+        scriptingComponent.addImport(AssetManager.class);
         scriptingComponent.setExampleCode("root.attachChild(\nnew Node(\"created from Groovy\"));");
         scriptingComponent.buildHeader();
 
@@ -414,7 +417,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         var components = paintingComponentContainer.getComponents();
         components.forEach(editorState, PaintingComponent::loadState);
 
-        final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
+        var transformType = TransformType.valueOf(editorState.getTransformationType());
 
         switch (transformType) {
             case MOVE_TOOL: {
@@ -984,39 +987,34 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         selectionButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_SELECTION));
         selectionButton.setGraphic(new ImageView(Icons.CUBE_16));
         selectionButton.setSelected(true);
-        selectionButton.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeSelectionVisible(newValue));
 
         gridButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_GRID));
         gridButton.setGraphic(new ImageView(Icons.PLANE_16));
         gridButton.setSelected(true);
-        gridButton.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeGridVisible(newValue));
 
         statisticsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_STATISTICS));
         statisticsButton.setGraphic(new ImageView(Icons.STATISTICS_16));
         statisticsButton.setSelected(true);
-        statisticsButton.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeStatisticsVisible(newValue));
 
         moveToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_MOVE_TOOL + " (G)"));
         moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
         moveToolButton.setSelected(true);
-        moveToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
-                updateTransformTool(TransformType.MOVE_TOOL, newValue));
 
         rotationToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL + " (R)"));
         rotationToolButton.setGraphic(new ImageView(Icons.ROTATION_16));
-        rotationToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
-                updateTransformTool(TransformType.ROTATE_TOOL, newValue));
 
         scaleToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_SCALE_TOOL + " (S)"));
         scaleToolButton.setGraphic(new ImageView(Icons.SCALE_16));
-        scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
-                updateTransformTool(TransformType.SCALE_TOOL, newValue));
 
-        DynamicIconSupport.addSupport(selectionButton, gridButton, statisticsButton, moveToolButton, rotationToolButton,
-                scaleToolButton);
+        FxControlUtils.onSelectedChange(scaleToolButton, this::changeSelectionVisible);
+        FxControlUtils.onSelectedChange(gridButton, this::changeGridVisible);
+        FxControlUtils.onSelectedChange(statisticsButton, this::changeStatisticsVisible);
+        FxControlUtils.onSelectedChange(moveToolButton, selected -> updateTransformTool(TransformType.MOVE_TOOL, selected));
+        FxControlUtils.onSelectedChange(rotationToolButton, selected -> updateTransformTool(TransformType.ROTATE_TOOL, selected));
+        FxControlUtils.onSelectedChange(scaleToolButton, selected -> updateTransformTool(TransformType.SCALE_TOOL, selected));
+
+        DynamicIconSupport.addSupport(selectionButton, gridButton, statisticsButton,
+                moveToolButton, rotationToolButton, scaleToolButton);
 
         FxUtils.addClass(selectionButton, gridButton, statisticsButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON)
                 .addClass(moveToolButton, rotationToolButton, scaleToolButton, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
@@ -1096,7 +1094,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         if (newIndex == OBJECTS_TOOL) {
             FxUtils.addChild(propertyEditorObjectsContainer, modelPropertyEditor);
-            FxUtils.addChild(modelNodeTreeObjectsContainer, modelPropertyEditor);
+            FxUtils.addChild(modelNodeTreeObjectsContainer, modelNodeTree);
             selectNodesFromTree(modelNodeTree.getSelectedItems());
         } else if (newIndex == PAINTING_TOOL) {
             FXUtils.addToPane(modelNodeTree, modelNodeTreeEditingContainer);

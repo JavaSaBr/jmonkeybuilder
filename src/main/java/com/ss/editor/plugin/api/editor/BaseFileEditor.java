@@ -174,7 +174,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
      * @param file the file to open.
      * @throws IOException if was some problem with writing to the file.
      */
-    @FxThread
+    @BackgroundThread
     protected void doOpenFile(@NotNull Path file) throws IOException {
     }
 

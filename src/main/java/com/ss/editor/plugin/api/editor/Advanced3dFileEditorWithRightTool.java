@@ -136,7 +136,7 @@ public abstract class Advanced3dFileEditorWithRightTool<T extends Advanced3dEdit
      */
     @FxThread
     protected @NotNull ScrollableEditorToolComponent getEditorToolComponent() {
-        return notNull(editorToolComponent);
+           return notNull(editorToolComponent);
     }
 
     /**

@@ -6,6 +6,7 @@ import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
@@ -148,7 +149,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
     }
 
     @Override
-    @FxThread
+    @BackgroundThread
     protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 

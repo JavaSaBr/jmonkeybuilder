@@ -4,6 +4,7 @@ import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.ui.control.tree.node.factory.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
@@ -43,6 +44,17 @@ public class TreeNodeFactoryRegistry {
     }
 
     private TreeNodeFactoryRegistry() {
+
+        FACTORIES.register(new PrimitiveTreeNodeFactory())
+                .register(new LegacyAnimationTreeNodeFactory())
+                .register(new CollisionTreeNodeFactory())
+                .register(new ControlTreeNodeFactory())
+                .register(new DefaultParticlesTreeNodeFactory())
+                .register(new DefaultTreeNodeFactory())
+                .register(new LightTreeNodeFactory())
+                .register(new MaterialSettingsTreeNodeFactory())
+                .register(new AnimationTreeNodeFactory());
+
         LOGGER.info("initialized.");
     }
 

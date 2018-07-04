@@ -141,7 +141,6 @@ public class EditorRegistry {
         }
 
         var extension = FileUtils.getExtension(file);
-
         var descriptions = editorDescriptors.get(extension);
 
         EditorDescriptor description;
@@ -159,7 +158,9 @@ public class EditorRegistry {
 
         var constructor = description.getConstructor();
         try {
-            return constructor.call();
+            var fileEditor = constructor.call();
+            fileEditor.createContent();
+            return fileEditor;
         } catch (Exception e) {
             EditorUtil.handleException(LOGGER, this, e);
         }
@@ -180,7 +181,9 @@ public class EditorRegistry {
 
         var constructor = descriptor.getConstructor();
         try {
-            return constructor.call();
+            var fileEditor = constructor.call();
+            fileEditor.createContent();
+            return fileEditor;
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

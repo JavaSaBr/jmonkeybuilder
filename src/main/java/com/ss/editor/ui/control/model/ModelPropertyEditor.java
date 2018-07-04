@@ -66,7 +66,7 @@ public class ModelPropertyEditor extends PropertyEditor<ModelChangeConsumer> {
         }
 
         return NEED_UPDATE_CHECKERS.anyMatch(currentObject, changedObject,
-                IsNeedUpdateChecker::isNeedUpdate);
+                IsNeedUpdateChecker::isNeedUpdate) || super.isNeedUpdate(changedObject);
     }
 
     @Override

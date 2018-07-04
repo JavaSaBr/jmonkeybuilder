@@ -1,14 +1,14 @@
 package com.ss.editor.ui.component.editor.scripting;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.scripting.GroovyEditorComponent;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
+import com.ss.rlib.fx.util.FxUtils;
 import groovy.lang.GroovyShell;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,6 +27,12 @@ public class EditorScriptingComponent extends GridPane {
      */
     @NotNull
     private final ObjectDictionary<String, Object> variables;
+
+    /**
+     * The table of variable to type.
+     */
+    @NotNull
+    private final ObjectDictionary<String, Class<?>> variableToType;
 
     /**
      * The list of imports.
@@ -58,12 +64,7 @@ public class EditorScriptingComponent extends GridPane {
     @NotNull
     private final Runnable applyHandler;
 
-    /**
-     * Instantiates a new Editor scripting component.
-     *
-     * @param applyHandler the apply handler
-     */
-    public EditorScriptingComponent(@NotNull final Runnable applyHandler) {
+    public EditorScriptingComponent(@NotNull Runnable applyHandler) {
         this.applyHandler = applyHandler;
 
         this.editorComponent = new GroovyEditorComponent(true);
@@ -74,13 +75,14 @@ public class EditorScriptingComponent extends GridPane {
         this.headerComponent.prefHeightProperty().bind(heightProperty().multiply(0.4));
         this.headerComponent.prefWidthProperty().bind(widthProperty());
         this.shell = new GroovyShell();
-        this.variables = DictionaryFactory.newObjectDictionary();
+        this.variables = ObjectDictionary.ofType(String.class, Object.class);
+        this.variableToType = ObjectDictionary.ofType(String.class, Class.class);
         this.imports = ArrayFactory.newArray(String.class);
 
-        final Label headersLabel = new Label(Messages.EDITOR_SCRIPTING_COMPONENT_HEADERS + ":");
-        final Label scriptBodyLabel = new Label(Messages.EDITOR_SCRIPTING_COMPONENT_BODY + ":");
+        var headersLabel = new Label(Messages.EDITOR_SCRIPTING_COMPONENT_HEADERS + ":");
+        var scriptBodyLabel = new Label(Messages.EDITOR_SCRIPTING_COMPONENT_BODY + ":");
 
-        final Button runButton = new Button(Messages.EDITOR_SCRIPTING_COMPONENT_RUN);
+        var runButton = new Button(Messages.EDITOR_SCRIPTING_COMPONENT_RUN);
         runButton.setOnAction(event -> run());
 
         add(headersLabel, 0, 0, 1, 1);
@@ -89,7 +91,7 @@ public class EditorScriptingComponent extends GridPane {
         add(editorComponent, 0, 3, 1, 1);
         add(runButton, 0, 4, 1, 1);
 
-        FXUtils.addClassTo(this, CssClasses.EDITOR_SCRIPTING_COMPONENT);
+        FxUtils.addClass(this, CssClasses.EDITOR_SCRIPTING_COMPONENT);
     }
 
     /**
@@ -98,38 +100,71 @@ public class EditorScriptingComponent extends GridPane {
      * @param name  the name of the variable.
      * @param value the variable.
      */
-    public void addVariable(@NotNull final String name, @NotNull final Object value) {
+    @FromAnyThread
+    public void addVariable(@NotNull String name, @NotNull Object value) {
         variables.put(name, value);
         addImport(value.getClass());
     }
+
+    /**
+     * Add a global variable to the script.
+     *
+     * @param name  the name of the variable.
+     * @param value the variable.
+     * @param type  the expected type of the variable.
+     */
+    @FromAnyThread
+    public <T> void addVariable(@NotNull String name, @NotNull T value, @NotNull Class<T> type) {
+        variables.put(name, value);
+        variableToType.put(name, type);
+        addImport(type.getClass());
+    }
+
 
     /**
      * Add an import of a some type.
      *
      * @param type the type.
      */
-    public void addImport(@NotNull final Class<?> type) {
-        final String name = type.getName();
-        if (!imports.contains(name)) imports.add(name);
+    @FromAnyThread
+    public void addImport(@NotNull Class<?> type) {
+
+        var name = type.getName();
+
+        if (!imports.contains(name)) {
+            imports.add(name);
+        }
     }
 
     /**
      * Build a header of a script.
      */
+    @FromAnyThread
     public void buildHeader() {
 
-        final StringBuilder result = new StringBuilder();
+        var result = new StringBuilder();
 
-        imports.forEach(result, (type, stringBuilder) -> stringBuilder.append("import ").append(type).append('\n'));
+        imports.forEach(result, (type, builder) -> builder.append("import ")
+                .append(type)
+                .append('\n'));
 
         result.append('\n');
 
-        variables.forEach((name, value) -> result.append(value.getClass().getSimpleName())
-                .append(' ')
-                .append(name)
-                .append(" = load_")
-                .append(name)
-                .append("();\n"));
+        variables.forEach((name, value) -> {
+
+            Class<?> type = variableToType.get(name);
+
+            if (type == null) {
+                type = value.getClass();
+            }
+
+            result.append(type.getSimpleName())
+                    .append(' ')
+                    .append(name)
+                    .append(" = load_")
+                    .append(name)
+                    .append("();\n");
+        });
 
         headerComponent.setCode(result.toString());
     }
@@ -139,7 +174,7 @@ public class EditorScriptingComponent extends GridPane {
      *
      * @param example the example code.
      */
-    public void setExampleCode(@NotNull final String example) {
+    public void setExampleCode(@NotNull String example) {
         editorComponent.setCode(example);
     }
 
@@ -150,23 +185,25 @@ public class EditorScriptingComponent extends GridPane {
 
         String code = editorComponent.getCode();
 
-        for (final String type : imports) {
-            final String check = "import " + type;
+        for (var type : imports) {
+            var check = "import " + type;
             if (code.contains(check)) {
                 code = code.replace(check, "");
             }
         }
 
-        final StringBuilder result = new StringBuilder();
+        var result = new StringBuilder();
 
-        imports.forEach(result, (type, stringBuilder) -> stringBuilder.append("import ").append(type).append('\n'));
+        imports.forEach(result, (type, builder) -> builder.append("import ")
+                .append(type)
+                .append('\n'));
+
         result.append(code);
 
         variables.forEach(shell, GroovyShell::setVariable);
-
         try {
             shell.evaluate(result.toString());
-        } catch (final Exception e) {
+        } catch (Exception e) {
             EditorUtil.handleException(null, this, e);
             return;
         }

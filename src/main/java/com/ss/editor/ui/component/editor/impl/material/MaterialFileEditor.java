@@ -210,7 +210,7 @@ public class MaterialFileEditor extends
 
 
     @Override
-    @FxThread
+    @BackgroundThread
     protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 

@@ -9,6 +9,7 @@ import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
@@ -101,10 +102,10 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
 
     private ModelFileEditor() {
         super();
-        fastSkyComboBox = new ComboBox<>();
-        lightButton = new ToggleButton();
-        physicsButton = new ToggleButton();
-        debugPhysicsButton = new ToggleButton();
+        this.fastSkyComboBox = new ComboBox<>();
+        this.lightButton = new ToggleButton();
+        this.physicsButton = new ToggleButton();
+        this.debugPhysicsButton = new ToggleButton();
         this.bulletState = new ModelEditorBulletPart(editor3dPart);
         this.bulletState.setEnabled(false);
         this.bulletState.setDebugEnabled(false);
@@ -119,7 +120,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     }
 
     @Override
-    @FxThread
+    @BackgroundThread
     protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 
