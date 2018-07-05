@@ -1,15 +1,16 @@
 package com.ss.editor.plugin.api.dialog;
 
-import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
+import com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,6 +78,12 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
         this.validator = validator;
         this.vars = VarTable.newInstance();
         this.validateCallback = this::validate;
+    }
+
+    @Override
+    @FxThread
+    public void construct() {
+        super.construct();
         createControls();
         validate();
     }
@@ -139,14 +146,13 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
      */
     @FxThread
     private void createControls() {
+        getDefinitions().forEach(getRoot(), (definition, root) -> {
 
-        var children = getRoot().getChildren();
+            var control = PropertyEditorControlFactory.build(vars, definition, validateCallback);
+            control.prefWidthProperty()
+                    .bind(widthProperty());
 
-        var definitions = getDefinitions();
-        definitions.forEach(definition -> {
-            var control = build(vars, definition, validateCallback);
-            control.prefWidthProperty().bind(widthProperty());
-            children.add(control);
+            FxUtils.addChild(root, control);
         });
     }
 

@@ -27,6 +27,19 @@ public class PropertyEditorControlFactory {
             @NotNull Runnable validation
     ) {
 
+        var control = buildImpl(vars, definition, validation);
+        control.createComponents();
+        control.reload();
+
+        return control;
+    }
+
+    @FxThread
+    private static @NotNull PropertyEditorControl<?> buildImpl(
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validation
+    ) {
         switch (definition.getPropertyType()) {
             case FLOAT: {
                 var control = new FloatPropertyEditorControl(vars, definition, validation);

@@ -105,14 +105,6 @@ public class PropertyEditorControl<T> extends HBox {
 
         setOnKeyReleased(UiUtils::consumeIfIsNotHotKey);
         setOnKeyPressed(UiUtils::consumeIfIsNotHotKey);
-        createComponents();
-
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
-        }
 
         FxUtils.addClass(this, CssClasses.PROPERTY_EDITOR_CONTROL);
     }
@@ -194,6 +186,19 @@ public class PropertyEditorControl<T> extends HBox {
      */
     @FxThread
     public void reload() {
+        setIgnoreListener(true);
+        try {
+            reloadImpl();
+        } finally {
+            setIgnoreListener(false);
+        }
+    }
+
+    /**
+     * Reload value of this control.
+     */
+    @FxThread
+    protected void reloadImpl() {
     }
 
     @FxThread
@@ -208,7 +213,7 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     @FxThread
-    protected void createComponents() {
+    public void createComponents() {
         setAlignment(Pos.CENTER_RIGHT);
 
         propertyNameLabel = new Label(getName() + ":");
