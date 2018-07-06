@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -13,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.apache.http.conn.UnsupportedSchemeException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,10 +26,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends PropertyControl<C, D, T> {
 
-    /**
-     * The constant NO_ELEMENT.
-     */
-    @NotNull
     protected static final String NO_ELEMENT = Messages.ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
 
     /**
@@ -41,8 +37,8 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     /**
      * The label with name of the element.
      */
-    @Nullable
-    private Label elementLabel;
+    @NotNull
+    protected final Label elementLabel;
 
     public ElementPropertyControl(
             @NotNull Class<T> type,
@@ -52,6 +48,7 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     ) {
         super(propertyValue, propertyName, changeConsumer);
         this.type = type;
+        this.elementLabel = new Label(NO_ELEMENT);
     }
 
     @Override
@@ -59,7 +56,6 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        elementLabel = new Label(NO_ELEMENT);
         elementLabel.prefWidthProperty()
             .bind(container.widthProperty());
 
@@ -102,13 +98,20 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
         changed(null, getPropertyValue());
     }
 
+    @Override
+    @FxThread
+    protected void reloadImpl() {
+        elementLabel.setText(getElementText());
+        super.reloadImpl();
+    }
+
     /**
-     * Get the element label.
+     * Get the current element's text.
      *
-     * @return the element label.
+     * @return the current element's text.
      */
     @FxThread
-    protected @NotNull Label getElementLabel() {
-        return notNull(elementLabel);
+    protected @NotNull String getElementText() {
+        throw new UnsupportedOperationException();
     }
 }

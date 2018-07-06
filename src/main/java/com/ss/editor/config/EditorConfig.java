@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -316,6 +317,16 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public @Nullable Path getCurrentAsset() {
         return currentAsset;
+    }
+
+    /**
+     * Get an optional of the current asset folder.
+     *
+     * @return the optional of the current asset folder.
+     */
+    @FromAnyThread
+    public @NotNull Optional<Path> getCurrentAssetOpt() {
+        return Optional.ofNullable(currentAsset);
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Boolean.TRUE;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -28,8 +27,8 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
     /**
      * The field with current value.
      */
-    @Nullable
-    private CheckBox checkBox;
+    @NotNull
+    private final CheckBox checkBox;
 
     public BooleanPropertyControl(
             @Nullable Boolean propertyValue,
@@ -37,6 +36,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
+        this.checkBox = new CheckBox();
     }
 
     public BooleanPropertyControl(
@@ -46,6 +46,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
             @Nullable ChangeHandler<C, D, Boolean> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
+        this.checkBox = new CheckBox();
     }
 
     @Override
@@ -53,15 +54,12 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        checkBox = new CheckBox();
         checkBox.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FxControlUtils.onSelectedChange(checkBox, this::updateValue);
 
-        FxUtils.addClass(checkBox,
-                CssClasses.PROPERTY_CONTROL_CHECK_BOX);
-
+        FxUtils.addClass(checkBox, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
         FxUtils.addChild(container, checkBox);
     }
 
@@ -70,7 +68,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        FxUtils.rebindPrefWidth(getCheckBox(),
+        FxUtils.rebindPrefWidth(checkBox,
                 widthProperty().multiply(controlWidthPercent));
     }
 
@@ -79,9 +77,9 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
      */
     @FxThread
     public void disableCheckboxOffset() {
-        FxUtils.resetPrefWidth(getCheckBox());
-        FxUtils.resetMinMaxWidth(getPropertyNameLabel())
-            .prefWidthProperty().bind(widthProperty());
+        FxUtils.resetPrefWidth(checkBox);
+        FxUtils.resetMinMaxWidth(propertyNameLabel)
+                .prefWidthProperty().bind(widthProperty());
     }
 
     @Override
@@ -90,26 +88,17 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
         return true;
     }
 
-    /**
-     * Get the field with current value.
-     *
-     * @return the field with current value.
-     */
-    @FxThread
-    private @NotNull CheckBox getCheckBox() {
-        return notNull(checkBox);
-    }
-
     @Override
     @FxThread
-    protected void reload() {
-        getCheckBox().setSelected(TRUE.equals(getPropertyValue()));
+    protected void reloadImpl() {
+        checkBox.setSelected(TRUE.equals(getPropertyValue()));
+        super.reloadImpl();
     }
 
     @FxThread
     @Override
     public boolean isDirty() {
-        return !Objects.equals(getPropertyValue(), getCheckBox().isSelected());
+        return !Objects.equals(getPropertyValue(), checkBox.isSelected());
     }
 
     /**
@@ -125,6 +114,6 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
     @Override
     protected void apply() {
         super.apply();
-        changed(getCheckBox().isSelected(), getPropertyValue());
+        changed(checkBox.isSelected(), getPropertyValue());
     }
 }

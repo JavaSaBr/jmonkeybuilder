@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.property;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -22,8 +21,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    private static final PropertyBuilderRegistry BUILDER_REGISTRY = PropertyBuilderRegistry.getInstance();
-
     /**
      * The consumer of changes.
      */
@@ -33,8 +30,8 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
     /**
      * The container of controls.
      */
-    @Nullable
-    private VBox container;
+    @NotNull
+    private final VBox container;
 
     /**
      * The current editable object.
@@ -50,34 +47,23 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
     public PropertyEditor(@NotNull C changeConsumer) {
         this.changeConsumer = changeConsumer;
-        createComponents();
-    }
-
-    /**
-     * Get the container of controls.
-     *
-     * @return the container of controls.
-     */
-    @FxThread
-    private @NotNull VBox getContainer() {
-        return notNull(container);
-    }
-
-    /**
-     * Create components.
-     */
-    @FxThread
-    private void createComponents() {
         this.container = new VBox();
+        construct();
+    }
+
+    /**
+     * Finish constructing this property editor.
+     */
+    @FxThread
+    public void construct() {
+
         this.container.prefWidthProperty()
                 .bind(widthProperty().subtract(FxConstants.PROPERTY_LIST_OFFSET));
 
         var wrapper = new VBox(container);
 
-        FxUtils.addClass(this,
-                        CssClasses.PROPERTY_EDITOR)
-                .addClass(wrapper, container,
-                        CssClasses.DEF_VBOX, CssClasses.PROPERTY_EDITOR_CONTAINER);
+        FxUtils.addClass(this, CssClasses.PROPERTY_EDITOR)
+                .addClass(wrapper, container, CssClasses.DEF_VBOX, CssClasses.PROPERTY_EDITOR_CONTAINER);
 
         setContent(wrapper);
     }
@@ -94,7 +80,6 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
             return;
         }
 
-        var container = getContainer();
         container.setDisable(object == null || !canEdit(object, getCurrentParent()));
         container.getChildren().forEach(node -> {
             if (node instanceof UpdatableControl) {
@@ -114,7 +99,6 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
             return;
         }
 
-        var container = getContainer();
         container.setDisable(!canEdit(object, getCurrentParent()));
         container.getChildren().forEach(node -> {
             if (node instanceof UpdatableControl) {
@@ -136,12 +120,12 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
             return;
         }
 
-        var container = getContainer();
         var children = container.getChildren();
         children.clear();
 
         if (object != null) {
-            BUILDER_REGISTRY.buildFor(object, parent, container, changeConsumer);
+            PropertyBuilderRegistry.getInstance()
+                    .buildFor(object, parent, container, changeConsumer);
         }
 
         container.setDisable(object == null || !canEdit(object, parent));
@@ -175,12 +159,12 @@ public class PropertyEditor<C extends ChangeConsumer> extends ScrollPane {
             return;
         }
 
-        var container = getContainer();
         var children = container.getChildren();
         children.clear();
 
         if (object != null) {
-            BUILDER_REGISTRY.buildFor(object, parent, container, changeConsumer);
+            PropertyBuilderRegistry.getInstance()
+                    .buildFor(object, parent, container, changeConsumer);
         }
     }
 

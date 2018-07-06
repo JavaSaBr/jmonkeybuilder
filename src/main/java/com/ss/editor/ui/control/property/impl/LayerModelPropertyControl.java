@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeConsumer, D, SceneLayer> {
 
-    @NotNull
     private class LayerCell extends ListCell<SceneLayer> {
 
         @Override
@@ -45,8 +44,8 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
     /**
      * The layers combo box.
      */
-    @Nullable
-    private ComboBox<SceneLayer> layerComboBox;
+    @NotNull
+    private final ComboBox<SceneLayer> layerComboBox;
 
     public LayerModelPropertyControl(
             @Nullable SceneLayer layer,
@@ -54,6 +53,7 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
             @NotNull SceneChangeConsumer changeConsumer
     ) {
         super(ifNull(layer, SceneLayer.NO_LAYER), propertyName, changeConsumer);
+        this.layerComboBox = new ComboBox<>();
     }
 
     @Override
@@ -67,7 +67,6 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        layerComboBox = new ComboBox<>();
         layerComboBox.setCellFactory(param -> new LayerCell());
         layerComboBox.setButtonCell(new LayerCell());
         layerComboBox.setEditable(false);
@@ -76,43 +75,33 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
 
         FxControlUtils.onSelectedItemChange(layerComboBox, this::updateLevel);
 
-        FxUtils.addClass(layerComboBox,
-                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-
+        FxUtils.addClass(layerComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FxUtils.addChild(container, layerComboBox);
     }
 
     @FxThread
     private void updateLevel(@Nullable SceneLayer layer) {
-        if (isIgnoreListener()) return;
-        changed(layer, getPropertyValue());
-    }
-
-    /**
-     * Get the layers combo box.
-     *
-     * @return the layers combo box.
-     */
-    @FxThread
-    protected @NotNull ComboBox<SceneLayer> getLayerComboBox() {
-        return notNull(layerComboBox);
+        if (!isIgnoreListener()) {
+            changed(layer, getPropertyValue());
+        }
     }
 
     @Override
     @FxThread
-    protected void reload() {
+    protected void reloadImpl() {
 
         var changeConsumer = (SceneChangeConsumer) getChangeConsumer();
         var currentModel = changeConsumer.getCurrentModel();
         var sceneLayer = getPropertyValue();
 
-        var levelComboBox = getLayerComboBox();
-        var items = levelComboBox.getItems();
+        var items = layerComboBox.getItems();
         items.clear();
         items.add(SceneLayer.NO_LAYER);
         items.addAll(currentModel.getLayers());
 
-        levelComboBox.getSelectionModel()
+        layerComboBox.getSelectionModel()
                 .select(sceneLayer == null ? SceneLayer.NO_LAYER : sceneLayer);
+
+        super.reloadImpl();
     }
 }

@@ -54,8 +54,8 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     /**
      * The lod level combobox.
      */
-    @Nullable
-    private ComboBox<Integer> levelComboBox;
+    @NotNull
+    private final ComboBox<Integer> levelComboBox;
 
     public LodLevelPropertyControl(
             @Nullable Integer element,
@@ -63,6 +63,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
             @NotNull C changeConsumer
     ) {
         super(element, paramName, changeConsumer);
+        this.levelComboBox = new ComboBox<>();
     }
 
     @Override
@@ -76,7 +77,6 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        levelComboBox = new ComboBox<>();
         levelComboBox.setCellFactory(param -> new LodLevelCell());
         levelComboBox.setButtonCell(new LodLevelCell());
         levelComboBox.setEditable(false);
@@ -85,9 +85,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         FxControlUtils.onSelectedItemChange(levelComboBox, this::updateLevel);
 
-        FxUtils.addClass(levelComboBox,
-                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-
+        FxUtils.addClass(levelComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FxUtils.addChild(container, levelComboBox);
     }
 
@@ -98,8 +96,9 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
      */
     @FxThread
     private void updateLevel(@Nullable Integer newValue) {
-        if (isIgnoreListener()) return;
-        changed(ObjectUtils.ifNull(newValue, 0), getPropertyValue());
+        if (!isIgnoreListener()) {
+            changed(ObjectUtils.ifNull(newValue, 0), getPropertyValue());
+        }
     }
 
     @Override
@@ -108,19 +107,9 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
         return ObjectUtils.ifNull(super.getPropertyValue(), 0);
     }
 
-    /**
-     * Get the level combo box.
-     *
-     * @return The lod level combo box.
-     */
-    @FxThread
-    protected @NotNull ComboBox<Integer> getLevelComboBox() {
-        return ObjectUtils.notNull(levelComboBox);
-    }
-
     @Override
     @FxThread
-    protected void reload() {
+    protected void reloadImpl() {
 
         if (!hasEditObject()) {
             return;
@@ -128,12 +117,12 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         var geometry = getEditObject();
         var mesh = geometry.getMesh();
+
         if (mesh == null) {
             return;
         }
 
         var element = getPropertyValue();
-        var levelComboBox = getLevelComboBox();
         var items = levelComboBox.getItems();
         items.clear();
 
@@ -149,5 +138,7 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         levelComboBox.getSelectionModel()
                 .select(element);
+
+        super.reloadImpl();
     }
 }

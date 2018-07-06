@@ -27,8 +27,8 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
     /**
      * The list of available options of the {@link Enum} value.
      */
-    @Nullable
-    private ComboBox<E> enumComboBox;
+    @NotNull
+    private final ComboBox<E> enumComboBox;
 
     public EnumPropertyControl(
             @Nullable E propertyValue,
@@ -37,7 +37,8 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
             @NotNull E[] availableValues
     ) {
         super(propertyValue, propertyName, changeConsumer);
-        getEnumComboBox().getItems()
+        this.enumComboBox = new ComboBox<>();
+        this.enumComboBox.getItems()
                 .addAll(availableValues);
     }
 
@@ -57,7 +58,8 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
             @Nullable ChangeHandler<C, D, E> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
-        getEnumComboBox().getItems()
+        this.enumComboBox = new ComboBox<>();
+        this.enumComboBox.getItems()
                 .addAll(availableValues);
     }
 
@@ -66,7 +68,6 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        enumComboBox = new ComboBox<>();
         enumComboBox.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
@@ -79,37 +80,23 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
     }
 
     /**
-     * Get the list of available options of the {@link Enum} value.
-     *
-     * @return the list of available options of the {@link Enum} value.
-     */
-    @FxThread
-    private @NotNull ComboBox<E> getEnumComboBox() {
-        return notNull(enumComboBox);
-    }
-
-    /**
      * Update selected {@link Enum} value.
      */
     @FxThread
     private void change() {
-
-        if (isIgnoreListener()) {
-            return;
+        if (!isIgnoreListener()) {
+            changed(enumComboBox.getValue(), getPropertyValue());
         }
-
-        var enumComboBox = getEnumComboBox();
-        var selectionModel = enumComboBox.getSelectionModel();
-        var newValue = selectionModel.getSelectedItem();
-
-        changed(newValue, getPropertyValue());
     }
 
     @Override
     @FxThread
-    protected void reload() {
-        getEnumComboBox().getSelectionModel()
+    protected void reloadImpl() {
+
+        enumComboBox.getSelectionModel()
                 .select(getPropertyValue());
+
+        super.reloadImpl();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.property.impl;
 
 import com.jme3.light.Light;
+import com.jme3.post.Filter;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.dialog.node.selector.LightSelectorDialog;
@@ -34,14 +35,13 @@ public class LightElementModelPropertyControl<L extends Light, D> extends Elemen
 
     @Override
     @FxThread
-    protected void reload() {
-
-        var light = getPropertyValue();
-        var elementLabel = getElementLabel();
-
-        String name = light == null ? null : light.getName();
-        name = name == null && light != null ? light.getClass().getSimpleName() : name;
-
-        elementLabel.setText(StringUtils.ifEmpty(name, NO_ELEMENT));
+    protected @NotNull String getElementText() {
+        return getPropertyValueOpt()
+                .map(Light::getName)
+                .filter(StringUtils::isNotEmpty)
+                .or(() -> getPropertyValueOpt()
+                        .map(Light::getClass)
+                        .map(Class::getSimpleName))
+                .orElse(NO_ELEMENT);
     }
 }

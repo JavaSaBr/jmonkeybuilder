@@ -3,15 +3,19 @@ package com.ss.editor.ui.control.property.impl;
 import static com.ss.editor.FileExtensions.AUDIO_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+
+import com.jme3.asset.AssetKey;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
@@ -39,14 +43,13 @@ import java.nio.file.Paths;
  */
 public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyControl<C, AudioNode, AudioKey> {
 
-    @NotNull
     private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
 
     /**
      * The label with name of the audio key.
      */
-    @Nullable
-    private Label audioKeyLabel;
+    @NotNull
+    private final Label audioKeyLabel;
 
     public AudioKeyPropertyControl(
             @Nullable AudioKey element,
@@ -54,6 +57,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
             @NotNull C changeConsumer
     ) {
         super(element, paramName, changeConsumer);
+        this.audioKeyLabel = new Label(NO_AUDIO);
         setOnDragOver(this::handleDragOverEvent);
         setOnDragDropped(this::handleDragDroppedEvent);
         setOnDragExited(this::handleDragExitedEvent);
@@ -89,8 +93,6 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     @FxThread
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
-
-        audioKeyLabel = new Label(NO_AUDIO);
 
         var changeButton = new Button();
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
@@ -140,16 +142,13 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     @FxThread
     private void addAudioData(@NotNull Path file) {
 
-        var assetFile = notNull(getAssetFile(file));
-        var audioKey = new AudioKey(toAssetPath(assetFile));
+        var audioKey = EditorUtil.getAssetFileOpt(file)
+                .map(EditorUtil::toAssetPath)
+                .map(AudioKey::new)
+                .orElseThrow(() -> new IllegalStateException("Can't build audio key."));
 
         changed(audioKey, getPropertyValue());
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
-        }
+        reload();
     }
 
     /**
@@ -160,41 +159,24 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
     @FxThread
     protected void openAudio(@Nullable ActionEvent event) {
 
-        var element = getPropertyValue();
-        if (element == null) {
-            return;
-        }
+       var eventManager = FxEventManager.getInstance();
 
-        var assetPath = element.getName();
-        if (StringUtils.isEmpty(assetPath)) {
-            return;
-        }
-
-        var assetFile = Paths.get(assetPath);
-        var realFile = notNull(getRealFile(assetFile));
-        if (!Files.exists(realFile)) {
-            return;
-        }
-
-        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(realFile));
-    }
-
-    /**
-     * Get the audio key label.
-     *
-     * @return the audio key label.
-     */
-    @FxThread
-    private @NotNull Label getAudioKeyLabel() {
-        return notNull(audioKeyLabel);
+        getPropertyValueOpt()
+                .map(AssetKey::getName)
+                .filter(StringUtils::isNotEmpty)
+                .map(EditorUtil::requireRealFile)
+                .filter(path -> Files.exists(path))
+                .ifPresent(path -> eventManager.notify(new RequestedOpenFileEvent(path)));
     }
 
     @Override
     @FxThread
-    protected void reload() {
-        getAudioKeyLabel().setText(getKeyLabel(getPropertyValue()));
+    protected void reloadImpl() {
+        audioKeyLabel.setText(getKeyLabel(getPropertyValue()));
+        super.reloadImpl();
     }
 
+    @FromAnyThread
     private @NotNull String getKeyLabel(@Nullable AudioKey assetKey) {
         return EditorUtil.isEmpty(assetKey) ? NO_AUDIO : assetKey.getName();
     }

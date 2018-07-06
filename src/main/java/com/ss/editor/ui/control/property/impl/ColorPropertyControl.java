@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -27,8 +26,8 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     /**
      * The color picker.
      */
-    @Nullable
-    private ColorPicker colorPicker;
+    @NotNull
+    private final ColorPicker colorPicker;
 
     public ColorPropertyControl(
             @Nullable ColorRGBA propertyValue,
@@ -36,6 +35,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
+        this.colorPicker = new ColorPicker();
     }
 
     @Override
@@ -43,7 +43,6 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        colorPicker = new ColorPicker();
         colorPicker.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
@@ -60,7 +59,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        FxUtils.rebindPrefWidth(getColorPicker(),
+        FxUtils.rebindPrefWidth(colorPicker,
                 widthProperty().multiply(controlWidthPercent));
     }
 
@@ -76,20 +75,11 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
         return true;
     }
 
-    /**
-     * Get the color picker.
-     *
-     * @return the color picker.
-     */
-    @FxThread
-    private @NotNull ColorPicker getColorPicker() {
-        return notNull(colorPicker);
-    }
-
     @Override
     @FxThread
-    protected void reload() {
-        getColorPicker().setValue(UiUtils.from(getPropertyValue()));
+    protected void reloadImpl() {
+        colorPicker.setValue(UiUtils.from(getPropertyValue()));
+        super.reloadImpl();
     }
 
     /**
@@ -102,7 +92,6 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
             return;
         }
 
-        var colorPicker = getColorPicker();
         var newColor = UiUtils.from(colorPicker.getValue());
         var oldValue = getPropertyValue();
 

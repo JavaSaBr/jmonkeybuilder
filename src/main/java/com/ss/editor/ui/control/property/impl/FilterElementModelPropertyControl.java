@@ -33,13 +33,13 @@ public class FilterElementModelPropertyControl<D> extends SceneElementPropertyCo
 
     @Override
     @FxThread
-    protected void reload() {
-
-        var filter = getPropertyValue();
-
-        String name = filter == null ? null : filter.getName();
-        name = StringUtils.isEmpty(name) && filter != null ? filter.getClass().getSimpleName() : name;
-
-        getElementLabel().setText(StringUtils.ifEmpty(name, NO_ELEMENT));
+    protected @NotNull String getElementText() {
+        return getPropertyValueOpt()
+                .map(Filter::getName)
+                .filter(StringUtils::isNotEmpty)
+                .or(() -> getPropertyValueOpt()
+                        .map(Filter::getClass)
+                        .map(Class::getSimpleName))
+                .orElse(NO_ELEMENT);
     }
 }

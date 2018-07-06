@@ -4,6 +4,7 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
+import com.jme3.audio.AudioKey;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.util.UiUtils;
@@ -41,16 +42,13 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
     @FxThread
     protected void addMaterial(@NotNull Path file) {
 
-        var assetFile = notNull(getAssetFile(file));
-        var materialKey = new MaterialKey(toAssetPath(assetFile));
+        var materialKey = EditorUtil.getAssetFileOpt(file)
+                .map(EditorUtil::toAssetPath)
+                .map(MaterialKey::new)
+                .orElseThrow(() -> new IllegalStateException("Can't build material key."));
 
         changed(materialKey, getPropertyValue());
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
-        }
+        reload();
     }
 
     @Override

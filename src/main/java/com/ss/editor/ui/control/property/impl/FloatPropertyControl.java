@@ -28,8 +28,8 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     /**
      * The filed with current value.
      */
-    @Nullable
-    private FloatTextField valueField;
+    @NotNull
+    private final FloatTextField valueField;
 
     public FloatPropertyControl(
             @Nullable Float propertyValue,
@@ -37,6 +37,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
+        this.valueField = new FloatTextField();
     }
 
     public FloatPropertyControl(
@@ -46,6 +47,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
             @Nullable ChangeHandler<C, D, Float> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
+        this.valueField = new FloatTextField();
     }
 
     @Override
@@ -53,7 +55,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        FxUtils.rebindPrefWidth(getValueField(),
+        FxUtils.rebindPrefWidth(valueField,
                 widthProperty().multiply(controlWidthPercent));
     }
 
@@ -62,16 +64,13 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        valueField = new FloatTextField();
         valueField.prefWidthProperty()
-            .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FxControlUtils.onValueChange(valueField, this::updateValue);
         FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
 
-        FxUtils.addClass(valueField,
-                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-
+        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FxUtils.addChild(container, valueField);
     }
 
@@ -82,7 +81,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
      */
     @FxThread
     public void setScrollPower(float scrollPower) {
-        getValueField().setScrollPower(scrollPower);
+        valueField.setScrollPower(scrollPower);
     }
 
     /**
@@ -92,7 +91,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
      */
     @FxThread
     public float getScrollPower() {
-        return getValueField().getScrollPower();
+        return valueField.getScrollPower();
     }
 
     /**
@@ -103,7 +102,7 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
      */
     @FxThread
     public void setMinMax(float min, float max) {
-        getValueField().setMinMax(min, max);
+        valueField.setMinMax(min, max);
     }
 
     @Override
@@ -112,29 +111,21 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
         return true;
     }
 
-    /**
-     * Get the filed with current value.
-     *
-     * @return the filed with current value.
-     */
-    @FxThread
-    private @NotNull FloatTextField getValueField() {
-        return notNull(valueField);
-    }
-
     @Override
     @FxThread
-    protected void reload() {
-        var valueField = getValueField();
+    protected void reloadImpl() {
+
         var caretPosition = valueField.getCaretPosition();
         valueField.setValue(zeroIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
+
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     public boolean isDirty() {
-        return !Objects.equals(getValueField().getValue(), getPropertyValue());
+        return !Objects.equals(valueField.getValue(), getPropertyValue());
     }
 
     /**
@@ -151,6 +142,6 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     @FxThread
     protected void apply() {
         super.apply();
-        changed(getValueField().getValue(), getPropertyValue());
+        changed(valueField.getValue(), getPropertyValue());
     }
 }

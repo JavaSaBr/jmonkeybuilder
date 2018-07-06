@@ -65,10 +65,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * The class with utility methods for the Editor.
@@ -553,27 +550,36 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Get the path to the file from the current asset folder.
+     * Get a relative file to the file from the current asset folder.
      *
      * @param file the file.
-     * @return the relative path.
+     * @return the relative file or null.
      */
     @FromAnyThread
     public static @Nullable Path getAssetFile(@NotNull Path file) {
-
-        var editorConfig = EditorConfig.getInstance();
-        var currentAsset = editorConfig.getCurrentAsset();
-        if (currentAsset == null) {
-            return null;
-        }
-
         try {
-            return currentAsset.relativize(file);
+
+            return EditorConfig.getInstance()
+                    .getCurrentAssetOpt()
+                    .map(path -> path.relativize(file))
+                    .orElse(null);
+
         } catch (IllegalArgumentException e) {
-            LOGGER.warning("Can't create asset file of the " + file + " for asset folder " + currentAsset);
+            LOGGER.warning("Can't create asset file of the " + file);
             LOGGER.warning(e);
             return null;
         }
+    }
+
+    /**
+     * Get an optional of a relative file to the file from the current asset folder.
+     *
+     * @param file the file.
+     * @return the optional of the relative file.
+     */
+    @FromAnyThread
+    public static @NotNull Optional<Path> getAssetFileOpt(@NotNull Path file) {
+        return Optional.ofNullable(getAssetFile(file));
     }
 
     /**
@@ -606,6 +612,20 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Get the absolute file by the relative asset path.
+     *
+     * @param assetPath the relative path to the file.
+     * @return the absolute files.
+     */
+    @FromAnyThread
+    public static @NotNull Path requireRealFile(@NotNull String assetPath) {
+        return EditorConfig.getInstance()
+                .getCurrentAssetOpt()
+                .map(path -> path.resolve(assetPath))
+                .orElseThrow(() -> new IllegalStateException("Can't build a real file for the asset path " + assetPath));
+    }
+
+    /**
      * Get the absolute path to the file in the current asset.
      *
      * @param assetFile the asset path to file.
@@ -616,6 +636,7 @@ public abstract class EditorUtil {
 
         var editorConfig = EditorConfig.getInstance();
         var currentAsset = editorConfig.getCurrentAsset();
+
         if (currentAsset == null) {
             return null;
         }

@@ -184,7 +184,7 @@ public class EditorRegistry {
             var fileEditor = constructor.call();
             fileEditor.createContent();
             return fileEditor;
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

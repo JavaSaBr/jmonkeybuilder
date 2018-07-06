@@ -39,19 +39,10 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
 
     @Override
     @FxThread
-    protected void reload() {
-
-        var element = getPropertyValue();
-        var valueField = getValueField();
-        var caretPosition = valueField.getCaretPosition();
-
-        if (element == null) {
-            valueField.setText(StringUtils.EMPTY);
-        } else {
-            valueField.setText(ArrayUtils.toString(element, " ", false, false));
-        }
-
-        valueField.positionCaret(caretPosition);
+    protected @NotNull String getTextPresentation() {
+        return getPropertyValueOpt()
+                .map(ints -> ArrayUtils.toString(ints, " ", false, false))
+                .orElse(StringUtils.EMPTY);
     }
 
     @Override
@@ -64,7 +55,7 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
     @FxThread
     protected @Nullable float[] getCurrentValue() {
 
-        var textValue = getValueField().getText();
+        var textValue = valueField.getText();
 
         float[] newValue = null;
 

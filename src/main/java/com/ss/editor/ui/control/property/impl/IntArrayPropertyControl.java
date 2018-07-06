@@ -20,12 +20,6 @@ import java.util.Arrays;
  */
 public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends StringBasedArrayPropertyControl<C, D, int[]> {
 
-    /**
-     * The filed with current value.
-     */
-    @Nullable
-    private TextField valueField;
-
     public IntArrayPropertyControl(
             @Nullable int[] propertyValue,
             @NotNull String propertyName,
@@ -45,20 +39,10 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends String
 
     @Override
     @FxThread
-    protected void reload() {
-
-        var element = getPropertyValue();
-
-        var valueField = getValueField();
-        var caretPosition = valueField.getCaretPosition();
-
-        if (element == null) {
-            valueField.setText(StringUtils.EMPTY);
-        } else {
-            valueField.setText(ArrayUtils.toString(element, " ", false, false));
-        }
-
-        valueField.positionCaret(caretPosition);
+    protected @NotNull String getTextPresentation() {
+        return getPropertyValueOpt()
+                .map(ints -> ArrayUtils.toString(ints, " ", false, false))
+                .orElse(StringUtils.EMPTY);
     }
 
     @Override
@@ -71,7 +55,7 @@ public class IntArrayPropertyControl<C extends ChangeConsumer, D> extends String
     @FxThread
     protected @Nullable int[] getCurrentValue() {
 
-        var textValue = getValueField().getText();
+        var textValue = valueField.getText();
 
         int[] newValue = null;
 

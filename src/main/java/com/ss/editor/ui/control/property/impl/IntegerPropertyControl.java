@@ -28,8 +28,8 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     /**
      * The filed with current value.
      */
-    @Nullable
-    private IntegerTextField valueField;
+    @NotNull
+    private final IntegerTextField valueField;
 
     public IntegerPropertyControl(
             @Nullable Integer propertyValue,
@@ -37,6 +37,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
+        this.valueField = new IntegerTextField();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     public void changeControlWidthPercent(double controlWidthPercent) {
         super.changeControlWidthPercent(controlWidthPercent);
 
-        FxUtils.rebindPrefWidth(getValueField(),
+        FxUtils.rebindPrefWidth(valueField,
                 widthProperty().multiply(controlWidthPercent));
     }
 
@@ -53,16 +54,13 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        valueField = new IntegerTextField();
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FxControlUtils.onValueChange(valueField, this::updateValue);
         FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
 
-        FxUtils.addClass(valueField,
-                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-
+        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FxUtils.addChild(container, valueField);
     }
 
@@ -73,16 +71,6 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     }
 
     /**
-     * Get the filed with current value.
-     *
-     * @return the filed with current value.
-     */
-    @FxThread
-    private @NotNull IntegerTextField getValueField() {
-        return notNull(valueField);
-    }
-
-    /**
      * Set value limits for this field.
      *
      * @param min the min value.
@@ -90,7 +78,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
      */
     @FxThread
     public void setMinMax(int min, int max) {
-        getValueField().setMinMax(min, max);
+        valueField.setMinMax(min, max);
     }
 
     /**
@@ -100,7 +88,7 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
      */
     @FxThread
     public void setScrollPower(int scrollPower) {
-        getValueField().setScrollPower(scrollPower);
+        valueField.setScrollPower(scrollPower);
     }
 
     /**
@@ -110,22 +98,24 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
      */
     @FxThread
     public int getScrollPower() {
-        return (int) getValueField().getScrollPower();
+        return (int) valueField.getScrollPower();
     }
 
     @Override
     @FxThread
-    protected void reload() {
-        var valueField = getValueField();
+    protected void reloadImpl() {
+
         var caretPosition = valueField.getCaretPosition();
         valueField.setValue(zeroIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
+
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     public boolean isDirty() {
-        return !Objects.equals(getValueField().getValue(), getPropertyValue());
+        return !Objects.equals(valueField.getValue(), getPropertyValue());
     }
 
     /**
@@ -142,6 +132,6 @@ public class IntegerPropertyControl<C extends ChangeConsumer, D> extends Propert
     @FxThread
     protected void apply() {
         super.apply();
-        changed(getValueField().getValue(), getPropertyValue());
+        changed(valueField.getValue(), getPropertyValue());
     }
 }
