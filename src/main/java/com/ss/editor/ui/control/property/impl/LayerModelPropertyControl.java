@@ -64,8 +64,8 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         layerComboBox = new ComboBox<>();
         layerComboBox.setCellFactory(param -> new LayerCell());

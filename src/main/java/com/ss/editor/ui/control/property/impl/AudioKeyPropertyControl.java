@@ -87,8 +87,8 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         audioKeyLabel = new Label(NO_AUDIO);
 

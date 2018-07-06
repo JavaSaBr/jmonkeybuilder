@@ -40,8 +40,8 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         colorPicker = new ColorPicker();
         colorPicker.prefWidthProperty()

@@ -97,8 +97,8 @@ public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends Proper
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         fieldContainer = new HBox();
         fieldContainer.prefWidthProperty()

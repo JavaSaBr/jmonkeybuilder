@@ -72,8 +72,8 @@ public class Vector3fSingleRowPropertyControl<C extends ChangeConsumer, D> exten
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         fieldContainer = new HBox();
         fieldContainer.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));

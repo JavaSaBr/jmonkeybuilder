@@ -135,8 +135,8 @@ public class MaterialPropertyControl<C extends ChangeConsumer, T, V> extends Pro
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         materialLabel = new Label(NO_MATERIAL);
 

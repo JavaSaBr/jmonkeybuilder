@@ -50,8 +50,8 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         checkBox = new CheckBox();
         checkBox.prefWidthProperty()

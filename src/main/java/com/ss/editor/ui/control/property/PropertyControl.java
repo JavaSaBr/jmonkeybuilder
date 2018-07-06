@@ -3,8 +3,6 @@ package com.ss.editor.ui.control.property;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -12,13 +10,13 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.function.SixObjectConsumer;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -41,6 +39,8 @@ import java.util.function.Predicate;
  */
 public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implements UpdatableControl {
 
+    protected static final Logger LOGGER = LoggerManager.getLogger(PropertyControl.class);
+
     /**
      * @param <C> the type of a change consumer.
      * @param <D> the type of an editing object.
@@ -50,51 +50,23 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     public interface ChangeHandler<C, D, T> extends SixObjectConsumer<C, D, String, T,  T, BiConsumer<D, T>> {
     }
 
-    /**
-     * The constant LOGGER.
-     */
-    @NotNull
-    protected static final Logger LOGGER = LoggerManager.getLogger(PropertyControl.class);
-
-    /**
-     * Default action tester.
-     */
-    @NotNull
     protected static final Predicate<Class<?>> DEFAULT_ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class || type == RenameFileAction.class;
 
-    /**
-     * The constant CONTROL_WIDTH_PERCENT.
-     */
     public static final double CONTROL_WIDTH_PERCENT = 0.4;
-
-    /**
-     * The constant CONTROL_WIDTH_PERCENT_2.
-     */
     public static final double CONTROL_WIDTH_PERCENT_2 = 0.6;
-
-    /**
-     * The constant CONTROL_WIDTH_PERCENT_3.
-     */
     public static final double CONTROL_WIDTH_PERCENT_3 = 0.7;
 
-    /**
-     * The FX event manager.
-     */
-    @NotNull
-    protected static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
+    @FxThread
+    public static void constructProperties(@NotNull Parent parent) {
 
-    /**
-     * The executor manager.
-     */
-    @NotNull
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * The image preview manager.
-     */
-    @NotNull
-    protected static final JavaFxImageManager IMAGE_MANAGER = JavaFxImageManager.getInstance();
+        var children = parent.getChildrenUnmodifiable();
+        children.stream()
+                .filter(PropertyControl.class::isInstance)
+                .map(node -> (PropertyControl<?, ?, ?>) node)
+                .peek(PropertyControl::construct)
+                .forEach(PropertyControl::reload);
+    }
 
     /**
      * The change handler.
@@ -113,6 +85,12 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      */
     @NotNull
     private final C changeConsumer;
+
+    /**
+     * The label of the property name.
+     */
+    @NotNull
+    protected final Label propertyNameLabel;
 
     /**
      * The edit object.
@@ -139,12 +117,6 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     private Function<D, T> syncHandler;
 
     /**
-     * The label of the property name.
-     */
-    @Nullable
-    private Label propertyNameLabel;
-
-    /**
      * The flag for ignoring listeners.
      */
     private boolean ignoreListener;
@@ -162,17 +134,11 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
         this.propertyName = propertyName;
         this.changeConsumer = changeConsumer;
         this.changeHandler = changeHandler == null ? newChangeHandler() : changeHandler;
+        this.propertyNameLabel = new Label(getPropertyName() + ":");
 
         setOnKeyReleased(UiUtils::consumeIfIsNotHotKey);
         setOnKeyPressed(UiUtils::consumeIfIsNotHotKey);
         setPropertyValue(propertyValue);
-        createComponents();
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
-        }
     }
 
     /**
@@ -211,15 +177,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     public void setEditObject(@NotNull D editObject, boolean needReload) {
         setEditObject(editObject);
 
-        if (!needReload) {
-            return;
-        }
-
-        setIgnoreListener(true);
-        try {
+        if (needReload) {
             reload();
-        } finally {
-            setIgnoreListener(false);
         }
     }
 
@@ -277,7 +236,20 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * Reloading control.
      */
     @FxThread
-    protected void reload() {
+    public void reload() {
+        setIgnoreListener(true);
+        try {
+            reloadImpl();
+        } finally {
+            setIgnoreListener(false);
+        }
+    }
+
+    /**
+     * Reloading control.
+     */
+    @FxThread
+    protected void reloadImpl() {
     }
 
     /**
@@ -325,7 +297,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             }
 
             if (!Objects.equals(currentValue, getPropertyValue())) {
-                reload();
+                reloadImpl();
             }
 
         } finally {
@@ -337,13 +309,12 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * Create this control.
      */
     @FxThread
-    protected void createComponents() {
+    public void construct() {
         setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
         var container = new HBox();
         container.setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
-        propertyNameLabel = new Label(getPropertyName() + ":");
 
         if (isSingleRow()) {
             propertyNameLabel.maxWidthProperty()
@@ -355,7 +326,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
 
         FxUtils.addChild(isSingleRow() ? container : this, propertyNameLabel);
 
-        createComponents(container);
+        createControls(container);
 
         FxUtils.addChild(this, container);
     }
@@ -364,16 +335,6 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     protected @NotNull String getLabelCssClass() {
         return isSingleRow() ? CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
                 CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME;
-    }
-
-    /**
-     * Get the property name label.
-     *
-     * @return the property name label.
-     */
-    @FxThread
-    protected @NotNull Label getPropertyNameLabel() {
-        return propertyNameLabel;
     }
 
     /**
@@ -388,10 +349,9 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
             return;
         }
 
-        var propertyNameLabel = getPropertyNameLabel();
         propertyNameLabel.maxWidthProperty().unbind();
         propertyNameLabel.maxWidthProperty()
-            .bind(widthProperty().multiply(1D - controlWidthPercent));
+                .bind(widthProperty().multiply(1D - controlWidthPercent));
     }
 
     /**
@@ -410,7 +370,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * @param container the container.
      */
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
+    protected void createControls(@NotNull HBox container) {
     }
 
     /**

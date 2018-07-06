@@ -75,8 +75,8 @@ public class DefaultPropertyControl<C extends ChangeConsumer, D, T> extends Prop
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         propertyValueLabel = new Label();
         propertyValueLabel.prefWidthProperty()

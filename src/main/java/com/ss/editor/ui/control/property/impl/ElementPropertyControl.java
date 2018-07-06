@@ -56,8 +56,8 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         elementLabel = new Label(NO_ELEMENT);
         elementLabel.prefWidthProperty()

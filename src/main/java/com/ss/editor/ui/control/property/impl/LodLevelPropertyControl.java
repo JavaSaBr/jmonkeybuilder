@@ -73,8 +73,8 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         levelComboBox = new ComboBox<>();
         levelComboBox.setCellFactory(param -> new LodLevelCell());

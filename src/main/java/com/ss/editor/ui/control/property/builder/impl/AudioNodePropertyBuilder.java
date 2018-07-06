@@ -28,7 +28,6 @@ import java.util.function.BiConsumer;
  */
 public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
-    @NotNull
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
         var assetManager = EditorUtil.getAssetManager();
@@ -41,14 +40,8 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         }
     };
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new AudioNodePropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance.
-     */
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -67,10 +60,12 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
             @NotNull ModelChangeConsumer changeConsumer
     ) {
 
-        if (!(object instanceof AudioNode)) return;
+        if (!(object instanceof AudioNode)) {
+            return;
+        }
 
-        final AudioNode audioNode = (AudioNode) object;
-        final AudioKey key = AudioNodeUtils.getAudioKey(audioNode);
+        var audioNode = (AudioNode) object;
+        var key = AudioNodeUtils.getAudioKey(audioNode);
 
         final Vector3f velocity = audioNode.getVelocity();
         final Vector3f direction = audioNode.getDirection();

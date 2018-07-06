@@ -59,8 +59,8 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         valueField = new FloatTextField();
         valueField.prefWidthProperty()

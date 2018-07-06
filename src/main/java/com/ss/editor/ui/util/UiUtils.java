@@ -15,6 +15,7 @@ import com.ss.editor.ui.dialog.asset.file.FileAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
+import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -43,7 +44,6 @@ import org.reactfx.util.TriConsumer;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -59,16 +59,10 @@ import java.util.stream.Stream;
  */
 public abstract class UiUtils {
 
-    @NotNull
     private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
 
-    @NotNull
     private static final Duration TOOLTIP_HIDE_DELAY = new Duration(100);
-
-    @NotNull
     private static final Duration TOOLTIP_SHOW_DELAY = new Duration(1000);
-
-    @NotNull
     private static final Duration TOOLTIP_SHOW_DURATION = new Duration(5000);
 
     /**
@@ -98,30 +92,27 @@ public abstract class UiUtils {
             }
         };
 
-        ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
-            focused.setValue(newValue || Arrays.stream(controls)
-                    .anyMatch(Node::isFocused));
-        };
+        ChangeListener<Boolean> listener = (observable, oldValue, newValue) ->
+                focused.setValue(newValue || ArrayUtils.anyMatch(controls, Node::isFocused));
 
         for (var control : controls) {
             control.focusedProperty().addListener(listener);
             control.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> control.requestFocus());
         }
 
-        focused.setValue(Arrays.stream(controls)
-                .anyMatch(Node::isFocused));
+        focused.setValue(ArrayUtils.anyMatch(controls, Node::isFocused));
 
         return focused;
     }
 
     /**
-     * Clear children of a pane.
+     * Clear children of the pane.
      *
      * @param pane the pane.
      */
     @FxThread
-    public static void clear(@NotNull final Pane pane) {
-        final ObservableList<Node> children = pane.getChildren();
+    public static void clear(@NotNull Pane pane) {
+        var children = pane.getChildren();
         children.forEach(UiUtils::unbind);
         children.clear();
     }
@@ -132,13 +123,13 @@ public abstract class UiUtils {
      * @param node the node.
      */
     @FxThread
-    private static void unbind(@NotNull final Node node) {
+    private static void unbind(@NotNull Node node) {
         if (node instanceof Control) {
-            final Control control = (Control) node;
+            var control = (Control) node;
             control.prefWidthProperty().unbind();
             control.prefHeightProperty().unbind();
         } else if (node instanceof Pane) {
-            final Pane pane = (Pane) node;
+            var pane = (Pane) node;
             pane.prefHeightProperty().unbind();
             pane.prefWidthProperty().unbind();
         }
@@ -179,16 +170,16 @@ public abstract class UiUtils {
     }
 
     /**
-     * Find all components for a type.
+     * Get all components of the type.
      *
-     * @param <T>  the type parameter
-     * @param node the node
-     * @param type the type
-     * @return the array
+     * @param <T>  the component's type.
+     * @param node the node.
+     * @param type the type.
+     * @return the found components.
      */
     @FxThread
-    public static @NotNull <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
-        final Array<T> container = ArrayFactory.newArray(type);
+    public static @NotNull <T extends Node> Array<T> getComponents(@NotNull Node node, @NotNull Class<T> type) {
+        var container = Array.<T>ofType(type);
         fillComponents(container, node, type);
         return container;
     }
@@ -202,8 +193,11 @@ public abstract class UiUtils {
      * @param type      the type
      */
     @FxThread
-    public static <T extends Node> void fillComponents(@NotNull final Array<T> container, @NotNull final Node node,
-                                                       @NotNull final Class<T> type) {
+    public static <T extends Node> void fillComponents(
+            @NotNull Array<T> container,
+            @NotNull Node node,
+            @NotNull Class<T> type
+    ) {
 
         if (type.isInstance(container)) {
             container.add(type.cast(node));
@@ -213,23 +207,23 @@ public abstract class UiUtils {
             return;
         }
 
-        final ObservableList<Node> nodes = ((Parent) node).getChildrenUnmodifiable();
-        nodes.forEach(child -> fillComponents(container, child, type));
+        ((Parent) node).getChildrenUnmodifiable()
+                .forEach(child -> fillComponents(container, child, type));
     }
 
     /**
-     * Get all elements of a menu.
+     * Get all elements of the menu.
      *
-     * @param menuBar the menu bar
-     * @return the all items
+     * @param menuBar the menu bar.
+     * @return the all items.
      */
     @FxThread
-    public static @NotNull Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
+    public static @NotNull Array<MenuItem> getAllItems(@NotNull MenuBar menuBar) {
 
-        final Array<MenuItem> container = ArrayFactory.newArray(MenuItem.class);
+        var container = Array.<MenuItem>ofType(MenuItem.class);
 
-        final ObservableList<Menu> menus = menuBar.getMenus();
-        menus.forEach(menu -> getAllItems(container, menu));
+        menuBar.getMenus()
+                .forEach(menu -> getAllItems(container, menu));
 
         return container;
     }
@@ -238,7 +232,7 @@ public abstract class UiUtils {
      * Collect all elements of a menu.
      */
     @FxThread
-    private static void getAllItems(@NotNull final Array<MenuItem> container, @NotNull final MenuItem menuItem) {
+    private static void getAllItems(@NotNull Array<MenuItem> container, @NotNull MenuItem menuItem) {
 
         container.add(menuItem);
 
@@ -246,8 +240,8 @@ public abstract class UiUtils {
             return;
         }
 
-        final ObservableList<MenuItem> items = ((Menu) menuItem).getItems();
-        items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
+        ((Menu) menuItem).getItems()
+                .forEach(subMenuItem -> getAllItems(container, subMenuItem));
     }
 
     /**

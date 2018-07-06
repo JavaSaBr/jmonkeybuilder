@@ -65,8 +65,8 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         var xLabel = new Label("x:");
 

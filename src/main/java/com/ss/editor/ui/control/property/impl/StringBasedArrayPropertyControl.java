@@ -58,8 +58,8 @@ public class StringBasedArrayPropertyControl<C extends ChangeConsumer, D, T> ext
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         valueField = new TextField();
         valueField.setOnKeyReleased(this::updateValue);

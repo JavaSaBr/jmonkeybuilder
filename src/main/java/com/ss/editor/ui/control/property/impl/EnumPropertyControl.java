@@ -63,8 +63,8 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
 
         enumComboBox = new ComboBox<>();
         enumComboBox.prefWidthProperty()

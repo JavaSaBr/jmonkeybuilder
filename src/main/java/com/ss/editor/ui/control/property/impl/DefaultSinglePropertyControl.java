@@ -27,8 +27,8 @@ public class DefaultSinglePropertyControl<C extends ChangeConsumer, D, T> extend
 
     @Override
     @FxThread
-    protected void createComponents(@NotNull HBox container) {
-        super.createComponents(container);
+    protected void createControls(@NotNull HBox container) {
+        super.createControls(container);
         getPropertyValueLabel().prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
     }
