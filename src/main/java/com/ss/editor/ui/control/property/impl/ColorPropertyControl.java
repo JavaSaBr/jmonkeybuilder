@@ -48,9 +48,7 @@ public class ColorPropertyControl<C extends ChangeConsumer, T> extends PropertyC
 
         FxControlUtils.onColorChange(colorPicker, this::updateValue);
 
-        FxUtils.addClass(colorPicker,
-                CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
-
+        FxUtils.addClass(colorPicker, CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
         FxUtils.addChild(container, colorPicker);
     }
 

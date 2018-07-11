@@ -7,6 +7,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.control.input.TypedTextField;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;
@@ -22,30 +23,34 @@ import java.util.Objects;
  * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Float> {
+public class TypedTextControlPropertyControl<C extends ChangeConsumer, D, T, F extends TypedTextField<T>> extends PropertyControl<C, D, T> {
 
     /**
      * The filed with current value.
      */
     @NotNull
-    private final FloatTextField valueField;
+    private final F valueField;
 
-    public FloatPropertyControl(
-            @Nullable Float propertyValue,
+    public TypedTextControlPropertyControl(
+            @Nullable T propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer
     ) {
         this(propertyValue, propertyName, changeConsumer, null);
     }
 
-    public FloatPropertyControl(
-            @Nullable Float propertyValue,
+    public TypedTextControlPropertyControl(
+            @Nullable T propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer,
-            @Nullable ChangeHandler<C, D, Float> changeHandler
+            @Nullable ChangeHandler<C, D, T> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
-        this.valueField = new FloatTextField();
+        this.valueField = createValueField();
+    }
+
+    protected @NotNull F createValueField() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -90,17 +95,6 @@ public class FloatPropertyControl<C extends ChangeConsumer, D> extends PropertyC
     @FxThread
     public float getScrollPower() {
         return valueField.getScrollPower();
-    }
-
-    /**
-     * Set the value limits for this field.
-     *
-     * @param min the min value.
-     * @param max the max value.
-     */
-    @FxThread
-    public void setMinMax(float min, float max) {
-        valueField.setMinMax(min, max);
     }
 
     @Override

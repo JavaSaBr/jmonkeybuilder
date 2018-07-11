@@ -100,10 +100,10 @@ public class EditorDialog {
     }
 
     /**
-     * Construct content of this dialog.
+     * Construct content of this dialog after constructor.
      */
     @FxThread
-    public void construct() {
+    public void postConstruct() {
 
         if (ready) {
             return;
@@ -297,7 +297,7 @@ public class EditorDialog {
      */
     @FxThread
     public void show(@NotNull Window owner) {
-        construct();
+        postConstruct();
 
         var scene = owner.getScene();
 

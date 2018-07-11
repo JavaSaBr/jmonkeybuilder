@@ -35,8 +35,7 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
             @NotNull String propertyName,
             @NotNull C changeConsumer
     ) {
-        super(propertyValue, propertyName, changeConsumer);
-        this.checkBox = new CheckBox();
+        this(propertyValue, propertyName, changeConsumer, null);
     }
 
     public BooleanPropertyControl(

@@ -1,10 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.editor.FileExtensions.AUDIO_EXTENSIONS;
-import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
-
-import com.jme3.asset.AssetKey;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
@@ -15,13 +11,10 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.fx.util.FxUtils;
-import com.ss.rlib.common.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,9 +24,7 @@ import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * The implementation of the {@link PropertyControl} to edit the {@link AudioData}.
@@ -100,7 +91,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         var openButton = new Button();
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
-        openButton.setOnAction(this::openAudio);
+        openButton.setOnAction(this::openAudioFile);
         openButton.disableProperty()
                 .bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
 
@@ -141,13 +132,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      */
     @FxThread
     private void addAudioData(@NotNull Path file) {
-
-        var audioKey = EditorUtil.getAssetFileOpt(file)
-                .map(EditorUtil::toAssetPath)
-                .map(AudioKey::new)
-                .orElseThrow(() -> new IllegalStateException("Can't build audio key."));
-
-        changed(audioKey, getPropertyValue());
+        changed(EditorUtil.realFileToKey(file, AudioKey::new), getPropertyValue());
         reload();
     }
 
@@ -157,16 +142,8 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer> extends PropertyC
      * @param event the action event.
      */
     @FxThread
-    protected void openAudio(@Nullable ActionEvent event) {
-
-       var eventManager = FxEventManager.getInstance();
-
-        getPropertyValueOpt()
-                .map(AssetKey::getName)
-                .filter(StringUtils::isNotEmpty)
-                .map(EditorUtil::requireRealFile)
-                .filter(path -> Files.exists(path))
-                .ifPresent(path -> eventManager.notify(new RequestedOpenFileEvent(path)));
+    private void openAudioFile(@Nullable ActionEvent event) {
+        getPropertyValueOpt().ifPresent(EditorUtil::openInEditor);
     }
 
     @Override

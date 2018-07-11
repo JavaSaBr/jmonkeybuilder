@@ -82,8 +82,8 @@ public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
 
     @Override
     @FxThread
-    public void construct() {
-        super.construct();
+    public void postConstruct() {
+        super.postConstruct();
         createControls();
         validate();
     }

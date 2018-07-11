@@ -37,7 +37,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
         }, question);
 
-        dialog.construct();
+        dialog.postConstruct();
         dialog.show();
     }
 

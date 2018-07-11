@@ -63,9 +63,9 @@ import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * The class with utility methods for the Editor.
@@ -604,44 +604,57 @@ public abstract class EditorUtil {
 
         var editorConfig = EditorConfig.getInstance();
         var currentAsset = editorConfig.getCurrentAsset();
+
         if (currentAsset == null) {
             return null;
         }
 
         return currentAsset.resolve(assetFile);
+    }
+
+    /**
+     * Get the absolute file by the asset key.
+     *
+     * @param assetKey the asset key.
+     * @return the absolute file.
+     */
+    @FromAnyThread
+    public static @NotNull Path requireRealFile(@NotNull AssetKey<?> assetKey) {
+        return requireRealFile(assetKey.getName());
     }
 
     /**
      * Get the absolute file by the relative asset path.
      *
      * @param assetPath the relative path to the file.
-     * @return the absolute files.
+     * @return the absolute file.
      */
     @FromAnyThread
     public static @NotNull Path requireRealFile(@NotNull String assetPath) {
         return EditorConfig.getInstance()
                 .getCurrentAssetOpt()
+                .filter(path -> StringUtils.isNotEmpty(assetPath))
                 .map(path -> path.resolve(assetPath))
                 .orElseThrow(() -> new IllegalStateException("Can't build a real file for the asset path " + assetPath));
     }
 
     /**
-     * Get the absolute path to the file in the current asset.
+     * Get the absolute file by the relative asset path.
      *
-     * @param assetFile the asset path to file.
-     * @return the absolute path to the file.
+     * @param assetPath the relative path to the file.
+     * @return the absolute file.
      */
     @FromAnyThread
-    public static @Nullable Path getRealFile(@NotNull String assetFile) {
+    public static @Nullable Path getRealFile(@NotNull String assetPath) {
 
         var editorConfig = EditorConfig.getInstance();
         var currentAsset = editorConfig.getCurrentAsset();
 
-        if (currentAsset == null) {
+        if (currentAsset == null || StringUtils.isEmpty(assetPath)) {
             return null;
         }
 
-        return currentAsset.resolve(assetFile);
+        return currentAsset.resolve(assetPath);
     }
 
     /**
@@ -912,6 +925,7 @@ public abstract class EditorUtil {
     public static <E extends Enum<?>> @NotNull E[] getAvailableValues(@NotNull E value) {
 
         var valueClass = value.getClass();
+
         if (!valueClass.isEnum()) {
             throw new RuntimeException("The class " + valueClass + " isn't enum.");
         }
@@ -1011,18 +1025,16 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static void openInEditor(@Nullable AssetKey<?> assetKey) {
 
-        if (assetKey == null) {
+        if (assetKey == null || StringUtils.isEmpty(assetKey.getName())) {
+            LOGGER.warning("The asset key " + assetKey + " is empty or null.");
             return;
         }
 
         var assetPath = assetKey.getName();
-        if (StringUtils.isEmpty(assetPath)) {
-            return;
-        }
+        var realFile = requireRealFile(assetPath);
 
-        var assetFile = Paths.get(assetPath);
-        var realFile = notNull(getRealFile(assetFile));
         if (!Files.exists(realFile)) {
+            LOGGER.warning("The file " + realFile + " is not exists.");
             return;
         }
 
@@ -1096,5 +1108,23 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static void renderUnlock(long stamp) {
         jmeApplication.asyncUnlock(stamp);
+    }
+
+    /**
+     * Build an asset key for the real file.
+     *
+     * @param realFile the real file.
+     * @param constructor the asset key's constructor.
+     * @param <T> the asset key's type.
+     * @return the asset key.
+     */
+    public static <T extends AssetKey<?>> @NotNull T realFileToKey(
+            @NotNull Path realFile,
+            @NotNull Function<String, T> constructor
+    ) {
+        return getAssetFileOpt(realFile)
+                .map(EditorUtil::toAssetPath)
+                .map(constructor)
+                .orElseThrow(() -> new RuntimeException("Can't build an asset key for the file " + realFile));
     }
 }

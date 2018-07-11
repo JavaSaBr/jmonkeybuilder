@@ -64,7 +64,7 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
         children.stream()
                 .filter(PropertyControl.class::isInstance)
                 .map(node -> (PropertyControl<?, ?, ?>) node)
-                .peek(PropertyControl::construct)
+                .peek(PropertyControl::postConstruct)
                 .forEach(PropertyControl::reload);
     }
 
@@ -306,19 +306,18 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     }
 
     /**
-     * Create this control.
+     * Create all necessary things after constructor.
      */
     @FxThread
-    public void construct() {
+    public void postConstruct() {
         setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
         var container = new HBox();
         container.setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
-
         if (isSingleRow()) {
             propertyNameLabel.maxWidthProperty()
-                .bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
+                    .bind(widthProperty().multiply(1F - CONTROL_WIDTH_PERCENT));
         }
 
         FxUtils.addClass(container, CssClasses.DEF_HBOX)

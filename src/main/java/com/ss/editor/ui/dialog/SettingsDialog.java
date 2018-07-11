@@ -76,8 +76,8 @@ public class SettingsDialog extends EditorDialog {
 
     @Override
     @FxThread
-    public void construct() {
-        super.construct();
+    public void postConstruct() {
+        super.postConstruct();
         validate();
     }
 
