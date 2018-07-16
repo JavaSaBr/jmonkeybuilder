@@ -1,14 +1,11 @@
 package com.ss.editor.ui.control.property.impl;
 
-import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.rlib.common.util.ArrayUtils;
-import com.ss.rlib.common.util.StringUtils;
+import com.ss.rlib.fx.control.input.FloatArrayTextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 
 /**
  * The implementation of the {@link PropertyControl} to edit float array values.
@@ -18,7 +15,7 @@ import java.util.Arrays;
  * @author JavaSaBr
  */
 public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
-        extends StringBasedArrayPropertyControl<C, D, float[]> {
+        extends StringBasedArrayPropertyControl<C, D, float[], FloatArrayTextField> {
 
     public FloatArrayPropertyControl(
             @Nullable float[] propertyValue,
@@ -37,46 +34,10 @@ public class FloatArrayPropertyControl<C extends ChangeConsumer, D>
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 
-    @Override
-    @FxThread
-    protected @NotNull String getTextPresentation() {
-        return getPropertyValueOpt()
-                .map(ints -> ArrayUtils.toString(ints, " ", false, false))
-                .orElse(StringUtils.EMPTY);
-    }
 
     @Override
-    @FxThread
-    public boolean isDirty() {
-        return !Arrays.equals(getCurrentValue(), getPropertyValue());
-    }
-
-    @Override
-    @FxThread
-    protected @Nullable float[] getCurrentValue() {
-
-        var textValue = valueField.getText();
-
-        float[] newValue = null;
-
-        if (!StringUtils.isEmpty(textValue)) {
-
-            var splitter = textValue.contains(" ") ? " " : ",";
-            var split = textValue.split(splitter);
-
-            newValue = new float[split.length];
-
-            for (var i = 0; i < split.length; i++) {
-                try {
-                    newValue[i] = Float.parseFloat(split[i]);
-                } catch (NumberFormatException e) {
-                    LOGGER.warning(this, e);
-                    newValue = getPropertyValue();
-                    break;
-                }
-            }
-        }
-
-        return newValue;
+    @FromAnyThread
+    protected @NotNull FloatArrayTextField createFieldControl() {
+        return new FloatArrayTextField();
     }
 }
