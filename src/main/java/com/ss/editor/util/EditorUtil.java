@@ -1018,6 +1018,16 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Return the another string if the key is empty.
+     *
+     * @param assetKey the asset key.
+     * @return the another string if the key is empty.
+     */
+    public static String ifEmpty(@Nullable AssetKey<?> assetKey, @NotNull String another) {
+        return isEmpty(assetKey) ? another : assetKey.getName();
+    }
+
+    /**
      * Open the asset resource in an editor.
      *
      * @param assetKey the asset key.

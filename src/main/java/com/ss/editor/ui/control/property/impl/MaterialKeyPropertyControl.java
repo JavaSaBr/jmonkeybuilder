@@ -1,16 +1,10 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
-import com.jme3.audio.AudioKey;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.common.util.StringUtils;
-import javafx.event.ActionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,34 +28,29 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
 
     @Override
     @FxThread
-    protected void change(@Nullable ActionEvent event) {
-        UiUtils.openFileAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
+    protected void chooseKey() {
+        UiUtils.openFileAssetDialog(this::applyNewKey, MATERIAL_EXTENSIONS, DEFAULT_ACTION_TESTER);
+        super.chooseKey();
     }
 
     @Override
     @FxThread
-    protected void addMaterial(@NotNull Path file) {
-
-        var materialKey = EditorUtil.getAssetFileOpt(file)
-                .map(EditorUtil::toAssetPath)
-                .map(MaterialKey::new)
-                .orElseThrow(() -> new IllegalStateException("Can't build material key."));
-
-        changed(materialKey, getPropertyValue());
-        reload();
+    protected void applyNewKey(@NotNull Path file) {
+        changed(EditorUtil.realFileToKey(file, MaterialKey::new), getPropertyValue());
+        super.applyNewKey(file);
     }
 
     @Override
     @FxThread
-    protected void openToEdit(@Nullable ActionEvent event) {
+    protected void openKey() {
         EditorUtil.openInEditor(getPropertyValue());
+        super.openKey();
     }
 
     @Override
     @FxThread
-    protected void reload() {
-        var element = getPropertyValue();
-        getMaterialLabel().setText(element == null || StringUtils.isEmpty(element.getName()) ?
-                NO_MATERIAL : element.getName());
+    protected void reloadImpl() {
+        keyLabel.setText(EditorUtil.ifEmpty(getPropertyValue(), NO_MATERIAL));
+        super.reloadImpl();
     }
 }

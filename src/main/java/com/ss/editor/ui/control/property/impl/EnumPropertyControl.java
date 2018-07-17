@@ -35,10 +35,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
             @NotNull C changeConsumer,
             @NotNull E[] availableValues
     ) {
-        super(propertyValue, propertyName, changeConsumer);
-        this.enumComboBox = new ComboBox<>();
-        this.enumComboBox.getItems()
-                .addAll(availableValues);
+        this(propertyValue, propertyName, changeConsumer, availableValues, null);
     }
 
     public EnumPropertyControl(
@@ -46,7 +43,7 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
             @NotNull String propertyName,
             @NotNull C changeConsumer
     ) {
-        this(propertyValue, propertyName, changeConsumer, getAvailableValues(propertyValue));
+        this(propertyValue, propertyName, changeConsumer, getAvailableValues(propertyValue), null);
     }
 
     public EnumPropertyControl(

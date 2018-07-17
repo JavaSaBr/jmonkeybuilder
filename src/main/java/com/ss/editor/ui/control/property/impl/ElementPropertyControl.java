@@ -7,12 +7,12 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import org.apache.http.conn.UnsupportedSchemeException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,10 +63,10 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> addElement());
 
-        var editButton = new Button();
-        editButton.setGraphic(new ImageView(Icons.REMOVE_12));
-        editButton.setOnAction(event -> removeElement());
-        editButton.disableProperty()
+        var removeButton = new Button();
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
+        removeButton.setOnAction(event -> removeElement());
+        removeButton.disableProperty()
             .bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
 
         FxUtils.addClass(container,
@@ -74,13 +74,16 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
                     CssClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER)
             .addClass(elementLabel,
                     CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL)
-            .addClass(changeButton, editButton,
+            .addClass(changeButton, removeButton,
                     CssClasses.FLAT_BUTTON,
                     CssClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
-        FxUtils.addChild(container, elementLabel, changeButton, editButton);
+        FxControlUtils.onAction(changeButton, this::addElement);
+        FxControlUtils.onAction(removeButton, this::removeElement);
 
-        DynamicIconSupport.addSupport(changeButton, editButton);
+        FxUtils.addChild(container, elementLabel, changeButton, removeButton);
+
+        DynamicIconSupport.addSupport(changeButton, removeButton);
     }
 
     /**
