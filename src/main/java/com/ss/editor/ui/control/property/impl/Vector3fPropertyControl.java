@@ -31,27 +31,27 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
     /**
      * The field X.
      */
-    @Nullable
-    private FloatTextField xField;
+    @NotNull
+    protected final FloatTextField xField;
 
     /**
      * The field Y.
      */
-    @Nullable
-    private FloatTextField yField;
+    @NotNull
+    protected final FloatTextField yField;
 
     /**
      * The field Z.
      */
-    @Nullable
-    private FloatTextField zField;
+    @NotNull
+    protected final FloatTextField zField;
 
     public Vector3fPropertyControl(
             @Nullable Vector3f propertyValue,
             @NotNull String propertyName,
             @NotNull C changeConsumer
     ) {
-        super(propertyValue, propertyName, changeConsumer);
+        this(propertyValue, propertyName, changeConsumer, null);
     }
 
     public Vector3fPropertyControl(
@@ -61,6 +61,9 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
             @Nullable ChangeHandler<C, D, Vector3f> changeHandler
     ) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
+        this.xField = new FloatTextField();
+        this.yField = new FloatTextField();
+        this.zField = new FloatTextField();
     }
 
     @Override
@@ -70,7 +73,6 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
 
         var xLabel = new Label("x:");
 
-        xField = new FloatTextField();
         xField.setOnKeyReleased(this::keyReleased);
         xField.setScrollPower(getScrollPower());
         xField.prefWidthProperty().
@@ -78,7 +80,6 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
 
         var yLabel = new Label("y:");
 
-        yField = new FloatTextField();
         yField.setOnKeyReleased(this::keyReleased);
         yField.setScrollPower(getScrollPower());
         yField.prefWidthProperty()
@@ -86,7 +87,6 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
 
         var zLabel = new Label("z:");
 
-        zField = new FloatTextField();
         zField.setOnKeyReleased(this::keyReleased);
         zField.setScrollPower(getScrollPower());
         zField.prefWidthProperty()
@@ -132,61 +132,70 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
     }
 
     /**
-     * Get the field X.
+     * Check result x value.
      *
-     * @return the field X.
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
+     * @return the result x value.
      */
     @FxThread
-    protected @NotNull FloatTextField getXField() {
-        return notNull(xField);
+    protected float checkResultXValue(float x, float y, float z) {
+        return x;
     }
 
     /**
-     * Get the filed Y.
+     * Check result y value.
      *
-     * @return the field Y.
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
+     * @return the result y value.
      */
     @FxThread
-    protected @NotNull FloatTextField getYField() {
-        return notNull(yField);
+    protected float checkResultYValue(float x, float y, float z) {
+        return y;
     }
 
     /**
-     * Get the field Z.
+     * Check result z value.
      *
-     * @return the field Z.
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
+     * @return the result z value.
      */
     @FxThread
-    protected @NotNull FloatTextField getZField() {
-        return notNull(zField);
+    protected float checkResultZValue(float x, float y, float z) {
+        return z;
     }
+
 
     @Override
     @FxThread
-    protected void reload() {
+    protected void reloadImpl() {
 
         var vector = zeroIfNull(getPropertyValue());
 
-        var xField = getXField();
         xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
-        var yFiled = getYField();
-        yFiled.setValue(vector.getY());
-        yFiled.positionCaret(xField.getText().length());
+        yField.setValue(vector.getY());
+        yField.positionCaret(xField.getText().length());
 
-        var zField = getZField();
         zField.setValue(vector.getZ());
         zField.positionCaret(xField.getText().length());
+
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     public boolean isDirty() {
 
-        var x = getXField().getValue();
-        var y = getYField().getValue();
-        var z = getZField().getValue();
+        var x = xField.getPrimitiveValue();
+        var y = yField.getPrimitiveValue();
+        var z = zField.getPrimitiveValue();
 
         return !GeomUtils.equals(getPropertyValue(), x, y, z);
     }
@@ -195,7 +204,7 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
      * Handle of input the enter key.
      */
     @FxThread
-    private void keyReleased(@NotNull KeyEvent event) {
+    protected void keyReleased(@NotNull KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             changeValue();
         }
@@ -205,7 +214,7 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
      * Change value of vector.
      */
     @FxThread
-    private void changeValue() {
+    protected void changeValue() {
         if (!isIgnoreListener()) {
             apply();
         }
@@ -216,12 +225,14 @@ public class Vector3fPropertyControl<C extends ChangeConsumer, D> extends Proper
     protected void apply() {
         super.apply();
 
-        var x = getXField().getValue();
-        var y = getYField().getValue();
-        var z = getZField().getValue();
+        var x = xField.getPrimitiveValue();
+        var y = yField.getPrimitiveValue();
+        var z = zField.getPrimitiveValue();
 
         var storedValue =  zeroIfNull(getPropertyValue());
+        var newValue = new Vector3f();
+        newValue.set(checkResultXValue(x, y, z), checkResultYValue(x, y, z), checkResultZValue(x, y, z));
 
-        changed(new Vector3f(x, y, z), storedValue.clone());
+        changed(newValue, storedValue.clone());
     }
 }

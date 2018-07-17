@@ -59,9 +59,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
 
     @FxThread
     public static void constructProperties(@NotNull Parent parent) {
-
-        var children = parent.getChildrenUnmodifiable();
-        children.stream()
+        parent.getChildrenUnmodifiable()
+                .stream()
                 .filter(PropertyControl.class::isInstance)
                 .map(node -> (PropertyControl<?, ?, ?>) node)
                 .peek(PropertyControl::postConstruct)
@@ -120,6 +119,8 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      * The flag for ignoring listeners.
      */
     private boolean ignoreListener;
+
+    private boolean constructed;
 
     public PropertyControl(@Nullable T propertyValue, @NotNull String propertyName, @NotNull C changeConsumer) {
         this(propertyValue, propertyName, changeConsumer, null);
@@ -310,6 +311,13 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      */
     @FxThread
     public void postConstruct() {
+
+        if (constructed) {
+            return;
+        } else {
+            constructed = true;
+        }
+
         setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
         var container = new HBox();

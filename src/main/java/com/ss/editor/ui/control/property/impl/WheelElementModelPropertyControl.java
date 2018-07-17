@@ -30,9 +30,12 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
     @Override
     @FxThread
     protected @NotNull NodeSelectorDialog<Spatial> createNodeSelectorDialog() {
-        var changeConsumer = getChangeConsumer();
-        var currentModel = changeConsumer.getCurrentModel();
+
+        var currentModel = getChangeConsumer()
+                .getCurrentModel();
+
         var root = NodeUtils.findSpatial(currentModel, this::checkSpatial);
+
         return new NodeSelectorDialog<>(notNull(root), type, this::addElement);
     }
 
@@ -45,6 +48,7 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
     private boolean checkSpatial(@NotNull Spatial spatial) {
 
         var control = spatial.getControl(VehicleControl.class);
+
         if (control == null) {
             return false;
         }

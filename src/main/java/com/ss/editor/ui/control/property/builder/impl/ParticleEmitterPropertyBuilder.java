@@ -47,10 +47,12 @@ public class ParticleEmitterPropertyBuilder extends EditableModelObjectPropertyB
         emitter.setStartSize(size.getX());
         emitter.setEndSize(size.getY());
     };
+
     private static final ChangeHandler<Vector2f> LIFE_SETTER = (emitter, size) -> {
         emitter.setLowLife(size.getX());
         emitter.setHighLife(size.getY());
     };
+
     private static final ChangeHandler<Vector2f> SPRITES_SETTER = (emitter, size) -> {
         emitter.setImagesX((int) size.getX());
         emitter.setImagesY((int) size.getY());

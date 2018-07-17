@@ -29,10 +29,6 @@ import java.util.Objects;
  */
 public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
 
-    @NotNull
-    private static final PropertyBuilder INSTANCE = new MaterialPropertyBuilder();
-
-    @NotNull
     private static final ObjectDictionary<VarType, Integer> SIZE_MAP = DictionaryFactory.newObjectDictionary();
 
     static {
@@ -43,18 +39,14 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
         SIZE_MAP.put(VarType.Int, 2);
     }
 
-    @NotNull
     protected static final Comparator<MatParam> MAT_PARAM_COMPARATOR = (first, second) -> {
         var firstType = first.getVarType();
         var secondType = second.getVarType();
         return SIZE_MAP.get(secondType, () -> 0) - SIZE_MAP.get(firstType, () -> 0);
     };
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
+    private static final PropertyBuilder INSTANCE = new MaterialPropertyBuilder();
+
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -68,7 +60,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     @FxThread
     protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
 
-        if(!(object instanceof Material)) {
+        if (!(object instanceof Material)) {
             return null;
         }
 
@@ -93,6 +85,7 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
     private @Nullable EditableProperty<?, Material> convert(@NotNull MatParam param, @NotNull Material material) {
 
         var propertyType = convert(param.getVarType());
+
         if (propertyType == null) {
             return null;
         }

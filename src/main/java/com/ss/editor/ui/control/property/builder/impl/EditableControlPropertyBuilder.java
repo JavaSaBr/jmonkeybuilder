@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class EditableControlPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    @NotNull
     private static final EditableControlPropertyBuilder INSTANCE = new EditableControlPropertyBuilder();
 
     @FromAnyThread
@@ -31,8 +30,11 @@ public class EditableControlPropertyBuilder extends EditableModelObjectPropertyB
 
     @Override
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
-        if(!(object instanceof EditableControl)) return null;
-        return ((EditableControl) object).getEditableProperties();
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
+        if (object instanceof EditableControl) {
+            return ((EditableControl) object).getEditableProperties();
+        } else {
+            return null;
+        }
     }
 }

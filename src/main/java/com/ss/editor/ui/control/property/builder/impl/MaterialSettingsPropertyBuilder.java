@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
  */
 public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
 
-    @NotNull
     private static final Comparator<MatParam> MAT_PARAM_NAME_COMPARATOR = (first, second) -> {
 
         int result = MAT_PARAM_COMPARATOR.compare(first, second);
@@ -40,22 +39,16 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
         return StringUtils.compareIgnoreCase(first.getName(), second.getName());
     };
 
-    @NotNull
-    private static final Set<VarType> TEXTURE_TYPES = new HashSet<>();
+    private static final Set<VarType> TEXTURE_TYPES = Set.of(
+            VarType.Texture2D,
+            VarType.TextureCubeMap,
+            VarType.Texture3D,
+            VarType.TextureArray,
+            VarType.TextureBuffer
+    );
 
-    @NotNull
-    private static final Set<VarType> COLOR_TYPES = new HashSet<>();
+    private static final Set<VarType> COLOR_TYPES = Set.of(VarType.Vector4);
 
-    static {
-        TEXTURE_TYPES.add(VarType.Texture2D);
-        TEXTURE_TYPES.add(VarType.TextureCubeMap);
-        TEXTURE_TYPES.add(VarType.Texture3D);
-        TEXTURE_TYPES.add(VarType.TextureArray);
-        TEXTURE_TYPES.add(VarType.TextureBuffer);
-        COLOR_TYPES.add(VarType.Vector4);
-    }
-
-    @NotNull
     private static final PropertyBuilder INSTANCE = new MaterialSettingsPropertyBuilder();
 
     @FromAnyThread
@@ -65,20 +58,20 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
 
     @Override
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
 
         if (!(object instanceof MaterialSettings) || object instanceof RootMaterialSettings) {
             return null;
         }
 
-        final MaterialSettings settings = (MaterialSettings) object;
-        final Material material = settings.getMaterial();
+        var settings = (MaterialSettings) object;
+        var material = settings.getMaterial();
 
         if(object instanceof RenderSettings) {
 
-            final RenderState renderState = material.getAdditionalRenderState();
+            var renderState = material.getAdditionalRenderState();
 
-            final List<EditableProperty<?, ?>> result = new ArrayList<>();
+            var result = new ArrayList<EditableProperty<?, ?>>();
             result.add(new SimpleProperty<>(BOOLEAN, Messages.MATERIAL_RENDER_STATE_COLOR_WRITE, settings,
                     sett -> renderState.isColorWrite(),
                     (sett, property) -> renderState.setColorWrite(property)));
@@ -113,9 +106,8 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
             return result;
         }
 
-        final MaterialDef materialDef = material.getMaterialDef();
-
-        return materialDef.getMaterialParams()
+        return material.getMaterialDef()
+                .getMaterialParams()
                 .stream()
                 .filter(param -> filter(param, object))
                 .sorted(MAT_PARAM_NAME_COMPARATOR)
@@ -132,7 +124,7 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
      * @return true of we can show the parameter.
      */
     @FxThread
-    private boolean filter(@NotNull final MatParam param, @NotNull final Object object) {
+    private boolean filter(@NotNull MatParam param, @NotNull Object object) {
 
         if (object instanceof TexturesSettings) {
             return TEXTURE_TYPES.contains(param.getVarType());
@@ -152,10 +144,13 @@ public class MaterialSettingsPropertyBuilder extends MaterialPropertyBuilder {
      * @return the editable property or null.
      */
     @FxThread
-    private @Nullable EditableProperty<?, ?> convert(@NotNull final MatParam param, @NotNull final Material material,
-                                                     @NotNull final MaterialSettings settings) {
+    private @Nullable EditableProperty<?, ?> convert(
+            @NotNull MatParam param,
+            @NotNull Material material,
+            @NotNull MaterialSettings settings
+    ) {
 
-        final EditablePropertyType propertyType = convert(param.getVarType());
+        var propertyType = convert(param.getVarType());
         if (propertyType == null) {
             return null;
         }

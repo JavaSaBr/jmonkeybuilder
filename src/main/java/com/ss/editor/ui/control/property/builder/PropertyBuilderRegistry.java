@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.property.builder;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -101,5 +102,7 @@ public class PropertyBuilderRegistry {
 
             builder.buildFor(object, parent, container, changeConsumer);
         }
+
+        PropertyControl.constructProperties(container);
     }
 }

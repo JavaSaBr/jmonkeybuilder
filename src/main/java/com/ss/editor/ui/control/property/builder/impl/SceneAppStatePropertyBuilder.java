@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class SceneAppStatePropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    @NotNull
     private static final SceneAppStatePropertyBuilder INSTANCE = new SceneAppStatePropertyBuilder();
 
     @FromAnyThread
@@ -31,7 +30,7 @@ public class SceneAppStatePropertyBuilder extends EditableModelObjectPropertyBui
 
     @Override
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
         if (object instanceof EditableSceneAppState) {
             return ((EditableSceneAppState) object).getEditableProperties();
         } else {

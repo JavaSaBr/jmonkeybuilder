@@ -40,6 +40,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
     ) {
 
         var properties = getProperties(object, parent, changeConsumer);
+
         if (properties == null || properties.isEmpty()) {
             return;
         }

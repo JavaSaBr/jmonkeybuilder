@@ -71,8 +71,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
         var container = new VBox(line);
 
         FxUtils.addClass(line, CssClasses.DEF_HBOX)
-                .addClass(container,
-                        CssClasses.PROPERTY_EDITOR_CONTAINER_SPLIT_LINE);
+                .addClass(container, CssClasses.PROPERTY_EDITOR_CONTAINER_SPLIT_LINE);
 
         FxUtils.addChild(pane, container);
     }

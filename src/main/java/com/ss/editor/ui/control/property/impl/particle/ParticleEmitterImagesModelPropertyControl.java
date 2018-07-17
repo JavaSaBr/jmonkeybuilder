@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr.
  */
-public class ParticleEmitterImagesModelPropertyControl extends Vector2fPropertyControl<ModelChangeConsumer, ParticleEmitter> {
+public class ParticleEmitterImagesModelPropertyControl extends
+        Vector2fPropertyControl<ModelChangeConsumer, ParticleEmitter> {
 
     public ParticleEmitterImagesModelPropertyControl(
             @NotNull Vector2f element,
@@ -20,7 +21,6 @@ public class ParticleEmitterImagesModelPropertyControl extends Vector2fPropertyC
             @NotNull ModelChangeConsumer changeConsumer
     ) {
         super(element, paramName, changeConsumer);
-        getXField().setMinMax(1, Integer.MAX_VALUE);
-        getYField().setMinMax(1, Integer.MAX_VALUE);
+        setMinMax(1, Integer.MAX_VALUE);
     }
 }

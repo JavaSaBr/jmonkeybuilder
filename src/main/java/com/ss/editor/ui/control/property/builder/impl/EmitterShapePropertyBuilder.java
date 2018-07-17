@@ -4,10 +4,13 @@ import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.effect.shapes.EmitterPointShape;
 import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.effect.shapes.EmitterSphereShape;
+import com.jme3.light.SpotLight;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
@@ -17,21 +20,20 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.ss.editor.extension.property.EditablePropertyType.VECTOR_3F;
+
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link EmitterShape}.
  *
  * @author JavaSaBr
  */
-public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class EmitterShapePropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new EmitterShapePropertyBuilder();
 
-    /**
-     * Get the single instance.
-     *
-     * @return the single instance
-     */
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -43,6 +45,38 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
 
     @Override
     @FxThread
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
+
+        if (!(object instanceof EmitterShape)) {
+            return null;
+        }
+
+
+        var shape = (EmitterShape) object;
+        var properties = new ArrayList<EditableProperty<?, ?>>();
+
+        if (shape instanceof EmitterPointShape) {
+
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_POINT, (EmitterPointShape) shape,
+                EmitterPointShape::getPoint, EmitterPointShape::setPoint));
+
+        } else if (shape instanceof EmitterBoxShape) {
+
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_LENGTH, (EmitterBoxShape) shape,
+                EmitterBoxShape::getLen, EmitterBoxShape::setLen));
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_MIN, (EmitterBoxShape) shape,
+                EmitterBoxShape::getMin, EmitterBoxShape::setMin));
+
+        } else if (shape instanceof EmitterSphereShape) {
+            createControls(container, changeConsumer, (EmitterSphereShape) object);
+        }
+
+        return properties;
+    }
+
+
+    @Override
+    @FxThread
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
@@ -51,12 +85,15 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         final EmitterShape shape = (EmitterShape) object;
 
         if (shape instanceof EmitterPointShape) {
+
             createControls(container, changeConsumer, (EmitterPointShape) object);
         } else if (shape instanceof EmitterBoxShape) {
             createControls(container, changeConsumer, (EmitterBoxShape) object);
         } else if (shape instanceof EmitterSphereShape) {
             createControls(container, changeConsumer, (EmitterSphereShape) object);
         }
+
+        fwefwefw
     }
 
     /**

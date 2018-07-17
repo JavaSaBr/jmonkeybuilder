@@ -130,7 +130,7 @@ public class Vector2fPropertyControl<C extends ChangeConsumer, D> extends Proper
                 .addChild(container, fieldContainer);
 
         UiUtils.addFocusBinding(fieldContainer, xField, yField)
-            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
+                .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
     }
 
     @Override

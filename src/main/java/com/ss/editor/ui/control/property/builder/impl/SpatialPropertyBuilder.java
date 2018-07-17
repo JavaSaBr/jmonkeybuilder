@@ -90,8 +90,8 @@ public class SpatialPropertyBuilder extends EditableModelObjectPropertyBuilder {
         }
 
         var count = userDataKeys.stream()
-            .filter(s -> !isNeedSkip(s))
-            .count();
+                .filter(this::isUserData)
+                .count();
 
         if (count < 1) {
             return properties;
@@ -99,12 +99,12 @@ public class SpatialPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
         properties.add(SeparatorProperty.getInstance());
 
-        final Array<String> sortedKeys = ArrayFactory.newSortedArray(String.class);
+        var sortedKeys = ArrayFactory.<String>newSortedArray(String.class);
         sortedKeys.addAll(userDataKeys);
 
         for (var key : sortedKeys) {
 
-            if (isNeedSkip(key)) {
+            if (!isUserData(key)) {
                 continue;
             }
 
@@ -138,12 +138,12 @@ public class SpatialPropertyBuilder extends EditableModelObjectPropertyBuilder {
         return EditablePropertyType.READ_ONLY_STRING;
     }
 
-    @FxThread
-    private boolean isNeedSkip(@NotNull String key) {
-        return SceneLayer.KEY.equals(key) || KEY_LOADED_MODEL.equals(key);
+    @FromAnyThread
+    private boolean isUserData(@NotNull String key) {
+        return !(SceneLayer.KEY.equals(key) || KEY_LOADED_MODEL.equals(key));
     }
 
-    @FxThread
+    @FromAnyThread
     private boolean canEditTransformation(@NotNull Spatial spatial) {
         return !(spatial instanceof SceneNode || spatial instanceof SceneLayer);
     }

@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class SceneFilterPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    @NotNull
     private static final SceneFilterPropertyBuilder INSTANCE = new SceneFilterPropertyBuilder();
 
     @FromAnyThread
@@ -31,7 +30,7 @@ public class SceneFilterPropertyBuilder extends EditableModelObjectPropertyBuild
 
     @Override
     @FxThread
-    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull final Object object) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
         if (object instanceof EditableSceneFilter) {
             return ((EditableSceneFilter) object).getEditableProperties();
         } else {

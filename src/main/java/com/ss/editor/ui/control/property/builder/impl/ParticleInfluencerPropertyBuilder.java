@@ -7,6 +7,9 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.SeparatorProperty;
+import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
@@ -17,14 +20,18 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.ss.editor.extension.property.EditablePropertyType.*;
+
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleInfluencer}.
  *
  * @author JavaSaBr
  */
-public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class ParticleInfluencerPropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new ParticleInfluencerPropertyBuilder();
 
     @FromAnyThread
@@ -38,84 +45,44 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
 
-        if (!(object instanceof ParticleInfluencer)) return;
-
-        final ParticleInfluencer influencer = (ParticleInfluencer) object;
-        final Vector3f initialVelocity = influencer.getInitialVelocity();
-
-        final float velocityVariation = influencer.getVelocityVariation();
-
-        final Vector3fPropertyControl<ModelChangeConsumer, ParticleInfluencer> initialVelocityControl =
-                new Vector3fPropertyControl<>(initialVelocity, Messages.MODEL_PROPERTY_INITIAL_VELOCITY, changeConsumer);
-
-        initialVelocityControl.setSyncHandler(ParticleInfluencer::getInitialVelocity);
-        initialVelocityControl.setApplyHandler(ParticleInfluencer::setInitialVelocity);
-        initialVelocityControl.setEditObject(influencer);
-
-        FXUtils.addToPane(initialVelocityControl, container);
-
-        if (object instanceof RadialParticleInfluencer) {
-            createControls(container, changeConsumer, (RadialParticleInfluencer) object);
-        } else {
-            buildSplitLine(initialVelocityControl);
+        if (!(object instanceof ParticleInfluencer)) {
+            return null;
         }
+
+        var influencer = (ParticleInfluencer) object;
+        var properties = new ArrayList<EditableProperty<?, ?>>();
 
         if (influencer instanceof EmptyParticleInfluencer) {
-            initialVelocityControl.setDisable(true);
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_INITIAL_VELOCITY,
+                    influencer.getInitialVelocity(), String::valueOf));
+        } else {
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_INITIAL_VELOCITY, influencer,
+                    ParticleInfluencer::getInitialVelocity, ParticleInfluencer::setInitialVelocity));
         }
 
-        final FloatPropertyControl<ModelChangeConsumer, ParticleInfluencer> velocityVariationControl =
-                new FloatPropertyControl<>(velocityVariation, Messages.MODEL_PROPERTY_VELOCITY_VARIATION, changeConsumer);
+        if (object instanceof RadialParticleInfluencer) {
 
-        velocityVariationControl.setSyncHandler(ParticleInfluencer::getVelocityVariation);
-        velocityVariationControl.setApplyHandler(ParticleInfluencer::setVelocityVariation);
-        velocityVariationControl.setEditObject(influencer);
+            var radialParticleInfluencer = (RadialParticleInfluencer) object;
 
-        FXUtils.addToPane(velocityVariationControl, container);
-    }
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_ORIGIN, radialParticleInfluencer,
+                    RadialParticleInfluencer::getOrigin, RadialParticleInfluencer::setOrigin));
 
-    /**
-     * Create controls.
-     *
-     * @param container      the container.
-     * @param changeConsumer the change consumer.
-     * @param influencer     the influencer.
-     */
-    @FxThread
-    private void createControls(@NotNull final VBox container, final @NotNull ModelChangeConsumer changeConsumer,
-                                @NotNull final RadialParticleInfluencer influencer) {
+            properties.add(SeparatorProperty.getInstance());
 
-        final Vector3f origin = influencer.getOrigin();
-        final float radialVelocity = influencer.getRadialVelocity();
-        final boolean horizontal = influencer.isHorizontal();
+            properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_RADIAL_VELOCITY, radialParticleInfluencer,
+                RadialParticleInfluencer::getRadialVelocity, RadialParticleInfluencer::setRadialVelocity));
+            properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_HORIZONTAL, radialParticleInfluencer,
+                RadialParticleInfluencer::isHorizontal, RadialParticleInfluencer::setHorizontal));
 
-        final FloatPropertyControl<ModelChangeConsumer, RadialParticleInfluencer> radialVelocityControl =
-                new FloatPropertyControl<>(radialVelocity, Messages.MODEL_PROPERTY_RADIAL_VELOCITY, changeConsumer);
+        } else {
+            properties.add(SeparatorProperty.getInstance());
+        }
 
-        radialVelocityControl.setSyncHandler(RadialParticleInfluencer::getRadialVelocity);
-        radialVelocityControl.setApplyHandler(RadialParticleInfluencer::setRadialVelocity);
-        radialVelocityControl.setEditObject(influencer);
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_VELOCITY_VARIATION, influencer,
+                ParticleInfluencer::getVelocityVariation, ParticleInfluencer::setVelocityVariation));
 
-        final BooleanPropertyControl<ModelChangeConsumer, RadialParticleInfluencer> horizontalControl =
-                new BooleanPropertyControl<>(horizontal, Messages.MODEL_PROPERTY_IS_HORIZONTAL, changeConsumer);
-
-        horizontalControl.setSyncHandler(RadialParticleInfluencer::isHorizontal);
-        horizontalControl.setApplyHandler(RadialParticleInfluencer::setHorizontal);
-        horizontalControl.setEditObject(influencer);
-
-        final Vector3fPropertyControl<ModelChangeConsumer, RadialParticleInfluencer> originControl =
-                new Vector3fPropertyControl<>(origin, Messages.MODEL_PROPERTY_ORIGIN, changeConsumer);
-
-        originControl.setSyncHandler(RadialParticleInfluencer::getOrigin);
-        originControl.setApplyHandler(RadialParticleInfluencer::setOrigin);
-        originControl.setEditObject(influencer);
-
-        FXUtils.addToPane(originControl, container);
-        buildSplitLine(container);
-        FXUtils.addToPane(radialVelocityControl, container);
-        FXUtils.addToPane(horizontalControl, container);
+        return properties;
     }
 }

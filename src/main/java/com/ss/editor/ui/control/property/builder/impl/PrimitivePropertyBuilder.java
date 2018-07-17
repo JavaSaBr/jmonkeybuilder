@@ -1,35 +1,47 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.DefaultSinglePropertyControl;
 import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
+import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.ss.editor.extension.property.EditablePropertyType.ENUM;
+import static com.ss.editor.extension.property.EditablePropertyType.READ_ONLY_STRING;
+import static com.ss.editor.extension.property.EditablePropertyType.VECTOR_3F;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for primitive objects objects.
  *
  * @author JavaSaBr
  */
-public class PrimitivePropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class PrimitivePropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new PrimitivePropertyBuilder();
 
-    /**
-     * Gets the instance.
-     *
-     * @return the single instance.
-     */
+    private static final Array<Class<?>> SUPPORTED_TYPES = Array.of(
+        Vector3f.class,
+        VertexBuffer.class,
+        Buffer.class
+    );
+
     @FromAnyThread
     public static @NotNull PropertyBuilder getInstance() {
         return INSTANCE;
@@ -40,135 +52,62 @@ public class PrimitivePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     }
 
     @Override
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
+
+        if (!SUPPORTED_TYPES.anyMatch(object, Class::isInstance)) {
+            return null;
+        }
+
+        var properties = new ArrayList<EditableProperty<?, ?>>();
 
         if (object instanceof Vector3f) {
 
-            final Vector3f position = (Vector3f) object;
-            final Vector3f value = position.clone();
-
-            final Vector3fPropertyControl<ModelChangeConsumer, Vector3f> control =
-                    new Vector3fPropertyControl<>(value, Messages.MODEL_PROPERTY_VALUE, changeConsumer);
-            control.setApplyHandler(Vector3f::set);
-            control.setSyncHandler(Vector3f::clone);
-            control.setEditObject(position);
-
-            FXUtils.addToPane(control, container);
+            properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_VALUE, (Vector3f) object,
+                    Vector3f::clone, Vector3f::set));
 
         } else if (object instanceof VertexBuffer) {
 
-            final VertexBuffer vertexBuffer = (VertexBuffer) object;
-            final Buffer data = vertexBuffer.getData();
-            if (data == null) return;
+            var vertexBuffer = (VertexBuffer) object;
+            var data = vertexBuffer.getData();
 
-            final VertexBuffer.Type bufferType = vertexBuffer.getBufferType();
-            final VertexBuffer.Format format = vertexBuffer.getFormat();
-            final VertexBuffer.Usage usage = vertexBuffer.getUsage();
+            if (data == null) {
+                return null;
+            }
 
-            final long uniqueId = vertexBuffer.getUniqueId();
-
-            final int baseInstanceCount = vertexBuffer.getBaseInstanceCount();
-            final int instanceSpan = vertexBuffer.getInstanceSpan();
-            final int numComponents = vertexBuffer.getNumComponents();
-            final int numElements = vertexBuffer.getNumElements();
-            final int offset = vertexBuffer.getOffset();
-            final int stride = vertexBuffer.getStride();
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, VertexBuffer.Type> bufferTypeControl =
-                    new DefaultSinglePropertyControl<>(bufferType, Messages.MODEL_PROPERTY_TYPE, changeConsumer);
-
-            bufferTypeControl.setSyncHandler(VertexBuffer::getBufferType);
-            bufferTypeControl.setToStringFunction(Enum::name);
-            bufferTypeControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, VertexBuffer.Format> formatControl =
-                    new DefaultSinglePropertyControl<>(format, Messages.MODEL_PROPERTY_FORMAT, changeConsumer);
-
-            formatControl.setSyncHandler(VertexBuffer::getFormat);
-            formatControl.setToStringFunction(Enum::name);
-            formatControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, VertexBuffer.Usage> usageControl =
-                    new DefaultSinglePropertyControl<>(usage, Messages.MODEL_PROPERTY_USAGE, changeConsumer);
-
-            usageControl.setSyncHandler(VertexBuffer::getUsage);
-            usageControl.setToStringFunction(Enum::name);
-            usageControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Long> uniqIdControl =
-                    new DefaultSinglePropertyControl<>(uniqueId, Messages.MODEL_PROPERTY_UNIQ_ID, changeConsumer);
-
-            uniqIdControl.setSyncHandler(VertexBuffer::getUniqueId);
-            uniqIdControl.setToStringFunction(value -> Long.toString(value));
-            uniqIdControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Integer> baseInstanceCountControl =
-                    new DefaultSinglePropertyControl<>(baseInstanceCount, Messages.MODEL_PROPERTY_BASE_INSTANCE_COUNT, changeConsumer);
-
-            baseInstanceCountControl.setSyncHandler(VertexBuffer::getBaseInstanceCount);
-            baseInstanceCountControl.setToStringFunction(value -> Integer.toString(value));
-            baseInstanceCountControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Integer> instanceSpanControl =
-                    new DefaultSinglePropertyControl<>(instanceSpan, Messages.MODEL_PROPERTY_INSTANCE_SPAN, changeConsumer);
-
-            instanceSpanControl.setSyncHandler(VertexBuffer::getBaseInstanceCount);
-            instanceSpanControl.setToStringFunction(value -> Integer.toString(value));
-            instanceSpanControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Integer> numComponentsControl =
-                    new DefaultSinglePropertyControl<>(numComponents, Messages.MODEL_PROPERTY_NUM_COMPONENTS, changeConsumer);
-
-            numComponentsControl.setSyncHandler(VertexBuffer::getNumComponents);
-            numComponentsControl.setToStringFunction(value -> Integer.toString(value));
-            numComponentsControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Integer> numElementsControl =
-                    new DefaultSinglePropertyControl<>(numElements, Messages.MODEL_PROPERTY_NUM_ELEMENTS, changeConsumer);
-
-            numElementsControl.setSyncHandler(VertexBuffer::getNumElements);
-            numElementsControl.setToStringFunction(value -> Integer.toString(value));
-            numElementsControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Integer> offsetControl =
-                    new DefaultSinglePropertyControl<>(offset, Messages.MODEL_PROPERTY_OFFSET, changeConsumer);
-
-            offsetControl.setSyncHandler(VertexBuffer::getOffset);
-            offsetControl.setToStringFunction(value -> Integer.toString(value));
-            offsetControl.setEditObject(vertexBuffer);
-
-            final DefaultSinglePropertyControl<ModelChangeConsumer, VertexBuffer, Integer> strideControl =
-                    new DefaultSinglePropertyControl<>(stride, Messages.MODEL_PROPERTY_STRIDE, changeConsumer);
-
-            strideControl.setSyncHandler(VertexBuffer::getStride);
-            strideControl.setToStringFunction(value -> Integer.toString(value));
-            strideControl.setEditObject(vertexBuffer);
-
-            FXUtils.addToPane(bufferTypeControl, container);
-            FXUtils.addToPane(formatControl, container);
-            FXUtils.addToPane(usageControl, container);
-            FXUtils.addToPane(uniqIdControl, container);
-            FXUtils.addToPane(baseInstanceCountControl, container);
-            FXUtils.addToPane(instanceSpanControl, container);
-            FXUtils.addToPane(numComponentsControl, container);
-            FXUtils.addToPane(numElementsControl, container);
-            FXUtils.addToPane(offsetControl, container);
-            FXUtils.addToPane(strideControl, container);
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_TYPE,
+                    vertexBuffer.getBufferType(), Enum::name));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_FORMAT,
+                    vertexBuffer.getFormat(), Enum::name));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_USAGE,
+                    vertexBuffer.getUsage(), Enum::name));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_UNIQ_ID,
+                    vertexBuffer.getUniqueId(), String::valueOf));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_BASE_INSTANCE_COUNT,
+                    vertexBuffer.getBaseInstanceCount(), String::valueOf));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_INSTANCE_SPAN,
+                    vertexBuffer.getInstanceSpan(), String::valueOf));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_NUM_COMPONENTS,
+                    vertexBuffer.getNumComponents(), String::valueOf));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_NUM_ELEMENTS,
+                    vertexBuffer.getNumElements(), String::valueOf));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_OFFSET,
+                    vertexBuffer.getOffset(), String::valueOf));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_STRIDE,
+                    vertexBuffer.getStride(), String::valueOf));
 
         } else if (object instanceof Buffer) {
 
-            final Buffer buffer = (Buffer) object;
-            final int capacity = buffer.capacity();
+            var buffer = (Buffer) object;
 
-            final DefaultSinglePropertyControl<ModelChangeConsumer, Buffer, Integer> capacityControl =
-                    new DefaultSinglePropertyControl<>(capacity, Messages.MODEL_PROPERTY_CAPACITY, changeConsumer);
-
-            capacityControl.setSyncHandler(Buffer::capacity);
-            capacityControl.setToStringFunction(integer -> Integer.toString(integer));
-            capacityControl.setEditObject(buffer);
-
-            FXUtils.addToPane(capacityControl, container);
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_CAPACITY,
+                    buffer.capacity(), String::valueOf));
         }
+
+        return properties;
     }
+
 }
