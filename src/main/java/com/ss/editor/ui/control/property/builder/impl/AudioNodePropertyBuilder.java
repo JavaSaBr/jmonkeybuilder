@@ -1,11 +1,16 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
+import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
+import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.SeparatorProperty;
+import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.AudioKeyPropertyControl;
@@ -19,6 +24,8 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -26,7 +33,7 @@ import java.util.function.BiConsumer;
  *
  * @author JavaSaBr
  */
-public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class AudioNodePropertyBuilder extends EditableModelObjectPropertyBuilder {
 
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
@@ -35,8 +42,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         if (audioKey == null) {
             audioNode.setAudioData(null, null);
         } else {
-            var audioData = assetManager.loadAudio(audioKey);
-            AudioNodeUtils.updateData(audioNode, audioData, audioKey);
+            AudioNodeUtils.updateData(audioNode, assetManager.loadAudio(audioKey), audioKey);
         }
     };
 
@@ -49,6 +55,74 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
 
     private AudioNodePropertyBuilder() {
         super(ModelChangeConsumer.class);
+    }
+
+    @Override
+    protected @Nullable List<EditableProperty<?, ?>> getProperties(@NotNull Object object) {
+
+        if (!(object instanceof AudioNode)) {
+            return null;
+        }
+
+        var audioNode = (AudioNode) object;
+        var properties = new ArrayList<EditableProperty<?, ?>>();
+
+        properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_LOOPING, audioNode,
+                AudioNode::isLooping, AudioNode::setLooping));
+        properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_REVERB, audioNode,
+                AudioNode::isReverbEnabled, AudioNode::setReverbEnabled));
+        properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_DIRECTIONAL, audioNode,
+                AudioNode::isDirectional, AudioNode::setDirectional));
+        properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_DIRECTIONAL, audioNode,
+                AudioNode::isPositional, AudioNode::setPositional));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_AUDIO_PITCH, 2F, 0.5F, 2F, audioNode,
+                AudioNode::getPitch, AudioNode::setPitch));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_AUDIO_VOLUME, 5F, 0F, Integer.MAX_VALUE, audioNode,
+                AudioNode::getVolume, AudioNode::setVolume));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_TIME_OFFSET, 1F, 0F, Integer.MAX_VALUE, audioNode,
+                AudioNode::getTimeOffset, AudioNode::setTimeOffset));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_MAX_DISTANCE, 1F, 0F, Integer.MAX_VALUE, audioNode,
+                AudioNode::getMaxDistance, AudioNode::setMaxDistance));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_REF_DISTANCE, 1F, 0F, Integer.MAX_VALUE, audioNode,
+                AudioNode::getRefDistance, AudioNode::setRefDistance));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_INNER_ANGLE, audioNode,
+                AudioNode::getInnerAngle, AudioNode::setInnerAngle));
+        properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_OUTER_ANGLE, audioNode,
+                AudioNode::getOuterAngle, AudioNode::setOuterAngle));
+
+        properties.add(SeparatorProperty.getInstance());
+
+
+        final AudioKeyPropertyControl<ModelChangeConsumer> audioKeyControl = new AudioKeyPropertyControl<>(key,
+                Messages.MODEL_PROPERTY_AUDIO_DATA, changeConsumer);
+
+        audioKeyControl.setApplyHandler(AUDIO_APPLY_HANDLER);
+        audioKeyControl.setSyncHandler(AudioNodeUtils::getAudioKey);
+        audioKeyControl.setEditObject(audioNode);
+
+        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3fPropertyControl<>(velocity,
+                Messages.MODEL_PROPERTY_VELOCITY, changeConsumer);
+
+        velocityControl.setApplyHandler(AudioNode::setVelocity);
+        velocityControl.setSyncHandler(AudioNode::getVelocity);
+        velocityControl.setEditObject(audioNode);
+
+        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3fPropertyControl<>(direction,
+                Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
+
+        directionControl.setApplyHandler(AudioNode::setDirection);
+        directionControl.setSyncHandler(AudioNode::getDirection);
+        directionControl.setEditObject(audioNode);
+
+        buildSplitLine(container);
+
+        FXUtils.addToPane(audioKeyControl, container);
+        FXUtils.addToPane(velocityControl, container);
+        FXUtils.addToPane(directionControl, container);
+
+        buildSplitLine(container);
+
+        return super.getProperties(object);
     }
 
     @Override

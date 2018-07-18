@@ -1,6 +1,5 @@
 package com.ss.editor.util;
 
-import static java.lang.Thread.currentThread;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.*;
 import com.jme3.scene.Spatial;
@@ -25,16 +24,11 @@ public class LocalObjects {
 
     private static final ThreadLocal<LocalObjects> THREAD_LOCAL = ThreadLocal.withInitial(LocalObjects::new);
 
-    /**
-     * Get the local objects.
-     *
-     * @return the local objects
-     */
     public static @NotNull LocalObjects get() {
 
-        final Thread currentThread = currentThread();
+        var currentThread = Thread.currentThread();
         if (currentThread instanceof EditorThread) {
-            ((EditorThread) currentThread).getLocal();
+            return ((EditorThread) currentThread).getLocal();
         }
 
         return THREAD_LOCAL.get();
@@ -95,6 +89,12 @@ public class LocalObjects {
     private final CycleBuffer<float[]> matrixFloatBuffer;
 
     /**
+     * The buffer of 3 float arrays.
+     */
+    @NotNull
+    private final CycleBuffer<float[]> array3fBuffer;
+
+    /**
      * The buffer of object arrays.
      */
     @NotNull
@@ -115,6 +115,7 @@ public class LocalObjects {
         this.rayBuffer = new CycleBuffer<>(Ray.class, SIZE, Ray::new);
         this.matrix3fBuffer = new CycleBuffer<>(Matrix3f.class, SIZE, Matrix3f::new);
         this.matrixFloatBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[16]);
+        this.array3fBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[3]);
         this.colorBuffer = new CycleBuffer<>(ColorRGBA.class, SIZE, ColorRGBA::new);
         this.objectArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Object.class), Collection::clear);
         this.spatialArrayBuffer = new CycleBuffer<>(Array.class, SIZE, () -> ArrayFactory.newArray(Spatial.class), Collection::clear);
@@ -160,6 +161,16 @@ public class LocalObjects {
     @FromAnyThread
     public @NotNull float[] nextMatrixFloat() {
         return matrixFloatBuffer.next();
+    }
+
+    /**
+     * Get the next 3 float array.
+     *
+     * @return the next 3 float array.
+     */
+    @FromAnyThread
+    public @NotNull float[] nextArray3f() {
+        return array3fBuffer.next();
     }
 
     /**

@@ -35,7 +35,6 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
     public static final int PRIORITY = 0;
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new DefaultControlPropertyBuilder();
 
     @FxThread
@@ -52,7 +51,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         var result = new ArrayList<EditableProperty<?, ?>>();
         result.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_ENABLED, control,
-            AbstractControl::isEnabled, AbstractControl::setEnabled));
+                AbstractControl::isEnabled, AbstractControl::setEnabled));
 
         return result;
     }
@@ -62,7 +61,7 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
 
         var result = new ArrayList<EditableProperty<?, ?>>();
         result.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_ENABLED, control,
-            PhysicsControl::isEnabled, PhysicsControl::setEnabled));
+                PhysicsControl::isEnabled, PhysicsControl::setEnabled));
 
         return result;
     }
@@ -78,61 +77,61 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             var control = (VehicleWheel) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_FRONT, control,
-                VehicleWheel::isFrontWheel, VehicleWheel::setFrontWheel));
+                    VehicleWheel::isFrontWheel, VehicleWheel::setFrontWheel));
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, control,
-                VehicleWheel::isApplyLocal, VehicleWheel::setApplyLocal));
+                    VehicleWheel::isApplyLocal, VehicleWheel::setApplyLocal));
             properties.add(new SimpleProperty<>(STRING, Messages.MODEL_PROPERTY_OBJECT_ID, control,
-                wheel -> String.valueOf(wheel.getWheelId())));
+                    wheel -> String.valueOf(wheel.getWheelId())));
 
             properties.add(new SimpleProperty<>(SPATIAL_FROM_SCENE, Messages.MODEL_PROPERTY_WHEEL_SPATIAL, control,
-                VehicleWheel::getWheelSpatial, VehicleWheel::setWheelSpatial));
+                    VehicleWheel::getWheelSpatial, VehicleWheel::setWheelSpatial));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_LOCATION, control,
-                VehicleWheel::getLocation));
+                    VehicleWheel::getLocation));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_DIRECTION, control,
-                VehicleWheel::getDirection));
+                    VehicleWheel::getDirection));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_AXLE, control,
-                VehicleWheel::getAxle));
+                    VehicleWheel::getAxle));
 
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_DAMPING_COMPRESSION, control,
-                VehicleWheel::getWheelsDampingCompression, VehicleWheel::setWheelsDampingCompression));
+                    VehicleWheel::getWheelsDampingCompression, VehicleWheel::setWheelsDampingCompression));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_FRICTION_SLIP, control,
-                VehicleWheel::getFrictionSlip, VehicleWheel::setFrictionSlip));
+                    VehicleWheel::getFrictionSlip, VehicleWheel::setFrictionSlip));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_RADIUS, control,
-                VehicleWheel::getRadius, VehicleWheel::setRadius));
+                    VehicleWheel::getRadius, VehicleWheel::setRadius));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_MAX_SUSPENSION_FORCE, control,
-                VehicleWheel::getMaxSuspensionForce, VehicleWheel::setMaxSuspensionForce));
+                    VehicleWheel::getMaxSuspensionForce, VehicleWheel::setMaxSuspensionForce));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM, control,
-                VehicleWheel::getMaxSuspensionTravelCm, VehicleWheel::setMaxSuspensionTravelCm));
+                    VehicleWheel::getMaxSuspensionTravelCm, VehicleWheel::setMaxSuspensionTravelCm));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM, control,
-                VehicleWheel::getMaxSuspensionTravelCm, VehicleWheel::setMaxSuspensionTravelCm));
+                    VehicleWheel::getMaxSuspensionTravelCm, VehicleWheel::setMaxSuspensionTravelCm));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_DAMPING_RELAXATION, control,
-                VehicleWheel::getWheelsDampingRelaxation, VehicleWheel::setWheelsDampingRelaxation));
+                    VehicleWheel::getWheelsDampingRelaxation, VehicleWheel::setWheelsDampingRelaxation));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_SUSPENSION_STIFFNESS, control,
-                VehicleWheel::getSuspensionStiffness, VehicleWheel::setSuspensionStiffness));
+                    VehicleWheel::getSuspensionStiffness, VehicleWheel::setSuspensionStiffness));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_REST_LENGTH, control,
-                VehicleWheel::getRestLength, VehicleWheel::setRestLength));
+                    VehicleWheel::getRestLength, VehicleWheel::setRestLength));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_ROLL_INFLUENCE, control,
-                VehicleWheel::getRollInfluence, VehicleWheel::setRollInfluence));
+                    VehicleWheel::getRollInfluence, VehicleWheel::setRollInfluence));
 
         } else if (object instanceof AbstractCinematicEvent) {
 
             var control = (AbstractCinematicEvent) object;
 
             properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_LOOP_MODE, control,
-                AbstractCinematicEvent::getLoopMode, AbstractCinematicEvent::setLoopMode));
+                    AbstractCinematicEvent::getLoopMode, AbstractCinematicEvent::setLoopMode));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_INITIAL_DURATION, control,
-                AbstractCinematicEvent::getInitialDuration, AbstractCinematicEvent::setInitialDuration));
+                    AbstractCinematicEvent::getInitialDuration, AbstractCinematicEvent::setInitialDuration));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_SPEED, control,
-                AbstractCinematicEvent::getSpeed, AbstractCinematicEvent::setSpeed));
+                    AbstractCinematicEvent::getSpeed, AbstractCinematicEvent::setSpeed));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_TIME, control,
-                AbstractCinematicEvent::getTime, AbstractCinematicEvent::setTime));
+                    AbstractCinematicEvent::getTime, AbstractCinematicEvent::setTime));
 
         } else if (object instanceof Animation) {
 
             var animation = (Animation) object;
 
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_LENGTH, animation,
-                Animation::getLength));
+                    Animation::getLength));
         }
 
         if (object instanceof MotionEvent) {
@@ -140,11 +139,11 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             var control = (MotionEvent) object;
 
             properties.add(new SimpleProperty<>(ENUM, Messages.MODEL_PROPERTY_DIRECTION_TYPE, control,
-                MotionEvent::getDirectionType, MotionEvent::setDirectionType));
+                    MotionEvent::getDirectionType, MotionEvent::setDirectionType));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_DIRECTION, control,
-                MotionEvent::getDirection, MotionEvent::setDirection));
+                    MotionEvent::getDirection, MotionEvent::setDirection));
             properties.add(new SimpleProperty<>(QUATERNION, Messages.MODEL_PROPERTY_ROTATION, control,
-                MotionEvent::getRotation, MotionEvent::setRotation));
+                    MotionEvent::getRotation, MotionEvent::setRotation));
         }
 
         if (!(object instanceof Control)) {
@@ -199,14 +198,14 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             var control = (SkeletonControl) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED, control,
-                SkeletonControl::isHardwareSkinningPreferred, SkeletonControl::setHardwareSkinningPreferred));
+                    SkeletonControl::isHardwareSkinningPreferred, SkeletonControl::setHardwareSkinningPreferred));
 
         } else if (object instanceof VehicleControl) {
 
            var control = (VehicleControl) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL, control,
-                VehicleControl::isApplyPhysicsLocal, VehicleControl::setApplyPhysicsLocal));
+                    VehicleControl::isApplyPhysicsLocal, VehicleControl::setApplyPhysicsLocal));
 
         }
 
@@ -215,27 +214,27 @@ public class DefaultControlPropertyBuilder extends EditableModelObjectPropertyBu
             var control = (PhysicsRigidBody) object;
 
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_KINEMATIC, control,
-                PhysicsRigidBody::isKinematic, PhysicsRigidBody::setKinematic));
+                    PhysicsRigidBody::isKinematic, PhysicsRigidBody::setKinematic));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_GRAVITY, control,
-                PhysicsRigidBody::getGravity, PhysicsRigidBody::setGravity));
+                    PhysicsRigidBody::getGravity, PhysicsRigidBody::setGravity));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_LINEAR_FACTOR, control,
-                PhysicsRigidBody::getLinearFactor, PhysicsRigidBody::setLinearFactor));
+                    PhysicsRigidBody::getLinearFactor, PhysicsRigidBody::setLinearFactor));
             properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_ANGULAR_VELOCITY, control,
-                PhysicsRigidBody::getAngularVelocity, PhysicsRigidBody::setAngularVelocity));
+                    PhysicsRigidBody::getAngularVelocity, PhysicsRigidBody::setAngularVelocity));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_ANGULAR_DAMPING, control,
-                PhysicsRigidBody::getAngularDamping, PhysicsRigidBody::setAngularDamping));
+                    PhysicsRigidBody::getAngularDamping, PhysicsRigidBody::setAngularDamping));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_ANGULAR_FACTOR, control,
-                PhysicsRigidBody::getAngularFactor, PhysicsRigidBody::setAngularFactor));
+                    PhysicsRigidBody::getAngularFactor, PhysicsRigidBody::setAngularFactor));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD, control,
-                PhysicsRigidBody::getAngularSleepingThreshold, PhysicsRigidBody::setAngularSleepingThreshold));
+                    PhysicsRigidBody::getAngularSleepingThreshold, PhysicsRigidBody::setAngularSleepingThreshold));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_FRICTION, control,
-                PhysicsRigidBody::getFriction, PhysicsRigidBody::setFriction));
+                    PhysicsRigidBody::getFriction, PhysicsRigidBody::setFriction));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_MASS, control,
-                PhysicsRigidBody::getMass, PhysicsRigidBody::setMass));
+                    PhysicsRigidBody::getMass, PhysicsRigidBody::setMass));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_LINEAR_DAMPING, control,
-                PhysicsRigidBody::getLinearDamping, PhysicsRigidBody::setLinearDamping));
+                    PhysicsRigidBody::getLinearDamping, PhysicsRigidBody::setLinearDamping));
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_RESTITUTION, control,
-                PhysicsRigidBody::getRestitution, PhysicsRigidBody::setRestitution));
+                    PhysicsRigidBody::getRestitution, PhysicsRigidBody::setRestitution));
         }
 
         return properties;
