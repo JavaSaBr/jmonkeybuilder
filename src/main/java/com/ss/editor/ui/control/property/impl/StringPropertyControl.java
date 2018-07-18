@@ -29,8 +29,8 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
     /**
      * The filed with current value.
      */
-    @Nullable
-    private TextField valueField;
+    @NotNull
+    private final TextField valueField;
 
     public StringPropertyControl(
             @Nullable String propertyValue,
@@ -38,6 +38,7 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
+        this.valueField = new TextField();
     }
 
     @Override
@@ -45,15 +46,13 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        valueField = new TextField();
         valueField.setOnKeyReleased(this::updateValue);
         valueField.prefWidthProperty()
-            .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
-        FxUtils.addClass(valueField,
-                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
+        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
         FxUtils.addChild(container, valueField);
     }
 
@@ -63,23 +62,16 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
         return true;
     }
 
-    /**
-     * Get the filed with current value.
-     *
-     * @return the filed with current value.
-     */
-    @FxThread
-    private @NotNull TextField getValueField() {
-        return notNull(valueField);
-    }
-
     @Override
     @FxThread
-    protected void reload() {
-        var valueField = getValueField();
+    protected void reloadImpl() {
+
         var caretPosition = valueField.getCaretPosition();
+
         valueField.setText(emptyIfNull(getPropertyValue()));
         valueField.positionCaret(caretPosition);
+
+        super.reloadImpl();
     }
 
     /**
@@ -95,13 +87,13 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
     @FxThread
     @Override
     public boolean isDirty() {
-        return !StringUtils.equals(getPropertyValue(), getValueField().getText());
+        return !StringUtils.equals(getPropertyValue(), valueField.getText());
     }
 
     @Override
     @FxThread
     protected void apply() {
         super.apply();
-        changed(getValueField().getText(), getPropertyValue());
+        changed(valueField.getText(), getPropertyValue());
     }
 }

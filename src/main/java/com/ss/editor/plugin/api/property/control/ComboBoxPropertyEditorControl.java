@@ -34,8 +34,8 @@ public class ComboBoxPropertyEditorControl<T> extends PropertyEditorControl<T> {
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         comboBox = new ComboBox<>();
         comboBox.setVisibleRowCount(20);

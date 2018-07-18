@@ -5,6 +5,7 @@ import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.rlib.common.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,22 +18,11 @@ import java.lang.reflect.Field;
  */
 public class AudioNodeUtils {
 
-    private static final Field AUDIO_DATA_FIELD;
-    private static final Field AUDIO_KEY_FIELD;
+    private static final Field AUDIO_DATA_FIELD =
+            ReflectionUtils.getUnsafeField(AudioNode.class, "audioKey");
 
-    static {
-        try {
-
-            AUDIO_KEY_FIELD = AudioNode.class.getDeclaredField("audioKey");
-            AUDIO_KEY_FIELD.setAccessible(true);
-
-            AUDIO_DATA_FIELD = AudioNode.class.getDeclaredField("data");
-            AUDIO_DATA_FIELD.setAccessible(true);
-
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final Field AUDIO_KEY_FIELD  =
+            ReflectionUtils.getUnsafeField(AudioNode.class, "data");
 
     /**
      * Update audio data for an audio node.

@@ -34,8 +34,8 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         valueField = new TextField();
         valueField.prefWidthProperty()

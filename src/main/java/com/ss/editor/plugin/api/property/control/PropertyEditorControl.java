@@ -11,6 +11,7 @@ import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -84,6 +85,11 @@ public class PropertyEditorControl<T> extends HBox {
      */
     private boolean ignoreListener;
 
+    /**
+     * The flag to mark this control that this control was constructed fully.
+     */
+    private boolean constructed;
+
     protected PropertyEditorControl(
             @NotNull VarTable vars,
             @NotNull PropertyDefinition definition,
@@ -116,6 +122,7 @@ public class PropertyEditorControl<T> extends HBox {
     public void checkDependency() {
 
         var dependencies = getDependencies();
+
         if (dependencies.isEmpty()) {
             return;
         }
@@ -203,8 +210,9 @@ public class PropertyEditorControl<T> extends HBox {
 
     @FxThread
     protected void change() {
-        if (isIgnoreListener()) return;
-        changeImpl();
+        if (!isIgnoreListener()) {
+            changeImpl();
+        }
     }
 
     @FxThread
@@ -213,7 +221,14 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     @FxThread
-    public void createComponents() {
+    public void postConstruct() {
+
+        if (constructed) {
+            return;
+        } else {
+            constructed = true;
+        }
+
         setAlignment(Pos.CENTER_RIGHT);
 
         propertyNameLabel = new Label(getName() + ":");

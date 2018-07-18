@@ -36,8 +36,8 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         colorPicker = new ColorPicker();
         colorPicker.prefWidthProperty()

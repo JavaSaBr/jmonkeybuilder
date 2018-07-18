@@ -28,7 +28,7 @@ public class PropertyEditorControlFactory {
     ) {
 
         var control = buildImpl(vars, definition, validation);
-        control.createComponents();
+        control.postConstruct();
         control.reload();
 
         return control;

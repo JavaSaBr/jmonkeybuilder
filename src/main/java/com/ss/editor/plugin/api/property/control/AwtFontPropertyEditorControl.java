@@ -60,8 +60,8 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         comboBox = new ComboBox<>();
         comboBox.getItems().addAll(FONTS);

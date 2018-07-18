@@ -19,11 +19,12 @@ import java.nio.file.Path;
 /**
  * The implementation of the {@link PropertyControl} to edit the {@link AudioData}.
  *
- * @param <C> the type of a change consumer.
+ * @param <C> the change consumer's type.
+ * @param <E> the edited object's type.
  * @author JavaSaBr
  */
-public class AudioKeyPropertyControl<C extends ChangeConsumer> extends
-        AssetKeyPropertyControl<C, AudioNode, AudioData, AudioKey> {
+public class AudioKeyPropertyControl<C extends ChangeConsumer, E> extends
+        AssetKeyPropertyControl<C, E, AudioData, AudioKey> {
 
     private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
 

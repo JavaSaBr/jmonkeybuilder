@@ -120,6 +120,9 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
      */
     private boolean ignoreListener;
 
+    /**
+     * The flag to mark this control that this control was constructed fully.
+     */
     private boolean constructed;
 
     public PropertyControl(@Nullable T propertyValue, @NotNull String propertyName, @NotNull C changeConsumer) {

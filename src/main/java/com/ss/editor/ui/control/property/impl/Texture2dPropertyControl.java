@@ -7,12 +7,15 @@ import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
 import static com.ss.editor.extension.property.EditablePropertyType.ENUM;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.JavaFxImageManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -49,53 +52,39 @@ import java.nio.file.Path;
  */
 public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Texture2D> {
 
-    /**
-     * The constant NO_TEXTURE.
-     */
-    @NotNull
     protected static final String NO_TEXTURE = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
 
-    @NotNull
     protected static final Point DIALOG_SIZE = new Point(600, -1);
 
-    @NotNull
     protected static final String PROP_FLIP = "flip";
-
-    @NotNull
     protected static final String PROP_WRAP_MODE_S = "wrapModeS";
-
-    @NotNull
     protected static final String PROP_WRAP_MODE_T = "wrapModeT";
-
-    @NotNull
     protected static final String PROP_MAG_FILTER = "magFilter";
-
-    @NotNull
     protected static final String PROP_MIN_FILTER = "minFilter";
 
     /**
      * The image channels preview.
      */
-    @Nullable
-    private ImageChannelPreview textureTooltip;
+    @NotNull
+    private final ImageChannelPreview textureTooltip;
 
     /**
      * The image preview.
      */
-    @Nullable
-    private ImageView texturePreview;
+    @NotNull
+    private final ImageView texturePreview;
 
     /**
      * The label for of path to a texture.
      */
-    @Nullable
-    private Label textureLabel;
+    @NotNull
+    private final Label textureLabel;
 
     /**
      * The field container.
      */
-    @Nullable
-    private HBox fieldContainer;
+    @NotNull
+    private final HBox fieldContainer;
 
     public Texture2dPropertyControl(
             @Nullable Texture2D propertyValue,
@@ -103,6 +92,10 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
             @NotNull C changeConsumer
     ) {
         super(propertyValue, propertyName, changeConsumer);
+        this.fieldContainer = new HBox();
+        this.textureTooltip = new ImageChannelPreview();
+        this.texturePreview = new ImageView();
+        this.textureLabel = new Label(NO_TEXTURE);
         setOnDragOver(this::handleDragOverEvent);
         setOnDragDropped(this::handleDragDroppedEvent);
     }
@@ -119,7 +112,8 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
      */
     @FxThread
     protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
-        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2dPropertyControl::changeTexture);
+        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this,
+                Texture2dPropertyControl::changeTexture);
     }
 
     /**
@@ -137,18 +131,13 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
     protected void createControls(@NotNull HBox container) {
         super.createControls(container);
 
-        fieldContainer = new HBox();
-
         if (!isSingleRow()) {
             fieldContainer.prefWidthProperty()
                     .bind(container.widthProperty());
         }
 
-        textureTooltip = new ImageChannelPreview();
-
         var previewContainer = new VBox();
 
-        texturePreview = new ImageView();
         texturePreview.fitHeightProperty()
                 .bind(previewContainer.heightProperty());
         texturePreview.fitWidthProperty()
@@ -172,7 +161,6 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
 
         if (!isSingleRow()) {
 
-            textureLabel = new Label(NO_TEXTURE);
             textureLabel.prefWidthProperty()
                     .bind(widthProperty()
                         .subtract(removeButton.widthProperty())
@@ -211,47 +199,8 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
      */
     @FxThread
     protected @NotNull BooleanBinding buildDisableRemoveCondition() {
-        return getTexturePreview().imageProperty().isNull();
-    }
-
-    /**
-     * Get the texture label.
-     *
-     * @return the texture label.
-     */
-    @FxThread
-    private @NotNull Label getTextureLabel() {
-        return notNull(textureLabel);
-    }
-
-    /**
-     * Get the field container.
-     *
-     * @return the field container.
-     */
-    @FxThread
-    protected @NotNull HBox getFieldContainer() {
-        return notNull(fieldContainer);
-    }
-
-    /**
-     * Get the texture preview.
-     *
-     * @return the texture preview.
-     */
-    @FxThread
-    private @NotNull ImageView getTexturePreview() {
-        return notNull(texturePreview);
-    }
-
-    /**
-     * Get the image channels preview.
-     *
-     * @return the image channels preview.
-     */
-    @FxThread
-    private @NotNull ImageChannelPreview getTextureTooltip() {
-        return notNull(textureTooltip);
+        return texturePreview.imageProperty()
+                .isNull();
     }
 
     /**
@@ -371,37 +320,44 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
 
     @Override
     @FxThread
-    protected void reload() {
+    protected void reloadImpl() {
 
-        var texture2D = getPropertyValue();
-        var key = texture2D == null ? null : texture2D.getKey();
+        var assetKey = getPropertyValueOpt()
+                .map(Texture::getKey);
 
         if (!isSingleRow()) {
-            getTextureLabel().setText(key == null ? NO_TEXTURE : key.getName());
+            textureLabel.setText(assetKey.map(AssetKey::getName)
+                    .orElse(NO_TEXTURE));
         }
 
-        var textureTooltip = getTextureTooltip();
-        var preview = getTexturePreview();
+        assetKey.ifPresentOrElse(this::loadTexture, this::clearTexture);
 
-        if (key == null) {
-            preview.setImage(null);
-            textureTooltip.clean();
-            preview.setDisable(true);
-            preview.setMouseTransparent(true);
+        super.reloadImpl();
+    }
+
+    @FxThread
+    private void loadTexture(@NotNull AssetKey key) {
+
+        texturePreview.setDisable(false);
+        texturePreview.setMouseTransparent(false);
+
+        var realFile = EditorUtil.requireRealFile(key);
+        var imageManager = JavaFxImageManager.getInstance();
+
+        if (Files.exists(realFile)) {
+            texturePreview.setImage(imageManager.getImagePreview(realFile, 24, 24));
+            textureTooltip.showImage(realFile);
         } else {
-
-            preview.setDisable(false);
-            preview.setMouseTransparent(false);
-
-            var realFile = notNull(getRealFile(key.getName()));
-
-            if (Files.exists(realFile)) {
-                preview.setImage(IMAGE_MANAGER.getImagePreview(realFile, 24, 24));
-                textureTooltip.showImage(realFile);
-            } else {
-                preview.setImage(IMAGE_MANAGER.getImagePreview(key.getName(), 24, 24));
-                textureTooltip.showImage(key.getName());
-            }
+            texturePreview.setImage(imageManager.getImagePreview(key.getName(), 24, 24));
+            textureTooltip.showImage(key.getName());
         }
+    }
+
+    @FxThread
+    private void clearTexture() {
+        texturePreview.setImage(null);
+        textureTooltip.clean();
+        texturePreview.setDisable(true);
+        texturePreview.setMouseTransparent(true);
     }
 }

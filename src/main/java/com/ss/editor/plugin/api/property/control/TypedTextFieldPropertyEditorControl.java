@@ -35,8 +35,8 @@ public abstract class TypedTextFieldPropertyEditorControl<T, F extends TypedText
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         valueField = createField();
         valueField.prefWidthProperty()

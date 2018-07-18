@@ -357,7 +357,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
         heightMapScaleField = new FloatTextField();
         heightMapScaleField.prefWidthProperty().bind(baseTextureControl.widthProperty());
-        heightMapScaleField.setValue(1);
+        heightMapScaleField.setValue(1F);
 
         heightMapSettings = new GridPane();
         heightMapSettings.add(heightMapImageControlLabel, 0, 0);
@@ -388,8 +388,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
         hillMinRadiusField = new FloatTextField();
         hillMinRadiusField.prefWidthProperty().bind(baseTextureControl.widthProperty());
-        hillMinRadiusField.setMinMax(0, 1000);
-        hillMinRadiusField.setValue(20);
+        hillMinRadiusField.setMinMax(0F, 1000F);
+        hillMinRadiusField.setValue(20F);
         hillMinRadiusField.addChangeListener((observable, oldValue, newValue) -> validate());
 
         final Label hillMaxRadiusLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_MAX_RADIUS + ":");
@@ -397,8 +397,8 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
         hillMaxRadiusField = new FloatTextField();
         hillMaxRadiusField.prefWidthProperty().bind(baseTextureControl.widthProperty());
-        hillMaxRadiusField.setMinMax(0, 1000);
-        hillMaxRadiusField.setValue(50);
+        hillMaxRadiusField.setMinMax(0F, 1000F);
+        hillMaxRadiusField.setValue(50F);
         hillMaxRadiusField.addChangeListener((observable, oldValue, newValue) -> validate());
 
         hillSettings = new GridPane();

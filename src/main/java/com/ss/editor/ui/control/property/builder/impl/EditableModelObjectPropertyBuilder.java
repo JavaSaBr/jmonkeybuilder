@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
+import com.jme3.audio.AudioKey;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
@@ -47,7 +48,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new LightElementModelPropertyControl<DirectionalLight, EditableProperty<DirectionalLight, ?>>(
-                    DirectionalLight.class, value, property.getName(), changeConsumer);
+                        DirectionalLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -58,7 +59,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new LightElementModelPropertyControl<AmbientLight, EditableProperty<AmbientLight, ?>>(
-                    AmbientLight.class, value, property.getName(), changeConsumer);
+                        AmbientLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -69,7 +70,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new LightElementModelPropertyControl<PointLight, EditableProperty<PointLight, ?>>(
-                    PointLight.class, value, property.getName(), changeConsumer);
+                        PointLight.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -80,7 +81,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new LightElementModelPropertyControl<Light, EditableProperty<Light, ?>>(
-                    Light.class, value, property.getName(), changeConsumer);
+                        Light.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -91,7 +92,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new SpatialElementModelPropertyControl<Spatial, EditableProperty<Spatial, ?>>(
-                    Spatial.class, value, property.getName(), changeConsumer);
+                        Spatial.class, value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -102,7 +103,18 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new SpatialElementModelPropertyControl<Node, EditableProperty<Node, ?>>(
-                    Node.class, value, property.getName(), changeConsumer);
+                        Node.class, value, property.getName(), changeConsumer);
+
+                addControl(container, property, propertyControl);
+                break;
+            }
+            case AUDIO_KEY: {
+
+                EditableProperty<AudioKey, ?> property = cast(description);
+
+                var value = property.getValue();
+                var propertyControl = new AudioKeyPropertyControl<ModelChangeConsumer, EditableProperty<AudioKey, ?>>(
+                        value, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;
@@ -122,7 +134,7 @@ public class EditableModelObjectPropertyBuilder extends EditableObjectPropertyBu
 
                 var value = property.getValue();
                 var propertyControl = new FilterElementModelPropertyControl<EditableProperty<Filter, ?>>(
-                    value, property.getName(), consumer);
+                        value, property.getName(), consumer);
 
                 addControl(container, property, propertyControl);
                 break;

@@ -53,8 +53,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         resourceLabel = new Label(NOT_SELECTED);
 

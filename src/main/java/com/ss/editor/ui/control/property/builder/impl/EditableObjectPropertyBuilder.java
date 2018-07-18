@@ -193,7 +193,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
                 var currentValue = property.getValue();
 
                 var propertyControl = new QuaternionPropertyControl<C, EditableProperty<Quaternion, ?>>(
-                    currentValue, property.getName(), changeConsumer);
+                        currentValue, property.getName(), changeConsumer);
 
                 addControl(container, property, propertyControl);
                 break;

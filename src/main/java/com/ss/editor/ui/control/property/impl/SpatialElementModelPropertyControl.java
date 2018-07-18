@@ -5,6 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.dialog.node.selector.NodeSelectorDialog;
 import com.ss.editor.ui.dialog.node.selector.SpatialSelectorDialog;
+import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,13 +35,13 @@ public class SpatialElementModelPropertyControl<T extends Spatial, D> extends El
 
     @Override
     @FxThread
-    protected void reload() {
-
-        var spatial = getPropertyValue();
-
-        String name = spatial == null ? null : spatial.getName();
-        name = name == null && spatial != null ? spatial.getClass().getSimpleName() : name;
-
-        getElementLabel().setText(name == null ? NO_ELEMENT : name);
+    protected @NotNull String getElementText() {
+        return getPropertyValueOpt()
+                .map(Spatial::getName)
+                .filter(StringUtils::isNotEmpty)
+                .or(() -> getPropertyValueOpt()
+                        .map(Spatial::getClass)
+                        .map(Class::getSimpleName))
+                .orElse(NO_ELEMENT);
     }
 }

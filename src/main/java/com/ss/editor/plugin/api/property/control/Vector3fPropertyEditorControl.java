@@ -49,8 +49,8 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         var resultWidth = widthProperty()
                 .multiply(DEFAULT_FIELD_W_PERCENT);

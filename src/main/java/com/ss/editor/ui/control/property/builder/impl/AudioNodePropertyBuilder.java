@@ -1,16 +1,12 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
-import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
-import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.SeparatorProperty;
-import com.ss.editor.extension.property.SimpleProperty;
+import com.ss.editor.extension.property.*;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.AudioKeyPropertyControl;
@@ -28,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import static com.ss.editor.extension.property.EditablePropertyType.*;
+
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link AudioNode} objects.
  *
@@ -35,12 +33,12 @@ import java.util.function.BiConsumer;
  */
 public class AudioNodePropertyBuilder extends EditableModelObjectPropertyBuilder {
 
-    private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
+    private static final Setter<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
         var assetManager = EditorUtil.getAssetManager();
 
         if (audioKey == null) {
-            audioNode.setAudioData(null, null);
+            AudioNodeUtils.updateData(audioNode, null, null);
         } else {
             AudioNodeUtils.updateData(audioNode, assetManager.loadAudio(audioKey), audioKey);
         }
@@ -92,194 +90,13 @@ public class AudioNodePropertyBuilder extends EditableModelObjectPropertyBuilder
 
         properties.add(SeparatorProperty.getInstance());
 
+        properties.add(new SimpleProperty<>(AUDIO_KEY, Messages.MODEL_PROPERTY_AUDIO_DATA, audioNode,
+                AudioNodeUtils::getAudioKey, AUDIO_APPLY_HANDLER));
+        properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_VELOCITY, audioNode,
+                AudioNode::getVelocity, AudioNode::setVelocity));
+        properties.add(new SimpleProperty<>(VECTOR_3F, Messages.MODEL_PROPERTY_DIRECTION, audioNode,
+                AudioNode::getDirection, AudioNode::setDirection));
 
-        final AudioKeyPropertyControl<ModelChangeConsumer> audioKeyControl = new AudioKeyPropertyControl<>(key,
-                Messages.MODEL_PROPERTY_AUDIO_DATA, changeConsumer);
-
-        audioKeyControl.setApplyHandler(AUDIO_APPLY_HANDLER);
-        audioKeyControl.setSyncHandler(AudioNodeUtils::getAudioKey);
-        audioKeyControl.setEditObject(audioNode);
-
-        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3fPropertyControl<>(velocity,
-                Messages.MODEL_PROPERTY_VELOCITY, changeConsumer);
-
-        velocityControl.setApplyHandler(AudioNode::setVelocity);
-        velocityControl.setSyncHandler(AudioNode::getVelocity);
-        velocityControl.setEditObject(audioNode);
-
-        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3fPropertyControl<>(direction,
-                Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
-
-        directionControl.setApplyHandler(AudioNode::setDirection);
-        directionControl.setSyncHandler(AudioNode::getDirection);
-        directionControl.setEditObject(audioNode);
-
-        buildSplitLine(container);
-
-        FXUtils.addToPane(audioKeyControl, container);
-        FXUtils.addToPane(velocityControl, container);
-        FXUtils.addToPane(directionControl, container);
-
-        buildSplitLine(container);
-
-        return super.getProperties(object);
-    }
-
-    @Override
-    @FxThread
-    protected void buildForImpl(
-            @NotNull Object object,
-            @Nullable Object parent,
-            @NotNull VBox container,
-            @NotNull ModelChangeConsumer changeConsumer
-    ) {
-
-        if (!(object instanceof AudioNode)) {
-            return;
-        }
-
-        var audioNode = (AudioNode) object;
-        var key = AudioNodeUtils.getAudioKey(audioNode);
-
-        final Vector3f velocity = audioNode.getVelocity();
-        final Vector3f direction = audioNode.getDirection();
-
-        final float pitch = audioNode.getPitch();
-        final float volume = audioNode.getVolume();
-        final float timeOffset = audioNode.getTimeOffset();
-        final float maxDistance = audioNode.getMaxDistance();
-        final float refDistance = audioNode.getRefDistance();
-        final float innerAngle = audioNode.getInnerAngle();
-        final float outerAngle = audioNode.getOuterAngle();
-
-        final boolean looping = audioNode.isLooping();
-        final boolean reverbEnabled = audioNode.isReverbEnabled();
-        final boolean directional = audioNode.isDirectional();
-        final boolean positional = audioNode.isPositional();
-
-        final BooleanPropertyControl<ModelChangeConsumer, AudioNode> loopControl = new BooleanPropertyControl<>(looping,
-                Messages.MODEL_PROPERTY_IS_LOOPING, changeConsumer);
-
-        loopControl.setApplyHandler(AudioNode::setLooping);
-        loopControl.setSyncHandler(AudioNode::isLooping);
-        loopControl.setEditObject(audioNode);
-
-        final BooleanPropertyControl<ModelChangeConsumer, AudioNode> reverbControl = new BooleanPropertyControl<>(reverbEnabled,
-                Messages.MODEL_PROPERTY_IS_REVERB, changeConsumer);
-
-        reverbControl.setApplyHandler(AudioNode::setReverbEnabled);
-        reverbControl.setSyncHandler(AudioNode::isReverbEnabled);
-        reverbControl.setEditObject(audioNode);
-
-        final BooleanPropertyControl<ModelChangeConsumer, AudioNode> directionalControl = new BooleanPropertyControl<>(directional,
-                Messages.MODEL_PROPERTY_IS_DIRECTIONAL, changeConsumer);
-
-        directionalControl.setApplyHandler(AudioNode::setDirectional);
-        directionalControl.setSyncHandler(AudioNode::isDirectional);
-        directionalControl.setEditObject(audioNode);
-
-        final BooleanPropertyControl<ModelChangeConsumer, AudioNode> positionalControl = new BooleanPropertyControl<>(positional,
-                Messages.MODEL_PROPERTY_IS_POSITIONAL, changeConsumer);
-
-        positionalControl.setApplyHandler(AudioNode::setPositional);
-        positionalControl.setSyncHandler(AudioNode::isPositional);
-        positionalControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> pitchControl = new FloatPropertyControl<>(pitch,
-                Messages.MODEL_PROPERTY_AUDIO_PITCH, changeConsumer);
-
-        pitchControl.setApplyHandler(AudioNode::setPitch);
-        pitchControl.setSyncHandler(AudioNode::getPitch);
-        pitchControl.setMinMax(0.5F, 2.0F);
-        pitchControl.setScrollPower(2F);
-        pitchControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> volumeControl = new FloatPropertyControl<>(volume,
-                Messages.MODEL_PROPERTY_AUDIO_VOLUME, changeConsumer);
-
-        volumeControl.setApplyHandler(AudioNode::setVolume);
-        volumeControl.setSyncHandler(AudioNode::getVolume);
-        volumeControl.setMinMax(0F, Float.MAX_VALUE);
-        volumeControl.setScrollPower(5F);
-        volumeControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> timeOffsetControl = new FloatPropertyControl<>(timeOffset,
-                Messages.MODEL_PROPERTY_TIME_OFFSET, changeConsumer);
-
-        timeOffsetControl.setApplyHandler(AudioNode::setTimeOffset);
-        timeOffsetControl.setSyncHandler(AudioNode::getTimeOffset);
-        timeOffsetControl.setMinMax(0F, Float.MAX_VALUE);
-        timeOffsetControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> maxDistanceControl = new FloatPropertyControl<>(maxDistance,
-                Messages.MODEL_PROPERTY_MAX_DISTANCE, changeConsumer);
-
-        maxDistanceControl.setApplyHandler(AudioNode::setMaxDistance);
-        maxDistanceControl.setSyncHandler(AudioNode::getMaxDistance);
-        maxDistanceControl.setMinMax(0F, Float.MAX_VALUE);
-        maxDistanceControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> refDistanceControl = new FloatPropertyControl<>(refDistance,
-                Messages.MODEL_PROPERTY_REF_DISTANCE, changeConsumer);
-
-        refDistanceControl.setApplyHandler(AudioNode::setRefDistance);
-        refDistanceControl.setSyncHandler(AudioNode::getRefDistance);
-        refDistanceControl.setMinMax(0F, Float.MAX_VALUE);
-        refDistanceControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> innerAngleControl = new FloatPropertyControl<>(innerAngle,
-                Messages.MODEL_PROPERTY_INNER_ANGLE, changeConsumer);
-
-        innerAngleControl.setApplyHandler(AudioNode::setInnerAngle);
-        innerAngleControl.setSyncHandler(AudioNode::getInnerAngle);
-        innerAngleControl.setEditObject(audioNode);
-
-        final FloatPropertyControl<ModelChangeConsumer, AudioNode> outerAngleControl = new FloatPropertyControl<>(outerAngle,
-                Messages.MODEL_PROPERTY_OUTER_ANGLE, changeConsumer);
-
-        outerAngleControl.setApplyHandler(AudioNode::setOuterAngle);
-        outerAngleControl.setSyncHandler(AudioNode::getOuterAngle);
-        outerAngleControl.setEditObject(audioNode);
-
-        FXUtils.addToPane(loopControl, container);
-        FXUtils.addToPane(reverbControl, container);
-        FXUtils.addToPane(directionalControl, container);
-        FXUtils.addToPane(positionalControl, container);
-        FXUtils.addToPane(pitchControl, container);
-        FXUtils.addToPane(volumeControl, container);
-        FXUtils.addToPane(timeOffsetControl, container);
-        FXUtils.addToPane(maxDistanceControl, container);
-        FXUtils.addToPane(refDistanceControl, container);
-        FXUtils.addToPane(innerAngleControl, container);
-        FXUtils.addToPane(outerAngleControl, container);
-
-        final AudioKeyPropertyControl<ModelChangeConsumer> audioKeyControl = new AudioKeyPropertyControl<>(key,
-                Messages.MODEL_PROPERTY_AUDIO_DATA, changeConsumer);
-
-        audioKeyControl.setApplyHandler(AUDIO_APPLY_HANDLER);
-        audioKeyControl.setSyncHandler(AudioNodeUtils::getAudioKey);
-        audioKeyControl.setEditObject(audioNode);
-
-        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> velocityControl = new Vector3fPropertyControl<>(velocity,
-                Messages.MODEL_PROPERTY_VELOCITY, changeConsumer);
-
-        velocityControl.setApplyHandler(AudioNode::setVelocity);
-        velocityControl.setSyncHandler(AudioNode::getVelocity);
-        velocityControl.setEditObject(audioNode);
-
-        final Vector3fPropertyControl<ModelChangeConsumer, AudioNode> directionControl = new Vector3fPropertyControl<>(direction,
-                Messages.MODEL_PROPERTY_DIRECTION, changeConsumer);
-
-        directionControl.setApplyHandler(AudioNode::setDirection);
-        directionControl.setSyncHandler(AudioNode::getDirection);
-        directionControl.setEditObject(audioNode);
-
-        buildSplitLine(container);
-
-        FXUtils.addToPane(audioKeyControl, container);
-        FXUtils.addToPane(velocityControl, container);
-        FXUtils.addToPane(directionControl, container);
-
-        buildSplitLine(container);
+        return properties;
     }
 }

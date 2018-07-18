@@ -34,8 +34,8 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
 
     @Override
     @FxThread
-    protected void createComponents() {
-        super.createComponents();
+    protected void postConstruct() {
+        super.postConstruct();
 
         checkBox = new CheckBox();
         checkBox.prefWidthProperty()
