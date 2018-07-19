@@ -112,8 +112,7 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
      */
     @FxThread
     protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
-        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this,
-                Texture2dPropertyControl::changeTexture);
+        UiUtils.handleDroppedFile(dragEvent, this, Texture2dPropertyControl::changeTexture);
     }
 
     /**

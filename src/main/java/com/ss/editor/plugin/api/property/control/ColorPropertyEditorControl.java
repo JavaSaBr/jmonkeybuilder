@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -11,7 +10,6 @@ import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ColorPicker;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The control to edit color values.
@@ -23,8 +21,8 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     /**
      * The color picker.
      */
-    @Nullable
-    private ColorPicker colorPicker;
+    @NotNull
+    private final ColorPicker colorPicker;
 
     protected ColorPropertyEditorControl(
             @NotNull VarTable vars,
@@ -32,44 +30,34 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
             @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
+        this.colorPicker = new ColorPicker();
     }
 
     @Override
     @FxThread
-    protected void postConstruct() {
+    public void postConstruct() {
         super.postConstruct();
 
-        colorPicker = new ColorPicker();
         colorPicker.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FxControlUtils.onColorChange(colorPicker, this::change);
 
-        FxUtils.addClass(colorPicker, CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
+        FxUtils.addClass(colorPicker,
+                CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
+
         FxUtils.addChild(this, colorPicker);
     }
 
-    /**
-     * Get the color picker.
-     *
-     * @return the color picker.
-     */
-    @FxThread
-    private @NotNull ColorPicker getColorPicker() {
-        return notNull(colorPicker);
-    }
-
     @Override
-    @FxThread
-    public void reload() {
-        super.reload();
-        getColorPicker().setValue(UiUtils.from(getPropertyValue()));
+    protected void reloadImpl() {
+        colorPicker.setValue(UiUtils.from(getPropertyValue()));
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        var colorPicker = getColorPicker();
         setPropertyValue(UiUtils.from(colorPicker.getValue()));
         super.changeImpl();
     }

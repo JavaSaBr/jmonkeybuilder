@@ -50,8 +50,10 @@ public class PropertyControl<C extends ChangeConsumer, D, T> extends VBox implem
     public interface ChangeHandler<C, D, T> extends SixObjectConsumer<C, D, String, T,  T, BiConsumer<D, T>> {
     }
 
-    protected static final Predicate<Class<?>> DEFAULT_ACTION_TESTER = type -> type == NewFileAction.class ||
-            type == DeleteFileAction.class || type == RenameFileAction.class;
+    protected static final Predicate<Class<?>> DEFAULT_ACTION_TESTER =
+            type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     public static final double CONTROL_WIDTH_PERCENT = 0.4;
     public static final double CONTROL_WIDTH_PERCENT_2 = 0.6;

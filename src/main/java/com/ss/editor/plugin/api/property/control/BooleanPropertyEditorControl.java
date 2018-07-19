@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
@@ -9,7 +8,6 @@ import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.CheckBox;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The control to edit boolean values.
@@ -21,8 +19,8 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     /**
      * The {@link CheckBox} with current value.
      */
-    @Nullable
-    private CheckBox checkBox;
+    @NotNull
+    private final CheckBox checkBox;
 
     protected BooleanPropertyEditorControl(
             @NotNull VarTable vars,
@@ -30,14 +28,14 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
             @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
+        this.checkBox = new CheckBox();
     }
 
     @Override
     @FxThread
-    protected void postConstruct() {
+    public void postConstruct() {
         super.postConstruct();
 
-        checkBox = new CheckBox();
         checkBox.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
@@ -47,27 +45,17 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
         FxUtils.addChild(this, checkBox);
     }
 
-    /**
-     * Get the check box with current value.
-     *
-     * @return the check box with current value.
-     */
-    @FxThread
-    private @NotNull CheckBox getCheckBox() {
-        return notNull(checkBox);
-    }
-
     @Override
     @FxThread
-    public void reload() {
-        super.reload();
-        getCheckBox().setSelected(Boolean.TRUE.equals(getPropertyValue()));
+    protected void reloadImpl() {
+        checkBox.setSelected(Boolean.TRUE.equals(getPropertyValue()));
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        setPropertyValue(getCheckBox().isSelected());
+        setPropertyValue(checkBox.isSelected());
         super.changeImpl();
     }
 }

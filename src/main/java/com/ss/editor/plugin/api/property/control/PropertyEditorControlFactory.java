@@ -40,10 +40,19 @@ public class PropertyEditorControlFactory {
             @NotNull PropertyDefinition definition,
             @NotNull Runnable validation
     ) {
+
+        var min = definition.getMin();
+        var max = definition.getMax();
+
         switch (definition.getPropertyType()) {
             case FLOAT: {
+
                 var control = new FloatPropertyEditorControl(vars, definition, validation);
-                control.setMinMax(definition.getMin(), definition.getMax());
+
+                if (!Float.isNaN(min) && !Float.isNaN(max)) {
+                    control.setMinMax(min, max);
+                }
+
                 return control;
             }
             case COLOR:
@@ -51,8 +60,13 @@ public class PropertyEditorControlFactory {
             case BOOLEAN:
                 return new BooleanPropertyEditorControl(vars, definition, validation);
             case INTEGER: {
+
                 var control = new IntegerPropertyEditorControl(vars, definition, validation);
-                control.setMinMax(definition.getMin(), definition.getMax());
+
+                if (!Float.isNaN(min) && !Float.isNaN(max)) {
+                    control.setMinMax((int) min, (int) max);
+                }
+                
                 return control;
             }
             case VECTOR_3F:

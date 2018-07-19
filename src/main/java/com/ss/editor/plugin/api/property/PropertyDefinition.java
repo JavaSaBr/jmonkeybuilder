@@ -2,6 +2,7 @@ package com.ss.editor.plugin.api.property;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -173,13 +174,23 @@ public class PropertyDefinition {
     }
 
     /**
-     * Get the name of the property.
+     * Get the default value of the property.
      *
-     * @return the name of the property.
+     * @return the default value of the property or null.
      */
     @FromAnyThread
     public @Nullable Object getDefaultValue() {
         return defaultValue;
+    }
+
+    /**
+     * Get the default value of the property.
+     *
+     * @return the default value of the property.
+     */
+    @FromAnyThread
+    public @NotNull Object requireDefaultValue() {
+        return ObjectUtils.notNull(defaultValue);
     }
 
     /**

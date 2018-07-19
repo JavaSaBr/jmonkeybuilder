@@ -19,7 +19,6 @@ public class ObjectFromListPropertyEditorControl extends ComboBoxPropertyEditorC
             @NotNull Array<?> options
     ) {
         super(vars, definition, validationCallback);
-        var comboBox = getComboBox();
         options.forEach(comboBox.getItems(),
                 (option, items) -> items.add(option));
     }

@@ -11,13 +11,13 @@ import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The base implementation of an editor control to edit properties on the factory dialog.
@@ -257,6 +257,20 @@ public class PropertyEditorControl<T> extends HBox {
     protected @Nullable T getPropertyValue() {
         if (!vars.has(id)) return null;
         return vars.get(id);
+    }
+
+    /**
+     * Get the current property value.
+     *
+     * @return the optional value of the current property value.
+     */
+    @FromAnyThread
+    protected @NotNull Optional<T> getPropertyValueOpt() {
+        if (!vars.has(id)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(vars.get(id));
+        }
     }
 
     /**

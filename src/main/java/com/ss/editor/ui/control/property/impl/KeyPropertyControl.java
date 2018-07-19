@@ -83,7 +83,7 @@ public abstract class KeyPropertyControl<C extends ChangeConsumer, E, T>
      */
     @FxThread
     protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
-        UiUtils.handleDroppedFile(dragEvent, getExtensions(), this, KeyPropertyControl::applyNewKey);
+        UiUtils.handleDroppedFile(dragEvent, this, KeyPropertyControl::applyNewKey);
     }
 
     /**

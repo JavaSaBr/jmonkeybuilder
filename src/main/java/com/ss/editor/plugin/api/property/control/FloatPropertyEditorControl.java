@@ -2,6 +2,7 @@ package com.ss.editor.plugin.api.property.control;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.rlib.common.util.ExtMath;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.fx.control.input.FloatTextField;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class FloatPropertyEditorControl extends TypedTextFieldPropertyEditorControl<Float, FloatTextField> {
+public class FloatPropertyEditorControl extends NumberPropertyEditorControl<Float, FloatTextField> {
 
     public FloatPropertyEditorControl(
             @NotNull VarTable vars,
@@ -27,30 +28,10 @@ public class FloatPropertyEditorControl extends TypedTextFieldPropertyEditorCont
         return new FloatTextField();
     }
 
-    /**
-     * Set min/max values.
-     *
-     * @param min the min value.
-     * @param max the max value.
-     */
-    @FxThread
-    public void setMinMax(float min, float max) {
-        if (Float.isNaN(min) || Float.isNaN(max)) return;
-        getValueField().setMinMax(min, max);
-    }
-
     @Override
     @FxThread
-    public void reload() {
-        super.reload();
-        var value = getPropertyValue();
-        getValueField().setValue(value == null ? 0 : value);
-    }
-
-    @Override
-    @FxThread
-    protected void changeImpl() {
-        setPropertyValue(getValueField().getValue());
-        super.changeImpl();
+    protected void reloadImpl() {
+        valueField.setValue(ExtMath.zeroIfNull(getPropertyValue()));
+        super.reloadImpl();
     }
 }

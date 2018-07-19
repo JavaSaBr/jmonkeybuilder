@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.property.impl;
 
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
-import com.jme3.audio.AudioNode;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
@@ -26,7 +25,8 @@ import java.nio.file.Path;
 public class AudioKeyPropertyControl<C extends ChangeConsumer, E> extends
         AssetKeyPropertyControl<C, E, AudioData, AudioKey> {
 
-    private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
+    private static final String NO_AUDIO =
+            Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
 
     public AudioKeyPropertyControl(
             @Nullable AudioKey element,

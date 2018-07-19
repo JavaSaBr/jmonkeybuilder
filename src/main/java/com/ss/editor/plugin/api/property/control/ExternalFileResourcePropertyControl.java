@@ -35,8 +35,8 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
 
     @Override
     @FxThread
-    protected void chooseNew() {
-        super.chooseNew();
+    protected void chooseNewResource() {
+        super.chooseNewResource();
 
         var dialog = new ExternalFileEditorDialog(this::openExternalFile);
         dialog.setTitleText(Messages.ASSET_EDITOR_DIALOG_TITLE);
@@ -56,15 +56,14 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
         reload();
     }
 
-
     @Override
     @FxThread
-    public void reload() {
+    protected void reloadImpl() {
 
-        var resource = getPropertyValue();
-        var resourceLabel = getResourceLabel();
-        resourceLabel.setText(resource == null ? NOT_SELECTED : resource.toString());
+        resourceLabel.setText(getPropertyValueOpt()
+                .map(Path::toString)
+                .orElse(NOT_SELECTED));
 
-        super.reload();
+        super.reloadImpl();
     }
 }

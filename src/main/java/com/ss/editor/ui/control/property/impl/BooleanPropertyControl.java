@@ -58,7 +58,9 @@ public class BooleanPropertyControl<C extends ChangeConsumer, D> extends Propert
 
         FxControlUtils.onSelectedChange(checkBox, this::updateValue);
 
-        FxUtils.addClass(checkBox, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
+        FxUtils.addClass(checkBox,
+                CssClasses.PROPERTY_CONTROL_CHECK_BOX);
+
         FxUtils.addChild(container, checkBox);
     }
 

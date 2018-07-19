@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CssClasses;
@@ -9,7 +8,6 @@ import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The control to edit string values.
@@ -21,8 +19,8 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     /**
      * The value field.
      */
-    @Nullable
-    private TextField valueField;
+    @NotNull
+    private final TextField valueField;
 
     protected StringPropertyEditorControl(
             @NotNull VarTable vars,
@@ -30,45 +28,39 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
             @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
+        this.valueField = new TextField();
     }
 
     @Override
     @FxThread
-    protected void postConstruct() {
+    public void postConstruct() {
         super.postConstruct();
 
-        valueField = new TextField();
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FxControlUtils.onTextChange(valueField, this::change);
 
-        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
-        FxUtils.addChild(this, valueField);
-    }
+        FxUtils.addClass(valueField,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
-    /**
-     * Get the value field.
-     *
-     * @return the value field.
-     */
-    @FxThread
-    private @NotNull TextField getValueField() {
-        return notNull(valueField);
+        FxUtils.addChild(this, valueField);
     }
 
     @Override
     @FxThread
-    public void reload() {
-        super.reload();
-        var value = getPropertyValue();
-        getValueField().setText(value == null ? "" : value);
+    protected void reloadImpl() {
+
+        valueField.setText(getPropertyValueOpt()
+                .orElse(""));
+
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        setPropertyValue(getValueField().getText());
+        setPropertyValue(valueField.getText());
         super.changeImpl();
     }
 }

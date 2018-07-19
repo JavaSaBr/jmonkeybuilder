@@ -6,7 +6,6 @@ import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -19,14 +18,10 @@ import java.util.function.Predicate;
  */
 public abstract class AssetResourcePropertyEditorControl<T> extends ResourcePropertyEditorControl<T> {
 
-    private static final Predicate<Class<?>> DEFAULT_ACTION_TESTER = type -> false;
-
-    private static final Array<String> DEFAULT_EXTENSIONS = ArrayFactory.newArray(String.class);
-
     protected AssetResourcePropertyEditorControl(
-            @NotNull final VarTable vars,
-            @NotNull final PropertyDefinition definition,
-            @NotNull final Runnable validationCallback
+            @NotNull VarTable vars,
+            @NotNull PropertyDefinition definition,
+            @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
     }
@@ -38,24 +33,24 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
      */
     @FromAnyThread
     protected @NotNull Predicate<Class<?>> getActionTester() {
-        return DEFAULT_ACTION_TESTER;
+        return type -> false;
     }
 
     /**
-     * Gets a list with available extensions.
+     * Get a list with available extensions.
      *
      * @return the list with available extensions.
      */
     @FromAnyThread
     protected @NotNull Array<String> getExtensions() {
-        return DEFAULT_EXTENSIONS;
+        return Array.empty();
     }
 
     @Override
     @FxThread
-    protected void chooseNew() {
-        super.chooseNew();
-        UiUtils.openFileAssetDialog(this::chooseNew, getExtensions(), getActionTester());
+    protected void chooseNewResource() {
+        super.chooseNewResource();
+        UiUtils.openFileAssetDialog(this::chooseNewResource, getExtensions(), getActionTester());
     }
 
     /**
@@ -64,7 +59,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
      * @param file the selected file.
      */
     @FxThread
-    protected void chooseNew(@NotNull Path file) {
+    protected void chooseNewResource(@NotNull Path file) {
         change();
         reload();
     }

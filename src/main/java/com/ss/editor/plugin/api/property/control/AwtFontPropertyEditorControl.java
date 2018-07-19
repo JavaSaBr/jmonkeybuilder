@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -26,7 +25,9 @@ import java.util.Arrays;
  */
 public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
 
-    private static final GraphicsEnvironment GRAPHICS_ENVIRONMENT = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private static final GraphicsEnvironment GRAPHICS_ENVIRONMENT =
+            GraphicsEnvironment.getLocalGraphicsEnvironment();
+
     private static final Font[] FONTS = GRAPHICS_ENVIRONMENT.getAllFonts();
 
     private static final StringConverter<Font> STRING_CONVERTER = new StringConverter<>() {
@@ -47,8 +48,8 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     /**
      * The list of available options of the string value.
      */
-    @Nullable
-    private ComboBox<Font> comboBox;
+    @NotNull
+    private final ComboBox<Font> comboBox;
 
     protected AwtFontPropertyEditorControl(
             @NotNull VarTable vars,
@@ -56,14 +57,14 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
             @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
+        this.comboBox = new ComboBox<>();
     }
 
     @Override
     @FxThread
-    protected void postConstruct() {
+    public void postConstruct() {
         super.postConstruct();
 
-        comboBox = new ComboBox<>();
         comboBox.getItems().addAll(FONTS);
         comboBox.setVisibleRowCount(20);
         comboBox.setConverter(STRING_CONVERTER);
@@ -72,12 +73,14 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         var selectionModel = comboBox.getSelectionModel();
-
         var editor = comboBox.getEditor();
+
         var binding = new AutoCompletionTextFieldBinding<Font>(editor,
                 new AwtFontSuggestionProvider(comboBox.getItems()), STRING_CONVERTER);
+
         binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
-        binding.prefWidthProperty().bind(comboBox.widthProperty().multiply(1.3));
+        binding.prefWidthProperty()
+                .bind(comboBox.widthProperty().multiply(1.3));
 
         FxControlUtils.onSelectedItemChange(comboBox, newValue -> {
             var executorManager = ExecutorManager.getInstance();
@@ -94,32 +97,23 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
         FxUtils.addChild(this, comboBox);
     }
 
-    /**
-     * @return The list of available options of the string value.
-     */
-    @FxThread
-    private @NotNull ComboBox<Font> getComboBox() {
-        return notNull(comboBox);
-    }
-
     @Override
     @FxThread
-    public void reload() {
-        super.reload();
-        var value = getPropertyValue();
-        getComboBox().getSelectionModel()
-                .select(value);
+    protected void reloadImpl() {
+
+        comboBox.getSelectionModel()
+                .select(getPropertyValue());
+
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
 
-        var selectionItem = getComboBox()
+        setPropertyValue(comboBox
                 .getSelectionModel()
-                .getSelectedItem();
-
-        setPropertyValue(selectionItem);
+                .getSelectedItem());
 
         super.changeImpl();
     }

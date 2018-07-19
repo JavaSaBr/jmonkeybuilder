@@ -1,27 +1,24 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.rlib.common.util.ClassUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.List;
+import java.nio.file.Path;
 
 /**
  * The control to edit resource values.
@@ -36,8 +33,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     /**
      * The label with name of the resource.
      */
-    @Nullable
-    private Label resourceLabel;
+    @NotNull
+    protected final Label resourceLabel;
 
     protected ResourcePropertyEditorControl(
             @NotNull VarTable vars,
@@ -45,6 +42,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
             @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
+        this.resourceLabel = new Label(NOT_SELECTED);
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
         setOnDragExited(this::dragExited);
@@ -53,18 +51,14 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
 
     @Override
     @FxThread
-    protected void postConstruct() {
+    public void postConstruct() {
         super.postConstruct();
-
-        resourceLabel = new Label(NOT_SELECTED);
 
         var changeButton = new Button();
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
-        changeButton.setOnAction(event -> chooseNew());
 
         var removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
-        removeButton.setOnAction(event -> removeCurrent());
         removeButton.disableProperty()
                 .bind(resourceLabel.textProperty().isEqualTo(NOT_SELECTED));
 
@@ -75,7 +69,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         resourceLabel.prefWidthProperty()
                 .bind(container.widthProperty());
 
-        FxUtils.addChild(this, container);
+        FxControlUtils.onAction(changeButton, this::chooseNewResource);
+        FxControlUtils.onAction(removeButton, this::removeCurrentResource);
 
         FxUtils.addClass(container,
                         CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER)
@@ -84,6 +79,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
                 .addClass(resourceLabel,
                         CssClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
+        FxUtils.addChild(this, container);
+
         DynamicIconSupport.addSupport(changeButton);
     }
 
@@ -91,7 +88,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      * Choose a new resource.
      */
     @FxThread
-    protected void chooseNew() {
+    protected void chooseNewResource() {
 
     }
 
@@ -99,7 +96,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      * Remove the current resource.
      */
     @FxThread
-    protected void removeCurrent() {
+    protected void removeCurrentResource() {
         setPropertyValue(null);
         change();
         reload();
@@ -117,66 +114,28 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      */
     @FxThread
     private void dragDropped(@NotNull DragEvent dragEvent) {
-
-        var dragboard = dragEvent.getDragboard();
-        var files = ClassUtils.<List<File>>unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        var file = files.get(0);
-        if (!canAccept(file)) {
-            return;
-        }
-
-        handleFile(file);
+        UiUtils.handleDroppedFile(dragEvent, this::chooseNewResource);
     }
 
     /**
-     * Handle a dropped file.
+     * Choose a new resource.
      *
-     * @param file the dropped file.
+     * @param file the resource's file.
      */
     @FxThread
-    protected void handleFile(@NotNull File file) {
+    protected void chooseNewResource(@NotNull Path file) {
     }
 
     /**
      * Handle drag over.
      */
     @FxThread
-    private void dragOver(@NotNull DragEvent dragEvent) {
-
-        var dragboard = dragEvent.getDragboard();
-        var files = ClassUtils.<List<File>>unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        var file = files.get(0);
-        if (!canAccept(file)) {
-            return;
-        }
-
-        var transferModes = dragboard.getTransferModes();
-        var isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
+    private void dragOver(@NotNull DragEvent dragEvent) { ;
+        UiUtils.acceptIfHasFile(dragEvent, this::canAccept);
     }
 
     @FxThread
     protected boolean canAccept(@NotNull File file) {
         return false;
-    }
-
-    /**
-     * @return the label with name of the resource.
-     */
-    @FxThread
-    protected @NotNull Label getResourceLabel() {
-        return notNull(resourceLabel);
     }
 }

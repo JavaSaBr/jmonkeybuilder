@@ -85,7 +85,9 @@ public class LodLevelPropertyControl<C extends ChangeConsumer> extends PropertyC
 
         FxControlUtils.onSelectedItemChange(levelComboBox, this::updateLevel);
 
-        FxUtils.addClass(levelComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addClass(levelComboBox,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, levelComboBox);
     }
 

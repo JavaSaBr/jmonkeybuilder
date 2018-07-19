@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -12,7 +11,6 @@ import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The control to edit float values.
@@ -24,20 +22,20 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     /**
      * The field X.
      */
-    @Nullable
-    private FloatTextField xField;
+    @NotNull
+    private final FloatTextField xField;
 
     /**
      * The field Y.
      */
-    @Nullable
-    private FloatTextField yField;
+    @NotNull
+    private final FloatTextField yField;
 
     /**
      * The field Z.
      */
-    @Nullable
-    private FloatTextField zField;
+    @NotNull
+    private final FloatTextField zField;
 
     protected Vector3fPropertyEditorControl(
             @NotNull VarTable vars,
@@ -45,11 +43,14 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
             @NotNull Runnable validationCallback
     ) {
         super(vars, definition, validationCallback);
+        this.xField = new FloatTextField();
+        this.yField = new FloatTextField();
+        this.zField = new FloatTextField();
     }
 
     @Override
     @FxThread
-    protected void postConstruct() {
+    public void postConstruct() {
         super.postConstruct();
 
         var resultWidth = widthProperty()
@@ -62,14 +63,12 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         var fieldWidth = gridPane.widthProperty()
                 .divide(3);
 
-        xField = new FloatTextField();
-        xField.prefWidthProperty().bind(fieldWidth);
-
-        yField = new FloatTextField();
-        yField.prefWidthProperty().bind(fieldWidth);
-
-        zField = new FloatTextField();
-        zField.prefWidthProperty().bind(fieldWidth);
+        xField.prefWidthProperty()
+                .bind(fieldWidth);
+        yField.prefWidthProperty()
+                .bind(fieldWidth);
+        zField.prefWidthProperty()
+                .bind(fieldWidth);
 
         gridPane.add(xField, 0, 0);
         gridPane.add(yField, 1, 0);
@@ -90,60 +89,28 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         UiUtils.addFocusBinding(gridPane, xField, yField, zField);
     }
 
-    /**
-     * Get the field X.
-     *
-     * @return the field X.
-     */
-    @FxThread
-    private @NotNull FloatTextField getXField() {
-        return notNull(xField);
-    }
-
-    /**
-     * Get the field Y.
-     *
-     * @return the field Y.
-     */
-    @FxThread
-    private @NotNull FloatTextField getYField() {
-        return notNull(yField);
-    }
-
-    /**
-     * Get the field Z.
-     *
-     * @return the field Z.
-     */
-    @FxThread
-    private @NotNull FloatTextField getZField() {
-        return notNull(zField);
-    }
-
     @Override
     @FxThread
-    public void reload() {
-        super.reload();
+    protected void reloadImpl() {
 
         var value = getPropertyValue();
 
-        var xField = getXField();
         xField.setValue(value == null ? 0 : value.getX());
-
-        var yField = getYField();
         yField.setValue(value == null ? 0 : value.getY());
-
-        var zField = getZField();
         zField.setValue(value == null ? 0 : value.getZ());
+
+        super.reloadImpl();
     }
 
     @Override
     @FxThread
     protected void changeImpl() {
-        var xField = getXField();
-        var yField = getYField();
-        var zField = getZField();
-        setPropertyValue(new Vector3f(xField.getValue(), yField.getValue(), zField.getValue()));
+
+        setPropertyValue(new Vector3f(
+                xField.getPrimitiveValue(),
+                yField.getPrimitiveValue(),
+                zField.getPrimitiveValue()));
+
         super.changeImpl();
     }
 }

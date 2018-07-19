@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.ifNull;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -75,7 +74,9 @@ public class LayerModelPropertyControl<D> extends PropertyControl<ModelChangeCon
 
         FxControlUtils.onSelectedItemChange(layerComboBox, this::updateLevel);
 
-        FxUtils.addClass(layerComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addClass(layerComboBox,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, layerComboBox);
     }
 

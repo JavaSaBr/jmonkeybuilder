@@ -82,7 +82,7 @@ public abstract class EditorUtil {
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
             new SimpleDateFormat("HH:mm:ss:SSS"));
 
-    private static ThreadLocal<ObjectDictionary<Class<?>, Enum<?>[]>> ENUM_VALUES_LOCAL =
+    private static final ThreadLocal<ObjectDictionary<Class<?>, Enum<?>[]>> ENUM_VALUES_LOCAL =
             ThreadLocal.withInitial(DictionaryFactory::newObjectDictionary);
 
     private static JmeApplication jmeApplication;

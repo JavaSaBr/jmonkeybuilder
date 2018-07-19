@@ -69,7 +69,9 @@ public class EnumPropertyControl<C extends ChangeConsumer, D, E extends Enum<?>>
 
         FxControlUtils.onSelectedItemChange(enumComboBox, this::change);
 
-        FxUtils.addClass(enumComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addClass(enumComboBox,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, enumComboBox);
     }
 

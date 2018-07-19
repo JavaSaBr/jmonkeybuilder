@@ -1,6 +1,5 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.ClassUtils;
@@ -21,10 +20,10 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends ComboBoxProper
     ) {
         super(vars, definition, validationCallback);
 
-        var defaultValue = ClassUtils.<T>unsafeCast(notNull(definition.getDefaultValue()));
+        var defaultValue = ClassUtils.<T>unsafeCast(definition.requireDefaultValue());
         var enumConstants = EditorUtil.<T>getEnumValues(defaultValue.getClass());
 
-        getComboBox().getItems()
+        comboBox.getItems()
                 .addAll(enumConstants);
     }
 }

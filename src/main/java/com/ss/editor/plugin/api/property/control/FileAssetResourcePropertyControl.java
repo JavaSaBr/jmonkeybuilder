@@ -1,12 +1,11 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -22,8 +21,8 @@ import java.util.function.Predicate;
  */
 public class FileAssetResourcePropertyControl extends AssetResourcePropertyEditorControl<Path> {
 
-    @NotNull
-    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class;
+    private static final Predicate<Class<?>> ACTION_TESTER =
+            type -> type == NewFileAction.class;
 
     /**
      * The list of target extensions.
@@ -54,20 +53,19 @@ public class FileAssetResourcePropertyControl extends AssetResourcePropertyEdito
 
     @Override
     @FxThread
-    protected void chooseNew(@NotNull Path file) {
-        setPropertyValue(notNull(getAssetFile(file)));
-        super.chooseNew(file);
+    protected void chooseNewResource(@NotNull Path file) {
+        setPropertyValue(EditorUtil.requireAssetFile(file));
+        super.chooseNewResource(file);
     }
 
     @Override
     @FxThread
-    public void reload() {
+    protected void reloadImpl() {
 
-        var file = getPropertyValue();
+        resourceLabel.setText(getPropertyValueOpt()
+                .map(EditorUtil::toAssetPath)
+                .orElse(NOT_SELECTED));
 
-        var resourceLabel = getResourceLabel();
-        resourceLabel.setText(file == null ? NOT_SELECTED : toAssetPath(file));
-
-        super.reload();
+        super.reloadImpl();
     }
 }

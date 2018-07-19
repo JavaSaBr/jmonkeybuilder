@@ -16,6 +16,7 @@ import com.ss.editor.ui.dialog.asset.file.FolderAssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.virtual.StringVirtualAssetEditorDialog;
 import com.ss.editor.ui.dialog.save.SaveAsEditorDialog;
 import com.ss.rlib.common.util.ArrayUtils;
+import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -46,9 +47,10 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -674,22 +676,63 @@ public abstract class UiUtils {
     }
 
     /**
+     * Accept a transfer mode for the event.
+     *
+     * @param dragEvent the drag event.
+     * @param dragboard the dragboard.
+     */
+    @FxThread
+    private static void acceptTransferMode(@NotNull DragEvent dragEvent, @NotNull Dragboard dragboard) {
+
+        var transferModes = dragboard.getTransferModes();
+        var isCopy = transferModes.contains(TransferMode.COPY);
+
+        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
+        dragEvent.consume();
+    }
+
+    /**
+     * Get a file from the dragboard.
+     *
+     * @param dragboard the dragboard.
+     * @return the file or null.
+     */
+    @FxThread
+    private static @Nullable File getDragboardFile(@NotNull Dragboard dragboard) {
+
+        var files = ClassUtils.<List<File>>unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return null;
+        }
+
+        return files.get(0);
+    }
+
+    /**
+     * Get a file from the dragboard.
+     *
+     * @param dragboard the dragboard.
+     * @return the optional value of the file.
+     */
+    private static @NotNull Optional<File> getDragboardFileOpt(@NotNull Dragboard dragboard) {
+        return Optional.ofNullable(getDragboardFile(dragboard));
+    }
+
+    /**
      * Accept a drag event if it has a file with required extensions.
      *
      * @param dragEvent  the drag event.
      * @param extensions the extensions.
      */
     @FxThread
-    public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions) {
+    public static void acceptIfHasFile(@NotNull DragEvent dragEvent, @NotNull Array<String> extensions) {
 
-        final Dragboard dragboard = dragEvent.getDragboard();
-        if (!isHasFile(dragboard, extensions)) return;
+        var dragboard = dragEvent.getDragboard();
 
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
+        if (isHasFile(dragboard, extensions)) {
+            acceptTransferMode(dragEvent, dragboard);
+        }
     }
 
     /**
@@ -699,140 +742,175 @@ public abstract class UiUtils {
      * @param targetExtension the extension.
      */
     @FxThread
-    public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final String targetExtension) {
+    public static void acceptIfHasFile(@NotNull DragEvent dragEvent, @NotNull String targetExtension) {
 
-        final Dragboard dragboard = dragEvent.getDragboard();
-        if (!isHasFile(dragboard, targetExtension)) return;
+        var dragboard = dragEvent.getDragboard();
 
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
+        if (isHasFile(dragboard, targetExtension)) {
+            acceptTransferMode(dragEvent, dragboard);
+        }
     }
 
+    /**
+     * Accept a drag event if it has a file with required extension.
+     *
+     * @param dragEvent the drag event.
+     * @param checker   the checker.
+     */
+    @FxThread
+    public static void acceptIfHasFile(@NotNull DragEvent dragEvent, @NotNull Function<File, Boolean> checker) {
+
+        var dragboard = dragEvent.getDragboard();
+
+        if (!isHasFile(dragboard, checker)) {
+            acceptTransferMode(dragEvent, dragboard);
+        }
+    }
 
     /**
-     * Check the dragboard.
+     * Return true if there are required file.
      *
      * @param dragboard  the dragboard.
      * @param extensions the extensions.
      * @return true if there are required file.
      */
     @FxThread
-    public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final Array<String> extensions) {
-
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return false;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), true);
-
-        return extensions.contains(extension);
+    public static boolean isHasFile(@NotNull Dragboard dragboard, @NotNull Array<String> extensions) {
+        return getDragboardFileOpt(dragboard)
+                .map(file -> FileUtils.getExtension(file.getName(), true))
+                .map(extensions::contains)
+                .orElse(false);
     }
 
     /**
-     * Check the dragboard.
+     * Return true if there are required file.
      *
      * @param dragboard       the dragboard.
      * @param targetExtension the target extension.
      * @return true if there are required file.
      */
     @FxThread
-    public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final String targetExtension) {
+    public static boolean isHasFile(@NotNull Dragboard dragboard, @NotNull String targetExtension) {
+        return getDragboardFileOpt(dragboard)
+                .map(file -> FileUtils.getExtension(file.getName(), true))
+                .map(targetExtension::equalsIgnoreCase)
+                .orElse(false);
+    }
 
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return false;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), true);
-
-        return targetExtension.equalsIgnoreCase(extension);
+    /**
+     * Return true if there are required file.
+     *
+     * @param dragboard the dragboard.
+     * @param checker   the checker.
+     * @return true if there are required file.
+     */
+    @FxThread
+    public static boolean isHasFile(@NotNull Dragboard dragboard, @NotNull Function<File, Boolean> checker) {
+        return getDragboardFileOpt(dragboard)
+                .map(checker)
+                .orElse(false);
     }
 
     /**
      * Handle a first dropped file if it has required extensions.
      *
-     * @param dragEvent  the drag event.
-     * @param extensions the extensions.
-     * @param handler    the handler.
+     * @param dragEvent the drag event.
+     * @param handler   the handler.
      */
     @FxThread
-    public static void handleDroppedFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions,
-                                         @NotNull final Consumer<Path> handler) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), true);
-
-        if (!extensions.contains(extension)) {
-            return;
-        }
-
-        handler.accept(file.toPath());
+    public static void handleDroppedFile(
+            @NotNull DragEvent dragEvent,
+            @NotNull Consumer<Path> handler
+    ) {
+        getDragboardFileOpt(dragEvent.getDragboard())
+                .map(File::toPath)
+                .ifPresent(handler);
     }
 
     /**
      * Handle a first dropped file if it has required extensions.
      *
-     * @param <F>        the type parameter
-     * @param dragEvent  the drag event.
-     * @param extensions the extensions.
-     * @param firstArg   the first argument.
-     * @param handler    the handler.
+     * @param firstArg the first argument.
+     * @param handler  the handler.
+     * @param <F>      the first arg's type.
      */
     @FxThread
-    public static <F> void handleDroppedFile(@NotNull final DragEvent dragEvent,
-                                             @NotNull final Array<String> extensions, @NotNull final F firstArg,
-                                             @NotNull final BiConsumer<F, Path> handler) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), true);
-
-        if (!extensions.contains(extension)) {
-            return;
-        }
-
-        handler.accept(firstArg, file.toPath());
+    public static <F> void handleDroppedFile(
+            @NotNull DragEvent dragEvent,
+            @NotNull F firstArg,
+            @NotNull BiConsumer<F, Path> handler
+    ) {
+        getDragboardFileOpt(dragEvent.getDragboard())
+                .map(File::toPath)
+                .ifPresent(path -> handler.accept(firstArg, path));
     }
 
     /**
      * Handle a first dropped file if it has required extensions.
      *
-     * @param <F>             the type parameter
-     * @param <S>             the type parameter
-     * @param dragEvent       the drag event.
-     * @param targetExtension the extension.
-     * @param firstArg        the first argument.
-     * @param secondArg       the second argument.
-     * @param handler         the handler.
+     * @param dragEvent the drag event.
+     * @param extension the extension.
+     * @param firstArg  the first argument.
+     * @param handler   the handler.
+     * @param <F>       the first arg's type.
      */
     @FxThread
-    public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
-                                                @NotNull final String targetExtension, @NotNull final F firstArg,
-                                                @NotNull final S secondArg,
-                                                @NotNull final TriConsumer<F, S, Path> handler) {
+    public static <F> void handleDroppedFile(
+            @NotNull DragEvent dragEvent,
+            @NotNull String extension,
+            @NotNull F firstArg,
+            @NotNull BiConsumer<F, Path> handler
+    ) {
+        getDragboardFileOpt(dragEvent.getDragboard())
+                .map(File::toPath)
+                .filter(file -> extension.equalsIgnoreCase(FileUtils.getExtension(file)))
+                .ifPresent(path -> handler.accept(firstArg, path));
+    }
 
-        handleDroppedFile(dragEvent.getDragboard(), targetExtension, firstArg, secondArg, handler);
+
+    /**
+     * Handle a first dropped file if it has required extensions.
+     *
+     * @param dragEvent the drag event.
+     * @param firstArg  the first argument.
+     * @param secondArg the second argument.
+     * @param handler   the handler.
+     * @param <F>       the first arg's type.
+     * @param <S>       the second arg's type.
+     */
+    @FxThread
+    public static <F, S> void handleDroppedFile(
+            @NotNull DragEvent dragEvent,
+            @NotNull F firstArg,
+            @NotNull S secondArg,
+            @NotNull TriConsumer<F, S, Path> handler
+    ) {
+        handleDroppedFile(dragEvent.getDragboard(), firstArg, secondArg, handler);
+    }
+
+    /**
+     * Handle a first dropped file if it has required extensions.
+     *
+     * @param dragEvent the drag event.
+     * @param extension the extension.
+     * @param firstArg  the first argument.
+     * @param secondArg the second argument.
+     * @param handler   the handler.
+     * @param <F>       the first arg's type.
+     * @param <S>       the second arg's type.
+     */
+    @FxThread
+    public static <F, S> void handleDroppedFile(
+            @NotNull DragEvent dragEvent,
+            @NotNull F firstArg,
+            @NotNull S secondArg,
+            @NotNull String extension,
+            @NotNull TriConsumer<F, S, Path> handler
+    ) {
+        getDragboardFileOpt(dragEvent.getDragboard())
+                .map(File::toPath)
+                .filter(file -> extension.equalsIgnoreCase(FileUtils.getExtension(file)))
+                .ifPresent(path -> handler.accept(firstArg, secondArg, path));
     }
 
     /**
@@ -841,67 +919,21 @@ public abstract class UiUtils {
      * @param <F>             the type parameter
      * @param <S>             the type parameter
      * @param dragboard       the dragboard.
-     * @param targetExtension the extension.
      * @param firstArg        the first argument.
      * @param secondArg       the second argument.
      * @param handler         the handler.
      */
     @FxThread
-    public static <F, S> void handleDroppedFile(@NotNull final Dragboard dragboard,
-                                                @NotNull final String targetExtension, @NotNull final F firstArg,
-                                                @NotNull final S secondArg,
-                                                @NotNull final TriConsumer<F, S, Path> handler) {
-
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), false);
-
-        if (!targetExtension.equalsIgnoreCase(extension)) {
-            return;
-        }
-
-        handler.accept(firstArg, secondArg, file.toPath());
+    public static <F, S> void handleDroppedFile(
+            @NotNull Dragboard dragboard,
+            @NotNull F firstArg,
+            @NotNull S secondArg,
+            @NotNull TriConsumer<F, S, Path> handler
+    ) {
+        getDragboardFileOpt(dragboard)
+                .map(File::toPath)
+                .ifPresent(path -> handler.accept(firstArg, secondArg, path));
     }
-
-    /**
-     * Handle a first dropped file if it has required extensions.
-     *
-     * @param <F>        the type parameter
-     * @param <S>        the type parameter
-     * @param dragEvent  the drag event.
-     * @param extensions the extensions.
-     * @param firstArg   the first argument.
-     * @param secondArg  the second argument.
-     * @param handler    the handler.
-     */
-    @FxThread
-    public static <F, S> void handleDroppedFile(@NotNull final DragEvent dragEvent,
-                                                @NotNull final Array<String> extensions, @NotNull final F firstArg,
-                                                @NotNull final S secondArg,
-                                                @NotNull final TriConsumer<F, S, Path> handler) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), true);
-
-        if (!extensions.contains(extension)) {
-            return;
-        }
-
-        handler.accept(firstArg, secondArg, file.toPath());
-    }
-
 
     /**
      * Convert the color to hex presentation to use in web.
@@ -911,9 +943,9 @@ public abstract class UiUtils {
      */
     @FromAnyThread
     public static @NotNull String toWeb(@NotNull final Color color) {
-        final int red = (int) (color.getRed() * 255);
-        final int green = (int) (color.getGreen() * 255);
-        final int blue = (int) (color.getBlue() * 255);
+        int red = (int) (color.getRed() * 255);
+        int green = (int) (color.getGreen() * 255);
+        int blue = (int) (color.getBlue() * 255);
         return "#" + Integer.toHexString(red) + Integer.toHexString(green) + Integer.toHexString(blue);
     }
 

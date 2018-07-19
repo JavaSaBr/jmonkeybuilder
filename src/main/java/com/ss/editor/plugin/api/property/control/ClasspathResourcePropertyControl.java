@@ -35,13 +35,13 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
 
     @Override
     @FxThread
-    protected void chooseNew() {
-        super.chooseNew();
+    protected void chooseNewResource() {
+        super.chooseNewResource();
 
-        var resourceManager = ResourceManager.getInstance();
-        var resources = resourceManager.getAvailableResources(extension);
+        var resources = ResourceManager.getInstance()
+                .getAvailableResources(extension);
 
-        UiUtils.openResourceAssetDialog(this::chooseNew, this::validate, resources);
+        UiUtils.openResourceAssetDialog(this::chooseNewResource, this::validate, resources);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      * @param resource the selected resource.
      */
     @FxThread
-    private void chooseNew(@NotNull String resource) {
+    private void chooseNewResource(@NotNull String resource) {
         setPropertyValue(resource);
         change();
         reload();
@@ -63,9 +63,10 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
      * @return the message of problems or null if all are ok.
      */
     @FxThread
-    private String validate(@NotNull final String resource) {
+    private String validate(@NotNull String resource) {
 
         var extension = FileUtils.getExtension(resource);
+
         if (StringUtils.isEmpty(extension)) {
             return Messages.ASSET_EDITOR_DIALOG_WARNING_SELECT_FILE;
         }
@@ -75,12 +76,8 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
 
     @Override
     @FxThread
-    public void reload() {
-
-        var resource = getPropertyValue();
-        var resourceLabel = getResourceLabel();
-        resourceLabel.setText(resource == null ? NOT_SELECTED : resource);
-
-        super.reload();
+    protected void reloadImpl() {
+        resourceLabel.setText(StringUtils.ifEmpty(getPropertyValue(), NOT_SELECTED));
+        super.reloadImpl();
     }
 }

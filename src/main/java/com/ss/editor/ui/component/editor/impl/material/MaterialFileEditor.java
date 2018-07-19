@@ -197,8 +197,7 @@ public class MaterialFileEditor extends
     @FxThread
     protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
         super.handleDragDroppedEvent(dragEvent);
-        UiUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
-                dragEvent, this::applyTexture);
+        UiUtils.handleDroppedFile(dragEvent, this, dragEvent, this::applyTexture);
     }
 
     @Override

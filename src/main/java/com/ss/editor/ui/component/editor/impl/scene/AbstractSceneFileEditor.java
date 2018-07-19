@@ -1111,13 +1111,12 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @FxThread
     protected void handleDragDroppedEvent(@NotNull DragEvent dragEvent) {
-        super.handleDragDroppedEvent(dragEvent);
 
-        UiUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
-                dragEvent, AbstractSceneFileEditor::addNewModel);
+        UiUtils.handleDroppedFile(dragEvent, this, dragEvent, FileExtensions.JME_OBJECT,
+                AbstractSceneFileEditor::addNewModel);
 
-        UiUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
-                dragEvent, AbstractSceneFileEditor::applyMaterial);
+        UiUtils.handleDroppedFile(dragEvent, this, dragEvent, FileExtensions.JME_MATERIAL,
+                AbstractSceneFileEditor::applyMaterial);
     }
 
     @Override

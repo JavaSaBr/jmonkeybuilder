@@ -26,7 +26,6 @@ public class StringFromListPropertyEditorControl extends ComboBoxPropertyEditorC
     ) {
         super(vars, definition, validationCallback);
 
-        var comboBox = getComboBox();
         options.forEach(comboBox.getItems(),
                 (option, items) -> items.add(option.toString()));
 
@@ -41,8 +40,10 @@ public class StringFromListPropertyEditorControl extends ComboBoxPropertyEditorC
 
                 var binding = new AutoCompletionTextFieldBinding<String>(editor,
                         new SimpleStringSuggestionProvider(comboBox.getItems()));
+
                 binding.setOnAutoCompleted(event -> selectionModel.select(event.getCompletion()));
-                binding.prefWidthProperty().bind(comboBox.widthProperty().multiply(1.3));
+                binding.prefWidthProperty()
+                        .bind(comboBox.widthProperty().multiply(1.3));
 
                 FxControlUtils.onSelectedItemChange(comboBox, newValue -> {
                     var executorManager = ExecutorManager.getInstance();
@@ -53,7 +54,7 @@ public class StringFromListPropertyEditorControl extends ComboBoxPropertyEditorC
                         CssClasses.TRANSPARENT_TEXT_FIELD,
                         CssClasses.TEXT_FIELD_IN_COMBO_BOX);
 
-                reload();
+                reloadImpl();
 
             } finally {
                 setIgnoreListener(false);

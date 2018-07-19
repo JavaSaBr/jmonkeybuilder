@@ -2,9 +2,8 @@ package com.ss.editor.plugin.api.property.control;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.rlib.common.util.ExtMath;
 import com.ss.rlib.common.util.VarTable;
-import com.ss.rlib.fx.control.input.IntegerTextField;
+import com.ss.rlib.fx.control.input.NumberTextField;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,9 +11,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class IntegerPropertyEditorControl extends NumberPropertyEditorControl<Integer, IntegerTextField> {
+public abstract class NumberPropertyEditorControl<T extends Number, F extends NumberTextField<T>> extends
+        TypedTextFieldPropertyEditorControl<T, F> {
 
-    public IntegerPropertyEditorControl(
+    public NumberPropertyEditorControl(
             @NotNull VarTable vars,
             @NotNull PropertyDefinition definition,
             @NotNull Runnable validationCallback
@@ -22,16 +22,21 @@ public class IntegerPropertyEditorControl extends NumberPropertyEditorControl<In
         super(vars, definition, validationCallback);
     }
 
-    @Override
+    /**
+     * Set min/max values.
+     *
+     * @param min the min value.
+     * @param max the max value.
+     */
     @FxThread
-    protected @NotNull IntegerTextField createField() {
-        return new IntegerTextField();
+    public void setMinMax(T min, T max) {
+        valueField.setMinMax(min, max);
     }
 
     @Override
     @FxThread
-    protected void reloadImpl() {
-        valueField.setValue(ExtMath.zeroIfNull(getPropertyValue()));
-        super.reloadImpl();
+    protected void changeImpl() {
+        setPropertyValue(valueField.getValue());
+        super.changeImpl();
     }
 }

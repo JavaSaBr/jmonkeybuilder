@@ -555,7 +555,7 @@ public class TerrainPaintingComponent extends
         shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         shininessField = new FloatTextField();
-        shininessField.setMinMax(0F, Integer.MAX_VALUE);
+        shininessField.setMinMax(0F, (float) Integer.MAX_VALUE);
         shininessField.prefWidthProperty()
                 .bind(widthProperty().multiply(FIELD_PERCENT));
 

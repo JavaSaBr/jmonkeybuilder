@@ -1,15 +1,14 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.StringUtils.emptyIfNull;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
+import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
-import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -52,7 +51,9 @@ public class StringPropertyControl<C extends ChangeConsumer, D> extends Property
 
         FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
 
-        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addClass(valueField,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, valueField);
     }
 

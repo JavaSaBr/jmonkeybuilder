@@ -1,9 +1,7 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
@@ -15,7 +13,6 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,12 +26,8 @@ import java.nio.file.Path;
  */
 public class SpatialAssetResourcePropertyControl<T extends Spatial> extends AssetResourcePropertyEditorControl<T> {
 
-    @NotNull
-    private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
-
-    static {
-        EXTENSIONS.add(FileExtensions.JME_OBJECT);
-    }
+    private static final Array<String> EXTENSIONS =
+            Array.of(FileExtensions.JME_OBJECT);
 
     public SpatialAssetResourcePropertyControl(
             @NotNull VarTable vars,
@@ -52,17 +45,17 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
 
     @Override
     @FxThread
-    protected void chooseNew(@NotNull Path file) {
+    protected void chooseNewResource(@NotNull Path file) {
 
         var assetManager = EditorUtil.getAssetManager();
 
-        var assetFile = notNull(getAssetFile(file));
+        var assetFile = EditorUtil.requireAssetFile(file);
         var modelKey = new ModelKey(toAssetPath(assetFile));
         var spatial = findResource(assetManager, modelKey);
 
         setPropertyValue(unsafeCast(spatial));
 
-        super.chooseNew(file);
+        super.chooseNewResource(file);
     }
 
     /**
@@ -85,20 +78,13 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
 
     @Override
     @FxThread
-    protected void handleFile(@NotNull File file) {
-        chooseNew(file.toPath());
-    }
-
-    @Override
-    @FxThread
-    public void reload() {
+    protected void reloadImpl() {
 
         var model = getPropertyValue();
         var rootKey = EditorUtil.findRootKey(model);
 
-        var resourceLabel = getResourceLabel();
         resourceLabel.setText(rootKey == null ? NOT_SELECTED : rootKey + "[" + model.getName() + "]");
 
-        super.reload();
+        super.reloadImpl();
     }
 }

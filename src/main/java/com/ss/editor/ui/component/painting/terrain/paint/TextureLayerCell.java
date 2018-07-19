@@ -85,7 +85,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
 
         scaleField = new FloatTextField();
-        scaleField.setMinMax(0.0001F, Integer.MAX_VALUE);
+        scaleField.setMinMax(0.0001F, (float) Integer.MAX_VALUE);
         scaleField.setScrollPower(3F);
         scaleField.addChangeListener((observable, oldValue, newValue) -> updateScale(newValue));
         scaleField.prefWidthProperty().bind(settingContainer.widthProperty().multiply(FIELD_PERCENT));

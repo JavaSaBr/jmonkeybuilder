@@ -284,8 +284,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
     @Override
     @FxThread
     public void acceptExternal(@NotNull Dragboard dragboard, @NotNull ChangeConsumer consumer) {
-        UiUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT,
-                getElement(), consumer, this::dropExternalObject);
+        UiUtils.handleDroppedFile(dragboard, getElement(), consumer, this::dropExternalObject);
     }
 
     /**

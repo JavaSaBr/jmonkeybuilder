@@ -79,7 +79,9 @@ public class TypedTextFieldPropertyControl<C extends ChangeConsumer, D, T, F ext
         FxControlUtils.onValueChange(valueField, this::updateValue);
         FxControlUtils.onFocusChange(valueField, this::applyOnLostFocus);
 
-        FxUtils.addClass(valueField, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+        FxUtils.addClass(valueField,
+                CssClasses.PROPERTY_CONTROL_COMBO_BOX);
+
         FxUtils.addChild(container, valueField);
     }
 

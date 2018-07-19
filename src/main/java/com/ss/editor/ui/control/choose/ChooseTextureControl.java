@@ -92,7 +92,7 @@ public class ChooseTextureControl extends HBox {
      */
     @FxThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-        UiUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, ChooseTextureControl::setTextureFile);
+        UiUtils.handleDroppedFile(dragEvent, this, ChooseTextureControl::setTextureFile);
     }
 
     /**

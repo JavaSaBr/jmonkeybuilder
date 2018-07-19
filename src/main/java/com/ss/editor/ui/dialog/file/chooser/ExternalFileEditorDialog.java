@@ -61,7 +61,7 @@ public class ExternalFileEditorDialog extends AbstractSimpleEditorDialog {
     @Nullable
     protected Path initDirectory;
 
-    public ExternalFileEditorDialog(@NotNull final Consumer<@NotNull Path> consumer) {
+    public ExternalFileEditorDialog(@NotNull Consumer<@NotNull Path> consumer) {
         this.consumer = consumer;
     }
 

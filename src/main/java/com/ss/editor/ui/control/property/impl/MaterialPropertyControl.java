@@ -21,9 +21,11 @@ import org.jetbrains.annotations.Nullable;
 public class MaterialPropertyControl<C extends ChangeConsumer, E, T> extends
         KeyPropertyControl<C, E, T> {
 
-    protected static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    protected static final String NO_MATERIAL =
+            Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
-    protected static final Array<String> MATERIAL_EXTENSIONS = Array.of(FileExtensions.JME_MATERIAL);
+    protected static final Array<String> MATERIAL_EXTENSIONS =
+            Array.of(FileExtensions.JME_MATERIAL);
 
     public MaterialPropertyControl(
             @Nullable T element,
