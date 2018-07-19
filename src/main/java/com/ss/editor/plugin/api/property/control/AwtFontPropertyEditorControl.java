@@ -28,7 +28,8 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
     private static final GraphicsEnvironment GRAPHICS_ENVIRONMENT =
             GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-    private static final Font[] FONTS = GRAPHICS_ENVIRONMENT.getAllFonts();
+    private static final Font[] FONTS =
+            GRAPHICS_ENVIRONMENT.getAllFonts();
 
     private static final StringConverter<Font> STRING_CONVERTER = new StringConverter<>() {
 
@@ -87,7 +88,7 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
             executorManager.addFxTask(() -> editor.positionCaret(newValue.getFontName().length()));
         });
 
-        FxControlUtils.onSelectedItemChange(comboBox, this::change);
+        FxControlUtils.onSelectedItemChange(comboBox, this::changed);
 
         FxUtils.addClass(editor,
                         CssClasses.TRANSPARENT_TEXT_FIELD, CssClasses.TEXT_FIELD_IN_COMBO_BOX)
@@ -109,12 +110,12 @@ public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
 
         setPropertyValue(comboBox
                 .getSelectionModel()
                 .getSelectedItem());
 
-        super.changeImpl();
+        super.changedImpl();
     }
 }

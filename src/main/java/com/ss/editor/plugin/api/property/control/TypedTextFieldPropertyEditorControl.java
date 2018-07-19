@@ -40,7 +40,7 @@ public abstract class TypedTextFieldPropertyEditorControl<T, F extends TypedText
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FxControlUtils.onTextChange(valueField, this::change);
+        FxControlUtils.onTextChange(valueField, this::changed);
 
         FxUtils.addClass(valueField,
                 CssClasses.PROPERTY_CONTROL_COMBO_BOX);

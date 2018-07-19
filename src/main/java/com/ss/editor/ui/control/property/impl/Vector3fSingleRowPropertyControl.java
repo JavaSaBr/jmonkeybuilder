@@ -83,7 +83,7 @@ public class Vector3fSingleRowPropertyControl<C extends ChangeConsumer, D> exten
                 .addChild(container, fieldContainer);
 
         UiUtils.addFocusBinding(fieldContainer, xField, yField, zField)
-            .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
+                .addListener((observable, oldValue, newValue) -> applyOnLostFocus(newValue));
     }
 
     @Override

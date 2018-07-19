@@ -33,7 +33,6 @@ public class CollisionShapePropertyBuilder extends EditableModelObjectPropertyBu
     private static final Array<Class<?>> SUPPORTED_TYPES = Array.of(
             ChildCollisionShape.class,
             CollisionShape.class
-
     );
 
     private static final PropertyBuilder INSTANCE = new CollisionShapePropertyBuilder();
@@ -69,13 +68,13 @@ public class CollisionShapePropertyBuilder extends EditableModelObjectPropertyBu
 
         if (object instanceof BoxCollisionShape) {
 
-            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_HALF_EXTENTS, (BoxCollisionShape) object,
-                    shape -> String.valueOf(shape.getHalfExtents())));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_HALF_EXTENTS,
+                    (BoxCollisionShape) object, shape -> String.valueOf(shape.getHalfExtents())));
 
         } else if (object instanceof SphereCollisionShape) {
 
-            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_RADIUS, (SphereCollisionShape) object,
-                    shape -> String.valueOf(shape.getRadius())));
+            properties.add(new SimpleProperty<>(READ_ONLY_STRING, Messages.MODEL_PROPERTY_RADIUS,
+                    (SphereCollisionShape) object, shape -> String.valueOf(shape.getRadius())));
 
         } else if (object instanceof CapsuleCollisionShape) {
 

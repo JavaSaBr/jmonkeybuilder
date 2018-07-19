@@ -1,13 +1,14 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
+import static com.ss.editor.extension.property.EditablePropertyType.*;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.math.FastMath;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.SeparatorProperty;
 import com.ss.editor.extension.property.SimpleProperty;
@@ -18,8 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ss.editor.extension.property.EditablePropertyType.*;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Light} objects.

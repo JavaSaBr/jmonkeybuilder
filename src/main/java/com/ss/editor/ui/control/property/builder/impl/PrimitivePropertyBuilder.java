@@ -35,9 +35,9 @@ import static com.ss.editor.extension.property.EditablePropertyType.VECTOR_3F;
 public class PrimitivePropertyBuilder extends EditableModelObjectPropertyBuilder {
 
     private static final Array<Class<?>> SUPPORTED_TYPES = Array.of(
-        Vector3f.class,
-        VertexBuffer.class,
-        Buffer.class
+            Vector3f.class,
+            VertexBuffer.class,
+            Buffer.class
     );
 
     private static final PropertyBuilder INSTANCE = new PrimitivePropertyBuilder();

@@ -52,7 +52,7 @@ public class ExternalFileResourcePropertyControl extends ResourcePropertyEditorC
     @FxThread
     private void openExternalFile(@NotNull Path path) {
         setPropertyValue(path);
-        change();
+        changed();
         reload();
     }
 

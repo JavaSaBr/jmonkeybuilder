@@ -39,7 +39,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FxControlUtils.onTextChange(valueField, this::change);
+        FxControlUtils.onTextChange(valueField, this::changed);
 
         FxUtils.addClass(valueField,
                 CssClasses.PROPERTY_CONTROL_COMBO_BOX);
@@ -59,8 +59,8 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
         setPropertyValue(valueField.getText());
-        super.changeImpl();
+        super.changedImpl();
     }
 }

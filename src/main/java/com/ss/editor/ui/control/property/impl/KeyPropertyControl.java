@@ -126,7 +126,8 @@ public abstract class KeyPropertyControl<C extends ChangeConsumer, E, T>
         FxControlUtils.onAction(changeButton, this::chooseKey);
         FxControlUtils.onAction(openButton, this::openKey);
 
-        FxUtils.addChild(container, keyLabel, changeButton, openButton);
+        FxUtils.addChild(container,
+                keyLabel, changeButton, openButton);
 
         DynamicIconSupport.addSupport(changeButton, openButton);
     }

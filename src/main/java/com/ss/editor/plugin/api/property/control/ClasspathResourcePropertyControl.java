@@ -52,7 +52,7 @@ public class ClasspathResourcePropertyControl extends ResourcePropertyEditorCont
     @FxThread
     private void chooseNewResource(@NotNull String resource) {
         setPropertyValue(resource);
-        change();
+        changed();
         reload();
     }
 

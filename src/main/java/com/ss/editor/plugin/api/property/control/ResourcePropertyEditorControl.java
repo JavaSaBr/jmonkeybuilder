@@ -89,7 +89,6 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
      */
     @FxThread
     protected void chooseNewResource() {
-
     }
 
     /**
@@ -98,7 +97,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
     @FxThread
     protected void removeCurrentResource() {
         setPropertyValue(null);
-        change();
+        changed();
         reload();
     }
 

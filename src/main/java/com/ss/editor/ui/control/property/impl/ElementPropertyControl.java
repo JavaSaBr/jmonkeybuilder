@@ -81,7 +81,8 @@ public class ElementPropertyControl<C extends ChangeConsumer, D, T> extends Prop
         FxControlUtils.onAction(changeButton, this::addElement);
         FxControlUtils.onAction(removeButton, this::removeElement);
 
-        FxUtils.addChild(container, elementLabel, changeButton, removeButton);
+        FxUtils.addChild(container,
+                elementLabel, changeButton, removeButton);
 
         DynamicIconSupport.addSupport(changeButton, removeButton);
     }

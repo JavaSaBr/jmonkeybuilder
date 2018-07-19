@@ -1,29 +1,22 @@
 package com.ss.editor.ui.control.property.builder.impl;
 
+import static com.ss.editor.extension.property.EditablePropertyType.*;
 import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
-import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.SeparatorProperty;
 import com.ss.editor.extension.property.SimpleProperty;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
-import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ss.editor.extension.property.EditablePropertyType.*;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleInfluencer}.
@@ -72,9 +65,9 @@ public class ParticleInfluencerPropertyBuilder extends EditableModelObjectProper
             properties.add(SeparatorProperty.getInstance());
 
             properties.add(new SimpleProperty<>(FLOAT, Messages.MODEL_PROPERTY_RADIAL_VELOCITY, radialParticleInfluencer,
-                RadialParticleInfluencer::getRadialVelocity, RadialParticleInfluencer::setRadialVelocity));
+                    RadialParticleInfluencer::getRadialVelocity, RadialParticleInfluencer::setRadialVelocity));
             properties.add(new SimpleProperty<>(BOOLEAN, Messages.MODEL_PROPERTY_IS_HORIZONTAL, radialParticleInfluencer,
-                RadialParticleInfluencer::isHorizontal, RadialParticleInfluencer::setHorizontal));
+                    RadialParticleInfluencer::isHorizontal, RadialParticleInfluencer::setHorizontal));
 
         } else {
             properties.add(SeparatorProperty.getInstance());

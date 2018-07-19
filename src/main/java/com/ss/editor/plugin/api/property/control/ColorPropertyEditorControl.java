@@ -41,7 +41,7 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
         colorPicker.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FxControlUtils.onColorChange(colorPicker, this::change);
+        FxControlUtils.onColorChange(colorPicker, this::changed);
 
         FxUtils.addClass(colorPicker,
                 CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
@@ -57,8 +57,8 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
         setPropertyValue(UiUtils.from(colorPicker.getValue()));
-        super.changeImpl();
+        super.changedImpl();
     }
 }

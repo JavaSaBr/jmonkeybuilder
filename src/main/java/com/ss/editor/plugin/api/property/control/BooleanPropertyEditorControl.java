@@ -39,7 +39,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
         checkBox.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FxControlUtils.onSelectedChange(checkBox, this::change);
+        FxControlUtils.onSelectedChange(checkBox, this::changed);
 
         FxUtils.addClass(checkBox, CssClasses.PROPERTY_CONTROL_CHECK_BOX);
         FxUtils.addChild(this, checkBox);
@@ -54,8 +54,8 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
         setPropertyValue(checkBox.isSelected());
-        super.changeImpl();
+        super.changedImpl();
     }
 }

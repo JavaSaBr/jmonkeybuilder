@@ -122,10 +122,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Refresh flag types
      */
     protected static final int RF_TRANSFORM = 0x01, // need light resort + combine transforms
-        RF_BOUND = 0x02,
-        RF_LIGHTLIST = 0x04, // changes in light lists
-        RF_CHILD_LIGHTLIST = 0x08, // some child need geometry update
-        RF_MATPARAM_OVERRIDE = 0x10;
+            RF_BOUND = 0x02,
+            RF_LIGHTLIST = 0x04, // changes in light lists
+            RF_CHILD_LIGHTLIST = 0x08, // some child need geometry update
+            RF_MATPARAM_OVERRIDE = 0x10;
 
     protected CullHint cullHint = CullHint.Inherit;
     protected BatchHint batchHint = BatchHint.Inherit;
@@ -357,9 +357,9 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     public boolean checkCulling(Camera cam) {
         if (refreshFlags != 0) {
             throw new IllegalStateException("Scene graph is not properly updated for rendering.\n"
-                + "State was changed after rootNode.updateGeometricState() call. \n"
-                + "Make sure you do not modify the scene from another thread!\n"
-                + "Problem spatial name: " + getName());
+                    + "State was changed after rootNode.updateGeometricState() call. \n"
+                    + "Make sure you do not modify the scene from another thread!\n"
+                    + "Problem spatial name: " + getName());
         }
 
         if (!isVisible()) {
@@ -379,7 +379,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
         // check to see if we can cull this node
         frustrumIntersects = (parent != null ? parent.frustrumIntersects
-            : Camera.FrustumIntersect.Intersects);
+                : Camera.FrustumIntersect.Intersects);
 
         if (frustrumIntersects == Camera.FrustumIntersect.Intersects) {
             if (getQueueBucket() == Bucket.Gui) {
@@ -1566,9 +1566,9 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         cullHint = ic.readEnum("cull_mode", CullHint.class, CullHint.Inherit);
         batchHint = ic.readEnum("batch_hint", BatchHint.class, BatchHint.Inherit);
         queueBucket = ic.readEnum("queue", RenderQueue.Bucket.class,
-            RenderQueue.Bucket.Inherit);
+                RenderQueue.Bucket.Inherit);
         shadowMode = ic.readEnum("shadow_mode", ShadowMode.class,
-            ShadowMode.Inherit);
+                ShadowMode.Inherit);
 
         localTransform = (Transform) ic.readSavable("transform", Transform.IDENTITY);
 

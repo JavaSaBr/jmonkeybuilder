@@ -60,7 +60,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
      */
     @FxThread
     protected void chooseNewResource(@NotNull Path file) {
-        change();
+        changed();
         reload();
     }
 }

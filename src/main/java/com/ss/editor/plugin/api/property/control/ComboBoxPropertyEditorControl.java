@@ -40,7 +40,7 @@ public class ComboBoxPropertyEditorControl<T> extends PropertyEditorControl<T> {
         comboBox.prefWidthProperty()
                 .bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FxControlUtils.onSelectedItemChange(comboBox, this::change);
+        FxControlUtils.onSelectedItemChange(comboBox, this::changed);
 
         FxUtils.addClass(comboBox,
                 CssClasses.PROPERTY_CONTROL_COMBO_BOX);
@@ -58,11 +58,11 @@ public class ComboBoxPropertyEditorControl<T> extends PropertyEditorControl<T> {
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
 
         setPropertyValue(comboBox.getSelectionModel()
                 .getSelectedItem());
 
-        super.changeImpl();
+        super.changedImpl();
     }
 }

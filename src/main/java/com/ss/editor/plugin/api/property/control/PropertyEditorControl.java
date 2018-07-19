@@ -209,14 +209,14 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     @FxThread
-    protected void change() {
+    protected void changed() {
         if (!isIgnoreListener()) {
-            changeImpl();
+            changedImpl();
         }
     }
 
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
         validationCallback.run();
     }
 

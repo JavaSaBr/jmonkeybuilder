@@ -52,7 +52,8 @@ import java.nio.file.Path;
  */
 public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends PropertyControl<C, D, Texture2D> {
 
-    protected static final String NO_TEXTURE = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
+    protected static final String NO_TEXTURE =
+            Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
 
     protected static final Point DIALOG_SIZE = new Point(600, -1);
 

@@ -3,10 +3,9 @@ package com.ss.editor.ui.control.property.builder.impl;
 import static java.util.stream.Collectors.toList;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
-import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.property.SimpleProperty;
@@ -17,10 +16,10 @@ import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link com.jme3.material.Material} objects.
@@ -103,7 +102,6 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      */
     @FxThread
     protected void applyParam(@NotNull MatParam param, @NotNull Material material, @Nullable Object newValue) {
-
         if (newValue == null) {
             material.clearParam(param.getName());
         } else {
@@ -120,8 +118,9 @@ public class MaterialPropertyBuilder extends EditableObjectPropertyBuilder {
      */
     @FxThread
     protected @Nullable Object getParamValue(@NotNull MatParam param, @NotNull Material material) {
-        var currentParam = material.getParam(param.getName());
-        return currentParam == null ? null : currentParam.getValue();
+        return Optional.ofNullable(material.getParam(param.getName()))
+                .map(MatParam::getValue)
+                .orElse(null);
     }
 
     /**

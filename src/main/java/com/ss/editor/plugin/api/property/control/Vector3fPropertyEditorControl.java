@@ -74,9 +74,9 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         gridPane.add(yField, 1, 0);
         gridPane.add(zField, 2, 0);
 
-        FxControlUtils.onValueChange(xField, this::change);
-        FxControlUtils.onValueChange(yField, this::change);
-        FxControlUtils.onValueChange(zField, this::change);
+        FxControlUtils.onValueChange(xField, this::changed);
+        FxControlUtils.onValueChange(yField, this::changed);
+        FxControlUtils.onValueChange(zField, this::changed);
 
         FxUtils.addClass(gridPane,
                         CssClasses.DEF_GRID_PANE, CssClasses.TEXT_INPUT_CONTAINER)
@@ -104,13 +104,13 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
 
         setPropertyValue(new Vector3f(
                 xField.getPrimitiveValue(),
                 yField.getPrimitiveValue(),
                 zField.getPrimitiveValue()));
 
-        super.changeImpl();
+        super.changedImpl();
     }
 }

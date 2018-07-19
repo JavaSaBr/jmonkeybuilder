@@ -35,8 +35,8 @@ public abstract class NumberPropertyEditorControl<T extends Number, F extends Nu
 
     @Override
     @FxThread
-    protected void changeImpl() {
+    protected void changedImpl() {
         setPropertyValue(valueField.getValue());
-        super.changeImpl();
+        super.changedImpl();
     }
 }

@@ -67,10 +67,10 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         }
     };
 
-    private static final Function<Geometry, MaterialKey> MATERIAL_SYNC_HANDLER = geometry -> {
-        var material = geometry.getMaterial();
-        return (MaterialKey) material.getKey();
-    };
+    private static final Function<Geometry, MaterialKey> MATERIAL_SYNC_HANDLER =
+            geometry -> (MaterialKey) geometry
+                    .getMaterial()
+                    .getKey();
 
     private static final Function<BoundingVolume, String> BOUNDING_VOLUME_TO_STRING = boundingVolume -> {
 
