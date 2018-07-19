@@ -90,8 +90,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         var currentAsset = EditorConfig.getInstance()
                 .requiredCurrentAsset();
 
-        getResourceTree()
-                .setOnLoadHandler(finished -> expand(file, finished))
+        resourceTree.setOnLoadHandler(finished -> expand(file, finished))
                 .fill(currentAsset);
 
         ExecutorManager.getInstance()
@@ -103,18 +102,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     @FxThread
     private void expand(@NotNull Path file, @NotNull Boolean finished) {
         if (finished) {
-            getResourceTree().expandTo(file, true);
+            resourceTree.expandTo(file, true);
         }
-    }
-
-    /**
-     * Get the resources tree.
-     *
-     * @return the resources tree.
-     */
-    @FromAnyThread
-    private @NotNull ResourceTree getResourceTree() {
-        return notNull(resourceTree);
     }
 
     /**
@@ -151,8 +140,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     @FromAnyThread
     private @NotNull Path getSelectedFile() {
 
-        var selectedItem = getResourceTree()
-                .getSelectionModel()
+        var selectedItem = resourceTree.getSelectionModel()
                 .getSelectedItem();
 
         if (selectedItem == null) {
@@ -388,8 +376,10 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         root.add(fileNameLabel, 0, 0);
         root.add(fileNameField, 1, 0);
 
-        FXUtils.addClassTo(fileNameLabel, CssClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(fileNameField, CssClasses.DIALOG_FIELD);
+        FxUtils.addClass(fileNameLabel,
+                        CssClasses.DIALOG_DYNAMIC_LABEL).
+                addClass(fileNameField,
+                        CssClasses.DIALOG_FIELD);
     }
 
     /**

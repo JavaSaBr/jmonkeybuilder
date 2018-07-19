@@ -84,8 +84,10 @@ public class EditorDialog {
 
         var mainScene = EditorUtil.getFxScene();
         var scene = new Scene(container);
-        var stylesheets = scene.getStylesheets();
-        stylesheets.addAll(mainScene.getStylesheets());
+        scene.getStylesheets()
+                .addAll(mainScene.getStylesheets());
+
+        var fxStage = EditorUtil.getFxStage();
 
         dialog = new Stage();
         dialog.setTitle(getTitleText());
@@ -93,10 +95,8 @@ public class EditorDialog {
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.setResizable(isResizable());
         dialog.setScene(scene);
-
-        var fxStage = EditorUtil.getFxStage();
-        var icons = dialog.getIcons();
-        icons.addAll(fxStage.getIcons());
+        dialog.getIcons()
+                .addAll(fxStage.getIcons());
     }
 
     /**
@@ -136,14 +136,25 @@ public class EditorDialog {
         var actionsContainer = new VBox();
 
         if (isGridStructure()) {
+
             var container = new GridPane();
-            FxUtils.addClass(container, CssClasses.DEF_GRID_PANE, CssClasses.DIALOG_CONTENT_ROOT);
+
+            FxUtils.addClass(container,
+                    CssClasses.DEF_GRID_PANE, CssClasses.DIALOG_CONTENT_ROOT);
+
             createContent(container);
+
             FxUtils.addChild(root, container);
+
         } else {
+
             var container = new VBox();
-            FxUtils.addClass(container, CssClasses.DEF_VBOX, CssClasses.DIALOG_CONTENT_ROOT);
+
+            FxUtils.addClass(container,
+                    CssClasses.DEF_VBOX, CssClasses.DIALOG_CONTENT_ROOT);
+
             createContent(container);
+
             FxUtils.addChild(root, container);
         }
 

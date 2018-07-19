@@ -91,15 +91,21 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         createBeforeActions(container);
 
         if (needOkButton()) {
+
             okButton = new Button(getButtonOkText());
             okButton.setOnAction(event -> safeProcessOk());
-            FxUtils.addClass(okButton, CssClasses.DIALOG_BUTTON);
+
+            FxUtils.addClass(okButton,
+                    CssClasses.DIALOG_BUTTON);
         }
 
         if (needCloseButton()) {
+
             closeButton = new Button(getButtonCloseText());
             closeButton.setOnAction(event -> processClose());
-            FxUtils.addClass(closeButton, CssClasses.DIALOG_BUTTON);
+
+            FxUtils.addClass(closeButton,
+                    CssClasses.DIALOG_BUTTON);
         }
 
         if (needOkButton()) {

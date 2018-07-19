@@ -2,16 +2,14 @@ package com.ss.editor.ui.dialog.about;
 
 import com.ss.editor.JfxApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
-import javafx.application.HostServices;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -21,7 +19,6 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.io.InputStream;
 
 /**
  * The dialog about this editor.
@@ -30,69 +27,63 @@ import java.io.InputStream;
  */
 public class AboutDialog extends AbstractSimpleEditorDialog {
 
-    @NotNull
-    private static final String PROJECT_HOME = "https://bitbucket.org/JavaSabr/jmonkeybuilder";
+    private static final String PROJECT_HOME =
+            "https://bitbucket.org/JavaSabr/jmonkeybuilder";
 
-    @NotNull
-    private static final String FORUM_THREAD = "https://hub.jmonkeyengine.org/t/editor-jmonkeybuilder";
+    private static final String FORUM_THREAD =
+            "https://hub.jmonkeyengine.org/t/editor-jmonkeybuilder";
 
-    @NotNull
     private static final Point DIALOG_SIZE = new Point(600, -1);
 
-    @NotNull
-    private static final String ICONS;
+    private static final String ICONS =
+            FileUtils.readFromClasspath("/credits/icons.txt");
 
-    @NotNull
-    private static final String LIBRARIES;
-
-    static {
-        final InputStream iconsResource = FileCreator.class.getResourceAsStream("/credits/icons.txt");
-        final InputStream librariesResource = FileCreator.class.getResourceAsStream("/credits/libraries.txt");
-        ICONS = FileUtils.read(iconsResource);
-        LIBRARIES = FileUtils.read(librariesResource);
-    }
+    private static final String LIBRARIES =
+            FileUtils.readFromClasspath("/credits/libraries.txt");
 
     @Override
     @FxThread
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull VBox root) {
         super.createContent(root);
 
-        final JfxApplication application = JfxApplication.getInstance();
-        final HostServices hostServices = application.getHostServices();
+        var application = JfxApplication.getInstance();
+        var hostServices = application.getHostServices();
 
-        final GridPane gridPane = new GridPane();
+        var gridPane = new GridPane();
 
-        final Label applicationLabel = new Label(Config.TITLE);
-        applicationLabel.setGraphic(new ImageView(Icons.APPLICATION_64));
+        var applicationLabel = new Label(Config.TITLE, new ImageView(Icons.APPLICATION_64));
 
-        final Label versionLabel = new Label(Messages.ABOUT_DIALOG_VERSION + ":");
-        versionLabel.prefWidthProperty().bind(gridPane.widthProperty().multiply(0.5));
+        var versionLabel = new Label(Messages.ABOUT_DIALOG_VERSION + ":");
+        versionLabel.prefWidthProperty()
+                .bind(gridPane.widthProperty().multiply(0.5));
 
-        final Label versionField = new Label(Config.STRING_VERSION);
+        var versionField = new Label(Config.STRING_VERSION);
 
-        final Label projectHomeLabel = new Label(Messages.ABOUT_DIALOG_PROJECT_HOME + ":");
+        var projectHomeLabel = new Label(Messages.ABOUT_DIALOG_PROJECT_HOME + ":");
 
-        final Hyperlink projectHomeField = new Hyperlink("bitbucket.org");
+        var projectHomeField = new Hyperlink("bitbucket.org");
         projectHomeField.setOnAction(event -> hostServices.showDocument(PROJECT_HOME));
         projectHomeField.setFocusTraversable(false);
 
-        final Label forumThreadLabel = new Label(Messages.ABOUT_DIALOG_FORUM_THREAD + ":");
+        var forumThreadLabel = new Label(Messages.ABOUT_DIALOG_FORUM_THREAD + ":");
 
-        final Hyperlink forumThreadField = new Hyperlink("hub.jmonkeyengine.org");
+        var forumThreadField = new Hyperlink("hub.jmonkeyengine.org");
         forumThreadField.setOnAction(event -> hostServices.showDocument(FORUM_THREAD));
         forumThreadField.setFocusTraversable(false);
 
-        final Label usedLibrariesLabel = new Label(Messages.ABOUT_DIALOG_USED_LIBRARIES + ":");
-        usedLibrariesLabel.prefWidthProperty().bind(gridPane.widthProperty());
+        var usedLibrariesLabel = new Label(Messages.ABOUT_DIALOG_USED_LIBRARIES + ":");
+        usedLibrariesLabel.prefWidthProperty()
+                .bind(gridPane.widthProperty());
 
-        final Label usedIcons = new Label(Messages.ABOUT_DIALOG_USED_ICONS + ":");
-        usedIcons.prefWidthProperty().bind(gridPane.widthProperty());
+        var usedIcons = new Label(Messages.ABOUT_DIALOG_USED_ICONS + ":");
+        usedIcons.prefWidthProperty()
+                .bind(gridPane.widthProperty());
 
-        final TextArea librariesArea = new TextArea(LIBRARIES);
+        var librariesArea = new TextArea(LIBRARIES);
         librariesArea.setEditable(false);
         librariesArea.setFocusTraversable(false);
 
-        final TextArea iconsArea = new TextArea(ICONS);
+        var iconsArea = new TextArea(ICONS);
         iconsArea.setEditable(false);
         iconsArea.setFocusTraversable(false);
 
@@ -108,14 +99,22 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         gridPane.add(usedIcons, 0, 6, 2, 1);
         gridPane.add(iconsArea, 0, 7, 2, 1);
 
-        FXUtils.addToPane(gridPane, root);
+        FxUtils.addClass(root,
+                        CssClasses.ABOUT_DIALOG)
+                .addClass(gridPane,
+                        CssClasses.DEF_GRID_PANE)
+                .addClass(usedLibrariesLabel, usedIcons,
+                        CssClasses.ABOUT_DIALOG_LONG_LABEL)
+                .addClass(versionLabel, projectHomeLabel, forumThreadLabel,
+                        CssClasses.SPECIAL_FONT_16)
+                .addClass(usedLibrariesLabel, usedIcons, versionField,
+                        CssClasses.SPECIAL_FONT_16)
+                .addClass(projectHomeField, forumThreadField,
+                        CssClasses.SPECIAL_FONT_16)
+                .addClass(applicationLabel,
+                        CssClasses.ABOUT_DIALOG_TITLE_LABEL);
 
-        FXUtils.addClassTo(root, CssClasses.ABOUT_DIALOG);
-        FXUtils.addClassTo(gridPane, CssClasses.DEF_GRID_PANE);
-        FXUtils.addClassTo(usedLibrariesLabel, usedIcons, CssClasses.ABOUT_DIALOG_LONG_LABEL);
-        FXUtils.addClassesTo(versionLabel, projectHomeLabel, forumThreadLabel, usedLibrariesLabel, usedIcons,
-                versionField, projectHomeField, forumThreadField, CssClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(applicationLabel, CssClasses.ABOUT_DIALOG_TITLE_LABEL);
+        FxUtils.addChild(root, gridPane);
     }
 
     @Override
