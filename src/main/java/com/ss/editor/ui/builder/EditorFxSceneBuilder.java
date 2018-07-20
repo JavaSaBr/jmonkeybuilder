@@ -25,6 +25,7 @@ import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Group;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -47,6 +48,9 @@ public class EditorFxSceneBuilder {
      */
     @FxThread
     public static @NotNull EditorFxScene build(@NotNull Stage window) {
+
+        // init FX classes
+        var t1 = Menu.ON_SHOWN;
 
         var editorConfig = EditorConfig.getInstance();
         var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
@@ -79,16 +83,19 @@ public class EditorFxSceneBuilder {
      */
     @BackgroundThread
     private static void attachScene(@NotNull Stage window, @NotNull EditorFxScene scene) {
-        var executorManager = ExecutorManager.getInstance();
-        executorManager.addFxTask(() -> {
+        ExecutorManager.getInstance()
+                .addFxTask(() -> attachSceneInFx(window, scene));
+    }
 
-            window.setScene(scene);
+    @FxThread
+    private static void attachSceneInFx(@NotNull Stage window, @NotNull EditorFxScene scene) {
 
-            LOGGER.info("The main scene is attached.");
+        window.setScene(scene);
 
-            AsyncEventManager.getInstance()
-                    .notify(new FxSceneAttachedEvent());
-        });
+        LOGGER.info("the main scene is attached.");
+
+        AsyncEventManager.getInstance()
+                .notify(new FxSceneAttachedEvent());
     }
 
     /**

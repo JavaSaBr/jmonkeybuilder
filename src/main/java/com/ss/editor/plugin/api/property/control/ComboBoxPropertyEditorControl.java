@@ -50,10 +50,12 @@ public class ComboBoxPropertyEditorControl<T> extends PropertyEditorControl<T> {
 
     @Override
     @FxThread
-    public void reload() {
-        super.reload();
+    protected void reloadImpl() {
+
         comboBox.getSelectionModel()
-                .select(getPropertyValue());
+            .select(getPropertyValue());
+
+        super.reloadImpl();
     }
 
     @Override

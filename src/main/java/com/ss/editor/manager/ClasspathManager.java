@@ -2,7 +2,7 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_CLASSES_FOLDER;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_LIBRARY_FOLDER;
-import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
+
 import com.jme3.asset.AssetManager;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JmeApplication;
@@ -46,10 +46,6 @@ public class ClasspathManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(ClasspathManager.class);
 
-    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-    private static final AsyncEventManager ASYNC_EVENT_MANAGER = AsyncEventManager.getInstance();
-
     public enum Scope {
         CORE,
         CUSTOM,
@@ -63,7 +59,8 @@ public class ClasspathManager {
             EnumSet.of(CORE, CUSTOM, LOCAL_CLASSES, LOCAL_LIBRARIES);
     }
 
-    private static final String[] JAR_EXTENSIONS = toArray(FileExtensions.JAVA_LIBRARY);
+    private static final String[] JAR_EXTENSIONS =
+            ArrayFactory.toArray(FileExtensions.JAVA_LIBRARY);
 
     public static final Array<String> CORE_LIBRARIES_NAMES = Array.of(
             "jme3-core",
@@ -107,7 +104,6 @@ public class ClasspathManager {
      */
     @NotNull
     private volatile ClassPathScanner coreScanner;
-
 
     /**
      * The local libraries scanner.
@@ -162,24 +158,28 @@ public class ClasspathManager {
 
         var coreScanner = ClassPathScannerFactory.newManifestScanner(JmeApplication.class, "Class-Path");
         coreScanner.setUseSystemClasspath(true);
-        coreScanner.scan(path -> {
-
-            if (Files.isDirectory(Paths.get(path))) {
-                return true;
-            } else if (!CORE_LIBRARIES_NAMES.anyMatch(path, (pattern, pth) -> pth.contains(pattern))) {
-                return false;
-            } else if (path.contains("natives")) {
-                return false;
-            } else {
-                return !path.contains("sources") && !path.contains("javadoc");
-            }
-        });
+        coreScanner.scan(this::filterCoreLibraries);
 
         this.coreScanner = coreScanner;
 
-        ASYNC_EVENT_MANAGER.notify(new CoreClassesScannedEvent());
+        AsyncEventManager.getInstance()
+                .notify(new CoreClassesScannedEvent());
 
         LOGGER.info("scanned core classes.");
+    }
+
+    @BackgroundThread
+    private boolean filterCoreLibraries(@NotNull String path) {
+
+        if (Files.isDirectory(Paths.get(path))) {
+            return true;
+        } else if (!CORE_LIBRARIES_NAMES.anyMatch(path, (pattern, pth) -> pth.contains(pattern))) {
+            return false;
+        } else if (path.contains("natives")) {
+            return false;
+        } else {
+            return !path.contains("sources") && !path.contains("javadoc");
+        }
     }
 
     /**
@@ -200,7 +200,7 @@ public class ClasspathManager {
 
             var classLoader = userClassesLoader == null ? userLibrariesLoader : userClassesLoader;
             var scanner = ClassPathScannerFactory.newDefaultScanner(classLoader);
-            var urls = ArrayFactory.<URL>newArray(URL.class);
+            var urls = Array.ofType(URL.class);
 
             if (userLibrariesLoader != null) {
                 urls.addAll(userLibrariesLoader.getURLs());
@@ -225,7 +225,10 @@ public class ClasspathManager {
         } finally {
             updateLibrariesLoader(userLibrariesLoader);
             updateClassesLoader(userClassesLoader);
-            ASYNC_EVENT_MANAGER.notify(new ClasspathReloadedEvent());
+
+            AsyncEventManager.getInstance()
+                    .notify(new ClasspathReloadedEvent());
+
             LOGGER.info("reloaded.");
         }
     }
@@ -244,7 +247,8 @@ public class ClasspathManager {
      */
     @FromAnyThread
     public void reload() {
-        EXECUTOR_MANAGER.addBackgroundTask(this::reloadInBackground);
+        ExecutorManager.getInstance()
+                .addBackgroundTask(this::reloadInBackground);
     }
 
     /**
@@ -253,13 +257,15 @@ public class ClasspathManager {
     @BackgroundThread
     private @Nullable URLClassLoader createUserLibrariesLoader() {
 
-        var path = EDITOR_CONFIG.getFile(PREF_USER_LIBRARY_FOLDER);
+        var path = EditorConfig.getInstance()
+                .getFile(PREF_USER_LIBRARY_FOLDER);
+
         if (path == null) {
             return null;
         }
 
-        var jars = FileUtils.getFiles(path, false, JAR_EXTENSIONS);
-        var urls = jars.stream()
+        var urls = FileUtils.getFiles(path, false, JAR_EXTENSIONS)
+                .stream()
                 .map(FileUtils::getUrl)
                 .toArray(URL[]::new);
 
@@ -272,12 +278,14 @@ public class ClasspathManager {
     @FromAnyThread
     private @Nullable URLClassLoader createUserClassesLoader(@Nullable ClassLoader userLibrariesLoader) {
 
-        var path = EDITOR_CONFIG.getFile(PREF_USER_CLASSES_FOLDER);
+        var path = EditorConfig.getInstance()
+                .getFile(PREF_USER_CLASSES_FOLDER);
+
         if (path == null) {
             return null;
         }
 
-        var folders = ArrayFactory.<Path>newArray(Path.class);
+        var folders = Array.ofType(Path.class);
 
         Utils.run(path, folders, (dir, toStore) -> {
             var stream = Files.newDirectoryStream(dir);
@@ -313,13 +321,13 @@ public class ClasspathManager {
         var assetManager = EditorUtil.getAssetManager();
 
         if (currentLoader != null) {
-            EXECUTOR_MANAGER.addJmeTask(() ->
-                    assetManager.removeClassLoader(currentLoader));
+            ExecutorManager.getInstance()
+                    .addJmeTask(() -> assetManager.removeClassLoader(currentLoader));
         }
 
         if (newLoader != null) {
-            EXECUTOR_MANAGER.addJmeTask(() ->
-                    assetManager.addClassLoader(newLoader));
+            ExecutorManager.getInstance()
+                    .addJmeTask(() -> assetManager.addClassLoader(newLoader));
         }
     }
 
