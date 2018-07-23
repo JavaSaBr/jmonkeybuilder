@@ -1,11 +1,12 @@
 package com.ss.editor.model.undo.impl.scene;
 
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.model.node.layer.LayersRoot;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
-
+import com.ss.editor.model.node.layer.LayersRoot;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,33 +34,41 @@ public class AddSceneLayerOperation extends AbstractEditorOperation<ModelChangeC
     @NotNull
     private final SceneNode sceneNode;
 
-    /**
-     * Instantiates a new Add scene layer operation.
-     *
-     * @param layersRoot the layers root
-     * @param layer      the layer
-     * @param sceneNode  the scene node
-     */
-    public AddSceneLayerOperation(final @NotNull LayersRoot layersRoot, @NotNull final SceneLayer layer,
-                                  @NotNull final SceneNode sceneNode) {
+    public AddSceneLayerOperation(
+            @NotNull LayersRoot layersRoot,
+            @NotNull SceneLayer layer,
+            @NotNull SceneNode sceneNode
+    ) {
         this.layersRoot = layersRoot;
         this.layer = layer;
         this.sceneNode = sceneNode;
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.addLayer(layer);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(layersRoot, layer, -1, true));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        sceneNode.addLayer(layer);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.removeLayer(layer);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(layersRoot, layer));
-        });
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxAddedChild(layersRoot, layer, -1, true);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        sceneNode.removeLayer(layer);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxRemovedChild(layersRoot, layer);
     }
 }
