@@ -24,7 +24,7 @@ public class DisableAppStateOperation extends AbstractEditorOperation<SceneChang
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
+    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             appState.setEnabled(false);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedAppState(appState));

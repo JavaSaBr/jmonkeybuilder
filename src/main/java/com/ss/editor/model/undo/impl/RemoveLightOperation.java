@@ -35,7 +35,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
 
     @Override
     @JmeThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.removeLight(light);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(parent, light));

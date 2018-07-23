@@ -59,7 +59,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             final Spatial currentModel = editor.getCurrentModel();
             currentModel.depthFirstTraversal(this::clean);

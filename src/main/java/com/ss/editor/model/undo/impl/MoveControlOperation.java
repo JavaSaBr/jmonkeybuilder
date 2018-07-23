@@ -44,7 +44,7 @@ public class MoveControlOperation extends AbstractEditorOperation<ModelChangeCon
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             oldParent.removeControl(moved);
             newParent.addControl(moved);

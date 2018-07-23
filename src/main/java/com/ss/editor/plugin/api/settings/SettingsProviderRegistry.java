@@ -47,7 +47,7 @@ public class SettingsProviderRegistry {
     @FxThread
     public @NotNull Array<SettingsPropertyDefinition> getDefinitions() {
 
-        var result = Array.<SettingsPropertyDefinition>ofType(SettingsPropertyDefinition.class);
+        var result = Array.ofType(SettingsPropertyDefinition.class);
 
         for (var settingsProvider : PROVIDERS.getExtensions()) {
             result.addAll(settingsProvider.getDefinitions());

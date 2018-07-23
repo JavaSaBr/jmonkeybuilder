@@ -3,6 +3,8 @@ package com.ss.editor.model.undo.impl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.RenderFilterRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -31,36 +33,49 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
      */
     private final boolean needSelect;
 
-    public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent) {
+    public AddChildOperation(@NotNull Spatial newChild, @NotNull Node parent) {
         this(newChild, parent, true);
     }
 
-    public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent, boolean needSelect) {
+    public AddChildOperation(@NotNull Spatial newChild, @NotNull Node parent, boolean needSelect) {
         this.newChild = newChild;
         this.parent = parent;
         this.needSelect = needSelect;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
 
-            editor.notifyJmePreChangeProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
-            parent.attachChildAt(newChild, 0);
-            editor.notifyJmeChangedProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
+        editor.notifyJmePreChangeProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
 
-            final RenderFilterRegistry filterExtension = RenderFilterRegistry.getInstance();
-            filterExtension.refreshFilters();
+        parent.attachChildAt(newChild, 0);
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(parent, newChild, 0, needSelect));
-        });
+        editor.notifyJmeChangedProperty(newChild, Messages.MODEL_PROPERTY_TRANSFORMATION);
+
+        RenderFilterRegistry.getInstance()
+                .refreshFilters();
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            parent.detachChild(newChild);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(parent, newChild));
-        });
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxAddedChild(parent, newChild, 0, needSelect);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        parent.detachChild(newChild);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxRemovedChild(parent, newChild);
     }
 }

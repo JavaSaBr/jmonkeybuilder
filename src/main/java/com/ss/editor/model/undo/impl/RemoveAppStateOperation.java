@@ -33,7 +33,7 @@ public class RemoveAppStateOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
+    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.removeAppState(newState);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyRemovedAppState(newState));

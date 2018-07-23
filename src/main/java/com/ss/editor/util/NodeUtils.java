@@ -283,7 +283,7 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static Array<Geometry> getGeometriesWithMaterial(@NotNull Spatial spatial, @NotNull String assetPath) {
-        var container = Array.<Geometry>ofType(Geometry.class);
+        var container = Array.ofType(Geometry.class);
         addGeometryWithMaterial(spatial, container, assetPath);
         return container;
     }
@@ -462,7 +462,7 @@ public class NodeUtils {
      */
     @FromAnyThread
     public static @NotNull Array<Geometry> getGeometries(@NotNull Spatial spatial) {
-        var result = ArrayFactory.<Geometry>newArray(Geometry.class);
+        var result = ArrayFactory.newArray(Geometry.class);
         addGeometry(spatial, result);
         return result;
     }
@@ -499,7 +499,7 @@ public class NodeUtils {
     @FromAnyThread
     public static @NotNull Array<Light> getAllLights(@NotNull Spatial spatial) {
 
-        var lights = Array.<Light>ofType(Light.class);
+        var lights = Array.ofType(Light.class);
 
         spatial.depthFirstTraversal(sp ->
                 sp.getLocalLightList().forEach(lights::add));
@@ -540,7 +540,7 @@ public class NodeUtils {
     @FromAnyThread
     public static @NotNull Array<AudioNode> getAllAudioNodes(@NotNull Spatial spatial) {
 
-        var audioNodes = Array.<AudioNode>ofType(AudioNode.class);
+        var audioNodes = Array.ofType(AudioNode.class);
 
         spatial.depthFirstTraversal(sp -> {
             if (sp instanceof AudioNode) {
@@ -584,7 +584,7 @@ public class NodeUtils {
     @FromAnyThread
     public static Stream<Spatial> children(@NotNull Spatial spatial) {
 
-        var result = ArrayFactory.<Spatial>newArray(Spatial.class);
+        var result = ArrayFactory.newArray(Spatial.class);
 
         visitSpatial(spatial, sp -> {
             result.add(sp);

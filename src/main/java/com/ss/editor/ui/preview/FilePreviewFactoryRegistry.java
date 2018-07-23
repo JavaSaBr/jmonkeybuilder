@@ -45,7 +45,7 @@ public class FilePreviewFactoryRegistry {
     @FxThread
     public Array<FilePreview> createAvailablePreviews() {
 
-        var result = Array.<FilePreview>ofType(FilePreview.class);
+        var result = Array.ofType(FilePreview.class);
 
         PREVIEW_FACTORIES.forEach(result, FilePreviewFactory::createFilePreviews);
 

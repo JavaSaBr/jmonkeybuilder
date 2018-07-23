@@ -57,7 +57,7 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final C editor) {
+    protected void redoInFx(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             editor.notifyJmePreChangeProperty(target, propertyName);
             apply(target, newValue);

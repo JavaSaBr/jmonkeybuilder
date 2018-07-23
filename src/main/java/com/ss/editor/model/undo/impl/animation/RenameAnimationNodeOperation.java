@@ -47,7 +47,7 @@ public class RenameAnimationNodeOperation extends AbstractEditorOperation<ModelC
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             final Animation anim = control.getAnim(oldName);
             AnimationUtils.changeName(control, anim, oldName, newName);

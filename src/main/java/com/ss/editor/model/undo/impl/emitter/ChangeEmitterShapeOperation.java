@@ -2,6 +2,8 @@ package com.ss.editor.model.undo.impl.emitter;
 
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterShape;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -23,30 +25,46 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
      * The prev shape.
      */
     @NotNull
-    private volatile EmitterShape prevShape;
+    private final EmitterShape prevShape;
 
-    public ChangeEmitterShapeOperation(@NotNull final EmitterShape newShape, @NotNull final ParticleEmitter emitter) {
-        this.prevShape = newShape;
+    /**
+     * The new shape.
+     */
+    @NotNull
+    private final EmitterShape newShape;
+
+    public ChangeEmitterShapeOperation(@NotNull EmitterShape newShape, @NotNull ParticleEmitter emitter) {
+        this.newShape = newShape;
+        this.prevShape = emitter.getShape();
         this.emitter = emitter;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
-    }
-
-    private void switchShape(final @NotNull ModelChangeConsumer editor) {
-
-        final EmitterShape shape = emitter.getShape();
-        final EmitterShape newShape = prevShape;
-        prevShape = shape;
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
         emitter.setShape(newShape);
-
-        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxReplaced(emitter, prevShape, newShape, true, true));
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxReplaced(emitter, prevShape, newShape, true, true);
     }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        emitter.setShape(prevShape);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxReplaced(emitter, newShape, prevShape, true, true);
+    }
+
 }

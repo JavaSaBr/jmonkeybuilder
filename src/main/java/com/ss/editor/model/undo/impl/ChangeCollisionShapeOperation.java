@@ -2,8 +2,9 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,35 +32,55 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
     @NotNull
     private final PhysicsCollisionObject collisionObject;
 
-    /**
-     * Instantiates a new Change collision shape operation.
-     *
-     * @param newShape        the new shape
-     * @param oldShape        the old shape
-     * @param collisionObject the collision object
-     */
-    public ChangeCollisionShapeOperation(@NotNull final CollisionShape newShape, @NotNull final CollisionShape oldShape,
-                                         @NotNull final PhysicsCollisionObject collisionObject) {
+    public ChangeCollisionShapeOperation(
+            @NotNull CollisionShape newShape,
+            @NotNull CollisionShape oldShape,
+            @NotNull PhysicsCollisionObject collisionObject
+    ) {
         this.newShape = newShape;
         this.oldShape = oldShape;
         this.collisionObject = collisionObject;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(collisionObject, oldShape));
-            collisionObject.setCollisionShape(newShape);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(collisionObject, newShape, -1, true));
-        });
+    @FxThread
+    protected void startRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.startRedoInFx(editor);
+        editor.notifyFxRemovedChild(collisionObject, oldShape);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(collisionObject, newShape));
-            collisionObject.setCollisionShape(oldShape);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(collisionObject, oldShape, -1, false));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        collisionObject.setCollisionShape(newShape);
+    }
+
+    @Override
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxAddedChild(collisionObject, newShape, -1, true);
+    }
+
+    @Override
+    @FxThread
+    protected void startUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.startUndoInFx(editor);
+        editor.notifyFxRemovedChild(collisionObject, newShape);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        collisionObject.setCollisionShape(oldShape);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxAddedChild(collisionObject, oldShape, -1, false);
     }
 }

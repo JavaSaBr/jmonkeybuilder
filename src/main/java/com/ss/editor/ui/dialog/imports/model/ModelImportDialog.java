@@ -94,7 +94,7 @@ public class ModelImportDialog extends GenericFileCreator {
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var result = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var result = Array.ofType(PropertyDefinition.class);
         result.add(new PropertyDefinition(EXTERNAL_FILE, Messages.IMPORT_MODEL_DIALOG_EXTERNAL_FILE, PROP_FILE, null));
         result.add(new PropertyDefinition(FOLDER_FROM_ASSET_FOLDER, Messages.IMPORT_MODEL_DIALOG_TEXTURES_FOLDER, PROP_TEXTURES_FOLDER, null));
         result.add(new PropertyDefinition(BOOLEAN, Messages.IMPORT_MODEL_DIALOG_OVERWRITE_TEXTURES, PROP_OVERWRITE_TEXTURES, true));
@@ -234,8 +234,8 @@ public class ModelImportDialog extends GenericFileCreator {
         var materialsFolder = vars.get(PROP_MATERIALS_FOLDER, parent);
         var overwriteMaterials = vars.getBoolean(PROP_OVERWRITE_MATERIALS, false);
 
-        var textures = Array.<Texture>ofType(Texture.class);
-        var geometries = Array.<Geometry>ofType(Geometry.class);
+        var textures = Array.ofType(Texture.class);
+        var geometries = Array.ofType(Geometry.class);
 
         NodeUtils.visitGeometry(model, geometry -> {
 
@@ -294,7 +294,7 @@ public class ModelImportDialog extends GenericFileCreator {
             return;
         }
 
-        var resultNameToKey = ObjectDictionary.<String>ofType(String.class);
+        var resultNameToKey = ObjectDictionary.ofType(String.class);
 
         for (var geometry : geometries) {
 
@@ -345,8 +345,8 @@ public class ModelImportDialog extends GenericFileCreator {
             return;
         }
 
-        var oldKeyToNew = ObjectDictionary.<String>ofType(String.class);
-        var newTextureKeys = Array.<AssetKey>ofType(AssetKey.class);
+        var oldKeyToNew = ObjectDictionary.ofType(String.class);
+        var newTextureKeys = Array.ofType(AssetKey.class);
 
         for (var texture : textures) {
 

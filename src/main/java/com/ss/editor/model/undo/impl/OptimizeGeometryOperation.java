@@ -4,8 +4,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,8 +33,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final Node parent;
 
-    public OptimizeGeometryOperation(@NotNull final Spatial newSpatial, @NotNull final Spatial oldSpatial,
-                                     @NotNull final Node parent) {
+    public OptimizeGeometryOperation(@NotNull Spatial newSpatial, @NotNull Spatial oldSpatial, @NotNull Node parent) {
         this.newSpatial = newSpatial;
         this.oldSpatial = oldSpatial;
         this.parent = parent;
@@ -42,14 +41,16 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> apply(editor, oldSpatial, newSpatial));
+    protected void redoInFx(@NotNull ModelChangeConsumer editor) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> apply(editor, oldSpatial, newSpatial));
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> apply(editor, newSpatial, oldSpatial));
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> apply(editor, newSpatial, oldSpatial));
     }
 
     /**
@@ -60,13 +61,17 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
      * @param oldSpatial the new old spatial.
      */
     @JmeThread
-    private void apply(@NotNull final ModelChangeConsumer consumer, @NotNull final Spatial newSpatial,
-                       @NotNull final Spatial oldSpatial) {
+    private void apply(
+            @NotNull ModelChangeConsumer consumer, @NotNull Spatial newSpatial, @NotNull Spatial oldSpatial
+    ) {
 
-        final int index = parent.getChildIndex(newSpatial);
+        var index = parent.getChildIndex(newSpatial);
+
         parent.detachChildAt(index);
         parent.attachChildAt(oldSpatial, index);
 
-        EXECUTOR_MANAGER.addFxTask(() -> consumer.notifyFxReplaced(parent, newSpatial, oldSpatial, true, false));
+        ExecutorManager.getInstance()
+                .addFxTask(() -> consumer.notifyFxReplaced(parent, newSpatial,
+                        oldSpatial, true, false));
     }
 }

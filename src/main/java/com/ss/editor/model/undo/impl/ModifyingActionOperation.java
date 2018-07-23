@@ -40,7 +40,7 @@ public class ModifyingActionOperation extends AbstractEditorOperation<ChangeCons
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull ChangeConsumer editor) {
+    protected void redoInFx(@NotNull ChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             state = modifyingAction.redo(JmbEditorEnvoriment.getInstance(), owner);
             editor.notifyJmeObjectChanged(owner);

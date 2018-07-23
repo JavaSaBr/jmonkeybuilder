@@ -2,8 +2,10 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
@@ -21,25 +23,38 @@ public class ChangeControlsOperation extends AbstractEditorOperation<ModelChange
     @NotNull
     private final Array<Control> controls;
 
-    public ChangeControlsOperation(@NotNull final Array<Control> controls) {
+    public ChangeControlsOperation(@NotNull Array<Control> controls) {
         this.controls = controls;
     }
 
     @Override
     @JmeThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-
-            for (final Control control : controls) {
-                redoChange(control);
-            }
-
-            EXECUTOR_MANAGER.addFxTask(() -> {
-                controls.forEach(editor, (control, consumer) ->
-                        consumer.notifyFxChangeProperty(control, getPropertyName()));
-            });
-        });
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        controls.forEachR(this, ChangeControlsOperation::redoChange);
     }
+
+    @Override
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        controls.forEachRm(editor, getPropertyName(), ChangeConsumer::notifyFxChangeProperty);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        controls.forEachR(this, ChangeControlsOperation::undoChange);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        controls.forEachRm(editor, getPropertyName(), ChangeConsumer::notifyFxChangeProperty);
+    }
+
 
     /**
      * Apply new changes to the control.
@@ -47,23 +62,7 @@ public class ChangeControlsOperation extends AbstractEditorOperation<ModelChange
      * @param control the control.
      */
     @JmeThread
-    protected void redoChange(@NotNull final Control control) {
-    }
-
-    @Override
-    @JmeThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-
-            for (final Control control : controls) {
-                undoChange(control);
-            }
-
-            EXECUTOR_MANAGER.addFxTask(() -> {
-                controls.forEach(editor, (control, consumer) ->
-                    consumer.notifyFxChangeProperty(control, getPropertyName()));
-            });
-        });
+    protected void redoChange(@NotNull Control control) {
     }
 
     /**
@@ -72,7 +71,7 @@ public class ChangeControlsOperation extends AbstractEditorOperation<ModelChange
      * @param control the control.
      */
     @JmeThread
-    protected void undoChange(@NotNull final Control control) {
+    protected void undoChange(@NotNull Control control) {
     }
 
     /**
@@ -80,7 +79,7 @@ public class ChangeControlsOperation extends AbstractEditorOperation<ModelChange
      *
      * @return the property name.
      */
-    @FxThread
+    @FromAnyThread
     protected @NotNull String getPropertyName() {
         throw new UnsupportedOperationException();
     }

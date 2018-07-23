@@ -95,7 +95,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     @FromAnyThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var result = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var result = Array.ofType(PropertyDefinition.class);
         result.add(new PropertyDefinition(STRING_FROM_LIST, Messages.MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL,
                 PROP_GLSL_VERSION, Caps.GLSL150.name(), availableGlsl));
 

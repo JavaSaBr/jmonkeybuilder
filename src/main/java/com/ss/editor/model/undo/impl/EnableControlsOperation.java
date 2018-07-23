@@ -3,6 +3,8 @@ package com.ss.editor.model.undo.impl;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.util.ControlUtils;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
@@ -14,23 +16,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EnableControlsOperation extends ChangeControlsOperation {
 
-    public EnableControlsOperation(@NotNull final Array<Control> controls) {
+    public EnableControlsOperation(@NotNull Array<Control> controls) {
         super(controls);
     }
 
     @Override
-    protected void redoChange(final @NotNull Control control) {
+    @JmeThread
+    protected void redoChange(@NotNull Control control) {
         super.redoChange(control);
         ControlUtils.setEnabled(control, true);
     }
 
     @Override
-    protected void undoChange(final @NotNull Control control) {
+    @JmeThread
+    protected void undoChange(@NotNull Control control) {
         super.undoChange(control);
         ControlUtils.setEnabled(control, false);
     }
 
     @Override
+    @FromAnyThread
     protected @NotNull String getPropertyName() {
         return Messages.MODEL_PROPERTY_IS_ENABLED;
     }

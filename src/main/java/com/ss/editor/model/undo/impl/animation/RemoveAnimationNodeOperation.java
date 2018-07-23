@@ -33,7 +33,7 @@ public class RemoveAnimationNodeOperation extends AbstractEditorOperation<ModelC
 
     @Override
     @JmeThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             control.removeAnim(animation);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, animation));

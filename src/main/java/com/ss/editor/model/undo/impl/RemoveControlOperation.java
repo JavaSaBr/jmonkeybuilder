@@ -34,7 +34,7 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
 
     @Override
     @JmeThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             parent.removeControl(control);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(parent, control));

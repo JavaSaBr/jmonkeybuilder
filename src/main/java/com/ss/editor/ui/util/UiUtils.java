@@ -181,7 +181,7 @@ public abstract class UiUtils {
      */
     @FxThread
     public static @NotNull <T extends Node> Array<T> getComponents(@NotNull Node node, @NotNull Class<T> type) {
-        var container = Array.<T>ofType(type);
+        var container = Array.ofType(type);
         fillComponents(container, node, type);
         return container;
     }
@@ -222,7 +222,7 @@ public abstract class UiUtils {
     @FxThread
     public static @NotNull Array<MenuItem> getAllItems(@NotNull MenuBar menuBar) {
 
-        var container = Array.<MenuItem>ofType(MenuItem.class);
+        var container = Array.ofType(MenuItem.class);
 
         menuBar.getMenus()
                 .forEach(menu -> getAllItems(container, menu));
