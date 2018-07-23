@@ -39,7 +39,7 @@ public class RemoveElementsOperation extends AbstractEditorOperation<ModelChange
          */
         private int index;
 
-        public Element(@NotNull final Object element, @NotNull final Object parent) {
+        public Element(@NotNull Object element, @NotNull Object parent) {
             this.element = element;
             this.parent = parent;
             this.index = -1;

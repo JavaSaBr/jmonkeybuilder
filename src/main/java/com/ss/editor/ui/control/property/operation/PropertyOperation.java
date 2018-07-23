@@ -1,13 +1,18 @@
 package com.ss.editor.ui.control.property.operation;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.common.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
+
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to edit properties of objects.
@@ -40,15 +45,22 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     /**
      * The target object.
      */
+    @NotNull
     protected final D target;
 
     /**
      * The handler for applying new value.
      */
-    private BiConsumer<D, T> applyHandler;
+    @Nullable
+    private volatile BiConsumer<D, T> applyHandler;
 
-    public PropertyOperation(@NotNull final D target, @NotNull final String propertyName, @Nullable final T newValue,
-                             @Nullable final T oldValue) {
+    public PropertyOperation(
+            @NotNull D target,
+            @NotNull String propertyName,
+            @Nullable T newValue,
+            @Nullable T oldValue
+    ) {
+
         this.newValue = newValue;
         this.oldValue = oldValue;
         this.target = target;
@@ -56,25 +68,38 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
     }
 
     @Override
-    @FxThread
-    protected void redoInFx(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            editor.notifyJmePreChangeProperty(target, propertyName);
-            apply(target, newValue);
-            editor.notifyJmeChangedProperty(target, propertyName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(target, propertyName));
-        });
+    @JmeThread
+    protected void startInJme(@NotNull C editor) {
+        super.startInJme(editor);
+        editor.notifyJmePreChangeProperty(target, propertyName);
+    }
+
+    @Override
+    @JmeThread
+    protected void endInJme(@NotNull C editor) {
+        super.endInJme(editor);
+        editor.notifyJmeChangedProperty(target, propertyName);
+    }
+
+    @Override
+    @JmeThread
+    protected void redoInJme(@NotNull C editor) {
+        super.redoInJme(editor);
+        apply(target, newValue);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull C editor) {
+        super.undoInJme(editor);
+        apply(target, oldValue);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            editor.notifyJmePreChangeProperty(target, propertyName);
-            apply(target, oldValue);
-            editor.notifyJmeChangedProperty(target, propertyName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(target, propertyName));
-        });
+    protected void endInFx(@NotNull C editor) {
+        super.endInFx(editor);
+        editor.notifyFxChangeProperty(target, propertyName);
     }
 
     /**
@@ -82,7 +107,8 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
      *
      * @param applyHandler the handler for applying new value.
      */
-    public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
+    @FromAnyThread
+    public void setApplyHandler(@NotNull BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
 
@@ -92,10 +118,11 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
      * @param spatial the spatial
      * @param value   the value
      */
-    protected void apply(@NotNull final D spatial, @Nullable final T value) {
+    @JmeThread
+    protected void apply(@NotNull D spatial, @Nullable T value) {
         try {
-            applyHandler.accept(spatial, value);
-        } catch (final Exception e) {
+            notNull(applyHandler).accept(spatial, value);
+        } catch (Exception e) {
             EditorUtil.handleException(LOGGER, this, e);
         }
     }

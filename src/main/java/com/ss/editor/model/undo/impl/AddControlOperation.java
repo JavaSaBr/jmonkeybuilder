@@ -40,8 +40,8 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyFxAddedChild(spatial, newControl, -1, true);
     }
 
@@ -54,8 +54,8 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyFxRemovedChild(spatial, newControl);
     }
 }

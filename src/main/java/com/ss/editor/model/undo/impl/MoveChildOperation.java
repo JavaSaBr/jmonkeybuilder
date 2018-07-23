@@ -2,6 +2,8 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
@@ -21,30 +23,28 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
     private final Spatial moved;
 
     /**
-     * The child index.
-     */
-    private final int childIndex;
-
-    /**
      * The old parent.
      */
-    private Node oldParent;
+    @NotNull
+    private final Node oldParent;
 
     /**
      * The new parent.
      */
-    private Node newParent;
+    @NotNull
+    private final Node newParent;
 
     /**
-     * Instantiates a new Move child operation.
-     *
-     * @param moved      the moved
-     * @param oldParent  the old parent
-     * @param newParent  the new parent
-     * @param childIndex the child index
+     * The child index.
      */
-    public MoveChildOperation(@NotNull final Spatial moved, @NotNull final Node oldParent,
-                              @NotNull final Node newParent, final int childIndex) {
+    private final int childIndex;
+
+    public MoveChildOperation(
+            @NotNull Spatial moved,
+            @NotNull Node oldParent,
+            @NotNull Node newParent,
+            int childIndex
+    ) {
         this.moved = moved;
         this.oldParent = oldParent;
         this.newParent = newParent;
@@ -52,18 +52,30 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            newParent.attachChildAt(moved, 0);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxMoved(oldParent, newParent, moved, 0, true));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        newParent.attachChildAt(moved, 0);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            oldParent.attachChildAt(moved, childIndex);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxMoved(newParent, oldParent, moved, childIndex, false));
-        });
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxMoved(oldParent, newParent, moved, 0, true);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        oldParent.attachChildAt(moved, childIndex);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxMoved(newParent, oldParent, moved, childIndex, false);
     }
 }

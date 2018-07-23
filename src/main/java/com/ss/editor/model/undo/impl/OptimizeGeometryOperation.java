@@ -40,38 +40,45 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     }
 
     @Override
-    @FxThread
-    protected void redoInFx(@NotNull ModelChangeConsumer editor) {
-        ExecutorManager.getInstance()
-                .addJmeTask(() -> apply(editor, oldSpatial, newSpatial));
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        apply(oldSpatial, newSpatial);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
-        ExecutorManager.getInstance()
-                .addJmeTask(() -> apply(editor, newSpatial, oldSpatial));
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxReplaced(parent, oldSpatial, newSpatial, true, false);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        apply(newSpatial, oldSpatial);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxReplaced(parent, newSpatial, oldSpatial, true, false);
     }
 
     /**
      * Apply changes.
      *
-     * @param consumer   the change consumer.
      * @param newSpatial the new spatial.
      * @param oldSpatial the new old spatial.
      */
     @JmeThread
-    private void apply(
-            @NotNull ModelChangeConsumer consumer, @NotNull Spatial newSpatial, @NotNull Spatial oldSpatial
-    ) {
+    private void apply(@NotNull Spatial newSpatial,@NotNull Spatial oldSpatial) {
 
         var index = parent.getChildIndex(newSpatial);
 
         parent.detachChildAt(index);
         parent.attachChildAt(oldSpatial, index);
-
-        ExecutorManager.getInstance()
-                .addFxTask(() -> consumer.notifyFxReplaced(parent, newSpatial,
-                        oldSpatial, true, false));
     }
 }

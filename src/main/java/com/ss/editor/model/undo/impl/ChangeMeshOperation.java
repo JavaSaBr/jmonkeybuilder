@@ -2,8 +2,9 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,32 +33,37 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
     @NotNull
     private final Geometry geometry;
 
-    /**
-     * Instantiates a new Change mesh operation.
-     *
-     * @param newMesh  the new mesh
-     * @param oldMesh  the old mesh
-     * @param geometry the geometry
-     */
-    public ChangeMeshOperation(@NotNull final Mesh newMesh, @NotNull final Mesh oldMesh, @NotNull final Geometry geometry) {
+    public ChangeMeshOperation(@NotNull Mesh newMesh, @NotNull Mesh oldMesh, @NotNull Geometry geometry) {
         this.newMesh = newMesh;
         this.oldMesh = oldMesh;
         this.geometry = geometry;
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            geometry.setMesh(newMesh);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(geometry, newMesh, "mesh"));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        geometry.setMesh(newMesh);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            geometry.setMesh(oldMesh);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(geometry, oldMesh, "mesh"));
-        });
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxChangeProperty(geometry, newMesh, "mesh");
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        geometry.setMesh(oldMesh);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxChangeProperty(geometry, oldMesh, "mesh");
     }
 }

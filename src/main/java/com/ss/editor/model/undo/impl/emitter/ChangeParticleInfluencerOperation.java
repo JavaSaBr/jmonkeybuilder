@@ -2,6 +2,8 @@ package com.ss.editor.model.undo.impl.emitter;
 
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.influencers.ParticleInfluencer;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -24,37 +26,48 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
      * The prev influencer.
      */
     @NotNull
-    private ParticleInfluencer prevInfluencer;
+    private final ParticleInfluencer prevInfluencer;
 
     /**
-     * Instantiates a new Add particle influencer operation.
-     *
-     * @param influencer the influencer
-     * @param emitter    the particle emitter
+     * The new influencer.
      */
-    public ChangeParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
-                                             @NotNull final ParticleEmitter emitter) {
-        this.prevInfluencer = influencer;
+    @NotNull
+    private final ParticleInfluencer newInfluencer;
+
+    public ChangeParticleInfluencerOperation(
+            @NotNull ParticleInfluencer influencer,
+            @NotNull ParticleEmitter emitter
+    ) {
+        this.prevInfluencer = emitter.getParticleInfluencer();
+        this.newInfluencer = influencer;
         this.emitter = emitter;
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchInfluencer(editor));
-    }
-
-    private void switchInfluencer(final @NotNull ModelChangeConsumer editor) {
-
-        final ParticleInfluencer influencer = emitter.getParticleInfluencer();
-        final ParticleInfluencer newInfluencer = prevInfluencer;
-        prevInfluencer = influencer;
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
         emitter.setParticleInfluencer(newInfluencer);
-
-        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxReplaced(emitter, prevInfluencer, newInfluencer, true, true));
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchInfluencer(editor));
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxReplaced(emitter, prevInfluencer, newInfluencer, true, true);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        emitter.setParticleInfluencer(prevInfluencer);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxReplaced(emitter, newInfluencer, prevInfluencer, true, true);
     }
 }

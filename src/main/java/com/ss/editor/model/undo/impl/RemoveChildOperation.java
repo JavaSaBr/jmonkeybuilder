@@ -2,6 +2,7 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -41,22 +42,29 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
 
     @Override
     @JmeThread
-    protected void redoInFx(@NotNull ModelChangeConsumer editor) {
-        ExecutorManager.getInstance().addJmeTask(() -> {
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        parent.detachChild(child);
+    }
 
-            parent.detachChild(child);
-
-            ExecutorManager.getInstance()
-                    .addFxTask(() -> editor.notifyFxRemovedChild(parent, child));
-        });
+    @Override
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxRemovedChild(parent, child);
     }
 
     @Override
     @JmeThread
-    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            parent.attachChildAt(child, childIndex);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(parent, child, childIndex, false));
-        });
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        parent.attachChildAt(child, childIndex);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxAddedChild(parent, child, childIndex, false);
     }
 }

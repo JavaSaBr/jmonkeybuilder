@@ -35,13 +35,6 @@ public class ChangeControlsOperation extends AbstractEditorOperation<ModelChange
     }
 
     @Override
-    @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
-        controls.forEachRm(editor, getPropertyName(), ChangeConsumer::notifyFxChangeProperty);
-    }
-
-    @Override
     @JmeThread
     protected void undoInJme(@NotNull ModelChangeConsumer editor) {
         super.undoInJme(editor);
@@ -50,11 +43,10 @@ public class ChangeControlsOperation extends AbstractEditorOperation<ModelChange
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endInFx(@NotNull ModelChangeConsumer editor) {
+        super.endInFx(editor);
         controls.forEachRm(editor, getPropertyName(), ChangeConsumer::notifyFxChangeProperty);
     }
-
 
     /**
      * Apply new changes to the control.

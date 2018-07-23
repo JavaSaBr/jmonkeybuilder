@@ -90,8 +90,8 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyFxAddedChild(control, ObjectUtils.notNull(createdWheel), -1, true);
     }
 
@@ -110,8 +110,8 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyFxRemovedChild(control, ObjectUtils.notNull(createdWheel));
         createdWheel = null;
     }

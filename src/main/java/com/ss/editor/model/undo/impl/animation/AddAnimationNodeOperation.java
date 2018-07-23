@@ -41,8 +41,8 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyFxAddedChild(control, animation, -1, true);
     }
 
@@ -55,8 +55,8 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyFxRemovedChild(control, animation);
     }
 }

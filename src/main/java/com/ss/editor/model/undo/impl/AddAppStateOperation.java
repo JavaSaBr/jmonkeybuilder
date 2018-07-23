@@ -40,8 +40,8 @@ public class AddAppStateOperation extends AbstractEditorOperation<SceneChangeCon
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull SceneChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyAddedAppState(newState);
     }
 
@@ -54,8 +54,8 @@ public class AddAppStateOperation extends AbstractEditorOperation<SceneChangeCon
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull SceneChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyRemovedAppState(newState);
     }
 }

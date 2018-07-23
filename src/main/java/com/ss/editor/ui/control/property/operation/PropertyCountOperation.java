@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.property.operation;
 
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,24 +16,33 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PropertyCountOperation<C extends ChangeConsumer, D, T> extends PropertyOperation<C, D, T> {
 
-    public PropertyCountOperation(@NotNull final D target, @NotNull final String propertyName,
-                                  @Nullable final T newValue, @Nullable final T oldValue) {
+    public PropertyCountOperation(
+            @NotNull D target,
+            @NotNull String propertyName,
+            @Nullable T newValue,
+            @Nullable T oldValue
+    ) {
         super(target, propertyName, newValue, oldValue);
     }
 
     @Override
-    protected void redoInFx(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            apply(target, newValue);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangePropertyCount(target));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull C editor) {
+        super.redoInJme(editor);
+        apply(target, newValue);
     }
 
     @Override
-    protected void undoImpl(@NotNull final C editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            apply(target, oldValue);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangePropertyCount(target));
-        });
+    @JmeThread
+    protected void undoInJme(@NotNull C editor) {
+        super.undoInJme(editor);
+        apply(target, oldValue);
+    }
+
+    @Override
+    @FxThread
+    protected void endInFx(@NotNull C editor) {
+        super.endInFx(editor);
+        editor.notifyFxChangePropertyCount(target);
     }
 }

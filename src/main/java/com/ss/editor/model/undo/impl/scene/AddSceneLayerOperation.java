@@ -53,8 +53,8 @@ public class AddSceneLayerOperation extends AbstractEditorOperation<ModelChangeC
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyFxAddedChild(layersRoot, layer, -1, true);
     }
 
@@ -67,8 +67,8 @@ public class AddSceneLayerOperation extends AbstractEditorOperation<ModelChangeC
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyFxRemovedChild(layersRoot, layer);
     }
 }

@@ -1,6 +1,7 @@
 package com.ss.editor.model.undo.impl;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import org.jetbrains.annotations.NotNull;
@@ -18,25 +19,35 @@ public class DisableAppStateOperation extends AbstractEditorOperation<SceneChang
     @NotNull
     private final SceneAppState appState;
 
-    public DisableAppStateOperation(@NotNull final SceneAppState appState) {
+    public DisableAppStateOperation(@NotNull SceneAppState appState) {
         this.appState = appState;
     }
 
     @Override
-    @FxThread
-    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            appState.setEnabled(false);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedAppState(appState));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull SceneChangeConsumer editor) {
+        super.redoInJme(editor);
+        appState.setEnabled(false);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            appState.setEnabled(true);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedAppState(appState));
-        });
+    protected void endRedoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyChangedAppState(appState);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull SceneChangeConsumer editor) {
+        super.undoInJme(editor);
+        appState.setEnabled(true);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyChangedAppState(appState);
     }
 }

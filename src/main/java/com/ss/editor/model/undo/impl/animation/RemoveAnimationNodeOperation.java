@@ -2,6 +2,7 @@ package com.ss.editor.model.undo.impl.animation;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
@@ -26,26 +27,36 @@ public class RemoveAnimationNodeOperation extends AbstractEditorOperation<ModelC
     @NotNull
     private final Animation animation;
 
-    public RemoveAnimationNodeOperation(@NotNull final Animation animation, @NotNull final AnimControl control) {
+    public RemoveAnimationNodeOperation(@NotNull Animation animation, @NotNull AnimControl control) {
         this.animation = animation;
         this.control = control;
     }
 
     @Override
     @JmeThread
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            control.removeAnim(animation);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, animation));
-        });
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        control.removeAnim(animation);
+    }
+
+    @Override
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxRemovedChild(control, animation);
     }
 
     @Override
     @JmeThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            control.addAnim(animation);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, animation, -1, false));
-        });
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        control.addAnim(animation);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxAddedChild(control, animation, -1, false);
     }
 }

@@ -1,6 +1,7 @@
 package com.ss.editor.model.undo.impl;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
@@ -26,26 +27,36 @@ public class RemoveAppStateOperation extends AbstractEditorOperation<SceneChange
     @NotNull
     private final SceneNode sceneNode;
 
-    public RemoveAppStateOperation(@NotNull final SceneAppState newState, @NotNull final SceneNode sceneNode) {
+    public RemoveAppStateOperation(@NotNull SceneAppState newState, @NotNull SceneNode sceneNode) {
         this.newState = newState;
         this.sceneNode = sceneNode;
     }
 
     @Override
-    @FxThread
-    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.removeAppState(newState);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyRemovedAppState(newState));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull SceneChangeConsumer editor) {
+        super.redoInJme(editor);
+        sceneNode.removeAppState(newState);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.addAppState(newState);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyAddedAppState(newState));
-        });
+    protected void endRedoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyRemovedAppState(newState);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull SceneChangeConsumer editor) {
+        super.undoInJme(editor);
+        sceneNode.addAppState(newState);
+    }
+
+    @Override
+    @JmeThread
+    protected void endUndoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyAddedAppState(newState);
     }
 }

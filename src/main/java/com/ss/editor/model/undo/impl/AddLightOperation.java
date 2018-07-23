@@ -40,8 +40,8 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyFxAddedChild(parent, light, -1, true);
     }
 
@@ -54,8 +54,8 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyFxRemovedChild(parent, light);
     }
 }

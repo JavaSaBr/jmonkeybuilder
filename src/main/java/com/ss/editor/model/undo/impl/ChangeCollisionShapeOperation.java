@@ -58,8 +58,8 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
 
     @Override
     @FxThread
-    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishRedoInFx(editor);
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
         editor.notifyFxAddedChild(collisionObject, newShape, -1, true);
     }
 
@@ -79,8 +79,8 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
 
     @Override
     @FxThread
-    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
-        super.finishUndoInFx(editor);
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
         editor.notifyFxAddedChild(collisionObject, oldShape, -1, false);
     }
 }

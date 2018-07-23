@@ -1,6 +1,8 @@
 package com.ss.editor.model.undo.impl.scene;
 
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.extension.scene.SceneLayer;
@@ -23,61 +25,43 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
     /**
      * The flag is need to show.
      */
-    private boolean needShow;
+    private volatile boolean needShow;
 
-    /**
-     * Instantiates a new Change visible scene layer operation.
-     *
-     * @param layer    the layer
-     * @param needShow the need show
-     */
-    public ChangeVisibleSceneLayerOperation(@NotNull final SceneLayer layer, final boolean needShow) {
+    public ChangeVisibleSceneLayerOperation(@NotNull SceneLayer layer, boolean needShow) {
         this.layer = layer;
         this.needShow = needShow;
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    @JmeThread
+    protected void startInJme(@NotNull ModelChangeConsumer editor) {
 
-            final Spatial currentModel = editor.getCurrentModel();
+        super.startInJme(editor);
 
-            if (needShow && !layer.isShowed()) {
-                layer.show();
-                currentModel.depthFirstTraversal(this::updateSpatial);
-            } else if (!needShow && layer.isShowed()) {
-                layer.hide();
-                currentModel.depthFirstTraversal(this::updateSpatial);
-            }
+        var currentModel = editor.getCurrentModel();
 
-            needShow = !needShow;
+        if (needShow && !layer.isShowed()) {
+            layer.show();
+            currentModel.depthFirstTraversal(this::updateSpatial);
+        } else if (!needShow && layer.isShowed()) {
+            layer.hide();
+            currentModel.depthFirstTraversal(this::updateSpatial);
+        }
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(layer, "Showed"));
-        });
-    }
-
-    private void updateSpatial(@NotNull final Spatial spatial) {
-        if (SceneLayer.getLayer(spatial) != layer) return;
-        spatial.setVisible(layer.isShowed());
+        needShow = !needShow;
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    @FxThread
+    protected void endInFx(@NotNull ModelChangeConsumer editor) {
+        super.endInFx(editor);
+        editor.notifyFxChangeProperty(layer, "Showed");
+    }
 
-            final Spatial currentModel = editor.getCurrentModel();
-
-            if (needShow && !layer.isShowed()) {
-                layer.show();
-                currentModel.depthFirstTraversal(this::updateSpatial);
-            } else if (!needShow && layer.isShowed()) {
-                layer.hide();
-                currentModel.depthFirstTraversal(this::updateSpatial);
-            }
-
-            needShow = !needShow;
-
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(layer, "Showed"));
-        });
+    @JmeThread
+    private void updateSpatial(@NotNull Spatial spatial) {
+        if (SceneLayer.getLayer(spatial) == layer) {
+            spatial.setVisible(layer.isShowed());
+        }
     }
 }

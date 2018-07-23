@@ -2,6 +2,7 @@ package com.ss.editor.model.undo.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.action.ModifyingAction;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.util.JmbEditorEnvoriment;
@@ -25,13 +26,13 @@ public class ModifyingActionOperation extends AbstractEditorOperation<ChangeCons
      * The action's owner.
      */
     @NotNull
-    private Object owner;
+    private final Object owner;
 
     /**
      * The prev. state.
      */
     @Nullable
-    private Object state;
+    private volatile Object state;
 
     public ModifyingActionOperation(@NotNull ModifyingAction modifyingAction, @NotNull Object owner) {
         this.modifyingAction = modifyingAction;
@@ -39,22 +40,30 @@ public class ModifyingActionOperation extends AbstractEditorOperation<ChangeCons
     }
 
     @Override
-    @FxThread
-    protected void redoInFx(@NotNull ChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            state = modifyingAction.redo(JmbEditorEnvoriment.getInstance(), owner);
-            editor.notifyJmeObjectChanged(owner);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxObjectChanged(owner));
-        });
+    @JmeThread
+    protected void endInJme(@NotNull ChangeConsumer editor) {
+        super.endInJme(editor);
+        editor.notifyJmeObjectChanged(owner);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull ChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            modifyingAction.undo(JmbEditorEnvoriment.getInstance(), owner, notNull(state));
-            editor.notifyJmeObjectChanged(owner);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxObjectChanged(owner));
-        });
+    protected void endInFx(@NotNull ChangeConsumer editor) {
+        super.endInFx(editor);
+        editor.notifyFxObjectChanged(owner);
+    }
+
+    @Override
+    @JmeThread
+    protected void redoInJme(@NotNull ChangeConsumer editor) {
+        super.redoInJme(editor);
+        state = modifyingAction.redo(JmbEditorEnvoriment.getInstance(), owner);
+    }
+
+    @Override
+    @FxThread
+    protected void undoInJme(@NotNull ChangeConsumer editor) {
+        super.undoInJme(editor);
+        modifyingAction.undo(JmbEditorEnvoriment.getInstance(), owner, notNull(state));
     }
 }
