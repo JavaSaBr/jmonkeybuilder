@@ -39,7 +39,7 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchInfluencer(editor));
     }
 

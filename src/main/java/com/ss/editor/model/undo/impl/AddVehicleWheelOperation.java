@@ -85,7 +85,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,

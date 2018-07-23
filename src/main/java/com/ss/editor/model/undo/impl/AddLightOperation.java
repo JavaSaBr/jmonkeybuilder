@@ -2,9 +2,9 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,30 +26,36 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
     @NotNull
     private final Node parent;
 
-    /**
-     * Instantiates a new Add light operation.
-     *
-     * @param light  the light
-     * @param parent the parent
-     */
-    public AddLightOperation(@NotNull final Light light, @NotNull Node parent) {
+    public AddLightOperation(@NotNull Light light, @NotNull Node parent) {
         this.light = light;
         this.parent = parent;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            parent.addLight(light);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(parent, light, -1, true));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        parent.addLight(light);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            parent.removeLight(light);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(parent, light));
-        });
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxAddedChild(parent, light, -1, true);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        parent.removeLight(light);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxRemovedChild(parent, light);
     }
 }

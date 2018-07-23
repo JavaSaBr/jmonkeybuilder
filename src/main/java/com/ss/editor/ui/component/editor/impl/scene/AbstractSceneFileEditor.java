@@ -634,7 +634,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
             handleAddedObject((Spatial) newChild);
 
-            setCurrentModel(ClassUtils.<M>unsafeCast(newChild));
+            setCurrentModel(ClassUtils.unsafeCast(newChild));
 
         } else {
 
@@ -764,7 +764,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void multiSelectNodesFromTree(@NotNull Array<?> objects, @NotNull MA editor3dPart) {
 
-        var toSelect = Array.<Spatial>ofType(Spatial.class);
+        var toSelect = Array.ofType(Spatial.class);
 
         for (var object : objects) {
             getSpatialToShowSelection(editor3dPart, object)

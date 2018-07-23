@@ -37,7 +37,7 @@ public class RenameEditableNameOperation extends AbstractEditorOperation<ChangeC
     }
 
     @Override
-    protected void redoImpl(@NotNull ChangeConsumer editor) {
+    protected void redoInFx(@NotNull ChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             object.setName(newName);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(object, PROPERTY_NAME));

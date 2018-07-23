@@ -94,7 +94,7 @@ public class RemoveElementsOperation extends AbstractEditorOperation<ModelChange
 
     @Override
     @JmeThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             for (final Element element : elements) {

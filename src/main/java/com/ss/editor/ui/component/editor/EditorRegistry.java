@@ -199,7 +199,7 @@ public class EditorRegistry {
     public @NotNull Array<EditorDescriptor> getAvailableEditorsFor(@NotNull Path file) {
         checkAndInitialize();
 
-        var result = Array.<EditorDescriptor>ofType(EditorDescriptor.class);
+        var result = Array.ofType(EditorDescriptor.class);
         var extension = FileUtils.getExtension(file);
 
         var descriptions = editorDescriptors.get(extension);

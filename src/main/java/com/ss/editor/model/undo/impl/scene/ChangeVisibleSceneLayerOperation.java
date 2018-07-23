@@ -37,7 +37,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();

@@ -52,7 +52,7 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             newParent.attachChildAt(moved, 0);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxMoved(oldParent, newParent, moved, 0, true));

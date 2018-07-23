@@ -38,7 +38,7 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             spatial.setName(newName);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(spatial, PROPERTY_NAME));

@@ -46,7 +46,7 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(collisionObject, oldShape));
             collisionObject.setCollisionShape(newShape);

@@ -24,7 +24,7 @@ public class EnableSceneFilterOperation extends AbstractEditorOperation<SceneCha
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
+    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneFilter.setEnabled(true);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyChangedFilter(sceneFilter));

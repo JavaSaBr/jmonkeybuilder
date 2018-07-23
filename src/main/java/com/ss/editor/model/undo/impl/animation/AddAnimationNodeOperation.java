@@ -2,6 +2,8 @@ package com.ss.editor.model.undo.impl.animation;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -25,30 +27,36 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final Animation animation;
 
-    /**
-     * Instantiates a new Add animation node operation.
-     *
-     * @param animation the animation
-     * @param control   the control
-     */
-    public AddAnimationNodeOperation(@NotNull final Animation animation, @NotNull final AnimControl control) {
+    public AddAnimationNodeOperation(@NotNull Animation animation, @NotNull AnimControl control) {
         this.animation = animation;
         this.control = control;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            control.addAnim(animation);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, animation, -1, true));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        control.addAnim(animation);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            control.removeAnim(animation);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, animation));
-        });
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxAddedChild(control, animation, -1, true);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        control.removeAnim(animation);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxRemovedChild(control, animation);
     }
 }

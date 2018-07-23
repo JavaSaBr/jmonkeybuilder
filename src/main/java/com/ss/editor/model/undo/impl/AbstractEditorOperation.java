@@ -1,12 +1,13 @@
 package com.ss.editor.model.undo.impl;
 
-import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,25 +18,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
-    /**
-     * The logger.
-     */
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorOperation.class);
-
-    /**
-     * The executor manager.
-     */
-    @NotNull
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     public AbstractEditorOperation() {
     }
 
     @Override
     @FxThread
-    public void redo(@NotNull final UndoableEditor editor) {
-        redoImpl(unsafeCast(editor));
+    public void redo(@NotNull UndoableEditor editor) {
+        redoImpl(ClassUtils.unsafeCast(editor));
     }
 
     /**
@@ -44,12 +35,52 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      * @param editor the editor.
      */
     @FxThread
-    protected abstract void redoImpl(@NotNull E editor);
+    protected void redoImpl(@NotNull E editor) {
+        startRedoInFx(editor);
+
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> {
+                    redoInJme(editor);
+                    ExecutorManager.getInstance()
+                            .addFxTask(() -> finishRedoInFx(editor));
+                });
+    }
+
+    /**
+     * Start executing changes in Fx thread.
+     *
+     * @param editor the editor.
+     */
+    @FxThread
+    protected void startRedoInFx(@NotNull E editor) {
+
+    }
+
+    /**
+     * Execute changes in jME thread.
+     *
+     * @param editor the editor.
+     */
+    @JmeThread
+    protected void redoInJme(@NotNull E editor) {
+
+    }
+
+    /**
+     * Finish executing changes in Fx thread.
+     *
+     * @param editor the editor.
+     */
+    @FxThread
+    protected void finishRedoInFx(@NotNull E editor) {
+
+    }
+
 
     @Override
     @FxThread
-    public void undo(@NotNull final UndoableEditor editor) {
-        undoImpl(unsafeCast(editor));
+    public void undo(@NotNull UndoableEditor editor) {
+        undoImpl(ClassUtils.unsafeCast(editor));
     }
 
     /**
@@ -58,5 +89,44 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
      * @param editor the editor.
      */
     @FxThread
-    protected abstract void undoImpl(@NotNull final E editor);
+    protected void undoImpl(@NotNull E editor) {
+        startUndoInFx(editor);
+
+        ExecutorManager.getInstance()
+                .addJmeTask(() -> {
+                    undoInJme(editor);
+                    ExecutorManager.getInstance()
+                            .addFxTask(() -> finishUndoInFx(editor));
+                });
+    }
+
+    /**
+     * Start reverting changes in Fx thread.
+     *
+     * @param editor the editor.
+     */
+    @FxThread
+    protected void startUndoInFx(@NotNull E editor) {
+
+    }
+
+    /**
+     * Execute reverting in jME thread.
+     *
+     * @param editor the editor.
+     */
+    @JmeThread
+    protected void undoInJme(@NotNull E editor) {
+
+    }
+
+    /**
+     * Finish reverting changes in Fx thread.
+     *
+     * @param editor the editor.
+     */
+    @FxThread
+    protected void finishUndoInFx(@NotNull E editor) {
+
+    }
 }

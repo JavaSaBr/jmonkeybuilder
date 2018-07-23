@@ -31,7 +31,7 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 

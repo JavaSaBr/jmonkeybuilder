@@ -2,8 +2,6 @@ package com.ss.editor.config;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
-import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
@@ -16,10 +14,12 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.ClassUtils;
+import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
-import com.ss.rlib.common.util.dictionary.DictionaryUtils;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -153,41 +153,51 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     private synchronized <T> @Nullable T get(@NotNull String id, @NotNull Class<T> type, @Nullable T def) {
 
-        var value = DictionaryUtils.getInReadLock(settings, id, (objects, s) -> objects.get(id));
+        var value = settings.getInReadLock(id, ObjectDictionary::get);
+
         if (value == null) {
             return def;
         } else if (type.isInstance(value)) {
-            return unsafeCast(value);
+            return ClassUtils.unsafeCast(value);
         }
 
         T result = null;
 
         if (type == Boolean.class) {
+
             if (value instanceof String) {
-                result = unsafeCast(Boolean.valueOf(value.toString()));
+                result = ClassUtils.unsafeCast(Boolean.valueOf(value.toString()));
             }
+
         } else if (type == Integer.class) {
+
             if (value instanceof String) {
-                result = unsafeCast(Integer.valueOf(value.toString()));
+                result = ClassUtils.unsafeCast(Integer.valueOf(value.toString()));
             }
+
         } else if (type == Vector3f.class) {
+
             if (value instanceof String) {
                 var values = value.toString().split(",");
                 var x = Float.parseFloat(values[0]);
                 var y = Float.parseFloat(values[1]);
                 var z = Float.parseFloat(values[2]);
-                result = unsafeCast(new Vector3f(x, y, z));
+                result = ClassUtils.unsafeCast(new Vector3f(x, y, z));
             }
+
         } else if (Enum.class.isAssignableFrom(type)) {
-            final Class<Enum> enumType = unsafeCast(type);
+
+            Class<Enum> enumType = ClassUtils.unsafeCast(type);
+
             if (value instanceof String) {
                 var enumValue = Enum.valueOf(enumType, value.toString());
-                result = unsafeCast(enumValue);
+                result = ClassUtils.unsafeCast(enumValue);
             }
+
         } else if (Path.class.isAssignableFrom(type)) {
             if (value instanceof String) {
                 var uri = Utils.get(value.toString(), URI::new);
-                result = unsafeCast(Paths.get(uri));
+                result = ClassUtils.unsafeCast(Paths.get(uri));
             }
         }
 
@@ -233,7 +243,7 @@ public final class EditorConfig implements AssetEventListener {
 
     @FromAnyThread
     public int getInteger(@NotNull String id, int def) {
-        return notNull(get(id, Integer.class, def));
+        return ObjectUtils.notNull(get(id, Integer.class, def));
     }
 
     @FromAnyThread
@@ -248,12 +258,12 @@ public final class EditorConfig implements AssetEventListener {
 
     @FromAnyThread
     public <T extends Enum<T>> @NotNull T getEnum(@NotNull String id, @NotNull T def) {
-        return notNull(get(id, unsafeCast(def.getClass()), def));
+        return ObjectUtils.notNull(get(id, ClassUtils.unsafeCast(def.getClass()), def));
     }
 
     @FromAnyThread
     public @NotNull Vector3f getVector3f(@NotNull String id, @NotNull Vector3f def) {
-        return notNull(get(id, Vector3f.class, def));
+        return ObjectUtils.notNull(get(id, Vector3f.class, def));
     }
 
     @FromAnyThread
@@ -337,7 +347,7 @@ public final class EditorConfig implements AssetEventListener {
      */
     @FromAnyThread
     public @NotNull Path requiredCurrentAsset() {
-        return notNull(currentAsset);
+        return ObjectUtils.notNull(currentAsset);
     }
 
     /**

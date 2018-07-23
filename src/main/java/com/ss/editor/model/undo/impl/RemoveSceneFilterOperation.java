@@ -32,7 +32,7 @@ public class RemoveSceneFilterOperation extends AbstractEditorOperation<SceneCha
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
+    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             sceneNode.removeFilter(sceneFilter);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyRemovedFilter(sceneFilter));

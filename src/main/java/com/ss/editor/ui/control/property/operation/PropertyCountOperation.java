@@ -20,7 +20,7 @@ public class PropertyCountOperation<C extends ChangeConsumer, D, T> extends Prop
     }
 
     @Override
-    protected void redoImpl(@NotNull final C editor) {
+    protected void redoInFx(@NotNull final C editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(target, newValue);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangePropertyCount(target));

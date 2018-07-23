@@ -118,8 +118,8 @@ public class PasteFileAction extends FileAction {
      */
     private void processCopy(@NotNull Path targetFolder, @NotNull Path file) {
 
-        var toCopy = Array.<Path>ofType(Path.class);
-        var copied = Array.<Path>ofType(Path.class);
+        var toCopy = Array.ofType(Path.class);
+        var copied = Array.ofType(Path.class);
 
         if (Files.isDirectory(file)) {
             toCopy.addAll(FileUtils.getFiles(file, true));

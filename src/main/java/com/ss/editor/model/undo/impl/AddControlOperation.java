@@ -2,9 +2,9 @@ package com.ss.editor.model.undo.impl;
 
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,30 +26,36 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
     @NotNull
     private final Spatial spatial;
 
-    /**
-     * Instantiates a new Add control operation.
-     *
-     * @param newControl the new control
-     * @param spatial    the spatial
-     */
-    public AddControlOperation(@NotNull final Control newControl, @NotNull final Spatial spatial) {
+    public AddControlOperation(@NotNull Control newControl, @NotNull Spatial spatial) {
         this.newControl = newControl;
         this.spatial = spatial;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            spatial.addControl(newControl);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(spatial, newControl, -1, true));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        spatial.addControl(newControl);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            spatial.removeControl(newControl);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(spatial, newControl));
-        });
+    @FxThread
+    protected void finishRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishRedoInFx(editor);
+        editor.notifyFxAddedChild(spatial, newControl, -1, true);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        spatial.removeControl(newControl);
+    }
+
+    @Override
+    @FxThread
+    protected void finishUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.finishUndoInFx(editor);
+        editor.notifyFxRemovedChild(spatial, newControl);
     }
 }
