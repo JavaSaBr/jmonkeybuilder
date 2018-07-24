@@ -2,6 +2,8 @@ package com.ss.editor.model.undo.impl.animation;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.AnimationUtils;
@@ -32,35 +34,41 @@ public class RenameAnimationNodeOperation extends AbstractEditorOperation<ModelC
     @NotNull
     private final AnimControl control;
 
-    /**
-     * Instantiates a new Rename animation node operation.
-     *
-     * @param oldName the old name
-     * @param newName the new name
-     * @param control the control
-     */
-    public RenameAnimationNodeOperation(@NotNull final String oldName, @NotNull final String newName,
-                                        @NotNull final AnimControl control) {
+    public RenameAnimationNodeOperation(
+            @NotNull String oldName,
+            @NotNull String newName,
+            @NotNull AnimControl control
+    ) {
         this.oldName = oldName;
         this.newName = newName;
         this.control = control;
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Animation anim = control.getAnim(oldName);
-            AnimationUtils.changeName(control, anim, oldName, newName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(control, anim, "name"));
-        });
+    @JmeThread
+    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
+        super.redoImpl(editor);
+        AnimationUtils.changeName(control, control.getAnim(oldName), oldName, newName);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Animation anim = control.getAnim(newName);
-            AnimationUtils.changeName(control, anim, newName, oldName);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(control, anim, "name"));
-        });
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxChangeProperty(control, control.getAnim(newName), "name");
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        AnimationUtils.changeName(control, control.getAnim(newName), newName, oldName);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxChangeProperty(control, control.getAnim(oldName), "name");
     }
 }

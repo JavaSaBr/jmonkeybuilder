@@ -4,9 +4,9 @@ import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,7 +45,7 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
      * The wheel.
      */
     @Nullable
-    private VehicleWheel createdWheel;
+    private volatile VehicleWheel wheel;
 
     /**
      * The rest length.
@@ -62,7 +62,7 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
      */
     private final boolean isFrontWheel;
 
-    public RemoveVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final VehicleWheel wheel) {
+    public RemoveVehicleWheelOperation(@NotNull VehicleControl control, @NotNull VehicleWheel wheel) {
         this.control = control;
         this.connectionPoint = wheel.getLocation();
         this.direction = wheel.getDirection();
@@ -70,41 +70,43 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
         this.restLength = wheel.getRestLength();
         this.wheelRadius = wheel.getRadius();
         this.isFrontWheel = wheel.isFrontWheel();
-        this.createdWheel = wheel;
+        this.wheel = wheel;
     }
 
     @Override
     @JmeThread
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
 
-            for (int i = 0, length = control.getNumWheels(); i < length; i++) {
-                final VehicleWheel wheel = control.getWheel(i);
-                if (wheel == createdWheel) {
-                    control.removeWheel(i);
-                    break;
-                }
+        super.redoInJme(editor);
+
+        for (int i = 0, length = control.getNumWheels(); i < length; i++) {
+            var wheel = control.getWheel(i);
+            if (wheel == this.wheel) {
+                control.removeWheel(i);
+                break;
             }
+        }
+    }
 
-            final VehicleWheel toRemove = notNull(createdWheel);
-
-            this.createdWheel = null;
-
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(control, toRemove));
-        });
+    @Override
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxRemovedChild(control, notNull(wheel));
     }
 
     @Override
     @JmeThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        this.wheel = control.addWheel(connectionPoint, direction, axle, restLength,
+                wheelRadius, isFrontWheel);
+    }
 
-            final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
-                    wheelRadius, isFrontWheel);
-
-            this.createdWheel = vehicleWheel;
-
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(control, vehicleWheel, -1, false));
-        });
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxAddedChild(control, notNull(wheel), -1, false);
     }
 }

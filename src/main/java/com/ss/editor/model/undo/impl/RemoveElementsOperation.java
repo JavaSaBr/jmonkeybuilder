@@ -6,6 +6,7 @@ import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
@@ -44,42 +45,6 @@ public class RemoveElementsOperation extends AbstractEditorOperation<ModelChange
             this.parent = parent;
             this.index = -1;
         }
-
-        /**
-         * Get the element to remove.
-         *
-         * @return the element to remove.
-         */
-        private @NotNull Object getElement() {
-            return element;
-        }
-
-        /**
-         * Get the element's parent.
-         *
-         * @return the element's parent.
-         */
-        private @NotNull Object getParent() {
-            return parent;
-        }
-
-        /**
-         * Get the index of position in the parent.
-         *
-         * @return the index of position in the parent.
-         */
-        private int getIndex() {
-            return index;
-        }
-
-        /**
-         * Set the index of position in the parent.
-         *
-         * @param index the index of position in the parent.
-         */
-        private void setIndex(final int index) {
-            this.index = index;
-        }
     }
 
     /**
@@ -88,110 +53,114 @@ public class RemoveElementsOperation extends AbstractEditorOperation<ModelChange
     @NotNull
     private final Array<Element> elements;
 
-    public RemoveElementsOperation(@NotNull final Array<Element> elements) {
+    public RemoveElementsOperation(@NotNull Array<Element> elements) {
         this.elements = elements;
     }
 
     @Override
     @JmeThread
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
 
-            for (final Element element : elements) {
+        elements.forEach(this, (element, op) -> {
 
-                final Object toRemove = element.getElement();
+            var toRemove = element.element;
 
-                if (toRemove instanceof Spatial) {
-                    removeSpatial(element, (Spatial) toRemove);
-                } else if (toRemove instanceof Light) {
-                    removeLight(element, (Light) toRemove);
-                } else if (toRemove instanceof Animation) {
-                    removeAnimation(element, (Animation) toRemove);
-                } else if (toRemove instanceof Control) {
-                    removeControl(element, (Control) toRemove);
-                }
+            if (toRemove instanceof Spatial) {
+                op.removeSpatial(element, (Spatial) toRemove);
+            } else if (toRemove instanceof Light) {
+                op.removeLight(element, (Light) toRemove);
+            } else if (toRemove instanceof Animation) {
+                op.removeAnimation(element, (Animation) toRemove);
+            } else if (toRemove instanceof Control) {
+                op.removeControl(element, (Control) toRemove);
             }
-
-            EXECUTOR_MANAGER.addFxTask(() -> {
-                elements.forEach(editor, (element, consumer) ->
-                        consumer.notifyFxRemovedChild(element.getParent(), element.getElement()));
-            });
         });
     }
 
     @Override
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        elements.forEach(editor, (element, consumer) ->
+                consumer.notifyFxRemovedChild(element.parent, element.element));
+    }
+
+    @Override
     @JmeThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
 
-            for (final Element element : elements) {
+        elements.forEach(this, (element, op) -> {
 
-                final Object toRestore = element.getElement();
+            var toRemove = element.element;
 
-                if (toRestore instanceof Spatial) {
-                    restoreSpatial(element, (Spatial) toRestore);
-                } else if (toRestore instanceof Light) {
-                    restoreLight(element, (Light) toRestore);
-                } else if (toRestore instanceof Animation) {
-                    restoreAnimation(element, (Animation) toRestore);
-                } else if (toRestore instanceof Control) {
-                    restoreControl(element, (Control) toRestore);
-                }
+            if (toRemove instanceof Spatial) {
+                op.restoreSpatial(element, (Spatial) toRemove);
+            } else if (toRemove instanceof Light) {
+                op.restoreLight(element, (Light) toRemove);
+            } else if (toRemove instanceof Animation) {
+                op.restoreAnimation(element, (Animation) toRemove);
+            } else if (toRemove instanceof Control) {
+                op.restoreControl(element, (Control) toRemove);
             }
-
-            EXECUTOR_MANAGER.addFxTask(() -> {
-                elements.forEach(editor, (element, consumer) ->
-                        consumer.notifyFxAddedChild(element.getParent(), element.getElement(), element.getIndex(), false));
-            });
         });
     }
 
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        elements.forEach(editor, (element, consumer) ->
+                consumer.notifyFxAddedChild(element.parent, element.element, element.index, false));
+    }
+
     @JmeThread
-    private void removeSpatial(@NotNull final Element element, @NotNull final Spatial toRemove) {
-        final Node parent = (Node) element.getParent();
-        element.setIndex(parent.getChildIndex(toRemove));
+    private void removeSpatial(@NotNull Element element, @NotNull Spatial toRemove) {
+        var parent = (Node) element.parent;
+        element.index = parent.getChildIndex(toRemove);
         parent.detachChild(toRemove);
     }
 
     @JmeThread
-    private void restoreSpatial(@NotNull final Element element, @NotNull final Spatial toRestore) {
-        final Node parent = (Node) element.getParent();
-        parent.attachChildAt(toRestore, element.getIndex());
+    private void restoreSpatial(@NotNull Element element, @NotNull Spatial toRestore) {
+        var parent = (Node) element.parent;
+        parent.attachChildAt(toRestore, element.index);
     }
 
     @JmeThread
-    private void removeControl(@NotNull final Element element, @NotNull final Control toRemove) {
-        final Spatial parent = (Spatial) element.getParent();
+    private void removeControl(@NotNull Element element, @NotNull Control toRemove) {
+        var parent = (Spatial) element.parent;
         parent.removeControl(toRemove);
     }
 
     @JmeThread
-    private void restoreControl(@NotNull final Element element, @NotNull final Control toRestore) {
-        final Spatial parent = (Spatial) element.getParent();
+    private void restoreControl(@NotNull Element element, @NotNull Control toRestore) {
+        var parent = (Spatial) element.parent;
         parent.addControl(toRestore);
     }
 
     @JmeThread
-    private void removeLight(@NotNull final Element element, @NotNull final Light toRemove) {
-        final Spatial parent = (Spatial) element.getParent();
+    private void removeLight(@NotNull Element element, @NotNull Light toRemove) {
+        var parent = (Spatial) element.parent;
         parent.removeLight(toRemove);
     }
 
     @JmeThread
-    private void restoreLight(@NotNull final Element element, @NotNull final Light toRestore) {
-        final Spatial parent = (Spatial) element.getParent();
+    private void restoreLight(@NotNull Element element, @NotNull Light toRestore) {
+        var parent = (Spatial) element.parent;
         parent.addLight(toRestore);
     }
 
     @JmeThread
-    private void removeAnimation(@NotNull final Element element, @NotNull final Animation toRemove) {
-        final AnimControl parent = (AnimControl) element.getParent();
+    private void removeAnimation(@NotNull Element element, @NotNull Animation toRemove) {
+        var parent = (AnimControl) element.parent;
         parent.removeAnim(toRemove);
     }
 
     @JmeThread
-    private void restoreAnimation(@NotNull final Element element, @NotNull final Animation toRestore) {
-        final AnimControl parent = (AnimControl) element.getParent();
+    private void restoreAnimation(@NotNull Element element, @NotNull Animation toRestore) {
+        var parent = (AnimControl) element.parent;
         parent.addAnim(toRestore);
     }
 }

@@ -1,6 +1,8 @@
 package com.ss.editor.model.undo.impl.scene;
 
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.model.node.layer.LayersRoot;
@@ -43,48 +45,62 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final SceneNode sceneNode;
 
-    /**
-     * Instantiates a new Remove scene layer operation.
-     *
-     * @param layersRoot the layers root
-     * @param layer      the layer
-     * @param sceneNode  the scene node
-     */
-    public RemoveSceneLayerOperation(final @NotNull LayersRoot layersRoot, @NotNull final SceneLayer layer,
-                                     @NotNull final SceneNode sceneNode) {
-        this.toRevert = ArrayFactory.newArray(Spatial.class);
+    public RemoveSceneLayerOperation(
+            @NotNull LayersRoot layersRoot,
+            @NotNull SceneLayer layer,
+            @NotNull SceneNode sceneNode
+    ) {
+
+        this.toRevert = Array.ofType(Spatial.class);
         this.layersRoot = layersRoot;
         this.layer = layer;
         this.sceneNode = sceneNode;
     }
 
     @Override
-    protected void redoInFx(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            final Spatial currentModel = editor.getCurrentModel();
-            currentModel.depthFirstTraversal(this::clean);
-            sceneNode.removeLayer(layer);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(layersRoot, layer));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+
+        var currentModel = editor.getCurrentModel();
+        currentModel.depthFirstTraversal(this::clean);
+
+        sceneNode.removeLayer(layer);
     }
 
-    private void clean(@NotNull final Spatial spatial) {
-        final SceneLayer currentLayer = SceneLayer.getLayer(spatial);
+    @Override
+    @FxThread
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxRemovedChild(layersRoot, layer);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+
+        sceneNode.addLayer(layer);
+
+        toRevert.forEach(spatial -> SceneLayer.setLayer(layer, spatial));
+        toRevert.forEach(spatial -> spatial.setVisible(layer.isShowed()));
+        toRevert.clear();
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxAddedChild(layersRoot, layer, -1, false);
+    }
+
+    @JmeThread
+    private void clean(@NotNull Spatial spatial) {
+        var currentLayer = SceneLayer.getLayer(spatial);
         if (currentLayer == layer) {
             toRevert.add(spatial);
             SceneLayer.setLayer(null, spatial);
             spatial.setVisible(true);
         }
-    }
-
-    @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.addLayer(layer);
-            toRevert.forEach(spatial -> SceneLayer.setLayer(layer, spatial));
-            toRevert.forEach(spatial -> spatial.setVisible(layer.isShowed()));
-            toRevert.clear();
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(layersRoot, layer, -1, false));
-        });
     }
 }

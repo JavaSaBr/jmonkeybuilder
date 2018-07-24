@@ -1,6 +1,7 @@
 package com.ss.editor.model.undo.impl;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
@@ -25,26 +26,36 @@ public class RemoveSceneFilterOperation extends AbstractEditorOperation<SceneCha
     @NotNull
     private final SceneNode sceneNode;
 
-    public RemoveSceneFilterOperation(@NotNull final SceneFilter sceneFilter, @NotNull final SceneNode sceneNode) {
+    public RemoveSceneFilterOperation(@NotNull SceneFilter sceneFilter, @NotNull SceneNode sceneNode) {
         this.sceneFilter = sceneFilter;
         this.sceneNode = sceneNode;
     }
 
     @Override
-    @FxThread
-    protected void redoInFx(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.removeFilter(sceneFilter);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyRemovedFilter(sceneFilter));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull SceneChangeConsumer editor) {
+        super.redoInJme(editor);
+        sceneNode.removeFilter(sceneFilter);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            sceneNode.addFilter(sceneFilter);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyAddedFilter(sceneFilter));
-        });
+    protected void endRedoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyRemovedFilter(sceneFilter);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull SceneChangeConsumer editor) {
+        super.undoInJme(editor);
+        sceneNode.addFilter(sceneFilter);
+    }
+
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull SceneChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyAddedFilter(sceneFilter);
     }
 }
