@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -375,6 +376,28 @@ public class NodeUtils {
         spatial.depthFirstTraversal(sp -> {
             if (spatial instanceof Geometry) {
                 consumer.accept((Geometry) sp);
+            }
+        }, DFSMode.PRE_ORDER);
+    }
+
+    /**
+     * Visit all geometries.
+     *
+     * @param spatial  the spatial.
+     * @param mapper   the mapper.
+     * @param consumer the consumer.
+     * @param <R>      the mapper's result type.
+     */
+    @FromAnyThread
+    public static <R> void visitGeometry(
+            @NotNull Spatial spatial,
+            @NotNull Function<@NotNull Geometry, @NotNull R> mapper,
+            @NotNull Consumer<@NotNull R> consumer
+    ) {
+
+        spatial.depthFirstTraversal(sp -> {
+            if (spatial instanceof Geometry) {
+                consumer.accept(mapper.apply((Geometry) sp));
             }
         }, DFSMode.PRE_ORDER);
     }

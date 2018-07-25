@@ -33,14 +33,14 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
     }
 
     @Override
-    protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
+    protected void doExecute(@NotNull Array<Runnable> execute, @NotNull Array<Runnable> executed) {
 
-        final Runnable[] array = execute.array();
+        var array = execute.array();
 
         for (int i = 0, length = min(execute.size(), PROP_MAXIMUM_UPDATE); i < length; ) {
             for (int count = 0; count < PROP_EXECUTE_LIMIT && i < length; count++, i++) {
 
-                final Runnable task = array[i];
+                var task = array[i];
                 task.run();
 
                 executed.add(task);
