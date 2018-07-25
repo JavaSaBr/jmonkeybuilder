@@ -302,10 +302,12 @@ public class AsyncEventManager {
 
         var eventHandlers = getEventHandlers();
 
-        for (EventType<? extends Event> eventType = event.getEventType(); eventType != null;
-             eventType = eventType.getSuperType()) {
+        for (EventType<? extends Event> eventType = event.getEventType();
+                 eventType != null;
+                 eventType = eventType.getSuperType()) {
 
             var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
+
             if (handlers == null || handlers.isEmpty()) {
                 continue;
             }

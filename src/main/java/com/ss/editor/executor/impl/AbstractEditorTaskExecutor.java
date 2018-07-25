@@ -22,10 +22,6 @@ import java.util.concurrent.locks.Lock;
  */
 public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor, Lockable {
 
-    /**
-     * The logger.
-     */
-    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorTaskExecutor.class);
 
     /**
@@ -38,19 +34,19 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
      * The array of executed task of the iteration.
      */
     @NotNull
-    final Array<Runnable> executed;
+    protected final Array<Runnable> executed;
 
     /**
      * The array of task to execute.
      */
     @NotNull
-    final Array<Runnable> waitTasks;
+    protected final Array<Runnable> waitTasks;
 
     /**
      * Is this executor waiting new tasks.
      */
     @NotNull
-    final AtomicBoolean wait;
+    protected final AtomicBoolean wait;
 
     /**
      * The synchronizer.
@@ -73,15 +69,18 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
      */
     @FromAnyThread
     private @NotNull Array<Runnable> createExecuteArray() {
-        return ArrayFactory.newArray(Runnable.class);
+        return Array.ofType(Runnable.class);
     }
 
     @Override
     @FromAnyThread
-    public void execute(@NotNull final Runnable task) {
+    public void execute(@NotNull Runnable task) {
+
         lock();
         try {
+
             waitTasks.add(task);
+
             if (!wait.get()) {
                 return;
             }

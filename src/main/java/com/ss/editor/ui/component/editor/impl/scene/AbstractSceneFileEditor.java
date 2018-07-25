@@ -65,6 +65,8 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.ControlUtils;
 import com.ss.editor.util.*;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -87,6 +89,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -102,6 +105,12 @@ import java.util.function.Consumer;
 public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3dPart, ES extends BaseEditorSceneEditorState> extends
         Advanced3dFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
+    public interface SaveHandler {
+
+        @BackgroundThread
+        void handle(@NotNull Spatial spatial);
+    }
+
     protected static final int OBJECTS_TOOL = 0;
     protected static final int PAINTING_TOOL = 1;
     protected static final int SCRIPTING_TOOL = 2;
@@ -114,37 +123,14 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES =
             FXCollections.observableArrayList(TransformationMode.values());
 
-    /**
-     * The list of pre-save handlers.
-     */
-    private static final Array<Consumer<Spatial>> PRE_SAVE_HANDLERS =
-            ArrayFactory.newCopyOnModifyArray(Consumer.class);
+    public static final String EP_PRE_SAVE_HANDLERS = "AbstractSceneFileEditor#preSaveHandlers";
+    public static final String EP_POST_SAVE_HANDLERS = "AbstractSceneFileEditor#postSaveHandlers";
 
-    /**
-     * The list of post-save handlers.
-     */
-    private static final Array<Consumer<Spatial>> POST_SAVE_HANDLERS =
-            ArrayFactory.newCopyOnModifyArray(Consumer.class);
+    private static final ExtensionPoint<SaveHandler> PRE_SAVE_HANDLERS =
+            ExtensionPointManager.register(EP_PRE_SAVE_HANDLERS);
 
-    /**
-     * Register the new pre-save handler.
-     *
-     * @param handler the new pre-save handler.
-     */
-    @FromAnyThread
-    public static void registerPreSaveHandler(@NotNull Consumer<Spatial> handler) {
-        PRE_SAVE_HANDLERS.add(handler);
-    }
-
-    /**
-     * Register the new post-save handler.
-     *
-     * @param handler the new post-save handler.
-     */
-    @FromAnyThread
-    public static void registerPostSaveHandler(@NotNull Consumer<Spatial> handler) {
-        PRE_SAVE_HANDLERS.add(handler);
-    }
+    private static final ExtensionPoint<SaveHandler> POST_SAVE_HANDLERS =
+            ExtensionPointManager.register(EP_POST_SAVE_HANDLERS);
 
     /**
      * The stats 3D part.
@@ -885,12 +871,19 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         var currentModel = getCurrentModel();
         try {
-            NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
+
+            NodeUtils.visitGeometry(currentModel,
+                    Geometry::getMaterial,
+                    MaterialUtils::saveIfNeedTextures);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        PRE_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
+        var preSaveHandlers = PRE_SAVE_HANDLERS.getExtensions();
+        var postSaveHandlers = POST_SAVE_HANDLERS.getExtensions();
+
+        preSaveHandlers.forEach(saveHandler -> saveHandler.handle(currentModel));
         try {
 
             var exporter = BinaryExporter.getInstance();
@@ -902,7 +895,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            POST_SAVE_HANDLERS.forEach(currentModel, Consumer::accept);
+            postSaveHandlers.forEach(saveHandler -> saveHandler.handle(currentModel));
         }
     }
 

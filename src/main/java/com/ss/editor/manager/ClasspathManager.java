@@ -522,7 +522,7 @@ public class ClasspathManager {
             @NotNull Set<Scope> scope
     ) {
 
-        var result = ArrayFactory.<Class<T>>newArray(Class.class);
+        var result = Array.<Class<T>>ofType(Class.class);
 
         if (scope.contains(Scope.CORE)) {
             coreScanner.findImplements(result, interfaceClass);

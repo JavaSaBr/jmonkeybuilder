@@ -37,7 +37,6 @@ import java.util.function.Consumer;
 public class PluginManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(PluginManager.class);
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @Nullable
     private static PluginManager instance;
@@ -208,10 +207,9 @@ public class PluginManager {
             var classLoader = editorPlugin.getContainer().
                     getClassLoader();
 
-            EXECUTOR_MANAGER.addFxTask(() -> {
-                var assetManager = EditorUtil.getAssetManager();
-                assetManager.addClassLoader(classLoader);
-            });
+            ExecutorManager.getInstance()
+                    .addFxTask(() -> EditorUtil.getAssetManager()
+                            .addClassLoader(classLoader));
         });
     }
 
@@ -253,7 +251,8 @@ public class PluginManager {
      */
     @FromAnyThread
     public void handlePluginsInBackground(@NotNull Consumer<EditorPlugin> consumer) {
-        EXECUTOR_MANAGER.addBackgroundTask(() -> handlePlugins(consumer));
+        ExecutorManager.getInstance()
+                .addBackgroundTask(() -> handlePlugins(consumer));
     }
 
     /**
@@ -264,10 +263,11 @@ public class PluginManager {
      */
     @FromAnyThread
     public void handlePluginsInBackground(@NotNull Consumer<EditorPlugin> consumer, @NotNull Runnable result) {
-        EXECUTOR_MANAGER.addBackgroundTask(() -> {
-            handlePlugins(consumer);
-            result.run();
-        });
+        ExecutorManager.getInstance()
+                .addBackgroundTask(() -> {
+                    handlePlugins(consumer);
+                    result.run();
+                });
     }
 
     @FromAnyThread
