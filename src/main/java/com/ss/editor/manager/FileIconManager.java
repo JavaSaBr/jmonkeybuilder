@@ -13,9 +13,10 @@ import com.ss.editor.util.svg.SvgImageLoader;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.plugin.extension.ExtensionPoint;
+import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.IntegerDictionary;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
@@ -43,7 +44,12 @@ public class FileIconManager {
         @Nullable String find(@NotNull Path file, @NotNull String extension);
     }
 
+    public static final String EP_ICON_FINDERS = "FileIconManager#iconFinders";
+
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
+
+    private static final ExtensionPoint<IconFinder> ICON_FINDERS =
+            ExtensionPointManager.register(EP_ICON_FINDERS);
 
     private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE =
             ObjectDictionary.ofType(String.class);
@@ -133,32 +139,14 @@ public class FileIconManager {
     @NotNull
     private final ObjectDictionary<String, String> extensionToUrl;
 
-    /**
-     * The list of icon finders.
-     */
-    @NotNull
-    private final Array<IconFinder> iconFinders;
-
     private FileIconManager() {
         InitializeManager.valid(getClass());
 
-        this.iconFinders = ArrayFactory.newCopyOnModifyArray(IconFinder.class);
         this.imageCache = IntegerDictionary.ofType(ObjectDictionary.class);
         this.extensionToUrl = ObjectDictionary.ofType(String.class);
         this.originalImageCache = ObjectDictionary.ofType(Image.class);
 
         LOGGER.info("initialized.");
-    }
-
-    /**
-     * Register a new icon finder. It's a function which receives a file and
-     * its extension and should return an URL to load an image.
-     *
-     * @param iconFinder the icon finder.
-     */
-    @FromAnyThread
-    public void register(@NotNull IconFinder iconFinder) {
-        iconFinders.add(iconFinder);
     }
 
     /**
@@ -186,19 +174,22 @@ public class FileIconManager {
     public @NotNull Image getIcon(@NotNull Path path, boolean directory, boolean tryToGetContentType, int size) {
 
         var extension = directory ? "folder" : FileUtils.getExtension(path);
-        var iconFinders = getIconFinders();
-
         var url = extensionToUrl.get(extension);
+
         if (url != null) {
             return getImage(url, size);
         }
+
+        var iconFinders = ICON_FINDERS.getExtensions();
 
         if (!iconFinders.isEmpty()) {
             for (var iconFinder : iconFinders) {
 
                 url = iconFinder.find(path, extension);
 
-                var classLoader = iconFinder.getClass().getClassLoader();
+                var classLoader = iconFinder.getClass()
+                        .getClassLoader();
+
                 if (url == null || !EditorUtil.checkExists(url, classLoader)) {
                     continue;
                 }
@@ -332,8 +323,8 @@ public class FileIconManager {
             return buildImage(url, classLoader, size);
         }
 
-        return imageCache.get(size, DictionaryFactory::newObjectDictionary)
-                .get(url, () -> buildImage(url, classLoader, size));
+        return imageCache.getOrCompute(size, DictionaryFactory::newObjectDictionary)
+                .getOrCompute(url, () -> buildImage(url, classLoader, size));
     }
 
     @FxThread
@@ -403,15 +394,5 @@ public class FileIconManager {
     @FromAnyThread
     public @NotNull Image getOriginal(@NotNull Image image) {
         return notNull(originalImageCache.get(image), "not found original for " + image.getUrl());
-    }
-
-    /**
-     * Get the list of icon finders.
-     *
-     * @return the list of icon finders.
-     */
-    @FromAnyThread
-    private @NotNull Array<IconFinder> getIconFinders() {
-        return iconFinders;
     }
 }
