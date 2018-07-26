@@ -167,7 +167,7 @@ public class AsyncEventManager {
 
             var eventTypesSet = resultHandler.eventTypesSet;
             eventTypesSet.forEach(eventType ->
-                eventManager.addEventHandler(eventType, resultHandler));
+                    eventManager.addEventHandler(eventType, resultHandler));
         }
     }
 
