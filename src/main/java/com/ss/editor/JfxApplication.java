@@ -173,6 +173,11 @@ public class JfxApplication extends Application {
         LoggerLevel.ERROR.setEnabled(true);
         LoggerLevel.WARNING.setEnabled(true);
 
+        if (Config.DEV_DEBUG_ASYNC_EVENT_MANAGER) {
+            LoggerManager.getLogger(AsyncEventManager.class)
+                    .setEnabled(LoggerLevel.DEBUG, true);
+        }
+
         var logFolder = Config.getFolderForLog();
 
         if (!Files.exists(logFolder)) {

@@ -118,7 +118,12 @@ public final class Config {
     /**
      * The flag to enable startup debug mode.
      */
-    public static boolean DEV_DEBUG_STARTUP = true;
+    public static boolean DEV_DEBUG_STARTUP;
+
+    /**
+     * The flag to enable debug of async event manager.
+     */
+    public static boolean DEV_DEBUG_ASYNC_EVENT_MANAGER;
 
     /**
      * The flag to enable PBR render.
@@ -153,6 +158,7 @@ public final class Config {
         DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         DEV_DEBUG_STARTUP = vars.getBoolean("Dev.debugStartup", false);
+        DEV_DEBUG_ASYNC_EVENT_MANAGER = vars.getBoolean("Dev.debugAsyncEventManager", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
         ENABLE_3D = vars.getBoolean("Graphics.enable3D", true);
 

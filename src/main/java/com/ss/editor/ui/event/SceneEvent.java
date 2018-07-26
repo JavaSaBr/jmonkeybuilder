@@ -89,4 +89,9 @@ public class SceneEvent extends Event {
                 .map(ClassUtils::<T>unsafeCast)
                 .orElse(null);
     }
+
+    @Override
+    public String toString() {
+        return eventType.toString();
+    }
 }

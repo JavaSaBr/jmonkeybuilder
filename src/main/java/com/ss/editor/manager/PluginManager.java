@@ -71,8 +71,9 @@ public class PluginManager {
                 .add(this::onFinishLoading)
                 .buildAndRegister();
 
-        SingleAsyncEventHandlerBuilder.of(JmeContextCreatedEvent.EVENT_TYPE)
-                .add(this::onAfterCreateJmeContext)
+        CombinedAsyncEventHandlerBuilder.of(this::onAfterCreateJmeContext)
+                .add(JmeContextCreatedEvent.EVENT_TYPE)
+                .add(PluginsLoadedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
         SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)

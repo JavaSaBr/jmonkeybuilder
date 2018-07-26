@@ -7,5 +7,6 @@
   "Dev.jfxMouseInput": false,
   "Dev.jfxKeyInput": false,
   "Dev.debugJFX": false,
-  "Dev.debugStartup": false
+  "Dev.debugStartup": false,
+  "Dev.debugAsyncEventManager": true
 }

@@ -210,7 +210,6 @@ public class ModelImportDialog extends GenericFileCreator {
         var editorConfig = EditorConfig.getInstance();
         var modelFile = notNull(getFileToCreate());
         var parent = modelFile.getParent();
-        var vars = getVars();
         var importedFile = vars.get(PROP_FILE, Path.class);
         var assetManager = EditorUtil.getAssetManager();
 

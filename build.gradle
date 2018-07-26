@@ -4,7 +4,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
     }
 }
@@ -12,7 +11,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
-apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 apply plugin: 'application'
@@ -58,20 +56,9 @@ ext.applicationTitle = "jMonkeyBuilder"
 ext.jmeVersion = "develop-SNAPSHOT"
 ext.jmbExtVersion = "2.4.2"
 ext.jme3_xbuf_version = '0.9.1'
-ext.junitPlatformVersion = "1.0.0"
-ext.junitJupiterVersion = "5.0.0"
+ext.junitJupiterVersion = "5.2.0"
 ext.log4jVersion = '2.6.2'
 ext.bintrayVersion = version
-
-junitPlatform {
-    filters {
-        engines {
-        }
-        tags {
-        }
-    }
-    logManager 'org.apache.logging.log4j.jul.LogManager'
-}
 
 repositories {
     jcenter()
@@ -191,17 +178,8 @@ dependencies {
         exclude group: 'com.github.JavaSaB.jmonkeyengine'
     }
 
-    testCompile "org.junit.platform:junit-platform-commons:$junitPlatformVersion"
-    testRuntime "org.junit.platform:junit-platform-engine:$junitPlatformVersion"
-
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
-
-    testRuntime "org.apache.logging.log4j:log4j-core:$log4jVersion"
-    testRuntime "org.apache.logging.log4j:log4j-jul:$log4jVersion"
-
-    // Only needed to run tests in an (IntelliJ) IDE(A) that bundles an older version
-    testCompile "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 }
 
 ant.importBuild('build-native.xml')
@@ -236,5 +214,5 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.8'
+    gradleVersion = '4.9'
 }

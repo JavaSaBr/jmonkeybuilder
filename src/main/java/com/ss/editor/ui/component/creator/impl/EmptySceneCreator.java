@@ -9,7 +9,9 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
+import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -17,11 +19,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * The creator for creating an empty scene.
+ * The creator to create an empty scene.
  *
  * @author JavaSaBr
  */
-public class EmptySceneCreator extends AbstractFileCreator {
+public class EmptySceneCreator extends GenericFileCreator {
 
     public static final FileCreatorDescriptor DESCRIPTOR = new FileCreatorDescriptor(
             Messages.EMPTY_SCENE_CREATOR_DESCRIPTION,
@@ -42,8 +44,8 @@ public class EmptySceneCreator extends AbstractFileCreator {
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull Path resultFile) throws IOException {
-        super.writeData(resultFile);
+    protected void writeData(@NotNull VarTable vars, @NotNull Path resultFile) throws IOException {
+        super.writeData(vars, resultFile);
 
         var exporter = BinaryExporter.getInstance();
         var newNode = createScene();

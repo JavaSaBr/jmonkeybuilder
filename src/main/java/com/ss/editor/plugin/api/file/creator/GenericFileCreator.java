@@ -26,18 +26,19 @@ import java.nio.file.Path;
 public class GenericFileCreator extends AbstractFileCreator {
 
     /**
+     * The result vars of the creator.
+     */
+    @NotNull
+    protected final VarTable vars;
+
+    /**
      * The settings container.
      */
     @Nullable
     private GridPane settingsContainer;
 
-    /**
-     * The result vars of the creator.
-     */
-    @Nullable
-    private VarTable vars;
-
     public GenericFileCreator() {
+        this.vars = VarTable.newInstance();
     }
 
     @Override
@@ -45,13 +46,15 @@ public class GenericFileCreator extends AbstractFileCreator {
         super.createSettings(root);
 
         this.settingsContainer = root;
-        this.vars = VarTable.newInstance();
 
         var rowIndex = 1;
 
         for (var definition : getPropertyDefinitions()) {
+
             var control = build(vars, definition, this::validateFileName);
-            control.prefWidthProperty().bind(widthProperty());
+            control.prefWidthProperty()
+                    .bind(widthProperty());
+
             root.add(control, 0, rowIndex++, 2, 1);
         }
     }
@@ -61,14 +64,6 @@ public class GenericFileCreator extends AbstractFileCreator {
     public void show(@NotNull Window owner) {
         super.show(owner);
         validateFileName();
-    }
-
-    /**
-     * @return the result vars of the creator.
-     */
-    @FxThread
-    protected @NotNull VarTable getVars() {
-        return notNull(vars);
     }
 
     /**
@@ -97,7 +92,7 @@ public class GenericFileCreator extends AbstractFileCreator {
             return;
         }
 
-        var result = validate(getVars());
+        var result = validate(vars);
 
         if (!okButton.isDisabled()) {
             okButton.setDisable(!result);
@@ -118,7 +113,7 @@ public class GenericFileCreator extends AbstractFileCreator {
     @Override
     @BackgroundThread
     protected void writeData(@NotNull Path resultFile) throws IOException {
-        writeData(getVars(), resultFile);
+        writeData(vars, resultFile);
     }
 
     /**

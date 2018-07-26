@@ -120,7 +120,6 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         var pathToFragment = assetFolder.relativize(fragmentFile);
         var pathToVertex = assetFolder.relativize(vertexFile);
 
-        var vars = getVars();
         var glslVersion = vars.getString(PROP_GLSL_VERSION);
 
         var mdName = filename.length() > 1 ?

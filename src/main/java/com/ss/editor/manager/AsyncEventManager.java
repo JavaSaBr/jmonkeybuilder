@@ -3,7 +3,8 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.event.ConsumableEvent;
-import com.ss.rlib.common.manager.InitializeManager;
+import com.ss.rlib.common.logging.Logger;
+import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -25,6 +26,8 @@ import java.util.Collection;
  * @author JavaSaBr
  */
 public class AsyncEventManager {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(AsyncEventManager.class);
 
     /**
      * Builder to build a combined async events handler.
@@ -203,6 +206,16 @@ public class AsyncEventManager {
             eventTypesSet.forEach(eventType ->
                     eventManager.removeEventHandler(eventType, this));
         }
+
+        @Override
+        public String toString() {
+
+            if (handlers.size() == 1) {
+                return handlers.first().getClass().getSimpleName();
+            }
+
+            return handlers.toString();
+        }
     }
 
     private static final AsyncEventManager INSTANCE = new AsyncEventManager();
@@ -235,19 +248,19 @@ public class AsyncEventManager {
             @NotNull EventHandler<T> eventHandler
     ) {
 
-        var eventHandlers = getEventHandlers();
-        var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
+        LOGGER.debug(eventType, eventHandler,
+                (type, handler) -> "Register the handler " + handler + " for the event type " + type);
+
+        var allHandlers = getEventHandlers();
+        var handlers = allHandlers.getInReadLock(eventType, ObjectDictionary::get);
 
         if (handlers != null) {
             handlers.runInWriteLock(eventHandler, Collection::add);
             return;
         }
 
-        eventHandlers.runInWriteLock(dictionary -> {
-
-            var newHandlers = dictionary.get(eventType,
-                    () -> ArrayFactory.newConcurrentStampedLockArray(EventHandler.class));
-
+        allHandlers.runInWriteLock(dictionary -> {
+            var newHandlers = dictionary.getOrCompute(eventType, ConcurrentArray.supplier(EventHandler.class));
             newHandlers.runInWriteLock(eventHandler, Collection::add);
         });
     }
@@ -264,8 +277,11 @@ public class AsyncEventManager {
             @NotNull EventHandler<?> eventHandler
     ) {
 
-        var eventHandlers = getEventHandlers();
-        var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
+        LOGGER.debug(eventType, eventHandler,
+                (type, handler) -> "Remove the handler " + handler + " for the event type " + type);
+
+        var handlers = getEventHandlers()
+                .getInReadLock(eventType, ObjectDictionary::get);
 
         if (handlers != null) {
             handlers.runInWriteLock(eventHandler, Collection::remove);
@@ -300,6 +316,8 @@ public class AsyncEventManager {
     @BackgroundThread
     private void notifyImpl(@NotNull Event event) {
 
+        LOGGER.debug(event, e -> "Received the event " + e);
+
         var eventHandlers = getEventHandlers();
 
         for (EventType<? extends Event> eventType = event.getEventType();
@@ -308,24 +326,34 @@ public class AsyncEventManager {
 
             var handlers = eventHandlers.getInReadLock(eventType, ObjectDictionary::get);
 
+
             if (handlers == null || handlers.isEmpty()) {
                 continue;
             }
 
+            LOGGER.debug(event, handlers,
+                    (e, eHandlers) -> "Handle the event " + e + " by the handlers " + eHandlers);
+
             handlers.runInReadLock(event, (array, toHandle) -> {
-
-                var executorManager = ExecutorManager.getInstance();
-
                 for (var eventHandler : array) {
-                    executorManager.addBackgroundTask(() ->
-                            eventHandler.handle(ClassUtils.unsafeCast(event)));
+                    ExecutorManager.getInstance()
+                            .addBackgroundTask(() -> notifyImpl(event, eventHandler));
                 }
             });
         }
 
         if (event instanceof ConsumableEvent && !event.isConsumed()) {
-            var executorManager = ExecutorManager.getInstance();
-            executorManager.addBackgroundTask(() -> notifyImpl(event));
+            ExecutorManager.getInstance()
+                    .addBackgroundTask(() -> notifyImpl(event));
         }
+    }
+
+    @BackgroundThread
+    private void notifyImpl(@NotNull Event event, @NotNull EventHandler<? extends Event> eventHandler) {
+
+        LOGGER.debug(event, eventHandler,
+                (e, handler) -> "Handle the event " + e + " by the handler " + handler);
+
+        eventHandler.handle(ClassUtils.unsafeCast(event));
     }
 }
