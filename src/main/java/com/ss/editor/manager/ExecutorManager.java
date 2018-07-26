@@ -10,12 +10,11 @@ import com.ss.rlib.common.concurrent.atomic.AtomicInteger;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
+import javafx.concurrent.Task;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * The class to manage executing some tasks in the some threads.
@@ -25,8 +24,6 @@ import java.util.concurrent.TimeUnit;
 public class ExecutorManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(ExecutorManager.class);
-
-    private static final Runtime RUNTIME = Runtime.getRuntime();
 
     private static final int PROP_BACKGROUND_TASK_EXECUTORS = 8;
 
@@ -45,12 +42,6 @@ public class ExecutorManager {
     private final ScheduledExecutorService scheduledExecutorService;
 
     /**
-     * The list of background tasks executors.
-     */
-    @NotNull
-    private final EditorTaskExecutor[] backgroundTaskExecutors;
-
-    /**
      * The executor of editor tasks.
      */
     @NotNull
@@ -62,26 +53,12 @@ public class ExecutorManager {
     @NotNull
     private final EditorTaskExecutor fxEditorTaskExecutor;
 
-    /**
-     * The index of a next background executor.
-     */
-    @NotNull
-    private final AtomicInteger nextBackgroundTaskExecutor;
-
     private ExecutorManager() {
         InitializeManager.valid(getClass());
 
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.backgroundTaskExecutors = new EditorTaskExecutor[PROP_BACKGROUND_TASK_EXECUTORS];
-
-        for (int i = 0, length = backgroundTaskExecutors.length; i < length; i++) {
-            backgroundTaskExecutors[i] = new BackgroundEditorTaskExecutor(i + 1);
-        }
-
         this.jmeTasksExecutor = JmeThreadExecutor.getInstance();
         this.fxEditorTaskExecutor = new FxEditorTaskExecutor();
-
-        this.nextBackgroundTaskExecutor = new AtomicInteger(0);
 
         LOGGER.info("initialized.");
     }
@@ -92,19 +69,8 @@ public class ExecutorManager {
      * @param task the background task.
      */
     @FromAnyThread
-    public void addBackgroundTask(@NotNull final Runnable task) {
-
-        var executors = getBackgroundTaskExecutors();
-        var nextTaskExecutor = getNextBackgroundTaskExecutor();
-
-        var index = nextTaskExecutor.incrementAndGet();
-
-        if (index < executors.length) {
-            executors[index].execute(task);
-        } else {
-            nextTaskExecutor.set(0);
-            executors[0].execute(task);
-        }
+    public void addBackgroundTask(@NotNull Runnable task) {
+        ForkJoinPool.commonPool().execute(task);
     }
 
     /**
@@ -128,16 +94,6 @@ public class ExecutorManager {
     }
 
     /**
-     * Get the list of background tasks executors.
-     *
-     * @return the list of background tasks executors.
-     */
-    @FromAnyThread
-    private @NotNull EditorTaskExecutor[] getBackgroundTaskExecutors() {
-        return backgroundTaskExecutors;
-    }
-
-    /**
      * Get the executor of javaFX tasks.
      *
      * @return the executor of javaFX tasks.
@@ -145,16 +101,6 @@ public class ExecutorManager {
     @FromAnyThread
     private @NotNull EditorTaskExecutor getFxTaskExecutor() {
         return fxEditorTaskExecutor;
-    }
-
-    /**
-     * Get the index of a next background executor.
-     *
-     * @return the index of a next background executor.
-     */
-    @FromAnyThread
-    private @NotNull AtomicInteger getNextBackgroundTaskExecutor() {
-        return nextBackgroundTaskExecutor;
     }
 
     /**

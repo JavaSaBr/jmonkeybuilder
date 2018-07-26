@@ -69,20 +69,11 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
             executed.clear();
             execute.clear();
 
-            lock();
-            try {
-
-                if (waitTasks.isEmpty()) {
-                    wait.getAndSet(true);
-                } else {
-                    execute.addAll(waitTasks);
-                }
-
-            } finally {
-                unlock();
+            synchronized (waitTasks) {
+                execute.addAll(waitTasks);
             }
 
-            if (wait.get()) {
+            if (execute.isEmpty() && wait.compareAndSet(false, true)) {
                 synchronized (wait) {
                     if (wait.get()) {
                         ConcurrentUtils.waitInSynchronize(wait);
@@ -100,11 +91,8 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 continue;
             }
 
-            lock();
-            try {
+            synchronized (waitTasks) {
                 waitTasks.removeAll(executed);
-            } finally {
-                unlock();
             }
         }
     }

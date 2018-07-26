@@ -26,7 +26,7 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
      */
     private static final int PROP_EXECUTE_LIMIT = 5;
     
-    public BackgroundEditorTaskExecutor(final int order) {
+    public BackgroundEditorTaskExecutor(int order) {
         setName(BackgroundEditorTaskExecutor.class.getSimpleName() + "_" + order);
         setPriority(NORM_PRIORITY - 2);
         start();
