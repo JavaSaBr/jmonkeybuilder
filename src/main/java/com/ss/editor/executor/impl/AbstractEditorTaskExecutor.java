@@ -20,7 +20,7 @@ import java.util.concurrent.locks.Lock;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor, Lockable {
+public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorTaskExecutor.class);
 
@@ -48,17 +48,10 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     @NotNull
     protected final AtomicBoolean wait;
 
-    /**
-     * The synchronizer.
-     */
-    @NotNull
-    private final Lock lock;
-
     public AbstractEditorTaskExecutor() {
         this.execute = createExecuteArray();
         this.executed = createExecuteArray();
         this.waitTasks = createExecuteArray();
-        this.lock = LockFactory.newAtomicLock();
         this.wait = new AtomicBoolean(false);
     }
 
@@ -76,33 +69,12 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     @FromAnyThread
     public void execute(@NotNull Runnable task) {
 
-        lock();
-        try {
-
+        synchronized (waitTasks) {
             waitTasks.add(task);
-
-            if (!wait.get()) {
-                return;
-            }
-
-            synchronized (wait) {
-                if (wait.compareAndSet(true, false)) {
-                    ConcurrentUtils.notifyAllInSynchronize(wait);
-                }
-            }
-
-        } finally {
-            unlock();
         }
 
-        if (!wait.get()) {
-            return;
-        }
-
-        synchronized (wait) {
-            if (wait.compareAndSet(true, false)) {
-                ConcurrentUtils.notifyAllInSynchronize(wait);
-            }
+        if (wait.compareAndSet(true, false)) {
+            ConcurrentUtils.notifyAll(wait);
         }
     }
 
@@ -112,7 +84,7 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
      * @param execute  the execute
      * @param executed the executed
      */
-    protected abstract void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed);
+    protected abstract void doExecute(@NotNull Array<Runnable> execute, @NotNull Array<Runnable> executed);
 
     @Override
     public void run() {
@@ -121,20 +93,11 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
             executed.clear();
             execute.clear();
 
-            lock();
-            try {
-
-                if (waitTasks.isEmpty()) {
-                    wait.getAndSet(true);
-                } else {
-                    execute.addAll(waitTasks);
-                }
-
-            } finally {
-                unlock();
+            synchronized (waitTasks) {
+                execute.addAll(waitTasks);
             }
 
-            if (wait.get()) {
+            if (execute.isEmpty() && wait.compareAndSet(false, true)) {
                 synchronized (wait) {
                     if (wait.get()) {
                         ConcurrentUtils.waitInSynchronize(wait);
@@ -152,22 +115,9 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
                 continue;
             }
 
-            lock();
-            try {
+            synchronized (waitTasks) {
                 waitTasks.removeAll(executed);
-            } finally {
-                unlock();
             }
         }
-    }
-
-    @Override
-    public void lock() {
-        lock.lock();
-    }
-
-    @Override
-    public void unlock() {
-        lock.unlock();
     }
 }

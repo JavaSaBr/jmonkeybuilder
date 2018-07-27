@@ -167,7 +167,7 @@ public class AsyncEventManager {
 
             var eventTypesSet = resultHandler.eventTypesSet;
             eventTypesSet.forEach(eventType ->
-                eventManager.addEventHandler(eventType, resultHandler));
+                    eventManager.addEventHandler(eventType, resultHandler));
         }
     }
 
@@ -331,9 +331,6 @@ public class AsyncEventManager {
                 continue;
             }
 
-            LOGGER.debug(event, handlers,
-                    (e, eHandlers) -> "Handle the event " + e + " by the handlers " + eHandlers);
-
             handlers.runInReadLock(event, (array, toHandle) -> {
                 for (var eventHandler : array) {
                     ExecutorManager.getInstance()
@@ -352,7 +349,7 @@ public class AsyncEventManager {
     private void notifyImpl(@NotNull Event event, @NotNull EventHandler<? extends Event> eventHandler) {
 
         LOGGER.debug(event, eventHandler,
-                (e, handler) -> "Handle the event " + e + " by the handler " + handler);
+                (e, handler) -> e + " -> " + handler);
 
         eventHandler.handle(ClassUtils.unsafeCast(event));
     }

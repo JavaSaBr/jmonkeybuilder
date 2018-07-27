@@ -1,6 +1,5 @@
 package com.ss.editor.manager;
 
-import static com.ss.rlib.common.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
@@ -17,6 +16,7 @@ import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.plugin.ConfigurablePluginSystem;
 import com.ss.rlib.common.plugin.exception.PreloadPluginException;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
+import com.ss.rlib.common.plugin.impl.PluginSystemFactory;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.Utils;
@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 /**
@@ -99,20 +100,27 @@ public class PluginManager {
     @BackgroundThread
     private void loadPluginsInBackground() {
 
-        var pluginSystem = newBasePluginSystem(getClass().getClassLoader());
+        var pluginSystem = PluginSystemFactory.newBasePluginSystem();
         pluginSystem.setAppVersion(Config.APP_VERSION);
 
         var folderInUserHome = Config.getAppFolderInUserHome();
         var embeddedPath = System.getProperty("editor.embedded.plugins.path");
 
         if (embeddedPath != null && Files.exists(Paths.get(embeddedPath))) {
+
             var embeddedPluginPath = Paths.get(embeddedPath);
+
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
+
             pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
+
         } else {
+
             var rootFolder = Utils.getRootFolderFromClass(JmeApplication.class);
             var embeddedPluginPath = rootFolder.resolve("embedded-plugins");
+
             LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
+
             if (Files.exists(embeddedPluginPath)) {
                 pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
             } else {
@@ -129,14 +137,10 @@ public class PluginManager {
         }
 
         pluginSystem.configureInstallationPluginsPath(userPluginsFolder);
-        try {
-            pluginSystem.preLoad();
-        } catch (PreloadPluginException e) {
-            FileUtils.delete(e.getPath());
-            throw e;
-        }
-
-        pluginSystem.initialize();
+        pluginSystem.preLoad()
+                .exceptionally(this::handleException)
+                .thenApply(ConfigurablePluginSystem::initialize)
+                .join();
 
         this.pluginSystem = pluginSystem;
 
@@ -150,6 +154,16 @@ public class PluginManager {
 
         eventManager.notify(new PluginsRegisteredResourcesEvent());
 
+    }
+
+    @BackgroundThread
+    private @Nullable ConfigurablePluginSystem handleException(@Nullable Throwable throwable) {
+
+        if (throwable instanceof PreloadPluginException) {
+            FileUtils.delete(((PreloadPluginException) throwable).getPath());
+        }
+
+        throw new RuntimeException(throwable);
     }
 
     /**
