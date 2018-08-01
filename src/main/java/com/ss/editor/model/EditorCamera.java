@@ -22,6 +22,7 @@ import com.ss.editor.config.Config;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -32,16 +33,28 @@ import java.io.IOException;
  */
 public class EditorCamera implements ActionListener, AnalogListener, Control {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorCamera.class);
 
-    private static final String CHASECAM_TOGGLEROTATE = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_TOGGLEROTATE;
-    private static final String CHASECAM_DOWN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_DOWN;
-    private static final String CHASECAM_UP = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_UP;
-    private static final String CHASECAM_MOVELEFT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_MOVELEFT;
-    private static final String CHASECAM_MOVERIGHT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_MOVERIGHT;
-    private static final String CHASECAM_ZOOMIN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_ZOOMIN;
-    private static final String CHASECAM_ZOOMOUT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_ZOOMOUT;
+    private static final String CHASECAM_TOGGLEROTATE =
+            "jMB.Editor." + CameraInput.CHASECAM_TOGGLEROTATE;
+
+    private static final String CHASECAM_DOWN =
+            "jMB.Editor." + CameraInput.CHASECAM_DOWN;
+
+    private static final String CHASECAM_UP =
+            "jMB.Editor." + CameraInput.CHASECAM_UP;
+
+    private static final String CHASECAM_MOVELEFT =
+            "jMB.Editor." + CameraInput.CHASECAM_MOVELEFT;
+
+    private static final String CHASECAM_MOVERIGHT =
+            "jMB.Editor." + CameraInput.CHASECAM_MOVERIGHT;
+
+    private static final String CHASECAM_ZOOMIN =
+            "jMB.Editor." + CameraInput.CHASECAM_ZOOMIN;
+
+    private static final String CHASECAM_ZOOMOUT =
+            "jMB.Editor." + CameraInput.CHASECAM_ZOOMOUT;
 
     private static final String[] ALL_INPUTS = {
             CHASECAM_TOGGLEROTATE,
@@ -97,102 +110,126 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         BOTTOM
     }
 
-    private InputManager inputManager;
-
-    private final Camera camera;
-
-    private Spatial target;
-
+    @NotNull
     private final Vector3f targetDir;
+
+    @NotNull
     private final Vector3f position;
 
+    @NotNull
     private final Vector3f targetLocation;
+
+    @NotNull
     private final Vector3f temp;
 
-    private Vector3f initialUpVec;
-    private Vector3f prevPos;
-    private Vector3f lookAtOffset;
+    @NotNull
+    private final Vector3f initialUpVec;
 
-    private float minDistance = 1.0f;
-    private float maxDistance = 40.0f;
+    @NotNull
+    private final Vector3f prevPos;
 
-    private float distance = 20;
+    @NotNull
+    private final Vector3f lookAtOffset;
 
-    private float rotationSpeed = 1.0f;
-    private float rotation = 0;
+    @NotNull
+    private final Camera camera;
 
-    private float trailingRotationInertia = 0.05f;
+    @Nullable
+    private InputManager inputManager;
 
-    private float zoomSensitivity = 2f;
-    private float rotationSensitivity = 5f;
-    private float chasingSensitivity = 5f;
-    private float trailingSensitivity = 0.5f;
+    @Nullable
+    private Spatial target;
 
-    private float verticalRotation = FastMath.PI / 6;
+    private float minDistance;
+    private float maxDistance;
 
-    private float rotationLerpFactor = 0;
-    private float trailingLerpFactor = 0;
+    private float distance;
 
-    /**
-     * Целевой разворот камеры.
-     */
+    private float rotationSpeed;
+    private float rotation;
+
+    private float trailingRotationInertia;
+
+    private float zoomSensitivity;
+    private float rotationSensitivity;
+    private float chasingSensitivity;
+    private float trailingSensitivity;
+
+    private float verticalRotation;
+
+    private float rotationLerpFactor;
+    private float trailingLerpFactor;
+
     private float targetRotation = rotation;
-
-    /**
-     * Целевой разворот камеры по вертикали.
-     */
     private float targetVRotation = verticalRotation;
 
-    private float vRotationLerpFactor = 0;
-    private float targetDistance = distance;
-    private float distanceLerpFactor = 0;
+    private float vRotationLerpFactor;
+    private float targetDistance;
+    private float distanceLerpFactor;
 
-    private float offsetDistance = 0.002f;
+    private float offsetDistance;
 
     private float previousTargetRotation;
 
-    private boolean enabled = true;
-    private boolean dragToRotate = true;
-    private boolean trailingEnabled = true;
-    private boolean hideCursorOnRotate = true;
+    private boolean enabled;
+    private boolean dragToRotate;
+    private boolean trailingEnabled;
+    private boolean hideCursorOnRotate;
 
-    private boolean rotating = false;
-    private boolean verticalRotating = false;
-    private boolean smoothMotion = false;
-    private boolean targetMoves = false;
+    private boolean rotating;
+    private boolean verticalRotating;
+    private boolean smoothMotion;
+    private boolean targetMoves;
 
-    private boolean zooming = false;
-    private boolean trailing = false;
-    private boolean chasing = false;
+    private boolean zooming;
+    private boolean trailing;
+    private boolean chasing;
     private boolean canRotate;
     private boolean zoomin;
     private boolean lockRotation;
 
-    /**
-     * Constructs the chase camera
-     *
-     * @param camera the application camera
-     * @param target the spatial to follow
-     */
-    public EditorCamera(@NotNull final Camera camera, @NotNull final Spatial target) {
+    public EditorCamera(@NotNull Camera camera, @NotNull Spatial target) {
         this(camera);
         target.addControl(this);
     }
 
-    /**
-     * Constructs the chase camera if you use this constructor you have to attach the camera later to a spatial doing
-     * spatial.addControl(chaseCamera);
-     *
-     * @param camera the application camera
-     */
-    public EditorCamera(@NotNull final Camera camera) {
+    public EditorCamera(@NotNull Camera camera) {
         this.camera = camera;
-        this.initialUpVec = Vector3f.UNIT_Y;
+        this.initialUpVec = Vector3f.UNIT_Y.clone();
         this.targetDir = new Vector3f();
         this.position = new Vector3f();
-        this.targetLocation = new Vector3f(0, 0, 0);
-        this.lookAtOffset = new Vector3f(0, 0, 0);
-        this.temp = new Vector3f(0, 0, 0);
+        this.targetLocation = new Vector3f();
+        this.lookAtOffset = new Vector3f();
+        this.temp = new Vector3f();
+        this.prevPos = new Vector3f();
+        this.minDistance = 1.0f;
+        this.maxDistance = 40.0f;
+        this.distance = 20;
+        this.rotationSpeed = 1.0f;
+        this.rotation = 0;
+        this.trailingRotationInertia = 0.05f;
+        this.zoomSensitivity = 2f;
+        this.chasingSensitivity = 5f;
+        this.rotationSensitivity = 5f;
+        this.trailingSensitivity = 0.5f;
+        this.verticalRotation = FastMath.PI / 6;
+        this.rotationLerpFactor = 0;
+        this.trailingLerpFactor = 0;
+        this.vRotationLerpFactor = 0;
+        this.targetDistance = distance;
+        this.distanceLerpFactor = 0;
+        this.offsetDistance = 0.002f;
+        this.enabled = true;
+        this.dragToRotate = true;
+        this.trailingEnabled = true;
+        this.hideCursorOnRotate = true;
+        this.rotating = false;
+        this.verticalRotating = false;
+        this.smoothMotion = false;
+        this.targetMoves = false;
+        this.zooming = false;
+        this.trailing = false;
+        this.chasing = false;
     }
 
     /**
@@ -201,7 +238,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param direction the direction
      * @param value     the value
      */
-    public void rotateTo(final Direction direction, final float value) {
+    public void rotateTo(@NotNull Direction direction, float value) {
 
         float targetRotation = radiansToDegree(getTargetRotation());
         float targetVRotation = radiansToDegree(getTargetVRotation());
@@ -968,24 +1005,6 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      */
     public void setLookAtOffset(Vector3f lookAtOffset) {
         this.lookAtOffset = lookAtOffset;
-    }
-
-    /**
-     * Sets the up vector of the camera used for the lookAt on the target
-     *
-     * @param up the up
-     */
-    public void setUpVector(Vector3f up) {
-        initialUpVec = up;
-    }
-
-    /**
-     * Returns the up vector of the camera used for the lookAt on the target
-     *
-     * @return the up vector
-     */
-    public Vector3f getUpVector() {
-        return initialUpVec;
     }
 
     /**
