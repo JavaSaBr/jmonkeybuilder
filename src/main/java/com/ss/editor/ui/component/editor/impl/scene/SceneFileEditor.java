@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
@@ -33,7 +33,7 @@ import com.ss.editor.ui.control.filter.list.FilterList;
 import com.ss.editor.ui.control.layer.LayerNodeTree;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxControlUtils;
@@ -153,10 +153,10 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
     protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 
-        var assetFile = EditorUtil.requireAssetFile(file);
+        var assetFile = EditorUtils.requireAssetFile(file);
         var modelKey = new ModelKey(toAssetPath(assetFile));
 
-        Spatial loadedScene = EditorUtil.getAssetManager()
+        Spatial loadedScene = EditorUtils.getAssetManager()
                 .loadAsset(modelKey);
 
         var model = (SceneNode) loadedScene;
@@ -592,7 +592,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
         super.notifyHided();
 
         ExecutorManager.getInstance()
-                .addJmeTask(EditorUtil::enableGlobalLightProbe);
+                .addJmeTask(EditorUtils::enableGlobalLightProbe);
     }
 
     @Override
@@ -601,7 +601,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
         super.notifyShowed();
 
         ExecutorManager.getInstance()
-                .addJmeTask(EditorUtil::disableGlobalLightProbe);
+                .addJmeTask(EditorUtils::disableGlobalLightProbe);
     }
 
     @Override

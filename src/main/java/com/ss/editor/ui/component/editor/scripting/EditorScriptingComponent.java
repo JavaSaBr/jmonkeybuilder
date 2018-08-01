@@ -4,7 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.scripting.GroovyEditorComponent;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
@@ -204,7 +204,7 @@ public class EditorScriptingComponent extends GridPane {
         try {
             shell.evaluate(result.toString());
         } catch (Exception e) {
-            EditorUtil.handleException(null, this, e);
+            EditorUtils.handleException(null, this, e);
             return;
         }
 

@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +51,7 @@ public class AudioKeyPropertyControl<C extends ChangeConsumer, E> extends
     @Override
     @FxThread
     protected void applyNewKey(@NotNull Path file) {
-        changed(EditorUtil.realFileToKey(file, AudioKey::new), getPropertyValue());
+        changed(EditorUtils.realFileToKey(file, AudioKey::new), getPropertyValue());
         super.applyNewKey(file);
     }
 }

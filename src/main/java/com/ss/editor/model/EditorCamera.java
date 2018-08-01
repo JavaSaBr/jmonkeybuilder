@@ -1,7 +1,5 @@
 package com.ss.editor.model;
 
-import static com.ss.rlib.common.geom.util.AngleUtils.degreeToRadians;
-import static com.ss.rlib.common.geom.util.AngleUtils.radiansToDegree;
 import static java.lang.Math.*;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -18,9 +16,13 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.util.JmeUtils;
+import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -142,11 +144,12 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     private float minDistance;
     private float maxDistance;
-
     private float distance;
 
     private float rotationSpeed;
-    private float rotation;
+
+    private float hRotation;
+    private float vRotation;
 
     private float trailingRotationInertia;
 
@@ -155,18 +158,15 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     private float chasingSensitivity;
     private float trailingSensitivity;
 
-    private float verticalRotation;
-
-    private float rotationLerpFactor;
+    private float hRotationLerpFactor;
+    private float vRotationLerpFactor;
+    private float distanceLerpFactor;
     private float trailingLerpFactor;
 
-    private float targetRotation = rotation;
-    private float targetVRotation = verticalRotation;
+    private float targetHRotation = hRotation;
+    private float targetVRotation = vRotation;
 
-    private float vRotationLerpFactor;
     private float targetDistance;
-    private float distanceLerpFactor;
-
     private float offsetDistance;
 
     private float previousTargetRotation;
@@ -206,14 +206,14 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         this.maxDistance = 40.0f;
         this.distance = 20;
         this.rotationSpeed = 1.0f;
-        this.rotation = 0;
+        this.hRotation = 0;
         this.trailingRotationInertia = 0.05f;
         this.zoomSensitivity = 2f;
         this.chasingSensitivity = 5f;
         this.rotationSensitivity = 5f;
         this.trailingSensitivity = 0.5f;
-        this.verticalRotation = FastMath.PI / 6;
-        this.rotationLerpFactor = 0;
+        this.vRotation = FastMath.PI / 6;
+        this.hRotationLerpFactor = 0;
         this.trailingLerpFactor = 0;
         this.vRotationLerpFactor = 0;
         this.targetDistance = distance;
@@ -233,92 +233,123 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Разворот камеры.
+     * Rotate this camera to the direction by the value.
      *
-     * @param direction the direction
-     * @param value     the value
+     * @param direction the direction.
+     * @param value     the value.
      */
+    @JmeThread
     public void rotateTo(@NotNull Direction direction, float value) {
 
-        float targetRotation = radiansToDegree(getTargetRotation());
-        float targetVRotation = radiansToDegree(getTargetVRotation());
+        var hRotation = AngleUtils.radiansToDegree(targetHRotation);
+        var vRotation = AngleUtils.radiansToDegree(targetVRotation);
 
         if (direction == Direction.LEFT) {
-            targetRotation += value;
+            hRotation += value;
         } else if (direction == Direction.RIGHT) {
-            targetRotation -= value;
+            hRotation -= value;
         } else if (direction == Direction.TOP) {
-            targetVRotation += value;
+            vRotation += value;
         } else if (direction == Direction.BOTTOM) {
-            targetVRotation -= value;
+            vRotation -= value;
         }
 
-        setTargetRotation(degreeToRadians(targetRotation));
-        setTargetVRotation(degreeToRadians(targetVRotation));
+        targetHRotation = AngleUtils.degreeToRadians(hRotation);
+        targetVRotation = AngleUtils.degreeToRadians(vRotation);
     }
 
     /**
-     * Разворот камеры.
+     * Rotate this camera to the perspective.
      *
-     * @param perspective the perspective
+     * @param perspective the perspective.
      */
-    public void rotateTo(final Perspective perspective) {
+    @JmeThread
+    public void rotateTo(@NotNull Perspective perspective) {
 
-        float targetRotation = degreeToRadians(90);
-        float targetVRotation = degreeToRadians(0);
+        var hRotation = AngleUtils.degreeToRadians(90);
+        var vRotation = AngleUtils.degreeToRadians(0);
 
         if (perspective == Perspective.BACK) {
-            targetRotation = degreeToRadians(-90);
+            hRotation = AngleUtils.degreeToRadians(-90);
         } else if (perspective == Perspective.RIGHT) {
-            targetRotation = degreeToRadians(180);
+            hRotation = AngleUtils.degreeToRadians(180);
         } else if (perspective == Perspective.BOTTOM) {
-            targetVRotation = degreeToRadians(90);
+            vRotation = AngleUtils.degreeToRadians(90);
         } else if (perspective == Perspective.TOP) {
-            targetVRotation = degreeToRadians(-90);
+            vRotation = AngleUtils.degreeToRadians(-90);
         }
 
-        setTargetRotation(targetRotation);
-        setTargetVRotation(targetVRotation);
+        targetHRotation = hRotation;
+        targetVRotation = vRotation;
     }
 
     /**
-     * @return целевой разворот камеры.
-     */
-    private float getTargetRotation() {
-        return targetRotation;
-    }
-
-    /**
-     * Sets target rotation.
+     * Get the input manager.
      *
-     * @param targetRotation целевой разворот камеры.
+     * @return the input manager
      */
-    public void setTargetRotation(final float targetRotation) {
-        this.targetRotation = targetRotation;
+    @JmeThread
+    private @NotNull InputManager getInputManager() {
+        return ObjectUtils.notNull(inputManager);
     }
 
     /**
-     * @return целевой разворот камеры по вертикали.
-     */
-    private float getTargetVRotation() {
-        return targetVRotation;
-    }
-
-    /**
-     * Sets target v rotation.
+     * Get the target spatial.
      *
-     * @param targetVRotation целевой разворот камеры по вертикали.
+     * @return the target spatial.
      */
-    public void setTargetVRotation(final float targetVRotation) {
+    @JmeThread
+    public @NotNull Spatial getTarget() {
+        return ObjectUtils.notNull(target);
+    }
+
+    /**
+     * Set the target rotation.
+     *
+     * @param targetHRotation the target rotation.
+     */
+    @JmeThread
+    public void setTargetHRotation(float targetHRotation) {
+        this.targetHRotation = targetHRotation;
+    }
+
+    /**
+     * Set the target vertical rotation.
+     *
+     * @param targetVRotation the target vertical rotation.
+     */
+    @JmeThread
+    public void setTargetVRotation(float targetVRotation) {
         this.targetVRotation = targetVRotation;
     }
 
+    /**
+     * Set the target distance.
+     *
+     * @param targetDistance the target distance.
+     */
+    @JmeThread
+    public void setTargetDistance(float targetDistance) {
+        this.targetDistance = targetDistance;
+    }
+
+    /**
+     * Get the target distance.
+     *
+     * @return the target distance.
+     */
+    @JmeThread
+    public float getTargetDistance() {
+        return targetDistance;
+    }
+
     @Override
-    public void onAction(final String name, final boolean keyPressed, final float tpf) {
+    @JmeThread
+    public void onAction(@NotNull String name, boolean keyPressed, float tpf) {
 
         if (!enabled || !dragToRotate) {
             return;
-        } else if (!name.equals(CHASECAM_TOGGLEROTATE)) {
+        } else if (!CHASECAM_TOGGLEROTATE.equals(name)) {
             return;
         }
 
@@ -326,27 +357,30 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             LOGGER.debug(this, keyPressed, flag -> "Toggle camera " + flag);
         }
 
-        if (keyPressed) {
-            canRotate = true;
-            if (hideCursorOnRotate) inputManager.setCursorVisible(false);
-        } else {
-            canRotate = false;
-            if (hideCursorOnRotate) inputManager.setCursorVisible(true);
+        canRotate = keyPressed;
+
+        if (hideCursorOnRotate) {
+            getInputManager().setCursorVisible(!keyPressed);
         }
     }
 
     /**
-     * Sets lock rotation.
+     * Set true to lock rotation.
      *
-     * @param lockRotation the lock rotation
+     * @param lockRotation true to lock rotation.
      */
+    @JmeThread
     public void setLockRotation(boolean lockRotation) {
         this.lockRotation = lockRotation;
     }
 
     @Override
-    public void onAnalog(String name, float value, float tpf) {
-        if (!enabled) return;
+    @JmeThread
+    public void onAnalog(@NotNull String name, float value, float tpf) {
+
+        if (!enabled) {
+            return;
+        }
 
         if (name.equals(CHASECAM_MOVELEFT) && !lockRotation) {
             rotateCamera(-value * 3);
@@ -368,40 +402,21 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Registers inputs with the input manager
+     * Register inputs with the input manager.
      *
-     * @param inputManager the input manager
+     * @param inputManager the input manager.
      */
-    public final void registerInput(final InputManager inputManager) {
+    @JmeThread
+    public final void registerInput(@NotNull InputManager inputManager) {
         this.inputManager = inputManager;
 
-        if (!inputManager.hasMapping(CHASECAM_DOWN)) {
-            inputManager.addMapping(CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        }
-
-        if (!inputManager.hasMapping(CHASECAM_UP)) {
-            inputManager.addMapping(CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        }
-
-        if (!inputManager.hasMapping(CHASECAM_ZOOMIN)) {
-            inputManager.addMapping(CHASECAM_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-        }
-
-        if (!inputManager.hasMapping(CHASECAM_ZOOMOUT)) {
-            inputManager.addMapping(CHASECAM_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-        }
-
-        if (!inputManager.hasMapping(CHASECAM_MOVELEFT)) {
-            inputManager.addMapping(CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        }
-
-        if (!inputManager.hasMapping(CHASECAM_MOVERIGHT)) {
-            inputManager.addMapping(CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        }
-
-        if (!inputManager.hasMapping(CHASECAM_TOGGLEROTATE)) {
-            inputManager.addMapping(CHASECAM_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
-        }
+        JmeUtils.addMapping(CHASECAM_DOWN, inputManager, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        JmeUtils.addMapping(CHASECAM_UP, inputManager, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        JmeUtils.addMapping(CHASECAM_ZOOMIN, inputManager, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        JmeUtils.addMapping(CHASECAM_ZOOMOUT, inputManager, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+        JmeUtils.addMapping(CHASECAM_MOVELEFT, inputManager, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        JmeUtils.addMapping(CHASECAM_MOVERIGHT, inputManager, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        JmeUtils.addMapping(CHASECAM_TOGGLEROTATE, inputManager, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
         inputManager.addListener(this, ALL_INPUTS);
     }
@@ -411,7 +426,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param inputManager the input manager
      */
-    public void unregisterInput(final InputManager inputManager) {
+    @JmeThread
+    public void unregisterInput(@NotNull InputManager inputManager) {
         inputManager.removeListener(this);
     }
 
@@ -420,52 +436,43 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      */
     protected void computePosition() {
 
-        float highDistance = (distance) * FastMath.sin((FastMath.PI / 2) - verticalRotation);
+        var highDistance = (distance) * FastMath.sin((FastMath.PI / 2) - vRotation);
+        var newX = highDistance * FastMath.cos(hRotation);
+        var newY = (distance) * FastMath.sin(vRotation);
+        var newZ = highDistance * FastMath.sin(hRotation);
 
-        position.set(highDistance * FastMath.cos(rotation), (distance) * FastMath.sin(verticalRotation), highDistance * FastMath.sin(rotation));
-        position.addLocal(target.getWorldTranslation());
+        position.set(newX, newY, newZ)
+                .addLocal(getTarget().getWorldTranslation());
     }
 
     /**
-     * Rotate camera.
+     * Rotate this camera in horizontal.
      *
-     * @param value the value
+     * @param value the value.
      */
-    //rotate the camera around the target on the horizontal plane
     protected void rotateCamera(float value) {
-        if (!canRotate || !enabled) return;
+
+        if (!canRotate || !enabled) {
+            return;
+        }
+
         rotating = true;
-        targetRotation += value * rotationSpeed;
-    }
-
-    /**
-     * Gets target distance.
-     *
-     * @return the target distance
-     */
-    public float getTargetDistance() {
-        return targetDistance;
-    }
-
-    /**
-     * Sets target distance.
-     *
-     * @param targetDistance the target distance
-     */
-    public void setTargetDistance(final float targetDistance) {
-        this.targetDistance = max(min(targetDistance, maxDistance), minDistance);
+        targetHRotation += value * rotationSpeed;
     }
 
     /**
      * Zoom camera.
      *
-     * @param value the value
+     * @param value the value.
      */
-    //move the camera toward or away the target
     protected void zoomCamera(float value) {
-        if (!enabled) return;
+
+        if (!enabled) {
+            return;
+        }
 
         zooming = true;
+
         targetDistance += value * zoomSensitivity * sqrt(targetDistance);
         targetDistance = max(min(targetDistance, maxDistance), minDistance);
     }
@@ -475,9 +482,11 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param value the value
      */
-    //rotate the camera around the target on the vertical plane
-    protected void verticalRotateCamera(final float value) {
-        if (!canRotate || !enabled) return;
+    protected void verticalRotateCamera(float value) {
+
+        if (!canRotate || !enabled) {
+            return;
+        }
 
         verticalRotating = true;
         targetVRotation += value * rotationSpeed;
@@ -488,19 +497,22 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param tpf the tpf
      */
+    @JmeThread
     public void updateCamera(float tpf) {
 
         if (!enabled) {
             return;
         }
 
-        targetLocation.set(target.getWorldTranslation())
+        targetLocation.set(getTarget().getWorldTranslation())
                 .addLocal(lookAtOffset);
 
         if (smoothMotion) {
 
-            //computation of target direction
-            targetDir.set(targetLocation).subtractLocal(prevPos);
+            // computation of target direction
+            targetDir.set(targetLocation)
+                    .subtractLocal(prevPos);
+
             float dist = targetDir.length();
 
             //Low pass filtering on the target postition to avoid shaking when physics are enabled.
@@ -517,10 +529,10 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
                 //if target was moving, we compute a slight offset in rotation to avoid a rought stop of the camera
                 //We do not if the player is rotationg the camera
                 if (targetMoves && !canRotate) {
-                    if (targetRotation - rotation > trailingRotationInertia) {
-                        targetRotation = rotation + trailingRotationInertia;
-                    } else if (targetRotation - rotation < -trailingRotationInertia) {
-                        targetRotation = rotation - trailingRotationInertia;
+                    if (targetHRotation - hRotation > trailingRotationInertia) {
+                        targetHRotation = hRotation + trailingRotationInertia;
+                    } else if (targetHRotation - hRotation < -trailingRotationInertia) {
+                        targetHRotation = hRotation - trailingRotationInertia;
                     }
                 }
                 //Target stops
@@ -546,27 +558,27 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
                     a.y = 0;
                     //computation of the rotation angle between the x axis and the trail
                     if (targetDir.z > 0) {
-                        targetRotation = FastMath.TWO_PI - FastMath.acos(a.dot(b));
+                        targetHRotation = FastMath.TWO_PI - FastMath.acos(a.dot(b));
                     } else {
-                        targetRotation = FastMath.acos(a.dot(b));
+                        targetHRotation = FastMath.acos(a.dot(b));
                     }
-                    if (targetRotation - rotation > FastMath.PI || targetRotation - rotation < -FastMath.PI) {
-                        targetRotation -= FastMath.TWO_PI;
+                    if (targetHRotation - hRotation > FastMath.PI || targetHRotation - hRotation < -FastMath.PI) {
+                        targetHRotation -= FastMath.TWO_PI;
                     }
 
                     //if there is an important change in the direction while trailing reset of the lerp factor to avoid jumpy movements
-                    if (targetRotation != previousTargetRotation && FastMath.abs(targetRotation - previousTargetRotation) > FastMath.PI / 8) {
+                    if (targetHRotation != previousTargetRotation && FastMath.abs(targetHRotation - previousTargetRotation) > FastMath.PI / 8) {
                         trailingLerpFactor = 0;
                     }
-                    previousTargetRotation = targetRotation;
+                    previousTargetRotation = targetHRotation;
                 }
                 //computing lerp factor
                 trailingLerpFactor = min(trailingLerpFactor + tpf * tpf * trailingSensitivity, 1);
                 //computing rotation by linear interpolation
-                rotation = FastMath.interpolateLinear(trailingLerpFactor, rotation, targetRotation);
+                hRotation = FastMath.interpolateLinear(trailingLerpFactor, hRotation, targetHRotation);
 
                 //if the rotation is near the target rotation we're good, that's over
-                if (targetRotation + 0.01f >= rotation && targetRotation - 0.01f <= rotation) {
+                if (targetHRotation + 0.01f >= hRotation && targetHRotation - 0.01f <= hRotation) {
                     trailing = false;
                     trailingLerpFactor = 0;
                 }
@@ -595,19 +607,19 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
             //linear interpolation of the rotation while rotating horizontally
             if (rotating) {
-                rotationLerpFactor = min(rotationLerpFactor + tpf * tpf * rotationSensitivity, 1);
-                rotation = FastMath.interpolateLinear(rotationLerpFactor, rotation, targetRotation);
-                if (targetRotation + 0.01f >= rotation && targetRotation - 0.01f <= rotation) {
+                hRotationLerpFactor = min(hRotationLerpFactor + tpf * tpf * rotationSensitivity, 1);
+                hRotation = FastMath.interpolateLinear(hRotationLerpFactor, hRotation, targetHRotation);
+                if (targetHRotation + 0.01f >= hRotation && targetHRotation - 0.01f <= hRotation) {
                     rotating = false;
-                    rotationLerpFactor = 0;
+                    hRotationLerpFactor = 0;
                 }
             }
 
             //linear interpolation of the rotation while rotating vertically
             if (verticalRotating) {
                 vRotationLerpFactor = min(vRotationLerpFactor + tpf * tpf * rotationSensitivity, 1);
-                verticalRotation = FastMath.interpolateLinear(vRotationLerpFactor, verticalRotation, targetVRotation);
-                if (targetVRotation + 0.01f >= verticalRotation && targetVRotation - 0.01f <= verticalRotation) {
+                vRotation = FastMath.interpolateLinear(vRotationLerpFactor, vRotation, targetVRotation);
+                if (targetVRotation + 0.01f >= vRotation && targetVRotation - 0.01f <= vRotation) {
                     verticalRotating = false;
                     vRotationLerpFactor = 0;
                 }
@@ -618,8 +630,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             camera.setLocation(position.addLocal(lookAtOffset));
         } else {
             //easy no smooth motion
-            verticalRotation = targetVRotation;
-            rotation = targetRotation;
+            vRotation = targetVRotation;
+            hRotation = targetHRotation;
             distance = targetDistance;
             computePosition();
             camera.setLocation(position.addLocal(lookAtOffset));
@@ -645,6 +657,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param enabled true to enable
      */
+    @JmeThread
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (!enabled) {
@@ -700,7 +713,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     @Override
     public Control cloneForSpatial(Spatial spatial) {
 
-        final EditorCamera editorCamera = new EditorCamera(camera, spatial);
+        var editorCamera = new EditorCamera(camera, spatial);
         editorCamera.setMaxDistance(getMaxDistance());
         editorCamera.setMinDistance(getMinDistance());
 
@@ -714,14 +727,15 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Sets the spacial for the camera control, should only be used internally
      */
-    public void setSpatial(Spatial spatial) {
+    public void setSpatial(@Nullable Spatial spatial) {
         target = spatial;
 
-        if (spatial == null) return;
+        if (spatial == null) {
+            return;
+        }
 
         computePosition();
-
-        prevPos = new Vector3f(target.getWorldTranslation());
+        prevPos.set(target.getWorldTranslation());
         camera.setLocation(position);
     }
 
@@ -734,7 +748,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * renders the camera control, should only be used internally
      */
-    public void render(RenderManager rm, ViewPort vp) {
+    public void render(@NotNull RenderManager rm, @NotNull ViewPort vp) {
         //nothing to render
     }
 
@@ -743,14 +757,14 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @param ex the exporter
      */
-    public void write(JmeExporter ex) throws IOException {
+    public void write(@NotNull JmeExporter ex) throws IOException {
         throw new UnsupportedOperationException("remove ChaseCamera before saving");
     }
 
     /**
      * Read the camera
      */
-    public void read(JmeImporter im) throws IOException {
+    public void read(@NotNull JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
         maxDistance = ic.readFloat("maxDistance", 40);
         minDistance = ic.readFloat("minDistance", 1);
@@ -924,8 +938,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param angleInRad the angle in rad
      */
     public void setDefaultHorizontalRotation(float angleInRad) {
-        rotation = angleInRad;
-        targetRotation = angleInRad;
+        hRotation = angleInRad;
+        targetHRotation = angleInRad;
     }
 
     /**
@@ -934,7 +948,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param angleInRad the angle in rad
      */
     public void setDefaultVerticalRotation(float angleInRad) {
-        verticalRotation = angleInRad;
+        vRotation = angleInRad;
         targetVRotation = angleInRad;
     }
 
@@ -977,7 +991,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @return the horizontal rotation
      */
     public float getHorizontalRotation() {
-        return rotation;
+        return hRotation;
     }
 
     /**
@@ -985,8 +999,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @return the vertical rotation
      */
-    public float getVerticalRotation() {
-        return verticalRotation;
+    public float getvRotation() {
+        return vRotation;
     }
 
     /**
@@ -1004,7 +1018,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param lookAtOffset the look at offset
      */
     public void setLookAtOffset(Vector3f lookAtOffset) {
-        this.lookAtOffset = lookAtOffset;
+        this.lookAtOffset.set(lookAtOffset);
     }
 
     /**

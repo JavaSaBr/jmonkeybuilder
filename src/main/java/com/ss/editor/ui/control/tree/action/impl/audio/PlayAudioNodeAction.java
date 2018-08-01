@@ -11,7 +11,7 @@ import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.impl.spatial.AudioTreeNode;
 import com.ss.editor.util.AudioNodeUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +54,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
         var audioModelNode = (AudioTreeNode) getNode();
         var audioNode = audioModelNode.getElement();
         var audioKey = AudioNodeUtils.getAudioKey(audioNode);
-        var audioData = EditorUtil.getAssetManager()
+        var audioData = EditorUtils.getAssetManager()
                 .loadAudio(audioKey);
 
         AudioNodeUtils.updateData(audioNode, audioData, audioKey);

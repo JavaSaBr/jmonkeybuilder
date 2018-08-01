@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
-import static com.ss.editor.util.EditorUtil.getDefaultLayer;
+import static com.ss.editor.util.EditorUtils.getDefaultLayer;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;

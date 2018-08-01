@@ -13,7 +13,7 @@ import com.ss.editor.ui.builder.EditorFxSceneBuilder;
 import com.ss.editor.ui.event.impl.CssAppliedEvent;
 import com.ss.editor.ui.event.impl.FxSceneCreatedEvent;
 import com.ss.editor.ui.event.impl.PluginCssLoadedEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -101,7 +101,7 @@ public class CssRegistry {
             var editorConfig = EditorConfig.getInstance();
             var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
 
-            var scene = EditorUtil.getFxScene();
+            var scene = EditorUtils.getFxScene();
             var stylesheets = scene.getStylesheets();
 
             // check if we have nothing new

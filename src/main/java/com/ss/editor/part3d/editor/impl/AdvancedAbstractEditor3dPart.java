@@ -15,17 +15,15 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.function.FloatFloatConsumer;
 import com.ss.rlib.common.logging.LoggerLevel;
-import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,47 +39,47 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T> {
 
     protected static final ObjectDictionary<String, Trigger> TRIGGERS =
-            DictionaryFactory.newObjectDictionary();
+            ObjectDictionary.ofType(String.class, Trigger.class);
 
     protected static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS =
-            DictionaryFactory.newObjectDictionary();
+            ObjectDictionary.ofType(String.class, Trigger[].class);
 
-    protected static final String MOUSE_RIGHT_CLICK = "SSEditor.editorState.mouseRightClick";
-    protected static final String MOUSE_LEFT_CLICK = "SSEditor.editorState.mouseLeftClick";
-    protected static final String MOUSE_MIDDLE_CLICK = "SSEditor.editorState.mouseMiddleClick";
+    protected static final String MOUSE_RIGHT_CLICK = "jMB.baseEditor.mouseRightClick";
+    protected static final String MOUSE_LEFT_CLICK = "jMB.baseEditor.mouseLeftClick";
+    protected static final String MOUSE_MIDDLE_CLICK = "jMB.baseEditor.mouseMiddleClick";
 
-    protected static final String MOUSE_X_AXIS = "SSEditor.editorState.mouseXAxis";
-    protected static final String MOUSE_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseXAxisNegative";
-    protected static final String MOUSE_Y_AXIS = "SSEditor.editorState.mouseYAxis";
-    protected static final String MOUSE_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseYAxisNegative";
+    protected static final String MOUSE_X_AXIS = "jMB.baseEditor.mouseXAxis";
+    protected static final String MOUSE_X_AXIS_NEGATIVE = "jMB.baseEditor.mouseXAxisNegative";
+    protected static final String MOUSE_Y_AXIS = "jMB.baseEditor.mouseYAxis";
+    protected static final String MOUSE_Y_AXIS_NEGATIVE = "jMB.baseEditor.mouseYAxisNegative";
 
-    protected static final String MOUSE_MOVE_CAMERA_X_AXIS = "SSEditor.editorState.mouseMoveCameraXAxis";
-    protected static final String MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraXAxisNegative";
-    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS = "SSEditor.editorState.mouseMoveCameraYAxis";
-    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraYAxisNegative";
+    protected static final String MOUSE_MOVE_CAMERA_X_AXIS = "jMB.baseEditor.mouseMoveCameraXAxis";
+    protected static final String MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE = "jMB.baseEditor.mouseMoveCameraXAxisNegative";
+    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS = "jMB.baseEditor.mouseMoveCameraYAxis";
+    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE = "jMB.baseEditor.mouseMoveCameraYAxisNegative";
 
-    protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
-    protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
-    protected static final String KEY_SHIFT = "SSEditor.editorState.keyShift";
+    protected static final String KEY_CTRL = "jMB.baseEditor.keyCtrl";
+    protected static final String KEY_ALT = "jMB.baseEditor.keyAlt";
+    protected static final String KEY_SHIFT = "jMB.baseEditor.keyShift";
 
-    protected static final String KEY_CTRL_S = "SSEditor.editorState.Ctrl.S";
-    protected static final String KEY_CTRL_Z = "SSEditor.editorState.Ctrl.Z";
-    protected static final String KEY_CTRL_Y = "SSEditor.editorState.Ctrl.Y";
+    protected static final String KEY_CTRL_S = "jMB.baseEditor.Ctrl.S";
+    protected static final String KEY_CTRL_Z = "jMB.baseEditor.Ctrl.Z";
+    protected static final String KEY_CTRL_Y = "jMB.baseEditor.Ctrl.Y";
 
-    protected static final String KEY_FLY_CAMERA_W = "SSEditor.editorState.keyFlyCameraW";
-    protected static final String KEY_FLY_CAMERA_S = "SSEditor.editorState.keyFlyCameraS";
-    protected static final String KEY_FLY_CAMERA_A = "SSEditor.editorState.keyFlyCameraA";
-    protected static final String KEY_FLY_CAMERA_D = "SSEditor.editorState.keyFlyCameraD";
+    protected static final String KEY_FLY_CAMERA_W = "jMB.baseEditor.keyFlyCameraW";
+    protected static final String KEY_FLY_CAMERA_S = "jMB.baseEditor.keyFlyCameraS";
+    protected static final String KEY_FLY_CAMERA_A = "jMB.baseEditor.keyFlyCameraA";
+    protected static final String KEY_FLY_CAMERA_D = "jMB.baseEditor.keyFlyCameraD";
 
-    protected static final String KEY_NUM_1 = "SSEditor.editorState.num1";
-    protected static final String KEY_NUM_2 = "SSEditor.editorState.num2";
-    protected static final String KEY_NUM_3 = "SSEditor.editorState.num3";
-    protected static final String KEY_NUM_4 = "SSEditor.editorState.num4";
-    protected static final String KEY_NUM_5 = "SSEditor.editorState.num5";
-    protected static final String KEY_NUM_6 = "SSEditor.editorState.num6";
-    protected static final String KEY_NUM_7 = "SSEditor.editorState.num7";
-    protected static final String KEY_NUM_8 = "SSEditor.editorState.num8";
-    protected static final String KEY_NUM_9 = "SSEditor.editorState.num9";
+    protected static final String KEY_NUM_1 = "jMB.baseEditor.num1";
+    protected static final String KEY_NUM_2 = "jMB.baseEditor.num2";
+    protected static final String KEY_NUM_3 = "jMB.baseEditor.num3";
+    protected static final String KEY_NUM_4 = "jMB.baseEditor.num4";
+    protected static final String KEY_NUM_5 = "jMB.baseEditor.num5";
+    protected static final String KEY_NUM_6 = "jMB.baseEditor.num6";
+    protected static final String KEY_NUM_7 = "jMB.baseEditor.num7";
+    protected static final String KEY_NUM_8 = "jMB.baseEditor.num8";
+    protected static final String KEY_NUM_9 = "jMB.baseEditor.num9";
 
     static {
         TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
@@ -170,6 +168,12 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     private final boolean[] cameraKeysState;
 
     /**
+     * The flag of flying camera.
+     */
+    @NotNull
+    private AtomicInteger cameraFlying;
+
+    /**
      * The flag of moving camera.
      */
     @NotNull
@@ -199,12 +203,12 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     /**
      * The previous camera speed.
      */
-    private float prevCameraSpeed;
+    private float prevCameraFlySpeed;
 
     /**
-     * The camera speed.
+     * The camera fly speed.
      */
-    private float cameraSpeed;
+    private float cameraFlySpeed;
 
     /**
      * Is control pressed.
@@ -238,12 +242,13 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
 
     public AdvancedAbstractEditor3dPart(@NotNull T fileEditor) {
         super(fileEditor);
+        this.cameraFlying = new AtomicInteger();
         this.cameraMoving = new AtomicInteger();
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
         this.prevCameraLocation = new Vector3f();
         this.cameraKeysState = new boolean[4];
-        this.cameraSpeed = 1F;
+        this.cameraFlySpeed = 1F;
 
         if (lightForCamera != null) {
             stateNode.addLight(lightForCamera);
@@ -251,8 +256,8 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
 
         this.analogListener = this::onAnalogImpl;
         this.actionListener = this::onActionImpl;
-        this.actionHandlers = DictionaryFactory.newObjectDictionary();
-        this.analogHandlers = DictionaryFactory.newObjectDictionary();
+        this.actionHandlers = ObjectDictionary.ofType(String.class, BooleanFloatConsumer.class);
+        this.analogHandlers = ObjectDictionary.ofType(String.class, FloatFloatConsumer.class);
 
         registerActionHandlers(actionHandlers);
         registerAnalogHandlers(analogHandlers);
@@ -266,7 +271,6 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     @JmeThread
     protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
 
-        actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
         actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> setButtonLeftDown(isPressed));
         actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> setButtonRightDown(isPressed));
         actionHandlers.put(KEY_NUM_1, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.BACK, isPressed));
@@ -280,22 +284,26 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
 
         actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> {
             setButtonMiddleDown(isPressed);
-            if (isCameraMoving() && !isPressed) finishCameraMoving(0, true);
+            if (isCameraFlying() && !isPressed) {
+                finishCameraMoving(0, true);
+            }
         });
 
         actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> {
             setControlDown(isPressed);
-            if (isCameraMoving() && isPressed && cameraSpeed > 0) {
-                cameraSpeed = Math.max(cameraSpeed - 0.4F, 0.1F);
+            if (isCameraFlying() && isPressed && cameraFlySpeed > 0) {
+                cameraFlySpeed = Math.max(cameraFlySpeed - 0.4F, 0.1F);
             }
         });
 
-        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> {
-            setShiftDown(isPressed);
-            if (isCameraMoving() && isPressed && cameraSpeed > 0) {
-                cameraSpeed += 0.4F;
+        actionHandlers.put(KEY_ALT, (isPressed, tpf) -> {
+            setAltDown(isPressed);
+            if (isCameraFlying() && isPressed && cameraFlySpeed > 0) {
+                cameraFlySpeed += 0.4F;
             }
         });
+
+        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> setShiftDown(isPressed));
 
         actionHandlers.put(KEY_CTRL_Z, (isPressed, tpf) -> {
             if (!isPressed && isControlDown()) undo();
@@ -305,22 +313,29 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         });
 
         actionHandlers.put(KEY_FLY_CAMERA_A, (isPressed, tpf) -> {
-            if (isButtonMiddleDown()) moveSideCamera(tpf, true, isPressed, 0);
+            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
+                moveSideCamera(tpf, true, isPressed, 0);
+            }
         });
         actionHandlers.put(KEY_FLY_CAMERA_D, (isPressed, tpf) -> {
-            if (isButtonMiddleDown()) moveSideCamera(-tpf, true, isPressed, 1);
+            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
+                moveSideCamera(-tpf, true, isPressed, 1);
+            }
         });
         actionHandlers.put(KEY_FLY_CAMERA_W, (isPressed, tpf) -> {
-            if (isButtonMiddleDown()) moveDirectionCamera(tpf, true, isPressed, 2);
+            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
+                moveDirectionCamera(tpf, true, isPressed, 2);
+            }
         });
         actionHandlers.put(KEY_FLY_CAMERA_S, (isPressed, tpf) -> {
-            if (isButtonMiddleDown()) moveDirectionCamera(-tpf, true, isPressed, 3);
+            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
+                moveDirectionCamera(-tpf, true, isPressed, 3);
+            }
         });
 
         actionHandlers.put(KEY_CTRL_S, (isPressed, tpf) -> {
             if (isPressed && isControlDown() && fileEditor.isDirty()) {
-                ExecutorManager.getInstance()
-                        .addFxTask(fileEditor::save);
+                fileEditor.save();
             }
         });
     }
@@ -368,6 +383,16 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     }
 
     /**
+     * Return true if the camera is flying now.
+     *
+     * @return true if the camera is flying now.
+     */
+    @JmeThread
+    public boolean isCameraFlying() {
+        return cameraFlying.get() != 0;
+    }
+
+    /**
      * Return true if the camera is moving now.
      *
      * @return true if the camera is moving now.
@@ -391,27 +416,25 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
      * Start to move the camera.
      */
     @JmeThread
-    private void startCameraMoving(int key) {
+    private void startCameraFlying(int key) {
 
         if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
-            LOGGER.debug(this, "start camera moving[" + cameraMoving + "] for key " + key);
+            LOGGER.debug(this, "start camera moving[" + cameraFlying + "] for key " + key);
         }
 
-        if (cameraMoving.get() == 0) {
+        if (cameraFlying.get() == 0) {
 
-            var camera = EditorUtil.getGlobalCamera();
-            var nodeForCamera = getNodeForCamera();
-            nodeForCamera.setLocalTranslation(camera.getLocation());
+            var camera = EditorUtils.getGlobalCamera();
 
-            var editorCamera = notNull(getEditorCamera());
-            editorCamera.setTargetDistance(0);
+            getNodeForCamera().setLocalTranslation(camera.getLocation());
+            requireEditorCamera().setTargetDistance(0);
         }
 
         var cameraKeysState = getCameraKeysState();
 
         if (!cameraKeysState[key]) {
             cameraKeysState[key] = true;
-            cameraMoving.incrementAndGet();
+            cameraFlying.incrementAndGet();
         }
     }
 
@@ -424,22 +447,22 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         var cameraKeysState = getCameraKeysState();
 
         if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
-            LOGGER.debug(this, "finish camera moving[" + cameraMoving + "] for key " + key + ", force = " + force);
+            LOGGER.debug(this, "finish camera moving[" + cameraFlying + "] for key " + key + ", force = " + force);
         }
 
         cameraKeysState[key] = false;
 
-        if (cameraMoving.get() == 0) {
+        if (cameraFlying.get() == 0) {
             return;
         }
 
         if (force) {
-            cameraMoving.set(0);
+            cameraFlying.set(0);
             for (int i = 0; i < cameraKeysState.length; i++) {
                 cameraKeysState[i] = false;
             }
         } else {
-            cameraMoving.decrementAndGet();
+            cameraFlying.decrementAndGet();
         }
     }
 
@@ -451,15 +474,15 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     @JmeThread
     private void moveDirectionCamera(float value, boolean isAction, boolean isPressed, int key) {
 
-        if (!canCameraMove()) {
+        if (!canCameraMoveOrFly()) {
             return;
         } else if (isAction && isPressed) {
-            startCameraMoving(key);
+            startCameraFlying(key);
         } else if (isAction) {
             finishCameraMoving(key, false);
         }
 
-        if (!isCameraMoving() || isAction) {
+        if (!isCameraFlying() || isAction) {
             return;
         }
 
@@ -469,13 +492,13 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
             return;
         }
 
-        var camera = EditorUtil.getGlobalCamera();
+        var camera = EditorUtils.getGlobalCamera();
         var nodeForCamera = getNodeForCamera();
 
         var local = LocalObjects.get();
 
         var direction = camera.getDirection(local.nextVector());
-        direction.multLocal(value * cameraSpeed);
+        direction.multLocal(value * cameraFlySpeed);
         direction.addLocal(nodeForCamera.getLocalTranslation());
 
         nodeForCamera.setLocalTranslation(direction);
@@ -489,15 +512,15 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     @JmeThread
     private void moveSideCamera(float value, boolean isAction, boolean isPressed, int key) {
 
-        if (!canCameraMove()) {
+        if (!canCameraMoveOrFly()) {
             return;
         } else if (isAction && isPressed) {
-            startCameraMoving(key);
+            startCameraFlying(key);
         } else if (isAction) {
             finishCameraMoving(key, false);
         }
 
-        if (!isCameraMoving() || isAction) {
+        if (!isCameraFlying() || isAction) {
             return;
         }
 
@@ -507,19 +530,19 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
             return;
         }
 
-        var camera = EditorUtil.getGlobalCamera();
+        var camera = EditorUtils.getGlobalCamera();
         var nodeForCamera = getNodeForCamera();
 
         var local = LocalObjects.get();
         var left = camera.getLeft(local.nextVector());
-        left.multLocal(value * cameraSpeed);
+        left.multLocal(value * cameraFlySpeed);
         left.addLocal(nodeForCamera.getLocalTranslation());
 
         nodeForCamera.setLocalTranslation(left);
     }
 
     @JmeThread
-    private boolean canCameraMove() {
+    private boolean canCameraMoveOrFly() {
         return needMovableCamera() && isButtonMiddleDown();
     }
 
@@ -728,20 +751,30 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         return editorCamera;
     }
 
+    /**
+     * Get the editor camera.
+     *
+     * @return the editor camera.
+     */
+    @JmeThread
+    protected @NotNull EditorCamera requireEditorCamera() {
+        return notNull(editorCamera);
+    }
+
     @Override
     @JmeThread
     public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
         super.initialize(stateManager, application);
         this.stateManager = stateManager;
 
-        var rootNode = EditorUtil.getGlobalRootNode();
+        var rootNode = EditorUtils.getGlobalRootNode();
         rootNode.attachChild(stateNode);
 
         var filterRegistry = RenderFilterRegistry.getInstance();
         filterRegistry.enableFilters();
 
         var editorCamera = getEditorCamera();
-        var inputManager = EditorUtil.getInputManager();
+        var inputManager = EditorUtils.getInputManager();
 
         checkAndAddMappings(inputManager);
         registerActionListener(inputManager);
@@ -819,12 +852,12 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         var filterRegistry = RenderFilterRegistry.getInstance();
         filterRegistry.disableFilters();
 
-        var rootNode = EditorUtil.getGlobalRootNode();
+        var rootNode = EditorUtils.getGlobalRootNode();
         rootNode.detachChild(stateNode);
 
         var editorCamera = getEditorCamera();
 
-        var inputManager = EditorUtil.getInputManager();
+        var inputManager = EditorUtils.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
 
@@ -862,7 +895,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     @JmeThread
     protected @NotNull EditorCamera createEditorCamera() {
 
-        var camera = EditorUtil.getGlobalCamera();
+        var camera = EditorUtils.getGlobalCamera();
 
         var editorCamera = new EditorCamera(camera, getNodeForCamera());
         editorCamera.setMaxDistance(10000);
@@ -907,66 +940,6 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     }
 
     /**
-     * Get the previous horizontal camera rotation.
-     *
-     * @return the previous horizontal camera rotation.
-     */
-    @JmeThread
-    protected float getPrevHRotation() {
-        return prevHRotation;
-    }
-
-    /**
-     * Set the previous horizontal camera rotation.
-     *
-     * @param prevHRotation the previous horizontal camera rotation.
-     */
-    @JmeThread
-    protected void setPrevHRotation(float prevHRotation) {
-        this.prevHRotation = prevHRotation;
-    }
-
-    /**
-     * Get the previous camera zoom.
-     *
-     * @return the previous camera zoom.
-     */
-    @JmeThread
-    protected float getPrevTargetDistance() {
-        return prevTargetDistance;
-    }
-
-    /**
-     * Set the previous camera zoom.
-     *
-     * @param prevTargetDistance the previous camera zoom.
-     */
-    @JmeThread
-    protected void setPrevTargetDistance(float prevTargetDistance) {
-        this.prevTargetDistance = prevTargetDistance;
-    }
-
-    /**
-     * Get the previous vertical camera rotation.
-     *
-     * @return the previous vertical camera rotation.
-     */
-    @JmeThread
-    protected float getPrevVRotation() {
-        return prevVRotation;
-    }
-
-    /**
-     * Set the previous vertical camera rotation.
-     *
-     * @param prevVRotation the previous vertical camera rotation.
-     */
-    @JmeThread
-    protected void setPrevVRotation(float prevVRotation) {
-        this.prevVRotation = prevVRotation;
-    }
-
-    /**
      * Get the previous camera location.
      *
      * @return the previous camera location
@@ -974,46 +947,6 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     @FromAnyThread
     public @NotNull Vector3f getPrevCameraLocation() {
         return prevCameraLocation;
-    }
-
-    /**
-     * Get the camera speed.
-     *
-     * @return the camera speed.
-     */
-    @FromAnyThread
-    private float getCameraSpeed() {
-        return cameraSpeed;
-    }
-
-    /**
-     * Set the camera speed.
-     *
-     * @param cameraSpeed the camera speed.
-     */
-    @FromAnyThread
-    private void setCameraSpeed(float cameraSpeed) {
-        this.cameraSpeed = cameraSpeed;
-    }
-
-    /**
-     * Get the previous camera speed.
-     *
-     * @return the previous camera speed.
-     */
-    @FromAnyThread
-    private float getPrevCameraSpeed() {
-        return prevCameraSpeed;
-    }
-
-    /**
-     * Set the previous camera speed.
-     *
-     * @param prevCameraSpeed the previous camera speed.
-     */
-    @FromAnyThread
-    private void setPrevCameraSpeed(float prevCameraSpeed) {
-        this.prevCameraSpeed = prevCameraSpeed;
     }
 
     @Override
@@ -1032,7 +965,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         var editorCamera = getEditorCamera();
 
         if (editorCamera != null && lightForCamera != null && needUpdateCameraLight()) {
-            var camera = EditorUtil.getGlobalCamera();
+            var camera = EditorUtils.getGlobalCamera();
             lightForCamera.setDirection(camera.getDirection().normalize());
         }
     }
@@ -1050,7 +983,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
 
         var cameraKeysState = getCameraKeysState();
 
-        if (isCameraMoving()) {
+        if (isCameraFlying()) {
             if (cameraKeysState[0]) {
                 moveSideCamera(tpf * 30, false, false, 0);
             }
@@ -1069,7 +1002,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     }
 
     @JmeThread
-    protected void preCameraUpdate(final float tpf) {
+    protected void preCameraUpdate(float tpf) {
     }
 
     /**
@@ -1086,17 +1019,10 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         var prevCameraLocation = getPrevCameraLocation();
         var cameraLocation = nodeForCamera.getLocalTranslation();
 
-        var prevHRotation = getPrevHRotation();
         var hRotation = editorCamera.getHorizontalRotation();
-
-        var prevVRotation = getPrevVRotation();
-        var vRotation = editorCamera.getVerticalRotation();
-
-        var prevTargetDistance = getPrevTargetDistance();
+        var vRotation = editorCamera.getvRotation();
         var targetDistance = editorCamera.getTargetDistance();
 
-        var cameraSpeed = getCameraSpeed();
-        var prevCameraSpeed = getPrevCameraSpeed();
 
         if (!prevCameraLocation.equals(cameraLocation)) {
             changes++;
@@ -1127,7 +1053,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
      * @param hRotation      the h rotation.
      * @param vRotation      the v rotation.
      * @param targetDistance the target distance.
-     * @param cameraSpeed    the camera speed.
+     * @param cameraFlySpeed the camera fly speed.
      */
     @JmeThread
     protected void notifyChangedCameraSettings(
@@ -1135,7 +1061,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
             float hRotation,
             float vRotation,
             float targetDistance,
-            float cameraSpeed
+            float cameraFlySpeed
     ) {
     }
 
@@ -1146,7 +1072,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
      * @param hRotation      the h rotation.
      * @param vRotation      the v rotation.
      * @param targetDistance the target distance.
-     * @param cameraSpeed    the camera speed.
+     * @param cameraFlySpeed the camera fly speed.
      */
     @JmeThread
     public void updateCameraSettings(
@@ -1154,7 +1080,7 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
             float hRotation,
             float vRotation,
             float targetDistance,
-            float cameraSpeed
+            float cameraFlySpeed
     ) {
 
         var editorCamera = getEditorCamera();
@@ -1163,18 +1089,18 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
             return;
         }
 
-        editorCamera.setTargetRotation(hRotation);
+        editorCamera.setTargetHRotation(hRotation);
         editorCamera.setTargetVRotation(vRotation);
         editorCamera.setTargetDistance(targetDistance);
 
         getNodeForCamera().setLocalTranslation(cameraLocation);
         getPrevCameraLocation().set(cameraLocation);
 
-        setPrevHRotation(hRotation);
-        setPrevVRotation(vRotation);
-        setPrevTargetDistance(targetDistance);
-        setPrevCameraSpeed(cameraSpeed);
-        setCameraSpeed(cameraSpeed);
+        this.prevHRotation = hRotation;
+        this.prevVRotation = vRotation;
+        this.prevTargetDistance = targetDistance;
+        this.prevCameraFlySpeed = cameraFlySpeed;
+        this.cameraFlySpeed = cameraFlySpeed;
 
         editorCamera.update(1F);
     }

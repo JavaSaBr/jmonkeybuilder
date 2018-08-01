@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_LOADED_MODEL;
-import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.EditorUtils.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
@@ -22,7 +22,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -91,7 +91,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         loadedModel.setUserData(KEY_LOADED_MODEL, true);
 

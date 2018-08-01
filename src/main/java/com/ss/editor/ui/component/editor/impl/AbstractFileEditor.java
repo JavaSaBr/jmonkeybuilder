@@ -18,7 +18,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
@@ -48,6 +48,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -88,7 +89,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The save callback.
      */
     @Nullable
-    private Consumer<FileEditor> saveCallback;
+    private CompletableFuture<FileEditor> saveCallback;
 
     /**
      * The root element of this editor.
@@ -332,10 +333,27 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    @FxThread
-    public void save(@Nullable Consumer<FileEditor> callback) {
+    @FromAnyThread
+    public @NotNull CompletableFuture<FileEditor> save() {
 
-        if (isSaving()) {
+        var result = new CompletableFuture<FileEditor>();
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> checkAndSaveIdNeed(result));
+
+        return result;
+    }
+
+    /**
+     * Check and if need to save the current state of this editor.
+     *
+     * @param callback the callback.
+     */
+    @FxThread
+    protected void checkAndSaveIdNeed(@NotNull CompletableFuture<FileEditor> callback) {
+
+        if (isSaving() || !isDirty()) {
+            callback.complete(this);
             return;
         }
 
@@ -356,7 +374,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         var tempFile = Utils.get(editorId,
                 prefix -> Files.createTempFile(prefix, "toSave.tmp"));
 
-        var stamp = EditorUtil.renderLock();
+        var stamp = EditorUtils.renderLock();
         try {
 
             doSave(tempFile);
@@ -368,13 +386,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             }
 
         } catch (Throwable e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
 
             ExecutorManager.getInstance()
                     .addFxTask(this::notifyFinishSaving);
 
         } finally {
-            EditorUtil.renderUnlock(stamp);
+            EditorUtils.renderUnlock(stamp);
         }
 
         ExecutorManager.getInstance()
@@ -470,9 +488,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    @FxThread
+    @FromAnyThread
     public boolean isDirty() {
-        return dirtyProperty.get();
+        synchronized (dirtyProperty) {
+            return dirtyProperty.get();
+        }
     }
 
     /**
@@ -480,9 +500,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @param dirty the dirty
      */
-    @FxThread
+    @FromAnyThread
     protected void setDirty(boolean dirty) {
-        this.dirtyProperty.setValue(dirty);
+        synchronized (dirtyProperty) {
+            dirtyProperty.setValue(dirty);
+        }
     }
 
     @Override
@@ -719,7 +741,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param saving true if saving process is running now.
      */
     @FxThread
-    protected void setSaving(final boolean saving) {
+    protected void setSaving(boolean saving) {
         this.saving = saving;
     }
 
@@ -742,7 +764,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         UiUtils.decrementLoading();
 
         if (saveCallback != null) {
-            saveCallback.accept(this);
+            saveCallback.complete(this);
             saveCallback = null;
         }
     }

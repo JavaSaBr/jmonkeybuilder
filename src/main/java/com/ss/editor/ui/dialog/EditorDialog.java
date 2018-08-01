@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.fx.util.FXUtils;
@@ -82,12 +82,12 @@ public class EditorDialog {
         container = new VBox();
         container.setAlignment(CENTER);
 
-        var mainScene = EditorUtil.getFxScene();
+        var mainScene = EditorUtils.getFxScene();
         var scene = new Scene(container);
         scene.getStylesheets()
                 .addAll(mainScene.getStylesheets());
 
-        var fxStage = EditorUtil.getFxStage();
+        var fxStage = EditorUtils.getFxStage();
 
         dialog = new Stage();
         dialog.setTitle(getTitleText());
@@ -298,7 +298,7 @@ public class EditorDialog {
      */
     @FxThread
     public void show() {
-        show(EditorUtil.getFxLastWindow());
+        show(EditorUtils.getFxLastWindow());
     }
 
     /**
@@ -329,7 +329,7 @@ public class EditorDialog {
         GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
 
-        EditorUtil.addFxWindow(dialog);
+        EditorUtils.addFxWindow(dialog);
 
         Platform.runLater(dialog::sizeToScene);
     }
@@ -365,7 +365,7 @@ public class EditorDialog {
 
         dialog.hide();
 
-        EditorUtil.removeFxWindow(window);
+        EditorUtils.removeFxWindow(window);
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, getDialogId());
         GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG, seconds, getDialogId());

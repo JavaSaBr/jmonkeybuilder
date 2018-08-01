@@ -10,7 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -594,7 +594,7 @@ public final class EditorConfig implements AssetEventListener {
         var lastOpenedAssets = getLastOpenedAssets();
         try {
 
-            lastOpenedAssets.addAll(EditorUtil.deserialize(byteArray));
+            lastOpenedAssets.addAll(EditorUtils.deserialize(byteArray));
 
             for (var iterator = lastOpenedAssets.iterator(); iterator.hasNext(); ) {
 
@@ -666,7 +666,7 @@ public final class EditorConfig implements AssetEventListener {
         }
 
         prefs.putByteArray(PREF_ASSET_LAST_OPENED_ASSETS,
-                EditorUtil.serialize((Serializable) getLastOpenedAssets()));
+                EditorUtils.serialize((Serializable) getLastOpenedAssets()));
 
         try {
             prefs.flush();

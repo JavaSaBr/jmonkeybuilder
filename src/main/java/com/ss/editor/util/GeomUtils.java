@@ -17,12 +17,90 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.lang.Math.acos;
+import static java.lang.Math.toDegrees;
+
 /**
  * The class with utility methods for working with geometry.
  *
  * @author JavaSaBr.
  */
 public class GeomUtils {
+
+    /**
+     * Calculate new point from first point and using second point like a direction.
+     *
+     * @param first  the first point.
+     * @param second the second point.
+     * @param store  the container of the result.
+     * @param length the distance.
+     */
+    @FromAnyThread
+    public static void movePoint(
+            @NotNull Vector3f first,
+            @NotNull Vector3f second,
+            @NotNull Vector3f store,
+            int length
+    ) {
+        store.x = first.x + (second.x - first.x) * length;
+        store.y = first.y + (second.y - first.y) * length;
+        store.z = first.z + (second.z - first.z) * length;
+    }
+
+    /**
+     * Check visibility the position on the screen.
+     *
+     * @param position the position for checking.
+     * @param camera   the camera of the screen.
+     * @return true of we can see the position on the screen.
+     */
+    @FromAnyThread
+    public static boolean isVisibleOnScreen(@NotNull Vector3f position, @NotNull Camera camera) {
+
+        var maxHeight = camera.getHeight();
+        var maxWidth = camera.getWidth();
+
+        var isBottom = position.getY() < 0;
+        var isTop = position.getY() > maxHeight;
+        var isLeft = position.getX() < 0;
+        var isRight = position.getX() > maxWidth;
+
+        return !isBottom && !isLeft && !isTop && !isRight && position.getZ() < 1F;
+    }
+
+    /**
+     * Get the angle between these points.
+     *
+     * @param center the center.
+     * @param first  the first point.
+     * @param second the second point.
+     * @return the angle between these points.
+     */
+    @FromAnyThread
+    public static float getAngle(
+            @NotNull Vector2f center,
+            @NotNull Vector2f first,
+            @NotNull Vector2f second
+    ) {
+
+        var x = center.getX();
+        var y = center.getY();
+
+        var ax = first.getX() - x;
+        var ay = first.getY() - y;
+        var bx = second.getX() - x;
+        var by = second.getY() - y;
+
+        var delta = (float) ((ax * bx + ay * by) / Math.sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
+
+        if (delta > 1.0) {
+            return 0.0F;
+        } else if (delta < -1.0) {
+            return 180.0F;
+        }
+
+        return (float) toDegrees(acos(delta));
+    }
 
     /**
      * Get the UP vector from the rotation.
@@ -223,7 +301,7 @@ public class GeomUtils {
      */
     @FromAnyThread
     public static @Nullable Vector3f getContactPointFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
-        var inputManager = EditorUtil.getInputManager();
+        var inputManager = EditorUtils.getInputManager();
         var cursor = inputManager.getCursorPosition();
         return getContactPointFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
@@ -237,7 +315,7 @@ public class GeomUtils {
      */
     @FromAnyThread
     public static @Nullable CollisionResult getCollisionFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
-        var inputManager = EditorUtil.getInputManager();
+        var inputManager = EditorUtils.getInputManager();
         var cursor = inputManager.getCursorPosition();
         return getCollisionFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
@@ -251,7 +329,7 @@ public class GeomUtils {
      */
     @FromAnyThread
     public static @NotNull CollisionResults getCollisionsFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
-        var inputManager = EditorUtil.getInputManager();
+        var inputManager = EditorUtils.getInputManager();
         var cursor = inputManager.getCursorPosition();
         return getCollisionsFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
@@ -305,7 +383,7 @@ public class GeomUtils {
      */
     @FromAnyThread
     public static @Nullable Geometry getGeometryFromCursor(@NotNull Spatial spatial, @NotNull Camera camera) {
-        var inputManager = EditorUtil.getInputManager();
+        var inputManager = EditorUtils.getInputManager();
         var cursor = inputManager.getCursorPosition();
         return getGeometryFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }

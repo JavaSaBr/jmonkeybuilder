@@ -9,7 +9,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.preview.FilePreview;
 import com.ss.editor.ui.preview.FilePreviewFactoryRegistry;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxUtils;
@@ -171,7 +171,7 @@ public class BaseAssetEditorDialog<T, C> extends AbstractSimpleEditorDialog {
             }
 
         } catch (Exception e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
         }
     }
 

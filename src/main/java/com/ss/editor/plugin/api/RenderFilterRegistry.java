@@ -8,7 +8,7 @@ import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.event.impl.AllPluginsExtensionsRegisteredEvent;
 import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
@@ -68,7 +68,7 @@ public class RenderFilterRegistry {
     @BackgroundThread
     private void applyExtensionsInJme() {
 
-        var postProcessor = EditorUtil.getGlobalFilterPostProcessor();
+        var postProcessor = EditorUtils.getGlobalFilterPostProcessor();
 
         for (var extension : EXTENSIONS) {
             postProcessor.addFilter(extension.getFilter());

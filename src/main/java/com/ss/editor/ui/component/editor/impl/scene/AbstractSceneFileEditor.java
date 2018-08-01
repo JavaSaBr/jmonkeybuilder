@@ -1,7 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_LOADED_MODEL;
-import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
@@ -70,7 +69,6 @@ import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
@@ -89,7 +87,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -294,8 +291,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private void updateMaterial(@NotNull Path file) {
 
-        var assetFile = EditorUtil.requireAssetFile(file);
-        var assetPath = EditorUtil.toAssetPath(assetFile);
+        var assetFile = EditorUtils.requireAssetFile(file);
+        var assetPath = EditorUtils.toAssetPath(assetFile);
         var currentModel = getCurrentModel();
 
         var geometries = NodeUtils.getGeometriesWithMaterial(currentModel, assetPath);
@@ -304,7 +301,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        var material = EditorUtil.getAssetManager()
+        var material = EditorUtils.getAssetManager()
                 .loadMaterial(assetPath);
 
         geometries.forEach(geometry -> geometry.setMaterial(material));
@@ -377,7 +374,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         super.loadState();
 
         scriptingComponent.addVariable("root", getCurrentModel());
-        scriptingComponent.addVariable("assetManager", EditorUtil.getAssetManager(), AssetManager.class);
+        scriptingComponent.addVariable("assetManager", EditorUtils.getAssetManager(), AssetManager.class);
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -434,7 +431,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             boolean isButtonMiddleDown
     ) {
 
-        if (editor3dPart.isCameraMoving()) {
+        if (editor3dPart.isCameraFlying()) {
             return false;
         }
 
@@ -1128,8 +1125,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private void applyMaterial(@NotNull DragEvent dragEvent, @NotNull Path file) {
 
-        var assetFile = EditorUtil.requireAssetFile(file);
-        var assetPath = EditorUtil.toAssetPath(assetFile);
+        var assetFile = EditorUtils.requireAssetFile(file);
+        var assetPath = EditorUtils.toAssetPath(assetFile);
 
         var materialKey = new MaterialKey(assetPath);
         var camera = editor3dPart.getCamera();
@@ -1153,7 +1150,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
                 return;
             }
 
-            var assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtils.getAssetManager();
             var material = assetManager.loadAsset(materialKey);
 
             var operation = new PropertyOperation<ChangeConsumer, Geometry, Material>(geometry,
@@ -1191,8 +1188,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             parent = (Node) currentModel;
         }
 
-        var assetFile = EditorUtil.requireAssetFile(file);
-        var assetPath = EditorUtil.toAssetPath(assetFile);
+        var assetFile = EditorUtils.requireAssetFile(file);
+        var assetPath = EditorUtils.toAssetPath(assetFile);
 
         var modelKey = new ModelKey(assetPath);
         var camera = editor3dPart.getCamera();
@@ -1203,10 +1200,10 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         var executorManager = ExecutorManager.getInstance();
         executorManager.addJmeTask(() -> {
 
-            var defaultLayer = EditorUtil.getDefaultLayer(this);
+            var defaultLayer = EditorUtils.getDefaultLayer(this);
             var local = LocalObjects.get();
 
-            var loadedModel = EditorUtil.getAssetManager()
+            var loadedModel = EditorUtils.getAssetManager()
                     .loadModel(modelKey);
 
             var assetLinkNode = new AssetLinkNode(modelKey);

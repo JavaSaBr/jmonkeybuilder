@@ -2,27 +2,18 @@ package com.ss.editor.ui.control.property.builder.impl;
 
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
-import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.*;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.control.property.impl.AudioKeyPropertyControl;
-import com.ss.editor.ui.control.property.impl.BooleanPropertyControl;
-import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
-import com.ss.editor.ui.control.property.impl.Vector3fPropertyControl;
 import com.ss.editor.util.AudioNodeUtils;
-import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.scene.layout.VBox;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 
@@ -35,7 +26,7 @@ public class AudioNodePropertyBuilder extends EditableModelObjectPropertyBuilder
 
     private static final Setter<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         if (audioKey == null) {
             AudioNodeUtils.updateData(audioNode, null, null);

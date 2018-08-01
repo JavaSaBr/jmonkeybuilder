@@ -21,7 +21,7 @@ import com.ss.editor.plugin.api.settings.SettingsCategory;
 import com.ss.editor.plugin.api.settings.SettingsPropertyDefinition;
 import com.ss.editor.plugin.api.settings.SettingsProviderRegistry;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
@@ -289,7 +289,7 @@ public class SettingsDialog extends EditorDialog {
             var classpathManager = ClasspathManager.getInstance();
             classpathManager.reload();
 
-            var assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtils.getAssetManager();
             assetManager.clearCache();
         }
 

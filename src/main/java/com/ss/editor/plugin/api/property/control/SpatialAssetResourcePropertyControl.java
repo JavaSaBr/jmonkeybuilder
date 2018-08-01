@@ -1,6 +1,6 @@
 package com.ss.editor.plugin.api.property.control;
 
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
@@ -9,7 +9,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
@@ -47,9 +47,9 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     @FxThread
     protected void chooseNewResource(@NotNull Path file) {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
-        var assetFile = EditorUtil.requireAssetFile(file);
+        var assetFile = EditorUtils.requireAssetFile(file);
         var modelKey = new ModelKey(toAssetPath(assetFile));
         var spatial = findResource(assetManager, modelKey);
 
@@ -81,7 +81,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
     protected void reloadImpl() {
 
         var model = getPropertyValue();
-        var rootKey = EditorUtil.findRootKey(model);
+        var rootKey = EditorUtils.findRootKey(model);
 
         resourceLabel.setText(rootKey == null ? NOT_SELECTED : rootKey + "[" + model.getName() + "]");
 

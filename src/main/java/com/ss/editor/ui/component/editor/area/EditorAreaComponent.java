@@ -23,7 +23,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFxScene;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -370,8 +370,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @JmeThread
     private void processShowEditor(@Nullable Tab prevTab, @Nullable Tab newTab) {
 
-        var stateManager = EditorUtil.getStateManager();
-        var canvas = EditorUtil.getFxScene().getCanvas();
+        var stateManager = EditorUtils.getStateManager();
+        var canvas = EditorUtils.getFxScene().getCanvas();
         var sceneProcessor = JfxApplication.getInstance()
                 .getSceneProcessor();
 
@@ -454,7 +454,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                     EDITOR_REGISTRY.createEditorFor(description, file);
 
         } catch (Throwable e) {
-            EditorUtil.handleException(null, this, new Exception(e));
+            EditorUtils.handleException(null, this, new Exception(e));
             UiUtils.decrementLoading();
             getOpeningFiles().runInWriteLock(file, Array::fastRemove);
             return;
@@ -473,7 +473,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         try {
             editor.openFile(file);
         } catch (Throwable e) {
-            EditorUtil.handleException(null, this, new Exception(e));
+            EditorUtils.handleException(null, this, new Exception(e));
 
             getOpeningFiles().runInWriteLock(file, Array::fastRemove);
 

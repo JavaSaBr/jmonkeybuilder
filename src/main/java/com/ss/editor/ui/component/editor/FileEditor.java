@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -83,25 +85,15 @@ public interface FileEditor {
      *
      * @return true if the current file was changed.
      */
-    @FxThread
+    @FromAnyThread
     boolean isDirty();
 
     /**
      * Save new changes.
      */
-    @FxThread
-    default void save() {
-        save(null);
-    }
+    @FromAnyThread
+    @NotNull CompletableFuture<FileEditor> save();
 
-    /**
-     * Save new changes.
-     *
-     * @param callback the callback.
-     */
-    @FxThread
-    default void save(@Nullable Consumer<@NotNull FileEditor> callback) {
-    }
 
     /**
      * Get the editor's 3D parts.

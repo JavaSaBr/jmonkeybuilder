@@ -2,13 +2,13 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.svg.SvgImageLoader;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -190,7 +190,7 @@ public class FileIconManager {
                 var classLoader = iconFinder.getClass()
                         .getClassLoader();
 
-                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
+                if (url == null || !EditorUtils.checkExists(url, classLoader)) {
                     continue;
                 }
 
@@ -231,24 +231,24 @@ public class FileIconManager {
             Path iconPath = mimeTypes.resolve(contentType + ".svg");
             url = toAssetPath(iconPath);
 
-            if (!EditorUtil.checkExists(url)) {
+            if (!EditorUtils.checkExists(url)) {
                 contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
                 iconPath = mimeTypes.resolve(contentType + ".svg");
                 url = toAssetPath(iconPath);
             }
 
-            if (!EditorUtil.checkExists(url)) {
+            if (!EditorUtils.checkExists(url)) {
                 contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
                 iconPath = mimeTypes.resolve(contentType + ".png");
                 url = toAssetPath(iconPath);
             }
 
-            if (EditorUtil.checkExists(url)) {
+            if (EditorUtils.checkExists(url)) {
                 break;
             }
         }
 
-        if (url == null || !EditorUtil.checkExists(url)) {
+        if (url == null || !EditorUtils.checkExists(url)) {
             LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
             url = "/ui/icons/svg/document.svg";
         }
@@ -329,7 +329,7 @@ public class FileIconManager {
 
     @FxThread
     private @NotNull Image buildImage(@NotNull String url, @NotNull ClassLoader classLoader, int size) {
-        return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
+        return buildImage(url, EditorUtils.getInputStream(url, classLoader), size);
     }
 
     @FxThread

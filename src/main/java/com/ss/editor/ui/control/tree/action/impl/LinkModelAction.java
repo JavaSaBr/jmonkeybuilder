@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_LOADED_MODEL;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
@@ -24,7 +24,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -86,14 +86,14 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
-        final SceneLayer defaultLayer = EditorUtil.getDefaultLayer(consumer);
+        final SceneLayer defaultLayer = EditorUtils.getDefaultLayer(consumer);
 
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
 
         final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);

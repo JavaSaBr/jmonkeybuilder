@@ -20,7 +20,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
@@ -171,7 +171,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private void registerAssetListenerAndReload() {
         var executorManager = ExecutorManager.getInstance();
         executorManager.addJmeTask(() -> {
-            var assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtils.getAssetManager();
             assetManager.addAssetEventListener(this);
             reload();
             LOGGER.info("registered an asset listener and reloaded.");
@@ -304,7 +304,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             return;
         }
 
-        var realFile = EditorUtil.getRealFile(Paths.get(key.getName()));
+        var realFile = EditorUtils.getRealFile(Paths.get(key.getName()));
         if (realFile == null || !Files.exists(realFile)) {
             return;
         }
@@ -316,7 +316,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             return;
         }
 
-        EditorUtil.getAssetManager()
+        EditorUtils.getAssetManager()
                 .deleteFromCache(key);
     }
 
@@ -388,8 +388,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         var resources = getInterestedResources()
                 .getInReadLock(extension, ObjectDictionary::get);
 
-        var assetFile = notNull(EditorUtil.getAssetFile(file));
-        var assetPath = EditorUtil.toAssetPath(assetFile);
+        var assetFile = notNull(EditorUtils.getAssetFile(file));
+        var assetPath = EditorUtils.toAssetPath(assetFile);
 
         if (resources != null) {
             resources.runInWriteLock(assetPath, Array::fastRemove);
@@ -397,7 +397,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            var assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtils.getAssetManager();
             var url = FileUtils.getUrl(file);
 
             var classLoaders = getClassLoaders();
@@ -535,7 +535,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         });
 
         EXECUTOR_MANAGER.addJmeTask(() -> {
-            var assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtils.getAssetManager();
             classLoadersCopy.forEach(assetManager::removeClassLoader);
             assetManager.clearCache();
         });
@@ -588,14 +588,14 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
                 .getInReadLock(extension, ObjectDictionary::get);
 
         if (toStore != null) {
-            var assetFile = notNull(EditorUtil.getAssetFile(file));
-            var assetPath = EditorUtil.toAssetPath(assetFile);
+            var assetFile = notNull(EditorUtils.getAssetFile(file));
+            var assetPath = EditorUtils.toAssetPath(assetFile);
             toStore.runInWriteLock(assetPath, Collection::add);
         }
 
         if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-            var assetManager = EditorUtil.getAssetManager();
+            var assetManager = EditorUtils.getAssetManager();
             var url = Utils.get(file, FileUtils::getUrl);
 
             var classLoaders = getClassLoaders();

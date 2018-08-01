@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.bar.action;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import javafx.scene.control.MenuItem;
 
 /**
@@ -26,7 +26,7 @@ public class ClearAssetCacheAction extends MenuItem {
      */
     private void process() {
         ExecutorManager.getInstance().addJmeTask(() -> {
-            final AssetManager assetManager = EditorUtil.getAssetManager();
+            final AssetManager assetManager = EditorUtils.getAssetManager();
             assetManager.clearCache();
         });
     }

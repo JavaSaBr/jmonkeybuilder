@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.action.impl;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
@@ -21,7 +21,7 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,12 +82,12 @@ public class SaveAsMaterialAction extends AbstractNodeAction<ChangeConsumer> {
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(file, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(materialContent);
         } catch (final IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return;
         }
 
         final Path assetFile = notNull(getAssetFile(file));
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final Material savedMaterial = assetManager.loadMaterial(notNull(toAssetPath(assetFile)));
 
         final PropertyOperation<ChangeConsumer, Material, AssetKey> operation =

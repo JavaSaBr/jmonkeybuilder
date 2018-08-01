@@ -3,7 +3,7 @@ package com.ss.editor.ui.preview.impl;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
@@ -62,7 +62,7 @@ public class TextFilePreview extends AbstractFilePreview<TextArea> {
         if (url != null) {
             content = Utils.get(url, toRead -> FileUtils.read(toRead.openStream()));
         } else {
-            final Path realFile = EditorUtil.getRealFile(resource);
+            final Path realFile = EditorUtils.getRealFile(resource);
             content = realFile == null ? "" : FileUtils.read(realFile);
         }
 

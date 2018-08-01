@@ -2,7 +2,7 @@ package com.ss.editor.executor.impl;
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.application.Platform;
@@ -48,7 +48,7 @@ public class FxEditorTaskExecutor extends AbstractEditorTaskExecutor {
                     try {
                         task.run();
                     } catch (Exception e) {
-                        EditorUtil.handleException(LOGGER, this, e);
+                        EditorUtils.handleException(LOGGER, this, e);
                     }
 
                     executed.add(task);

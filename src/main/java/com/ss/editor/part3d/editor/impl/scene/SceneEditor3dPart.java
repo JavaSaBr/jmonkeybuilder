@@ -16,7 +16,7 @@ import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -121,7 +121,7 @@ public class SceneEditor3dPart extends AbstractSceneEditor3dPart<SceneFileEditor
      */
     @JmeThread
     private void addAppStateInJme(@NotNull SceneAppState appState) {
-        var stateManager = EditorUtil.getStateManager();
+        var stateManager = EditorUtils.getStateManager();
         stateManager.attach(appState);
     }
 
@@ -143,7 +143,7 @@ public class SceneEditor3dPart extends AbstractSceneEditor3dPart<SceneFileEditor
      */
     @JmeThread
     private void removeAppStateInJme(@NotNull SceneAppState appState) {
-        var stateManager = EditorUtil.getStateManager();
+        var stateManager = EditorUtils.getStateManager();
         stateManager.detach(appState);
     }
 
@@ -165,7 +165,7 @@ public class SceneEditor3dPart extends AbstractSceneEditor3dPart<SceneFileEditor
      */
     @JmeThread
     private void addFilterImpl(@NotNull SceneFilter sceneFilter) {
-        var postProcessor = EditorUtil.getGlobalFilterPostProcessor();
+        var postProcessor = EditorUtils.getGlobalFilterPostProcessor();
         postProcessor.addFilter(sceneFilter.get());
     }
 
@@ -187,7 +187,7 @@ public class SceneEditor3dPart extends AbstractSceneEditor3dPart<SceneFileEditor
      */
     @JmeThread
     private void removeFilterInJme(@NotNull SceneFilter sceneFilter) {
-        var postProcessor = EditorUtil.getGlobalFilterPostProcessor();
+        var postProcessor = EditorUtils.getGlobalFilterPostProcessor();
         postProcessor.removeFilter(sceneFilter.get());
     }
 

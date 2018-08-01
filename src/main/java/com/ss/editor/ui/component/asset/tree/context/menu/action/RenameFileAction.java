@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RenamedFileEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import javafx.event.ActionEvent;
@@ -88,7 +88,7 @@ public class RenameFileAction extends FileAction {
         try {
             Files.move(file, newFile);
         } catch (IOException e) {
-            EditorUtil.handleException(null, this, e);
+            EditorUtils.handleException(null, this, e);
             return;
         }
 

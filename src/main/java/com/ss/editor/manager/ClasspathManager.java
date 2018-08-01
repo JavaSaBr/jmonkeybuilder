@@ -3,7 +3,6 @@ package com.ss.editor.manager;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_CLASSES_FOLDER;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_LIBRARY_FOLDER;
 
-import com.jme3.asset.AssetManager;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.BackgroundThread;
@@ -14,7 +13,7 @@ import com.ss.editor.ui.event.impl.ClasspathReloadedEvent;
 import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
 import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
 import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.classpath.ClassPathScanner;
 import com.ss.rlib.common.classpath.ClassPathScannerFactory;
 import com.ss.rlib.common.logging.Logger;
@@ -29,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -320,7 +318,7 @@ public class ClasspathManager {
             return;
         }
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         if (currentLoader != null) {
             ExecutorManager.getInstance()

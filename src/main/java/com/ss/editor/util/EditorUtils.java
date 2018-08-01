@@ -3,8 +3,6 @@ package com.ss.editor.util;
 import static com.ss.rlib.common.util.ClassUtils.cast;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import static java.lang.Math.acos;
-import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
 import com.jme3.app.state.AppStateManager;
@@ -14,8 +12,6 @@ import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -72,9 +68,9 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public abstract class EditorUtil {
+public abstract class EditorUtils {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(EditorUtils.class);
 
     public static final DataFormat JAVA_PARAM = new DataFormat("jMB.javaParam");
     public static final DataFormat GNOME_FILES = new DataFormat("x-special/gnome-copied-files");
@@ -97,7 +93,7 @@ public abstract class EditorUtil {
             throw new IllegalArgumentException();
         }
 
-        EditorUtil.jmeApplication = jmeApplication;
+        EditorUtils.jmeApplication = jmeApplication;
     }
 
     public static void setJfxApplication(@NotNull JfxApplication jfxApplication) {
@@ -109,7 +105,7 @@ public abstract class EditorUtil {
             throw new IllegalArgumentException();
         }
 
-        EditorUtil.jfxApplication = jfxApplication;
+        EditorUtils.jfxApplication = jfxApplication;
     }
 
     /**
@@ -333,7 +329,7 @@ public abstract class EditorUtil {
                 .collect(toList());
 
         content.putFiles(files);
-        content.put(EditorUtil.JAVA_PARAM, "copy");
+        content.put(EditorUtils.JAVA_PARAM, "copy");
 
         var platform = JmeSystem.getPlatform();
 
@@ -368,7 +364,7 @@ public abstract class EditorUtil {
      */
     @FromAnyThread
     public static boolean checkExists(@NotNull String path) {
-        var cs = EditorUtil.class;
+        var cs = EditorUtils.class;
         return cs.getResource(path) != null || cs.getResource("/" + path) != null;
     }
 
@@ -399,45 +395,12 @@ public abstract class EditorUtil {
         }
 
         var resource = classLoader.getResource(path);
+
         if (resource == null) {
             resource = classLoader.getResource("/" + path);
         }
 
         return resource == null ? null : resource.toExternalForm();
-    }
-
-    /**
-     * Get the angle between these points.
-     *
-     * @param center the center.
-     * @param first  the first point.
-     * @param second the second point.
-     * @return the angle between these points.
-     */
-    @FromAnyThread
-    public static float getAngle(
-            @NotNull Vector2f center,
-            @NotNull Vector2f first,
-            @NotNull Vector2f second
-    ) {
-
-        var x = center.getX();
-        var y = center.getY();
-
-        var ax = first.getX() - x;
-        var ay = first.getY() - y;
-        var bx = second.getX() - x;
-        var by = second.getY() - y;
-
-        var delta = (float) ((ax * bx + ay * by) / Math.sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
-
-        if (delta > 1.0) {
-            return 0.0F;
-        } else if (delta < -1.0) {
-            return 180.0F;
-        }
-
-        return (float) toDegrees(acos(delta));
     }
 
     /**
@@ -472,57 +435,6 @@ public abstract class EditorUtil {
     @FromAnyThread
     public static @Nullable InputStream getInputStream(@NotNull String path, @NotNull ClassLoader classLoader) {
         return classLoader.getResourceAsStream(path);
-    }
-
-    /**
-     * Get the user name of the computer user.
-     *
-     * @return the user name.
-     */
-    @FromAnyThread
-    public static @NotNull String getUserName() {
-        return System.getProperty("user.name");
-    }
-
-    /**
-     * Check visibility the position on the screen.
-     *
-     * @param position the position for checking.
-     * @param camera   the camera of the screen.
-     * @return true of we can see the position on the screen.
-     */
-    @FromAnyThread
-    public static boolean isVisibleOnScreen(@NotNull Vector3f position, @NotNull Camera camera) {
-
-        var maxHeight = camera.getHeight();
-        var maxWidth = camera.getWidth();
-
-        var isBottom = position.getY() < 0;
-        var isTop = position.getY() > maxHeight;
-        var isLeft = position.getX() < 0;
-        var isRight = position.getX() > maxWidth;
-
-        return !isBottom && !isLeft && !isTop && !isRight && position.getZ() < 1F;
-    }
-
-    /**
-     * Calculate new point from first point and using second point like a direction.
-     *
-     * @param first  the first point.
-     * @param second the second point.
-     * @param store  the container of the result.
-     * @param length the distance.
-     */
-    @FromAnyThread
-    public static void movePoint(
-            @NotNull Vector3f first,
-            @NotNull Vector3f second,
-            @NotNull Vector3f store,
-            int length
-    ) {
-        store.x = first.x + (second.x - first.x) * length;
-        store.y = first.y + (second.y - first.y) * length;
-        store.z = first.z + (second.z - first.z) * length;
     }
 
     /**
@@ -971,6 +883,7 @@ public abstract class EditorUtil {
             }
 
             var librariesLoader = classpathManager.getLibrariesLoader();
+
             if (librariesLoader != null) {
                 try {
                     var targetClass = librariesLoader.loadClass(className);
@@ -1133,7 +1046,7 @@ public abstract class EditorUtil {
             @NotNull Function<String, T> constructor
     ) {
         return getAssetFileOpt(realFile)
-                .map(EditorUtil::toAssetPath)
+                .map(EditorUtils::toAssetPath)
                 .map(constructor)
                 .orElseThrow(() -> new RuntimeException("Can't build an asset key for the file " + realFile));
     }

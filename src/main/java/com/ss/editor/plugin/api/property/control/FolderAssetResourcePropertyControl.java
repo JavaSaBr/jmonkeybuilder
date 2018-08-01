@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +46,7 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
     @Override
     @FxThread
     protected void chooseNewResource(@NotNull Path file) {
-        setPropertyValue(EditorUtil.requireAssetFile(file));
+        setPropertyValue(EditorUtils.requireAssetFile(file));
         super.chooseNewResource(file);
     }
 
@@ -55,7 +55,7 @@ public class FolderAssetResourcePropertyControl extends AssetResourcePropertyEdi
     protected void reloadImpl() {
 
         resourceLabel.setText(getPropertyValueOpt()
-                .map(EditorUtil::toAssetPath)
+                .map(EditorUtils::toAssetPath)
                 .filter(StringUtils::isEmpty)
                 .orElse("/"));
 

@@ -120,7 +120,7 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
 
     static {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         AUDIO_NODE_MODEL = (Node) assetManager.loadModel("graphics/models/speaker/speaker.j3o");
 
@@ -429,7 +429,7 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @FromAnyThread
     private void createCollisionPlane() {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
         var renderState = material.getAdditionalRenderState();
@@ -541,7 +541,7 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @FromAnyThread
     private void createManipulators() {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         var redMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         redMaterial.setColor("Color", ColorRGBA.Red);
@@ -598,7 +598,7 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @FromAnyThread
     private @NotNull Material createColorMaterial(@NotNull ColorRGBA color) {
 
-        var material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        var material = new Material(EditorUtils.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.getAdditionalRenderState().setWireframe(true);
         material.setColor("Color", color);
 
@@ -952,7 +952,7 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     private @NotNull Vector3f getPositionOnCamera(@NotNull Vector3f location) {
 
         var local = LocalObjects.get();
-        var camera = EditorUtil.getGlobalCamera();
+        var camera = EditorUtils.getGlobalCamera();
 
         var cameraLocation = camera.getLocation();
         var resultPosition = location.subtract(cameraLocation, local.nextVector())
@@ -1585,8 +1585,8 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
 
         updateTransformCenter();
 
-        var camera = EditorUtil.getGlobalCamera();
-        var inputManager = EditorUtil.getInputManager();
+        var camera = EditorUtils.getGlobalCamera();
+        var inputManager = EditorUtils.getInputManager();
         var cursorPosition = inputManager.getCursorPosition();
 
         var collisionResults = new CollisionResults();
@@ -1793,14 +1793,14 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
 
         NodeUtils.visitGeometry(model, geometry -> {
 
-            var renderManager = EditorUtil.getRenderManager();
+            var renderManager = EditorUtils.getRenderManager();
             try {
                 renderManager.preloadScene(geometry);
             } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-                EditorUtil.handleException(LOGGER, this,
+                EditorUtils.handleException(LOGGER, this,
                         new RuntimeException("Found invalid material in the geometry: [" + geometry.getName() + "]. " +
                                 "The material will be removed from the geometry.", e));
-                geometry.setMaterial(EditorUtil.getDefaultMaterial());
+                geometry.setMaterial(EditorUtils.getDefaultMaterial());
             }
         });
 
@@ -1872,7 +1872,7 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
             return;
         }
 
-        var camera = EditorUtil.getGlobalCamera();
+        var camera = EditorUtils.getGlobalCamera();
 
         var lightModel = notNull(cachedLights.get(light, () -> {
 
@@ -2264,13 +2264,13 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
             float hRotation,
             float vRotation,
             float targetDistance,
-            float cameraSpeed
+            float cameraFlySpeed
     ) {
-        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed);
 
         var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() ->
-                fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
+                fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
     }
 
     /**
@@ -2347,6 +2347,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @Override
     @JmeThread
     public @NotNull Camera getCamera() {
-        return EditorUtil.getGlobalCamera();
+        return EditorUtils.getGlobalCamera();
     }
 }

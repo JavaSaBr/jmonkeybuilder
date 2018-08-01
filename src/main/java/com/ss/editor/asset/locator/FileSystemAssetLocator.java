@@ -1,6 +1,6 @@
 package com.ss.editor.asset.locator;
 
-import static com.ss.editor.util.EditorUtil.getAssetManager;
+import static com.ss.editor.util.EditorUtils.getAssetManager;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;

@@ -9,7 +9,7 @@ import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.ui.css.CssRegistry;
 import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 /**
@@ -223,7 +222,7 @@ public class PluginManager {
                     getClassLoader();
 
             ExecutorManager.getInstance()
-                    .addFxTask(() -> EditorUtil.getAssetManager()
+                    .addFxTask(() -> EditorUtils.getAssetManager()
                             .addClassLoader(classLoader));
         });
     }

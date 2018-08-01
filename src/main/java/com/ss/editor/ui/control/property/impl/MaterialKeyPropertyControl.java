@@ -4,7 +4,7 @@ import com.jme3.asset.MaterialKey;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,21 +36,21 @@ public class MaterialKeyPropertyControl<C extends ChangeConsumer, T> extends Mat
     @Override
     @FxThread
     protected void applyNewKey(@NotNull Path file) {
-        changed(EditorUtil.realFileToKey(file, MaterialKey::new), getPropertyValue());
+        changed(EditorUtils.realFileToKey(file, MaterialKey::new), getPropertyValue());
         super.applyNewKey(file);
     }
 
     @Override
     @FxThread
     protected void openKey() {
-        EditorUtil.openInEditor(getPropertyValue());
+        EditorUtils.openInEditor(getPropertyValue());
         super.openKey();
     }
 
     @Override
     @FxThread
     protected void reloadImpl() {
-        keyLabel.setText(EditorUtil.ifEmpty(getPropertyValue(), NO_MATERIAL));
+        keyLabel.setText(EditorUtils.ifEmpty(getPropertyValue(), NO_MATERIAL));
         super.reloadImpl();
     }
 }

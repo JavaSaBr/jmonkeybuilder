@@ -12,7 +12,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart;
 import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -148,7 +148,7 @@ public class ModelEditor3DPart extends AbstractSceneEditor3dPart<ModelFileEditor
 
         if (frame == 2) {
             customSky.forEach(spatial -> customSkyNode.attachChild(spatial.clone(false)));
-            EditorUtil.updateGlobalLightProbe(probeHandler);
+            EditorUtils.updateGlobalLightProbe(probeHandler);
         }
 
         frame++;

@@ -5,8 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.common.util.ObjectUtils;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,7 +122,7 @@ public class PropertyOperation<C extends ChangeConsumer, D, T> extends AbstractE
         try {
             notNull(applyHandler).accept(spatial, value);
         } catch (Exception e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
         }
     }
 }

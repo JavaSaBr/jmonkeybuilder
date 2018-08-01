@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
+import static com.ss.editor.util.EditorUtils.tryToCreateUserObject;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.ss.editor.Messages;

@@ -15,7 +15,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
@@ -57,7 +57,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
     private final Array<String> availableGlsl;
 
     private MaterialDefinitionFileCreator() {
-        this.availableGlsl = EditorUtil.getRenderer()
+        this.availableGlsl = EditorUtils.getRenderer()
             .getCaps()
             .stream()
             .filter(cap -> cap.name().startsWith("GLSL"))
@@ -134,21 +134,21 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         try (var out = new PrintWriter(Files.newOutputStream(matDefFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(mdContent);
         } catch (IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return;
         }
 
         try (var out = new PrintWriter(Files.newOutputStream(fragmentFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(FRAG_TEMPLATE);
         } catch (IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return;
         }
 
         try (var out = new PrintWriter(Files.newOutputStream(vertexFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(VERT_TEMPLATE);
         } catch (IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return;
         }
 

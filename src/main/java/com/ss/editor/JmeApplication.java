@@ -42,7 +42,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -76,7 +76,7 @@ public class JmeApplication extends JmeToJfxApplication {
     /**
      * It's an internal method.
      *
-     * @see EditorUtil
+     * @see EditorUtils
      */
     @Deprecated
     @FromAnyThread
@@ -151,7 +151,7 @@ public class JmeApplication extends JmeToJfxApplication {
     private Material defaultMaterial;
 
     private JmeApplication() {
-        EditorUtil.setJmeApplication(this);
+        EditorUtils.setJmeApplication(this);
 
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");

@@ -4,7 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import javafx.scene.control.MenuItem;
 
 /**
@@ -31,7 +31,7 @@ public class UpdateClasspathAndAssetCacheAction extends MenuItem {
             final ClasspathManager classpathManager = ClasspathManager.getInstance();
             classpathManager.reload();
 
-            final AssetManager assetManager = EditorUtil.getAssetManager();
+            final AssetManager assetManager = EditorUtils.getAssetManager();
             assetManager.clearCache();
         });
     }

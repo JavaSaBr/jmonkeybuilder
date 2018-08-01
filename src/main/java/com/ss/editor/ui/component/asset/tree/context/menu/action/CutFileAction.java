@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
@@ -56,7 +56,7 @@ public class CutFileAction extends FileAction {
 
         var content = new ClipboardContent();
         content.putFiles(files);
-        content.put(EditorUtil.JAVA_PARAM, "cut");
+        content.put(EditorUtils.JAVA_PARAM, "cut");
 
         var clipboard = Clipboard.getSystemClipboard();
         clipboard.setContent(content);

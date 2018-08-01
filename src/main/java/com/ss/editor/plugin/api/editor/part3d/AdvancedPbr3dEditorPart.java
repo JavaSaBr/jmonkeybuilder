@@ -7,7 +7,7 @@ import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -72,7 +72,7 @@ public abstract class AdvancedPbr3dEditorPart<T extends Advanced3dFileEditor> ex
         super.update(tpf);
 
         if (frame == 2) {
-            EditorUtil.updateGlobalLightProbe(probeHandler);
+            EditorUtils.updateGlobalLightProbe(probeHandler);
         }
 
         frame++;

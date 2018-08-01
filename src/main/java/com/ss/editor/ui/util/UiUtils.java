@@ -1,6 +1,6 @@
 package com.ss.editor.ui.util;
 
-import static com.ss.editor.util.EditorUtil.getFxScene;
+import static com.ss.editor.util.EditorUtils.getFxScene;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;

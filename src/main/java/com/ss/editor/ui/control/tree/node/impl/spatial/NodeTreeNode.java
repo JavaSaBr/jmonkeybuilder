@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.tree.node.impl.spatial;
 
-import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.EditorUtils.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.ModelKey;
 import com.jme3.effect.ParticleEmitter;
@@ -31,7 +31,7 @@ import com.ss.editor.ui.control.tree.action.impl.particle.emitter.ResetParticleE
 import com.ss.editor.ui.control.tree.action.impl.terrain.CreateTerrainAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
@@ -306,7 +306,7 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         var assetPath = toAssetPath(assetFile);
         var modelKey = new ModelKey(assetPath);
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var loadedModel = assetManager.loadModel(assetPath);
         var assetLinkNode = new AssetLinkNode(modelKey);
         assetLinkNode.attachLinkedChild(loadedModel, modelKey);

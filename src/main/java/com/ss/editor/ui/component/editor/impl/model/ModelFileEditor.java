@@ -24,7 +24,7 @@ import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorModelEditorState;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -124,10 +124,10 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
     protected void doOpenFile(@NotNull Path file) throws IOException {
         super.doOpenFile(file);
 
-        var assetFile = EditorUtil.requireAssetFile(file);
-        var modelKey = new ModelKey(EditorUtil.toAssetPath(assetFile));
+        var assetFile = EditorUtils.requireAssetFile(file);
+        var modelKey = new ModelKey(EditorUtils.toAssetPath(assetFile));
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
@@ -274,7 +274,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEdito
             return;
         }
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         var key = new TextureKey(newSky, true);
         key.setGenerateMips(false);

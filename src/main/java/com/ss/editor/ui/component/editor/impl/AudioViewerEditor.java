@@ -16,7 +16,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -186,11 +186,11 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     public void openFile(@NotNull Path file) {
         super.openFile(file);
 
-        var assetFile = notNull(EditorUtil.getAssetFile(file));
-        var assetPath = EditorUtil.toAssetPath(assetFile);
+        var assetFile = notNull(EditorUtils.getAssetFile(file));
+        var assetPath = EditorUtils.toAssetPath(assetFile);
 
         var audioKey = new AudioKey(assetPath);
-        var audioData = EditorUtil.getAssetManager()
+        var audioData = EditorUtils.getAssetManager()
                 .loadAudio(audioKey);
 
         getEditor3dPart()

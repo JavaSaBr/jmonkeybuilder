@@ -2,8 +2,8 @@ package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FLIPPED_TEXTURES;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
@@ -31,7 +31,7 @@ import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.fx.util.FxControlUtils;
@@ -127,7 +127,7 @@ public class MaterialFileEditor extends
         var assetFile = notNull(getAssetFile(getEditFile()));
         var materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        var material = EditorUtil.getAssetManager()
+        var material = EditorUtils.getAssetManager()
                 .loadAsset(materialKey);
 
         reload(material);
@@ -171,11 +171,11 @@ public class MaterialFileEditor extends
         executorManager.addJmeTask(() -> {
 
             var config = EditorConfig.getInstance();
-            var assetFile = EditorUtil.requireAssetFile(path);
-            var textureKey = new TextureKey(EditorUtil.toAssetPath(assetFile));
+            var assetFile = EditorUtils.requireAssetFile(path);
+            var textureKey = new TextureKey(EditorUtils.toAssetPath(assetFile));
             textureKey.setFlipY(config.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES));
 
-            var texture = EditorUtil.getAssetManager()
+            var texture = EditorUtils.getAssetManager()
                     .loadTexture(textureKey);
 
             texture.setWrap(Texture.WrapMode.Repeat);
@@ -216,7 +216,7 @@ public class MaterialFileEditor extends
         var assetFile = notNull(getAssetFile(file));
         var materialKey = new MaterialKey(toAssetPath(assetFile));
 
-        var material = EditorUtil.getAssetManager()
+        var material = EditorUtils.getAssetManager()
                 .loadAsset(materialKey);
 
         editor3dPart.changeMode(ModelType.BOX);
@@ -294,7 +294,7 @@ public class MaterialFileEditor extends
             return;
         }
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var newMaterial = new Material(assetManager, newType);
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());

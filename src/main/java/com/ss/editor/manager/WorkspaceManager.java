@@ -5,7 +5,7 @@ import static com.ss.rlib.common.util.Utils.get;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.workspace.Workspace;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -111,7 +111,7 @@ public class WorkspaceManager {
 
         Workspace workspace;
         try {
-            workspace = EditorUtil.deserialize(notNull(get(workspaceFile, Files::readAllBytes)));
+            workspace = EditorUtils.deserialize(notNull(get(workspaceFile, Files::readAllBytes)));
         } catch (RuntimeException e) {
             workspace = new Workspace();
         }

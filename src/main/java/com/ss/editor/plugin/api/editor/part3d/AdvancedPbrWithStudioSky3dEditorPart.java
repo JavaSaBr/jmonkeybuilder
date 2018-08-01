@@ -3,7 +3,7 @@ package com.ss.editor.plugin.api.editor.part3d;
 import com.jme3.scene.Geometry;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,7 +16,7 @@ public class AdvancedPbrWithStudioSky3dEditorPart<T extends Advanced3dFileEditor
     public AdvancedPbrWithStudioSky3dEditorPart(@NotNull T fileEditor) {
         super(fileEditor);
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var sky = (Geometry) SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
                 SkyFactory.EnvMapType.EquirectMap);
 

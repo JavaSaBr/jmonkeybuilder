@@ -4,7 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -159,7 +159,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         try {
             processOk();
         } catch (Exception e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
         }
     }
 

@@ -11,7 +11,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.extension.scene.ScenePresentable.PresentationType;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -210,7 +210,7 @@ public class EditorPresentableNode extends Node {
     @JmeThread
     private @NotNull Geometry createGeometry(@NotNull PresentationType presentationType) {
 
-        var material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        var material = new Material(EditorUtils.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", ColorRGBA.Yellow);
         material.getAdditionalRenderState().setWireframe(true);
 

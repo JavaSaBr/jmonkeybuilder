@@ -6,10 +6,9 @@ import com.jme3.texture.Texture2D;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.impl.*;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
@@ -202,7 +201,7 @@ public class EditableObjectPropertyBuilder<C extends ChangeConsumer> extends Abs
 
                 EditableProperty<Enum<?>, ?> property = cast(description);
                 var value = notNull(property.getValue(), "Enum value can't be null.");
-                var availableValues = EditorUtil.getAvailableValues(value);
+                var availableValues = EditorUtils.getAvailableValues(value);
 
                 var propertyControl = new EnumPropertyControl<C, EditableProperty<Enum<?>, ?>, Enum<?>>(value,
                         property.getName(), changeConsumer, availableValues);

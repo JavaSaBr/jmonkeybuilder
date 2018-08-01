@@ -16,7 +16,7 @@ import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.StringUtils;
@@ -206,7 +206,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         try {
             tempFile = Files.createTempFile("SSEditor", "fileCreator");
         } catch (final IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             UiUtils.decrementLoading();
             return;
         }
@@ -225,7 +225,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
         } catch (Exception e) {
             Utils.run(tempFile, Files::delete);
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
         }
 
         UiUtils.decrementLoading();

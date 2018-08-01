@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.bar.action.OpenAssetAction;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.AssetComponentLoadedEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.network.ConnectionOwner;
 import com.ss.rlib.common.network.annotation.PacketDescription;
 import javafx.event.EventHandler;
@@ -68,6 +68,6 @@ public class OpenFileClientCommand extends ClientCommand {
      */
     private void openFile(@NotNull Path fileToOpen) {
         FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
-        EditorUtil.requestFxFocus();
+        EditorUtils.requestFxFocus();
     }
 }

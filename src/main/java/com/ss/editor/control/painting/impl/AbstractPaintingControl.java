@@ -16,7 +16,7 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingControl;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.ui.component.painting.PaintingComponent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -170,7 +170,7 @@ public abstract class AbstractPaintingControl<T extends PaintingComponent> exten
      */
     @JmeThread
     protected @NotNull Material createColoredMaterial(@NotNull final ColorRGBA color) {
-        final Material material = new Material(EditorUtil.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        final Material material = new Material(EditorUtils.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", color);
         return material;
     }

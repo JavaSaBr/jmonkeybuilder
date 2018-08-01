@@ -15,7 +15,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,7 +73,7 @@ public class ScaleToolControl extends AbstractTransformControl {
 
         final LocalObjects local = LocalObjects.get();
         final Camera camera = editorControl.getCamera();
-        final InputManager inputManager = EditorUtil.getInputManager();
+        final InputManager inputManager = EditorUtils.getInputManager();
         final Transform transform = notNull(editorControl.getTransformCenter());
 
         // cursor position and selected position vectors

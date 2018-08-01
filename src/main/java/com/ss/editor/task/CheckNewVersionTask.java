@@ -3,7 +3,7 @@ package com.ss.editor.task;
 import static org.apache.http.impl.client.HttpClients.createMinimal;
 import com.ss.editor.Messages;
 import com.ss.editor.config.Config;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.Version;
@@ -72,7 +72,7 @@ public class CheckNewVersionTask implements Runnable {
 
             Platform.runLater(() -> {
 
-                var hostServices = EditorUtil.getHostServices();
+                var hostServices = EditorUtils.getHostServices();
 
                 var hyperlink = new Hyperlink(Messages.CHECK_NEW_VERSION_DIALOG_HYPERLINK + targetLink);
                 hyperlink.setOnAction(event -> hostServices.showDocument(targetLink));

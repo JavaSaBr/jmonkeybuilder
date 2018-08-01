@@ -3,8 +3,8 @@ package com.ss.editor.ui.dialog.imports.model;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
@@ -29,7 +29,7 @@ import com.ss.editor.manager.JmeFilePreviewManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.editor.util.NodeUtils;
 import com.ss.editor.util.TangentGenerator;
@@ -211,7 +211,7 @@ public class ModelImportDialog extends GenericFileCreator {
         var modelFile = notNull(getFileToCreate());
         var parent = modelFile.getParent();
         var importedFile = vars.get(PROP_FILE, Path.class);
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         Spatial model;
 

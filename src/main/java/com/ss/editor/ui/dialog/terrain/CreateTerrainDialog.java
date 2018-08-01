@@ -1,8 +1,8 @@
 package com.ss.editor.ui.dialog.terrain;
 
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_LOADED_MODEL;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
@@ -32,7 +32,7 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.fx.control.input.FloatTextField;
 import com.ss.rlib.fx.control.input.IntegerTextField;
 import com.ss.rlib.fx.util.FXUtils;
@@ -671,7 +671,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
             try {
                 createTerrainInBackground();
             } catch (final Exception e) {
-                EditorUtil.handleException(LOGGER, this, e);
+                EditorUtils.handleException(LOGGER, this, e);
             }
 
             EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
@@ -684,7 +684,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @BackgroundThread
     private void createTerrainInBackground() throws Exception {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final ComboBox<HeightMapType> heightMapTypeComboBox = getHeightMapTypeComboBox();
         final HeightMapType heightMapType = heightMapTypeComboBox.getSelectionModel().getSelectedItem();
 

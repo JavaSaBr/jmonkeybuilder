@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -54,7 +54,7 @@ public class FileAssetResourcePropertyControl extends AssetResourcePropertyEdito
     @Override
     @FxThread
     protected void chooseNewResource(@NotNull Path file) {
-        setPropertyValue(EditorUtil.requireAssetFile(file));
+        setPropertyValue(EditorUtils.requireAssetFile(file));
         super.chooseNewResource(file);
     }
 
@@ -63,7 +63,7 @@ public class FileAssetResourcePropertyControl extends AssetResourcePropertyEdito
     protected void reloadImpl() {
 
         resourceLabel.setText(getPropertyValueOpt()
-                .map(EditorUtil::toAssetPath)
+                .map(EditorUtils::toAssetPath)
                 .orElse(NOT_SELECTED));
 
         super.reloadImpl();

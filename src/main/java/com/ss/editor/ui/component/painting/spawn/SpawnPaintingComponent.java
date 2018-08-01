@@ -15,7 +15,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.editor.ui.component.painting.property.PaintingPropertyDefinition;
 import com.ss.editor.ui.component.painting.property.PropertiesBasedPaintingComponent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
@@ -138,7 +138,7 @@ public class SpawnPaintingComponent extends
         vars.set(PROPERTY_MAX_SCALE, state.getMaxScale());
         vars.set(PROPERTY_PADDING, state.getPadding());
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         for (int i = 1; i <= AVAILABLE_MODELS; i++) {
 

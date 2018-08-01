@@ -21,7 +21,7 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.plugin.api.editor.part3d.AdvancedPbrWithStudioSky3dEditorPart;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.TangentGenerator;
 import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.geom.util.AngleUtils;
@@ -159,14 +159,14 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
         testQuad.setMaterial(material);
         testSphere.setMaterial(material);
 
-        var renderManager = EditorUtil.getRenderManager();
+        var renderManager = EditorUtils.getRenderManager();
         try {
             renderManager.preloadScene(testBox);
         } catch (RendererException | AssetNotFoundException | UnsupportedOperationException e) {
             handleMaterialException(e);
-            testBox.setMaterial(EditorUtil.getDefaultMaterial());
-            testQuad.setMaterial(EditorUtil.getDefaultMaterial());
-            testSphere.setMaterial(EditorUtil.getDefaultMaterial());
+            testBox.setMaterial(EditorUtils.getDefaultMaterial());
+            testQuad.setMaterial(EditorUtils.getDefaultMaterial());
+            testSphere.setMaterial(EditorUtils.getDefaultMaterial());
         }
     }
 
@@ -177,7 +177,7 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
      */
     @JmeThread
     protected void handleMaterialException(@NotNull RuntimeException exception) {
-        EditorUtil.handleException(LOGGER, this, exception);
+        EditorUtils.handleException(LOGGER, this, exception);
     }
 
     /**

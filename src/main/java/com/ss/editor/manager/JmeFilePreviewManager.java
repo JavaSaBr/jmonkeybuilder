@@ -4,8 +4,8 @@ import static com.jme3.jfx.injfx.JmeToJfxIntegrator.bind;
 import static com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.FileUtils.getExtension;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetNotFoundException;
@@ -33,7 +33,7 @@ import com.ss.editor.asset.locator.FolderAssetLocator;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JmeThreadExecutor;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.TangentGenerator;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -212,7 +212,7 @@ public class JmeFilePreviewManager extends AbstractControl {
         var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() -> {
 
-            var scene = EditorUtil.getFxScene();
+            var scene = EditorUtils.getFxScene();
             var container = scene.getHideLayer();
 
             FxUtils.addChild(container, imageView);
@@ -237,7 +237,7 @@ public class JmeFilePreviewManager extends AbstractControl {
 
     @JmeThread
     private void notifyProbeComplete() {
-        var rootNode = EditorUtil.getPreviewNode();
+        var rootNode = EditorUtils.getPreviewNode();
         rootNode.attachChild(modelNode);
     }
 
@@ -321,7 +321,7 @@ public class JmeFilePreviewManager extends AbstractControl {
     private void showObject(@NotNull String path, boolean external) {
         prepareProcessor();
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         Spatial model;
 
@@ -340,7 +340,7 @@ public class JmeFilePreviewManager extends AbstractControl {
 
         tryToLoad(model);
 
-        var rootNode = EditorUtil.getPreviewNode();
+        var rootNode = EditorUtils.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -353,13 +353,13 @@ public class JmeFilePreviewManager extends AbstractControl {
     private void tryToLoad(@NotNull Spatial model) {
         try {
 
-            var renderManager = EditorUtil.getRenderManager();
+            var renderManager = EditorUtils.getRenderManager();
             renderManager.preloadScene(model);
 
             modelNode.attachChild(model);
 
         } catch (RendererException | AssetNotFoundException | UnsupportedOperationException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
         }
     }
 
@@ -375,7 +375,7 @@ public class JmeFilePreviewManager extends AbstractControl {
 
         frame = 0;
 
-        var camera = EditorUtil.getPreviewCamera();
+        var camera = EditorUtils.getPreviewCamera();
         camera.setLocation(CAMERA_LOCATION);
         camera.setRotation(CAMERA_ROTATION);
 
@@ -391,13 +391,13 @@ public class JmeFilePreviewManager extends AbstractControl {
     private void showMaterial(@NotNull String path) {
         prepareProcessor();
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var material = assetManager.loadMaterial(path);
 
         testBox.setMaterial(material);
         tryToLoad(testBox);
 
-        var rootNode = EditorUtil.getPreviewNode();
+        var rootNode = EditorUtils.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 

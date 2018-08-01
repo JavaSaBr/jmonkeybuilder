@@ -4,7 +4,7 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.ss.editor.JmeApplication;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.TimeTracker;
 import com.ss.rlib.common.plugin.Version;
 import com.ss.rlib.common.util.Utils;
@@ -142,7 +142,7 @@ public final class Config {
 
         var vars = VarTable.newInstance();
 
-        try (var reader = new InputStreamReader(EditorUtil.requireInputStream(CONFIG_RESOURCE_PATH))) {
+        try (var reader = new InputStreamReader(EditorUtils.requireInputStream(CONFIG_RESOURCE_PATH))) {
 
             var object = (JsonObject) Json.parse(reader);
             object.forEach(member -> vars.set(member.getName(), member.getValue().toString()));

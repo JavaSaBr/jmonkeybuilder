@@ -5,7 +5,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,14 +52,14 @@ public abstract class AssetKeyPropertyControl<C extends ChangeConsumer, E, T, A 
     @Override
     @FxThread
     protected void openKey() {
-        getPropertyValueOpt().ifPresent(EditorUtil::openInEditor);
+        getPropertyValueOpt().ifPresent(EditorUtils::openInEditor);
         super.openKey();
     }
 
     @Override
     @FxThread
     protected void reloadImpl() {
-        keyLabel.setText(EditorUtil.ifEmpty(getPropertyValue(), getNoKeyLabel()));
+        keyLabel.setText(EditorUtils.ifEmpty(getPropertyValue(), getNoKeyLabel()));
         super.reloadImpl();
     }
 }

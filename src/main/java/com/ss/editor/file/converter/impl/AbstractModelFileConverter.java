@@ -3,7 +3,7 @@ package com.ss.editor.file.converter.impl;
 import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.EditorUtils.*;
 import static com.ss.rlib.common.util.FileUtils.containsExtensions;
 import static com.ss.rlib.common.util.FileUtils.normalizeName;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
@@ -24,7 +24,7 @@ import com.ss.editor.util.TangentGenerator;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.MaterialSerializer;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
@@ -122,7 +122,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
             try {
                 convertImpl(source, vars);
             } catch (final Exception e) {
-                EditorUtil.handleException(LOGGER, this, e);
+                EditorUtils.handleException(LOGGER, this, e);
                 EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
             }
         });
@@ -142,7 +142,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
         if (EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
@@ -200,13 +200,13 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
             try (PrintWriter pout = new PrintWriter(Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
                 pout.println(MaterialSerializer.serializeToString(currentMaterial));
             } catch (final IOException e) {
-                EditorUtil.handleException(LOGGER, this, e);
+                EditorUtils.handleException(LOGGER, this, e);
             }
         }
 
         final String assetPath = toAssetPath(assetFile);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         geometry.setMaterial(assetManager.loadMaterial(assetPath));
     }
 

@@ -29,7 +29,7 @@ import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.TimeTracker;
 import com.ss.editor.util.svg.SvgImageLoaderFactory;
@@ -78,7 +78,7 @@ public class JfxApplication extends Application {
     /**
      * It's an internal method.
      *
-     * @see EditorUtil
+     * @see EditorUtils
      */
     @Deprecated
     @FromAnyThread
@@ -222,7 +222,7 @@ public class JfxApplication extends Application {
         return (observable, oldValue, newValue) -> {
 
             var jmeApplication = JmeApplication.getInstance();
-            var stage = EditorUtil.getFxStage();
+            var stage = EditorUtils.getFxStage();
 
             if (newValue || stage.isFocused()) {
                 jmeApplication.setPaused(false);
@@ -304,7 +304,7 @@ public class JfxApplication extends Application {
     private Stage stage;
 
     public JfxApplication() {
-        EditorUtil.setJfxApplication(this);
+        EditorUtils.setJfxApplication(this);
         this.openedWindows = ArrayFactory.newConcurrentStampedLockArray(Window.class);
     }
 

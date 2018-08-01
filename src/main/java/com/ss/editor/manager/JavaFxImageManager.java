@@ -15,8 +15,7 @@ import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.FxContextCreatedEvent;
-import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.TimeTracker;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -253,7 +252,7 @@ public class JavaFxImageManager {
 
         if (url == null) {
 
-            var realFile = EditorUtil.getRealFile(resourcePath);
+            var realFile = EditorUtils.getRealFile(resourcePath);
             if (realFile == null || !Files.exists(realFile)) {
                 return Icons.IMAGE_512;
             }
@@ -370,7 +369,7 @@ public class JavaFxImageManager {
         try {
             read = ImageIO.read(url);
         } catch (IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return Icons.IMAGE_512;
         }
 
@@ -385,14 +384,14 @@ public class JavaFxImageManager {
             @NotNull Path cacheFile
     ) {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var texture = assetManager.loadTexture(externalForm);
 
         BufferedImage textureImage;
         try {
             textureImage = ImageToAwt.convert(texture.getImage(), false, true, 0);
         } catch (UnsupportedOperationException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return Icons.IMAGE_512;
         }
 

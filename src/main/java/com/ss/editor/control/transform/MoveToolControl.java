@@ -16,7 +16,7 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
@@ -167,7 +167,7 @@ public class MoveToolControl extends AbstractTransformControl {
         final LocalObjects local = LocalObjects.get();
 
         final Camera camera = editorControl.getCamera();
-        final InputManager inputManager = EditorUtil.getInputManager();
+        final InputManager inputManager = EditorUtils.getInputManager();
         final Vector2f cursorPosition = inputManager.getCursorPosition();
         final CollisionResults results = local.nextCollisionResults();
 

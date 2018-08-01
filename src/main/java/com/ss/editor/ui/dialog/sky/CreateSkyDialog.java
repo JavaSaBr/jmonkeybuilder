@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.sky;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.*;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -31,7 +31,7 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.rlib.fx.control.input.FloatTextField;
 import com.ss.rlib.fx.util.FXUtils;
@@ -747,7 +747,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             try {
                 createSkyInBackground();
             } catch (final Exception e) {
-                EditorUtil.handleException(LOGGER, this, e);
+                EditorUtils.handleException(LOGGER, this, e);
             }
 
             EXECUTOR_MANAGER.addFxTask(UiUtils::decrementLoading);
@@ -762,7 +762,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @FxThread
     private void createSkyInBackground() {
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
@@ -901,9 +901,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             throw new RuntimeException(e);
         }
 
-        final Path assetFile = EditorUtil.getAssetFile(materialFile);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final Path assetFile = EditorUtils.getAssetFile(materialFile);
+        final String assetPath = EditorUtils.toAssetPath(assetFile);
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         return assetManager.loadMaterial(assetPath);
     }
 

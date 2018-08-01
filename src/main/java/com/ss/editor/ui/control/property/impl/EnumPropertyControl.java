@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static com.ss.editor.util.EditorUtil.getAvailableValues;
+import static com.ss.editor.util.EditorUtils.getAvailableValues;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;

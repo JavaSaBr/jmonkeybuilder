@@ -1,15 +1,15 @@
 package com.ss.editor.file.delete.handler.impl;
 
 import static com.ss.editor.FileExtensions.JME_OBJECT;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.ConfirmDialog;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
@@ -42,7 +42,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     public void preDelete(@NotNull final Path file) {
         super.preDelete(file);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
+        final AssetManager assetManager = EditorUtils.getAssetManager();
         final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 
@@ -97,7 +97,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
             return;
         }
 
-        getAssetKeys().stream().map(EditorUtil::getRealFile)
+        getAssetKeys().stream().map(EditorUtils::getRealFile)
                 .filter(Files::exists)
                 .forEach(FileUtils::delete);
     }

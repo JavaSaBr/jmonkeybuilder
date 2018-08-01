@@ -71,11 +71,11 @@ public abstract class Advanced3dEditorPart<T extends Advanced3dFileEditor> exten
             float hRotation,
             float vRotation,
             float targetDistance,
-            float cameraSpeed
+            float cameraFlySpeed
     ) {
-        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed);
 
         ExecutorManager.getInstance()
-                .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed));
+                .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
     }
 }

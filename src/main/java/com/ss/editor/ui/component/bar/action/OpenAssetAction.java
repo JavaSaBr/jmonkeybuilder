@@ -10,7 +10,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.dialog.file.chooser.OpenExternalFolderEditorDialog;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +71,7 @@ public class OpenAssetAction extends MenuItem {
         GAnalytics.sendPageView("AssetChooseDialog", null, "/dialog/AssetChooseDialog");
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "AssetChooseDialog");
 
-        final File folder = chooser.showDialog(EditorUtil.getFxLastWindow());
+        final File folder = chooser.showDialog(EditorUtils.getFxLastWindow());
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, "AssetChooseDialog");
 

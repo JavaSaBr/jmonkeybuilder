@@ -2,7 +2,7 @@ package com.ss.editor.executor.impl;
 
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +81,7 @@ public class JmeThreadExecutor {
         try {
             runnable.run();
         } catch (final Exception e) {
-            EditorUtil.handleException(LOGGER, getInstance(), e);
+            EditorUtils.handleException(LOGGER, getInstance(), e);
         }
     }
 }

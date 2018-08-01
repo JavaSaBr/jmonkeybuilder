@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
@@ -54,6 +54,6 @@ public class CopyFileAction extends FileAction {
                 .collect(toArray(Path.class));
 
         var clipboard = Clipboard.getSystemClipboard();
-        clipboard.setContent(EditorUtil.addCopiedFile(files, new ClipboardContent()));
+        clipboard.setContent(EditorUtils.addCopiedFile(files, new ClipboardContent()));
     }
 }

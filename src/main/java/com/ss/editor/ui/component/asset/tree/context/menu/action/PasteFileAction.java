@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -68,7 +68,7 @@ public class PasteFileAction extends FileAction {
         }
 
         var currentFile = getElement().getFile();
-        var isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
+        var isCut = "cut".equals(clipboard.getContent(EditorUtils.JAVA_PARAM));
 
         if (isCut) {
             files.forEach(file -> moveFile(currentFile, file.toPath()));
@@ -105,7 +105,7 @@ public class PasteFileAction extends FileAction {
         try {
             Files.move(file, newFile);
         } catch (IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return;
         }
 
@@ -133,7 +133,7 @@ public class PasteFileAction extends FileAction {
         try {
             processCopy(file, toCopy, copied, newFile);
         } catch (IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
             return;
         }
 

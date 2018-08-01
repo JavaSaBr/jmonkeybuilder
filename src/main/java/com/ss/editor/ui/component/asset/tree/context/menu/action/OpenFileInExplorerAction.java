@@ -4,7 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +37,6 @@ public class OpenFileInExplorerAction extends FileAction {
     @Override
     protected void execute(@Nullable final ActionEvent event) {
         super.execute(event);
-        EditorUtil.openFileInSystemExplorer(getElement().getFile());
+        EditorUtils.openFileInSystemExplorer(getElement().getFile());
     }
 }

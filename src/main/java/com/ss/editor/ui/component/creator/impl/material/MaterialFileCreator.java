@@ -13,7 +13,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.MaterialSerializer;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
@@ -112,7 +112,7 @@ public class MaterialFileCreator extends GenericFileCreator {
     protected void writeData(@NotNull VarTable vars, @NotNull Path resultFile) throws IOException {
         super.writeData(vars, resultFile);
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         var matDef = vars.get(PROP_MAT_DEF, String.class);
 
         var material = new Material(assetManager, matDef);

@@ -38,7 +38,7 @@ public class TangentGenerator {
             });
 
         } catch (Exception e) {
-            EditorUtil.handleException(LOGGER, null, e);
+            EditorUtils.handleException(LOGGER, null, e);
         }
     }
 
@@ -61,7 +61,7 @@ public class TangentGenerator {
             });
 
         } catch (Exception e) {
-            EditorUtil.handleException(LOGGER, null, e);
+            EditorUtils.handleException(LOGGER, null, e);
         }
     }
 }

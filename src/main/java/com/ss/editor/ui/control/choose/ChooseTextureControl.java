@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.choose;
 
 import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;

@@ -15,7 +15,7 @@ import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.impl.DefaultPropertyControl;
 import com.ss.editor.ui.control.property.impl.LodLevelPropertyControl;
 import com.ss.editor.ui.control.property.impl.MaterialKeyPropertyControl;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import com.ss.rlib.common.util.ExtMath;
@@ -52,7 +52,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
 
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         if (materialKey == null) {
 

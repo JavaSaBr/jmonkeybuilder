@@ -1,6 +1,6 @@
 package com.ss.editor.util;
 
-import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.EditorUtils.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import static java.nio.file.StandardOpenOption.*;
@@ -122,7 +122,7 @@ public class MaterialUtils {
     @JmeThread
     public static @Nullable Material updateMaterialIdNeed(@NotNull Path file, @NotNull Material material) {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         boolean needToReload = false;
         String textureKey = null;
@@ -289,7 +289,7 @@ public class MaterialUtils {
     @JmeThread
     private static void refreshTextures(@NotNull Material material, @NotNull String textureKey) {
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
 
         material.getParams().forEach(matParam -> {
 

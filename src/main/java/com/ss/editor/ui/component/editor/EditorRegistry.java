@@ -5,7 +5,7 @@ import com.ss.editor.ui.component.editor.impl.*;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
@@ -162,7 +162,7 @@ public class EditorRegistry {
             fileEditor.createContent();
             return fileEditor;
         } catch (Exception e) {
-            EditorUtil.handleException(LOGGER, this, e);
+            EditorUtils.handleException(LOGGER, this, e);
         }
 
         return null;

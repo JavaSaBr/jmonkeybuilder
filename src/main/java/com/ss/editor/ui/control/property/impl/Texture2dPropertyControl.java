@@ -5,7 +5,7 @@ import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT
 import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FLIPPED_TEXTURES;
 import static com.ss.editor.extension.property.EditablePropertyType.BOOLEAN;
 import static com.ss.editor.extension.property.EditablePropertyType.ENUM;
-import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.EditorUtils.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 
 import com.jme3.asset.AssetKey;
@@ -24,7 +24,7 @@ import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.fx.util.FxUtils;
@@ -281,7 +281,7 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
         var newKey = new TextureKey(key.getName());
         newKey.setFlipY(needFlipY);
 
-        var assetManager = EditorUtil.getAssetManager();
+        var assetManager = EditorUtils.getAssetManager();
         assetManager.deleteFromCache(key);
 
         var loadedTexture = (Texture2D) assetManager.loadTexture(newKey);
@@ -310,7 +310,7 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
             var textureKey = new TextureKey(toAssetPath(assetFile));
             textureKey.setFlipY(config.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES));
 
-            var texture = (Texture2D) EditorUtil.getAssetManager()
+            var texture = (Texture2D) EditorUtils.getAssetManager()
                     .loadTexture(textureKey);
             texture.setWrap(Texture.WrapMode.Repeat);
 
@@ -341,7 +341,7 @@ public class Texture2dPropertyControl<C extends ChangeConsumer, D> extends Prope
         texturePreview.setDisable(false);
         texturePreview.setMouseTransparent(false);
 
-        var realFile = EditorUtil.requireRealFile(key);
+        var realFile = EditorUtils.requireRealFile(key);
         var imageManager = JavaFxImageManager.getInstance();
 
         if (Files.exists(realFile)) {

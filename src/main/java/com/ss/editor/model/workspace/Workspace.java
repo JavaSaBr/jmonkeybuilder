@@ -1,7 +1,7 @@
 package com.ss.editor.model.workspace;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtils.getAssetFile;
+import static com.ss.editor.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FromAnyThread;
@@ -9,7 +9,7 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.component.editor.EditorDescriptor;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.StringUtils;
@@ -364,7 +364,7 @@ public class Workspace implements Serializable {
 
         changes.set(0);
         try {
-            Files.write(workspaceFile, EditorUtil.serialize(this));
+            Files.write(workspaceFile, EditorUtils.serialize(this));
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
