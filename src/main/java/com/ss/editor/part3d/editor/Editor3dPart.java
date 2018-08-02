@@ -2,6 +2,7 @@ package com.ss.editor.part3d.editor;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppState;
+import com.jme3.scene.Node;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.control.Editor3dPartControl;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,13 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public interface Editor3dPart extends AppState {
+
+    /**
+     * Get the root node of this part.
+     *
+     * @return the root node of this part.
+     */
+    @NotNull Node getRootNode();
 
     /**
      * Get a control by the type.

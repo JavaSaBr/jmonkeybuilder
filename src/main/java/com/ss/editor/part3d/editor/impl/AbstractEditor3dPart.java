@@ -1,6 +1,8 @@
 package com.ss.editor.part3d.editor.impl;
 
+import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.JmeThread;
@@ -9,10 +11,13 @@ import com.ss.editor.part3d.editor.control.Editor3dPartControl;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
+import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 
 /**
  * The base implementation of the {@link Editor3dPart} to use inside {@link FileEditor}.
@@ -42,18 +47,42 @@ public abstract class AbstractEditor3dPart<T extends FileEditor> extends Abstrac
     @NotNull
     protected final Array<Editor3dPartControl> controls;
 
+    /**
+     * The current application.
+     */
+    @Nullable
+    protected Application application;
+
     public AbstractEditor3dPart(@NotNull T fileEditor) {
         this.fileEditor = fileEditor;
         this.stateNode = new Node(getClass().getSimpleName());
         this.controls = Array.ofType(Editor3dPartControl.class);
-        initControls();
+    }
+
+    @Override
+    @JmeThread
+    public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
+        super.initialize(stateManager, application);
+        this.application = application;
+        controls.forEach(application, Editor3dPartControl::initialize);
+    }
+
+    @Override
+    @JmeThread
+    public void cleanup() {
+        controls.forEach(requireApplication(), Editor3dPartControl::cleanup);
+        this.application = null;
+        super.cleanup();
     }
 
     /**
-     * Init all controls of this part.
+     * Get the current application.
+     *
+     * @return get the current application.
      */
-    @BackgroundThread
-    protected void initControls() {
+    @JmeThread
+    public @NotNull Application requireApplication() {
+        return notNull(application);
     }
 
     /**

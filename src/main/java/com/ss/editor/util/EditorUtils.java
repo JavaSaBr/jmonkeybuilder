@@ -5,6 +5,8 @@ import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
+
+import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
@@ -146,6 +148,21 @@ public abstract class EditorUtils {
     @FromAnyThread
     public static @NotNull Renderer getRenderer() {
         return jmeApplication.getRenderer();
+    }
+
+    /**
+     * Get the root node.
+     *
+     * @return the root node.
+     */
+    @JmeThread
+    public static @NotNull Node getRootNode(@NotNull Application application) {
+
+        if (application instanceof JmeApplication) {
+            return ((JmeApplication) application).getRootNode();
+        }
+
+        throw new IllegalArgumentException("The application " + application + " doesn't have a root node.");
     }
 
     /**

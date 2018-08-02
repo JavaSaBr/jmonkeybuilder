@@ -29,17 +29,18 @@ public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<
     private static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger[].class);
 
-    private static final String MOUSE_RIGHT_CLICK = "jMB.inputEditorState.mouseRightClick";
-    private static final String MOUSE_LEFT_CLICK = "jMB.inputEditorState.mouseLeftClick";
-    private static final String MOUSE_MIDDLE_CLICK = "jMB.inputEditorState.mouseMiddleClick";
+    private static final String MOUSE_RIGHT_CLICK = "jMB.inputStateEditor.mouseRightClick";
+    private static final String MOUSE_LEFT_CLICK = "jMB.inputStateEditor.mouseLeftClick";
+    private static final String MOUSE_MIDDLE_CLICK = "jMB.inputStateEditor.mouseMiddleClick";
 
-    private static final String KEY_CTRL = "jMB.inputEditorState.keyCtrl";
-    private static final String KEY_ALT = "jMB.inputEditorState.keyAlt";
-    private static final String KEY_SHIFT = "jMB.inputEditorState.keyShift";
+    private static final String KEY_CTRL = "jMB.inputStateEditor.keyCtrl";
+    private static final String KEY_ALT = "jMB.inputStateEditor.keyAlt";
+    private static final String KEY_SHIFT = "jMB.inputStateEditor.keyShift";
 
     private static final String[] MAPPINGS;
 
     static {
+
         TRIGGERS.put(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         TRIGGERS.put(MOUSE_MIDDLE_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
@@ -53,7 +54,6 @@ public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<
 
         MAPPINGS = mappings.toArray(String.class);
     }
-
 
     /**
      * True if control is pressed.

@@ -233,6 +233,28 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
+     * Get the current camera direction.
+     *
+     * @param store the vector to store the result.
+     * @return the current direction.
+     */
+    @JmeThread
+    public @NotNull Vector3f getDirection(@NotNull Vector3f store) {
+        return camera.getDirection(store);
+    }
+
+    /**
+     * Get the current camera direction to left side.
+     *
+     * @param store the vector to store the result.
+     * @return the current direction to left side.
+     */
+    @JmeThread
+    public @NotNull Vector3f getLeft(@NotNull Vector3f store) {
+        return camera.getLeft(store);
+    }
+
+    /**
      * Rotate this camera to the direction by the value.
      *
      * @param direction the direction.
@@ -407,16 +429,16 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * @param inputManager the input manager.
      */
     @JmeThread
-    public final void registerInput(@NotNull InputManager inputManager) {
+    public void registerInput(@NotNull InputManager inputManager) {
         this.inputManager = inputManager;
 
-        JmeUtils.addMapping(CHASECAM_DOWN, inputManager, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        JmeUtils.addMapping(CHASECAM_UP, inputManager, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        JmeUtils.addMapping(CHASECAM_ZOOMIN, inputManager, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-        JmeUtils.addMapping(CHASECAM_ZOOMOUT, inputManager, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-        JmeUtils.addMapping(CHASECAM_MOVELEFT, inputManager, new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        JmeUtils.addMapping(CHASECAM_MOVERIGHT, inputManager, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        JmeUtils.addMapping(CHASECAM_TOGGLEROTATE, inputManager, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+        JmeUtils.addMapping(inputManager, CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        JmeUtils.addMapping(inputManager, CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        JmeUtils.addMapping(inputManager, CHASECAM_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        JmeUtils.addMapping(inputManager, CHASECAM_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+        JmeUtils.addMapping(inputManager, CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        JmeUtils.addMapping(inputManager, CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        JmeUtils.addMapping(inputManager, CHASECAM_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
         inputManager.addListener(this, ALL_INPUTS);
     }

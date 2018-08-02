@@ -1,5 +1,6 @@
 package com.ss.editor.part3d.editor.control;
 
+import com.jme3.app.Application;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
@@ -12,6 +13,18 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public interface InputEditor3dPartControl extends Editor3dPartControl, AnalogListener, ActionListener {
+
+    @Override
+    @JmeThread
+    default void initialize(@NotNull Application application) {
+        register(application.getInputManager());
+    }
+
+    @Override
+    @JmeThread
+    default void cleanup(@NotNull Application application) {
+        unregister(application.getInputManager());
+    }
 
     /**
      * Register interested mappings and listeners.

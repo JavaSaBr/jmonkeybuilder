@@ -1,21 +1,26 @@
 package com.ss.editor.part3d.editor.control.impl;
 
+import com.jme3.app.Application;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.Trigger;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
+import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.part3d.editor.impl.CameraSupportEditor3dPart;
 import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.JmeUtils;
 import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.common.logging.LoggerLevel;
-import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<CameraSupportEditor3dPart> implements
+public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Editor3dPart> implements
         InputEditor3dPartControl {
 
     protected static final ObjectDictionary<String, Trigger> TRIGGERS =
@@ -84,6 +89,30 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
     }
 
     /**
+     * The editor camera.
+     */
+    @NotNull
+    private final EditorCamera editorCamera;
+
+    /**
+     * The light of the camera.
+     */
+    @NotNull
+    private final DirectionalLight light;
+
+    /**
+     * The previous camera location.
+     */
+    @NotNull
+    private final Vector3f prevCameraLocation;
+
+    /**
+     * The node on which the camera is looking.
+     */
+    @NotNull
+    private final Node cameraNode;
+
+    /**
      * The flag of flying camera.
      */
     @NotNull
@@ -126,12 +155,43 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
      */
     private float cameraFlySpeed;
 
-    public CameraEditor3dPartControl(@NotNull CameraSupportEditor3dPart editor3dPart) {
+    /**
+     * True of need to add light for the camera.
+     */
+    private boolean needLight;
+
+    /**
+     * True if need to update light to follow the camera.
+     */
+    private boolean needUpdateLight;
+
+    /**
+     * TRue if need to allow the camera to be moved.
+     */
+    private boolean needMovableCamera;
+
+    public CameraEditor3dPartControl(@NotNull Editor3dPart editor3dPart, @NotNull Camera camera) {
+        this(editor3dPart, camera, true, true, true);
+    }
+
+    public CameraEditor3dPartControl(
+            @NotNull Editor3dPart editor3dPart,
+            @NotNull Camera camera,
+            boolean needLight,
+            boolean needUpdateLight,
+            boolean needMovableCamera
+    ) {
         super(editor3dPart);
         this.cameraFlying = new AtomicInteger();
         this.cameraMoving = new AtomicInteger();
         this.cameraKeysState = new boolean[4];
         this.cameraFlySpeed = 1F;
+        this.cameraNode = new Node("CameraNode");
+        this.editorCamera = createEditorCamera(camera);
+        this.light = createLight();
+        this.needLight = needLight;
+        this.needUpdateLight = needUpdateLight;
+        this.needMovableCamera = needMovableCamera;
 
         actionHandlers.put(KEY_NUM_1, (isPressed, tpf) -> rotateTo(Perspective.BACK, isPressed));
         actionHandlers.put(KEY_NUM_3, (isPressed, tpf) -> rotateTo(Perspective.RIGHT, isPressed));
@@ -171,6 +231,65 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
         analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYMouse(value));
     }
 
+    /**
+     * Create light for camera directional light.
+     *
+     * @return the light for the camera.
+     */
+    @JmeThread
+    protected @NotNull DirectionalLight createLight() {
+
+        var directionalLight = new DirectionalLight();
+        directionalLight.setColor(ColorRGBA.White);
+
+        return directionalLight;
+    }
+
+    /**
+     * Create an editor camera.
+     *
+     * @param camera the camera.
+     * @return the new editor camera.
+     */
+    @BackgroundThread
+    protected @NotNull EditorCamera createEditorCamera(@NotNull Camera camera) {
+
+        var editorCamera = new EditorCamera(camera, cameraNode);
+        editorCamera.setMaxDistance(10000);
+        editorCamera.setMinDistance(0.01F);
+        editorCamera.setSmoothMotion(false);
+        editorCamera.setRotationSensitivity(1);
+        editorCamera.setZoomSensitivity(0.2F);
+
+        return editorCamera;
+    }
+
+    @Override
+    @JmeThread
+    public void initialize(@NotNull Application application) {
+        super.initialize(application);
+
+        var rootNode = editor3dPart.getRootNode();
+        rootNode.attachChild(cameraNode);
+
+        if (needLight) {
+            rootNode.addLight(light);
+        }
+    }
+
+    @Override
+    @JmeThread
+    public void cleanup(@NotNull Application application) {
+        super.cleanup(application);
+
+        var rootNode = editor3dPart.getRootNode();
+        rootNode.detachChild(cameraNode);
+
+        if (needLight) {
+            rootNode.removeLight(light);
+        }
+    }
+
     @Override
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
@@ -181,6 +300,51 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
         inputManager.addListener(this, MAPPINGS);
     }
 
+    @Override
+    @JmeThread
+    public void onAction(@NotNull String name, boolean isPressed, float tpf) {
+        super.onAction(name, isPressed, tpf);
+
+        var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
+
+        if (needMovableCamera) {
+            //FIXME
+            // editorCamera.setLockRotation(inputState.isShiftDown() && inputState.isButtonMiddleDown());
+        }
+    }
+
+    @Override
+    @JmeThread
+    public void cameraUpdate(float tpf) {
+        editorCamera.updateCamera(tpf);
+
+        if (isCameraFlying()) {
+            if (cameraKeysState[0]) {
+                moveSideCamera(tpf * 30, false, false, 0);
+            }
+            if (cameraKeysState[1]) {
+                moveSideCamera(-tpf * 30, false, false, 1);
+            }
+            if (cameraKeysState[2]) {
+                moveDirectionCamera(tpf * 30, false, false, 2);
+            }
+            if (cameraKeysState[3]) {
+                moveDirectionCamera(-tpf * 30, false, false, 3);
+            }
+        }
+
+        checkCameraChanges(editorCamera);
+    }
+
+    @Override
+    @JmeThread
+    public void postCameraUpdate(float tpf) {
+        if (needLight && needUpdateLight) {
+            var direction = LocalObjects.get().nextVector();
+            light.setDirection(editorCamera.getDirection(direction));
+        }
+    }
+
     /**
      * Rotate to the perspective.
      *
@@ -189,9 +353,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
      */
     @JmeThread
     protected void rotateTo(@NotNull Perspective perspective, boolean isPressed) {
-
-        var editorCamera = editor3dPart.requireEditorCamera();
-
         if (isPressed) {
             editorCamera.rotateTo(perspective);
         }
@@ -205,9 +366,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
      */
     @JmeThread
     protected void rotateTo(@NotNull Direction direction, boolean isPressed) {
-
-        var editorCamera = editor3dPart.requireEditorCamera();
-
         if (isPressed) {
             editorCamera.rotateTo(direction, 10F);
         }
@@ -247,11 +405,9 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
 
             var camera = EditorUtils.getGlobalCamera();
 
-            getNodeForCamera().setLocalTranslation(camera.getLocation());
-            requireEditorCamera().setTargetDistance(0);
+            cameraNode.setLocalTranslation(camera.getLocation());
+            editorCamera.setTargetDistance(0);
         }
-
-        var cameraKeysState = getCameraKeysState();
 
         if (!cameraKeysState[key]) {
             cameraKeysState[key] = true;
@@ -265,8 +421,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
      */
     @JmeThread
     private void finishCameraMoving(int key, boolean force) {
-
-        var cameraKeysState = getCameraKeysState();
 
         if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
             LOGGER.debug(this, "finish camera moving[" + cameraFlying + "] for key " + key + ", force = " + force);
@@ -307,22 +461,12 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
             return;
         }
 
-        var editorCamera = getEditorCamera();
-
-        if (editorCamera == null) {
-            return;
-        }
-
-        var camera = EditorUtils.getGlobalCamera();
-        var nodeForCamera = getNodeForCamera();
-
         var local = LocalObjects.get();
-
-        var direction = camera.getDirection(local.nextVector());
+        var direction = editorCamera.getDirection(local.nextVector());
         direction.multLocal(value * cameraFlySpeed);
-        direction.addLocal(nodeForCamera.getLocalTranslation());
+        direction.addLocal(cameraNode.getLocalTranslation());
 
-        nodeForCamera.setLocalTranslation(direction);
+        cameraNode.setLocalTranslation(direction);
     }
 
     /**
@@ -343,21 +487,12 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
             return;
         }
 
-        var editorCamera = getEditorCamera();
-
-        if (editorCamera == null) {
-            return;
-        }
-
-        var camera = EditorUtils.getGlobalCamera();
-        var nodeForCamera = getNodeForCamera();
-
         var local = LocalObjects.get();
-        var left = camera.getLeft(local.nextVector());
+        var left = editorCamera.getLeft(local.nextVector());
         left.multLocal(value * cameraFlySpeed);
-        left.addLocal(nodeForCamera.getLocalTranslation());
+        left.addLocal(cameraNode.getLocalTranslation());
 
-        nodeForCamera.setLocalTranslation(left);
+        cameraNode.setLocalTranslation(left);
     }
 
 
@@ -369,7 +504,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
     @JmeThread
     protected void moveXMouse(float value) {
 
-        final EditorCamera editorCamera = getEditorCamera();
+        /*final EditorCamera editorCamera = getEditorCamera();
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
@@ -377,7 +512,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
         left.multLocal(value * (float) Math.sqrt(editorCamera.getTargetDistance()));
         left.addLocal(nodeForCamera.getLocalTranslation());
 
-        nodeForCamera.setLocalTranslation(left);
+        nodeForCamera.setLocalTranslation(left);*/
     }
 
     /**
@@ -388,7 +523,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
     @JmeThread
     protected void moveYMouse(float value) {
 
-        final EditorCamera editorCamera = getEditorCamera();
+        /*final EditorCamera editorCamera = getEditorCamera();
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
@@ -396,7 +531,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
         up.multLocal(value * (float) Math.sqrt(editorCamera.getTargetDistance()));
         up.addLocal(nodeForCamera.getLocalTranslation());
 
-        nodeForCamera.setLocalTranslation(up);
+        nodeForCamera.setLocalTranslation(up);*/
     }
 
     @JmeThread
@@ -411,5 +546,97 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Came
     private boolean canCameraMoveOrFly() {
         return editor3dPart.requireControl(InputStateEditor3dPartControl.class)
                 .isButtonMiddleDown();
+    }
+
+
+    /**
+     * Check camera changes.
+     *
+     * @param editorCamera the editor's camera.
+     */
+    @JmeThread
+    protected void checkCameraChanges(@NotNull EditorCamera editorCamera) {
+
+        int changes = 0;
+
+        var cameraLocation = cameraNode.getLocalTranslation();
+
+        var hRotation = editorCamera.getHorizontalRotation();
+        var vRotation = editorCamera.getvRotation();
+        var targetDistance = editorCamera.getTargetDistance();
+
+        if (!prevCameraLocation.equals(cameraLocation)) {
+            changes++;
+        } else if (prevHRotation != hRotation || prevVRotation != vRotation) {
+            changes++;
+        } else if (prevTargetDistance != targetDistance) {
+            changes++;
+        } else if (cameraFlySpeed != prevCameraFlySpeed) {
+            changes++;
+        }
+
+        if (changes > 0) {
+            notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed);
+        }
+
+        prevCameraLocation.set(cameraLocation);
+
+        this.prevHRotation = hRotation;
+        this.prevVRotation = vRotation;
+        this.prevTargetDistance = targetDistance;
+        this.prevCameraFlySpeed = cameraFlySpeed;
+    }
+
+    /**
+     * Notify about changed camera's settings.
+     *
+     * @param cameraLocation the camera location.
+     * @param hRotation      the h rotation.
+     * @param vRotation      the v rotation.
+     * @param targetDistance the target distance.
+     * @param cameraFlySpeed the camera fly speed.
+     */
+    @JmeThread
+    protected void notifyChangedCameraSettings(
+        @NotNull Vector3f cameraLocation,
+        float hRotation,
+        float vRotation,
+        float targetDistance,
+        float cameraFlySpeed
+    ) {
+    }
+
+    /**
+     * Update the editor's camera settings.
+     *
+     * @param cameraLocation the camera location.
+     * @param hRotation      the h rotation.
+     * @param vRotation      the v rotation.
+     * @param targetDistance the target distance.
+     * @param cameraFlySpeed the camera fly speed.
+     */
+    @JmeThread
+    public void updateCameraSettings(
+        @NotNull Vector3f cameraLocation,
+        float hRotation,
+        float vRotation,
+        float targetDistance,
+        float cameraFlySpeed
+    ) {
+        
+        editorCamera.setTargetHRotation(hRotation);
+        editorCamera.setTargetVRotation(vRotation);
+        editorCamera.setTargetDistance(targetDistance);
+
+        getNodeForCamera().setLocalTranslation(cameraLocation);
+        getPrevCameraLocation().set(cameraLocation);
+
+        this.prevHRotation = hRotation;
+        this.prevVRotation = vRotation;
+        this.prevTargetDistance = targetDistance;
+        this.prevCameraFlySpeed = cameraFlySpeed;
+        this.cameraFlySpeed = cameraFlySpeed;
+
+        editorCamera.update(1F);
     }
 }
