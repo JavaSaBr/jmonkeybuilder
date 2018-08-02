@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class ModelEditor3DPart extends AbstractSceneEditor3dPart<ModelFileEditor, Spatial> {
+public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor, Spatial> {
 
     @NotNull
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
@@ -62,7 +62,7 @@ public class ModelEditor3DPart extends AbstractSceneEditor3dPart<ModelFileEditor
      */
     private int frame;
 
-    public ModelEditor3DPart(@NotNull ModelFileEditor fileEditor) {
+    public ModelEditor3dPart(@NotNull ModelFileEditor fileEditor) {
         super(fileEditor);
         this.customSkyNode = new Node("Custom Sky");
         this.customSky = Array.ofType(Spatial.class);

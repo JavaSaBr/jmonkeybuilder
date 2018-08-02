@@ -21,7 +21,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.node.material.RootMaterialSettings;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.part3d.editor.impl.material.MaterialEditor3DPart;
+import com.ss.editor.part3d.editor.impl.material.MaterialEditor3dPart;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3dPart.ModelType;
 import com.ss.editor.plugin.api.editor.material.BaseMaterialFileEditor;
 import com.ss.editor.ui.component.editor.EditorDescriptor;
@@ -57,7 +57,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class MaterialFileEditor extends
-        BaseMaterialFileEditor<MaterialEditor3DPart, EditorMaterialEditorState, ChangeConsumer> {
+        BaseMaterialFileEditor<MaterialEditor3dPart, EditorMaterialEditorState, ChangeConsumer> {
 
     public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
             MaterialFileEditor::new,
@@ -85,8 +85,8 @@ public class MaterialFileEditor extends
 
     @Override
     @FxThread
-    protected @NotNull MaterialEditor3DPart create3dEditorPart() {
-        return new MaterialEditor3DPart(this);
+    protected @NotNull MaterialEditor3dPart create3dEditorPart() {
+        return new MaterialEditor3dPart(this);
     }
 
     @Override

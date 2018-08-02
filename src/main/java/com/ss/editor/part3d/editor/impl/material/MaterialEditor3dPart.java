@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class MaterialEditor3DPart extends BaseMaterialEditor3dPart<MaterialFileEditor> {
+public class MaterialEditor3dPart extends BaseMaterialEditor3dPart<MaterialFileEditor> {
 
-    public MaterialEditor3DPart(@NotNull final MaterialFileEditor fileEditor) {
+    public MaterialEditor3dPart(@NotNull MaterialFileEditor fileEditor) {
         super(fileEditor);
     }
 }

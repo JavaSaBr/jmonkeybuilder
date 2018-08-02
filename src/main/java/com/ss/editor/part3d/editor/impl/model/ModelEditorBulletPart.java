@@ -20,9 +20,9 @@ import org.jetbrains.annotations.Nullable;
 public class ModelEditorBulletPart extends EditableBulletSceneAppState implements Editor3dPart {
 
     @NotNull
-    private final ModelEditor3DPart editor3DPart;
+    private final ModelEditor3dPart editor3DPart;
 
-    public ModelEditorBulletPart(@NotNull final ModelEditor3DPart editor3DPart) {
+    public ModelEditorBulletPart(@NotNull final ModelEditor3dPart editor3DPart) {
         this.editor3DPart = editor3DPart;
     }
 

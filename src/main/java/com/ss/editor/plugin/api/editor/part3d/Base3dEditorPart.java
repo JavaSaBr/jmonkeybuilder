@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class Base3DEditorPart<T extends FileEditor> extends AbstractEditor3dPart<T> {
+public class Base3dEditorPart<T extends FileEditor> extends AbstractEditor3dPart<T> {
 
-    public Base3DEditorPart(@NotNull final T fileEditor) {
+    public Base3dEditorPart(@NotNull T fileEditor) {
         super(fileEditor);
     }
 }

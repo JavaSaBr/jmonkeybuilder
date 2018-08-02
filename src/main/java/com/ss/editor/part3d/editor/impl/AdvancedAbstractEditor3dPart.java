@@ -1,26 +1,30 @@
 package com.ss.editor.part3d.editor.impl;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.*;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.Trigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
+import com.ss.editor.part3d.editor.control.impl.CameraEditor3dPartControl;
+import com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl;
 import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.function.FloatFloatConsumer;
 import com.ss.rlib.common.logging.LoggerLevel;
@@ -28,15 +32,14 @@ import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * The base implementation of the {@link Editor3dPart} for a file editor.
  *
  * @param <T> the type of a file editor.
  * @author JavaSaBr
  */
-public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T> {
+public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T>
+        implements CameraSupportEditor3dPart {
 
     protected static final ObjectDictionary<String, Trigger> TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
@@ -120,30 +123,6 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     }
 
     /**
-     * The table of action handlers.
-     */
-    @NotNull
-    private final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers;
-
-    /**
-     * The table of analog handlers.
-     */
-    @NotNull
-    private final ObjectDictionary<String, FloatFloatConsumer> analogHandlers;
-
-    /**
-     * The action scene listeners.
-     */
-    @NotNull
-    protected final ActionListener actionListener;
-
-    /**
-     * The analog scene listeners.
-     */
-    @NotNull
-    protected final AnalogListener analogListener;
-
-    /**
      * The editor camera.
      */
     @Nullable
@@ -162,105 +141,32 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     private final Vector3f prevCameraLocation;
 
     /**
-     * The state of camera keys.
-     */
-    @NotNull
-    private final boolean[] cameraKeysState;
-
-    /**
-     * The flag of flying camera.
-     */
-    @NotNull
-    private AtomicInteger cameraFlying;
-
-    /**
-     * The flag of moving camera.
-     */
-    @NotNull
-    private AtomicInteger cameraMoving;
-
-    /**
      * The current state manager.
      */
     @Nullable
     protected AppStateManager stateManager;
 
-    /**
-     * The previous camera zoom.
-     */
-    private float prevTargetDistance;
-
-    /**
-     * The previous vertical camera rotation.
-     */
-    private float prevVRotation;
-
-    /**
-     * The previous horizontal camera rotation.
-     */
-    private float prevHRotation;
-
-    /**
-     * The previous camera speed.
-     */
-    private float prevCameraFlySpeed;
-
-    /**
-     * The camera fly speed.
-     */
-    private float cameraFlySpeed;
-
-    /**
-     * Is control pressed.
-     */
-    private boolean controlDown;
-
-    /**
-     * Is alt pressed.
-     */
-    private boolean altDown;
-
-    /**
-     * Is shift pressed.
-     */
-    private boolean shiftDown;
-
-    /**
-     * Is left button pressed.
-     */
-    private boolean buttonLeftDown;
-
-    /**
-     * Is right button pressed.
-     */
-    private boolean buttonRightDown;
-
-    /**
-     * Is middle button pressed.
-     */
-    private boolean buttonMiddleDown;
-
     public AdvancedAbstractEditor3dPart(@NotNull T fileEditor) {
         super(fileEditor);
-        this.cameraFlying = new AtomicInteger();
-        this.cameraMoving = new AtomicInteger();
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
         this.prevCameraLocation = new Vector3f();
-        this.cameraKeysState = new boolean[4];
-        this.cameraFlySpeed = 1F;
 
         if (lightForCamera != null) {
             stateNode.addLight(lightForCamera);
         }
+    }
 
-        this.analogListener = this::onAnalogImpl;
-        this.actionListener = this::onActionImpl;
-        this.actionHandlers = ObjectDictionary.ofType(String.class, BooleanFloatConsumer.class);
-        this.analogHandlers = ObjectDictionary.ofType(String.class, FloatFloatConsumer.class);
+    @Override
+    @BackgroundThread
+    protected void initControls() {
+        super.initControls();
 
-        registerActionHandlers(actionHandlers);
-        registerAnalogHandlers(analogHandlers);
+        controls.add(new InputStateEditor3dPartControl(this));
+
+        if (needMovableCamera()) {
+            controls.add(new CameraEditor3dPartControl(this));
+        }
     }
 
     /**
@@ -271,279 +177,26 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     @JmeThread
     protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
 
-        actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> setButtonLeftDown(isPressed));
-        actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> setButtonRightDown(isPressed));
-        actionHandlers.put(KEY_NUM_1, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.BACK, isPressed));
-        actionHandlers.put(KEY_NUM_3, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.RIGHT, isPressed));
-        actionHandlers.put(KEY_NUM_7, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.TOP, isPressed));
-        actionHandlers.put(KEY_NUM_9, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.BOTTOM, isPressed));
-        actionHandlers.put(KEY_NUM_2, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.BOTTOM, isPressed));
-        actionHandlers.put(KEY_NUM_8, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.TOP, isPressed));
-        actionHandlers.put(KEY_NUM_4, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.LEFT, isPressed));
-        actionHandlers.put(KEY_NUM_6, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.RIGHT, isPressed));
-
-        actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> {
-            setButtonMiddleDown(isPressed);
-            if (isCameraFlying() && !isPressed) {
-                finishCameraMoving(0, true);
-            }
-        });
-
-        actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> {
-            setControlDown(isPressed);
-            if (isCameraFlying() && isPressed && cameraFlySpeed > 0) {
-                cameraFlySpeed = Math.max(cameraFlySpeed - 0.4F, 0.1F);
-            }
-        });
-
-        actionHandlers.put(KEY_ALT, (isPressed, tpf) -> {
-            setAltDown(isPressed);
-            if (isCameraFlying() && isPressed && cameraFlySpeed > 0) {
-                cameraFlySpeed += 0.4F;
-            }
-        });
-
-        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> setShiftDown(isPressed));
-
         actionHandlers.put(KEY_CTRL_Z, (isPressed, tpf) -> {
-            if (!isPressed && isControlDown()) undo();
-        });
-        actionHandlers.put(KEY_CTRL_Y, (isPressed, tpf) -> {
-            if (!isPressed && isControlDown()) redo();
+            var control = requireControl(InputStateEditor3dPartControl.class);
+            if (!isPressed && control.isControlDown()) {
+                undo();
+            }
         });
 
-        actionHandlers.put(KEY_FLY_CAMERA_A, (isPressed, tpf) -> {
-            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
-                moveSideCamera(tpf, true, isPressed, 0);
-            }
-        });
-        actionHandlers.put(KEY_FLY_CAMERA_D, (isPressed, tpf) -> {
-            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
-                moveSideCamera(-tpf, true, isPressed, 1);
-            }
-        });
-        actionHandlers.put(KEY_FLY_CAMERA_W, (isPressed, tpf) -> {
-            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
-                moveDirectionCamera(tpf, true, isPressed, 2);
-            }
-        });
-        actionHandlers.put(KEY_FLY_CAMERA_S, (isPressed, tpf) -> {
-            if (isButtonMiddleDown() && !isShiftDown() && !isCameraMoving()) {
-                moveDirectionCamera(-tpf, true, isPressed, 3);
+        actionHandlers.put(KEY_CTRL_Y, (isPressed, tpf) -> {
+            var control = requireControl(InputStateEditor3dPartControl.class);
+            if (!isPressed && control.isControlDown()) {
+                redo();
             }
         });
 
         actionHandlers.put(KEY_CTRL_S, (isPressed, tpf) -> {
-            if (isPressed && isControlDown() && fileEditor.isDirty()) {
+            var control = requireControl(InputStateEditor3dPartControl.class);
+            if (isPressed && control.isControlDown() && fileEditor.isDirty()) {
                 fileEditor.save();
             }
         });
-    }
-
-    /**
-     * Register analog handlers.
-     *
-     * @param analogHandlers the analog handlers
-     */
-    @JmeThread
-    protected void registerAnalogHandlers(@NotNull ObjectDictionary<String, FloatFloatConsumer> analogHandlers) {
-        analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
-        analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
-        analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYMouse(-value));
-        analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYMouse(value));
-    }
-
-    /**
-     * Handle analog events.
-     */
-    @JmeThread
-    private void onAnalogImpl(@NotNull String name, float value, float tpf) {
-        var handler = analogHandlers.get(name);
-        if (handler != null) {
-            handler.accept(value, tpf);
-        }
-    }
-
-    /**
-     * Move a mouse on X axis.
-     *
-     * @param value the value to move.
-     */
-    @JmeThread
-    protected void moveXMouse(float value) {
-    }
-
-    /**
-     * Move a mouse on Y axis.
-     *
-     * @param value the value to move.
-     */
-    @JmeThread
-    protected void moveYMouse(float value) {
-    }
-
-    /**
-     * Return true if the camera is flying now.
-     *
-     * @return true if the camera is flying now.
-     */
-    @JmeThread
-    public boolean isCameraFlying() {
-        return cameraFlying.get() != 0;
-    }
-
-    /**
-     * Return true if the camera is moving now.
-     *
-     * @return true if the camera is moving now.
-     */
-    @JmeThread
-    public boolean isCameraMoving() {
-        return cameraMoving.get() != 0;
-    }
-
-    /**
-     * Get the state of camera keys.
-     *
-     * @return the state of camera keys.
-     */
-    @JmeThread
-    private @NotNull boolean[] getCameraKeysState() {
-        return cameraKeysState;
-    }
-
-    /**
-     * Start to move the camera.
-     */
-    @JmeThread
-    private void startCameraFlying(int key) {
-
-        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
-            LOGGER.debug(this, "start camera moving[" + cameraFlying + "] for key " + key);
-        }
-
-        if (cameraFlying.get() == 0) {
-
-            var camera = EditorUtils.getGlobalCamera();
-
-            getNodeForCamera().setLocalTranslation(camera.getLocation());
-            requireEditorCamera().setTargetDistance(0);
-        }
-
-        var cameraKeysState = getCameraKeysState();
-
-        if (!cameraKeysState[key]) {
-            cameraKeysState[key] = true;
-            cameraFlying.incrementAndGet();
-        }
-    }
-
-    /**
-     * Finish to move the camera.
-     */
-    @JmeThread
-    private void finishCameraMoving(int key, boolean force) {
-
-        var cameraKeysState = getCameraKeysState();
-
-        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
-            LOGGER.debug(this, "finish camera moving[" + cameraFlying + "] for key " + key + ", force = " + force);
-        }
-
-        cameraKeysState[key] = false;
-
-        if (cameraFlying.get() == 0) {
-            return;
-        }
-
-        if (force) {
-            cameraFlying.set(0);
-            for (int i = 0; i < cameraKeysState.length; i++) {
-                cameraKeysState[i] = false;
-            }
-        } else {
-            cameraFlying.decrementAndGet();
-        }
-    }
-
-    /**
-     * Move a camera to direction.
-     *
-     * @param value the value to move.
-     */
-    @JmeThread
-    private void moveDirectionCamera(float value, boolean isAction, boolean isPressed, int key) {
-
-        if (!canCameraMoveOrFly()) {
-            return;
-        } else if (isAction && isPressed) {
-            startCameraFlying(key);
-        } else if (isAction) {
-            finishCameraMoving(key, false);
-        }
-
-        if (!isCameraFlying() || isAction) {
-            return;
-        }
-
-        var editorCamera = getEditorCamera();
-
-        if (editorCamera == null) {
-            return;
-        }
-
-        var camera = EditorUtils.getGlobalCamera();
-        var nodeForCamera = getNodeForCamera();
-
-        var local = LocalObjects.get();
-
-        var direction = camera.getDirection(local.nextVector());
-        direction.multLocal(value * cameraFlySpeed);
-        direction.addLocal(nodeForCamera.getLocalTranslation());
-
-        nodeForCamera.setLocalTranslation(direction);
-    }
-
-    /**
-     * Move a camera to side.
-     *
-     * @param value the value to move.
-     */
-    @JmeThread
-    private void moveSideCamera(float value, boolean isAction, boolean isPressed, int key) {
-
-        if (!canCameraMoveOrFly()) {
-            return;
-        } else if (isAction && isPressed) {
-            startCameraFlying(key);
-        } else if (isAction) {
-            finishCameraMoving(key, false);
-        }
-
-        if (!isCameraFlying() || isAction) {
-            return;
-        }
-
-        var editorCamera = getEditorCamera();
-
-        if (editorCamera == null) {
-            return;
-        }
-
-        var camera = EditorUtils.getGlobalCamera();
-        var nodeForCamera = getNodeForCamera();
-
-        var local = LocalObjects.get();
-        var left = camera.getLeft(local.nextVector());
-        left.multLocal(value * cameraFlySpeed);
-        left.addLocal(nodeForCamera.getLocalTranslation());
-
-        nodeForCamera.setLocalTranslation(left);
-    }
-
-    @JmeThread
-    private boolean canCameraMoveOrFly() {
-        return needMovableCamera() && isButtonMiddleDown();
     }
 
     /**
@@ -580,34 +233,6 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     }
 
     /**
-     * Rotate to the perspective.
-     *
-     * @param perspective the perspective.
-     * @param isPressed   true if a key is pressed.
-     */
-    @JmeThread
-    protected void rotateTo(@NotNull EditorCamera.Perspective perspective, boolean isPressed) {
-        var editorCamera = getEditorCamera();
-        if (editorCamera != null && isPressed) {
-            editorCamera.rotateTo(perspective);
-        }
-    }
-
-    /**
-     * Rotate to the direction.
-     *
-     * @param direction the direction.
-     * @param isPressed true if a key is pressed.
-     */
-    @JmeThread
-    protected void rotateTo(@NotNull EditorCamera.Direction direction, boolean isPressed) {
-        var editorCamera = getEditorCamera();
-        if (editorCamera != null && isPressed) {
-            editorCamera.rotateTo(direction, 10F);
-        }
-    }
-
-    /**
      * Redo last operation.
      */
     @JmeThread
@@ -621,144 +246,10 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
     protected void undo() {
     }
 
-    /**
-     * Return true if alt is pressed.
-     *
-     * @return true if alt is pressed.
-     */
+    @Override
     @JmeThread
-    protected boolean isAltDown() {
-        return altDown;
-    }
-
-    /**
-     * Set true if the alt is pressed.
-     *
-     * @param altDown true if the alt is pressed.
-     */
-    @JmeThread
-    protected void setAltDown(boolean altDown) {
-        this.altDown = altDown;
-    }
-
-    /**
-     * Return true if control is pressed.
-     *
-     * @return true if control is pressed.
-     */
-    @JmeThread
-    protected boolean isControlDown() {
-        return controlDown;
-    }
-
-    /**
-     * Set true if the control is pressed.
-     *
-     * @param controlDown true if the control is pressed.
-     */
-    @JmeThread
-    protected void setControlDown(boolean controlDown) {
-        this.controlDown = controlDown;
-    }
-
-    /**
-     * Return true if shift is pressed.
-     *
-     * @return true if shift is pressed.
-     */
-    @JmeThread
-    protected boolean isShiftDown() {
-        return shiftDown;
-    }
-
-    /**
-     * Set true if the shift is pressed.
-     *
-     * @param shiftDown true if the shift is pressed.
-     */
-    @JmeThread
-    protected void setShiftDown(boolean shiftDown) {
-        this.shiftDown = shiftDown;
-    }
-
-    /**
-     * Set true if the left button is pressed.
-     *
-     * @param buttonLeftDown true if the left button is pressed.
-     */
-    @JmeThread
-    protected void setButtonLeftDown(boolean buttonLeftDown) {
-        this.buttonLeftDown = buttonLeftDown;
-    }
-
-    /**
-     * Set true if the middle button is pressed.
-     *
-     * @param buttonMiddleDown true if the middle button is pressed.
-     */
-    @JmeThread
-    protected void setButtonMiddleDown(boolean buttonMiddleDown) {
-        this.buttonMiddleDown = buttonMiddleDown;
-    }
-
-    /**
-     * Set true if the right button is pressed.
-     *
-     * @param buttonRightDown true if the right button is pressed.
-     */
-    @JmeThread
-    protected void setButtonRightDown(boolean buttonRightDown) {
-        this.buttonRightDown = buttonRightDown;
-    }
-
-    /**
-     * Return true if left button is pressed.
-     *
-     * @return true if left button is pressed.
-     */
-    @JmeThread
-    protected boolean isButtonLeftDown() {
-        return buttonLeftDown;
-    }
-
-    /**
-     * Return true if middle button is pressed.
-     *
-     * @return true if middle button is pressed.
-     */
-    @JmeThread
-    protected boolean isButtonMiddleDown() {
-        return buttonMiddleDown;
-    }
-
-    /**
-     * Return true if right button is pressed.
-     *
-     * @return true if right button is pressed.
-     */
-    @JmeThread
-    protected boolean isButtonRightDown() {
-        return buttonRightDown;
-    }
-
-    /**
-     * Get the editor camera.
-     *
-     * @return the editor camera.
-     */
-    @JmeThread
-    protected @Nullable EditorCamera getEditorCamera() {
+    public @Nullable EditorCamera getEditorCamera() {
         return editorCamera;
-    }
-
-    /**
-     * Get the editor camera.
-     *
-     * @return the editor camera.
-     */
-    @JmeThread
-    protected @NotNull EditorCamera requireEditorCamera() {
-        return notNull(editorCamera);
     }
 
     @Override
@@ -776,72 +267,15 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         var editorCamera = getEditorCamera();
         var inputManager = EditorUtils.getInputManager();
 
-        checkAndAddMappings(inputManager);
-        registerActionListener(inputManager);
-        registerAnalogListener(inputManager);
+        controls.stream()
+                .filter(InputEditor3dPartControl.class::isInstance)
+                .map(InputEditor3dPartControl.class::cast)
+                .forEach(inputEditor3dPartControl -> inputEditor3dPartControl.register(inputManager));
 
         if (editorCamera != null) {
             editorCamera.setEnabled(true);
             editorCamera.registerInput(inputManager);
         }
-    }
-
-    /**
-     * Check and update all triggers.
-     *
-     * @param inputManager the input manager
-     */
-    @JmeThread
-    protected void checkAndAddMappings(@NotNull InputManager inputManager) {
-        TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3dPart::addMapping);
-        MULTI_TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3dPart::addMapping);
-    }
-
-    @JmeThread
-    private static void addMapping(
-            @NotNull InputManager inputManager,
-            @NotNull String name,
-            @NotNull Trigger[] triggers
-    ) {
-        if (!inputManager.hasMapping(name)) {
-            inputManager.addMapping(name, triggers);
-        }
-    }
-
-    @JmeThread
-    private static void addMapping(
-            @NotNull InputManager inputManager,
-            @NotNull String name,
-            @NotNull Trigger trigger
-    ) {
-        if (!inputManager.hasMapping(name)) {
-            inputManager.addMapping(name, trigger);
-        }
-    }
-
-    /**
-     * Register the analog listener.
-     *
-     * @param inputManager the input manager
-     */
-    @JmeThread
-    protected void registerAnalogListener(@NotNull InputManager inputManager) {
-        inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS,
-                MOUSE_Y_AXIS_NEGATIVE, MOUSE_MOVE_CAMERA_X_AXIS, MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE,
-                MOUSE_MOVE_CAMERA_Y_AXIS, MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE);
-    }
-
-    /**
-     * Register the action listener.
-     *
-     * @param inputManager the input manager
-     */
-    @JmeThread
-    protected void registerActionListener(@NotNull InputManager inputManager) {
-        inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
-        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_CTRL_S, KEY_CTRL_Z, KEY_CTRL_Y, KEY_NUM_1,
-                KEY_NUM_2, KEY_NUM_3, KEY_NUM_4, KEY_NUM_5, KEY_NUM_6, KEY_NUM_7, KEY_NUM_8, KEY_NUM_9, KEY_FLY_CAMERA_W,
-                KEY_FLY_CAMERA_S, KEY_FLY_CAMERA_A, KEY_FLY_CAMERA_D);
     }
 
     @Override
@@ -856,10 +290,12 @@ public abstract class AdvancedAbstractEditor3dPart<T extends FileEditor> extends
         rootNode.detachChild(stateNode);
 
         var editorCamera = getEditorCamera();
-
         var inputManager = EditorUtils.getInputManager();
-        inputManager.removeListener(actionListener);
-        inputManager.removeListener(analogListener);
+
+        controls.stream()
+                .filter(InputEditor3dPartControl.class::isInstance)
+                .map(InputEditor3dPartControl.class::cast)
+                .forEach(inputEditor3dPartControl -> inputEditor3dPartControl.unregister(inputManager));
 
         if (editorCamera != null) {
             editorCamera.setEnabled(false);

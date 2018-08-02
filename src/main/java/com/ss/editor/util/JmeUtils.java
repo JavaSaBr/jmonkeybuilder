@@ -15,14 +15,32 @@ public class JmeUtils {
     /**
      * Add mapping to the input manager.
      *
-     * @param name         the mapping name.
      * @param inputManager the input manager.
+     * @param name         the mapping name.
      * @param trigger      the trigger.
      */
     @JmeThread
-    public static void addMapping(@NotNull String name, @NotNull InputManager inputManager, @NotNull Trigger trigger) {
+    public static void addMapping(@NotNull InputManager inputManager, @NotNull String name, @NotNull Trigger trigger) {
         if (!inputManager.hasMapping(name)) {
             inputManager.addMapping(name, trigger);
+        }
+    }
+
+    /**
+     * Add mapping to the input manager.
+     *
+     * @param inputManager the input manager.
+     * @param name         the mapping name.
+     * @param triggers     the triggers.
+     */
+    @JmeThread
+    public static void addMapping(
+            @NotNull InputManager inputManager,
+            @NotNull String name,
+            @NotNull Trigger... triggers
+    ) {
+        if (!inputManager.hasMapping(name)) {
+            inputManager.addMapping(name, triggers);
         }
     }
 }

@@ -104,8 +104,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 event -> processEvent((RenamedFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE,
                 event -> processEvent((MovedFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE,
-                event -> processEvent((ChangedCurrentAssetFolderEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent);
     }
 
     @FxThread
@@ -435,7 +434,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             UiUtils.incrementLoading();
 
-            EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
+            EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileInBackground(event, file));
 
         } finally {
             openingFiles.writeUnlock(stamp);
@@ -443,7 +442,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     @BackgroundThread
-    private void processOpenFileImpl(@NotNull RequestedOpenFileEvent event, @NotNull Path file) {
+    private void processOpenFileInBackground(@NotNull RequestedOpenFileEvent event, @NotNull Path file) {
+
+        var openingFiles = getOpeningFiles();
 
         FileEditor editor;
         try {
@@ -456,13 +457,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         } catch (Throwable e) {
             EditorUtils.handleException(null, this, new Exception(e));
             UiUtils.decrementLoading();
-            getOpeningFiles().runInWriteLock(file, Array::fastRemove);
+            openingFiles.runInWriteLock(file, Array::fastRemove);
             return;
         }
 
         if (editor == null) {
             UiUtils.decrementLoading();
-            getOpeningFiles().runInWriteLock(file, Array::fastRemove);
+            openingFiles.runInWriteLock(file, Array::fastRemove);
             return;
         }
 
@@ -475,24 +476,25 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         } catch (Throwable e) {
             EditorUtils.handleException(null, this, new Exception(e));
 
-            getOpeningFiles().runInWriteLock(file, Array::fastRemove);
+            openingFiles.runInWriteLock(file, Array::fastRemove);
 
-            var workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-
-            if (workspace != null) {
-                workspace.removeOpenedFile(file);
-            }
+            WorkspaceManager.getInstance()
+                    .requiredCurrentWorkspace()
+                    .removeOpenedFile(file);
 
             UiUtils.decrementLoading();
 
-            EXECUTOR_MANAGER.addFxTask(resultEditor::notifyClosed);
+            ExecutorManager.getInstance()
+                    .addFxTask(resultEditor::notifyClosed);
+
             return;
 
         } finally {
             jmeApplication.asyncUnlock(stamp);
         }
 
-        EXECUTOR_MANAGER.addFxTask(() -> addEditor(resultEditor, event.isNeedShow()));
+        ExecutorManager.getInstance()
+                .addFxTask(() -> addEditor(resultEditor, event.isNeedShow()));
     }
 
     /**
