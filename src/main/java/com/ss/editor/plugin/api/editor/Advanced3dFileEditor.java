@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.editor;
 
 import static com.ss.editor.ui.component.editor.FileEditorUtils.loadCameraState;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3dEditorPart;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3dEditorState;
 
 /**
@@ -10,7 +10,7 @@ import com.ss.editor.ui.component.editor.state.impl.Editor3dEditorState;
  *
  * @author JavaSaBr
  */
-public abstract class Advanced3dFileEditor<T extends Advanced3dEditorPart, S extends Editor3dEditorState>
+public abstract class Advanced3dFileEditor<T extends Advanced3dFileEditor3dEditorPart, S extends Editor3dEditorState>
         extends Base3dFileEditor<T, S> {
 
     @Override

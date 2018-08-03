@@ -2,14 +2,13 @@ package com.ss.editor.part3d.editor.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.renderer.Statistics;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.fx.util.FxUtils;
@@ -27,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public class Stats3dPart extends AbstractAppState implements Editor3dPart {
+public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
 
     private static final AtomicInteger STATISTICS_ENABLED = new AtomicInteger(0);
 
@@ -157,7 +156,8 @@ public class Stats3dPart extends AbstractAppState implements Editor3dPart {
     private int fps;
     private int prevFps;
 
-    public Stats3dPart(@NotNull Pane parent) {
+    public Stats3dPart(@NotNull FileEditor fileEditor, @NotNull Pane parent) {
+        super(fileEditor);
         this.parent = parent;
         this.statsContainer = new GridPane();
         this.frameCounter = 0;
@@ -526,7 +526,6 @@ public class Stats3dPart extends AbstractAppState implements Editor3dPart {
      */
     @JmeThread
     private void updateFps(int fps) {
-
         ExecutorManager.getInstance()
                 .addFxTask(() -> getFpsField().setText(Integer.toString(fps)));
     }

@@ -11,12 +11,12 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
-import com.ss.editor.part3d.editor.impl.CameraSupportEditor3dPart;
 import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.JmeUtils;
 import com.ss.editor.util.LocalObjects;
@@ -184,6 +184,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         super(editor3dPart);
         this.cameraFlying = new AtomicInteger();
         this.cameraMoving = new AtomicInteger();
+        this.prevCameraLocation = new Vector3f();
         this.cameraKeysState = new boolean[4];
         this.cameraFlySpeed = 1F;
         this.cameraNode = new Node("CameraNode");
@@ -604,6 +605,9 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         float targetDistance,
         float cameraFlySpeed
     ) {
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
     }
 
     /**
@@ -624,7 +628,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         float cameraFlySpeed
     ) {
         
-        editorCamera.setTargetHRotation(hRotation);
+      /*  editorCamera.setTargetHRotation(hRotation);
         editorCamera.setTargetVRotation(vRotation);
         editorCamera.setTargetDistance(targetDistance);
 
@@ -637,6 +641,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         this.prevCameraFlySpeed = cameraFlySpeed;
         this.cameraFlySpeed = cameraFlySpeed;
 
-        editorCamera.update(1F);
+        editorCamera.update(1F);*/
     }
 }

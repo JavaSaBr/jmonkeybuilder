@@ -7,6 +7,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.SavableEditor3dPart;
 import com.ss.editor.part3d.editor.control.Editor3dPartControl;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.rlib.common.logging.Logger;
@@ -99,5 +100,11 @@ public abstract class AbstractEditor3dPart<T extends FileEditor> extends Abstrac
     @JmeThread
     public <C extends Editor3dPartControl> @Nullable C getControl(@NotNull Class<C> type) {
         return controls.anyMatchR(type, Class::isInstance);
+    }
+
+    @Override
+    @JmeThread
+    public @NotNull Node getRootNode() {
+        return stateNode;
     }
 }

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.part3d.editor.impl.AdvancedAbstractEditor3dPart;
+import com.ss.editor.part3d.editor.impl.Base3dSceneEditor3dPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3dEditorState;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public class FileEditorUtils {
 
     public static void loadCameraState(
             @NotNull Editor3dEditorState editorState,
-            @NotNull AdvancedAbstractEditor3dPart editor3dPart
+            @NotNull Base3dSceneEditor3dPart editor3dPart
     ) {
 
         var cameraLocation = editorState.getCameraLocation();

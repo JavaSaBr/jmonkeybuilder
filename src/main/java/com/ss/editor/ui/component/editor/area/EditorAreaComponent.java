@@ -510,7 +510,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         var tab = new Tab(editor.getFileName());
         tab.setGraphic(new ImageView(ICON_MANAGER.getIcon(editFile, DEFAULT_FILE_ICON_SIZE)));
-        tab.setContent(editor.getPage());
+        tab.setContent(editor.getUiPage());
         tab.setOnCloseRequest(event -> handleRequestToCloseEditor(editor, tab, event));
         tab.getProperties().put(KEY_EDITOR, editor);
 

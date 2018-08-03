@@ -77,7 +77,7 @@ public abstract class Base3dFileEditor<T extends AbstractEditor3dPart, S extends
     @FxThread
     public boolean isInside(double sceneX, double sceneY, @NotNull Class<? extends Event> eventType) {
 
-        var editorPage = getPage();
+        var editorPage = getUiPage();
         var editor3dPage = get3dArea() == null ? editorPage : get3dArea();
 
         var only3D = eventType.isAssignableFrom(MouseEvent.class) ||

@@ -2,7 +2,7 @@ package com.ss.editor.plugin.api.editor;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3dEditorPart;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3dWithEditorToolEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public abstract class Advanced3dFileEditorWithRightTool<T extends Advanced3dEditorPart, S extends Editor3dWithEditorToolEditorState>
+public abstract class Advanced3dFileEditorWithRightTool<T extends Advanced3dFileEditor3dEditorPart, S extends Editor3dWithEditorToolEditorState>
         extends Advanced3dFileEditor<T, S> {
 
     /**

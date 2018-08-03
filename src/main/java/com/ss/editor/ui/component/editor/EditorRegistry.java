@@ -159,7 +159,7 @@ public class EditorRegistry {
         var constructor = description.getConstructor();
         try {
             var fileEditor = constructor.call();
-            fileEditor.createContent();
+            fileEditor.buildUi();
             return fileEditor;
         } catch (Exception e) {
             EditorUtils.handleException(LOGGER, this, e);
@@ -182,7 +182,7 @@ public class EditorRegistry {
         var constructor = descriptor.getConstructor();
         try {
             var fileEditor = constructor.call();
-            fileEditor.createContent();
+            fileEditor.buildUi();
             return fileEditor;
         } catch (Exception e) {
             throw new RuntimeException(e);

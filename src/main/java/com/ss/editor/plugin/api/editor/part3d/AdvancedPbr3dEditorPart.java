@@ -15,7 +15,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public abstract class AdvancedPbr3dEditorPart<T extends Advanced3dFileEditor> extends Advanced3dEditorPart<T> {
+public abstract class AdvancedPbr3dEditorPart<T extends Advanced3dFileEditor> extends
+        Advanced3dFileEditor3dEditorPart<T> {
 
     @NotNull
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<>() {

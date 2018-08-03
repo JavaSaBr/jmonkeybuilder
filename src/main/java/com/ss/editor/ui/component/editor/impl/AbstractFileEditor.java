@@ -153,7 +153,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FxThread
-    public void createContent() {
+    public void buildUi() {
 
         var container = new VBox();
 
@@ -445,7 +445,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FxThread
-    public @NotNull Pane getPage() {
+    public @NotNull Pane getUiPage() {
         return (Pane) root.getParent()
                 .getParent();
     }

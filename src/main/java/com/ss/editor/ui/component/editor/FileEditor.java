@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.editor;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 /**
  * The interface for implementing file editor.
@@ -25,10 +23,10 @@ import java.util.function.Consumer;
 public interface FileEditor {
 
     /**
-     * Create content of this editor.
+     * Create UI of this editor.
      */
     @BackgroundThread
-    void createContent();
+    void buildUi();
 
     /**
      * Get a visible page of this editor
@@ -36,7 +34,7 @@ public interface FileEditor {
      * @return the visible page of this editor
      */
     @FxThread
-    @NotNull Parent getPage();
+    @NotNull Parent getUiPage();
 
     /**
      * Get an area to place 3D scene.
@@ -93,7 +91,6 @@ public interface FileEditor {
      */
     @FromAnyThread
     @NotNull CompletableFuture<FileEditor> save();
-
 
     /**
      * Get the editor's 3D parts.
