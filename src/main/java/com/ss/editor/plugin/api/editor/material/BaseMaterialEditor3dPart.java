@@ -47,17 +47,6 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     private static final float H_ROTATION = AngleUtils.degreeToRadians(75);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(25);
 
-    private static final String KEY_C = "SSEditor.materialEditorState.C";
-    private static final String KEY_S = "SSEditor.materialEditorState.S";
-    private static final String KEY_P = "SSEditor.materialEditorState.P";
-    private static final String KEY_L = "SSEditor.materialEditorState.L";
-
-    static {
-        TRIGGERS.put(KEY_C, new KeyTrigger(KeyInput.KEY_C));
-        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
-        TRIGGERS.put(KEY_P, new KeyTrigger(KeyInput.KEY_P));
-        TRIGGERS.put(KEY_L, new KeyTrigger(KeyInput.KEY_L));
-    }
 
     /**
      * The test box.
@@ -108,6 +97,8 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
         modelNode.attachChild(getNodeForCamera());
+
+        controls.add(new BaseMaterialEditor3dPartControl(this));
     }
 
     @Override
@@ -115,17 +106,6 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         super.registerActionHandlers(actionHandlers);
 
-        actionHandlers.put(KEY_S, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-
-        actionHandlers.put(KEY_C, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-
-        actionHandlers.put(KEY_P, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.P, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-
-        actionHandlers.put(KEY_L, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.L, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
     }
 
     @Override

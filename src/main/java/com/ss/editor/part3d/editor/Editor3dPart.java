@@ -3,8 +3,10 @@ package com.ss.editor.part3d.editor;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppState;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.control.Editor3dPartControl;
+import com.ss.editor.ui.component.editor.FileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +23,14 @@ public interface Editor3dPart extends AppState {
      * @return the root node of this part.
      */
     @NotNull Node getRootNode();
+
+    /**
+     * Get the file editor.
+     *
+     * @return the file editor.
+     */
+    @FromAnyThread
+    @NotNull FileEditor getFileEditor();
 
     /**
      * Get a control by the type.
