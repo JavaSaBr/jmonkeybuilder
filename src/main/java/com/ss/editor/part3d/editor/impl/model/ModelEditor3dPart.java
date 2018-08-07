@@ -9,6 +9,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.part3d.editor.control.impl.CameraEditor3dPartControl;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart;
 import com.ss.editor.plugin.api.RenderFilterRegistry;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
@@ -53,11 +54,6 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
     private Spatial currentFastSky;
 
     /**
-     * The flag of activity light of the camera.
-     */
-    private boolean lightEnabled;
-
-    /**
      * The frame rate.
      */
     private int frame;
@@ -67,7 +63,6 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
         this.customSkyNode = new Node("Custom Sky");
         this.customSky = Array.ofType(Spatial.class);
         stateNode.attachChild(customSkyNode);
-        setLightEnabled(true);
     }
 
 
@@ -84,46 +79,6 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
 
         RenderFilterRegistry.getInstance()
                 .refreshFilters();
-    }
-
-    /**
-     * Set the current fast sky.
-     *
-     * @param currentFastSky the current fast sky.
-     */
-    @JmeThread
-    private void setCurrentFastSky(@Nullable Spatial currentFastSky) {
-        this.currentFastSky = currentFastSky;
-    }
-
-    /**
-     * Get the current fast sky.
-     *
-     * @return the current fast sky.
-     */
-    @JmeThread
-    private @Nullable Spatial getCurrentFastSky() {
-        return currentFastSky;
-    }
-
-    /**
-     * Return true if the light of the camera is enabled.
-     *
-     * @return true if the light of the camera is enabled.
-     */
-    @JmeThread
-    private boolean isLightEnabled() {
-        return lightEnabled;
-    }
-
-    /**
-     * Set true if the light of the camera is enabled.
-     *
-     * @param lightEnabled true if the light of the camera is enabled.
-     */
-    @JmeThread
-    private void setLightEnabled(boolean lightEnabled) {
-        this.lightEnabled = lightEnabled;
     }
 
     @Override
@@ -143,7 +98,7 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
 
     @Override
     @JmeThread
-    public void update(final float tpf) {
+    public void update(float tpf) {
         super.update(tpf);
 
         if (frame == 2) {
@@ -152,18 +107,6 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
         }
 
         frame++;
-    }
-
-    @Override
-    @JmeThread
-    protected boolean needUpdateCameraLight() {
-        return true;
-    }
-
-    @Override
-    @JmeThread
-    protected boolean needLightForCamera() {
-        return true;
     }
 
     /**
@@ -183,19 +126,13 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
     @JmeThread
     private void updateLightEnabledInJme(boolean enabled) {
 
-        if (enabled == isLightEnabled()) {
-            return;
-        }
-
-        var light = getLightForCamera();
+        var cameraControl = requireControl(CameraEditor3dPartControl.class);
 
         if (enabled) {
-            stateNode.addLight(light);
+            cameraControl.enableLight();
         } else {
-            stateNode.removeLight(light);
+            cameraControl.disableLight();
         }
-
-        setLightEnabled(enabled);
     }
 
     /**
@@ -215,8 +152,6 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
     @JmeThread
     private void changeFastSkyInJme(@Nullable Spatial fastSky) {
 
-        var currentFastSky = getCurrentFastSky();
-
         if (currentFastSky != null) {
             stateNode.detachChild(currentFastSky);
         }
@@ -228,7 +163,7 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
         stateNode.detachChild(modelNode);
         stateNode.detachChild(toolNode);
 
-        setCurrentFastSky(fastSky);
+        currentFastSky = fastSky;
 
         frame = 0;
     }
@@ -276,19 +211,14 @@ public class ModelEditor3dPart extends AbstractSceneEditor3dPart<ModelFileEditor
      */
     @FromAnyThread
     public void updateLightProbe() {
-
-        var executorManager = ExecutorManager.getInstance();
-        executorManager.addJmeTask(() -> {
-            stateNode.detachChild(modelNode);
-            stateNode.detachChild(toolNode);
-            frame = 0;
-        });
+        ExecutorManager.getInstance()
+                .addJmeTask(this::updateLightProbeInJme);
     }
 
-    @Override
-    public String toString() {
-        return "ModelEditor3DState{" +
-                ", lightEnabled=" + lightEnabled +
-                "} " + super.toString();
+    @JmeThread
+    private void updateLightProbeInJme() {
+        stateNode.detachChild(modelNode);
+        stateNode.detachChild(toolNode);
+        frame = 0;
     }
 }

@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.manager.ExecutorManager;
@@ -237,7 +238,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
      *
      * @return the light for the camera.
      */
-    @JmeThread
+    @FromAnyThread
     protected @NotNull DirectionalLight createLight() {
 
         var directionalLight = new DirectionalLight();
@@ -247,12 +248,32 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
     }
 
     /**
+     * sets the default horizontal rotation in radian of the camera at start of the application
+     *
+     * @param angleInRad the angle in rad
+     */
+    @FromAnyThread
+    public void setDefaultHorizontalRotation(float angleInRad) {
+        editorCamera.setDefaultHorizontalRotation(angleInRad);
+    }
+
+    /**
+     * sets the default vertical rotation in radian of the camera at start of the application
+     *
+     * @param angleInRad the angle in rad
+     */
+    @FromAnyThread
+    public void setDefaultVerticalRotation(float angleInRad) {
+        editorCamera.setDefaultVerticalRotation(angleInRad);
+    }
+
+    /**
      * Create an editor camera.
      *
      * @param camera the camera.
      * @return the new editor camera.
      */
-    @BackgroundThread
+    @FromAnyThread
     protected @NotNull EditorCamera createEditorCamera(@NotNull Camera camera) {
 
         var editorCamera = new EditorCamera(camera, cameraNode);
@@ -263,6 +284,16 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         editorCamera.setZoomSensitivity(0.2F);
 
         return editorCamera;
+    }
+
+    /**
+     * Set the light's direction.
+     *
+     * @param direction the light's direction.
+     */
+    @FromAnyThread
+    public void setLightDirection(@NotNull Vector3f direction) {
+        this.light.setDirection(direction);
     }
 
     @Override
@@ -289,6 +320,38 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         if (needLight) {
             rootNode.removeLight(light);
         }
+    }
+
+    /**
+     * Enable camera's light.
+     */
+    @JmeThread
+    public void enableLight() {
+
+        if (needLight) {
+            return;
+        }
+
+        editor3dPart.getRootNode()
+                .addLight(light);
+
+        needLight = true;
+    }
+
+    /**
+     * Disable camera's light.
+     */
+    @JmeThread
+    public void disableLight() {
+
+        if (!needLight) {
+            return;
+        }
+
+        editor3dPart.getRootNode()
+                .removeLight(light);
+
+        needLight = false;
     }
 
     @Override
@@ -606,8 +669,8 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
         float cameraFlySpeed
     ) {
 
-        ExecutorManager.getInstance()
-                .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
+      //  ExecutorManager.getInstance()
+       //         .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
     }
 
     /**

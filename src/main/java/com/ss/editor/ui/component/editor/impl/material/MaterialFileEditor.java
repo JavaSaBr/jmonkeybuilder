@@ -219,7 +219,7 @@ public class MaterialFileEditor extends
         var material = EditorUtils.getAssetManager()
                 .loadAsset(materialKey);
 
-        editor3dPart.changeMode(ModelType.BOX);
+        editor3dPart.changeModelType(ModelType.BOX);
 
         reload(material);
     }

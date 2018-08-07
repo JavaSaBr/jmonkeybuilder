@@ -22,6 +22,7 @@ public interface Editor3dPart extends AppState {
      *
      * @return the root node of this part.
      */
+    @FromAnyThread
     @NotNull Node getRootNode();
 
     /**

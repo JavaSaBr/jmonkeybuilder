@@ -49,7 +49,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 /**
  * The base implementation of an editor.
@@ -237,20 +236,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         var code = event.getCode();
 
-        if (handleKeyActionImpl(code, false, event.isControlDown(), event.isShiftDown(), false)) {
+        if (handleKeyActionInFx(code, false, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }
 
-    /**
-     * Handle a key action.
-     *
-     * @param keyCode            the key code.
-     * @param isPressed          true if key is pressed.
-     * @param isControlDown      true if control is down.
-     * @param isShiftDown        true if shift is down.
-     * @param isButtonMiddleDown true if mouse middle button is pressed.
-     */
+    @Override
     @FromAnyThread
     public void handleKeyAction(
             @NotNull KeyCode keyCode,
@@ -260,11 +251,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             boolean isButtonMiddleDown
     ) {
         ExecutorManager.getInstance()
-                .addFxTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
+                .addFxTask(() -> handleKeyActionInFx(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
     }
 
     /**
-     * Handle a key action.
+     * Handle a key action in Fx thread.
      *
      * @param keyCode            the key code.
      * @param isPressed          true if key is pressed.
@@ -274,7 +265,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @return true if need to consume the event.
      */
     @FxThread
-    protected boolean handleKeyActionImpl(
+    protected boolean handleKeyActionInFx(
             @NotNull KeyCode keyCode,
             boolean isPressed,
             boolean isControlDown,
@@ -296,7 +287,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
             save();
-        } else if (handleKeyActionImpl(code, true, event.isControlDown(), event.isShiftDown(), false)) {
+        } else if (handleKeyActionInFx(code, true, event.isControlDown(), event.isShiftDown(), false)) {
             event.consume();
         }
     }

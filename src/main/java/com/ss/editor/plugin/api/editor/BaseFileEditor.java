@@ -77,7 +77,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
 
     @FxThread
     @Override
-    protected boolean handleKeyActionImpl(
+    protected boolean handleKeyActionInFx(
             @NotNull KeyCode keyCode,
             boolean isPressed,
             boolean isControlDown,
@@ -96,7 +96,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
+        return super.handleKeyActionInFx(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     @Override

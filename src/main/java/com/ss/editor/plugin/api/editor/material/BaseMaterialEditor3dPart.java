@@ -1,12 +1,8 @@
 package com.ss.editor.plugin.api.editor.material;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetNotFoundException;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RendererException;
@@ -16,19 +12,20 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.EditorThread;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.part3d.editor.control.impl.CameraEditor3dPartControl;
 import com.ss.editor.plugin.api.editor.part3d.AdvancedPbrWithStudioSky3dEditorPart;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.TangentGenerator;
-import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.geom.util.AngleUtils;
-import com.ss.rlib.common.util.dictionary.ObjectDictionary;
-import javafx.scene.input.KeyCode;
+import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * The implementation the 3D part of the {@link MaterialFileEditor}.
@@ -47,6 +44,11 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     private static final float H_ROTATION = AngleUtils.degreeToRadians(75);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(25);
 
+    /**
+     * The array of all used geometries.
+     */
+    @NotNull
+    private final Array<Geometry> geometries;
 
     /**
      * The test box.
@@ -69,13 +71,8 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     /**
      * The current model mode.
      */
-    @Nullable
+    @NotNull
     private ModelType currentModelType;
-
-    /**
-     * The flag of enabling light.
-     */
-    private boolean lightEnabled;
 
     public BaseMaterialEditor3dPart(@NotNull T fileEditor) {
         super(fileEditor);
@@ -83,38 +80,25 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
         this.testQuad = new Geometry("Quad", new Quad(4, 4));
         this.testQuad.setLocalTranslation(QUAD_OFFSET);
-        this.lightEnabled = MaterialFileEditor.DEFAULT_LIGHT_ENABLED;
+        this.geometries = Array.of(testBox, testQuad, testSphere);
+        this.currentModelType = ModelType.BOX;
 
-        TangentGenerator.useMikktspaceGenerator(testBox);
-        TangentGenerator.useMikktspaceGenerator(testSphere);
-        TangentGenerator.useMikktspaceGenerator(testQuad);
+        geometries.forEach(TangentGenerator::useMikktspaceGenerator);
 
-        var light = notNull(getLightForCamera());
-        light.setDirection(LIGHT_DIRECTION);
-
-        var editorCamera = notNull(getEditorCamera());
-        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
-        editorCamera.setDefaultVerticalRotation(V_ROTATION);
-
-        modelNode.attachChild(getNodeForCamera());
+        var cameraControl = requireControl(CameraEditor3dPartControl.class);
+        cameraControl.setLightDirection(LIGHT_DIRECTION);
+        cameraControl.setDefaultHorizontalRotation(H_ROTATION);
+        cameraControl.setDefaultVerticalRotation(V_ROTATION);
 
         controls.add(new BaseMaterialEditor3dPartControl(this));
     }
 
     @Override
-    @JmeThread
-    protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
-        super.registerActionHandlers(actionHandlers);
-
+    @BackgroundThread
+    protected @NotNull Optional<CameraEditor3dPartControl> createCameraControl() {
+        return Optional.of(new CameraEditor3dPartControl(this, EditorUtils.getGlobalCamera(),
+                false, false, false));
     }
-
-    @Override
-    @JmeThread
-    protected void registerActionListener(@NotNull InputManager inputManager) {
-        super.registerActionListener(inputManager);
-        inputManager.addListener(actionListener, KEY_S, KEY_C, KEY_P, KEY_L);
-    }
-
 
     /**
      * Update the {@link Material}.
@@ -135,18 +119,14 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     @JmeThread
     protected void updateMaterialInJme(@NotNull Material material) {
 
-        testBox.setMaterial(material);
-        testQuad.setMaterial(material);
-        testSphere.setMaterial(material);
+        geometries.forEach(material, Geometry::setMaterial);
 
         var renderManager = EditorUtils.getRenderManager();
         try {
             renderManager.preloadScene(testBox);
         } catch (RendererException | AssetNotFoundException | UnsupportedOperationException e) {
             handleMaterialException(e);
-            testBox.setMaterial(EditorUtils.getDefaultMaterial());
-            testQuad.setMaterial(EditorUtils.getDefaultMaterial());
-            testSphere.setMaterial(EditorUtils.getDefaultMaterial());
+            geometries.forEach(EditorUtils.getDefaultMaterial(), Geometry::setMaterial);
         }
     }
 
@@ -166,7 +146,7 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
      * @param modelType the model type
      */
     @FromAnyThread
-    public void changeMode(@NotNull ModelType modelType) {
+    public void changeModelType(@NotNull ModelType modelType) {
         ExecutorManager.getInstance()
                 .addJmeTask(() -> changeModeInJme(modelType));
     }
@@ -196,7 +176,7 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
             }
         }
 
-        setCurrentModelType(modelType);
+        this.currentModelType = modelType;
     }
 
     /**
@@ -217,74 +197,14 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
      */
     @JmeThread
     protected void changeBucketTypeInJme(@NotNull Bucket bucket) {
-        testQuad.setQueueBucket(bucket);
-        testSphere.setQueueBucket(bucket);
-        testBox.setQueueBucket(bucket);
+        geometries.forEach(bucket, Geometry::setQueueBucket);
     }
 
     @Override
     @JmeThread
     public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
         super.initialize(stateManager, application);
-        changeModeInJme(getCurrentModelType());
-    }
-
-    @Override
-    @JmeThread
-    protected boolean needMovableCamera() {
-        return false;
-    }
-
-    @Override
-    @JmeThread
-    protected boolean needEditorCamera() {
-        return true;
-    }
-
-    @Override
-    @JmeThread
-    protected boolean needLightForCamera() {
-        return true;
-    }
-
-    /**
-     * Get the current model mode.
-     *
-     * @return the current model mode.
-     */
-    @JmeThread
-    protected @NotNull ModelType getCurrentModelType() {
-        return notNull(currentModelType);
-    }
-
-    /**
-     * Set the current model mode.
-     *
-     * @param currentModelType the current model mode.
-     */
-    @JmeThread
-    protected void setCurrentModelType(@NotNull ModelType currentModelType) {
-        this.currentModelType = currentModelType;
-    }
-
-    /**
-     * Return true if the light is enabled.
-     *
-     * @return true if the light is enabled.
-     */
-    @JmeThread
-    protected boolean isLightEnabled() {
-        return lightEnabled;
-    }
-
-    /**
-     * Set true if the light is enabled.
-     *
-     * @param lightEnabled true if the light is enabled.
-     */
-    @JmeThread
-    protected void setLightEnabled(boolean lightEnabled) {
-        this.lightEnabled = lightEnabled;
+        changeModeInJme(currentModelType);
     }
 
     /**
@@ -306,25 +226,13 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     @JmeThread
     protected void updateLightEnabledInJme(boolean enabled) {
 
-        if (enabled == isLightEnabled()) {
-            return;
-        }
-
-        var light = getLightForCamera();
+        var cameraControl = requireControl(CameraEditor3dPartControl.class);
 
         if (enabled) {
-            stateNode.addLight(light);
+            cameraControl.enableLight();
         } else {
-            stateNode.removeLight(light);
+            cameraControl.disableLight();
         }
-
-        setLightEnabled(enabled);
-    }
-
-    @Override
-    @JmeThread
-    protected boolean needUpdateCameraLight() {
-        return false;
     }
 
     /**
@@ -352,7 +260,7 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
          * @param index the index
          * @return the model type
          */
-        public static ModelType valueOf(final int index) {
+        public static ModelType valueOf(int index) {
             return VALUES[index];
         }
     }

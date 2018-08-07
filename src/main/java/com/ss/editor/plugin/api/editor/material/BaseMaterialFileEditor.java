@@ -117,7 +117,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3dPart,
 
     @Override
     @FxThread
-    protected boolean handleKeyActionImpl(
+    protected boolean handleKeyActionInFx(
             @NotNull KeyCode keyCode,
             boolean isPressed,
             boolean isControlDown,
@@ -139,7 +139,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3dPart,
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
+        return super.handleKeyActionInFx(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     @Override
@@ -330,7 +330,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3dPart,
             cubeButton.setSelected(true);
             sphereButton.setSelected(false);
             planeButton.setSelected(false);
-            editor3dPart.changeMode(modelType);
+            editor3dPart.changeModelType(modelType);
         } else if (modelType == ModelType.SPHERE) {
             cubeButton.setMouseTransparent(false);
             sphereButton.setMouseTransparent(true);
@@ -338,7 +338,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3dPart,
             cubeButton.setSelected(false);
             sphereButton.setSelected(true);
             planeButton.setSelected(false);
-            editor3dPart.changeMode(modelType);
+            editor3dPart.changeModelType(modelType);
         } else if (modelType == ModelType.QUAD) {
             cubeButton.setMouseTransparent(false);
             sphereButton.setMouseTransparent(false);
@@ -346,7 +346,7 @@ public abstract class BaseMaterialFileEditor<T extends BaseMaterialEditor3dPart,
             sphereButton.setSelected(false);
             cubeButton.setSelected(false);
             planeButton.setSelected(true);
-            editor3dPart.changeMode(modelType);
+            editor3dPart.changeModelType(modelType);
         }
 
         var editorState = getEditorState();

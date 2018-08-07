@@ -423,7 +423,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    protected boolean handleKeyActionImpl(
+    protected boolean handleKeyActionInFx(
             @NotNull KeyCode keyCode,
             boolean isPressed,
             boolean isControlDown,
@@ -467,7 +467,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             //TODO
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
+        return super.handleKeyActionInFx(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown);
     }
 
     /**
