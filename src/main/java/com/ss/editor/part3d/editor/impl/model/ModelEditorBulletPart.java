@@ -73,22 +73,4 @@ public class ModelEditorBulletPart extends EditableBulletSceneAppState implement
             }
         });
     }
-
-    @Override
-    @FromAnyThread
-    public @NotNull Node getRootNode() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @FromAnyThread
-    public @NotNull FileEditor getFileEditor() {
-        return editor3dPart.getFileEditor();
-    }
-
-    @Override
-    @JmeThread
-    public <C extends Editor3dPartControl> @Nullable C getControl(@NotNull Class<C> type) {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -90,7 +90,7 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
         cameraControl.setDefaultHorizontalRotation(H_ROTATION);
         cameraControl.setDefaultVerticalRotation(V_ROTATION);
 
-        controls.add(new BaseMaterialEditor3dPartControl(this));
+        controls.add(new BaseMaterialEditorHotKeys3dPartControl(this));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ss.editor.part3d.editor.control.impl;
 
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.function.FloatFloatConsumer;
@@ -14,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> the editor 3d part's type.
  * @author JavaSaBr
  */
-public abstract class BaseInputEditor3dPartControl<T extends Editor3dPart> extends AbstractEditor3dPartControl<T> implements
-        InputEditor3dPartControl {
+public abstract class BaseInputEditor3dPartControl<T extends ExtendableEditor3dPart> extends
+        AbstractEditor3dPartControl<T> implements InputEditor3dPartControl {
 
     /**
      * The table of action handlers.

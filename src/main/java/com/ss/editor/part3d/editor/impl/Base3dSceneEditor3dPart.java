@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
  * @param <T> the type of a file editor.
  * @author JavaSaBr
  */
-public abstract class Base3dSceneEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T> implements
+public abstract class Base3dSceneEditor3dPart<T extends FileEditor> extends AbstractExtendableEditor3dPart<T> implements
         UndoableEditor3dPart, SavableEditor3dPart {
 
     public Base3dSceneEditor3dPart(@NotNull T fileEditor) {

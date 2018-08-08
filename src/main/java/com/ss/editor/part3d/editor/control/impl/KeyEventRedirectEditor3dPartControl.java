@@ -3,11 +3,10 @@ package com.ss.editor.part3d.editor.control.impl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.Trigger;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.Editor3dPart;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3dPart;
+import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.ObjectUtils;
@@ -20,12 +19,17 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartControl<Editor3dPart> {
+public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> {
 
     private static final KeyCode[] KEY_CODES = new KeyCode[Byte.MAX_VALUE * 3];
 
     static {
         KEY_CODES[KeyInput.KEY_C] = KeyCode.C;
+        KEY_CODES[KeyInput.KEY_S] = KeyCode.S;
+        KEY_CODES[KeyInput.KEY_R] = KeyCode.R;
+        KEY_CODES[KeyInput.KEY_DELETE] = KeyCode.DELETE;
+        KEY_CODES[KeyInput.KEY_P] = KeyCode.P;
+        KEY_CODES[KeyInput.KEY_L] = KeyCode.L;
     }
 
     @NotNull
@@ -35,7 +39,7 @@ public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartCo
     private final String[] mappings;
 
     protected KeyEventRedirectEditor3dPartControl(
-            @NotNull BaseMaterialEditor3dPart<?> editor3dPart,
+            @NotNull ExtendableEditor3dPart editor3dPart,
             @NotNull ObjectDictionary<String, KeyTrigger> triggers,
             @NotNull String[] mappings
     ) {
@@ -49,7 +53,7 @@ public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartCo
     }
 
     @BackgroundThread
-    private void makeHandler(@NotNull Editor3dPart editor3dPart, @NotNull KeyCode keyCode, boolean isPressed) {
+    private void makeHandler(@NotNull ExtendableEditor3dPart editor3dPart, @NotNull KeyCode keyCode, boolean isPressed) {
 
         var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
         var fileEditor = editor3dPart.getFileEditor();

@@ -96,20 +96,8 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     public static final String KEY_SHAPE_CENTER = "jMB.sceneEditor.shapeCenter";
     public static final String KEY_SHAPE_INIT_SCALE = "jMB.sceneEditor.initScale";
 
-    private static final String KEY_S = "jMB.sceneEditor.S";
-    private static final String KEY_G = "jMB.sceneEditor.G";
-    private static final String KEY_R = "jMB.sceneEditor.R";
-    private static final String KEY_DEL = "jMB.sceneEditor.Del";
-
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
-
-    static {
-        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
-        TRIGGERS.put(KEY_G, new KeyTrigger(KeyInput.KEY_G));
-        TRIGGERS.put(KEY_R, new KeyTrigger(KeyInput.KEY_R));
-        TRIGGERS.put(KEY_DEL, new KeyTrigger(KeyInput.KEY_DELETE));
-    }
 
     /**
      * The table with models to present lights on a scene.
@@ -393,28 +381,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         setTransformMode(TransformationMode.GLOBAL);
         setTransformType(TransformType.MOVE_TOOL);
         setTransformDeltaX(Float.NaN);
-    }
-
-    @Override
-    @JmeThread
-    protected void registerActionHandlers(@NotNull ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
-        super.registerActionHandlers(actionHandlers);
-
-        actionHandlers.put(KEY_S, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_G, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.G, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_R, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.R, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-        actionHandlers.put(KEY_DEL, (isPressed, tpf) ->
-                fileEditor.handleKeyAction(KeyCode.DELETE, isPressed, isControlDown(), isShiftDown(), isButtonMiddleDown()));
-    }
-
-    @Override
-    @JmeThread
-    protected void registerActionListener(@NotNull InputManager inputManager) {
-        super.registerActionListener(inputManager);
-        inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
     }
 
     @Override
