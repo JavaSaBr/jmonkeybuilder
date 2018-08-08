@@ -1,6 +1,6 @@
 package com.ss.editor.part3d.editor.control.impl;
 
-import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.Editor3dPartControl;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractEditor3dPartControl<E extends Editor3dPart> implements Editor3dPartControl {
+public abstract class AbstractEditor3dPartControl<E extends ExtendableEditor3dPart> implements Editor3dPartControl {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(Editor3dPartControl.class);
 

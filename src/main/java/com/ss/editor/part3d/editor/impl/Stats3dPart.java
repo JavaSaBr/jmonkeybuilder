@@ -8,7 +8,6 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.fx.util.FxUtils;
@@ -26,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
+public class Stats3dPart extends AbstractEditor3dPart {
 
     private static final AtomicInteger STATISTICS_ENABLED = new AtomicInteger(0);
 
@@ -45,92 +44,86 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
     /**
      * The frame buffer M field.
      */
-    @Nullable
-    private Label frameBuffersMField;
+    @NotNull
+    private final Label frameBuffersMField;
 
     /**
      * The frame buffer F field.
      */
-    @Nullable
-    private Label frameBuffersFField;
+    @NotNull
+    private final Label frameBuffersFField;
 
     /**
      * The frame buffer S field.
      */
-    @Nullable
-    private Label frameBuffersSField;
+    @NotNull
+    private final Label frameBuffersSField;
 
     /**
      * The textures M field.
      */
-    @Nullable
-    private Label texturesMField;
+    @NotNull
+    private final Label texturesMField;
 
     /**
      * The textures F field.
      */
-    @Nullable
-    private Label texturesFField;
+    @NotNull
+    private final Label texturesFField;
 
     /**
      * The textures S field.
      */
-    @Nullable
-    private Label texturesSField;
+    @NotNull
+    private final Label texturesSField;
 
     /**
      * The shaders M field.
      */
-    @Nullable
-    private Label shadersMField;
+    @NotNull
+    private final Label shadersMField;
 
     /**
      * The shaders F field.
      */
-    @Nullable
-    private Label shadersFField;
+    @NotNull
+    private final Label shadersFField;
 
     /**
      * The shaders S field.
      */
-    @Nullable
-    private Label shadersSField;
+    @NotNull
+    private final Label shadersSField;
 
     /**
      * The objects field.
      */
-    @Nullable
-    private Label objectsField;
+    @NotNull
+    private final Label objectsField;
 
     /**
      * The uniforms field.
      */
-    @Nullable
-    private Label uniformsField;
+    @NotNull
+    private final Label uniformsField;
 
     /**
      * The triangles field.
      */
-    @Nullable
-    private Label trianglesField;
+    @NotNull
+    private final Label trianglesField;
 
     /**
      * The vertices S field.
      */
-    @Nullable
-    private Label verticesField;
+    @NotNull
+    private final Label verticesField;
 
     /**
      * The filed to show FPS.
      */
-    @Nullable
-    private Label fpsField;
-
-    /**
-     * The current application.
-     */
-    @Nullable
-    private Application application;
+    @NotNull
+    private final Label fpsField;
 
     /**
      * The statistics.
@@ -156,13 +149,26 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
     private int fps;
     private int prevFps;
 
-    public Stats3dPart(@NotNull FileEditor fileEditor, @NotNull Pane parent) {
-        super(fileEditor);
+    public Stats3dPart(@NotNull Pane parent) {
         this.parent = parent;
         this.statsContainer = new GridPane();
         this.frameCounter = 0;
         this.secondCounter = 0.0f;
         this.prevFps = -1;
+        this.frameBuffersMField = new Label();
+        this.frameBuffersFField = new Label();
+        this.frameBuffersSField = new Label();
+        this.texturesMField = new Label();
+        this.texturesFField = new Label();
+        this.texturesSField = new Label();
+        this.shadersMField = new Label();
+        this.shadersFField = new Label();
+        this.shadersSField = new Label();
+        this.objectsField = new Label();
+        this.uniformsField = new Label();
+        this.trianglesField = new Label();
+        this.verticesField = new Label();
+        this.fpsField = new Label();
         createComponents();
         setEnabled(false);
     }
@@ -174,46 +180,23 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
     private void createComponents() {
 
         var frameBuffersMLabel = new Label("FrameBuffers (M)");
-        frameBuffersMField = new Label();
-
         var frameBuffersFLabel = new Label("FrameBuffers (F)");
-        frameBuffersFField = new Label();
-
         var frameBuffersSLabel = new Label("FrameBuffers (S)");
-        frameBuffersSField = new Label();
 
         var texturesMLabel = new Label("Textures (M)");
-        texturesMField = new Label();
-
         var texturesFLabel = new Label("Textures (F)");
-        texturesFField = new Label();
-
         var texturesSLabel = new Label("Textures (S)");
-        texturesSField = new Label();
 
         var shadersMLabel = new Label("Shaders (M)");
-        shadersMField = new Label();
-
         var shadersFLabel = new Label("Shaders (F)");
-        shadersFField = new Label();
-
         var shadersSLabel = new Label("Shaders (S)");
-        shadersSField = new Label();
 
         var objectsLabel = new Label("Objects");
-        objectsField = new Label();
-
         var uniformsLabel = new Label("Uniforms");
-        uniformsField = new Label();
-
         var trianglesLabel = new Label("Triangles");
-        trianglesField = new Label();
-
         var verticesLabel = new Label("Vertices");
-        verticesField = new Label();
 
         var fpsLabel = new Label("Fps");
-        fpsField = new Label();
 
         statsContainer.add(frameBuffersMLabel, 0, 0);
         statsContainer.add(frameBuffersMField, 1, 0);
@@ -252,8 +235,9 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
     public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
         super.initialize(stateManager, application);
 
-        this.application = application;
-        this.statistics = application.getRenderer().getStatistics();
+        this.statistics = application.getRenderer()
+                .getStatistics();
+
         this.statsData = new int[statistics.getLabels().length];
         this.prevStatsData = new int[statistics.getLabels().length];
 
@@ -270,16 +254,6 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
 
         ExecutorManager.getInstance()
                 .addFxTask(() -> statsContainer.setVisible(enabled));
-    }
-
-    /**
-     * Get the current application.
-     *
-     * @return the current application.
-     */
-    @FromAnyThread
-    private @NotNull Application getApplication() {
-        return notNull(application);
     }
 
     /**
@@ -312,146 +286,6 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
         return prevStatsData;
     }
 
-    /**
-     * Get the filed to show FPS.
-     *
-     * @return the filed to show FPS.
-     */
-    @FxThread
-    private @NotNull Label getFpsField() {
-        return notNull(fpsField);
-    }
-
-    /**
-     * Get the vertices S field.
-     *
-     * @return the vertices S field.
-     */
-    @FxThread
-    private @NotNull Label getVerticesField() {
-        return notNull(verticesField);
-    }
-
-    /**
-     * Get the triangles field.
-     *
-     * @return the triangles field.
-     */
-    @FxThread
-    private @NotNull Label getTrianglesField() {
-        return notNull(trianglesField);
-    }
-
-    /**
-     * Get the uniforms field.
-     *
-     * @return the uniforms field.
-     */
-    @FxThread
-    private @NotNull Label getUniformsField() {
-        return notNull(uniformsField);
-    }
-
-    /**
-     * Get the objects field.
-     *
-     * @return the objects field.
-     */
-    @FxThread
-    private @NotNull Label getObjectsField() {
-        return notNull(objectsField);
-    }
-
-    /**
-     * Get the shaders F field.
-     *
-     * @return the shaders F field.
-     */
-    @FxThread
-    private @NotNull Label getShadersFField() {
-        return notNull(shadersFField);
-    }
-
-    /**
-     * Get the shaders M field.
-     *
-     * @return the shaders M field.
-     */
-    @FxThread
-    private @NotNull Label getShadersMField() {
-        return notNull(shadersMField);
-    }
-
-    /**
-     * Get the shaders S field.
-     *
-     * @return the shaders S field.
-     */
-    @FxThread
-    private @NotNull Label getShadersSField() {
-        return notNull(shadersSField);
-    }
-
-    /**
-     * Get the textures F field.
-     *
-     * @return the textures F field.
-     */
-    @FxThread
-    private @NotNull Label getTexturesFField() {
-        return notNull(texturesFField);
-    }
-
-    /**
-     * Get the textures M field.
-     *
-     * @return the textures M field.
-     */
-    @FxThread
-    private @NotNull Label getTexturesMField() {
-        return notNull(texturesMField);
-    }
-
-    /**
-     * Get the textures S field.
-     *
-     * @return the textures S field.
-     */
-    @FxThread
-    private @NotNull Label getTexturesSField() {
-        return notNull(texturesSField);
-    }
-
-    /**
-     * Get the frame buffer F field.
-     *
-     * @return the frame buffer F field.
-     */
-    @FxThread
-    private @NotNull Label getFrameBuffersFField() {
-        return notNull(frameBuffersFField);
-    }
-
-    /**
-     * Get the frame buffer M field.
-     *
-     * @return the frame buffer M field.
-     */
-    @FxThread
-    private @NotNull Label getFrameBuffersMField() {
-        return notNull(frameBuffersMField);
-    }
-
-    /**
-     * Get the frame buffer S field.
-     *
-     * @return the frame buffer S field.
-     */
-    @FxThread
-    private @NotNull Label getFrameBuffersSField() {
-        return notNull(frameBuffersSField);
-    }
-
     @Override
     @JmeThread
     public void update(float tpf) {
@@ -460,7 +294,7 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
             return;
         }
 
-        var application = getApplication();
+        var application = requireApplication();
         var timer = application.getTimer();
 
         secondCounter += timer.getTimePerFrame();
@@ -505,19 +339,19 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
 
         var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() -> {
-            getVerticesField().setText(Integer.toString(vertices));
-            getTrianglesField().setText(Integer.toString(triangles));
-            getUniformsField().setText(Integer.toString(uniforms));
-            getObjectsField().setText(Integer.toString(objects));
-            getShadersSField().setText(Integer.toString(shadersS));
-            getShadersFField().setText(Integer.toString(shadersF));
-            getShadersMField().setText(Integer.toString(shadersM));
-            getTexturesSField().setText(Integer.toString(texturesS));
-            getTexturesFField().setText(Integer.toString(texturesF));
-            getTexturesMField().setText(Integer.toString(texturesM));
-            getFrameBuffersSField().setText(Integer.toString(frameBuffersS));
-            getFrameBuffersFField().setText(Integer.toString(frameBuffersF));
-            getFrameBuffersMField().setText(Integer.toString(frameBuffersM));
+            verticesField.setText(Integer.toString(vertices));
+            trianglesField.setText(Integer.toString(triangles));
+            uniformsField.setText(Integer.toString(uniforms));
+            objectsField.setText(Integer.toString(objects));
+            shadersSField.setText(Integer.toString(shadersS));
+            shadersFField.setText(Integer.toString(shadersF));
+            shadersMField.setText(Integer.toString(shadersM));
+            texturesSField.setText(Integer.toString(texturesS));
+            texturesFField.setText(Integer.toString(texturesF));
+            texturesMField.setText(Integer.toString(texturesM));
+            frameBuffersSField.setText(Integer.toString(frameBuffersS));
+            frameBuffersFField.setText(Integer.toString(frameBuffersF));
+            frameBuffersMField.setText(Integer.toString(frameBuffersM));
         });
     }
 
@@ -527,7 +361,7 @@ public class Stats3dPart extends AbstractEditor3dPart<FileEditor> {
     @JmeThread
     private void updateFps(int fps) {
         ExecutorManager.getInstance()
-                .addFxTask(() -> getFpsField().setText(Integer.toString(fps)));
+                .addFxTask(() -> fpsField.setText(Integer.toString(fps)));
     }
 
     @Override

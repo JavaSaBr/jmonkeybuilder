@@ -18,6 +18,7 @@ import com.ss.editor.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The base implementation of the {@link Editor3dPart} for a file editor.
@@ -58,8 +59,8 @@ public abstract class Base3dSceneEditor3dPart<T extends FileEditor> extends Abst
 
     @Override
     @JmeThread
-    public void save() {
-        fileEditor.save().join();
+    public @NotNull CompletableFuture<FileEditor> save() {
+        return fileEditor.save();
     }
 
     @Override

@@ -1,6 +1,10 @@
 package com.ss.editor.part3d.editor;
 
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.ui.component.editor.FileEditor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The interface to mark an editor 3d part that it supports a save method.
@@ -13,7 +17,7 @@ public interface SavableEditor3dPart extends Editor3dPart {
      * Save changes.
      */
     @JmeThread
-    void save();
+    @NotNull CompletableFuture<FileEditor> save();
 
     /**
      * Return true if this editor part has unsaved changes.
