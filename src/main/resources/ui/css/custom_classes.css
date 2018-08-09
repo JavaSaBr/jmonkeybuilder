@@ -626,20 +626,19 @@
     -fx-background-color: -var-background-color;
 }
 
-.audio-view-editor-container > .label {
+.audio-view-editor-container > .hbox > .grid-pane > .label {
     -fx-alignment: center-right;
     -fx-min-width: 200px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-    -fx-font-size: 16px;
     -fx-padding: 0px 6px 0px 0px;
 }
 
-.audio-view-editor-container > .text-field {
+.audio-view-editor-container > .hbox > .grid-pane > .text-field {
     -fx-min-width: 200px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-    -fx-font-size: 16px;
+    -fx-focus-traversable: false;
 }
 
 .audio-view-editor-container > .hbox {

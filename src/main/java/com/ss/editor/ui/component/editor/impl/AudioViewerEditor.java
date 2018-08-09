@@ -97,9 +97,9 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         this.channelsField = new TextField();
         this.durationField = new TextField();
         this.dataTypeField = new TextField();
+        this.sampleRateField = new TextField();
         this.playButton = new Button();
         this.stopButton = new Button();
-        this.sampleRateField = new TextField();
         addEditor3dPart(editor3dPart);
     }
 

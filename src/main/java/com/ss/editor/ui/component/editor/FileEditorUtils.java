@@ -1,6 +1,5 @@
 package com.ss.editor.ui.component.editor;
 
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.impl.Base3dSceneEditor3dPart;
 import com.ss.editor.ui.component.editor.state.impl.Editor3dEditorState;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ public class FileEditorUtils {
         var tDistance = editorState.getCameraTDistance();
         var cameraSpeed = editorState.getCameraSpeed();
 
-        ExecutorManager.getInstance()
-                .addJmeTask(() -> editor3dPart.updateCameraSettings(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));
+        /** FIXME ExecutorManager.getInstance()
+                .addJmeTask(() -> editor3dPart.updateCameraSettings(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));*/
     }
 }

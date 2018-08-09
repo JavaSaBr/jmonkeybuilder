@@ -2,17 +2,16 @@ package com.ss.editor.part3d.editor.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.Editor3dPartControl;
+import com.ss.editor.part3d.editor.event.Editor3dPartEvent;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.rlib.common.logging.Logger;
-import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type of file editor
  * @author JavaSaBr
  */
-public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart implements
-        ExtendableEditor3dPart {
+public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T>
+        implements ExtendableEditor3dPart {
 
     /**
      * The owner editor.
@@ -87,7 +86,7 @@ public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> exten
     @Override
     @JmeThread
     public <C extends Editor3dPartControl> @Nullable C getControl(@NotNull Class<C> type) {
-        return controls.anyMatchR(type, Class::isInstance);
+        return type.cast(controls.anyMatchR(type, Class::isInstance));
     }
 
     @Override
@@ -107,5 +106,17 @@ public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> exten
     @JmeThread
     public @NotNull Node getRootNode() {
         return stateNode;
+    }
+
+    @Override
+    @JmeThread
+    public void notify(@NotNull Editor3dPartEvent event) {
+        controls.forEach(event, Editor3dPartControl::notify);
+    }
+
+    @Override
+    @FromAnyThread
+    public @NotNull Camera getCamera() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -2,7 +2,6 @@ package com.ss.editor.plugin.api.editor.part3d;
 
 import com.ss.editor.part3d.editor.impl.AbstractEditor3dPart;
 import com.ss.editor.ui.component.editor.FileEditor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The base implementation of 3D part of an editor.
@@ -10,8 +9,5 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public class Base3dEditorPart<T extends FileEditor> extends AbstractEditor3dPart<T> {
-
-    public Base3dEditorPart(@NotNull T fileEditor) {
-        super(fileEditor);
-    }
+    
 }

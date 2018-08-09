@@ -556,7 +556,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             }
 
             if (result) {
-                editor.save(fileEditor -> getTabs().remove(tab));
+                //FIXME editor.save(fileEditor -> getTabs().remove(tab));
             } else {
                 getTabs().remove(tab);
             }

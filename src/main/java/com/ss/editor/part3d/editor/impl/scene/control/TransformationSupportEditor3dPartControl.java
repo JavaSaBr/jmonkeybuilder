@@ -2,7 +2,6 @@ package com.ss.editor.part3d.editor.impl.scene.control;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -10,9 +9,9 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Ray;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -20,13 +19,11 @@ import com.jme3.scene.shape.Quad;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.*;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.part3d.editor.EditableSceneEditor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.impl.BaseInputEditor3dPartControl;
 import com.ss.editor.part3d.editor.event.Editor3dPartEvent;
-import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.util.*;
+import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -154,6 +151,90 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
         });
     }
 
+    @JmeThread
+    @Override
+    public @Nullable Transform getTransformCenter() {
+        return null;
+    }
+
+    @JmeThread
+    @Override
+    public void setPickedAxis(@NotNull PickedAxis axis) {
+
+    }
+
+    @JmeThread
+    @Override
+    public @NotNull PickedAxis getPickedAxis() {
+        return null;
+    }
+
+    @JmeThread
+    @Override
+    public @NotNull EditorTransformSupport.TransformationMode getTransformationMode() {
+        return null;
+    }
+
+    @JmeThread
+    @Override
+    public @Nullable Node getCollisionPlane() {
+        return null;
+    }
+
+    @JmeThread
+    @Override
+    public void setTransformDeltaX(float transformDeltaX) {
+
+    }
+
+    @JmeThread
+    @Override
+    public void setTransformDeltaY(float transformDeltaY) {
+
+    }
+
+    @JmeThread
+    @Override
+    public void setTransformDeltaZ(float transformDeltaZ) {
+
+    }
+
+    @JmeThread
+    @Override
+    public float getTransformDeltaX() {
+        return 0;
+    }
+
+    @JmeThread
+    @Override
+    public float getTransformDeltaY() {
+        return 0;
+    }
+
+    @JmeThread
+    @Override
+    public float getTransformDeltaZ() {
+        return 0;
+    }
+
+    @JmeThread
+    @Override
+    public @Nullable Spatial getToTransform() {
+        return null;
+    }
+
+    @JmeThread
+    @Override
+    public void notifyTransformed(@NotNull Spatial spatial) {
+
+    }
+
+    @JmeThread
+    @Override
+    public @NotNull Camera getCamera() {
+        return null;
+    }
+
     @Override
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
@@ -249,9 +330,9 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
     public void preCameraUpdate(float tpf) {
 
         // Transform Selected Objects!
-        if (!activeTransform || selectionCenter == null) {
+        /*if (!activeTransform || selectionCenter == null) {
             return;
-        }
+        }*/
 
         transformToolNode.detachAllChildren();
         transformationTypeToNode.getOptional(transformType)
@@ -268,11 +349,11 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
             .ifPresent(transformToolNode::attachChild);
 
         // FIXME change when will support transform multi-nodes
-        if (selected.size() != 1) {
+       /* if (selected.size() != 1) {
             toolNode.detachChild(transformToolNode);
         } else if (!isPaintingMode()) {
             toolNode.attachChild(transformToolNode);
-        }
+        }*/
     }
 
     /**
@@ -287,7 +368,7 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
 
         var transformationMode = getTransformationMode();
         var location = transform.getTranslation();
-        var positionOnCamera = getPositionOnCamera(location);
+        var positionOnCamera = JmeUtils.getPositionOnCamera(location, editor3dPart.getCamera());
 
         transformToolNode.setLocalTranslation(positionOnCamera);
         transformToolNode.setLocalScale(1.5F);
@@ -299,7 +380,7 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
      */
     @FromAnyThread
     private void updateToTransform() {
-        setToTransform(selected.first());
+        //setToTransform(selected.first());
     }
 
     /**
@@ -312,8 +393,8 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
         var transform = toTransform == null ? null : toTransform.getLocalTransform().clone();
         var originalTransform = transform == null ? null : transform.clone();
 
-        setTransformCenter(transform);
-        setOriginalTransform(originalTransform);
+        //setTransformCenter(transform);
+        //setOriginalTransform(originalTransform);
     }
 
     /**
@@ -322,7 +403,7 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
     @JmeThread
     private void endTransform() {
 
-        if (!isActiveTransform()) {
+        /*if (!isActiveTransform()) {
             return;
         }
 
@@ -365,7 +446,7 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
         setTransformDeltaX(Float.NaN);
         updateTransformCenter();
 
-        fileEditor.execute(operation);
+        fileEditor.execute(operation);*/
     }
 
     /**
@@ -374,7 +455,7 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
     @JmeThread
     private boolean startTransform() {
 
-        updateTransformCenter();
+        /*updateTransformCenter();
 
         var camera = EditorUtils.getGlobalCamera();
         var inputManager = EditorUtils.getInputManager();
@@ -422,7 +503,8 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
         }
 
         setActiveTransform(true);
-        return true;
+        return true;*/
+        return false;
     }
 
     @Override

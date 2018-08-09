@@ -8,15 +8,12 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
-import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.util.EditorUtils;
@@ -596,16 +593,18 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
     @JmeThread
     private boolean canCameraFly() {
-        var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
+       /** var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
         return inputState.isButtonMiddleDown() &&
                 !inputState.isShiftDown() &&
-                !isCameraMoving();
+                !isCameraMoving();**/
+       return false;
     }
 
     @JmeThread
     private boolean canCameraMoveOrFly() {
-        return editor3dPart.requireControl(InputStateEditor3dPartControl.class)
-                .isButtonMiddleDown();
+        /*return editor3dPart.requireControl(InputStateEditor3dPartControl.class)
+                .isButtonMiddleDown();*/
+        return false;
     }
 
 

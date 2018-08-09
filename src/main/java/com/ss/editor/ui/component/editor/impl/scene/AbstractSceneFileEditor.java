@@ -431,9 +431,11 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             boolean isButtonMiddleDown
     ) {
 
+       /*
+        FIXME
         if (editor3dPart.isCameraFlying()) {
             return false;
-        }
+        }*/
 
         if (isPressed && isControlDown && keyCode == KeyCode.Z) {
             undo();
@@ -723,6 +725,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     public void selectNodesFromTree(@NotNull Array<?> objects) {
 
+        /** FIXME
         editor3dPart.select(Array.empty());
 
         if (objects.size() > 1) {
@@ -735,7 +738,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
         }
 
         modelPropertyEditor.buildFor(null, null);
-        paintingComponentContainer.prepareFor(null);
+        paintingComponentContainer.prepareFor(null);**/
     }
 
     /**
@@ -747,14 +750,15 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     protected void multiSelectNodesFromTree(@NotNull Array<?> objects, @NotNull MA editor3dPart) {
 
-        var toSelect = Array.ofType(Spatial.class);
+        /**FIXME
+         * var toSelect = Array.ofType(Spatial.class);
 
         for (var object : objects) {
             getSpatialToShowSelection(editor3dPart, object)
                     .ifPresent(toSelect::add);
         }
 
-        editor3dPart.select(toSelect);
+        editor3dPart.select(toSelect);**/
     }
 
     /**
@@ -836,7 +840,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         if (spatial != null && canSelect(spatial)) {
 
-            editor3dPart.select(spatial);
+            //FIXME editor3dPart.select(spatial);
 
             if (!isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
                 editor3dPart.cameraLookAt(spatial);
@@ -908,7 +912,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private void changeTransformMode(@NotNull TransformationMode transformationMode) {
 
-        editor3dPart.setTransformMode(transformationMode);
+       //FIXME editor3dPart.setTransformMode(transformationMode);
 
         var editorState = getEditorState();
 
@@ -923,6 +927,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @FxThread
     private void updateTransformTool(@NotNull TransformType transformType, @NotNull Boolean newValue) {
 
+        /**FIXME
         if (newValue != Boolean.TRUE) {
             if (editor3dPart.getTransformType() == transformType) {
                 if (transformType == TransformType.MOVE_TOOL) {
@@ -952,7 +957,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
         if (editorState != null) {
             editorState.setTransformationType(transformType.ordinal());
-        }
+        } **/
     }
 
     @Override
@@ -1095,7 +1100,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             paintingComponentContainer.notifyHided();
         }
 
-        editor3dPart.changePaintingMode(newIndex == PAINTING_TOOL);
+       //FIXME editor3dPart.changePaintingMode(newIndex == PAINTING_TOOL);
     }
 
     @Override
@@ -1266,7 +1271,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return;
         }
 
-        editor3dPart.updateShowSelection(newValue);
+        //FIXME editor3dPart.updateShowSelection(newValue);
 
         var editorState = getEditorState();
 
@@ -1341,13 +1346,16 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
     @Override
     @JmeThread
     public @NotNull Node getCursorNode() {
-        return editor3dPart.getCursorNode();
+        //FIXME return editor3dPart.getCursorNode();
+        return null;
     }
 
     @Override
     @JmeThread
     public  @NotNull Node getMarkersNode() {
-        return editor3dPart.getMarkersNode();
+        //return editor3dPart.getMarkersNode();
+        //FIXME
+        return null;
     }
 }
 

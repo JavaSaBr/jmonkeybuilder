@@ -201,6 +201,15 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
         }
     }
 
+    /**
+     * Get a previous status of playing audio.
+     *
+     * @return the previous status of playing audio.
+     */
+    public @Nullable Status getPrevStatus() {
+        return prevStatus;
+    }
+
     @FromAnyThread
     private void notifyChangeStatus(@NotNull Status status) {
         ExecutorManager.getInstance()
