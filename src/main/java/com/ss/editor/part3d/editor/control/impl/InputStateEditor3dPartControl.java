@@ -8,7 +8,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -20,8 +20,11 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<Editor3dPart> implements
+public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> implements
         InputEditor3dPartControl {
+
+    public static final String PROP_IS_CONTROL_DOWN = "inputStateEditor.isControlDown";
+    public static final String PROP_IS_ALT_DOWN = "inputStateEditor.isAltDown";
 
     private static final ObjectDictionary<String, Trigger> TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
@@ -85,7 +88,7 @@ public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<
      */
     private boolean buttonMiddleDown;
 
-    public InputStateEditor3dPartControl(@NotNull Editor3dPart editor3dPart) {
+    public InputStateEditor3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart) {
         super(editor3dPart);
         actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> buttonLeftDown = isPressed);
         actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> buttonRightDown = isPressed);
@@ -103,65 +106,5 @@ public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<
         MULTI_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
 
         inputManager.addListener(this, MAPPINGS);
-    }
-
-    /**
-     * Return true if alt is pressed.
-     *
-     * @return true if alt is pressed.
-     */
-    @JmeThread
-    public boolean isAltDown() {
-        return altDown;
-    }
-
-    /**
-     * Return true if control is pressed.
-     *
-     * @return true if control is pressed.
-     */
-    @JmeThread
-    public boolean isControlDown() {
-        return controlDown;
-    }
-
-    /**
-     * Return true if shift is pressed.
-     *
-     * @return true if shift is pressed.
-     */
-    @JmeThread
-    public boolean isShiftDown() {
-        return shiftDown;
-    }
-
-    /**
-     * Return true if left button is pressed.
-     *
-     * @return true if left button is pressed.
-     */
-    @JmeThread
-    public boolean isButtonLeftDown() {
-        return buttonLeftDown;
-    }
-
-    /**
-     * Return true if middle button is pressed.
-     *
-     * @return true if middle button is pressed.
-     */
-    @JmeThread
-    public boolean isButtonMiddleDown() {
-        return buttonMiddleDown;
-    }
-
-    /**
-     * Return true if right button is pressed.
-     *
-     * @return true if right button is pressed.
-     */
-    @JmeThread
-    public boolean isButtonRightDown() {
-        return buttonRightDown;
     }
 }

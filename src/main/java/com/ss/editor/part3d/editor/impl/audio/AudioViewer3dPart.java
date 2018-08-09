@@ -9,8 +9,11 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.impl.AbstractExtendableEditor3dPart;
 import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
+import com.ss.rlib.common.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * The implementation of an editor app state for the {@link AudioViewerEditor}.
@@ -47,6 +50,11 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
         super(fileEditor);
     }
 
+    @JmeThread
+    private @NotNull Optional<AudioNode> getAudioNodeOpt() {
+        return Optional.ofNullable(audioNode);
+    }
+
     /**
      * Load the audio data.
      *
@@ -66,7 +74,7 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
      * @param audioKey  the audio key.
      */
     @JmeThread
-    private void loadInJme(@NotNull AudioData audioData, @NotNull AudioKey audioKey) {
+    private @NotNull AudioNode loadInJme(@NotNull AudioData audioData, @NotNull AudioKey audioKey) {
         removeAudioNode();
 
         this.audioData = audioData;
@@ -76,6 +84,8 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
         audioNode.setPositional(false);
 
         stateNode.attachChild(audioNode);
+
+        return audioNode;
     }
 
     /**
@@ -127,8 +137,10 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
             }
         }
 
-        loadInJme(getAudioData(), getAudioKey());
+        var audioData = ObjectUtils.notNull(this.audioData, "audio data can't be null.");
+        var audioKey = ObjectUtils.notNull(this.audioKey, "audio key can't be null.");
 
+        var audioNode = loadInJme(audioData, audioKey);
         audioNode.play();
     }
 
@@ -153,9 +165,7 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
      */
     @JmeThread
     private void pauseInJme() {
-        if (audioNode != null) {
-            audioNode.pause();
-        }
+        getAudioNodeOpt().ifPresent(AudioNode::pause);
     }
 
     /**
@@ -173,9 +183,7 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
     @JmeThread
     private void stopInJme() {
         removeAudioNode();
-
-        ExecutorManager.getInstance()
-                .addFxTask(() -> fileEditor.notifyChangedStatus(Status.Stopped));
+        notifyChangeStatus(Status.Stopped);
     }
 
     @Override
@@ -183,24 +191,25 @@ public class AudioViewer3dPart extends AbstractExtendableEditor3dPart<AudioViewe
     public void update(float tpf) {
         super.update(tpf);
 
-        if (audioNode == null) {
-            return;
+        var status = getAudioNodeOpt()
+                .map(AudioNode::getStatus)
+                .orElse(null);
+
+        if (status != null && status != prevStatus) {
+            notifyChangeStatus(status);
+            prevStatus = status;
         }
+    }
 
-        var status = audioNode.getStatus();
-
-        if (status != getPrevStatus()) {
-
-            ExecutorManager.getInstance()
-                    .addFxTask(() -> fileEditor.notifyChangedStatus(status));
-
-            setPrevStatus(status);
-        }
+    @FromAnyThread
+    private void notifyChangeStatus(@NotNull Status status) {
+        ExecutorManager.getInstance()
+                .addFxTask(() -> fileEditor.notifyChangedStatus(status));
     }
 
     @Override
     public String toString() {
-        return "AudioViewer3DState{" +
+        return "AudioViewer3dPart{" +
                 "prevStatus=" + prevStatus +
                 ", audioNode=" + audioNode +
                 ", audioData=" + audioData +

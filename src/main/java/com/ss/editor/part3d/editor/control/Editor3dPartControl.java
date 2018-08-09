@@ -43,4 +43,22 @@ public interface Editor3dPartControl {
     @JmeThread
     default void postCameraUpdate(float tpf) {
     }
+
+    /**
+     * Return true if this control knows about the property.
+     *
+     * @param propertyId the property id.
+     * @return true if this control knows about the property.
+     */
+    @JmeThread
+    boolean hasProperty(@NotNull String propertyId);
+
+    /**
+     * Get a boolean property value.
+     *
+     * @param propertyId the property id.
+     * @return the property value or false if the property is not known.
+     */
+    @JmeThread
+    boolean getBooleanProperty(@NotNull String propertyId);
 }

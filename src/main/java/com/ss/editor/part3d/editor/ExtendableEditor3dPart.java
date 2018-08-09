@@ -52,4 +52,13 @@ public interface ExtendableEditor3dPart extends Editor3dPart {
     default <C extends Editor3dPartControl> @NotNull C requireControl(@NotNull Class<C> type) {
         return notNull(getControl(type));
     }
+
+    /**
+     * Get a boolean property value.
+     *
+     * @param propertyId the property id.
+     * @return the property value or false if the property is not known.
+     */
+    @FromAnyThread
+    boolean getBooleanProperty(@NotNull String propertyId);
 }

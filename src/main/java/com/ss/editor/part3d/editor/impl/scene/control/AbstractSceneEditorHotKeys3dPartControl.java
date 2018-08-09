@@ -1,4 +1,4 @@
-package com.ss.editor.part3d.editor.impl.scene;
+package com.ss.editor.part3d.editor.impl.scene.control;
 
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -36,7 +36,7 @@ public class AbstractSceneEditorHotKeys3dPartControl extends KeyEventRedirectEdi
                     .toArray(String.class);
     }
 
-    protected AbstractSceneEditorHotKeys3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart) {
+    public AbstractSceneEditorHotKeys3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart) {
         super(editor3dPart, TRIGGERS, MAPPINGS);
     }
 }

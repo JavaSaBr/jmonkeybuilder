@@ -7,12 +7,8 @@ import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
-import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
@@ -34,7 +30,6 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.control.transform.*;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
@@ -42,6 +37,9 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.scene.*;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.part3d.editor.control.impl.CameraEditor3dPartControl;
+import com.ss.editor.part3d.editor.impl.scene.control.AbstractSceneEditorHotKeys3dPartControl;
+import com.ss.editor.part3d.editor.impl.scene.control.PaintingSupportEditor3dPartControl;
 import com.ss.editor.part3d.editor.impl.scene.handler.ApplyScaleToPhysicsControlsHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.DisableControlsTransformationHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.PhysicsControlTransformationHandler;
@@ -50,7 +48,6 @@ import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
-import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
@@ -58,7 +55,6 @@ import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -340,10 +336,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
      */
     private boolean activeTransform;
 
-    /**
-     * The flag of painting mode.
-     */
-    private boolean paintingMode;
 
     public AbstractSceneEditor3dPart(@NotNull T fileEditor) {
         super(fileEditor);
@@ -365,9 +357,12 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         this.cursorNode = new Node("Cursor node");
         this.markersNode = new Node("Markers node");
 
-        var editorCamera = notNull(getEditorCamera());
-        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
-        editorCamera.setDefaultVerticalRotation(V_ROTATION);
+        controls.add(new AbstractSceneEditorHotKeys3dPartControl(this));
+        controls.add(new PaintingSupportEditor3dPartControl(this));
+
+        var cameraControl = requireControl(CameraEditor3dPartControl.class);
+        cameraControl.setDefaultHorizontalRotation(H_ROTATION);
+        cameraControl.setDefaultVerticalRotation(V_ROTATION);
 
         modelNode.attachChild(lightNode);
         modelNode.attachChild(audioNode);
@@ -381,12 +376,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         setTransformMode(TransformationMode.GLOBAL);
         setTransformType(TransformType.MOVE_TOOL);
         setTransformDeltaX(Float.NaN);
-    }
-
-    @Override
-    @FromAnyThread
-    protected boolean needEditorCamera() {
-        return true;
     }
 
     /**
@@ -836,64 +825,8 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         } else if (!isPaintingMode()) {
             toolNode.attachChild(transformToolNode);
         }
-
-        if (isPaintingMode()) {
-            updatePaintingNodes();
-            updatePainting(tpf);
-        }
     }
 
-    /**
-     * Update editing nodes.
-     */
-    @JmeThread
-    private void updatePaintingNodes() {
-
-        if (!isPaintingMode()) {
-            return;
-        }
-
-        var control = PaintingUtils.getPaintingControl(cursorNode);
-        var paintedModel = PaintingUtils.getPaintedModel(control);
-
-        if (paintedModel == null) {
-            return;
-        }
-
-        var collisions = GeomUtils.getCollisionsFromCursor(paintedModel, getCamera());
-
-        if (collisions.size() < 1) {
-            return;
-        }
-
-        CollisionResult result = null;
-
-        for (var collision : collisions) {
-
-            var geometry = collision.getGeometry();
-            var parent = NodeUtils.findParent(geometry, spatial ->
-                    spatial.getUserData(KEY_IGNORE_RAY_CAST) == Boolean.TRUE);
-
-            if (parent == null) {
-                result = collision;
-                break;
-            }
-        }
-
-        if (result == null) {
-            result = collisions.getClosestCollision();
-        }
-
-        var contactPoint = result.getContactPoint();
-        var contactNormal = result.getContactNormal();
-
-        var local = LocalObjects.get();
-        var rotation = local.nextRotation();
-        rotation.lookAt(contactNormal, Vector3f.UNIT_Y);
-
-        cursorNode.setLocalRotation(rotation);
-        cursorNode.setLocalTranslation(contactPoint);
-    }
 
     /**
      * Update the transformation node.
@@ -1248,63 +1181,20 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
 
         if (MOUSE_RIGHT_CLICK.equals(name)) {
 
-            if (isPaintingMode()) {
-
-                if (isPressed) {
-                    startPainting(getPaintingInput(MouseButton.SECONDARY));
-                } else {
-                    finishPainting(getPaintingInput(MouseButton.SECONDARY));
-                }
-
-            } else if(!isPressed) {
+             if(!isPressed) {
                 processSelect();
             }
 
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
 
-            if (isPaintingMode()) {
-
-                if (isPressed) {
-                    startPainting(getPaintingInput(MouseButton.PRIMARY));
-                } else {
-                    finishPainting(getPaintingInput(MouseButton.PRIMARY));
-                }
-
+            if (isPressed) {
+                startTransform();
             } else {
-                if (isPressed) {
-                    startTransform();
-                } else {
-                    endTransform();
-                }
+                endTransform();
             }
         }
     }
 
-    /**
-     * Get the painting input.
-     *
-     * @param mouseButton the mouse button.
-     * @return the painting input.
-     */
-    @FromAnyThread
-    protected @NotNull PaintingInput getPaintingInput(@NotNull MouseButton mouseButton) {
-
-        switch (mouseButton) {
-            case SECONDARY: {
-
-                if (isControlDown()) {
-                    return PaintingInput.MOUSE_SECONDARY_WITH_CTRL;
-                }
-
-                return PaintingInput.MOUSE_SECONDARY;
-            }
-            case PRIMARY: {
-                return PaintingInput.MOUSE_PRIMARY;
-            }
-        }
-
-        return PaintingInput.MOUSE_PRIMARY;
-    }
 
     /**
      * Handling a click in the area of the editor.
@@ -1598,56 +1488,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
 
         setActiveTransform(true);
         return true;
-    }
-
-    /**
-     * Start painting.
-     */
-    @JmeThread
-    private void startPainting(@NotNull PaintingInput input) {
-
-        var control = PaintingUtils.getPaintingControl(cursorNode);
-        var paintedModel = PaintingUtils.getPaintedModel(cursorNode);
-
-        if (control == null || paintedModel == null || control.isStartedPainting()) {
-            return;
-        }
-
-        control.startPainting(input, cursorNode.getLocalRotation(), cursorNode.getLocalTranslation());
-    }
-
-    /**
-     * Finish painting.
-     */
-    @JmeThread
-    private void finishPainting(@NotNull PaintingInput input) {
-
-        var control = PaintingUtils.getPaintingControl(cursorNode);
-        var paintedModel = PaintingUtils.getPaintedModel(control);
-
-        if (control == null || paintedModel == null) {
-            return;
-        } else if (!control.isStartedPainting() || control.getCurrentInput() != input) {
-            return;
-        }
-
-        control.finishPainting(cursorNode.getLocalRotation(), cursorNode.getLocalTranslation());
-    }
-
-    /**
-     * Update painting.
-     */
-    @JmeThread
-    private void updatePainting(float tpf) {
-
-        var control = PaintingUtils.getPaintingControl(cursorNode);
-        var model = PaintingUtils.getPaintedModel(control);
-
-        if (control == null || model == null || !control.isStartedPainting()) {
-            return;
-        }
-
-        control.updatePainting(cursorNode.getLocalRotation(), cursorNode.getLocalTranslation(), tpf);
     }
 
     /**
@@ -2237,57 +2077,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() ->
                 fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
-    }
-
-    /**
-     * Set true if painting mode is enabled.
-     *
-     * @param paintingMode true if painting mode is enabled.
-     */
-    @JmeThread
-    private void setPaintingMode(boolean paintingMode) {
-        this.paintingMode = paintingMode;
-    }
-
-    /**
-     * Return true if painting mode is enabled.
-     *
-     * @return true if painting mode is enabled.
-     */
-    @JmeThread
-    private boolean isPaintingMode() {
-        return paintingMode;
-    }
-
-    /**
-     * Change enabling of painting mode.
-     *
-     * @param paintingMode true if painting mode is enabled.
-     */
-    @FromAnyThread
-    public void changePaintingMode(boolean paintingMode) {
-        ExecutorManager.getInstance()
-                .addJmeTask(() -> changePaintingModeInJme(paintingMode));
-    }
-
-    /**
-     * Change enabling of painting mode in jME thread.
-     *
-     * @param paintingMode true if painting mode is enabled.
-     */
-    @JmeThread
-    private void changePaintingModeInJme(boolean paintingMode) {
-        setPaintingMode(paintingMode);
-
-        if (isPaintingMode()) {
-            toolNode.attachChild(cursorNode);
-            toolNode.attachChild(markersNode);
-            toolNode.detachChild(transformToolNode);
-        } else {
-            toolNode.detachChild(cursorNode);
-            toolNode.detachChild(markersNode);
-            toolNode.attachChild(transformToolNode);
-        }
     }
 
     /**

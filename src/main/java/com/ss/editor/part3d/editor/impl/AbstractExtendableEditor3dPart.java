@@ -91,6 +91,13 @@ public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> exten
     }
 
     @Override
+    @JmeThread
+    public boolean getBooleanProperty(@NotNull String propertyId) {
+        var control = controls.findAny(propertyId, Editor3dPartControl::hasProperty);
+        return control != null && control.getBooleanProperty(propertyId);
+    }
+
+    @Override
     @FromAnyThread
     public @NotNull T getFileEditor() {
         return fileEditor;
