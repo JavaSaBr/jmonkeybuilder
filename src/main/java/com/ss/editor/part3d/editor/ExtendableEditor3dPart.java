@@ -1,9 +1,13 @@
 package com.ss.editor.part3d.editor;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.control.Editor3dPartControl;
+import com.ss.editor.part3d.editor.event.Editor3dPartEvent;
 import com.ss.editor.ui.component.editor.FileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +26,14 @@ public interface ExtendableEditor3dPart extends Editor3dPart {
      */
     @FromAnyThread
     @NotNull Node getRootNode();
+
+    /**
+     * Get a presented camera in this editor 3d part.
+     *
+     * @return the presented camera in this editor 3d part.
+     */
+    @FromAnyThread
+    @NotNull Camera getCamera();
 
     /**
      * Get the file editor.
@@ -61,4 +73,12 @@ public interface ExtendableEditor3dPart extends Editor3dPart {
      */
     @FromAnyThread
     boolean getBooleanProperty(@NotNull String propertyId);
+
+    /**
+     * Notify this 3d part about some events.
+     *
+     * @param event the event.
+     */
+    @JmeThread
+    void notify(@NotNull Editor3dPartEvent event);
 }

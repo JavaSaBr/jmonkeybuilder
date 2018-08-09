@@ -17,6 +17,7 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
 import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.JmeUtils;
@@ -33,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Editor3dPart> implements
+public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> implements
         InputEditor3dPartControl {
 
     protected static final ObjectDictionary<String, Trigger> TRIGGERS =
@@ -60,10 +61,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
     protected static final String KEY_ALT = "jMB.baseEditor.keyAlt";
     protected static final String KEY_SHIFT = "jMB.baseEditor.keyShift";
 
-    protected static final String KEY_CTRL_S = "jMB.baseEditor.Ctrl.S";
-    protected static final String KEY_CTRL_Z = "jMB.baseEditor.Ctrl.Z";
-    protected static final String KEY_CTRL_Y = "jMB.baseEditor.Ctrl.Y";
-
     protected static final String KEY_FLY_CAMERA_W = "jMB.baseEditor.keyFlyCameraW";
     protected static final String KEY_FLY_CAMERA_S = "jMB.baseEditor.keyFlyCameraS";
     protected static final String KEY_FLY_CAMERA_A = "jMB.baseEditor.keyFlyCameraA";
@@ -73,7 +70,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
     protected static final String KEY_NUM_2 = "jMB.baseEditor.num2";
     protected static final String KEY_NUM_3 = "jMB.baseEditor.num3";
     protected static final String KEY_NUM_4 = "jMB.baseEditor.num4";
-    protected static final String KEY_NUM_5 = "jMB.baseEditor.num5";
     protected static final String KEY_NUM_6 = "jMB.baseEditor.num6";
     protected static final String KEY_NUM_7 = "jMB.baseEditor.num7";
     protected static final String KEY_NUM_8 = "jMB.baseEditor.num8";
@@ -171,12 +167,12 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Edit
      */
     private boolean needMovableCamera;
 
-    public CameraEditor3dPartControl(@NotNull Editor3dPart editor3dPart, @NotNull Camera camera) {
+    public CameraEditor3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart, @NotNull Camera camera) {
         this(editor3dPart, camera, true, true, true);
     }
 
     public CameraEditor3dPartControl(
-            @NotNull Editor3dPart editor3dPart,
+            @NotNull ExtendableEditor3dPart editor3dPart,
             @NotNull Camera camera,
             boolean needLight,
             boolean needUpdateLight,

@@ -20,11 +20,23 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> implements
-        InputEditor3dPartControl {
+public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> {
 
     public static final String PROP_IS_CONTROL_DOWN = "inputStateEditor.isControlDown";
     public static final String PROP_IS_ALT_DOWN = "inputStateEditor.isAltDown";
+    public static final String PROP_IS_SHIFT_DOWN = "inputStateEditor.isShiftDown";
+    public static final String PROP_IS_BUTTON_LEFT_DOWN = "inputStateEditor.isButtonLeftDown";
+    public static final String PROP_IS_BUTTON_MIDDLE_DOWN = "inputStateEditor.isButtonMiddleDown";
+    public static final String PROP_IS_BUTTON_RIGHT_DOWN = "inputStateEditor.isButtonRightDown";
+
+    private static final String[] PROPERTIES = {
+            PROP_IS_CONTROL_DOWN,
+            PROP_IS_ALT_DOWN,
+            PROP_IS_SHIFT_DOWN,
+            PROP_IS_BUTTON_LEFT_DOWN,
+            PROP_IS_BUTTON_MIDDLE_DOWN,
+            PROP_IS_BUTTON_RIGHT_DOWN
+    };
 
     private static final ObjectDictionary<String, Trigger> TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
@@ -58,44 +70,23 @@ public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<
         MAPPINGS = mappings.toArray(String.class);
     }
 
-    /**
-     * True if control is pressed.
-     */
-    private boolean controlDown;
-
-    /**
-     * True if alt is pressed.
-     */
-    private boolean altDown;
-
-    /**
-     * True if shift is pressed.
-     */
-    private boolean shiftDown;
-
-    /**
-     * True if left button is pressed.
-     */
-    private boolean buttonLeftDown;
-
-    /**
-     * True if right button is pressed.
-     */
-    private boolean buttonRightDown;
-
-    /**
-     * True if middle button is pressed.
-     */
-    private boolean buttonMiddleDown;
+    @NotNull
+    private final ObjectDictionary<String, Boolean> state;
 
     public InputStateEditor3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart) {
         super(editor3dPart);
-        actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> buttonLeftDown = isPressed);
-        actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> buttonRightDown = isPressed);
-        actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> buttonMiddleDown = isPressed);
-        actionHandlers.put(KEY_ALT, (isPressed, tpf) -> altDown = isPressed);
-        actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> controlDown = isPressed);
-        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> shiftDown = isPressed);
+        this.state = ObjectDictionary.ofType(String.class, Boolean.class);
+
+        actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> state.put(PROP_IS_BUTTON_LEFT_DOWN, isPressed));
+        actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> state.put(PROP_IS_BUTTON_RIGHT_DOWN, isPressed));
+        actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> state.put(PROP_IS_BUTTON_MIDDLE_DOWN, isPressed));
+        actionHandlers.put(KEY_ALT, (isPressed, tpf) -> state.put(PROP_IS_ALT_DOWN, isPressed));
+        actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> state.put(PROP_IS_CONTROL_DOWN, isPressed));
+        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> state.put(PROP_IS_SHIFT_DOWN, isPressed));
+
+        for (var property : PROPERTIES) {
+            state.put(property, false);
+        }
     }
 
     @Override
@@ -106,5 +97,17 @@ public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<
         MULTI_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
 
         inputManager.addListener(this, MAPPINGS);
+    }
+
+    @Override
+    @JmeThread
+    public boolean hasProperty(@NotNull String propertyId) {
+        return state.containsKey(propertyId);
+    }
+
+    @Override
+    @JmeThread
+    public boolean getBooleanProperty(@NotNull String propertyId) {
+        return Boolean.TRUE.equals(state.get(propertyId));
     }
 }

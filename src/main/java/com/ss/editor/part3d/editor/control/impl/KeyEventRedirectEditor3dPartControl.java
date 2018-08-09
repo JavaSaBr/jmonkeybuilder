@@ -14,6 +14,10 @@ import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_BUTTON_MIDDLE_DOWN;
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_SHIFT_DOWN;
+
 /**
  * The control to redirect some input events from {@link Editor3dPart} to {@link FileEditor}.
  *
@@ -55,11 +59,10 @@ public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartCo
     @BackgroundThread
     private void makeHandler(@NotNull ExtendableEditor3dPart editor3dPart, @NotNull KeyCode keyCode, boolean isPressed) {
 
-        var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
         var fileEditor = editor3dPart.getFileEditor();
-        var isControlDown = inputState.isControlDown();
-        var isShiftDown = inputState.isShiftDown();
-        var isButtonMiddleDown = inputState.isButtonMiddleDown();
+        var isControlDown =  editor3dPart.getBooleanProperty(PROP_IS_CONTROL_DOWN);
+        var isShiftDown = editor3dPart.getBooleanProperty(PROP_IS_SHIFT_DOWN);
+        var isButtonMiddleDown =editor3dPart.getBooleanProperty(PROP_IS_BUTTON_MIDDLE_DOWN);
 
         fileEditor.handleKeyAction(ObjectUtils.notNull(keyCode), isPressed,
                 isControlDown, isShiftDown, isButtonMiddleDown);

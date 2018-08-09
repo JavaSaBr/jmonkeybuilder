@@ -1,41 +1,40 @@
 package com.ss.editor.part3d.editor.impl.scene.control;
 
-import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.collision.CollisionResult;
 import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.painting.PaintingInput;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.part3d.editor.EditableSceneEditor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
-import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.part3d.editor.control.impl.BaseInputEditor3dPartControl;
-import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart;
+import com.ss.editor.part3d.editor.impl.scene.event.FinishEditingEvent;
+import com.ss.editor.part3d.editor.impl.scene.event.StartEditingEvent;
 import com.ss.editor.util.*;
-import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
+
+import static com.ss.editor.part3d.editor.EditableSceneEditor3dPart.PROP_IS_EDITING;
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_IGNORE_RAY_CAST;
 
 /**
  * The control to implement painting support on the scene editor 3d part.
  *
  * @author JavaSaBr
  */
-public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartControl<AbstractSceneEditor3dPart<?, ?>> implements
-        InputEditor3dPartControl {
+public class PaintingSupportEditor3dPartControl<T extends EditableSceneEditor3dPart & ExtendableEditor3dPart>
+        extends BaseInputEditor3dPartControl<T> {
 
     private static final ObjectDictionary<String, Trigger> TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
-
-    private static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS =
-            ObjectDictionary.ofType(String.class, Trigger[].class);
 
     private static final String MOUSE_RIGHT_CLICK = "jMB.paintingSupportEditor.mouseRightClick";
     private static final String MOUSE_LEFT_CLICK = "jMB.paintingSupportEditor.mouseLeftClick";
@@ -46,25 +45,34 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
 
         TRIGGERS.put(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        TRIGGERS.put(MOUSE_MIDDLE_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
-        MULTI_TRIGGERS.put(KEY_CTRL, toArray(new KeyTrigger(KeyInput.KEY_RCONTROL), new KeyTrigger(KeyInput.KEY_LCONTROL)));
-        MULTI_TRIGGERS.put(KEY_SHIFT, toArray(new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_LSHIFT)));
-        MULTI_TRIGGERS.put(KEY_ALT, toArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
-
-        Array<String> mappings = TRIGGERS.keyArray(String.class);
-        mappings.addAll(MULTI_TRIGGERS.keyArray(String.class));
-
-        MAPPINGS = mappings.toArray(String.class);
+        MAPPINGS = TRIGGERS.keyArray(String.class)
+                .toArray(String.class);
     }
+
+    /**
+     * The cursor node.
+     */
+    @NotNull
+    private final Node cursorNode;
+
+    /**
+     * The markers node.
+     */
+    @NotNull
+    private final Node markersNode;
 
     /**
      * The flag of painting mode.
      */
     private boolean paintingMode;
 
-    public PaintingSupportEditor3dPartControl(@NotNull AbstractSceneEditor3dPart<?, ?> editor3dPart) {
+    public PaintingSupportEditor3dPartControl(@NotNull T editor3dPart) {
         super(editor3dPart);
+
+        this.cursorNode = new Node("Cursor node");
+        this.markersNode = new Node("Markers node");
+
         actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> {
             if (paintingMode) {
                 if (isPressed) {
@@ -88,10 +96,7 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
     @Override
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
-
         TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-        MULTI_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-
         inputManager.addListener(this, MAPPINGS);
     }
 
@@ -129,7 +134,6 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
         control.finishPainting(cursorNode.getLocalRotation(), cursorNode.getLocalTranslation());
     }
 
-
     @Override
     @JmeThread
     public void postCameraUpdate(float tpf) {
@@ -161,7 +165,7 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
     @JmeThread
     private void updatePaintingNodes() {
 
-        if (!isPaintingMode()) {
+        if (!paintingMode) {
             return;
         }
 
@@ -172,7 +176,7 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
             return;
         }
 
-        var collisions = GeomUtils.getCollisionsFromCursor(paintedModel, getCamera());
+        var collisions = GeomUtils.getCollisionsFromCursor(paintedModel, editor3dPart.getCamera());
 
         if (collisions.size() < 1) {
             return;
@@ -219,7 +223,7 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
         switch (mouseButton) {
             case SECONDARY: {
 
-                if (isControlDown()) {
+                if (editor3dPart.getBooleanProperty(PROP_IS_CONTROL_DOWN)) {
                     return PaintingInput.MOUSE_SECONDARY_WITH_CTRL;
                 }
 
@@ -253,15 +257,37 @@ public class PaintingSupportEditor3dPartControl extends BaseInputEditor3dPartCon
     private void changePaintingModeInJme(boolean paintingMode) {
         this.paintingMode = paintingMode;
 
+        var toolNode = editor3dPart.getToolNode();
+
         if (paintingMode) {
+
+            if (editor3dPart.getBooleanProperty(PROP_IS_EDITING)) {
+                return;
+            }
+
             toolNode.attachChild(cursorNode);
             toolNode.attachChild(markersNode);
-            toolNode.detachChild(transformToolNode);
+
+            editor3dPart.notify(new StartEditingEvent(this));
+
         } else {
+
             toolNode.detachChild(cursorNode);
             toolNode.detachChild(markersNode);
-            toolNode.attachChild(transformToolNode);
+
+            editor3dPart.notify(new FinishEditingEvent(this));
         }
     }
 
+    @Override
+    @JmeThread
+    public boolean hasProperty(@NotNull String propertyId) {
+        return PROP_IS_EDITING.equals(propertyId);
+    }
+
+    @Override
+    @JmeThread
+    public boolean getBooleanProperty(@NotNull String propertyId) {
+        return PROP_IS_EDITING.equals(propertyId) && paintingMode;
+    }
 }

@@ -5,18 +5,21 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.SavableEditor3dPart;
 import com.ss.editor.part3d.editor.UndoableEditor3dPart;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
+
 /**
  * The control to base hotkeys of the editor 3d part.
  *
  * @author JavaSaBr
  */
-public class BaseHotKeysEditor3dPartControl<T extends SavableEditor3dPart & UndoableEditor3dPart>
+public class BaseHotKeysEditor3dPartControl<T extends SavableEditor3dPart & UndoableEditor3dPart & ExtendableEditor3dPart>
         extends BaseInputEditor3dPartControl<T> {
 
     private static final ObjectDictionary<String, Trigger> TRIGGERS =
@@ -42,22 +45,19 @@ public class BaseHotKeysEditor3dPartControl<T extends SavableEditor3dPart & Undo
         super(editor3dPart);
 
         actionHandlers.put(KEY_CTRL_Z, (isPressed, tpf) -> {
-            var control = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
-            if (!isPressed && control.isControlDown()) {
+            if (!isPressed && editor3dPart.getBooleanProperty(PROP_IS_CONTROL_DOWN)) {
                 editor3dPart.undo();
             }
         });
 
         actionHandlers.put(KEY_CTRL_Y, (isPressed, tpf) -> {
-            var control = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
-            if (!isPressed && control.isControlDown()) {
+            if (!isPressed && editor3dPart.getBooleanProperty(PROP_IS_CONTROL_DOWN)) {
                 editor3dPart.redo();
             }
         });
 
         actionHandlers.put(KEY_CTRL_S, (isPressed, tpf) -> {
-            var control = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
-            if (isPressed && control.isControlDown() && editor3dPart.isDirty()) {
+            if (isPressed && editor3dPart.getBooleanProperty(PROP_IS_CONTROL_DOWN) && editor3dPart.isDirty()) {
                 editor3dPart.save();
             }
         });

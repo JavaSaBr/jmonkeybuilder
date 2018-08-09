@@ -7,7 +7,6 @@ import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
-import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
@@ -35,18 +34,18 @@ import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.scene.*;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.part3d.editor.EditableSceneEditor3dPart;
 import com.ss.editor.part3d.editor.control.impl.CameraEditor3dPartControl;
 import com.ss.editor.part3d.editor.impl.scene.control.AbstractSceneEditorHotKeys3dPartControl;
 import com.ss.editor.part3d.editor.impl.scene.control.PaintingSupportEditor3dPartControl;
+import com.ss.editor.part3d.editor.impl.scene.control.TransformationSupportEditor3dPartControl;
 import com.ss.editor.part3d.editor.impl.scene.handler.ApplyScaleToPhysicsControlsHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.DisableControlsTransformationHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.PhysicsControlTransformationHandler;
 import com.ss.editor.part3d.editor.impl.scene.handler.ReactivatePhysicsControlsTransformationHandler;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
-import com.ss.editor.ui.control.property.operation.PropertyOperation;
 import com.ss.editor.util.*;
 import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
@@ -55,7 +54,6 @@ import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
-import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,22 +67,22 @@ import java.util.Optional;
  * @author JavaSaBr
  */
 public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
-        extends Advanced3dFileEditor3dEditorPart<T> implements EditorTransformSupport {
+        extends Advanced3dFileEditor3dEditorPart<T> implements EditorTransformSupport, EditableSceneEditor3dPart {
 
     /**
      * @see SelectionFinder
      */
-    public static final String EP_SELECTION_FINDER = "SceneEditor3DPart#selectionFinder";
+    public static final String EP_SELECTION_FINDER = "AbstractSceneEditor3dPart#selectionFinder";
 
     /**
      * @see TransformationHandler
      */
-    public static final String EP_PRE_TRANSFORM_HANDLER = "SceneEditor3DPart#preTransfromHandler";
+    public static final String EP_PRE_TRANSFORM_HANDLER = "AbstractSceneEditor3dPart#preTransfromHandler";
 
     /**
      * @see TransformationHandler
      */
-    public static final String EP_POST_TRANSFORM_HANDLER = "SceneEditor3DPart#postTransformHandler";
+    public static final String EP_POST_TRANSFORM_HANDLER = "AbstractSceneEditor3dPart#postTransformHandler";
 
     public static final String KEY_LOADED_MODEL = "jMB.sceneEditor.loadedModel";
     public static final String KEY_IGNORE_RAY_CAST = "jMB.sceneEditor.ignoreRayCast";
@@ -198,19 +196,13 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
      * The array of selected models.
      */
     @NotNull
-    protected final Array<Spatial> selected;
+    private final Array<Spatial> selected;
 
     /**
      * The node for the placement of controls.
      */
     @NotNull
     protected final Node toolNode;
-
-    /**
-     * The node for the placement of transform controls.
-     */
-    @NotNull
-    private final Node transformToolNode;
 
     /**
      * The node for the placement of models.
@@ -237,48 +229,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     private final Node presentableNode;
 
     /**
-     * The cursor node.
-     */
-    @NotNull
-    private final Node cursorNode;
-
-    /**
-     * The markers node.
-     */
-    @NotNull
-    private final Node markersNode;
-
-    /**
-     * The nodes for the placement of model controls.
-     */
-    @Nullable
-    private Node moveTool, rotateTool, scaleTool;
-
-    /**
-     * The transformation mode.
-     */
-    @NotNull
-    private TransformationMode transformMode;
-
-    /**
-     * Center of transformation.
-     */
-    @Nullable
-    private Transform transformCenter;
-
-    /**
-     * The original transformation.
-     */
-    @Nullable
-    private Transform originalTransform;
-
-    /**
-     * Object to transform.
-     */
-    @Nullable
-    private Spatial toTransform;
-
-    /**
      * Current display model.
      */
     @Nullable
@@ -290,30 +240,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @Nullable
     private Material selectionMaterial;
 
-    /**
-     * The current type of transformation.
-     */
-    @Nullable
-    private volatile TransformType transformType;
-
-    /**
-     * The current direction of transformation.
-     */
-    @Nullable
-    private PickedAxis pickedAxis;
-
-    /**
-     * The difference between the previous point of transformation and new.
-     */
-    private float transformDeltaX;
-    private float transformDeltaY;
-    private float transformDeltaZ;
-
-    /**
-     * The plane for calculation transforms.
-     */
-    @Nullable
-    private Node collisionPlane;
 
     /**
      * Grid of the scene.
@@ -331,11 +257,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
      */
     private boolean showSelection;
 
-    /**
-     * The flag of existing active transformation.
-     */
-    private boolean activeTransform;
-
 
     public AbstractSceneEditor3dPart(@NotNull T fileEditor) {
         super(fileEditor);
@@ -347,18 +268,16 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();
         this.toolNode = new Node("ToolNode");
-        this.transformToolNode = new Node("TransformToolNode");
         this.lightNodes = ArrayFactory.newArray(EditorLightNode.class);
         this.audioNodes = ArrayFactory.newArray(EditorAudioNode.class);
         this.presentableNodes = ArrayFactory.newArray(EditorPresentableNode.class);
         this.lightNode = new Node("Lights");
         this.audioNode = new Node("Audio nodes");
         this.presentableNode = new Node("Presentable nodes");
-        this.cursorNode = new Node("Cursor node");
-        this.markersNode = new Node("Markers node");
 
         controls.add(new AbstractSceneEditorHotKeys3dPartControl(this));
-        controls.add(new PaintingSupportEditor3dPartControl(this));
+        controls.add(new PaintingSupportEditor3dPartControl<>(this));
+        controls.add(new TransformationSupportEditor3dPartControl<>(this));
 
         var cameraControl = requireControl(CameraEditor3dPartControl.class);
         cameraControl.setDefaultHorizontalRotation(H_ROTATION);
@@ -368,38 +287,11 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         modelNode.attachChild(audioNode);
         modelNode.attachChild(presentableNode);
 
-        createCollisionPlane();
         createToolElements();
-        createManipulators();
         setShowSelection(true);
         setShowGrid(true);
-        setTransformMode(TransformationMode.GLOBAL);
-        setTransformType(TransformType.MOVE_TOOL);
-        setTransformDeltaX(Float.NaN);
     }
 
-    /**
-     * Create collision plane.
-     */
-    @FromAnyThread
-    private void createCollisionPlane() {
-
-        var assetManager = EditorUtils.getAssetManager();
-        var material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-
-        var renderState = material.getAdditionalRenderState();
-        renderState.setFaceCullMode(RenderState.FaceCullMode.Off);
-        renderState.setWireframe(true);
-
-        var size = 20000F;
-
-        var geometry = new Geometry("plane", new Quad(size, size));
-        geometry.setMaterial(material);
-        geometry.setLocalTranslation(-size / 2, -size / 2, 0);
-
-        collisionPlane = new Node();
-        collisionPlane.attachChild(geometry);
-    }
 
     /**
      * Create tool elements.
@@ -407,7 +299,9 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @FromAnyThread
     private void createToolElements() {
 
-        selectionMaterial = createColorMaterial(new ColorRGBA(1F, 170 / 255F, 64 / 255F, 1F));
+        selectionMaterial = JmeUtils.coloredWireframeMaterial(
+                new ColorRGBA(1F, 170 / 255F, 64 / 255F, 1F), EditorUtils.getAssetManager());
+
         grid = createGrid();
 
         toolNode.attachChild(grid);
@@ -491,179 +385,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Create manipulators.
-     */
-    @FromAnyThread
-    private void createManipulators() {
-
-        var assetManager = EditorUtils.getAssetManager();
-
-        var redMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        redMaterial.setColor("Color", ColorRGBA.Red);
-
-        var blueMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        blueMaterial.setColor("Color", ColorRGBA.Blue);
-
-        var greenMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        greenMaterial.setColor("Color", ColorRGBA.Green);
-
-        moveTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_move.j3o");
-        moveTool.getChild("move_x").setMaterial(redMaterial);
-        moveTool.getChild("collision_move_x").setMaterial(redMaterial);
-        moveTool.getChild("collision_move_x").setCullHint(CullHint.Always);
-        moveTool.getChild("move_y").setMaterial(blueMaterial);
-        moveTool.getChild("collision_move_y").setMaterial(blueMaterial);
-        moveTool.getChild("collision_move_y").setCullHint(CullHint.Always);
-        moveTool.getChild("move_z").setMaterial(greenMaterial);
-        moveTool.getChild("collision_move_z").setMaterial(greenMaterial);
-        moveTool.getChild("collision_move_z").setCullHint(CullHint.Always);
-        moveTool.scale(0.2f);
-        moveTool.addControl(new MoveToolControl(this));
-
-        rotateTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_rotate.j3o");
-        rotateTool.getChild("rot_x").setMaterial(redMaterial);
-        rotateTool.getChild("collision_rot_x").setMaterial(redMaterial);
-        rotateTool.getChild("collision_rot_x").setCullHint(CullHint.Always);
-        rotateTool.getChild("rot_y").setMaterial(blueMaterial);
-        rotateTool.getChild("collision_rot_y").setMaterial(blueMaterial);
-        rotateTool.getChild("collision_rot_y").setCullHint(CullHint.Always);
-        rotateTool.getChild("rot_z").setMaterial(greenMaterial);
-        rotateTool.getChild("collision_rot_z").setMaterial(greenMaterial);
-        rotateTool.getChild("collision_rot_z").setCullHint(CullHint.Always);
-        rotateTool.scale(0.2f);
-        rotateTool.addControl(new RotationToolControl(this));
-
-        scaleTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_scale.j3o");
-        scaleTool.getChild("scale_x").setMaterial(redMaterial);
-        scaleTool.getChild("collision_scale_x").setMaterial(redMaterial);
-        scaleTool.getChild("collision_scale_x").setCullHint(CullHint.Always);
-        scaleTool.getChild("scale_y").setMaterial(blueMaterial);
-        scaleTool.getChild("collision_scale_y").setMaterial(blueMaterial);
-        scaleTool.getChild("collision_scale_y").setCullHint(CullHint.Always);
-        scaleTool.getChild("scale_z").setMaterial(greenMaterial);
-        scaleTool.getChild("collision_scale_z").setMaterial(greenMaterial);
-        scaleTool.getChild("collision_scale_z").setCullHint(CullHint.Always);
-        scaleTool.scale(0.2f);
-        scaleTool.addControl(new ScaleToolControl(this));
-    }
-
-    /**
-     * Create the material to present selected models.
-     */
-    @FromAnyThread
-    private @NotNull Material createColorMaterial(@NotNull ColorRGBA color) {
-
-        var material = new Material(EditorUtils.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        material.getAdditionalRenderState().setWireframe(true);
-        material.setColor("Color", color);
-
-        return material;
-    }
-
-    /**
-     * Set the transform type.
-     *
-     * @param transformType the transformation type.
-     */
-    @FromAnyThread
-    public void setTransformType(@Nullable TransformType transformType) {
-        this.transformType = transformType;
-    }
-
-    /**
-     * Set the transform mode.
-     *
-     * @param transformMode the transformation mode.
-     */
-    @FromAnyThread
-    public void setTransformMode(@NotNull TransformationMode transformMode) {
-        this.transformMode = transformMode;
-    }
-
-    /**
-     * Get the transform type.
-     *
-     * @return the current transformation type.
-     */
-    @FromAnyThread
-    public @Nullable TransformType getTransformType() {
-        return transformType;
-    }
-
-    @Override
-    @JmeThread
-    public @NotNull TransformationMode getTransformationMode() {
-        return transformMode;
-    }
-
-    @Override
-    @JmeThread
-    public @Nullable Transform getTransformCenter() {
-        return transformCenter;
-    }
-
-    @Override
-    @JmeThread
-    public void setPickedAxis(@NotNull PickedAxis axis) {
-        this.pickedAxis = axis;
-    }
-
-    @Override
-    @JmeThread
-    public @NotNull PickedAxis getPickedAxis() {
-        return notNull(pickedAxis);
-    }
-
-    @Override
-    @JmeThread
-    public @Nullable Node getCollisionPlane() {
-        if (collisionPlane == null) throw new RuntimeException("collisionPlane is null");
-        return collisionPlane;
-    }
-
-    @Override
-    @JmeThread
-    public void setTransformDeltaX(float transformDeltaX) {
-        this.transformDeltaX = transformDeltaX;
-    }
-
-    @Override
-    @JmeThread
-    public void setTransformDeltaY(float transformDeltaY) {
-        this.transformDeltaY = transformDeltaY;
-    }
-
-    @Override
-    @JmeThread
-    public void setTransformDeltaZ(float transformDeltaZ) {
-        this.transformDeltaZ = transformDeltaZ;
-    }
-
-    @Override
-    @JmeThread
-    public float getTransformDeltaX() {
-        return transformDeltaX;
-    }
-
-    @Override
-    @JmeThread
-    public float getTransformDeltaY() {
-        return transformDeltaY;
-    }
-
-    @Override
-    @JmeThread
-    public float getTransformDeltaZ() {
-        return transformDeltaZ;
-    }
-
-    @Override
-    @JmeThread
-    public @Nullable Spatial getToTransform() {
-        return toTransform;
-    }
-
-    /**
      * Get the grid.
      *
      * @return the grid.
@@ -671,81 +392,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     @FromAnyThread
     private @NotNull Node getGrid() {
         return notNull(grid);
-    }
-
-    /**
-     * Get the node to place move tool controls.
-     *
-     * @return the node to place move tool controls.
-     */
-    @FromAnyThread
-    private @NotNull Node getMoveTool() {
-        return notNull(moveTool);
-    }
-
-    /**
-     * Get the node to place rotation tool controls.
-     *
-     * @return the node to place rotation tool controls.
-     */
-    @FromAnyThread
-    private @NotNull Node getRotateTool() {
-        return notNull(rotateTool);
-    }
-
-    /**
-     * Get the node to place scale tool controls.
-     *
-     * @return the node to place scale tool controls.
-     */
-    @FromAnyThread
-    private @NotNull Node getScaleTool() {
-        return notNull(scaleTool);
-    }
-
-    /**
-     * Set true of we have active transformation.
-     *
-     * @param activeTransform true of we have active transformation.
-     */
-    @FromAnyThread
-    private void setActiveTransform(boolean activeTransform) {
-        this.activeTransform = activeTransform;
-    }
-
-    /**
-     * Return true of we have active transformation.
-     *
-     * @return true of we have active transformation.
-     */
-    @FromAnyThread
-    private boolean isActiveTransform() {
-        return activeTransform;
-    }
-
-    @Override
-    protected void preCameraUpdate(float tpf) {
-        super.preCameraUpdate(tpf);
-
-        var selectionCenter = getTransformCenter();
-        var transformType = getTransformType();
-
-        // Transform Selected Objects!
-        if (isActiveTransform() && selectionCenter != null) {
-            if (transformType == TransformType.MOVE_TOOL) {
-                var control = getMoveTool().getControl(TransformControl.class);
-                transformToolNode.detachAllChildren();
-                control.processTransform();
-            } else if (transformType == TransformType.ROTATE_TOOL) {
-                var control = getRotateTool().getControl(TransformControl.class);
-                transformToolNode.detachAllChildren();
-                control.processTransform();
-            } else if (transformType == TransformType.SCALE_TOOL) {
-                var control = getScaleTool().getControl(TransformControl.class);
-                transformToolNode.detachAllChildren();
-                control.processTransform();
-            }
-        }
     }
 
     @Override
@@ -808,57 +454,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
 
             shape.setLocalTranslation(position);
         });
-
-        transformToolNode.detachAllChildren();
-
-        if (transformType == TransformType.MOVE_TOOL) {
-            transformToolNode.attachChild(getMoveTool());
-        } else if (transformType == TransformType.ROTATE_TOOL) {
-            transformToolNode.attachChild(getRotateTool());
-        } else if (transformType == TransformType.SCALE_TOOL) {
-            transformToolNode.attachChild(getScaleTool());
-        }
-
-        // FIXME change when will support transform multi-nodes
-        if (selected.size() != 1) {
-            toolNode.detachChild(transformToolNode);
-        } else if (!isPaintingMode()) {
-            toolNode.attachChild(transformToolNode);
-        }
-    }
-
-
-    /**
-     * Update the transformation node.
-     */
-    @JmeThread
-    private void updateTransformNode(@Nullable Transform transform) {
-
-        if (transform == null) {
-            return;
-        }
-
-        var transformationMode = getTransformationMode();
-        var location = transform.getTranslation();
-        var positionOnCamera = getPositionOnCamera(location);
-
-        transformToolNode.setLocalTranslation(positionOnCamera);
-        transformToolNode.setLocalScale(1.5F);
-        transformToolNode.setLocalRotation(transformationMode.getToolRotation(transform, getCamera()));
-    }
-
-    @JmeThread
-    private @NotNull Vector3f getPositionOnCamera(@NotNull Vector3f location) {
-
-        var local = LocalObjects.get();
-        var camera = EditorUtils.getGlobalCamera();
-
-        var cameraLocation = camera.getLocation();
-        var resultPosition = location.subtract(cameraLocation, local.nextVector())
-                .normalizeLocal()
-                .multLocal(camera.getFrustumNear() + 0.5f);
-
-        return cameraLocation.add(resultPosition, local.nextVector());
     }
 
     /**
@@ -925,48 +520,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         }
 
         updateToTransform();
-    }
-
-    /**
-     * Update transformation.
-     */
-    @FromAnyThread
-    private void updateToTransform() {
-        setToTransform(selected.first());
-    }
-
-    /**
-     * Get the original transformation.
-     *
-     * @return the original transformation.
-     */
-    @FromAnyThread
-    private @Nullable Transform getOriginalTransform() {
-        return originalTransform;
-    }
-
-    /**
-     * Get the original transformation.
-     *
-     * @param originalTransform the original transformation.
-     */
-    @FromAnyThread
-    private void setOriginalTransform(@Nullable Transform originalTransform) {
-        this.originalTransform = originalTransform;
-    }
-
-    /**
-     * Update the transformation's center.
-     */
-    @JmeThread
-    private void updateTransformCenter() {
-
-        var toTransform = getToTransform();
-        var transform = toTransform == null ? null : toTransform.getLocalTransform().clone();
-        var originalTransform = transform == null ? null : transform.clone();
-
-        setTransformCenter(transform);
-        setOriginalTransform(originalTransform);
     }
 
     /**
@@ -1185,13 +738,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
                 processSelect();
             }
 
-        } else if (MOUSE_LEFT_CLICK.equals(name)) {
-
-            if (isPressed) {
-                startTransform();
-            } else {
-                endTransform();
-            }
         }
     }
 
@@ -1382,115 +928,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
     }
 
     /**
-     * Finish the transformation of the model.
-     */
-    @JmeThread
-    private void endTransform() {
-
-        if (!isActiveTransform()) {
-            return;
-        }
-
-        var originalTransform = getOriginalTransform();
-        var toTransform = getToTransform();
-        var currentModel = getCurrentModel();
-
-        if (currentModel == null) {
-            LOGGER.warning(this, "not found current model for finishing transform...");
-            return;
-        } else if (originalTransform == null || toTransform == null) {
-            LOGGER.warning(this, "not found originalTransform or toTransform");
-            return;
-        }
-
-        POST_TRANSFORM_HANDLERS.getExtensions()
-                .forEach(handler -> handler.handle(toTransform));
-
-        var oldValue = originalTransform.clone();
-        var newValue = toTransform.getLocalTransform().clone();
-
-        var operation = new PropertyOperation<ChangeConsumer, Spatial, Transform>(toTransform,
-                "internal_transformation", newValue, oldValue);
-
-        operation.setApplyHandler((spatial, transform) -> {
-
-            var preHandlers = PRE_TRANSFORM_HANDLERS.getExtensions();
-            var postHandlers = POST_TRANSFORM_HANDLERS.getExtensions();
-
-            preHandlers.forEach(handler -> handler.handle(spatial));
-            try {
-                spatial.setLocalTransform(transform);
-            } finally {
-                postHandlers.forEach(handler -> handler.handle(spatial));
-            }
-        });
-
-        setPickedAxis(PickedAxis.NONE);
-        setActiveTransform(false);
-        setTransformDeltaX(Float.NaN);
-        updateTransformCenter();
-
-        fileEditor.execute(operation);
-    }
-
-    /**
-     * Start transformation.
-     */
-    @JmeThread
-    private boolean startTransform() {
-
-        updateTransformCenter();
-
-        var camera = EditorUtils.getGlobalCamera();
-        var inputManager = EditorUtils.getInputManager();
-        var cursorPosition = inputManager.getCursorPosition();
-
-        var collisionResults = new CollisionResults();
-
-        var position = camera.getWorldCoordinates(cursorPosition, 0f);
-        var direction = camera.getWorldCoordinates(cursorPosition, 1f)
-                .subtractLocal(position)
-                .normalizeLocal();
-
-        var ray = new Ray();
-        ray.setOrigin(position);
-        ray.setDirection(direction);
-
-        transformToolNode.collideWith(ray, collisionResults);
-
-        if (collisionResults.size() < 1) {
-            return false;
-        }
-
-        var toTransform = getToTransform();
-
-        if (toTransform != null) {
-            PRE_TRANSFORM_HANDLERS.getExtensions().
-                    forEach(handler -> handler.handle(toTransform));
-        }
-
-        var collisionResult = collisionResults.getClosestCollision();
-        var transformType = getTransformType();
-
-        if (transformType == TransformType.MOVE_TOOL) {
-            var moveTool = getMoveTool();
-            var control = moveTool.getControl(TransformControl.class);
-            control.setCollisionPlane(collisionResult);
-        } else if (transformType == TransformType.ROTATE_TOOL) {
-            var rotateTool = getRotateTool();
-            var control = rotateTool.getControl(TransformControl.class);
-            control.setCollisionPlane(collisionResult);
-        } else if (transformType == TransformType.SCALE_TOOL) {
-            var scaleTool = getScaleTool();
-            var control = scaleTool.getControl(TransformControl.class);
-            control.setCollisionPlane(collisionResult);
-        }
-
-        setActiveTransform(true);
-        return true;
-    }
-
-    /**
      * Notify about an attempt to change the property from jME thread.
      *
      * @param object the object.
@@ -1550,26 +987,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
             Messages.MODEL_PROPERTY_SCALE.equals(name) ||
             Messages.MODEL_PROPERTY_ROTATION.equals(name) ||
             Messages.MODEL_PROPERTY_TRANSFORMATION.equals(name);
-    }
-
-    /**
-     * Set the object to transform.
-     *
-     * @param toTransform the object to transform.
-     */
-    @JmeThread
-    private void setToTransform(@Nullable Spatial toTransform) {
-        this.toTransform = toTransform;
-    }
-
-    /**
-     * Set the center of transformation.
-     *
-     * @param transformCenter the center of transformation.
-     */
-    @JmeThread
-    private void setTransformCenter(@Nullable Transform transformCenter) {
-        this.transformCenter = transformCenter;
     }
 
     /**
@@ -2077,26 +1494,6 @@ public abstract class AbstractSceneEditor3dPart<T extends AbstractSceneFileEdito
         var executorManager = ExecutorManager.getInstance();
         executorManager.addFxTask(() ->
                 fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
-    }
-
-    /**
-     * Get the cursor node.
-     *
-     * @return the cursor node.
-     */
-    @JmeThread
-    public @NotNull Node getCursorNode() {
-        return cursorNode;
-    }
-
-    /**
-     * Get the markers node.
-     *
-     * @return the markers node.
-     */
-    @JmeThread
-    public @NotNull Node getMarkersNode() {
-        return markersNode;
     }
 
     @Override

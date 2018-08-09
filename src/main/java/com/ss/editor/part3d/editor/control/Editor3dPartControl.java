@@ -3,6 +3,7 @@ package com.ss.editor.part3d.editor.control;
 import com.jme3.app.Application;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.part3d.editor.event.Editor3dPartEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -51,7 +52,9 @@ public interface Editor3dPartControl {
      * @return true if this control knows about the property.
      */
     @JmeThread
-    boolean hasProperty(@NotNull String propertyId);
+    default boolean hasProperty(@NotNull String propertyId) {
+        return false;
+    }
 
     /**
      * Get a boolean property value.
@@ -60,5 +63,15 @@ public interface Editor3dPartControl {
      * @return the property value or false if the property is not known.
      */
     @JmeThread
-    boolean getBooleanProperty(@NotNull String propertyId);
+    default boolean getBooleanProperty(@NotNull String propertyId) {
+        return false;
+    }
+
+    /**
+     * Notify this 3d part control about some events.
+     *
+     * @param event the event.
+     */
+    @JmeThread
+    void notify(@NotNull Editor3dPartEvent event);
 }
