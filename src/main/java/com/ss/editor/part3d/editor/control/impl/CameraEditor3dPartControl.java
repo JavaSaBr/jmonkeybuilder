@@ -2,7 +2,9 @@ package com.ss.editor.part3d.editor.control.impl;
 
 import com.jme3.app.Application;
 import com.jme3.input.InputManager;
-import com.jme3.input.controls.Trigger;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.*;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -11,6 +13,8 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.control.transform.EditorTransformSupport;
+import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
@@ -23,8 +27,13 @@ import com.ss.rlib.common.logging.LoggerLevel;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 
 /**
  * The editor's camera control.
@@ -32,54 +41,79 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author JavaSaBr
  */
 public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> implements
-        InputEditor3dPartControl {
+        InputEditor3dPartControl, ActionListener, AnalogListener {
 
-    protected static final ObjectDictionary<String, Trigger> TRIGGERS =
+    protected static final ObjectDictionary<String, Trigger> ACTION_TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
 
-    protected static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS =
+    protected static final ObjectDictionary<String, Trigger> ANALOG_TRIGGERS =
+            ObjectDictionary.ofType(String.class, Trigger.class);
+
+    protected static final ObjectDictionary<String, Trigger[]> ACTION_MULTI_TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger[].class);
 
-    protected static final String MOUSE_RIGHT_CLICK = "jMB.baseEditor.mouseRightClick";
-    protected static final String MOUSE_LEFT_CLICK = "jMB.baseEditor.mouseLeftClick";
-    protected static final String MOUSE_MIDDLE_CLICK = "jMB.baseEditor.mouseMiddleClick";
+    protected static final String MOUSE_RIGHT_CLICK = "jMB.editorCamera.rightClick";
+    protected static final String MOUSE_LEFT_CLICK = "jMB.editorCamera.leftClick";
+    protected static final String MOUSE_MIDDLE_CLICK = "jMB.editorCamera.middleClick";
 
-    protected static final String MOUSE_X_AXIS = "jMB.baseEditor.mouseXAxis";
-    protected static final String MOUSE_X_AXIS_NEGATIVE = "jMB.baseEditor.mouseXAxisNegative";
-    protected static final String MOUSE_Y_AXIS = "jMB.baseEditor.mouseYAxis";
-    protected static final String MOUSE_Y_AXIS_NEGATIVE = "jMB.baseEditor.mouseYAxisNegative";
+    protected static final String MOUSE_X_AXIS = "jMB.editorCamera.mouseXAxis";
+    protected static final String MOUSE_X_AXIS_NEGATIVE = "jMB.editorCamera.mouseXAxisNegative";
+    protected static final String MOUSE_Y_AXIS = "jMB.baseEditor.editorCamera";
+    protected static final String MOUSE_Y_AXIS_NEGATIVE = "jMB.editorCamera.mouseYAxisNegative";
 
-    protected static final String MOUSE_MOVE_CAMERA_X_AXIS = "jMB.baseEditor.mouseMoveCameraXAxis";
-    protected static final String MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE = "jMB.baseEditor.mouseMoveCameraXAxisNegative";
-    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS = "jMB.baseEditor.mouseMoveCameraYAxis";
-    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE = "jMB.baseEditor.mouseMoveCameraYAxisNegative";
+    protected static final String KEY_W = "jMB.editorCamera.W";
+    protected static final String KEY_S = "jMB.editorCamera.S";
+    protected static final String KEY_A = "jMB.editorCamera.A";
+    protected static final String KEY_D = "jMB.editorCamera.D";
+    protected static final String KEY_ALT = "jMB.editorCamera.Alt";
+    protected static final String KEY_CTRL = "jMB.editorCamera.Ctrl";
 
-    protected static final String KEY_CTRL = "jMB.baseEditor.keyCtrl";
-    protected static final String KEY_ALT = "jMB.baseEditor.keyAlt";
-    protected static final String KEY_SHIFT = "jMB.baseEditor.keyShift";
+    protected static final String KEY_NUM_1 = "jMB.editorCamera.num1";
+    protected static final String KEY_NUM_2 = "jMB.editorCamera.num2";
+    protected static final String KEY_NUM_3 = "jMB.editorCamera.num3";
+    protected static final String KEY_NUM_4 = "jMB.editorCamera.num4";
+    protected static final String KEY_NUM_6 = "jMB.editorCamera.num6";
+    protected static final String KEY_NUM_7 = "jMB.editorCamera.num7";
+    protected static final String KEY_NUM_8 = "jMB.editorCamera.num8";
+    protected static final String KEY_NUM_9 = "jMB.editorCamera.num9";
 
-    protected static final String KEY_FLY_CAMERA_W = "jMB.baseEditor.keyFlyCameraW";
-    protected static final String KEY_FLY_CAMERA_S = "jMB.baseEditor.keyFlyCameraS";
-    protected static final String KEY_FLY_CAMERA_A = "jMB.baseEditor.keyFlyCameraA";
-    protected static final String KEY_FLY_CAMERA_D = "jMB.baseEditor.keyFlyCameraD";
-
-    protected static final String KEY_NUM_1 = "jMB.baseEditor.num1";
-    protected static final String KEY_NUM_2 = "jMB.baseEditor.num2";
-    protected static final String KEY_NUM_3 = "jMB.baseEditor.num3";
-    protected static final String KEY_NUM_4 = "jMB.baseEditor.num4";
-    protected static final String KEY_NUM_6 = "jMB.baseEditor.num6";
-    protected static final String KEY_NUM_7 = "jMB.baseEditor.num7";
-    protected static final String KEY_NUM_8 = "jMB.baseEditor.num8";
-    protected static final String KEY_NUM_9 = "jMB.baseEditor.num9";
-
-    private static final String[] MAPPINGS;
+    private static final String[] ACTION_MAPPINGS;
+    private static final String[] ANALOG_MAPPINGS;
 
     static {
 
-        Array<String> mappings = TRIGGERS.keyArray(String.class);
-        mappings.addAll(MULTI_TRIGGERS.keyArray(String.class));
+        ACTION_TRIGGERS.put(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        ACTION_TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        ACTION_TRIGGERS.put(MOUSE_MIDDLE_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
-        MAPPINGS = mappings.toArray(String.class);
+        ACTION_TRIGGERS.put(KEY_W, new KeyTrigger(KeyInput.KEY_W));
+        ACTION_TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
+        ACTION_TRIGGERS.put(KEY_A, new KeyTrigger(KeyInput.KEY_A));
+        ACTION_TRIGGERS.put(KEY_D, new KeyTrigger(KeyInput.KEY_D));
+
+        ACTION_TRIGGERS.put(KEY_NUM_1, new KeyTrigger(KeyInput.KEY_NUMPAD1));
+        ACTION_TRIGGERS.put(KEY_NUM_2, new KeyTrigger(KeyInput.KEY_NUMPAD2));
+        ACTION_TRIGGERS.put(KEY_NUM_3, new KeyTrigger(KeyInput.KEY_NUMPAD3));
+        ACTION_TRIGGERS.put(KEY_NUM_4, new KeyTrigger(KeyInput.KEY_NUMPAD4));
+        ACTION_TRIGGERS.put(KEY_NUM_6, new KeyTrigger(KeyInput.KEY_NUMPAD6));
+        ACTION_TRIGGERS.put(KEY_NUM_7, new KeyTrigger(KeyInput.KEY_NUMPAD7));
+        ACTION_TRIGGERS.put(KEY_NUM_8, new KeyTrigger(KeyInput.KEY_NUMPAD8));
+        ACTION_TRIGGERS.put(KEY_NUM_9, new KeyTrigger(KeyInput.KEY_NUMPAD9));
+
+        ACTION_MULTI_TRIGGERS.put(KEY_CTRL, toArray(new KeyTrigger(KeyInput.KEY_RCONTROL), new KeyTrigger(KeyInput.KEY_LCONTROL)));
+        ACTION_MULTI_TRIGGERS.put(KEY_ALT, toArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
+
+        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+
+        Array<String> mappings = ACTION_TRIGGERS.keyArray(String.class);
+        mappings.addAll(ACTION_MULTI_TRIGGERS.keyArray(String.class));
+
+        ACTION_MAPPINGS = mappings.toArray(String.class);
+        ANALOG_MAPPINGS = ANALOG_TRIGGERS.keyArray(String.class)
+                .toArray(String.class);
     }
 
     /**
@@ -215,10 +249,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             }
         });
 
-        actionHandlers.put(KEY_FLY_CAMERA_A, (isPressed, tpf) -> moveSideCamera(tpf, true, isPressed, 0));
-        actionHandlers.put(KEY_FLY_CAMERA_D, (isPressed, tpf) -> moveSideCamera(-tpf, true, isPressed, 1));
-        actionHandlers.put(KEY_FLY_CAMERA_W, (isPressed, tpf) -> moveDirectionCamera(tpf, true, isPressed, 2));
-        actionHandlers.put(KEY_FLY_CAMERA_S, (isPressed, tpf) -> moveDirectionCamera(-tpf, true, isPressed, 3));
+        actionHandlers.put(KEY_A, (isPressed, tpf) -> moveSideCamera(tpf, true, isPressed, 0));
+        actionHandlers.put(KEY_D, (isPressed, tpf) -> moveSideCamera(-tpf, true, isPressed, 1));
+        actionHandlers.put(KEY_W, (isPressed, tpf) -> moveDirectionCamera(tpf, true, isPressed, 2));
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> moveDirectionCamera(-tpf, true, isPressed, 3));
 
         analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
         analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
@@ -234,10 +268,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     @FromAnyThread
     protected @NotNull DirectionalLight createLight() {
 
-        var directionalLight = new DirectionalLight();
-        directionalLight.setColor(ColorRGBA.White);
+        var light = new DirectionalLight();
+        light.setColor(ColorRGBA.White);
 
-        return directionalLight;
+        return light;
     }
 
     /**
@@ -351,10 +385,11 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
 
-        TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-        MULTI_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
+        ACTION_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
+        ACTION_MULTI_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
+        ANALOG_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
 
-        inputManager.addListener(this, MAPPINGS);
+        inputManager.addListener(this, ACTION_MAPPINGS);
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public interface InputEditor3dPartControl extends Editor3dPartControl, InputListener {
+public interface InputEditor3dPartControl extends Editor3dPartControl {
 
     @Override
     @JmeThread
