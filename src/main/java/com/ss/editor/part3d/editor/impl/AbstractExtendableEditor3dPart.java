@@ -86,7 +86,7 @@ public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> exten
     @Override
     @JmeThread
     public <C extends Editor3dPartControl> @Nullable C getControl(@NotNull Class<C> type) {
-        return type.cast(controls.anyMatchR(type, Class::isInstance));
+        return type.cast(controls.findAnyR(type, Class::isInstance));
     }
 
     @Override

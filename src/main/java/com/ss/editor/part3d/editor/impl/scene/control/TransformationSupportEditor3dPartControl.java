@@ -129,13 +129,13 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
         this.transformType = TransformType.MOVE_TOOL;
         this.pickedAxis = PickedAxis.NONE;
         this.transformDelta = new Vector3f(Float.NaN, Float.NaN, Float.NaN);
+        this.collisionPlane = new Node();
         this.moveTool = new Node("Move tool");
         this.moveTool.addControl(new MoveToolControl(this));
         this.rotateTool = new Node("Rotate tool");
         this.rotateTool.addControl(new RotationToolControl(this));
         this.scaleTool = new Node("Scale tool");
         this.scaleTool.addControl(new ScaleToolControl(this));
-        this.collisionPlane = new Node();
         this.transformationTypeToNode = ObjectDictionary.of(
                 TransformType.MOVE_TOOL, moveTool,
                 TransformType.ROTATE_TOOL, rotateTool,
@@ -175,10 +175,10 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
         return null;
     }
 
-    @JmeThread
     @Override
-    public @Nullable Node getCollisionPlane() {
-        return null;
+    @JmeThread
+    public @NotNull Node getCollisionPlane() {
+        return collisionPlane;
     }
 
     @JmeThread
@@ -229,10 +229,10 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
 
     }
 
-    @JmeThread
     @Override
+    @JmeThread
     public @NotNull Camera getCamera() {
-        return null;
+        return editor3dPart.getCamera();
     }
 
     @Override

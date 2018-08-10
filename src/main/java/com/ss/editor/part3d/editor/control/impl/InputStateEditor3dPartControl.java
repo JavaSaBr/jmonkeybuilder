@@ -4,12 +4,12 @@ import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
-import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
@@ -20,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> {
+public class InputStateEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart>
+        implements ActionListener {
 
     public static final String PROP_IS_CONTROL_DOWN = "inputStateEditor.isControlDown";
     public static final String PROP_IS_ALT_DOWN = "inputStateEditor.isAltDown";

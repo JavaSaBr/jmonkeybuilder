@@ -2,8 +2,7 @@ package com.ss.editor.part3d.editor.control;
 
 import com.jme3.app.Application;
 import com.jme3.input.InputManager;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.InputListener;
 import com.ss.editor.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public interface InputEditor3dPartControl extends Editor3dPartControl, AnalogListener, ActionListener {
+public interface InputEditor3dPartControl extends Editor3dPartControl, InputListener {
 
     @Override
     @JmeThread
@@ -44,12 +43,10 @@ public interface InputEditor3dPartControl extends Editor3dPartControl, AnalogLis
         inputManager.removeListener(this);
     }
 
-    @Override
     @JmeThread
     default void onAction(@NotNull String name, boolean isPressed, float tpf) {
     }
 
-    @Override
     @JmeThread
     default void onAnalog(@NotNull String name, float value, float tpf) {
 

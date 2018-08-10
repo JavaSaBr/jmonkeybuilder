@@ -1,7 +1,9 @@
 package com.ss.editor.part3d.editor.control.impl;
 
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.*;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.JmeThread;
@@ -14,16 +16,13 @@ import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
-import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_BUTTON_MIDDLE_DOWN;
-import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
-import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_SHIFT_DOWN;
-
 /**
  * The control to redirect some input events from {@link Editor3dPart} to {@link FileEditor}.
  *
  * @author JavaSaBr
  */
-public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> {
+public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart>
+        implements ActionListener {
 
     private static final KeyCode[] KEY_CODES = new KeyCode[Byte.MAX_VALUE * 3];
 

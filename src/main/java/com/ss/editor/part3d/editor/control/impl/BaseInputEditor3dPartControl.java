@@ -1,7 +1,6 @@
 package com.ss.editor.part3d.editor.control.impl;
 
 import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.rlib.common.function.BooleanFloatConsumer;

@@ -342,7 +342,7 @@ public interface EditorTransformSupport {
      * @return the collision plane.
      */
     @JmeThread
-    @Nullable Node getCollisionPlane();
+    @NotNull Node getCollisionPlane();
 
     /**
      * Set delta of transformation.
