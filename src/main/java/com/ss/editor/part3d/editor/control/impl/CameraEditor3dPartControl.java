@@ -1,5 +1,8 @@
 package com.ss.editor.part3d.editor.control.impl;
 
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_BUTTON_MIDDLE_DOWN;
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_SHIFT_DOWN;
+import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import com.jme3.app.Application;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -13,27 +16,21 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
-import com.ss.editor.control.transform.EditorTransformSupport;
-import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
-import com.ss.editor.util.EditorUtils;
 import com.ss.editor.util.JmeUtils;
 import com.ss.editor.util.LocalObjects;
+import com.ss.rlib.common.function.FloatObjectConsumer;
 import com.ss.rlib.common.logging.LoggerLevel;
+import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 
 /**
  * The editor's camera control.
@@ -43,39 +40,46 @@ import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> implements
         InputEditor3dPartControl, ActionListener, AnalogListener {
 
-    protected static final ObjectDictionary<String, Trigger> ACTION_TRIGGERS =
+    private enum KeyState {
+        KEY_A,
+        KEY_D,
+        KEY_W,
+        KEY_S
+    }
+
+    private static final ObjectDictionary<String, Trigger> ACTION_TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
 
-    protected static final ObjectDictionary<String, Trigger> ANALOG_TRIGGERS =
+    private static final ObjectDictionary<String, Trigger> ANALOG_TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger.class);
 
-    protected static final ObjectDictionary<String, Trigger[]> ACTION_MULTI_TRIGGERS =
+    private static final ObjectDictionary<String, Trigger[]> ACTION_MULTI_TRIGGERS =
             ObjectDictionary.ofType(String.class, Trigger[].class);
 
-    protected static final String MOUSE_RIGHT_CLICK = "jMB.editorCamera.rightClick";
-    protected static final String MOUSE_LEFT_CLICK = "jMB.editorCamera.leftClick";
-    protected static final String MOUSE_MIDDLE_CLICK = "jMB.editorCamera.middleClick";
+    private static final String MOUSE_RIGHT_CLICK = "jMB.editorCamera.rightClick";
+    private static final String MOUSE_LEFT_CLICK = "jMB.editorCamera.leftClick";
+    private static final String MOUSE_MIDDLE_CLICK = "jMB.editorCamera.middleClick";
 
-    protected static final String MOUSE_X_AXIS = "jMB.editorCamera.mouseXAxis";
-    protected static final String MOUSE_X_AXIS_NEGATIVE = "jMB.editorCamera.mouseXAxisNegative";
-    protected static final String MOUSE_Y_AXIS = "jMB.baseEditor.editorCamera";
-    protected static final String MOUSE_Y_AXIS_NEGATIVE = "jMB.editorCamera.mouseYAxisNegative";
+    private static final String MOUSE_X_AXIS = "jMB.editorCamera.mouseXAxis";
+    private static final String MOUSE_X_AXIS_NEGATIVE = "jMB.editorCamera.mouseXAxisNegative";
+    private static final String MOUSE_Y_AXIS = "jMB.baseEditor.editorCamera";
+    private static final String MOUSE_Y_AXIS_NEGATIVE = "jMB.editorCamera.mouseYAxisNegative";
 
-    protected static final String KEY_W = "jMB.editorCamera.W";
-    protected static final String KEY_S = "jMB.editorCamera.S";
-    protected static final String KEY_A = "jMB.editorCamera.A";
-    protected static final String KEY_D = "jMB.editorCamera.D";
-    protected static final String KEY_ALT = "jMB.editorCamera.Alt";
-    protected static final String KEY_CTRL = "jMB.editorCamera.Ctrl";
+    private static final String KEY_W = "jMB.editorCamera.W";
+    private static final String KEY_S = "jMB.editorCamera.S";
+    private static final String KEY_A = "jMB.editorCamera.A";
+    private static final String KEY_D = "jMB.editorCamera.D";
+    private static final String KEY_ALT = "jMB.editorCamera.Alt";
+    private static final String KEY_CTRL = "jMB.editorCamera.Ctrl";
 
-    protected static final String KEY_NUM_1 = "jMB.editorCamera.num1";
-    protected static final String KEY_NUM_2 = "jMB.editorCamera.num2";
-    protected static final String KEY_NUM_3 = "jMB.editorCamera.num3";
-    protected static final String KEY_NUM_4 = "jMB.editorCamera.num4";
-    protected static final String KEY_NUM_6 = "jMB.editorCamera.num6";
-    protected static final String KEY_NUM_7 = "jMB.editorCamera.num7";
-    protected static final String KEY_NUM_8 = "jMB.editorCamera.num8";
-    protected static final String KEY_NUM_9 = "jMB.editorCamera.num9";
+    private static final String KEY_NUM_1 = "jMB.editorCamera.num1";
+    private static final String KEY_NUM_2 = "jMB.editorCamera.num2";
+    private static final String KEY_NUM_3 = "jMB.editorCamera.num3";
+    private static final String KEY_NUM_4 = "jMB.editorCamera.num4";
+    private static final String KEY_NUM_6 = "jMB.editorCamera.num6";
+    private static final String KEY_NUM_7 = "jMB.editorCamera.num7";
+    private static final String KEY_NUM_8 = "jMB.editorCamera.num8";
+    private static final String KEY_NUM_9 = "jMB.editorCamera.num9";
 
     private static final String[] ACTION_MAPPINGS;
     private static final String[] ANALOG_MAPPINGS;
@@ -104,9 +108,9 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         ACTION_MULTI_TRIGGERS.put(KEY_ALT, toArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
 
         ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        ANALOG_TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        ANALOG_TRIGGERS.put(MOUSE_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        ANALOG_TRIGGERS.put(MOUSE_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        ANALOG_TRIGGERS.put(MOUSE_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
 
         Array<String> mappings = ACTION_TRIGGERS.keyArray(String.class);
         mappings.addAll(ACTION_MULTI_TRIGGERS.keyArray(String.class));
@@ -156,7 +160,13 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * The state of camera keys.
      */
     @NotNull
-    private final boolean[] cameraKeysState;
+    private final KeyState[] keyStates;
+
+    /**
+     * The key state handlers.
+     */
+    @NotNull
+    private final FloatObjectConsumer<KeyState>[] keyStateHandlers;
 
     /**
      * The previous camera zoom.
@@ -213,7 +223,8 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         this.cameraFlying = new AtomicInteger();
         this.cameraMoving = new AtomicInteger();
         this.prevCameraLocation = new Vector3f();
-        this.cameraKeysState = new boolean[4];
+        this.keyStates = new KeyState[4];
+        this.keyStateHandlers = ArrayUtils.create(FloatObjectConsumer.class, 4);
         this.cameraFlySpeed = 1F;
         this.cameraNode = new Node("CameraNode");
         this.editorCamera = createEditorCamera(camera);
@@ -258,6 +269,29 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
         analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYMouse(-value));
         analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYMouse(value));
+
+        /*
+
+
+        KEY_A,
+        KEY_D,
+        KEY_W,
+        KEY_S
+         */
+        keyStateHandlers[KeyState.KEY_A.ordinal()] = (tpf, key) ->
+                moveSideCamera(tpf * 30, false, false, key);
+        if (keyStates[0]) {
+            moveSideCamera(tpf * 30, false, false, 0);
+        }
+        if (keyStates[1]) {
+            moveSideCamera(-tpf * 30, false, false, 1);
+        }
+        if (keyStates[2]) {
+            moveDirectionCamera(tpf * 30, false, false, 2);
+        }
+        if (keyStates[3]) {
+            moveDirectionCamera(-tpf * 30, false, false, 3);
+        }
     }
 
     /**
@@ -389,7 +423,8 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         ACTION_MULTI_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
         ANALOG_TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
 
-        inputManager.addListener(this, ACTION_MAPPINGS);
+        inputManager.addListener(getActionListener(), ACTION_MAPPINGS);
+        inputManager.addListener(getAnalogListener(), ANALOG_MAPPINGS);
     }
 
     @Override
@@ -397,11 +432,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     public void onAction(@NotNull String name, boolean isPressed, float tpf) {
         super.onAction(name, isPressed, tpf);
 
-        var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
-
         if (needMovableCamera) {
-            //FIXME
-            // editorCamera.setLockRotation(inputState.isShiftDown() && inputState.isButtonMiddleDown());
+            boolean isShiftDown = editor3dPart.getBooleanProperty(PROP_IS_SHIFT_DOWN);
+            boolean isButtonMiddleDown = editor3dPart.getBooleanProperty(PROP_IS_BUTTON_MIDDLE_DOWN);
+            editorCamera.setLockRotation(isShiftDown && isButtonMiddleDown);
         }
     }
 
@@ -411,16 +445,16 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         editorCamera.updateCamera(tpf);
 
         if (isCameraFlying()) {
-            if (cameraKeysState[0]) {
+            if (keyStates[0]) {
                 moveSideCamera(tpf * 30, false, false, 0);
             }
-            if (cameraKeysState[1]) {
+            if (keyStates[1]) {
                 moveSideCamera(-tpf * 30, false, false, 1);
             }
-            if (cameraKeysState[2]) {
+            if (keyStates[2]) {
                 moveDirectionCamera(tpf * 30, false, false, 2);
             }
-            if (cameraKeysState[3]) {
+            if (keyStates[3]) {
                 moveDirectionCamera(-tpf * 30, false, false, 3);
             }
         }
@@ -432,8 +466,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     @JmeThread
     public void postCameraUpdate(float tpf) {
         if (needLight && needUpdateLight) {
-            var direction = LocalObjects.get().nextVector();
-            light.setDirection(editorCamera.getDirection(direction));
+            light.setDirection(editorCamera.getDirection());
         }
     }
 
@@ -444,7 +477,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param isPressed   true if a key is pressed.
      */
     @JmeThread
-    protected void rotateTo(@NotNull Perspective perspective, boolean isPressed) {
+    private void rotateTo(@NotNull Perspective perspective, boolean isPressed) {
         if (isPressed) {
             editorCamera.rotateTo(perspective);
         }
@@ -457,7 +490,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param isPressed true if a key is pressed.
      */
     @JmeThread
-    protected void rotateTo(@NotNull Direction direction, boolean isPressed) {
+    private void rotateTo(@NotNull Direction direction, boolean isPressed) {
         if (isPressed) {
             editorCamera.rotateTo(direction, 10F);
         }
@@ -495,14 +528,16 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         if (cameraFlying.get() == 0) {
 
-            var camera = EditorUtils.getGlobalCamera();
+            var location = editor3dPart.getCamera()
+                    .getLocation();
 
-            cameraNode.setLocalTranslation(camera.getLocation());
+            //FIXME change the logic
+            cameraNode.setLocalTranslation(location);
             editorCamera.setTargetDistance(0);
         }
 
-        if (!cameraKeysState[key]) {
-            cameraKeysState[key] = true;
+        if (!keyStates[key]) {
+            keyStates[key] = true;
             cameraFlying.incrementAndGet();
         }
     }
@@ -518,7 +553,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             LOGGER.debug(this, "finish camera moving[" + cameraFlying + "] for key " + key + ", force = " + force);
         }
 
-        cameraKeysState[key] = false;
+        keyStates[key] = false;
 
         if (cameraFlying.get() == 0) {
             return;
@@ -526,8 +561,8 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         if (force) {
             cameraFlying.set(0);
-            for (int i = 0; i < cameraKeysState.length; i++) {
-                cameraKeysState[i] = false;
+            for (int i = 0; i < keyStates.length; i++) {
+                keyStates[i] = false;
             }
         } else {
             cameraFlying.decrementAndGet();
@@ -541,7 +576,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param value the value to move.
      */
     @JmeThread
-    private void moveDirectionCamera(float value, boolean isAction, boolean isPressed, int key) {
+    private void moveDirectionCamera(float value, boolean isAction, boolean isPressed, @NotNull CameraEditor3dPartControl.KeyState key) {
 
         if (canCameraFly()) {
             return;
@@ -567,7 +602,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param value the value to move.
      */
     @JmeThread
-    private void moveSideCamera(float value, boolean isAction, boolean isPressed, int key) {
+    private void moveSideCamera(float value, boolean isAction, boolean isPressed, @NotNull CameraEditor3dPartControl.KeyState key) {
 
         if (canCameraFly()) {
             return;

@@ -19,6 +19,7 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.util.JmeUtils;
+import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -230,6 +231,17 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         this.zooming = false;
         this.trailing = false;
         this.chasing = false;
+    }
+
+    /**
+     * Get the current camera direction.
+     *
+     * @return the current direction.
+     */
+    @JmeThread
+    public @NotNull Vector3f getDirection() {
+        return camera.getDirection(LocalObjects.get()
+                .nextVector());
     }
 
     /**

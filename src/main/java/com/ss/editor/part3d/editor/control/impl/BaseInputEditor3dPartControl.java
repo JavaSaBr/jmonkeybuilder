@@ -1,5 +1,8 @@
 package com.ss.editor.part3d.editor.control.impl;
 
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
@@ -9,7 +12,7 @@ import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Base implementation of editor control which wirks with input system.
+ * Base implementation of editor control which works with input system.
  *
  * @param <T> the editor 3d part's type.
  * @author JavaSaBr
@@ -29,10 +32,36 @@ public abstract class BaseInputEditor3dPartControl<T extends ExtendableEditor3dP
     @NotNull
     protected final ObjectDictionary<String, FloatFloatConsumer> analogHandlers;
 
+    /**
+     * The action listener.
+     */
+    @NotNull
+    private final ActionListener actionListener;
+
+    /**
+     * The analog listener.
+     */
+    @NotNull
+    private final AnalogListener analogListener;
+
     protected BaseInputEditor3dPartControl(@NotNull T editor3dPart) {
         super(editor3dPart);
         this.actionHandlers = ObjectDictionary.ofType(String.class, BooleanFloatConsumer.class);
         this.analogHandlers = ObjectDictionary.ofType(String.class, FloatFloatConsumer.class);
+        this.actionListener = this::onAction;
+        this.analogListener = this::onAnalog;
+    }
+
+    @Override
+    @FromAnyThread
+    public @NotNull ActionListener getActionListener() {
+        return actionListener;
+    }
+
+    @Override
+    @FromAnyThread
+    public @NotNull AnalogListener getAnalogListener() {
+        return analogListener;
     }
 
     @Override
