@@ -22,14 +22,13 @@ import com.ss.editor.model.EditorCamera.Perspective;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
 import com.ss.editor.util.JmeUtils;
-import com.ss.editor.util.LocalObjects;
-import com.ss.rlib.common.function.FloatObjectConsumer;
+import com.ss.rlib.common.function.FloatConsumer;
 import com.ss.rlib.common.logging.LoggerLevel;
-import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -160,13 +159,13 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * The state of camera keys.
      */
     @NotNull
-    private final KeyState[] keyStates;
+    private final boolean[] keyStates;
 
     /**
      * The key state handlers.
      */
     @NotNull
-    private final FloatObjectConsumer<KeyState>[] keyStateHandlers;
+    private final FloatConsumer[] keyStateHandlers;
 
     /**
      * The previous camera zoom.
@@ -223,8 +222,8 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         this.cameraFlying = new AtomicInteger();
         this.cameraMoving = new AtomicInteger();
         this.prevCameraLocation = new Vector3f();
-        this.keyStates = new KeyState[4];
-        this.keyStateHandlers = ArrayUtils.create(FloatObjectConsumer.class, 4);
+        this.keyStates = new boolean[4];
+        this.keyStateHandlers = new FloatConsumer[4];
         this.cameraFlySpeed = 1F;
         this.cameraNode = new Node("CameraNode");
         this.editorCamera = createEditorCamera(camera);
@@ -260,38 +259,24 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             }
         });
 
-        actionHandlers.put(KEY_A, (isPressed, tpf) -> moveSideCamera(tpf, true, isPressed, 0));
-        actionHandlers.put(KEY_D, (isPressed, tpf) -> moveSideCamera(-tpf, true, isPressed, 1));
-        actionHandlers.put(KEY_W, (isPressed, tpf) -> moveDirectionCamera(tpf, true, isPressed, 2));
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> moveDirectionCamera(-tpf, true, isPressed, 3));
+        actionHandlers.put(KEY_A, (isPressed, tpf) -> moveCameraSide(tpf, true, isPressed, 0));
+        actionHandlers.put(KEY_D, (isPressed, tpf) -> moveCameraSide(-tpf, true, isPressed, 1));
+        actionHandlers.put(KEY_W, (isPressed, tpf) -> moveCameraForward(tpf, true, isPressed, 2));
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> moveCameraForward(-tpf, true, isPressed, 3));
 
         analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
         analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
         analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYMouse(-value));
         analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYMouse(value));
 
-        /*
-
-
-        KEY_A,
-        KEY_D,
-        KEY_W,
-        KEY_S
-         */
-        keyStateHandlers[KeyState.KEY_A.ordinal()] = (tpf, key) ->
-                moveSideCamera(tpf * 30, false, false, key);
-        if (keyStates[0]) {
-            moveSideCamera(tpf * 30, false, false, 0);
-        }
-        if (keyStates[1]) {
-            moveSideCamera(-tpf * 30, false, false, 1);
-        }
-        if (keyStates[2]) {
-            moveDirectionCamera(tpf * 30, false, false, 2);
-        }
-        if (keyStates[3]) {
-            moveDirectionCamera(-tpf * 30, false, false, 3);
-        }
+        keyStateHandlers[KeyState.KEY_A.ordinal()] = tpf ->
+                moveCameraSide(tpf * 30, false, false, KeyState.KEY_A);
+        keyStateHandlers[KeyState.KEY_D.ordinal()] = tpf ->
+                moveCameraSide(-tpf * 30, false, false, KeyState.KEY_D);
+        keyStateHandlers[KeyState.KEY_W.ordinal()] = tpf ->
+                moveCameraForward(tpf * 30, false, false, KeyState.KEY_W);
+        keyStateHandlers[KeyState.KEY_S.ordinal()] = tpf ->
+                moveCameraForward(-tpf * 30, false, false, KeyState.KEY_S);
     }
 
     /**
@@ -445,17 +430,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         editorCamera.updateCamera(tpf);
 
         if (isCameraFlying()) {
-            if (keyStates[0]) {
-                moveSideCamera(tpf * 30, false, false, 0);
-            }
-            if (keyStates[1]) {
-                moveSideCamera(-tpf * 30, false, false, 1);
-            }
-            if (keyStates[2]) {
-                moveDirectionCamera(tpf * 30, false, false, 2);
-            }
-            if (keyStates[3]) {
-                moveDirectionCamera(-tpf * 30, false, false, 3);
+            for (int i = 0; i < keyStateHandlers.length; i++) {
+                if (keyStates[i]) {
+                    keyStateHandlers[i].consume(tpf);
+                }
             }
         }
 
@@ -520,7 +498,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * Start to move the camera.
      */
     @JmeThread
-    private void startCameraFlying(int key) {
+    private void startCameraFlying(@NotNull KeyState key) {
 
         if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
             LOGGER.debug(this, "start camera moving[" + cameraFlying + "] for key " + key);
@@ -547,13 +525,13 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * Finish to move the camera.
      */
     @JmeThread
-    private void finishCameraMoving(int key, boolean force) {
+    private void finishCameraMoving(@NotNull KeyState key, boolean force) {
 
         if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
             LOGGER.debug(this, "finish camera moving[" + cameraFlying + "] for key " + key + ", force = " + force);
         }
 
-        keyStates[key] = false;
+        keyStates[key.ordinal()] = false;
 
         if (cameraFlying.get() == 0) {
             return;
@@ -561,14 +539,11 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         if (force) {
             cameraFlying.set(0);
-            for (int i = 0; i < keyStates.length; i++) {
-                keyStates[i] = false;
-            }
+            Arrays.fill(keyStates, false);
         } else {
             cameraFlying.decrementAndGet();
         }
     }
-
 
     /**
      * Move a camera to direction.
@@ -576,20 +551,17 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param value the value to move.
      */
     @JmeThread
-    private void moveDirectionCamera(float value, boolean isAction, boolean isPressed, @NotNull CameraEditor3dPartControl.KeyState key) {
+    private void moveCameraForward(float value, boolean isAction, boolean isPressed, @NotNull KeyState key) {
 
-        if (canCameraFly()) {
+        if (!canCameraFly()) {
             return;
         }  else if (isAction && isPressed) {
             startCameraFlying(key);
         } else if (isAction) {
             finishCameraMoving(key, false);
-        } else if (!isCameraFlying() || isAction) {
-            return;
         }
 
-        var local = LocalObjects.get();
-        var direction = editorCamera.getDirection(local.nextVector());
+        var direction = editorCamera.getDirection();
         direction.multLocal(value * cameraFlySpeed);
         direction.addLocal(cameraNode.getLocalTranslation());
 
@@ -602,20 +574,17 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param value the value to move.
      */
     @JmeThread
-    private void moveSideCamera(float value, boolean isAction, boolean isPressed, @NotNull CameraEditor3dPartControl.KeyState key) {
+    private void moveCameraSide(float value, boolean isAction, boolean isPressed, @NotNull KeyState key) {
 
-        if (canCameraFly()) {
+        if (!canCameraFly()) {
             return;
         }  else if (isAction && isPressed) {
             startCameraFlying(key);
         } else if (isAction) {
             finishCameraMoving(key, false);
-        } else if (!isCameraFlying() || isAction) {
-            return;
         }
 
-        var local = LocalObjects.get();
-        var left = editorCamera.getLeft(local.nextVector());
+        var left = editorCamera.getLeft();
         left.multLocal(value * cameraFlySpeed);
         left.addLocal(cameraNode.getLocalTranslation());
 
@@ -663,11 +632,9 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
     @JmeThread
     private boolean canCameraFly() {
-       /** var inputState = editor3dPart.requireControl(InputStateEditor3dPartControl.class);
-        return inputState.isButtonMiddleDown() &&
-                !inputState.isShiftDown() &&
-                !isCameraMoving();**/
-       return false;
+        var isButtonMiddleDown = editor3dPart.getBooleanProperty(PROP_IS_BUTTON_MIDDLE_DOWN);
+        var isShiftMiddleDown = editor3dPart.getBooleanProperty(PROP_IS_SHIFT_DOWN);
+        return isButtonMiddleDown && !isShiftMiddleDown && !isCameraMoving();
     }
 
     @JmeThread

@@ -19,7 +19,6 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.util.JmeUtils;
-import com.ss.editor.util.LocalObjects;
 import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -186,7 +185,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     private boolean trailing;
     private boolean chasing;
     private boolean canRotate;
-    private boolean zoomin;
+    private boolean zoomIn;
     private boolean lockRotation;
 
     public EditorCamera(@NotNull Camera camera, @NotNull Spatial target) {
@@ -240,30 +239,17 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      */
     @JmeThread
     public @NotNull Vector3f getDirection() {
-        return camera.getDirection(LocalObjects.get()
-                .nextVector());
-    }
-
-    /**
-     * Get the current camera direction.
-     *
-     * @param store the vector to store the result.
-     * @return the current direction.
-     */
-    @JmeThread
-    public @NotNull Vector3f getDirection(@NotNull Vector3f store) {
-        return camera.getDirection(store);
+        return camera.getDirection(new Vector3f());
     }
 
     /**
      * Get the current camera direction to left side.
      *
-     * @param store the vector to store the result.
      * @return the current direction to left side.
      */
     @JmeThread
-    public @NotNull Vector3f getLeft(@NotNull Vector3f store) {
-        return camera.getLeft(store);
+    public @NotNull Vector3f getLeft() {
+        return camera.getLeft(new Vector3f());
     }
 
     /**
@@ -426,12 +412,12 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             verticalRotateCamera(-value * 3);
         } else if (name.equals(CHASECAM_ZOOMIN)) {
             zoomCamera(-value);
-            if (!zoomin) distanceLerpFactor = 0;
-            zoomin = true;
+            if (!zoomIn) distanceLerpFactor = 0;
+            zoomIn = true;
         } else if (name.equals(CHASECAM_ZOOMOUT)) {
             zoomCamera(value);
-            if (zoomin) distanceLerpFactor = 0;
-            zoomin = false;
+            if (zoomIn) distanceLerpFactor = 0;
+            zoomIn = false;
         }
     }
 
