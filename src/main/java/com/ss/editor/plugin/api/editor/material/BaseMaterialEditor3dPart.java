@@ -96,8 +96,7 @@ public class BaseMaterialEditor3dPart<T extends BaseMaterialFileEditor> extends
     @Override
     @BackgroundThread
     protected @NotNull Optional<CameraEditor3dPartControl> createCameraControl() {
-        return Optional.of(new CameraEditor3dPartControl(this, EditorUtils.getGlobalCamera(),
-                false, false, false));
+        return Optional.of(new CameraEditor3dPartControl(this, false, false, false));
     }
 
     /**

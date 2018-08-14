@@ -37,35 +37,22 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     private static final Logger LOGGER = LoggerManager.getLogger(EditorCamera.class);
 
-    private static final String CHASECAM_TOGGLEROTATE =
-            "jMB.Editor." + CameraInput.CHASECAM_TOGGLEROTATE;
-
-    private static final String CHASECAM_DOWN =
-            "jMB.Editor." + CameraInput.CHASECAM_DOWN;
-
-    private static final String CHASECAM_UP =
-            "jMB.Editor." + CameraInput.CHASECAM_UP;
-
-    private static final String CHASECAM_MOVELEFT =
-            "jMB.Editor." + CameraInput.CHASECAM_MOVELEFT;
-
-    private static final String CHASECAM_MOVERIGHT =
-            "jMB.Editor." + CameraInput.CHASECAM_MOVERIGHT;
-
-    private static final String CHASECAM_ZOOMIN =
-            "jMB.Editor." + CameraInput.CHASECAM_ZOOMIN;
-
-    private static final String CHASECAM_ZOOMOUT =
-            "jMB.Editor." + CameraInput.CHASECAM_ZOOMOUT;
+    private static final String CAMERA_TOGGLEROTATE = "jMB." + CameraInput.CHASECAM_TOGGLEROTATE;
+    private static final String CAMERA_DOWN = "jMB." + CameraInput.CHASECAM_DOWN;
+    private static final String CAMERA_UP = "jMB." + CameraInput.CHASECAM_UP;
+    private static final String CAMERA_MOVELEFT = "jMB." + CameraInput.CHASECAM_MOVELEFT;
+    private static final String CAMERA_MOVERIGHT = "jMB." + CameraInput.CHASECAM_MOVERIGHT;
+    private static final String CAMERA_ZOOMIN = "jMB." + CameraInput.CHASECAM_ZOOMIN;
+    private static final String CAMERA_ZOOMOUT = "jMB." + CameraInput.CHASECAM_ZOOMOUT;
 
     private static final String[] ALL_INPUTS = {
-            CHASECAM_TOGGLEROTATE,
-            CHASECAM_DOWN,
-            CHASECAM_UP,
-            CHASECAM_MOVELEFT,
-            CHASECAM_MOVERIGHT,
-            CHASECAM_ZOOMIN,
-            CHASECAM_ZOOMOUT
+            CAMERA_TOGGLEROTATE,
+            CAMERA_DOWN,
+            CAMERA_UP,
+            CAMERA_MOVELEFT,
+            CAMERA_MOVERIGHT,
+            CAMERA_ZOOMIN,
+            CAMERA_ZOOMOUT
     };
 
     /**
@@ -369,12 +356,13 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
         if (!enabled || !dragToRotate) {
             return;
-        } else if (!CHASECAM_TOGGLEROTATE.equals(name)) {
+        } else if (!CAMERA_TOGGLEROTATE.equals(name)) {
             return;
         }
 
         if (Config.DEV_CAMERA_DEBUG) {
-            LOGGER.debug(this, keyPressed, flag -> "Toggle camera " + flag);
+            LOGGER.debug(this, name, keyPressed,
+                    (action, pressed) -> "Action[" + action + "], pressed[" + pressed + "]");
         }
 
         canRotate = keyPressed;
@@ -402,19 +390,19 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             return;
         }
 
-        if (name.equals(CHASECAM_MOVELEFT) && !lockRotation) {
+        if (name.equals(CAMERA_MOVELEFT) && !lockRotation) {
             rotateCamera(-value * 3);
-        } else if (name.equals(CHASECAM_MOVERIGHT) && !lockRotation) {
+        } else if (name.equals(CAMERA_MOVERIGHT) && !lockRotation) {
             rotateCamera(value * 3);
-        } else if (name.equals(CHASECAM_UP) && !lockRotation) {
+        } else if (name.equals(CAMERA_UP) && !lockRotation) {
             verticalRotateCamera(value * 3);
-        } else if (name.equals(CHASECAM_DOWN) && !lockRotation) {
+        } else if (name.equals(CAMERA_DOWN) && !lockRotation) {
             verticalRotateCamera(-value * 3);
-        } else if (name.equals(CHASECAM_ZOOMIN)) {
+        } else if (name.equals(CAMERA_ZOOMIN)) {
             zoomCamera(-value);
             if (!zoomIn) distanceLerpFactor = 0;
             zoomIn = true;
-        } else if (name.equals(CHASECAM_ZOOMOUT)) {
+        } else if (name.equals(CAMERA_ZOOMOUT)) {
             zoomCamera(value);
             if (zoomIn) distanceLerpFactor = 0;
             zoomIn = false;
@@ -430,13 +418,13 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     public void registerInput(@NotNull InputManager inputManager) {
         this.inputManager = inputManager;
 
-        JmeUtils.addMapping(inputManager, CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        JmeUtils.addMapping(inputManager, CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        JmeUtils.addMapping(inputManager, CHASECAM_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-        JmeUtils.addMapping(inputManager, CHASECAM_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-        JmeUtils.addMapping(inputManager, CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        JmeUtils.addMapping(inputManager, CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        JmeUtils.addMapping(inputManager, CHASECAM_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+        JmeUtils.addMapping(inputManager, CAMERA_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        JmeUtils.addMapping(inputManager, CAMERA_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        JmeUtils.addMapping(inputManager, CAMERA_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        JmeUtils.addMapping(inputManager, CAMERA_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+        JmeUtils.addMapping(inputManager, CAMERA_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        JmeUtils.addMapping(inputManager, CAMERA_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        JmeUtils.addMapping(inputManager, CAMERA_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
         inputManager.addListener(this, ALL_INPUTS);
     }
@@ -1010,7 +998,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @return the horizontal rotation
      */
-    public float getHorizontalRotation() {
+    public float getHRotation() {
         return hRotation;
     }
 
@@ -1019,7 +1007,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      *
      * @return the vertical rotation
      */
-    public float getvRotation() {
+    public float getVRotation() {
         return vRotation;
     }
 

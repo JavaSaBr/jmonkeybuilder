@@ -24,6 +24,6 @@ public class FileEditorUtils {
         var cameraSpeed = editorState.getCameraSpeed();
 
         /** FIXME ExecutorManager.getInstance()
-                .addJmeTask(() -> editor3dPart.updateCameraSettings(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));*/
+                .addJmeTask(() -> editor3dPart.applyState(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));*/
     }
 }

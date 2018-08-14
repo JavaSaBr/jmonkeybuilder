@@ -97,7 +97,7 @@ public class SelectionSupportEditor3dPartControl<T extends EditableSceneEditor3d
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
         TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-        inputManager.addListener(this, MAPPINGS);
+        inputManager.addListener(getActionListener(), MAPPINGS);
     }
 
     @Override

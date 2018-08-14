@@ -28,6 +28,7 @@ import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,11 +40,65 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<ExtendableEditor3dPart> implements
         InputEditor3dPartControl, ActionListener, AnalogListener {
 
+    public static class CameraState implements Serializable {
+
+        @NotNull Vector3f cameraLocation;
+
+        float hRotation;
+        float vRotation;
+        float targetDistance;
+        float cameraFlySpeed;
+
+        public CameraState() {
+            this.cameraLocation = new Vector3f();
+        }
+
+        public CameraState(
+                @NotNull Vector3f cameraLocation,
+                float hRotation,
+                float vRotation,
+                float targetDistance,
+                float cameraFlySpeed
+        ) {
+            this.cameraLocation = cameraLocation;
+            this.hRotation = hRotation;
+            this.vRotation = vRotation;
+            this.targetDistance = targetDistance;
+            this.cameraFlySpeed = cameraFlySpeed;
+        }
+
+        @FromAnyThread
+        public float getCameraFlySpeed() {
+            return cameraFlySpeed;
+        }
+
+        @FromAnyThread
+        public @NotNull Vector3f getCameraLocation() {
+            return cameraLocation;
+        }
+
+        @FromAnyThread
+        public float getHRotation() {
+            return hRotation;
+        }
+
+        @FromAnyThread
+        public float getVRotation() {
+            return vRotation;
+        }
+
+        @FromAnyThread
+        public float getTargetDistance() {
+            return targetDistance;
+        }
+    }
+
     private enum KeyState {
         KEY_A,
         KEY_D,
         KEY_W,
-        KEY_S
+        KEY_S,
+        KEY_ANY
     }
 
     private static final ObjectDictionary<String, Trigger> ACTION_TRIGGERS =
@@ -132,12 +187,6 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     private final DirectionalLight light;
 
     /**
-     * The previous camera location.
-     */
-    @NotNull
-    private final Vector3f prevCameraLocation;
-
-    /**
      * The node on which the camera is looking.
      */
     @NotNull
@@ -168,24 +217,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     private final FloatConsumer[] keyStateHandlers;
 
     /**
-     * The previous camera zoom.
+     * The previous state of the camera.
      */
-    private float prevTargetDistance;
-
-    /**
-     * The previous vertical camera rotation.
-     */
-    private float prevVRotation;
-
-    /**
-     * The previous horizontal camera rotation.
-     */
-    private float prevHRotation;
-
-    /**
-     * The previous camera speed.
-     */
-    private float prevCameraFlySpeed;
+    @NotNull
+    private final CameraState prevState;
 
     /**
      * The camera fly speed.
@@ -207,13 +242,12 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      */
     private boolean needMovableCamera;
 
-    public CameraEditor3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart, @NotNull Camera camera) {
-        this(editor3dPart, camera, true, true, true);
+    public CameraEditor3dPartControl(@NotNull ExtendableEditor3dPart editor3dPart) {
+        this(editor3dPart, true, true, true);
     }
 
     public CameraEditor3dPartControl(
             @NotNull ExtendableEditor3dPart editor3dPart,
-            @NotNull Camera camera,
             boolean needLight,
             boolean needUpdateLight,
             boolean needMovableCamera
@@ -221,16 +255,16 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         super(editor3dPart);
         this.cameraFlying = new AtomicInteger();
         this.cameraMoving = new AtomicInteger();
-        this.prevCameraLocation = new Vector3f();
         this.keyStates = new boolean[4];
         this.keyStateHandlers = new FloatConsumer[4];
         this.cameraFlySpeed = 1F;
         this.cameraNode = new Node("CameraNode");
-        this.editorCamera = createEditorCamera(camera);
+        this.editorCamera = createEditorCamera(editor3dPart.getCamera());
         this.light = createLight();
         this.needLight = needLight;
         this.needUpdateLight = needUpdateLight;
         this.needMovableCamera = needMovableCamera;
+        this.prevState = new CameraState();
 
         actionHandlers.put(KEY_NUM_1, (isPressed, tpf) -> rotateTo(Perspective.BACK, isPressed));
         actionHandlers.put(KEY_NUM_3, (isPressed, tpf) -> rotateTo(Perspective.RIGHT, isPressed));
@@ -243,7 +277,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> {
             if (isCameraFlying() && !isPressed) {
-                finishCameraMoving(0, true);
+                finishCameraMoving(KeyState.KEY_ANY, true);
             }
         });
 
@@ -259,10 +293,14 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             }
         });
 
-        actionHandlers.put(KEY_A, (isPressed, tpf) -> moveCameraSide(tpf, true, isPressed, 0));
-        actionHandlers.put(KEY_D, (isPressed, tpf) -> moveCameraSide(-tpf, true, isPressed, 1));
-        actionHandlers.put(KEY_W, (isPressed, tpf) -> moveCameraForward(tpf, true, isPressed, 2));
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> moveCameraForward(-tpf, true, isPressed, 3));
+        actionHandlers.put(KEY_A, (isPressed, tpf) ->
+                moveCameraSide(tpf, true, isPressed, KeyState.KEY_A));
+        actionHandlers.put(KEY_D, (isPressed, tpf) ->
+                moveCameraSide(-tpf, true, isPressed, KeyState.KEY_D));
+        actionHandlers.put(KEY_W, (isPressed, tpf) ->
+                moveCameraForward(tpf, true, isPressed, KeyState.KEY_W));
+        actionHandlers.put(KEY_S, (isPressed, tpf) ->
+                moveCameraForward(-tpf, true, isPressed, KeyState.KEY_S));
 
         analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
         analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
@@ -410,6 +448,15 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         inputManager.addListener(getActionListener(), ACTION_MAPPINGS);
         inputManager.addListener(getAnalogListener(), ANALOG_MAPPINGS);
+
+        editorCamera.registerInput(inputManager);
+    }
+
+    @Override
+    @JmeThread
+    public void unregister(@NotNull InputManager inputManager) {
+        super.unregister(inputManager);
+        editorCamera.unregisterInput(inputManager);
     }
 
     @Override
@@ -432,7 +479,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         if (isCameraFlying()) {
             for (int i = 0; i < keyStateHandlers.length; i++) {
                 if (keyStates[i]) {
-                    keyStateHandlers[i].consume(tpf);
+                   // keyStateHandlers[i].consume(tpf);
                 }
             }
         }
@@ -509,13 +556,18 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             var location = editor3dPart.getCamera()
                     .getLocation();
 
+            if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
+                LOGGER.debug(this, "init position: " + location + " of the camera.");
+            }
+
             //FIXME change the logic
-            cameraNode.setLocalTranslation(location);
+            cameraNode.setLocalTranslation(Vector3f.ZERO);
             editorCamera.setTargetDistance(0);
+            editorCamera.updateCamera(1);
         }
 
-        if (!keyStates[key]) {
-            keyStates[key] = true;
+        if (!keyStates[key.ordinal()]) {
+            keyStates[key.ordinal()] = true;
             cameraFlying.incrementAndGet();
         }
     }
@@ -531,7 +583,9 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             LOGGER.debug(this, "finish camera moving[" + cameraFlying + "] for key " + key + ", force = " + force);
         }
 
-        keyStates[key.ordinal()] = false;
+        if (key != KeyState.KEY_ANY) {
+            keyStates[key.ordinal()] = false;
+        }
 
         if (cameraFlying.get() == 0) {
             return;
@@ -639,9 +693,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
     @JmeThread
     private boolean canCameraMoveOrFly() {
-        /*return editor3dPart.requireControl(InputStateEditor3dPartControl.class)
-                .isButtonMiddleDown();*/
-        return false;
+        return editor3dPart.getBooleanProperty(PROP_IS_BUTTON_MIDDLE_DOWN);
     }
 
 
@@ -657,85 +709,63 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         var cameraLocation = cameraNode.getLocalTranslation();
 
-        var hRotation = editorCamera.getHorizontalRotation();
-        var vRotation = editorCamera.getvRotation();
+        var hRotation = editorCamera.getHRotation();
+        var vRotation = editorCamera.getVRotation();
         var targetDistance = editorCamera.getTargetDistance();
 
-        if (!prevCameraLocation.equals(cameraLocation)) {
+        if (!prevState.cameraLocation.equals(cameraLocation)) {
             changes++;
-        } else if (prevHRotation != hRotation || prevVRotation != vRotation) {
+        } else if (prevState.hRotation != hRotation || prevState.vRotation != vRotation) {
             changes++;
-        } else if (prevTargetDistance != targetDistance) {
+        } else if (prevState.targetDistance != targetDistance) {
             changes++;
-        } else if (cameraFlySpeed != prevCameraFlySpeed) {
+        } else if (prevState.cameraFlySpeed != cameraFlySpeed) {
             changes++;
         }
 
         if (changes > 0) {
-            notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed);
+            notifyChangedCameraState(new CameraState(cameraLocation.clone(), hRotation, vRotation, targetDistance, cameraFlySpeed));
         }
 
-        prevCameraLocation.set(cameraLocation);
-
-        this.prevHRotation = hRotation;
-        this.prevVRotation = vRotation;
-        this.prevTargetDistance = targetDistance;
-        this.prevCameraFlySpeed = cameraFlySpeed;
+        prevState.cameraLocation.set(cameraLocation);
+        prevState.hRotation = hRotation;
+        prevState.vRotation = vRotation;
+        prevState.targetDistance = targetDistance;
+        prevState.cameraFlySpeed = cameraFlySpeed;
     }
 
     /**
-     * Notify about changed camera's settings.
+     * Notify about changed camera's state.
      *
-     * @param cameraLocation the camera location.
-     * @param hRotation      the h rotation.
-     * @param vRotation      the v rotation.
-     * @param targetDistance the target distance.
-     * @param cameraFlySpeed the camera fly speed.
+     * @param cameraState the camera's state.
      */
     @JmeThread
-    protected void notifyChangedCameraSettings(
-        @NotNull Vector3f cameraLocation,
-        float hRotation,
-        float vRotation,
-        float targetDistance,
-        float cameraFlySpeed
-    ) {
+    protected void notifyChangedCameraState(@NotNull CameraState cameraState) {
 
       //  ExecutorManager.getInstance()
        //         .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
     }
 
     /**
-     * Update the editor's camera settings.
+     * Update the camera's state to this camera.
      *
-     * @param cameraLocation the camera location.
-     * @param hRotation      the h rotation.
-     * @param vRotation      the v rotation.
-     * @param targetDistance the target distance.
-     * @param cameraFlySpeed the camera fly speed.
+     * @param cameraState the camera's state.
      */
     @JmeThread
-    public void updateCameraSettings(
-        @NotNull Vector3f cameraLocation,
-        float hRotation,
-        float vRotation,
-        float targetDistance,
-        float cameraFlySpeed
-    ) {
-        
-      /*  editorCamera.setTargetHRotation(hRotation);
-        editorCamera.setTargetVRotation(vRotation);
-        editorCamera.setTargetDistance(targetDistance);
+    public void applyState(@NotNull CameraState cameraState) {
 
-        getNodeForCamera().setLocalTranslation(cameraLocation);
-        getPrevCameraLocation().set(cameraLocation);
+        prevState.cameraLocation.set(cameraState.getCameraLocation());
+        prevState.hRotation = cameraState.getHRotation();
+        prevState.vRotation = cameraState.getVRotation();
+        prevState.targetDistance = cameraState.getTargetDistance();
+        prevState.cameraFlySpeed = cameraState.getCameraFlySpeed();
 
-        this.prevHRotation = hRotation;
-        this.prevVRotation = vRotation;
-        this.prevTargetDistance = targetDistance;
-        this.prevCameraFlySpeed = cameraFlySpeed;
-        this.cameraFlySpeed = cameraFlySpeed;
+        editorCamera.setTargetHRotation(cameraState.getHRotation());
+        editorCamera.setTargetVRotation(cameraState.getVRotation());
+        editorCamera.setTargetDistance(cameraState.getTargetDistance());
 
-        editorCamera.update(1F);*/
+        cameraNode.setLocalTranslation(cameraState.getCameraLocation());
+
+        editorCamera.updateCamera(1);
     }
 }

@@ -239,7 +239,7 @@ public class TransformationSupportEditor3dPartControl<T extends EditableSceneEdi
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
         TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-        inputManager.addListener(this, MAPPINGS);
+        inputManager.addListener(getActionListener(), MAPPINGS);
     }
 
     /**

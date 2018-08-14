@@ -38,7 +38,7 @@ public abstract class Base3dSceneEditor3dPart<T extends FileEditor> extends Abst
 
     @BackgroundThread
     protected @NotNull Optional<CameraEditor3dPartControl> createCameraControl() {
-        return Optional.of(new CameraEditor3dPartControl(this, EditorUtils.getGlobalCamera()));
+        return Optional.of(new CameraEditor3dPartControl(this));
     }
 
     @Override

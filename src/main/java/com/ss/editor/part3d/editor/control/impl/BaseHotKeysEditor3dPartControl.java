@@ -1,5 +1,6 @@
 package com.ss.editor.part3d.editor.control.impl;
 
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -11,8 +12,6 @@ import com.ss.editor.part3d.editor.UndoableEditor3dPart;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
-
-import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
 
 /**
  * The control to base hotkeys of the editor 3d part.
@@ -67,6 +66,6 @@ public class BaseHotKeysEditor3dPartControl<T extends SavableEditor3dPart & Undo
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
         TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-        inputManager.addListener(this, MAPPINGS);
+        inputManager.addListener(getActionListener(), MAPPINGS);
     }
 }

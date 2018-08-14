@@ -1,5 +1,8 @@
 package com.ss.editor.part3d.editor.impl.scene.control;
 
+import static com.ss.editor.part3d.editor.EditableSceneEditor3dPart.PROP_IS_EDITING;
+import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
+import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_IGNORE_RAY_CAST;
 import com.jme3.collision.CollisionResult;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
@@ -20,10 +23,6 @@ import com.ss.editor.util.*;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
-
-import static com.ss.editor.part3d.editor.EditableSceneEditor3dPart.PROP_IS_EDITING;
-import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
-import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_IGNORE_RAY_CAST;
 
 /**
  * The control to implement painting support on the scene editor 3d part.
@@ -97,7 +96,7 @@ public class PaintingSupportEditor3dPartControl<T extends EditableSceneEditor3dP
     @JmeThread
     public void register(@NotNull InputManager inputManager) {
         TRIGGERS.forEach(inputManager, JmeUtils::addMapping);
-        inputManager.addListener(this, MAPPINGS);
+        inputManager.addListener(getActionListener(), MAPPINGS);
     }
 
     /**
