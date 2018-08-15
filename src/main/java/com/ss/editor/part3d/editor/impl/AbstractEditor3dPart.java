@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractEditor3dPart<T extends FileEditor> extends AbstractAppState implements Editor3dPart {
+public abstract class AbstractEditor3dPart extends AbstractAppState implements Editor3dPart {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(Editor3dPart.class);
 
@@ -26,7 +26,6 @@ public abstract class AbstractEditor3dPart<T extends FileEditor> extends Abstrac
      */
     @Nullable
     protected Application application;
-
 
     @Override
     @JmeThread

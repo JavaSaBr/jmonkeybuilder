@@ -228,6 +228,11 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     private float cameraFlySpeed;
 
     /**
+     * The saved target distance.
+     */
+    private float savedTargetDistance;
+
+    /**
      * True of need to add light for the camera.
      */
     private boolean needLight;
@@ -553,17 +558,16 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         if (cameraFlying.get() == 0) {
 
-            var location = editor3dPart.getCamera()
-                    .getLocation();
+            var camera = editor3dPart.getCamera();
+            var location = camera.getLocation();
 
             if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabled(LoggerLevel.DEBUG)) {
                 LOGGER.debug(this, "init position: " + location + " of the camera.");
             }
 
-            //FIXME change the logic
-            cameraNode.setLocalTranslation(Vector3f.ZERO);
+            cameraNode.setLocalTranslation(location);
+            savedTargetDistance = editorCamera.getTargetDistance();
             editorCamera.setTargetDistance(0);
-            editorCamera.updateCamera(1);
         }
 
         if (!keyStates[key.ordinal()]) {
@@ -591,11 +595,20 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             return;
         }
 
-        if (force) {
+        if (force || cameraFlying.decrementAndGet() == 0) {
+
             cameraFlying.set(0);
+
+            var camera = editor3dPart.getCamera();
+            var direction = camera.getDirection()
+                    .multLocal(-savedTargetDistance);
+            var location = camera.getLocation()
+                    .add(direction);
+
+            editorCamera.setTargetDistance(savedTargetDistance);
+            cameraNode.setLocalTranslation(location);
+
             Arrays.fill(keyStates, false);
-        } else {
-            cameraFlying.decrementAndGet();
         }
     }
 
@@ -613,6 +626,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             startCameraFlying(key);
         } else if (isAction) {
             finishCameraMoving(key, false);
+        }
+
+        if (!canCameraFly() || isAction) {
+            return;
         }
 
         var direction = editorCamera.getDirection();
@@ -636,6 +653,10 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             startCameraFlying(key);
         } else if (isAction) {
             finishCameraMoving(key, false);
+        }
+
+        if (!canCameraFly() || isAction) {
+            return;
         }
 
         var left = editorCamera.getLeft();

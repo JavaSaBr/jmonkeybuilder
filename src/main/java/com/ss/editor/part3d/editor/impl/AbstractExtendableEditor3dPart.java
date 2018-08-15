@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type of file editor
  * @author JavaSaBr
  */
-public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart<T>
+public abstract class AbstractExtendableEditor3dPart<T extends FileEditor> extends AbstractEditor3dPart
         implements ExtendableEditor3dPart {
 
     /**
