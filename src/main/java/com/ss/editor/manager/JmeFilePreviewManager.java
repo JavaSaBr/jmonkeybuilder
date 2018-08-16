@@ -459,8 +459,6 @@ public class JmeFilePreviewManager extends AbstractControl {
         var editorCamera = new EditorCamera(camera, cameraNode);
         editorCamera.setMaxDistance(10000);
         editorCamera.setMinDistance(0.01F);
-        editorCamera.setSmoothMotion(false);
-        editorCamera.setRotationSensitivity(1);
         editorCamera.setZoomSensitivity(0.2F);
 
         //TODO added supporting moving the camera

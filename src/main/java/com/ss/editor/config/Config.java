@@ -96,6 +96,11 @@ public final class Config {
     public static boolean DEV_CAMERA_DEBUG;
 
     /**
+     * The flag to enable camera checks debug mode.
+     */
+    public static boolean DEV_CAMERA_CHECKS_DEBUG;
+
+    /**
      * The flag to enable transformations debug mode.
      */
     public static boolean DEV_TRANSFORMS_DEBUG;
@@ -153,6 +158,7 @@ public final class Config {
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
         DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
+        DEV_CAMERA_CHECKS_DEBUG = vars.getBoolean("Dev.cameraChecksDebug", false);
         DEV_TRANSFORMS_DEBUG = vars.getBoolean("Dev.transformsDebug", false);
         DEV_DEBUG_JFX_MOUSE_INPUT = vars.getBoolean("Dev.jfxMouseInput", false);
         DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
