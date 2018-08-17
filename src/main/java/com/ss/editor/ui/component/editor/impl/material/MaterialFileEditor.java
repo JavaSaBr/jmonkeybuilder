@@ -124,7 +124,7 @@ public class MaterialFileEditor extends
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
-        var assetFile = notNull(getAssetFile(getEditFile()));
+        var assetFile = notNull(getAssetFile(getFile()));
         var materialKey = new MaterialKey(toAssetPath(assetFile));
 
         var material = EditorUtils.getAssetManager()

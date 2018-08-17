@@ -61,7 +61,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         super.processChangedFileImpl(event);
 
         var executorManager = ExecutorManager.getInstance();
-        executorManager.schedule(() -> executorManager.addFxTask(() -> showImage(getEditFile())), 1000);
+        executorManager.schedule(() -> executorManager.addFxTask(() -> showImage(getFile())), 1000);
     }
 
     @FxThread

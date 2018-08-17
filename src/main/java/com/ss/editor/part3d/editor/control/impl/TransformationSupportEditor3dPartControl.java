@@ -1,4 +1,4 @@
-package com.ss.editor.part3d.editor.impl.scene.control;
+package com.ss.editor.part3d.editor.control.impl;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -21,7 +21,6 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.control.transform.*;
 import com.ss.editor.part3d.editor.EditableSceneEditor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
-import com.ss.editor.part3d.editor.control.impl.BaseInputEditor3dPartControl;
 import com.ss.editor.part3d.editor.event.Editor3dPartEvent;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;

@@ -1,4 +1,4 @@
-package com.ss.editor.part3d.editor.impl.scene.control;
+package com.ss.editor.part3d.editor.control.impl;
 
 import static com.ss.editor.part3d.editor.EditableSceneEditor3dPart.PROP_IS_EDITING;
 import static com.ss.editor.part3d.editor.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
@@ -17,8 +17,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.EditableSceneEditor3dPart;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.impl.BaseInputEditor3dPartControl;
-import com.ss.editor.part3d.editor.impl.scene.event.FinishEditingEvent;
-import com.ss.editor.part3d.editor.impl.scene.event.StartEditingEvent;
+import com.ss.editor.part3d.editor.event.impl.FinishEditingEvent;
+import com.ss.editor.part3d.editor.event.impl.StartEditingEvent;
 import com.ss.editor.util.*;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.MouseButton;

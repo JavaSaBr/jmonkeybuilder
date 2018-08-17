@@ -125,7 +125,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
             fileEditor.notifyShowed();
 
-            newCurrentFile = fileEditor.getEditFile();
+            newCurrentFile = fileEditor.getFile();
             new3DArea = fileEditor.get3dArea();
         }
 
@@ -236,7 +236,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                     tab.setText(fileEditor.getFileName());
                 }
 
-                var editFile = fileEditor.getEditFile();
+                var editFile = fileEditor.getFile();
 
                 openedEditors.remove(file);
                 openedEditors.put(editFile, tab);
@@ -324,7 +324,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             var properties = tab.getProperties();
             var fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-            var editFile = fileEditor.getEditFile();
+            var editFile = fileEditor.getFile();
 
             DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, ObjectDictionary::remove);
 
@@ -506,7 +506,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     @FxThread
     private void addEditor(@NotNull FileEditor editor, boolean needShow) {
 
-        var editFile = editor.getEditFile();
+        var editFile = editor.getFile();
 
         var tab = new Tab(editor.getFileName());
         tab.setGraphic(new ImageView(ICON_MANAGER.getIcon(editFile, DEFAULT_FILE_ICON_SIZE)));

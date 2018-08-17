@@ -1,4 +1,4 @@
-package com.ss.editor.part3d.editor.impl.scene.event;
+package com.ss.editor.part3d.editor.event.impl;
 
 import com.ss.editor.part3d.editor.event.AbstractEditor3dPartEvent;
 import org.jetbrains.annotations.NotNull;

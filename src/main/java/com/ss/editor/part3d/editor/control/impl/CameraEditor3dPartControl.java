@@ -758,6 +758,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     @JmeThread
     protected void notifyChangedCameraState(@NotNull CameraState cameraState) {
 
+        //FIXME
       //  ExecutorManager.getInstance()
        //         .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
     }

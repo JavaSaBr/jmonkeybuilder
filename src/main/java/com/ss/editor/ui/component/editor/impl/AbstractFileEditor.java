@@ -13,6 +13,9 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.component.editor.event.FileEditorEvent;
+import com.ss.editor.ui.component.editor.event.HideFileEditorEvent;
+import com.ss.editor.ui.component.editor.event.ShowedFileEditorEvent;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -330,7 +333,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         var result = new CompletableFuture<FileEditor>();
 
         ExecutorManager.getInstance()
-                .addFxTask(() -> checkAndSaveIdNeed(result));
+                .addFxTask(() -> checkAndSaveIfNeed(result));
 
         return result;
     }
@@ -341,7 +344,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param callback the callback.
      */
     @FxThread
-    protected void checkAndSaveIdNeed(@NotNull CompletableFuture<FileEditor> callback) {
+    protected void checkAndSaveIfNeed(@NotNull CompletableFuture<FileEditor> callback) {
 
         if (isSaving() || !isDirty()) {
             callback.complete(this);
@@ -370,7 +373,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
             doSave(tempFile);
 
-            try (var out = Files.newOutputStream(getEditFile(), TRUNCATE_EXISTING)) {
+            try (var out = Files.newOutputStream(getFile(), TRUNCATE_EXISTING)) {
                 Files.copy(tempFile, out);
             } finally {
                 FileUtils.delete(tempFile);
@@ -443,14 +446,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FxThread
-    public @NotNull Path getEditFile() {
+    public @NotNull Path getFile() {
         return notNull(editedFile);
     }
 
     @Override
     @FxThread
     public @NotNull String getFileName() {
-        return getEditFile().getFileName()
+        return getFile().getFileName()
                 .toString();
     }
 
@@ -506,6 +509,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     @FxThread
+    public void notify(@NotNull FileEditorEvent event) {
+        if (event instanceof ShowedFileEditorEvent) {
+            notifyShowed();
+        } else if (event instanceof HideFileEditorEvent) {
+            notifyHide();
+        }
+    }
+
+    @Override
+    @FxThread
     public void notifyRenamed(@NotNull Path prevFile, @NotNull Path newFile) {
         notifyChangedEditedFile(prevFile, newFile);
     }
@@ -525,7 +538,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FxThread
     private void notifyChangedEditedFile(@NotNull Path prevFile, @NotNull Path newFile) {
 
-        var editFile = getEditFile();
+        var editFile = getFile();
 
         if (editFile.equals(prevFile)) {
             setEditedFile(newFile);
@@ -561,9 +574,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     ) {
     }
 
-    @Override
+    /**
+     * Notify that this editor was showed.
+     */
     @FxThread
-    public void notifyShowed() {
+    protected void notifyShowed() {
         this.showedTime = LocalTime.now();
 
         var description = getDescriptor();
@@ -572,9 +587,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
                 "/editing/" + description.getEditorId());
     }
 
-    @Override
+    /**
+     * Notify that this editor was hide.
+     */
     @FxThread
-    public void notifyHided() {
+    protected void notifyHide() {
 
         var duration = Duration.between(showedTime, LocalTime.now());
         var seconds = (int) duration.getSeconds();
@@ -613,7 +630,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected void processChangedFile(@NotNull FileChangedEvent event) {
 
         var file = event.getFile();
-        var editFile = getEditFile();
+        var editFile = getFile();
 
         if (!file.equals(editFile)) {
             return;

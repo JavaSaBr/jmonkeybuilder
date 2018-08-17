@@ -1,4 +1,4 @@
-package com.ss.editor.part3d.editor.impl.scene.control;
+package com.ss.editor.part3d.editor.control.impl;
 
 import static com.ss.editor.part3d.editor.EditableSceneEditor3dPart.PROP_IS_EDITING;
 import static com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3dPart.KEY_SHAPE_CENTER;

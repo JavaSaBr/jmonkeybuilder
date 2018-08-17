@@ -158,7 +158,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
-        var newContent = FileUtils.read(getEditFile());
+        var newContent = FileUtils.read(getFile());
         var currentContent = textArea.getText();
 
         textArea.setText(newContent);

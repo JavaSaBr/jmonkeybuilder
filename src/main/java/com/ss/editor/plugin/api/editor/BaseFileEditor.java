@@ -155,7 +155,7 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
         var currentWorkspace = WorkspaceManager.getInstance()
                 .requiredCurrentWorkspace();
 
-        editorState = currentWorkspace.getEditorState(getEditFile(), stateFactory);
+        editorState = currentWorkspace.getEditorState(getFile(), stateFactory);
     }
 
     /**

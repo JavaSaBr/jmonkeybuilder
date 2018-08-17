@@ -155,7 +155,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
-        var newContent = FileUtils.read(getEditFile());
+        var newContent = FileUtils.read(getFile());
         var currentContent = codeArea.getText();
 
         codeArea.reloadContent(newContent);

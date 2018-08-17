@@ -1,4 +1,4 @@
-package com.ss.editor.part3d.editor.impl.scene.control;
+package com.ss.editor.part3d.editor.control.impl;
 
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;

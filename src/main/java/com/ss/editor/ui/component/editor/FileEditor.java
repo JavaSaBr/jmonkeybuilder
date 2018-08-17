@@ -4,6 +4,7 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.part3d.editor.Editor3dPart;
+import com.ss.editor.ui.component.editor.event.FileEditorEvent;
 import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.Event;
@@ -61,7 +62,7 @@ public interface FileEditor {
      * @return the editing file.
      */
     @FxThread
-    @NotNull Path getEditFile();
+    @NotNull Path getFile();
 
     /**
      * Open the file.
@@ -104,31 +105,12 @@ public interface FileEditor {
     }
 
     /**
-     * Notify that this editor was closed.
-     */
-    @FxThread
-    default void notifyClosed() {
-    }
-
-    /**
-     * Notify about renamed files.
+     * Notify this editor about the event.
      *
-     * @param prevFile the prev file
-     * @param newFile  the new file
+     * @param event the editor's event.
      */
     @FxThread
-    default void notifyRenamed(@NotNull Path prevFile, @NotNull Path newFile) {
-    }
-
-    /**
-     * Notify about moved file.
-     *
-     * @param prevFile the prev file
-     * @param newFile  the new file
-     */
-    @FxThread
-    default void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
-    }
+    void notify(@NotNull FileEditorEvent event);
 
     /**
      * Get the editor's descriptor.
@@ -137,20 +119,6 @@ public interface FileEditor {
      */
     @FromAnyThread
     @NotNull EditorDescriptor getDescriptor();
-
-    /**
-     * Notify that this editor was showed.
-     */
-    @FxThread
-    default void notifyShowed() {
-    }
-
-    /**
-     * Notify that this editor was hided.
-     */
-    @FxThread
-    default void notifyHided() {
-    }
 
     /**
      * Return true if the point is inside in the editing area.

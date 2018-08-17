@@ -588,8 +588,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneNode, SceneEdi
 
     @Override
     @FxThread
-    public void notifyHided() {
-        super.notifyHided();
+    public void notifyHide() {
+        super.notifyHide();
 
         ExecutorManager.getInstance()
                 .addJmeTask(EditorUtils::enableGlobalLightProbe);
