@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.state;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.component.editor.event.FileEditorEvent;
 import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,17 @@ public interface EditorState extends Serializable {
      * @return the additional editor state.
      */
     @FxThread
-    <T extends AdditionalEditorState> @NotNull T getOrCreateAdditionalState(@NotNull Class<T> type,
-                                                                            @NotNull Supplier<T> factory);
+    <T extends AdditionalEditorState> @NotNull T getOrCreateAdditionalState(
+            @NotNull Class<T> type,
+            @NotNull Supplier<T> factory
+    );
+
+    /**
+     * Notify this editor's state about some editor's events.
+     *
+     * @param event the file editor's state.
+     */
+    @FxThread
+    default void notify(@NotNull FileEditorEvent event) {
+    }
 }

@@ -91,8 +91,8 @@ public class MaterialFileEditor extends
 
     @Override
     @FxThread
-    protected void processChangedFile(@NotNull final FileChangedEvent event) {
-        super.processChangedFile(event);
+    protected void handleChangedFile(@NotNull final FileChangedEvent event) {
+        super.handleChangedFile(event);
 
         var currentMaterial = getCurrentMaterial();
         var file = event.getFile();

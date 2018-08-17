@@ -77,7 +77,7 @@ public class EditorRegistry {
                 .register(MaterialFileEditor.DESCRIPTOR)
                 .register(ModelFileEditor.DESCRIPTOR)
                 .register(ImageViewerEditor.DESCRIPTOR)
-                .register(GLSLFileEditor.DESCRIPTOR)
+                .register(GlslFileEditor.DESCRIPTOR)
                 .register(MaterialDefinitionFileEditor.DESCRIPTOR)
                 .register(AudioViewerEditor.DESCRIPTOR)
                 .register(SceneFileEditor.DESCRIPTOR);

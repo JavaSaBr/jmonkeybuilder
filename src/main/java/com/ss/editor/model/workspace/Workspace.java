@@ -197,18 +197,24 @@ public class Workspace implements Serializable {
      * @return the state of the editor.
      */
     @FromAnyThread
-    public synchronized <T extends EditorState> @NotNull T getEditorState(@NotNull final Path file,
-                                                                          @NotNull final Supplier<EditorState> stateFactory) {
+    public synchronized <T extends EditorState> @NotNull T getEditorState(
+            @NotNull Path file,
+            @NotNull Supplier<EditorState> stateFactory
+    ) {
 
-        final Path assetFile = getAssetFile(getAssetFolder(), file);
-        final String assetPath = toAssetPath(assetFile);
+        var assetPath = EditorUtils.getAssetFileOpt(file)
+                .map(EditorUtils::toAssetPath)
+                .orElseThrow(() -> new RuntimeException("The file " + file + " isn't in the current asset folder."));
 
-        final Map<String, EditorState> editorStateMap = getEditorStateMap();
+        var editorStateMap = getEditorStateMap();
 
         if (!editorStateMap.containsKey(assetPath)) {
-            final EditorState editorState = stateFactory.get();
+
+            var editorState = stateFactory.get();
             editorState.setChangeHandler(this::incrementChanges);
+
             editorStateMap.put(assetPath, editorState);
+
             incrementChanges();
         }
 

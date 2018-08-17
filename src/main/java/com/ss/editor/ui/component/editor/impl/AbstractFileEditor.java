@@ -13,9 +13,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.part3d.editor.Editor3dPart;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.component.editor.event.FileEditorEvent;
-import com.ss.editor.ui.component.editor.event.HideFileEditorEvent;
-import com.ss.editor.ui.component.editor.event.ShowedFileEditorEvent;
+import com.ss.editor.ui.component.editor.event.*;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.event.FxEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -70,7 +68,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private final Array<Editor3dPart> editor3dParts;
 
     /**
-     * The editedFile changes listener.
+     * The file changes listener.
      */
     @NotNull
     private final EventHandler<FileChangedEvent> fileChangedHandler;
@@ -100,28 +98,28 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private final R root;
 
     /**
-     * The edited editedFile.
+     * The editing file.
      */
     @Nullable
-    private volatile Path editedFile;
+    private volatile Path file;
 
     /**
-     * Is left button pressed.
+     * True if the left button pressed.
      */
     private boolean buttonLeftDown;
 
     /**
-     * Is right button pressed.
+     * True if the right button pressed.
      */
     private boolean buttonRightDown;
 
     /**
-     * Is middle button pressed.
+     * True if the middle button pressed.
      */
     private boolean buttonMiddleDown;
 
     /**
-     * The flag of saving process.
+     * True if the saving process is running now.
      */
     private volatile boolean saving;
 
@@ -129,7 +127,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.showedTime = LocalTime.now();
         this.editor3dParts = ArrayFactory.newArray(Editor3dPart.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
-        this.fileChangedHandler = this::processChangedFile;
+        this.fileChangedHandler = this::handleChangedFile;
         this.root = createRoot();
     }
 
@@ -144,13 +142,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Set the edited file.
+     * Set the editing file.
      *
-     * @param editedFile the edited file.
+     * @param file the editing file.
      */
     @FxThread
-    protected void setEditedFile(@NotNull Path editedFile) {
-        this.editedFile = editedFile;
+    protected void setFile(@NotNull Path file) {
+        this.file = file;
     }
 
     @Override
@@ -447,7 +445,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Override
     @FxThread
     public @NotNull Path getFile() {
-        return notNull(editedFile);
+        return notNull(file);
     }
 
     @Override
@@ -464,7 +462,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         FxEventManager.getInstance()
                 .addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
 
-        this.editedFile = file;
+        this.file = file;
         this.showedTime = LocalTime.now();
 
         var description = getDescriptor();
@@ -510,49 +508,68 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Override
     @FxThread
     public void notify(@NotNull FileEditorEvent event) {
+
         if (event instanceof ShowedFileEditorEvent) {
             notifyShowed();
         } else if (event instanceof HideFileEditorEvent) {
             notifyHide();
+        } else if (event instanceof ClosedFileEditorEvent) {
+            notifyClosed();
+        } else if (event instanceof FileMovedFileEditorEvent) {
+            var movedEvent = (FileMovedFileEditorEvent) event;
+            notifyFileMoved(movedEvent.getPrevFile(), movedEvent.getNewFile());
+        } else if (event instanceof FileRenamedFileEditorEvent) {
+            var movedEvent = (FileRenamedFileEditorEvent) event;
+            notifyFileRenamed(movedEvent.getPrevFile(), movedEvent.getNewFile());
         }
     }
 
-    @Override
+    /**
+     * Notify about renamed files.
+     *
+     * @param prevFile the prev file
+     * @param newFile  the new file
+     */
     @FxThread
-    public void notifyRenamed(@NotNull Path prevFile, @NotNull Path newFile) {
-        notifyChangedEditedFile(prevFile, newFile);
-    }
-
-    @Override
-    @FxThread
-    public void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
-        notifyChangedEditedFile(prevFile, newFile);
+    protected void notifyFileRenamed(@NotNull Path prevFile, @NotNull Path newFile) {
+        notifyFilePathChanged(prevFile, newFile);
     }
 
     /**
-     * Notify about changed the edited file.
+     * Notify about moved file.
+     *
+     * @param prevFile the prev file
+     * @param newFile  the new file
+     */
+    @FxThread
+    protected void notifyFileMoved(@NotNull Path prevFile, @NotNull Path newFile) {
+        notifyFilePathChanged(prevFile, newFile);
+    }
+
+    /**
+     * Notify about changed the editing file.
      *
      * @param prevFile the previous file.
      * @param newFile  the new file.
      */
     @FxThread
-    private void notifyChangedEditedFile(@NotNull Path prevFile, @NotNull Path newFile) {
+    private void notifyFilePathChanged(@NotNull Path prevFile, @NotNull Path newFile) {
 
-        var editFile = getFile();
+        var currentFile = getFile();
 
-        if (editFile.equals(prevFile)) {
-            setEditedFile(newFile);
+        if (currentFile.equals(prevFile)) {
+            setFile(newFile);
             return;
         }
 
-        if (!editFile.startsWith(prevFile)) {
+        if (!currentFile.startsWith(prevFile)) {
             return;
         }
 
-        var relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
+        var relativeFile = currentFile.subpath(prevFile.getNameCount(), currentFile.getNameCount());
         var resultFile = newFile.resolve(relativeFile);
 
-        setEditedFile(resultFile);
+        setFile(resultFile);
     }
 
     /**
@@ -602,9 +619,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
                 seconds, description.getEditorId());
     }
 
-    @Override
+    /**
+     * Notify that this editor was closed.
+     */
     @FxThread
-    public void notifyClosed() {
+    protected void notifyClosed() {
 
         FxEventManager.getInstance()
                 .removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
@@ -627,7 +646,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param event the file changed event.
      */
     @FxThread
-    protected void processChangedFile(@NotNull FileChangedEvent event) {
+    protected void handleChangedFile(@NotNull FileChangedEvent event) {
 
         var file = event.getFile();
         var editFile = getFile();
@@ -656,7 +675,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Handle external changes of the edited editedFile.
+     * Handle external changes of the edited file.
      */
     @FxThread
     protected void handleExternalChanges() {
@@ -781,7 +800,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     public String toString() {
         return "AbstractFileEditor{" +
                 "dirtyProperty=" + dirtyProperty.get() +
-                ", editedFile=" + editedFile +
+                ", file=" + file +
                 '}';
     }
 

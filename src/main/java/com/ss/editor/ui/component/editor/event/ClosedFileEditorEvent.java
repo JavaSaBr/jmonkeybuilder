@@ -1,0 +1,17 @@
+package com.ss.editor.ui.component.editor.event;
+
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * The event about the file editor was closed.
+ *
+ * @author JavaSaBr
+ */
+public class ClosedFileEditorEvent extends AbstractFileEditorEvent {
+
+    private static final ClosedFileEditorEvent INSTANCE = new ClosedFileEditorEvent();
+
+    private static @NotNull ClosedFileEditorEvent getInstance() {
+        return INSTANCE;
+    }
+}

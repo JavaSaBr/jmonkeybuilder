@@ -14,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class GLSLFileEditor extends CodeAreaFileEditor {
+public class GlslFileEditor extends CodeAreaFileEditor {
 
     public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
-            GLSLFileEditor::new,
+            GlslFileEditor::new,
             Messages.GLSL_FILE_EDITOR_NAME,
-            GLSLFileEditor.class.getSimpleName(),
+            GlslFileEditor.class.getSimpleName(),
             FileExtensions.SHADER_EXTENSIONS
     );
 

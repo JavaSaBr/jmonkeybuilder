@@ -267,8 +267,8 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
 
     @Override
     @FxThread
-    protected void processChangedFile(@NotNull FileChangedEvent event) {
-        super.processChangedFile(event);
+    protected void handleChangedFile(@NotNull FileChangedEvent event) {
+        super.handleChangedFile(event);
 
         var file = event.getFile();
         var extension = FileUtils.getExtension(file);

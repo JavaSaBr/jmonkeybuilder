@@ -9,6 +9,7 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.component.editor.event.FileEditorEvent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import javafx.event.Event;
@@ -101,6 +102,18 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
 
     @Override
     @FxThread
+    public void notify(@NotNull FileEditorEvent event) {
+        super.notify(event);
+
+        S editorState = getEditorState();
+
+        if (editorState != null) {
+            editorState.notify(event);
+        }
+    }
+
+    @Override
+    @FxThread
     public void incrementChange() {
         var result = changeCounter.incrementAndGet();
         setDirty(result != 0);
@@ -152,10 +165,9 @@ public abstract class BaseFileEditor<S extends EditorState> extends AbstractFile
             return;
         }
 
-        var currentWorkspace = WorkspaceManager.getInstance()
-                .requiredCurrentWorkspace();
-
-        editorState = currentWorkspace.getEditorState(getFile(), stateFactory);
+        editorState = WorkspaceManager.getInstance()
+                .requiredCurrentWorkspace()
+                .getEditorState(getFile(), stateFactory);
     }
 
     /**
