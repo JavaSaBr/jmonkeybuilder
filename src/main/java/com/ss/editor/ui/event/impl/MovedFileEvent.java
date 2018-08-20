@@ -15,11 +15,7 @@ import java.nio.file.Path;
  */
 public class MovedFileEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    @NotNull
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<MovedFileEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {

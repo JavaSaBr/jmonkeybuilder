@@ -17,10 +17,7 @@ import java.nio.file.Path;
  */
 public class RequestedOpenFileEvent extends SceneEvent {
 
-    /**
-     * The constant EVENT_TYPE.
-     */
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<RequestedOpenFileEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {

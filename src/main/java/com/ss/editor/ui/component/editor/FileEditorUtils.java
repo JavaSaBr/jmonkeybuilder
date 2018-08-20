@@ -20,10 +20,10 @@ public class FileEditorUtils {
 
         var hRotation = editorState.getCameraHRotation();
         var vRotation = editorState.getCameraVRotation();
-        var tDistance = editorState.getCameraTDistance();
-        var cameraSpeed = editorState.getCameraSpeed();
+        var tDistance = editorState.getCameraTargetDistance();
+        var cameraSpeed = editorState.getCameraFlySpeed();
 
         /** FIXME ExecutorManager.getInstance()
-                .addJmeTask(() -> editor3dPart.applyState(cameraLocation, hRotation, vRotation, tDistance, cameraSpeed));*/
+                .addJmeTask(() -> editor3dPart.applyState(cameraLocation, hRotation, vRotation, tDistance, cameraFlySpeed));*/
     }
 }

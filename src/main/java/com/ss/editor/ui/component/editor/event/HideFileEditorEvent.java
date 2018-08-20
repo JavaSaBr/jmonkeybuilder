@@ -11,7 +11,7 @@ public class HideFileEditorEvent extends AbstractFileEditorEvent {
 
     private static final HideFileEditorEvent INSTANCE = new HideFileEditorEvent();
 
-    private static @NotNull HideFileEditorEvent getInstance() {
+    public static @NotNull HideFileEditorEvent getInstance() {
         return INSTANCE;
     }
 }

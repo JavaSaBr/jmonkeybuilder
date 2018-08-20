@@ -16,7 +16,7 @@ import java.nio.file.Path;
  */
 public class RequestedConvertFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<RequestedConvertFileEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {

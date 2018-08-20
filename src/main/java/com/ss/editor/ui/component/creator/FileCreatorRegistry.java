@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The registry of available file creators.
@@ -83,5 +84,17 @@ public class FileCreatorRegistry {
         }
 
         return null;
+    }
+
+    /**
+     * Create new creator by the descriptor for the file.
+     *
+     * @param descriptor the file creator descriptor.
+     * @param file       the file.
+     * @return the optional value of file creator.
+     */
+    @FromAnyThread
+    public @NotNull Optional<FileCreator> newCreatorOpt(@NotNull FileCreatorDescriptor descriptor, @NotNull Path file) {
+        return Optional.ofNullable(newCreator(descriptor, file));
     }
 }

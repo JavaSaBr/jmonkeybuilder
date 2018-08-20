@@ -16,11 +16,13 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.EditorCamera.Direction;
 import com.ss.editor.model.EditorCamera.Perspective;
 import com.ss.editor.part3d.editor.ExtendableEditor3dPart;
 import com.ss.editor.part3d.editor.control.InputEditor3dPartControl;
+import com.ss.editor.ui.component.editor.event.CameraChangedFileEditorEvent;
 import com.ss.editor.util.JmeUtils;
 import com.ss.rlib.common.function.FloatConsumer;
 import com.ss.rlib.common.logging.LoggerLevel;
@@ -740,7 +742,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
         }
 
         if (changes > 0) {
-            notifyChangedCameraState(new CameraState(cameraLocation.clone(), hRotation, vRotation, targetDistance, cameraFlySpeed));
+            notifyChangedState(new CameraState(cameraLocation.clone(), hRotation, vRotation, targetDistance, cameraFlySpeed));
         }
 
         prevState.cameraLocation.set(cameraLocation);
@@ -756,11 +758,12 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
      * @param cameraState the camera's state.
      */
     @JmeThread
-    protected void notifyChangedCameraState(@NotNull CameraState cameraState) {
+    protected void notifyChangedState(@NotNull CameraState cameraState) {
 
-        //FIXME
-      //  ExecutorManager.getInstance()
-       //         .addFxTask(() -> fileEditor.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraFlySpeed));
+        var fileEditor = editor3dPart.getFileEditor();
+
+        ExecutorManager.getInstance()
+                .addFxTask(() -> fileEditor.notify(new CameraChangedFileEditorEvent(cameraState)));
     }
 
     /**

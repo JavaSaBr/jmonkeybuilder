@@ -25,8 +25,6 @@ import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -125,7 +123,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
-        this.editor3dParts = ArrayFactory.newArray(Editor3dPart.class);
+        this.editor3dParts = Array.ofType(Editor3dPart.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         this.fileChangedHandler = this::handleChangedFile;
         this.root = createRoot();
@@ -236,8 +234,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected void processKeyReleased(@NotNull KeyEvent event) {
 
         var code = event.getCode();
+        var isControlDown = event.isControlDown();
+        var isShiftDown = event.isShiftDown();
 
-        if (handleKeyActionInFx(code, false, event.isControlDown(), event.isShiftDown(), false)) {
+        if (handleKeyActionInFx(code, false, isControlDown, isShiftDown, false)) {
             event.consume();
         }
     }
@@ -285,10 +285,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected void processKeyPressed(@NotNull KeyEvent event) {
 
         var code = event.getCode();
+        var isControlDown = event.isControlDown();
+        var isShiftDown = event.isShiftDown();
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
             save();
-        } else if (handleKeyActionInFx(code, true, event.isControlDown(), event.isShiftDown(), false)) {
+        } else if (handleKeyActionInFx(code, true, isControlDown, isShiftDown, false)) {
             event.consume();
         }
     }
@@ -310,14 +312,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FxThread
     protected @NotNull Button createSaveAction() {
 
-        final Button action = new Button();
+        var action = new Button();
         action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
         action.setOnAction(event -> save());
         action.setGraphic(new ImageView(Icons.SAVE_16));
         action.disableProperty().bind(dirtyProperty().not());
 
-        FXUtils.addClassesTo(action, CssClasses.FLAT_BUTTON,
-                CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FxUtils.addClass(action,
+                CssClasses.FLAT_BUTTON, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         DynamicIconSupport.addSupport(action);
 

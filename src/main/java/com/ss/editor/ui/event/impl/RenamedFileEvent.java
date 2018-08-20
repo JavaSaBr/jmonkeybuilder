@@ -15,7 +15,7 @@ import java.nio.file.Path;
  */
 public class RenamedFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<RenamedFileEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {

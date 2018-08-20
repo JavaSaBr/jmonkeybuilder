@@ -14,6 +14,7 @@ import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * The class to manage workspaces.
@@ -65,6 +66,7 @@ public class WorkspaceManager {
 
         var editorConfig = EditorConfig.getInstance();
         var currentAsset = editorConfig.getCurrentAsset();
+
         if (currentAsset == null) {
             return null;
         }
@@ -73,9 +75,19 @@ public class WorkspaceManager {
     }
 
     /**
-     * Get the current workspace.
+     * Get the optional value of current workspace.
      *
-     * @return the current workspace or null.
+     * @return the optional value of current workspace.
+     */
+    @FromAnyThread
+    public @NotNull Optional<Workspace> getCurrentWorkspaceOpt() {
+        return Optional.ofNullable(getCurrentWorkspace());
+    }
+
+    /**
+     * Require the current workspace.
+     *
+     * @return the current workspace.
      */
     @FromAnyThread
     public @NotNull Workspace requiredCurrentWorkspace() {

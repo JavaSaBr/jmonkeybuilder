@@ -3,7 +3,10 @@ package com.ss.editor.ui.component.editor.state.impl;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.ui.component.editor.event.CameraChangedFileEditorEvent;
+import com.ss.editor.ui.component.editor.event.FileEditorEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +22,7 @@ public class Editor3dEditorState extends AbstractEditorState {
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 1;
+    public static final long serialVersionUID = 2;
 
     /**
      * The camera location.
@@ -40,128 +43,145 @@ public class Editor3dEditorState extends AbstractEditorState {
     /**
      * The camera speed.
      */
-    protected volatile float cameraSpeed;
+    protected volatile float cameraFlySpeed;
 
     /**
      * The camera zoom.
      */
-    protected volatile float cameraTDistance;
+    protected volatile float cameraTargetDistance;
 
     public Editor3dEditorState() {
         this.cameraLocation = new Vector3f();
         this.cameraVRotation = FastMath.PI / 6;
-        this.cameraTDistance = 20;
+        this.cameraTargetDistance = 20;
         this.cameraHRotation = 0;
-        this.cameraSpeed = 1;
+        this.cameraFlySpeed = 1;
+    }
+
+    @Override
+    @FxThread
+    public void notify(@NotNull FileEditorEvent event) {
+        if (event instanceof CameraChangedFileEditorEvent) {
+            var state = ((CameraChangedFileEditorEvent) event).getCameraState();
+            setCameraLocation(state.getCameraLocation());
+            setCameraHRotation(state.getHRotation());
+            setCameraVRotation(state.getVRotation());
+            setCameraFlySpeed(state.getCameraFlySpeed());
+            setCameraTargetDistance(state.getTargetDistance());
+        }
     }
 
     /**
-     * Sets camera h rotation.
+     * Set the horizontal camera rotation.
      *
      * @param cameraHRotation the new horizontal rotation.
      */
     @FxThread
-    public void setCameraHRotation(final float cameraHRotation) {
-        final boolean changed = getCameraHRotation() != cameraHRotation;
+    public void setCameraHRotation(float cameraHRotation) {
+        var changed = getCameraHRotation() != cameraHRotation;
         this.cameraHRotation = cameraHRotation;
         if (changed) notifyChange();
     }
 
     /**
-     * Gets camera h rotation.
+     * Get the horizontal camera rotation.
      *
      * @return the horizontal camera rotation.
      */
-    @FxThread
+    @FromAnyThread
     public float getCameraHRotation() {
         return cameraHRotation;
     }
 
     /**
-     * Sets camera location.
+     * Set the new camera position.
      *
      * @param cameraLocation the new camera position.
      */
     @FxThread
-    public void setCameraLocation(@NotNull final Vector3f cameraLocation) {
-        final boolean changed = Objects.equals(getCameraLocation(), cameraLocation);
+    public void setCameraLocation(@NotNull Vector3f cameraLocation) {
+        var changed = Objects.equals(getCameraLocation(), cameraLocation);
         getCameraLocation().set(cameraLocation);
         if (changed) notifyChange();
     }
 
     /**
-     * Gets camera location.
+     * Get the camera location.
      *
      * @return the camera location.
      */
-    @FxThread
+    @FromAnyThread
     public @NotNull Vector3f getCameraLocation() {
-        if (cameraLocation == null) cameraLocation = new Vector3f();
+
+        if (cameraLocation == null) {
+            cameraLocation = new Vector3f();
+        }
+
         return notNull(cameraLocation);
     }
 
     /**
-     * Sets camera t distance.
+     * Set the new camera target distance.
      *
-     * @param cameraTDistance the new camera zoom.
+     * @param cameraTargetDistance the new camera target distance.
      */
     @FxThread
-    public void setCameraTDistance(final float cameraTDistance) {
-        final boolean changed = getCameraTDistance() != cameraTDistance;
-        this.cameraTDistance = cameraTDistance;
+    public void setCameraTargetDistance(float cameraTargetDistance) {
+        var changed = getCameraTargetDistance() != cameraTargetDistance;
+        this.cameraTargetDistance = cameraTargetDistance;
         if (changed) notifyChange();
     }
 
     /**
-     * Gets camera t distance.
+     * Get the camera target distance.
      *
-     * @return the camera zoom.
+     * @return the camera target distance.
      */
-    @FxThread
-    public float getCameraTDistance() {
-        return cameraTDistance;
+    @FromAnyThread
+    public float getCameraTargetDistance() {
+        return cameraTargetDistance;
     }
 
     /**
-     * Set the camera speed.
+     * Set the camera fly speed.
      *
-     * @param cameraSpeed the camera speed.
+     * @param cameraFlySpeed the camera fly speed.
      */
     @FxThread
-    public void setCameraSpeed(final float cameraSpeed) {
-        final boolean changed = getCameraSpeed() != cameraSpeed;
-        this.cameraSpeed = cameraSpeed;
+    public void setCameraFlySpeed(float cameraFlySpeed) {
+        var changed = getCameraFlySpeed() != cameraFlySpeed;
+        this.cameraFlySpeed = cameraFlySpeed;
         if (changed) notifyChange();
     }
 
     /**
-     * Get the camera speed.
+     * Get the camera fly speed.
      *
-     * @return the camera speed.
+     * @return the camera fly speed.
      */
-    @FxThread
-    public float getCameraSpeed() {
-        return cameraSpeed;
+    @FromAnyThread
+    public float getCameraFlySpeed() {
+        return cameraFlySpeed;
     }
 
     /**
-     * Sets camera v rotation.
+     * Set the new vertical camera rotation.
      *
-     * @param cameraVRotation the new vertical rotation.
+     * @param cameraVRotation the new vertical camera rotation.
      */
     @FxThread
-    public void setCameraVRotation(final float cameraVRotation) {
-        final boolean changed = getCameraVRotation() != cameraVRotation;
+    public void setCameraVRotation(float cameraVRotation) {
+        var changed = getCameraVRotation() != cameraVRotation;
         this.cameraVRotation = cameraVRotation;
         if (changed) notifyChange();
     }
 
     /**
-     * Gets camera v rotation.
+     * Get the camera vertical rotation.
      *
-     * @return the vertical camera rotation.
+     * @return the camera vertical rotation.
      */
-    @FxThread
+    @FromAnyThread
     public float getCameraVRotation() {
         return cameraVRotation;
     }
@@ -169,7 +189,7 @@ public class Editor3dEditorState extends AbstractEditorState {
     @Override
     public String toString() {
         return "Editor3DEditorState{" + "cameraLocation=" + cameraLocation + ", cameraVRotation=" + cameraVRotation +
-                ", cameraHRotation=" + cameraHRotation + ", cameraSpeed=" + cameraSpeed + ", cameraTDistance=" +
-                cameraTDistance + '}';
+                ", cameraHRotation=" + cameraHRotation + ", cameraFlySpeed=" + cameraFlySpeed + ", cameraTargetDistance=" +
+                cameraTargetDistance + '}';
     }
 }

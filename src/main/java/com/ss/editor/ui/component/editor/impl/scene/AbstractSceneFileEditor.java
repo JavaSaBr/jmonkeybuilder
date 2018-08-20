@@ -92,7 +92,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
- * The base implementation of a model file editor.
+ * The base implementation of a model/scene file editor.
  *
  * @param <M>  the type of edited object.
  * @param <MA> the type of {@link AbstractSceneEditor3dPart}
@@ -437,13 +437,7 @@ public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends Abst
             return false;
         }*/
 
-        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
-            undo();
-            return true;
-        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
-            redo();
-            return true;
-        } else if (isPressed && keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
+         if (isPressed && keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
             moveToolButton.setSelected(true);
             return true;
         } else if (isPressed && keyCode == KeyCode.R && !isControlDown && !isButtonMiddleDown) {

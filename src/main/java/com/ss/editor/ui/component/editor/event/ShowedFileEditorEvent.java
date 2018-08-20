@@ -11,7 +11,7 @@ public class ShowedFileEditorEvent extends AbstractFileEditorEvent {
 
     private static final ShowedFileEditorEvent INSTANCE = new ShowedFileEditorEvent();
 
-    private static @NotNull ShowedFileEditorEvent getInstance() {
+    public static @NotNull ShowedFileEditorEvent getInstance() {
         return INSTANCE;
     }
 }

@@ -11,7 +11,7 @@ public class ClosedFileEditorEvent extends AbstractFileEditorEvent {
 
     private static final ClosedFileEditorEvent INSTANCE = new ClosedFileEditorEvent();
 
-    private static @NotNull ClosedFileEditorEvent getInstance() {
+    public static @NotNull ClosedFileEditorEvent getInstance() {
         return INSTANCE;
     }
 }

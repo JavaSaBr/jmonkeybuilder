@@ -95,6 +95,6 @@ public class Editor3dWithEditorToolEditorState extends Editor3dEditorState imple
     public String toString() {
         return "Editor3DWithEditorToolEditorState{" + "toolWidth=" + toolWidth + ", toolCollapsed=" + toolCollapsed +
                 ", cameraLocation=" + cameraLocation + ", cameraVRotation=" + cameraVRotation + ", cameraHRotation=" +
-                cameraHRotation + ", cameraSpeed=" + cameraSpeed + ", cameraTDistance=" + cameraTDistance + '}';
+                cameraHRotation + ", cameraFlySpeed=" + cameraFlySpeed + ", cameraTargetDistance=" + cameraTargetDistance + '}';
     }
 }

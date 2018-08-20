@@ -67,9 +67,9 @@ public abstract class Base3dFileEditor<T extends AbstractEditor3dPart, S extends
         if (state != null) {
             state.setCameraHRotation(hRotation);
             state.setCameraVRotation(vRotation);
-            state.setCameraTDistance(targetDistance);
+            state.setCameraTargetDistance(targetDistance);
             state.setCameraLocation(cameraLocation);
-            state.setCameraSpeed(cameraSpeed);
+            state.setCameraFlySpeed(cameraSpeed);
         }
     }
 

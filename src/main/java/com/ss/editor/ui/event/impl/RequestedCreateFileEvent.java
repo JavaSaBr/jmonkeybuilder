@@ -16,7 +16,7 @@ import java.nio.file.Path;
  */
 public class RequestedCreateFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE;
+    public static final EventType<RequestedCreateFileEvent> EVENT_TYPE;
 
     static {
         synchronized (Event.class) {
