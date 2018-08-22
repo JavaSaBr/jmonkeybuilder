@@ -1,18 +1,14 @@
 package com.ss.builder.model.workspace;
 
 import static com.ss.builder.util.EditorUtils.getAssetFile;
-import static com.ss.builder.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.manager.WorkspaceManager;
 import com.ss.builder.util.EditorUtils;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.manager.WorkspaceManager;
-import com.ss.builder.fx.component.editor.EditorDescriptor;
-import com.ss.builder.fx.component.editor.FileEditor;
-import com.ss.builder.fx.component.editor.state.EditorState;
-import com.ss.builder.util.EditorUtils;
+import com.ss.builder.editor.EditorDescriptor;
+import com.ss.builder.editor.FileEditor;
+import com.ss.builder.editor.state.EditorState;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.StringUtils;

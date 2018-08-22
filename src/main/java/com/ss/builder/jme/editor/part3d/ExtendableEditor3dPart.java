@@ -8,11 +8,7 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.jme.editor.part3d.control.Editor3dPartControl;
 import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.jme.editor.part3d.control.Editor3dPartControl;
-import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
-import com.ss.builder.fx.component.editor.FileEditor;
+import com.ss.builder.editor.FileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

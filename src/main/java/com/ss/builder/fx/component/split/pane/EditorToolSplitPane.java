@@ -1,9 +1,7 @@
 package com.ss.builder.fx.component.split.pane;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.fx.component.editor.state.EditorToolConfig;
-import com.ss.builder.annotation.FxThread;
-import com.ss.builder.fx.component.editor.state.EditorToolConfig;
+import com.ss.builder.editor.state.EditorToolConfig;
 import com.ss.builder.fx.component.tab.GlobalLeftToolComponent;
 import com.ss.builder.fx.component.tab.TabToolComponent;
 import com.ss.rlib.fx.util.ObservableUtils;

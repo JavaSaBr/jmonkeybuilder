@@ -1,6 +1,6 @@
 package com.ss.builder.plugin.api.editor;
 
-import com.ss.builder.fx.component.editor.state.impl.VoidEditorState;
+import com.ss.builder.editor.state.impl.VoidEditorState;
 
 /**
  * The base implementation of {@link com.ss.editor.ui.component.editor.FileEditor} without

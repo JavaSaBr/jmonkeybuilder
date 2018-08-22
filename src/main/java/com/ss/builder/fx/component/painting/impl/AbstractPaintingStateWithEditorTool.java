@@ -3,10 +3,8 @@ package com.ss.builder.fx.component.painting.impl;
 import static java.lang.Math.abs;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.annotation.FxThread;
-import com.ss.builder.fx.component.editor.state.impl.AbstractEditorState;
-import com.ss.builder.fx.component.editor.state.impl.AdditionalEditorState;
+import com.ss.builder.editor.state.impl.AbstractEditorState;
+import com.ss.builder.editor.state.impl.AdditionalEditorState;
 
 /**
  * The state of painting component.

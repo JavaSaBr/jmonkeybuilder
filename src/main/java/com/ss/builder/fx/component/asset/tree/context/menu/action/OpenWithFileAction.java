@@ -2,12 +2,8 @@ package com.ss.builder.fx.component.asset.tree.context.menu.action;
 
 import com.ss.builder.Messages;
 import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
-import com.ss.builder.fx.component.editor.EditorDescriptor;
-import com.ss.builder.fx.component.editor.EditorRegistry;
-import com.ss.builder.Messages;
-import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
-import com.ss.builder.fx.component.editor.EditorDescriptor;
-import com.ss.builder.fx.component.editor.EditorRegistry;
+import com.ss.builder.editor.EditorDescriptor;
+import com.ss.builder.editor.EditorRegistry;
 
 import org.jetbrains.annotations.NotNull;
 

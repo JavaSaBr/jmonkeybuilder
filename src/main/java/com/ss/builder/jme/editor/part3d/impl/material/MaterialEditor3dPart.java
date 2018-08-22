@@ -1,8 +1,7 @@
 package com.ss.builder.jme.editor.part3d.impl.material;
 
 import com.ss.builder.plugin.api.editor.material.BaseMaterialEditor3dPart;
-import com.ss.builder.plugin.api.editor.material.BaseMaterialEditor3dPart;
-import com.ss.builder.fx.component.editor.impl.material.MaterialFileEditor;
+import com.ss.builder.editor.impl.material.MaterialFileEditor;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,9 +1,7 @@
 package com.ss.builder.jme.editor.part3d;
 
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.fx.component.editor.FileEditor;
-import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.fx.component.editor.FileEditor;
+import com.ss.builder.editor.FileEditor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;

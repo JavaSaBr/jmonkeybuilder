@@ -6,7 +6,7 @@ import com.jme3.scene.Node;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.fx.component.editor.state.EditorState;
+import com.ss.builder.editor.state.EditorState;
 import com.ss.builder.fx.component.painting.PaintingComponent;
 import com.ss.builder.fx.component.painting.PaintingComponentContainer;
 import com.ss.builder.jme.control.painting.PaintingControl;

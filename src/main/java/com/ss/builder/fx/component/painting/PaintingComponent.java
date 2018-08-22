@@ -2,9 +2,7 @@ package com.ss.builder.fx.component.painting;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.annotation.FxThread;
-import com.ss.builder.fx.component.editor.state.EditorState;
+import com.ss.builder.editor.state.EditorState;
 import com.ss.rlib.common.util.HasName;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;

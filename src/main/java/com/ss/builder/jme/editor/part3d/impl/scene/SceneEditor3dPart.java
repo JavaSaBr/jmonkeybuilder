@@ -12,16 +12,11 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.builder.util.EditorUtils;
-import com.ss.builder.JmeApplication;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
-import com.ss.builder.manager.ExecutorManager;
-import com.ss.builder.fx.component.editor.impl.scene.SceneFileEditor;
-import com.ss.builder.util.EditorUtils;
+import com.ss.builder.editor.impl.scene.SceneFileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
