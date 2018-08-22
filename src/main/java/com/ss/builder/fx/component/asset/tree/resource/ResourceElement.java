@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component.asset.tree.resource;
+package com.ss.builder.fx.component.asset.tree.resource;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;

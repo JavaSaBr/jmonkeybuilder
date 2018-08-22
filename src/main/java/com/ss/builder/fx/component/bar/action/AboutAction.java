@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component.bar.action;
+package com.ss.builder.fx.component.bar.action;
 
 import com.ss.builder.Messages;
-import com.ss.builder.ui.dialog.about.AboutDialog;
-import com.ss.editor.Messages;
-import com.ss.editor.ui.dialog.about.AboutDialog;
+import com.ss.builder.fx.dialog.about.AboutDialog;
+import com.ss.builder.Messages;
+import com.ss.builder.fx.dialog.about.AboutDialog;
 import javafx.scene.control.MenuItem;
 
 /**

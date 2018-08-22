@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.editor.state;
+package com.ss.builder.fx.component.editor.state;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 
 /**
  * The interface implementing a state of editor tool.

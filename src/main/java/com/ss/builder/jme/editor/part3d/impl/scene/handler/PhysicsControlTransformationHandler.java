@@ -1,10 +1,10 @@
-package com.ss.builder.editor.part3d.impl.scene.handler;
+package com.ss.builder.jme.editor.part3d.impl.scene.handler;
 
 import com.jme3.scene.Spatial;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.editor.extension.util.JmbExtUtils;
-import com.ss.editor.editor.part3d.impl.scene.AbstractSceneEditor3dPart;
+import com.ss.builder.jme.editor.part3d.impl.scene.AbstractSceneEditor3dPart;
 import org.jetbrains.annotations.NotNull;
 
 /**

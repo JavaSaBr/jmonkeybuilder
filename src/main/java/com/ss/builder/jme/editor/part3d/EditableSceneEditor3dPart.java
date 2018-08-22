@@ -1,7 +1,7 @@
-package com.ss.builder.editor.part3d;
+package com.ss.builder.jme.editor.part3d;
 
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

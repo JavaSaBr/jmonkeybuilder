@@ -1,4 +1,4 @@
-package com.ss.editor.model.node.material;
+package com.ss.builder.model.node.material;
 
 import com.jme3.material.Material;
 import org.jetbrains.annotations.NotNull;

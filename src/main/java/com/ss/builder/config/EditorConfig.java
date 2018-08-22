@@ -1,17 +1,20 @@
-package com.ss.editor.config;
+package com.ss.builder.config;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.*;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.jfx.injfx.JmeToJfxIntegrator;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.TimeTracker;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.TimeTracker;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ClassUtils;
@@ -315,7 +318,7 @@ public final class EditorConfig implements AssetEventListener {
     @Override
     public void assetRequested(@NotNull AssetKey key) {
         if (key instanceof TextureKey) {
-            ((TextureKey) key).setAnisotropy(getInteger(PREF_ANISOTROPY, PREF_DEFAULT_ANISOTROPY));
+            ((TextureKey) key).setAnisotropy(getInteger(DefaultSettingsProvider.Preferences.PREF_ANISOTROPY, DefaultSettingsProvider.Defaults.PREF_DEFAULT_ANISOTROPY));
         }
     }
 
@@ -532,11 +535,11 @@ public final class EditorConfig implements AssetEventListener {
 
         var settings = new AppSettings(true);
         settings.setFrequency(displayMode.getRefreshRate());
-        settings.setGammaCorrection(getBoolean(PREF_GAMMA_CORRECTION, PREF_DEFAULT_GAMMA_CORRECTION));
+        settings.setGammaCorrection(getBoolean(DefaultSettingsProvider.Preferences.PREF_GAMMA_CORRECTION, DefaultSettingsProvider.Defaults.PREF_DEFAULT_GAMMA_CORRECTION));
         settings.setResizable(true);
         // settings.putBoolean("GraphicsDebug", true);
 
-        JmeToJfxIntegrator.prepareSettings(settings, getInteger(PREF_FRAME_RATE, PREF_DEFAULT_FRAME_RATE));
+        JmeToJfxIntegrator.prepareSettings(settings, getInteger(DefaultSettingsProvider.Preferences.PREF_FRAME_RATE, DefaultSettingsProvider.Defaults.PREF_DEFAULT_FRAME_RATE));
 
         return settings;
     }
@@ -582,7 +585,7 @@ public final class EditorConfig implements AssetEventListener {
             this.currentAsset = null;
         }
 
-        var cameraAngle = getInteger(PREF_CAMERA_ANGLE, PREF_DEFAULT_CAMERA_ANGLE);
+        var cameraAngle = getInteger(DefaultSettingsProvider.Preferences.PREF_CAMERA_ANGLE, DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_ANGLE);
 
         System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(cameraAngle));
 

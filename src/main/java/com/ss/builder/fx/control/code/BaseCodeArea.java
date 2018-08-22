@@ -1,8 +1,8 @@
-package com.ss.builder.ui.control.code;
+package com.ss.builder.fx.control.code;
 
 import static java.util.Collections.singleton;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.rlib.common.util.StringUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;

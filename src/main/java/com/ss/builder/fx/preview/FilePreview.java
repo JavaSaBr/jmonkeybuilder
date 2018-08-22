@@ -1,7 +1,7 @@
-package com.ss.builder.ui.preview;
+package com.ss.builder.fx.preview;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.pools.Reusable;

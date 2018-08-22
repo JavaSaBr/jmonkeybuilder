@@ -1,9 +1,9 @@
-package com.ss.editor.remote.control.client;
+package com.ss.builder.remote.control.client;
 
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.manager.ClasspathManager;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.manager.ClasspathManager;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.network.ConnectionOwner;
 import com.ss.rlib.common.network.annotation.PacketDescription;
 import com.ss.rlib.common.util.StringUtils;
@@ -20,8 +20,6 @@ import java.nio.file.Paths;
 @PacketDescription(id = 3)
 public class LoadLocalClassesClientCommand extends ClientCommand {
 
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
     @Override
     @BackgroundThread
     protected void readImpl(@NotNull ConnectionOwner owner, @NotNull ByteBuffer buffer) {
@@ -32,6 +30,7 @@ public class LoadLocalClassesClientCommand extends ClientCommand {
         ClasspathManager.getInstance()
                 .loadLocalClasses(output);
 
-        EXECUTOR_MANAGER.addJmeTask(() -> EditorUtils.getAssetManager().clearCache());
+        ExecutorManager.getInstance()
+                .addJmeTask(EditorUtils::clearAssetCache);
     }
 }

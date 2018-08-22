@@ -1,4 +1,4 @@
-package com.ss.builder.control.painting;
+package com.ss.builder.jme.control.painting;
 
 /**
  * The enum with list of painting inputs.

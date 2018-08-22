@@ -1,11 +1,11 @@
-package com.ss.builder.ui.control.property.impl;
+package com.ss.builder.fx.control.property.impl;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

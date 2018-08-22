@@ -1,13 +1,13 @@
-package com.ss.builder.ui.control.tree.node.factory.impl;
+package com.ss.builder.fx.control.tree.node.factory.impl;
 
 import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
-import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationClipTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.control.anim.AnimationControlTreeNode;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.fx.control.tree.node.factory.TreeNodeFactory;
+import com.ss.builder.fx.control.tree.node.impl.control.anim.AnimationClipTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.control.anim.AnimationControlTreeNode;
 import org.jetbrains.annotations.Nullable;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;

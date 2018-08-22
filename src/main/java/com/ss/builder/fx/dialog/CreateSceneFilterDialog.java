@@ -1,19 +1,19 @@
-package com.ss.builder.ui.dialog;
+package com.ss.builder.fx.dialog;
 
-import static com.ss.editor.util.EditorUtils.tryToCreateUserObject;
+import static com.ss.builder.util.EditorUtils.tryToCreateUserObject;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.dictionary.DictionaryFactory.newObjectDictionary;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.extension.scene.filter.impl.*;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.model.undo.impl.AddSceneFilterOperation;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.model.undo.editor.SceneChangeConsumer;
+import com.ss.builder.model.undo.impl.AddSceneFilterOperation;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.Array;

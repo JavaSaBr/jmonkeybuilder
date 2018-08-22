@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component.asset.tree.resource;
+package com.ss.builder.fx.component.asset.tree.resource;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.manager.JavaFxImageManager;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.JavaFxImageManager;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.manager.JavaFxImageManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;

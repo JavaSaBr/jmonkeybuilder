@@ -1,4 +1,4 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
 import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
@@ -15,8 +15,10 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

@@ -1,7 +1,7 @@
-package com.ss.builder.editor.part3d.event.impl;
+package com.ss.builder.jme.editor.part3d.event.impl;
 
-import com.ss.builder.editor.part3d.event.AbstractEditor3dPartEvent;
-import com.ss.editor.editor.part3d.event.AbstractEditor3dPartEvent;
+import com.ss.builder.jme.editor.part3d.event.AbstractEditor3dPartEvent;
+import com.ss.builder.jme.editor.part3d.event.AbstractEditor3dPartEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**

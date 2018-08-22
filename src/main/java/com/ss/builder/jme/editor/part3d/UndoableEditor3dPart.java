@@ -1,7 +1,7 @@
-package com.ss.builder.editor.part3d;
+package com.ss.builder.jme.editor.part3d;
 
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 
 /**
  * The interface to mark an editor 3d part that it supports undo/redo methods.

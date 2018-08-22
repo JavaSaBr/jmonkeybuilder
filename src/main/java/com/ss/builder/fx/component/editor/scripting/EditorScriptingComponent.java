@@ -1,15 +1,15 @@
-package com.ss.builder.ui.component.editor.scripting;
+package com.ss.builder.fx.component.editor.scripting;
 
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.ui.component.scripting.GroovyEditorComponent;
-import com.ss.builder.ui.css.CssClasses;
+import com.ss.builder.fx.component.scripting.GroovyEditorComponent;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.scripting.GroovyEditorComponent;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.component.scripting.GroovyEditorComponent;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;

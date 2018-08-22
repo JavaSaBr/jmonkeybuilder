@@ -1,4 +1,4 @@
-package com.ss.editor.document;
+package com.ss.builder.document;
 
 import com.ss.rlib.common.data.AbstractStreamDocument;
 import com.ss.rlib.common.util.VarTable;

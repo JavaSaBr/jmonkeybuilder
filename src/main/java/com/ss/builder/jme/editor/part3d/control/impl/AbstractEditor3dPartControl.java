@@ -1,12 +1,12 @@
-package com.ss.builder.editor.part3d.control.impl;
+package com.ss.builder.jme.editor.part3d.control.impl;
 
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.editor.part3d.control.Editor3dPartControl;
-import com.ss.builder.editor.part3d.event.Editor3dPartEvent;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.control.Editor3dPartControl;
-import com.ss.editor.editor.part3d.ExtendableEditor3dPart;
-import com.ss.editor.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.jme.editor.part3d.control.Editor3dPartControl;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.control.Editor3dPartControl;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,9 @@
-package com.ss.builder.ui.dialog.asset.file;
+package com.ss.builder.fx.dialog.asset.file;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

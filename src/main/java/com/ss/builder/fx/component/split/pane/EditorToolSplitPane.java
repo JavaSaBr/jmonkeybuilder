@@ -1,11 +1,11 @@
-package com.ss.builder.ui.component.split.pane;
+package com.ss.builder.fx.component.split.pane;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.editor.state.EditorToolConfig;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.EditorToolConfig;
-import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
-import com.ss.editor.ui.component.tab.TabToolComponent;
+import com.ss.builder.fx.component.editor.state.EditorToolConfig;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.state.EditorToolConfig;
+import com.ss.builder.fx.component.tab.GlobalLeftToolComponent;
+import com.ss.builder.fx.component.tab.TabToolComponent;
 import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.scene.Node;
 import javafx.scene.Scene;

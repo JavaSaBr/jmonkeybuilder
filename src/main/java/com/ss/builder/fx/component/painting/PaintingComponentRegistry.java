@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.painting;
+package com.ss.builder.fx.component.painting;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.painting.spawn.SpawnPaintingComponent;
-import com.ss.builder.ui.component.painting.terrain.TerrainPaintingComponent;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.painting.spawn.SpawnPaintingComponent;
-import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.builder.fx.component.painting.spawn.SpawnPaintingComponent;
+import com.ss.builder.fx.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.painting.spawn.SpawnPaintingComponent;
+import com.ss.builder.fx.component.painting.terrain.TerrainPaintingComponent;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;

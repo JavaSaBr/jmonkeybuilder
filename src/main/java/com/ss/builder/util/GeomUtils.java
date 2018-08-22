@@ -1,4 +1,4 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
@@ -10,7 +10,8 @@ import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

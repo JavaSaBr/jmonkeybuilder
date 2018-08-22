@@ -1,38 +1,38 @@
-package com.ss.editor;
+package com.ss.builder;
 
-import static com.jme3.jfx.injfx.JmeToJfxIntegrator.bind;
 import static com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_OPEN_GL;
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_OPEN_GL;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_ANALYTICS_GOOGLE;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_OPEN_GL;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_STOP_RENDER_ON_LOST_FOCUS;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.jme3.jfx.injfx.JmeToJfxIntegrator;
 import com.jme3.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.jme3.util.LWJGLBufferAllocator;
-import com.ss.editor.analytics.google.GAEvent;
-import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.CommandLineConfig;
-import com.ss.editor.config.Config;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.executor.impl.JmeThreadExecutor;
-import com.ss.editor.manager.*;
-import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
-import com.ss.editor.plugin.api.RenderFilterRegistry;
-import com.ss.editor.task.CheckNewVersionTask;
-import com.ss.editor.ui.builder.EditorFxSceneBuilder;
-import com.ss.editor.ui.css.CssRegistry;
-import com.ss.editor.ui.dialog.ConfirmDialog;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.OpenGLVersion;
-import com.ss.editor.util.TimeTracker;
-import com.ss.editor.util.svg.SvgImageLoaderFactory;
+import com.ss.builder.analytics.google.GAEvent;
+import com.ss.builder.analytics.google.GAnalytics;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.CommandLineConfig;
+import com.ss.builder.config.Config;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.executor.impl.JmeThreadExecutor;
+import com.ss.builder.fx.builder.EditorFxSceneBuilder;
+import com.ss.builder.fx.css.CssRegistry;
+import com.ss.builder.fx.dialog.ConfirmDialog;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.*;
+import com.ss.builder.fx.scene.EditorFxScene;
+import com.ss.builder.manager.*;
+import com.ss.builder.plugin.api.RenderFilterRegistry;
+import com.ss.builder.task.CheckNewVersionTask;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.OpenGLVersion;
+import com.ss.builder.util.TimeTracker;
+import com.ss.builder.util.svg.SvgImageLoaderFactory;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerLevel;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -122,7 +122,7 @@ public class JfxApplication extends Application {
         TimeTracker.getStartupTracker(TimeTracker.STARTPUL_LEVEL_2)
                 .finishAndStart(() -> "initialized configuration");
 
-        CombinedAsyncEventHandlerBuilder.of(JfxApplication::createSceneProcessor)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(JfxApplication::createSceneProcessor)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(FxContextCreatedEvent.EVENT_TYPE)
                 .add(ImageSystemInitializedEvent.EVENT_TYPE)
@@ -230,6 +230,7 @@ public class JfxApplication extends Application {
             }
 
             var editorConfig = EditorConfig.getInstance();
+
             if (!editorConfig.getBoolean(PREF_STOP_RENDER_ON_LOST_FOCUS, PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS)) {
                 jmeApplication.setPaused(false);
                 return;
@@ -258,7 +259,7 @@ public class JfxApplication extends Application {
         var scene = jfxApplication.getScene();
         var stage = jfxApplication.getStage();
 
-        var sceneProcessor = bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
+        var sceneProcessor = JmeToJfxIntegrator.bind(jmeApplication, scene.getCanvas(), jmeApplication.getViewPort());
         sceneProcessor.setEnabled(false);
         sceneProcessor.setTransferMode(ON_CHANGES);
 
@@ -391,7 +392,7 @@ public class JfxApplication extends Application {
 
             ObservableUtils.onChange(stage.maximizedProperty(), config::setMaximized);
 
-            SingleAsyncEventHandlerBuilder.of(FxSceneAttachedEvent.EVENT_TYPE)
+            AsyncEventManager.SingleAsyncEventHandlerBuilder.of(FxSceneAttachedEvent.EVENT_TYPE)
                     .add(this::initializeImageSystem)
                     .buildAndRegister();
 

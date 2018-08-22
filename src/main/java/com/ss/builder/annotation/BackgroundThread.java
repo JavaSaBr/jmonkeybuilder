@@ -1,4 +1,4 @@
-package com.ss.editor.annotation;
+package com.ss.builder.annotation;
 
 import java.lang.annotation.*;
 

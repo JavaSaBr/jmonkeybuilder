@@ -1,4 +1,4 @@
-package com.ss.builder.control.brush;
+package com.ss.builder.jme.control.brush;
 
 import com.jme3.scene.control.Control;
 

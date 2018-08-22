@@ -1,7 +1,8 @@
-package com.ss.editor.model.undo.editor;
+package com.ss.builder.model.undo.editor;
 
 import com.jme3.scene.Spatial;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

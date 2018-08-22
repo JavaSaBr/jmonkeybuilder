@@ -1,11 +1,11 @@
-package com.ss.builder.ui.component.painting.spawn;
+package com.ss.builder.fx.component.painting.spawn;
 
 import com.jme3.math.Vector3f;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.jme.control.painting.spawn.SpawnToolControl;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.control.painting.spawn.SpawnToolControl.SpawnMethod;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingStateWithEditorTool;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.jme.control.painting.spawn.SpawnToolControl.SpawnMethod;
+import com.ss.builder.fx.component.painting.impl.AbstractPaintingStateWithEditorTool;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

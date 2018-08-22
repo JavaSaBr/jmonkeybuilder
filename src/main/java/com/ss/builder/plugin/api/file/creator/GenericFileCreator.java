@@ -1,13 +1,19 @@
-package com.ss.editor.plugin.api.file.creator;
+package com.ss.builder.plugin.api.file.creator;
 
-import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
+import static com.ss.builder.plugin.api.property.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
-import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.plugin.api.property.control.PropertyEditorControl;
+import com.ss.builder.plugin.api.property.control.PropertyEditorControlFactory;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.plugin.api.property.control.PropertyEditorControl;
+import com.ss.builder.fx.component.creator.impl.AbstractFileCreator;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import javafx.scene.layout.GridPane;
@@ -51,7 +57,7 @@ public class GenericFileCreator extends AbstractFileCreator {
 
         for (var definition : getPropertyDefinitions()) {
 
-            var control = build(vars, definition, this::validateFileName);
+            var control = PropertyEditorControlFactory.build(vars, definition, this::validateFileName);
             control.prefWidthProperty()
                     .bind(widthProperty());
 

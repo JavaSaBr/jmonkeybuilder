@@ -1,12 +1,12 @@
-package com.ss.builder.ui.component.bar;
+package com.ss.builder.fx.component.bar;
 
 import com.ss.builder.Messages;
-import com.ss.builder.ui.component.bar.action.*;
-import com.ss.builder.ui.css.CssIds;
-import com.ss.editor.Messages;
-import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.component.bar.action.*;
-import com.ss.editor.ui.css.CssIds;
+import com.ss.builder.fx.component.bar.action.*;
+import com.ss.builder.fx.css.CssIds;
+import com.ss.builder.Messages;
+import com.ss.builder.fx.component.ScreenComponent;
+import com.ss.builder.fx.component.bar.action.*;
+import com.ss.builder.fx.css.CssIds;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import org.jetbrains.annotations.NotNull;

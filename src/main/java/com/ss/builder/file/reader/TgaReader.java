@@ -1,4 +1,4 @@
-package com.ss.editor.file.reader;
+package com.ss.builder.file.reader;
 
 import org.jetbrains.annotations.NotNull;
 

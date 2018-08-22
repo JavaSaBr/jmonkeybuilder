@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.bar.action;
+package com.ss.builder.fx.component.bar.action;
 
 import com.ss.builder.Messages;
 import com.ss.builder.config.EditorConfig;
-import com.ss.builder.ui.event.FxEventManager;
-import com.ss.builder.ui.event.impl.ChangedCurrentAssetFolderEvent;
-import com.ss.editor.Messages;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.ChangedCurrentAssetFolderEvent;
+import com.ss.builder.Messages;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.ChangedCurrentAssetFolderEvent;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;

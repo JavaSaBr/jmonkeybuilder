@@ -1,10 +1,10 @@
-package com.ss.builder.ui.component.editor.state.impl;
+package com.ss.builder.fx.component.editor.state.impl;
 
 import static java.lang.Math.abs;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.plugin.api.editor.BaseFileEditorWithRightTool;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.EditorToolConfig;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.state.EditorToolConfig;
 
 /**
  * The base implementation of state for {@link BaseFileEditorWithRightTool}.

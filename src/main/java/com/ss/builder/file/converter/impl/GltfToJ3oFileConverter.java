@@ -1,8 +1,10 @@
-package com.ss.editor.file.converter.impl;
+package com.ss.builder.file.converter.impl;
 
-import com.ss.editor.FileExtensions;
-import com.ss.editor.Messages;
-import com.ss.editor.file.converter.FileConverterDescription;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.file.converter.FileConverterDescription;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;

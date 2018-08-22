@@ -1,9 +1,9 @@
-package com.ss.builder.ui.control.property.builder;
+package com.ss.builder.fx.control.property.builder;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

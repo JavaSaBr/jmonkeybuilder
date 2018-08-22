@@ -1,19 +1,17 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_CLASSES_FOLDER;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_USER_LIBRARY_FOLDER;
-
-import com.ss.editor.FileExtensions;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.ui.event.impl.ClasspathReloadedEvent;
-import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
-import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
-import com.ss.editor.ui.event.impl.ManagersInitializedEvent;
-import com.ss.editor.util.EditorUtils;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_USER_CLASSES_FOLDER;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_USER_LIBRARY_FOLDER;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.fx.event.impl.ClasspathReloadedEvent;
+import com.ss.builder.fx.event.impl.CoreClassesScannedEvent;
+import com.ss.builder.fx.event.impl.JmeContextCreatedEvent;
+import com.ss.builder.fx.event.impl.ManagersInitializedEvent;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.classpath.ClassPathScanner;
 import com.ss.rlib.common.classpath.ClassPathScannerFactory;
 import com.ss.rlib.common.logging.Logger;
@@ -141,11 +139,11 @@ public class ClasspathManager {
         this.localLibrariesLoader = new AtomicReference<>();
         this.localClassesLoader = new AtomicReference<>();
 
-        CombinedAsyncEventHandlerBuilder.of(this::scanCoreClasses)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::scanCoreClasses)
                 .add(ManagersInitializedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
-        CombinedAsyncEventHandlerBuilder.of(this::reload)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::reload)
                 .add(CoreClassesScannedEvent.EVENT_TYPE)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .buildAndRegister();

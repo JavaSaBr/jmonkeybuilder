@@ -1,28 +1,25 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
-import static com.ss.editor.FileExtensions.*;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FAST_SKY_FOLDER;
 import static com.ss.rlib.common.util.ArrayUtils.contains;
-import static com.ss.rlib.common.util.FileUtils.getFiles;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.file.StandardWatchEventKinds.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
-import com.ss.editor.EditorThread;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.SimpleFileVisitor;
-import com.ss.editor.util.SimpleFolderVisitor;
+import com.ss.builder.EditorThread;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.DefaultSettingsProvider;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.*;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.SimpleFileVisitor;
+import com.ss.builder.util.SimpleFolderVisitor;
 import com.ss.rlib.common.concurrent.util.ThreadUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
@@ -132,16 +129,16 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         updateAdditionalEnvs();
         start();
 
-        CombinedAsyncEventHandlerBuilder.of(this::registerFxListeners)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::registerFxListeners)
                 .add(EditorFinishedLoadingEvent.EVENT_TYPE)
                 .buildAndRegister();
 
-        CombinedAsyncEventHandlerBuilder.of(this::registerAssetListenerAndReload)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::registerAssetListenerAndReload)
                 .add(ManagersInitializedEvent.EVENT_TYPE)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
-        CombinedAsyncEventHandlerBuilder.of(this::prepareClasspathResources)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::prepareClasspathResources)
                 .add(CoreClassesScannedEvent.EVENT_TYPE)
                 .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
                 .buildAndRegister();
@@ -343,13 +340,13 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         var additionalEnvs = getAdditionalEnvs();
         additionalEnvs.runInWriteLock(Collection::clear);
 
-        var folder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
+        var folder = editorConfig.getFile(DefaultSettingsProvider.Preferences.PREF_FAST_SKY_FOLDER);
         if (folder == null) {
             return;
         }
 
         additionalEnvs.runInWriteLock(paths ->
-                paths.addAll(getFiles(folder, IMAGE_HDR, IMAGE_TGA, IMAGE_PNG)));
+                paths.addAll(FileUtils.getFiles(folder, FileExtensions.IMAGE_HDR, FileExtensions.IMAGE_TGA, FileExtensions.IMAGE_PNG)));
     }
 
     /**

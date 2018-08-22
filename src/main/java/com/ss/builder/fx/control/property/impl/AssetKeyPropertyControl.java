@@ -1,11 +1,11 @@
-package com.ss.builder.ui.control.property.impl;
+package com.ss.builder.fx.control.property.impl;
 
 import com.jme3.asset.AssetKey;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.property.PropertyControl;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

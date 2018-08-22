@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d;
+package com.ss.builder.jme.editor.part3d;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 
@@ -6,13 +6,13 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.editor.part3d.control.Editor3dPartControl;
-import com.ss.builder.editor.part3d.event.Editor3dPartEvent;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.control.Editor3dPartControl;
-import com.ss.editor.editor.part3d.event.Editor3dPartEvent;
-import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.builder.jme.editor.part3d.control.Editor3dPartControl;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.control.Editor3dPartControl;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.fx.component.editor.FileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,8 +1,10 @@
-package com.ss.editor.executor.impl;
+package com.ss.builder.executor.impl;
 
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.EditorUtils;
 
 import org.jetbrains.annotations.NotNull;
 

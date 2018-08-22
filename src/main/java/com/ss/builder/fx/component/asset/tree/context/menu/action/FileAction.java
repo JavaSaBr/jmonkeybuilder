@@ -1,10 +1,10 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.action;
+package com.ss.builder.fx.component.asset.tree.context.menu.action;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;

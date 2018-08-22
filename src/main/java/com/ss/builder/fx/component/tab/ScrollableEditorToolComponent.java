@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.tab;
+package com.ss.builder.fx.component.tab;
 
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.ScrollPane;

@@ -2,8 +2,8 @@ package com.ss.builder.fx.preview.impl;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.manager.JmeFilePreviewManager;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.JmeFilePreviewManager;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.JmeFilePreviewManager;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;

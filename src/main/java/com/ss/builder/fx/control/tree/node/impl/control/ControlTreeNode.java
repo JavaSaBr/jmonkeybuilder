@@ -1,18 +1,18 @@
-package com.ss.builder.ui.control.tree.node.impl.control;
+package com.ss.builder.fx.control.tree.node.impl.control;
 
 import com.jme3.scene.control.Control;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.control.tree.action.impl.RemoveControlAction;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.action.impl.RemoveControlAction;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.editor.extension.Named;
 import com.ss.editor.extension.scene.control.EditableControl;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.RemoveControlAction;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.action.impl.RemoveControlAction;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;

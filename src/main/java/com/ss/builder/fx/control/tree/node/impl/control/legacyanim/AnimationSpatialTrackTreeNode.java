@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.tree.node.impl.control.legacyanim;
+package com.ss.builder.fx.control.tree.node.impl.control.legacyanim;
 
 import com.jme3.animation.SpatialTrack;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.Icons;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

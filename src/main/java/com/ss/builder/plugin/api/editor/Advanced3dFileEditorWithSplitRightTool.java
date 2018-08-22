@@ -1,9 +1,12 @@
-package com.ss.editor.plugin.api.editor;
+package com.ss.builder.plugin.api.editor;
 
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
-import com.ss.editor.ui.component.editor.state.impl.Editor3dWithEditorToolEditorState;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
+import com.ss.builder.fx.component.editor.state.impl.Editor3dWithEditorToolEditorState;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;

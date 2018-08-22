@@ -1,13 +1,13 @@
-package com.ss.builder.ui.dialog.about;
+package com.ss.builder.fx.dialog.about;
 
-import com.ss.editor.JfxApplication;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.builder.JfxApplication;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Hyperlink;

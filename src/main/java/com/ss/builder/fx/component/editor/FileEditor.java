@@ -1,15 +1,10 @@
-package com.ss.builder.ui.component.editor;
+package com.ss.builder.fx.component.editor;
 
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.editor.part3d.Editor3dPart;
-import com.ss.builder.ui.component.editor.event.FileEditorEvent;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.editor.part3d.Editor3dPart;
-import com.ss.editor.ui.component.editor.event.FileEditorEvent;
+import com.ss.builder.fx.component.editor.event.FileEditorEvent;
+import com.ss.builder.jme.editor.part3d.Editor3dPart;
 import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.Event;

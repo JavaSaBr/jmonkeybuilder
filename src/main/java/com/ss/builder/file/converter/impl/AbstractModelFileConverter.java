@@ -1,9 +1,6 @@
-package com.ss.editor.file.converter.impl;
+package com.ss.builder.file.converter.impl;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static com.ss.editor.util.EditorUtils.*;
 import static com.ss.rlib.common.util.FileUtils.containsExtensions;
 import static com.ss.rlib.common.util.FileUtils.normalizeName;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
@@ -15,17 +12,18 @@ import com.jme3.export.binary.BinaryExporter;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.util.UiUtils;
-import com.ss.editor.util.TangentGenerator;
-import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.util.MaterialSerializer;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.NodeUtils;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.DefaultSettingsProvider;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.MaterialSerializer;
+import com.ss.builder.util.NodeUtils;
+import com.ss.builder.util.TangentGenerator;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;
@@ -74,7 +72,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         }
 
         final String resultName = FileUtils.getNameWithoutExtension(source);
-        final Path assetDestination = getAssetFile(destination.getParent());
+        final Path assetDestination = EditorUtils.getAssetFile(destination.getParent());
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(STRING, Messages.MODEL_CONVERTER_DIALOG_RESULT_NAME, PROP_RESULT_NAME, resultName));
@@ -135,17 +133,17 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     private void convertImpl(@NotNull final Path source, @NotNull final VarTable vars) throws IOException {
 
         final String filename = vars.getString(PROP_RESULT_NAME);
-        final Path destinationFolder = notNull(getRealFile(vars.get(PROP_DESTINATION, Path.class)));
+        final Path destinationFolder = notNull(EditorUtils.getRealFile(vars.get(PROP_DESTINATION, Path.class)));
         final Path destination = destinationFolder.resolve(filename + "." + FileExtensions.JME_OBJECT);
         final boolean isOverwrite = Files.exists(destination);
 
-        final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
-        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
+        final Path assetFile = notNull(EditorUtils.getAssetFile(source), "Not found asset file for " + source);
+        final ModelKey modelKey = new ModelKey(EditorUtils.toAssetPath(assetFile));
 
         final AssetManager assetManager = EditorUtils.getAssetManager();
         final Spatial model = assetManager.loadAsset(modelKey);
 
-        if (EDITOR_CONFIG.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION)) {
+        if (EDITOR_CONFIG.getBoolean(DefaultSettingsProvider.Preferences.PREF_TANGENT_GENERATION, DefaultSettingsProvider.Defaults.PREF_DEFAULT_TANGENT_GENERATION)) {
             TangentGenerator.useMikktspaceGenerator(model);
         }
 
@@ -187,7 +185,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
                                 @NotNull final String materialName, @NotNull final Geometry geometry) {
 
         final Path resultFile = materialsFolder.resolve(normalizeName(materialName) + "." + FileExtensions.JME_MATERIAL);
-        final Path assetFile = getAssetFile(resultFile);
+        final Path assetFile = EditorUtils.getAssetFile(resultFile);
 
         if (assetFile == null) {
             LOGGER.warning("Can't get asset file for the file " + resultFile);
@@ -204,7 +202,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
             }
         }
 
-        final String assetPath = toAssetPath(assetFile);
+        final String assetPath = EditorUtils.toAssetPath(assetFile);
 
         final AssetManager assetManager = EditorUtils.getAssetManager();
         geometry.setMaterial(assetManager.loadMaterial(assetPath));

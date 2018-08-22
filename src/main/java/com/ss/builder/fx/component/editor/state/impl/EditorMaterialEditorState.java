@@ -1,14 +1,14 @@
-package com.ss.builder.ui.component.editor.state.impl;
+package com.ss.builder.fx.component.editor.state.impl;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LAMP;
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_LIGHT;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_CAMERA_LAMP;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_CAMERA_LIGHT;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.config.DefaultSettingsProvider;
 import com.ss.builder.plugin.api.editor.material.BaseMaterialEditor3dPart;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.material.BaseMaterialEditor3dPart;
-import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.material.BaseMaterialEditor3dPart;
+import com.ss.builder.fx.component.editor.impl.material.MaterialFileEditor;
 
 import org.jetbrains.annotations.NotNull;
 

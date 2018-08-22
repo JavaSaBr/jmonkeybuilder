@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.tree.node.impl.spatial.particle.emitter.influencer;
+package com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.influencer;
 
 import com.jme3.effect.influencers.RadialParticleInfluencer;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

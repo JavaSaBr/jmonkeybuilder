@@ -1,10 +1,10 @@
-package com.ss.builder.ui.component.creator.impl;
+package com.ss.builder.fx.component.creator.impl;
 
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.component.creator.FileCreatorDescriptor;
 import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

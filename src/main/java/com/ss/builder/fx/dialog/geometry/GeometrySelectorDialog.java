@@ -1,13 +1,13 @@
-package com.ss.builder.ui.dialog.geometry;
+package com.ss.builder.fx.dialog.geometry;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.ui.dialog.node.selector.NodeSelectorDialog;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.dialog.node.selector.NodeSelectorDialog;
+import com.ss.builder.fx.dialog.node.selector.NodeSelectorDialog;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.dialog.node.selector.NodeSelectorDialog;
 
 import org.jetbrains.annotations.NotNull;
 

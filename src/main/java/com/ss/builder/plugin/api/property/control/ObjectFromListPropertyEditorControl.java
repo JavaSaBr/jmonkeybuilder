@@ -1,6 +1,6 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
-import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;

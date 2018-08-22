@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component.painting.terrain;
+package com.ss.builder.fx.component.painting.terrain;
 
 import static java.lang.Math.abs;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingStateWithEditorTool;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.painting.impl.AbstractPaintingStateWithEditorTool;
 
 /**
  * The state of terrain painting component.

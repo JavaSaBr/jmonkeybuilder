@@ -1,14 +1,14 @@
 package com.ss.builder.analytics.google;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_ANALYTICS_GOOGLE;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_ANALYTICS_GOOGLE;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_ANALYTICS_GOOGLE;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_ANALYTICS_GOOGLE;
 import static com.ss.rlib.common.util.StringUtils.isEmpty;
 import static org.apache.http.impl.client.HttpClients.createMinimal;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.EditorThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.config.EditorConfig;
+import com.ss.builder.EditorThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.config.EditorConfig;
 import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;

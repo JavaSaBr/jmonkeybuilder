@@ -1,13 +1,13 @@
-package com.ss.builder.editor.part3d.impl;
+package com.ss.builder.jme.editor.part3d.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.Editor3dPart;
-import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.Editor3dPart;
+import com.ss.builder.fx.component.editor.FileEditor;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;

@@ -1,7 +1,9 @@
-package com.ss.editor.file.delete.handler;
+package com.ss.builder.file.delete.handler;
 
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;

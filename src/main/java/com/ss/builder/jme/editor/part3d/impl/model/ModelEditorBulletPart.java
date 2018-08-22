@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.impl.model;
+package com.ss.builder.jme.editor.part3d.impl.model;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
@@ -6,9 +6,9 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.scene.Spatial;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
-import com.ss.editor.editor.part3d.Editor3dPart;
+import com.ss.builder.jme.editor.part3d.Editor3dPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

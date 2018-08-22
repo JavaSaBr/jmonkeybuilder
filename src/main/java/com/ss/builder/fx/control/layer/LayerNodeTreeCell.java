@@ -1,8 +1,8 @@
-package com.ss.builder.ui.control.layer;
+package com.ss.builder.fx.control.layer;
 
 import com.ss.builder.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.tree.NodeTreeCell;
+import com.ss.builder.model.undo.editor.SceneChangeConsumer;
+import com.ss.builder.fx.control.tree.NodeTreeCell;
 import org.jetbrains.annotations.NotNull;
 
 /**

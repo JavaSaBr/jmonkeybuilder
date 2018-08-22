@@ -1,20 +1,14 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.filler.impl;
+package com.ss.builder.fx.component.asset.tree.context.menu.filler.impl;
 
-import static com.ss.editor.ui.util.UiUtils.hasFileInClipboard;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.config.EditorConfig;
-import com.ss.builder.ui.component.asset.tree.resource.FileResourceElement;
-import com.ss.builder.ui.component.asset.tree.resource.FolderResourceElement;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.builder.ui.util.UiUtils;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.component.asset.tree.context.menu.action.*;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.resource.FileResourceElement;
+import com.ss.builder.fx.component.asset.tree.resource.FolderResourceElement;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.util.UiUtils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.MenuItem;
 import org.jetbrains.annotations.NotNull;

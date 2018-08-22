@@ -1,15 +1,13 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
-import com.ss.editor.plugin.EditorPlugin;
-import com.ss.editor.ui.css.CssRegistry;
-import com.ss.editor.ui.event.impl.*;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.fx.css.CssRegistry;
+import com.ss.builder.fx.event.impl.*;
+import com.ss.builder.plugin.EditorPlugin;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -67,20 +65,20 @@ public class PluginManager {
         ExecutorManager.getInstance()
                 .addBackgroundTask(this::loadPluginsInBackground);
 
-        SingleAsyncEventHandlerBuilder.of(EditorFinishedLoadingEvent.EVENT_TYPE)
+        AsyncEventManager.SingleAsyncEventHandlerBuilder.of(EditorFinishedLoadingEvent.EVENT_TYPE)
                 .add(this::onFinishLoading)
                 .buildAndRegister();
 
-        CombinedAsyncEventHandlerBuilder.of(this::onAfterCreateJmeContext)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::onAfterCreateJmeContext)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(PluginsLoadedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
-        SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
+        AsyncEventManager.SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
                 .add(this::onAfterCreateJavaFxContext)
                 .buildAndRegister();
 
-        CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::registeredExtensions)
                 .add(FxSceneCreatedEvent.EVENT_TYPE)
                 .add(PluginsRegisteredResourcesEvent.EVENT_TYPE)
                 .buildAndRegister();

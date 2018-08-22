@@ -1,4 +1,4 @@
-package com.ss.editor.model.scene;
+package com.ss.builder.model.scene;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.material.Material;
@@ -7,11 +7,14 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.extension.scene.ScenePresentable.PresentationType;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

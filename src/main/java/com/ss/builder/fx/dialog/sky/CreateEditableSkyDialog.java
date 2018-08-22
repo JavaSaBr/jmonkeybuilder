@@ -1,8 +1,8 @@
-package com.ss.builder.ui.dialog.sky;
+package com.ss.builder.fx.dialog.sky;
 
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 /**

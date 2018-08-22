@@ -1,7 +1,9 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.config.Config;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.config.Config;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerLevel;
 import com.ss.rlib.common.logging.LoggerManager;

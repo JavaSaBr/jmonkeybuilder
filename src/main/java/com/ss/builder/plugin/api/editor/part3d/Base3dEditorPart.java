@@ -1,6 +1,6 @@
-package com.ss.editor.plugin.api.editor.part3d;
+package com.ss.builder.plugin.api.editor.part3d;
 
-import com.ss.editor.editor.part3d.impl.AbstractEditor3dPart;
+import com.ss.builder.jme.editor.part3d.impl.AbstractEditor3dPart;
 
 /**
  * The base implementation of 3D part of an editor.

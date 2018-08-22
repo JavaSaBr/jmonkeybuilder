@@ -1,4 +1,4 @@
-package com.ss.editor.model;
+package com.ss.builder.model;
 
 import static java.lang.Math.*;
 import com.jme3.export.JmeExporter;
@@ -13,9 +13,12 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.util.JmeUtils;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.util.JmeUtils;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.util.JmeUtils;
 import com.ss.rlib.common.geom.util.AngleUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerLevel;

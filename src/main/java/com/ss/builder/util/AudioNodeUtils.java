@@ -1,10 +1,10 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.rlib.common.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

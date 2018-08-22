@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.property.builder.impl;
+package com.ss.builder.fx.control.property.builder.impl;
 
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
@@ -7,13 +7,13 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
 import com.ss.builder.util.AudioNodeUtils;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.editor.extension.property.*;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.util.AudioNodeUtils;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.control.property.builder.PropertyBuilder;
+import com.ss.builder.util.AudioNodeUtils;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

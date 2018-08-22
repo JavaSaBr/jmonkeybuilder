@@ -1,4 +1,4 @@
-package com.ss.builder.ui.scene;
+package com.ss.builder.fx.scene;
 
 import javafx.scene.image.ImageView;
 

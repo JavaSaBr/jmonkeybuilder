@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.asset.tree.resource;
+package com.ss.builder.fx.component.asset.tree.resource;
 
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayCollectors;
@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
+import static com.ss.builder.fx.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 
 /**

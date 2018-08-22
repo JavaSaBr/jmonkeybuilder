@@ -1,10 +1,12 @@
-package com.ss.editor.plugin.api.messages;
+package com.ss.builder.plugin.api.messages;
 
 import static java.util.Collections.emptyEnumeration;
 import static java.util.ResourceBundle.getBundle;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.plugin.EditorPlugin;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.plugin.EditorPlugin;
 import com.ss.rlib.common.util.PropertyLoader;
 import org.jetbrains.annotations.NotNull;
 

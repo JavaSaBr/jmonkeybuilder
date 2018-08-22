@@ -1,8 +1,8 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.event.ConsumableEvent;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.event.ConsumableEvent;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ArrayUtils;

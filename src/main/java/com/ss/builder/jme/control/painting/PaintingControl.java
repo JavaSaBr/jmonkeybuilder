@@ -1,10 +1,10 @@
-package com.ss.builder.control.painting;
+package com.ss.builder.jme.control.painting;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.control.Control;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

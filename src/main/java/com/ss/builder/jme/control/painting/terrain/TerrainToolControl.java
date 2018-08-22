@@ -1,13 +1,11 @@
-package com.ss.builder.control.painting.terrain;
+package com.ss.builder.jme.control.painting.terrain;
 
 import com.jme3.scene.Spatial;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.impl.AbstractPaintingControl;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.builder.fx.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.builder.jme.control.painting.impl.AbstractPaintingControl;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

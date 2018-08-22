@@ -1,8 +1,8 @@
-package com.ss.editor.util.svg;
+package com.ss.builder.util.svg;
 
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_HEIGHT;
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_WIDTH;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.sun.javafx.iio.ImageFrame;
 import com.sun.javafx.iio.ImageStorage.ImageType;
 import de.codecentric.centerdevice.javafxsvg.BufferedImageTranscoder;

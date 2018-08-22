@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.painting.terrain.paint;
+package com.ss.builder.fx.component.painting.terrain.paint;
 
-import static com.ss.editor.util.EditorUtils.*;
+import static com.ss.builder.util.EditorUtils.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

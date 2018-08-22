@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.property.builder.impl;
+package com.ss.builder.fx.control.property.builder.impl;
 
 import com.jme3.audio.AudioKey;
 import com.jme3.light.AmbientLight;
@@ -12,12 +12,12 @@ import com.jme3.scene.Spatial;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
 import com.ss.builder.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.property.impl.*;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.model.undo.editor.SceneChangeConsumer;
+import com.ss.builder.fx.control.property.impl.*;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 

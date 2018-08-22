@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.tree.action.impl;
+package com.ss.builder.fx.control.tree.action.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
@@ -7,15 +7,15 @@ import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
 import com.ss.builder.model.undo.impl.RemoveControlOperation;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.model.undo.impl.RemoveControlOperation;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.model.undo.impl.RemoveControlOperation;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.action.AbstractNodeAction;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

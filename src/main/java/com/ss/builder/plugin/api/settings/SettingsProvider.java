@@ -1,6 +1,7 @@
-package com.ss.editor.plugin.api.settings;
+package com.ss.builder.plugin.api.settings;
 
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 

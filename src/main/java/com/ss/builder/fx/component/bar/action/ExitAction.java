@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.bar.action;
+package com.ss.builder.fx.component.bar.action;
 
 import com.ss.builder.Messages;
-import com.ss.editor.Messages;
+import com.ss.builder.Messages;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
 

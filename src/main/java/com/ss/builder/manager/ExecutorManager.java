@@ -1,20 +1,19 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.executor.EditorTaskExecutor;
-import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
-import com.ss.editor.executor.impl.FxEditorTaskExecutor;
-import com.ss.editor.executor.impl.JmeThreadExecutor;
-import com.ss.editor.util.TimeTracker;
-import com.ss.rlib.common.concurrent.atomic.AtomicInteger;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.executor.EditorTaskExecutor;
+import com.ss.builder.executor.impl.FxEditorTaskExecutor;
+import com.ss.builder.executor.impl.JmeThreadExecutor;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
-import javafx.concurrent.Task;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The class to manage executing some tasks in the some threads.

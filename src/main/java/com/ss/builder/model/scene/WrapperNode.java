@@ -1,6 +1,7 @@
-package com.ss.editor.model.scene;
+package com.ss.builder.model.scene;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

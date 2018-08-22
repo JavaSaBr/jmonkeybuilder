@@ -1,11 +1,11 @@
-package com.ss.builder.ui.control.tree.node.impl.material.settings;
+package com.ss.builder.fx.control.tree.node.impl.material.settings;
 
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.model.node.material.TexturesSettings;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.model.node.material.TexturesSettings;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.model.node.material.TexturesSettings;
 import org.jetbrains.annotations.NotNull;
 
 /**

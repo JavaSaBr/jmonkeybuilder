@@ -1,16 +1,16 @@
-package com.ss.builder.ui.component.editor.state.impl;
+package com.ss.builder.fx.component.editor.state.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.editor.event.CameraChangedFileEditorEvent;
-import com.ss.builder.ui.component.editor.event.FileEditorEvent;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.event.CameraChangedFileEditorEvent;
-import com.ss.editor.ui.component.editor.event.FileEditorEvent;
+import com.ss.builder.fx.component.editor.event.CameraChangedFileEditorEvent;
+import com.ss.builder.fx.component.editor.event.FileEditorEvent;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.event.CameraChangedFileEditorEvent;
+import com.ss.builder.fx.component.editor.event.FileEditorEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

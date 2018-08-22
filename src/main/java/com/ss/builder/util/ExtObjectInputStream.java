@@ -1,6 +1,7 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
-import com.ss.editor.manager.PluginManager;
+import com.ss.builder.manager.PluginManager;
+import com.ss.builder.manager.PluginManager;
 import com.ss.rlib.common.util.ref.ReferenceFactory;
 import com.ss.rlib.common.util.ref.ReferenceType;
 import org.jetbrains.annotations.NotNull;

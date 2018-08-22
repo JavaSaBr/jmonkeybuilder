@@ -1,9 +1,9 @@
-package com.ss.builder.editor.part3d.impl.scene;
+package com.ss.builder.jme.editor.part3d.impl.scene;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FXAA_FILTER;
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TONEMAP_FILTER;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FILTER_FXAA;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_FILTER_TONEMAP;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_FXAA_FILTER;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_TONEMAP_FILTER;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_FILTER_FXAA;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_FILTER_TONEMAP;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.scene.Node;
@@ -12,16 +12,16 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.EditorConfig;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.component.editor.impl.scene.SceneFileEditor;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,8 +1,8 @@
-package com.ss.editor.executor.impl;
+package com.ss.builder.executor.impl;
 
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.application.Platform;

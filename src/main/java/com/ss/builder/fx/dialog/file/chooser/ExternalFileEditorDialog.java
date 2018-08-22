@@ -1,15 +1,15 @@
-package com.ss.builder.ui.dialog.file.chooser;
+package com.ss.builder.fx.dialog.file.chooser;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.asset.tree.ResourceTree;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.ui.dialog.EditorDialog;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.component.asset.tree.ResourceTree;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.dialog.AbstractSimpleEditorDialog;
+import com.ss.builder.fx.dialog.EditorDialog;
 import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;

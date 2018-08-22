@@ -1,11 +1,14 @@
-package com.ss.editor.config;
+package com.ss.builder.config;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.TimeTracker;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.TimeTracker;
 import com.ss.rlib.common.plugin.Version;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.VarTable;

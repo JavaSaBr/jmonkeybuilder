@@ -1,4 +1,4 @@
-package com.ss.builder.ui;
+package com.ss.builder.fx;
 
 /**
  * The interface with FX constants.

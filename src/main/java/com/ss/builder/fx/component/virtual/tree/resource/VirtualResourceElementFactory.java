@@ -1,8 +1,8 @@
-package com.ss.builder.ui.component.virtual.tree.resource;
+package com.ss.builder.fx.component.virtual.tree.resource;
 
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.virtual.tree.VirtualResourceTree;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.component.virtual.tree.VirtualResourceTree;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;

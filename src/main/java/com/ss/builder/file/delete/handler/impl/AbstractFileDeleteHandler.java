@@ -1,6 +1,6 @@
-package com.ss.editor.file.delete.handler.impl;
+package com.ss.builder.file.delete.handler.impl;
 
-import com.ss.editor.file.delete.handler.FileDeleteHandler;
+import com.ss.builder.file.delete.handler.FileDeleteHandler;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;

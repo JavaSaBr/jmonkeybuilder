@@ -1,11 +1,14 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.ResourceManager;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.fx.util.UiUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.VarTable;

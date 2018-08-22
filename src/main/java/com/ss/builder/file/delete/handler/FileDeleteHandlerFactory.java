@@ -1,7 +1,9 @@
-package com.ss.editor.file.delete.handler;
+package com.ss.builder.file.delete.handler;
 
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.file.delete.handler.impl.DeleteMaterialsModelFileDeleteHandler;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.file.delete.handler.impl.DeleteMaterialsModelFileDeleteHandler;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.file.delete.handler.impl.DeleteMaterialsModelFileDeleteHandler;
 import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;

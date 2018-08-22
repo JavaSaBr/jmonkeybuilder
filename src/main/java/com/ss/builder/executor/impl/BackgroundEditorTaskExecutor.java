@@ -1,4 +1,4 @@
-package com.ss.editor.executor.impl;
+package com.ss.builder.executor.impl;
 
 import static java.lang.Math.min;
 import com.ss.rlib.common.util.array.Array;

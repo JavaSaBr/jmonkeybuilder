@@ -1,15 +1,15 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.action;
+package com.ss.builder.fx.component.asset.tree.context.menu.action;
 
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.builder.ui.event.FxEventManager;
-import com.ss.builder.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.RequestedOpenFileEvent;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.RequestedOpenFileEvent;
 import javafx.event.ActionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

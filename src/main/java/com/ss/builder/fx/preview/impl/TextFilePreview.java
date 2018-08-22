@@ -1,13 +1,13 @@
-package com.ss.builder.ui.preview.impl;
+package com.ss.builder.fx.preview.impl;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.manager.ResourceManager;
-import com.ss.builder.ui.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.ResourceManager;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;

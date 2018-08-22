@@ -1,15 +1,15 @@
-package com.ss.builder.ui.control.layer;
+package com.ss.builder.fx.control.layer;
 
-import static com.ss.editor.ui.util.UiUtils.findItemForValue;
+import static com.ss.builder.fx.util.UiUtils.findItemForValue;
 import com.jme3.scene.Spatial;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.NodeTreeCell;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.model.undo.editor.SceneChangeConsumer;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.NodeTreeCell;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;

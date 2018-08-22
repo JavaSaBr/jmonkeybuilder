@@ -1,4 +1,4 @@
-package com.ss.editor.analytics.google;
+package com.ss.builder.analytics.google;
 
 import org.jetbrains.annotations.NotNull;
 

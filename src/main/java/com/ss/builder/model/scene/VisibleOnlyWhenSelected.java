@@ -1,4 +1,4 @@
-package com.ss.editor.model.scene;
+package com.ss.builder.model.scene;
 
 /**
  * The interface to mak object that it need to be visible only when it's selected.

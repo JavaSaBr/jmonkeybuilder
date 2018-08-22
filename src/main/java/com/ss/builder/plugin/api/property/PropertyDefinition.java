@@ -1,6 +1,7 @@
-package com.ss.editor.plugin.api.property;
+package com.ss.builder.plugin.api.property;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.array.Array;

@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.tree.node.factory.impl;
+package com.ss.builder.fx.control.tree.node.factory.impl;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.effect.ParticleEmitter;
@@ -8,15 +8,15 @@ import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
 import com.jme3.effect.shapes.*;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.node.impl.spatial.particle.emitter.ParticleEmitterTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.particle.emitter.influencer.DefaultParticleInfluencerTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.particle.emitter.influencer.EmptyParticleInfluencerTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.particle.emitter.influencer.ParticleInfluencerTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.particle.emitter.influencer.RadialParticleInfluencerTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.spatial.particle.emitter.shape.*;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.ParticleEmitterTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.influencer.DefaultParticleInfluencerTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.influencer.EmptyParticleInfluencerTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.influencer.ParticleInfluencerTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.influencer.RadialParticleInfluencerTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.shape.*;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.fx.control.tree.node.factory.TreeNodeFactory;
 import org.jetbrains.annotations.Nullable;
 
 /**

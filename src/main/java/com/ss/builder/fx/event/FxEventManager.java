@@ -1,8 +1,8 @@
-package com.ss.builder.ui.event;
+package com.ss.builder.fx.event;
 
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.ExecutorManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.Array;

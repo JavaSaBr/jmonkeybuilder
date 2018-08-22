@@ -1,18 +1,18 @@
-package com.ss.builder.ui.dialog;
+package com.ss.builder.fx.dialog;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.TangentGenerator;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.impl.ChangeMeshOperation;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.TangentGenerator;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.model.undo.impl.ChangeMeshOperation;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;

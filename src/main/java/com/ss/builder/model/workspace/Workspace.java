@@ -1,15 +1,18 @@
-package com.ss.editor.model.workspace;
+package com.ss.builder.model.workspace;
 
-import static com.ss.editor.util.EditorUtils.getAssetFile;
-import static com.ss.editor.util.EditorUtils.toAssetPath;
+import static com.ss.builder.util.EditorUtils.getAssetFile;
+import static com.ss.builder.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.ui.component.editor.EditorDescriptor;
-import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.manager.WorkspaceManager;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.manager.WorkspaceManager;
+import com.ss.builder.fx.component.editor.EditorDescriptor;
+import com.ss.builder.fx.component.editor.FileEditor;
+import com.ss.builder.fx.component.editor.state.EditorState;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.StringUtils;
@@ -130,8 +133,8 @@ public class Workspace implements Serializable {
             return;
         }
 
-        final Path assetFile = getAssetFile(getAssetFolder(), file);
-        this.currentEditedFile = toAssetPath(assetFile);
+        final Path assetFile = EditorUtils.getAssetFile(getAssetFolder(), file);
+        this.currentEditedFile = EditorUtils.toAssetPath(assetFile);
     }
 
     /**
@@ -229,8 +232,8 @@ public class Workspace implements Serializable {
     @FromAnyThread
     public synchronized void removeEditorState(@NotNull final Path file) {
 
-        final Path assetFile = getAssetFile(getAssetFolder(), file);
-        final String assetPath = toAssetPath(assetFile);
+        final Path assetFile = EditorUtils.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtils.toAssetPath(assetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
         if (editorStateMap.remove(assetPath) == null) return;
@@ -267,8 +270,8 @@ public class Workspace implements Serializable {
     @FromAnyThread
     public synchronized void addOpenedFile(@NotNull final Path file, @NotNull final FileEditor fileEditor) {
 
-        final Path assetFile = getAssetFile(getAssetFolder(), file);
-        final String assetPath = toAssetPath(assetFile);
+        final Path assetFile = EditorUtils.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtils.toAssetPath(assetFile);
 
         final EditorDescriptor description = fileEditor.getDescriptor();
 
@@ -289,8 +292,8 @@ public class Workspace implements Serializable {
     @FromAnyThread
     public synchronized void removeOpenedFile(@NotNull final Path file) {
 
-        final Path assetFile = getAssetFile(getAssetFolder(), file);
-        final String assetPath = toAssetPath(assetFile);
+        final Path assetFile = EditorUtils.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtils.toAssetPath(assetFile);
 
         final Map<String, String> openedFiles = getOpenedFiles();
         openedFiles.remove(assetPath);

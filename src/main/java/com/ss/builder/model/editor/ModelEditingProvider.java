@@ -1,4 +1,4 @@
-package com.ss.editor.model.editor;
+package com.ss.builder.model.editor;
 
 /**
  * The interface to implement a provider to edit models.

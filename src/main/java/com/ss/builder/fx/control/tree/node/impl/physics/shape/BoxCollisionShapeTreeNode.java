@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.tree.node.impl.physics.shape;
+package com.ss.builder.fx.control.tree.node.impl.physics.shape;
 
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.split.pane;
+package com.ss.builder.fx.component.split.pane;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.manager.ExecutorManager;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.tab.TabToolComponent;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.component.tab.TabToolComponent;
 import com.ss.rlib.fx.util.ObservableUtils;
 import javafx.scene.Node;
 import javafx.scene.Scene;

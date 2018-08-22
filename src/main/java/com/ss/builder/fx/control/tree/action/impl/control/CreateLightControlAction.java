@@ -1,16 +1,16 @@
-package com.ss.builder.ui.control.tree.action.impl.control;
+package com.ss.builder.fx.control.tree.action.impl.control;
 
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LightControl;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

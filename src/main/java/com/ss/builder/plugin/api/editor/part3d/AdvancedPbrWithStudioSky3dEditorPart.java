@@ -1,9 +1,10 @@
-package com.ss.editor.plugin.api.editor.part3d;
+package com.ss.builder.plugin.api.editor.part3d;
 
 import com.jme3.scene.Geometry;
 import com.jme3.util.SkyFactory;
-import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.plugin.api.editor.Advanced3dFileEditor;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

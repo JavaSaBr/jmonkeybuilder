@@ -1,18 +1,18 @@
-package com.ss.builder.ui.control.tree.action.impl.control.physics;
+package com.ss.builder.fx.control.tree.action.impl.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
+import com.ss.builder.fx.Icons;
 import com.ss.builder.util.ControlUtils;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.action.impl.control.AbstractCreateControlAction;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.util.ControlUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.action.impl.control.AbstractCreateControlAction;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.util.ControlUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

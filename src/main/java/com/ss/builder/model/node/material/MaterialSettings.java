@@ -1,7 +1,8 @@
-package com.ss.editor.model.node.material;
+package com.ss.builder.model.node.material;
 
 import com.jme3.material.Material;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

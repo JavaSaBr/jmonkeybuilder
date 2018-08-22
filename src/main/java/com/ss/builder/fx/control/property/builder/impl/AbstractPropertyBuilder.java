@@ -1,12 +1,12 @@
-package com.ss.builder.ui.control.property.builder.impl;
+package com.ss.builder.fx.control.property.builder.impl;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.property.builder.PropertyBuilder;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;

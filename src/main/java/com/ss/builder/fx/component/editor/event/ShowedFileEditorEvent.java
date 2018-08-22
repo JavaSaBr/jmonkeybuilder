@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.editor.event;
+package com.ss.builder.fx.component.editor.event;
 
 import org.jetbrains.annotations.NotNull;
 

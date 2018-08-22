@@ -1,11 +1,11 @@
-package com.ss.builder.ui.component.editor.state;
+package com.ss.builder.fx.component.editor.state;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.editor.event.FileEditorEvent;
-import com.ss.builder.ui.component.editor.state.impl.AdditionalEditorState;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.event.FileEditorEvent;
-import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
+import com.ss.builder.fx.component.editor.event.FileEditorEvent;
+import com.ss.builder.fx.component.editor.state.impl.AdditionalEditorState;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.event.FileEditorEvent;
+import com.ss.builder.fx.component.editor.state.impl.AdditionalEditorState;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

@@ -1,12 +1,12 @@
-package com.ss.builder.ui.component.painting.impl;
+package com.ss.builder.fx.component.painting.impl;
 
 import static java.lang.Math.abs;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
-import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.state.impl.AbstractEditorState;
+import com.ss.builder.fx.component.editor.state.impl.AdditionalEditorState;
 
 /**
  * The state of painting component.

@@ -1,11 +1,11 @@
-package com.ss.builder.ui.util;
+package com.ss.builder.fx.util;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.FileIconManager;
-import com.ss.editor.ui.css.CssColorTheme;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.manager.FileIconManager;
+import com.ss.builder.fx.css.CssColorTheme;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableMap;

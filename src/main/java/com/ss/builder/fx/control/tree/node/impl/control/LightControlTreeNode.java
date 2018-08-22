@@ -1,11 +1,11 @@
-package com.ss.builder.ui.control.tree.node.impl.control;
+package com.ss.builder.fx.control.tree.node.impl.control;
 
 import com.jme3.scene.control.LightControl;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 /**

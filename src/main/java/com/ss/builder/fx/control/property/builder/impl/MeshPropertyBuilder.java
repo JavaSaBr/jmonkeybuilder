@@ -1,17 +1,17 @@
-package com.ss.builder.ui.control.property.builder.impl;
+package com.ss.builder.fx.control.property.builder.impl;
 
 import com.jme3.scene.Mesh;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.SimpleProperty;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.property.builder.PropertyBuilder;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.control.property.builder.PropertyBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.tab;
+package com.ss.builder.fx.component.tab;
 
-import com.ss.builder.ui.css.CssIds;
-import com.ss.editor.ui.css.CssIds;
+import com.ss.builder.fx.css.CssIds;
+import com.ss.builder.fx.css.CssIds;
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
 import org.jetbrains.annotations.NotNull;

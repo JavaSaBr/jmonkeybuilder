@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.painting.terrain.paint;
+package com.ss.builder.fx.component.painting.terrain.paint;
 
-import static com.ss.editor.ui.component.painting.PaintingComponentContainer.FIELD_PERCENT;
-import static com.ss.editor.ui.component.painting.PaintingComponentContainer.LABEL_PERCENT;
+import static com.ss.builder.fx.component.painting.PaintingComponentContainer.FIELD_PERCENT;
+import static com.ss.builder.fx.component.painting.PaintingComponentContainer.LABEL_PERCENT;
 import com.ss.builder.Messages;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.editor.Messages;
-import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
-import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.Messages;
+import com.ss.builder.fx.control.choose.NamedChooseTextureControl;
+import com.ss.builder.fx.control.property.PropertyControl;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.control.input.FloatTextField;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.beans.binding.DoubleBinding;

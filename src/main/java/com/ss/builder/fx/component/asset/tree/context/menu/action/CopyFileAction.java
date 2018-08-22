@@ -1,16 +1,16 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.action;
+package com.ss.builder.fx.component.asset.tree.context.menu.action;
 
 import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;

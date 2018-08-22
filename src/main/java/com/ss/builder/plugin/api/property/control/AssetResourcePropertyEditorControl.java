@@ -2,11 +2,11 @@ package com.ss.builder.plugin.api.property.control;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.util.UiUtils;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.fx.util.UiUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;

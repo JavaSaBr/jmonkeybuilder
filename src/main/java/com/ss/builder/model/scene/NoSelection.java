@@ -1,4 +1,4 @@
-package com.ss.editor.model.scene;
+package com.ss.builder.model.scene;
 
 /**
  * The interface to mark an object that it should be without seleciton.

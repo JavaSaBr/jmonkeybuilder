@@ -1,10 +1,10 @@
-package com.ss.builder.ui.action;
+package com.ss.builder.fx.action;
 
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.action.ModifyingAction;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.impl.ModifyingActionOperation;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.model.undo.impl.ModifyingActionOperation;
 import javafx.scene.control.MenuItem;
 import org.jetbrains.annotations.NotNull;
 

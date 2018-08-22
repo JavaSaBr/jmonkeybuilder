@@ -1,6 +1,6 @@
-package com.ss.builder.editor.part3d.event;
+package com.ss.builder.jme.editor.part3d.event;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

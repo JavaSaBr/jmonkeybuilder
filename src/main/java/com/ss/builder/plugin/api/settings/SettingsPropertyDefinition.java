@@ -1,8 +1,9 @@
-package com.ss.editor.plugin.api.settings;
+package com.ss.builder.plugin.api.settings;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.impl;
+package com.ss.builder.jme.editor.part3d.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
@@ -8,12 +8,12 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.manager.ExecutorManager;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Label;

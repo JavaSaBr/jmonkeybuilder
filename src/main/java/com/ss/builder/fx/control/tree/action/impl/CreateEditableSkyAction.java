@@ -1,15 +1,15 @@
-package com.ss.builder.ui.control.tree.action.impl;
+package com.ss.builder.fx.control.tree.action.impl;
 
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.dialog.sky.CreateEditableSkyDialog;
-import com.ss.builder.ui.dialog.sky.CreateSkyDialog;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.dialog.sky.CreateEditableSkyDialog;
-import com.ss.editor.ui.dialog.sky.CreateSkyDialog;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.dialog.sky.CreateEditableSkyDialog;
+import com.ss.builder.fx.dialog.sky.CreateSkyDialog;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.dialog.sky.CreateEditableSkyDialog;
+import com.ss.builder.fx.dialog.sky.CreateSkyDialog;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 /**

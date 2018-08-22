@@ -1,15 +1,19 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
-import static com.ss.editor.util.EditorUtils.toAssetPath;
+import static com.ss.builder.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
@@ -50,7 +54,7 @@ public class SpatialAssetResourcePropertyControl<T extends Spatial> extends Asse
         var assetManager = EditorUtils.getAssetManager();
 
         var assetFile = EditorUtils.requireAssetFile(file);
-        var modelKey = new ModelKey(toAssetPath(assetFile));
+        var modelKey = new ModelKey(EditorUtils.toAssetPath(assetFile));
         var spatial = findResource(assetManager, modelKey);
 
         setPropertyValue(unsafeCast(spatial));

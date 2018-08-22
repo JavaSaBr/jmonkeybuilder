@@ -1,9 +1,9 @@
-package com.ss.builder.ui.dialog.node.selector;
+package com.ss.builder.fx.dialog.node.selector;
 
 import com.jme3.light.Light;
 import com.jme3.scene.Spatial;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;

@@ -1,15 +1,15 @@
-package com.ss.builder.ui.scene;
+package com.ss.builder.fx.scene;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.jfx.injfx.input.JfxMouseInput;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.AsyncEventManager;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.css.CssIds;
-import com.ss.editor.ui.event.impl.EditorFinishedLoadingEvent;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.ScreenComponent;
+import com.ss.builder.fx.css.CssIds;
+import com.ss.builder.fx.event.impl.EditorFinishedLoadingEvent;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.manager.AsyncEventManager;
+import com.ss.builder.manager.ExecutorManager;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;

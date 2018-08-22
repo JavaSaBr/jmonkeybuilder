@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.filler;
+package com.ss.builder.fx.component.asset.tree.context.menu.filler;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
 import javafx.scene.control.MenuItem;
 import org.jetbrains.annotations.NotNull;
 

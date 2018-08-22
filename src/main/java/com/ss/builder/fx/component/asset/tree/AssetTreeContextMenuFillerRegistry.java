@@ -1,15 +1,15 @@
-package com.ss.builder.ui.component.asset.tree;
+package com.ss.builder.fx.component.asset.tree;
 
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
-import com.ss.builder.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
-import com.ss.builder.ui.component.asset.tree.context.menu.filler.impl.FileAssetTreeSingleContextMenuFiller;
-import com.ss.builder.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.FileAssetTreeSingleContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.impl.FileAssetTreeSingleContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.AssetTreeMultiContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.AssetTreeSingleContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.impl.FileAssetTreeSingleContextMenuFiller;
+import com.ss.builder.fx.component.asset.tree.context.menu.filler.impl.ResourceAssetTreeSingleContextMenuFiller;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;

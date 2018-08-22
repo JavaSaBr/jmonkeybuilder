@@ -1,21 +1,20 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
 import static com.ss.rlib.common.util.FileUtils.getExtension;
 import static java.awt.Image.SCALE_DEFAULT;
 import static java.nio.file.StandardOpenOption.*;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.file.reader.DdsReader;
-import com.ss.editor.file.reader.TgaReader;
-import com.ss.editor.manager.AsyncEventManager.SingleAsyncEventHandlerBuilder;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
-import com.ss.editor.ui.event.impl.DeletedFileEvent;
-import com.ss.editor.ui.event.impl.FxContextCreatedEvent;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.file.reader.DdsReader;
+import com.ss.builder.file.reader.TgaReader;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.ChangedCurrentAssetFolderEvent;
+import com.ss.builder.fx.event.impl.DeletedFileEvent;
+import com.ss.builder.fx.event.impl.FxContextCreatedEvent;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
@@ -134,7 +133,7 @@ public class JavaFxImageManager {
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
         this.smallImageCache = DictionaryFactory.newIntegerDictionary();
 
-        SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
+        AsyncEventManager.SingleAsyncEventHandlerBuilder.of(FxContextCreatedEvent.EVENT_TYPE)
                 .add(() -> FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, this::processEvent))
                 .add(() -> FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, this::processEvent))
                 .buildAndRegister();

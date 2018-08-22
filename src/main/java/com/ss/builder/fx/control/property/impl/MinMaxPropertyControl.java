@@ -1,12 +1,12 @@
-package com.ss.builder.ui.control.property.impl;
+package com.ss.builder.fx.control.property.impl;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import com.jme3.math.Vector2f;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

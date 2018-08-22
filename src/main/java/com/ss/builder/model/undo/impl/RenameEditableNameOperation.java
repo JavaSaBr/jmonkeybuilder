@@ -1,4 +1,4 @@
-package com.ss.editor.model.undo.impl;
+package com.ss.builder.model.undo.impl;
 
 import com.ss.editor.extension.EditableName;
 import org.jetbrains.annotations.NotNull;

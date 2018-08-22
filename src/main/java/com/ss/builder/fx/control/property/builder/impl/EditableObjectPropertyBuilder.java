@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.property.builder.impl;
+package com.ss.builder.fx.control.property.builder.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.*;
@@ -6,12 +6,12 @@ import com.jme3.texture.Texture2D;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.editor.ui.control.property.impl.*;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.property.PropertyControl;
+import com.ss.builder.fx.control.property.impl.*;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;

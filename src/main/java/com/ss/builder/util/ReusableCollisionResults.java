@@ -1,8 +1,9 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.pools.Reusable;

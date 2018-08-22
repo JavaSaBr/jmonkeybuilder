@@ -1,4 +1,4 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer.Type;

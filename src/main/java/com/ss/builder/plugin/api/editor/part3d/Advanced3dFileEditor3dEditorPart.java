@@ -1,7 +1,7 @@
-package com.ss.editor.plugin.api.editor.part3d;
+package com.ss.builder.plugin.api.editor.part3d;
 
-import com.ss.editor.editor.part3d.impl.Base3dSceneEditor3dPart;
-import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
+import com.ss.builder.jme.editor.part3d.impl.Base3dSceneEditor3dPart;
+import com.ss.builder.plugin.api.editor.Advanced3dFileEditor;
 import org.jetbrains.annotations.NotNull;
 
 /**

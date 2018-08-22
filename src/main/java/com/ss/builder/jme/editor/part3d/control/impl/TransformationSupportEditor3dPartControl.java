@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.control.impl;
+package com.ss.builder.jme.editor.part3d.control.impl;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -16,13 +16,13 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.transform.*;
-import com.ss.editor.editor.part3d.EditableSceneEditor3dPart;
-import com.ss.editor.editor.part3d.ExtendableEditor3dPart;
-import com.ss.editor.editor.part3d.event.Editor3dPartEvent;
-import com.ss.editor.util.JmeUtils;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.control.transform.*;
+import com.ss.builder.jme.editor.part3d.EditableSceneEditor3dPart;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.util.JmeUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,16 +1,16 @@
-package com.ss.builder.ui.control.tree.node.impl.control.physics;
+package com.ss.builder.fx.control.tree.node.impl.control.physics;
 
 import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.node.impl.control.ControlTreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.node.impl.control.ControlTreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.tree.action.impl.particle.emitter.shape;
+package com.ss.builder.fx.control.tree.action.impl.particle.emitter.shape;
 
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterMeshFaceShape;
@@ -6,10 +6,10 @@ import com.jme3.effect.shapes.EmitterMeshVertexShape;
 import com.jme3.scene.Mesh;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

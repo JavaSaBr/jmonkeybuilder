@@ -1,7 +1,8 @@
-package com.ss.editor.model.scene;
+package com.ss.builder.model.scene;
 
 import com.jme3.util.SafeArrayList;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import org.jetbrains.annotations.NotNull;

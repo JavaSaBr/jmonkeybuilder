@@ -1,4 +1,4 @@
-package com.ss.builder.ui.util;
+package com.ss.builder.fx.util;
 
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;

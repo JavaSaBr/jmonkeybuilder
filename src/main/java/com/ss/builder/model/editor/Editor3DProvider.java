@@ -1,7 +1,8 @@
-package com.ss.editor.model.editor;
+package com.ss.builder.model.editor;
 
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,6 +1,6 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
-import static com.ss.editor.util.EditorUtils.*;
+import static com.ss.builder.util.EditorUtils.*;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static com.ss.rlib.common.util.array.ArrayFactory.toArray;
 import static java.nio.file.StandardOpenOption.*;
@@ -13,9 +13,12 @@ import com.jme3.material.MaterialDef;
 import com.jme3.scene.Spatial;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import jme3tools.converters.ImageToAwt;
@@ -179,8 +182,8 @@ public class MaterialUtils {
     private static boolean containsShader(@NotNull Material material, @NotNull Path file) {
 
         var materialDef = material.getMaterialDef();
-        var assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
-        var assetPath = toAssetPath(assetFile);
+        var assetFile = notNull(EditorUtils.getAssetFile(file), "Can't get an asset file.");
+        var assetPath = EditorUtils.toAssetPath(assetFile);
 
         return containsShader(materialDef, assetPath);
     }
@@ -195,8 +198,8 @@ public class MaterialUtils {
     @FromAnyThread
     private static @Nullable String containsTexture(@NotNull Material material, @NotNull Path file) {
 
-        var assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
-        var assetPath = toAssetPath(assetFile);
+        var assetFile = notNull(EditorUtils.getAssetFile(file), "Can't get an asset file.");
+        var assetPath = EditorUtils.toAssetPath(assetFile);
 
         return containsTexture(material, assetPath) ? assetPath : null;
     }
@@ -423,7 +426,7 @@ public class MaterialUtils {
         }
 
         var key = texture.getKey();
-        var file = notNull(getRealFile(key.getName()));
+        var file = notNull(EditorUtils.getRealFile(key.getName()));
         var bufferedImage = ImageToAwt.convert(image, false, true, 0);
 
         try (var out = Files.newOutputStream(file, WRITE, TRUNCATE_EXISTING, CREATE)) {

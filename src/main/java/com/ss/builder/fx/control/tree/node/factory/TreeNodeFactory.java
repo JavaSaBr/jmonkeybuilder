@@ -1,8 +1,8 @@
-package com.ss.builder.ui.control.tree.node.factory;
+package com.ss.builder.fx.control.tree.node.factory;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

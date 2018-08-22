@@ -1,6 +1,7 @@
-package com.ss.editor.util.svg;
+package com.ss.builder.util.svg;
 
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.sun.javafx.iio.ImageFormatDescription;
 import com.sun.javafx.iio.ImageLoader;
 import com.sun.javafx.iio.ImageLoaderFactory;

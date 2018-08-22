@@ -1,10 +1,10 @@
-package com.ss.builder.ui.component.scripting;
+package com.ss.builder.fx.component.scripting;
 
 import static java.util.Collections.singleton;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.builder.ui.util.UiUtils;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.UiUtils;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;

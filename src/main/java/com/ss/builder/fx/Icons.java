@@ -1,6 +1,6 @@
-package com.ss.builder.ui;
+package com.ss.builder.fx;
 
-import com.ss.editor.manager.FileIconManager;
+import com.ss.builder.manager.FileIconManager;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 

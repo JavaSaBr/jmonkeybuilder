@@ -1,9 +1,9 @@
-package com.ss.builder.ui.preview.impl;
+package com.ss.builder.fx.preview.impl;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.manager.JavaFxImageManager;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.JavaFxImageManager;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.JavaFxImageManager;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;

@@ -1,10 +1,10 @@
-package com.ss.builder.ui.event;
+package com.ss.builder.fx.event;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.config.Config;
-import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.config.Config;
+import com.ss.builder.fx.component.editor.FileEditor;
+import com.ss.builder.fx.component.editor.area.EditorAreaComponent;
+import com.ss.builder.fx.util.UiUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import javafx.event.Event;

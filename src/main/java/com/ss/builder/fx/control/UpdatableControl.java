@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control;
+package com.ss.builder.fx.control;
 
 /**
  * The interface to implement an updatable control.

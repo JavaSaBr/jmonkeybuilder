@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.creator;
+package com.ss.builder.fx.component.creator;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;

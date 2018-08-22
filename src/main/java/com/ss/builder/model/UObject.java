@@ -1,4 +1,4 @@
-package com.ss.editor.model;
+package com.ss.builder.model;
 
 /**
  * The interface to implement uniq object.

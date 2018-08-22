@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component;
+package com.ss.builder.fx.component;
 
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.Nullable;
 
 /**

@@ -1,15 +1,15 @@
-package com.ss.builder.ui.control.property.impl;
+package com.ss.builder.fx.control.property.impl;
 
 import com.jme3.light.Light;
 import com.jme3.post.Filter;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
-import com.ss.builder.ui.dialog.node.selector.LightSelectorDialog;
-import com.ss.builder.ui.dialog.node.selector.NodeSelectorDialog;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.dialog.node.selector.LightSelectorDialog;
-import com.ss.editor.ui.dialog.node.selector.NodeSelectorDialog;
+import com.ss.builder.fx.dialog.node.selector.LightSelectorDialog;
+import com.ss.builder.fx.dialog.node.selector.NodeSelectorDialog;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.dialog.node.selector.LightSelectorDialog;
+import com.ss.builder.fx.dialog.node.selector.NodeSelectorDialog;
 import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

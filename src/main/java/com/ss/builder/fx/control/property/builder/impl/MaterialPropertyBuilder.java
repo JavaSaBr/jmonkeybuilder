@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.property.builder.impl;
+package com.ss.builder.fx.control.property.builder.impl;
 
 import static java.util.stream.Collectors.toList;
 import com.jme3.material.MatParam;
@@ -7,13 +7,13 @@ import com.jme3.shader.VarType;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.property.SimpleProperty;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.property.builder.PropertyBuilder;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.property.builder.PropertyBuilder;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;

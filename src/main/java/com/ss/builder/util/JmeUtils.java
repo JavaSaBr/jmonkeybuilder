@@ -1,4 +1,4 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
@@ -7,8 +7,10 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

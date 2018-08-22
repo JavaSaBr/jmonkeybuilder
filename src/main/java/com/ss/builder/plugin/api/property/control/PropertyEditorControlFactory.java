@@ -1,7 +1,8 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,13 +1,13 @@
-package com.ss.builder.ui.control.tree.node.impl.control.anim;
+package com.ss.builder.fx.control.tree.node.impl.control.anim;
 
 import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.ObjectUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;

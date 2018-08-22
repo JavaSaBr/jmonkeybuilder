@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.tab;
+package com.ss.builder.fx.component.tab;
 
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;

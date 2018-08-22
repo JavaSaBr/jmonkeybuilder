@@ -1,4 +1,4 @@
-package com.ss.builder.control.painting.terrain;
+package com.ss.builder.jme.control.painting.terrain;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
@@ -12,14 +12,14 @@ import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
-import com.ss.editor.ui.control.property.operation.PropertyOperation;
-import com.ss.editor.util.LocalObjects;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.control.painting.PaintingInput;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.builder.fx.control.property.operation.PropertyOperation;
+import com.ss.builder.util.LocalObjects;
 import com.ss.rlib.common.function.ObjectFloatObjectConsumer;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;

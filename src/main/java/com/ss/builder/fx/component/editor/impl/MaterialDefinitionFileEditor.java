@@ -1,16 +1,16 @@
-package com.ss.builder.ui.component.editor.impl;
+package com.ss.builder.fx.component.editor.impl;
 
 import com.ss.builder.FileExtensions;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.editor.EditorDescriptor;
-import com.ss.editor.ui.control.code.BaseCodeArea;
-import com.ss.editor.ui.control.code.MaterialDefinitionCodeArea;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.component.editor.EditorDescriptor;
+import com.ss.builder.fx.control.code.BaseCodeArea;
+import com.ss.builder.fx.control.code.MaterialDefinitionCodeArea;
 import org.jetbrains.annotations.NotNull;
 
 /**

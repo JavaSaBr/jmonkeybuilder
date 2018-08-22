@@ -1,6 +1,6 @@
-package com.ss.builder.ui.component.editor.event;
+package com.ss.builder.fx.component.editor.event;
 
-import com.ss.editor.editor.part3d.control.impl.CameraEditor3dPartControl.CameraState;
+import com.ss.builder.jme.editor.part3d.control.impl.CameraEditor3dPartControl.CameraState;
 import org.jetbrains.annotations.NotNull;
 
 /**

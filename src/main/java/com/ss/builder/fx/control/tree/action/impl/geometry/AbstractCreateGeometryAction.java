@@ -1,6 +1,6 @@
-package com.ss.builder.ui.control.tree.action.impl.geometry;
+package com.ss.builder.fx.control.tree.action.impl.geometry;
 
-import static com.ss.editor.util.EditorUtils.getDefaultLayer;
+import static com.ss.builder.util.EditorUtils.getDefaultLayer;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -10,14 +10,14 @@ import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
 import com.ss.builder.model.undo.impl.AddChildOperation;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
-import com.ss.editor.model.undo.impl.AddChildOperation;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.control.tree.action.AbstractNodeAction;
+import com.ss.builder.model.undo.impl.AddChildOperation;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

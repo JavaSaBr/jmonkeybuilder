@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.editor;
+package com.ss.builder.fx.component.editor;
 
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.rlib.common.util.array.Array;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;

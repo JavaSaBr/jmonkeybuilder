@@ -12,7 +12,7 @@
  * http://3dtech.jp/wiki/index.php?DDSReader
  */
 
-package com.ss.editor.file.reader;
+package com.ss.builder.file.reader;
 
 /**
  * The implementation of DDS reader.

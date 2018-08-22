@@ -1,12 +1,12 @@
-package com.ss.builder.ui.component.virtual.tree;
+package com.ss.builder.fx.component.virtual.tree;
 
-import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
+import static com.ss.builder.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import com.ss.builder.manager.FileIconManager;
-import com.ss.builder.ui.component.virtual.tree.resource.FolderVirtualResourceElement;
-import com.ss.builder.ui.component.virtual.tree.resource.VirtualResourceElement;
-import com.ss.editor.manager.FileIconManager;
-import com.ss.editor.ui.component.virtual.tree.resource.FolderVirtualResourceElement;
-import com.ss.editor.ui.component.virtual.tree.resource.VirtualResourceElement;
+import com.ss.builder.fx.component.virtual.tree.resource.FolderVirtualResourceElement;
+import com.ss.builder.fx.component.virtual.tree.resource.VirtualResourceElement;
+import com.ss.builder.manager.FileIconManager;
+import com.ss.builder.fx.component.virtual.tree.resource.FolderVirtualResourceElement;
+import com.ss.builder.fx.component.virtual.tree.resource.VirtualResourceElement;
 import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;

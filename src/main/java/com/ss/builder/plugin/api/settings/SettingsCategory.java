@@ -1,6 +1,7 @@
-package com.ss.editor.plugin.api.settings;
+package com.ss.builder.plugin.api.settings;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

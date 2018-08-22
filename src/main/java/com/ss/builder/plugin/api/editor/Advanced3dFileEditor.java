@@ -1,9 +1,11 @@
-package com.ss.editor.plugin.api.editor;
+package com.ss.builder.plugin.api.editor;
 
-import static com.ss.editor.ui.component.editor.FileEditorUtils.loadCameraState;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
-import com.ss.editor.ui.component.editor.state.impl.Editor3dEditorState;
+import static com.ss.builder.fx.component.editor.FileEditorUtils.loadCameraState;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
+import com.ss.builder.fx.component.editor.state.impl.Editor3dEditorState;
 
 /**
  * The advanced implementation of 3D editor.

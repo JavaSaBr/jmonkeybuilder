@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.log;
+package com.ss.builder.fx.component.log;
 
 import org.jetbrains.annotations.NotNull;
 

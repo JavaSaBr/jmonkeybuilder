@@ -1,6 +1,6 @@
-package com.ss.builder.ui.event.impl;
+package com.ss.builder.fx.event.impl;
 
-import com.ss.editor.ui.event.SceneEvent;
+import com.ss.builder.fx.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 

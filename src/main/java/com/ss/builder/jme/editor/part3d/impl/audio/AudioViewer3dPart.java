@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.impl.audio;
+package com.ss.builder.jme.editor.part3d.impl.audio;
 
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
@@ -6,12 +6,9 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource.Status;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.fx.component.editor.impl.AudioViewerEditor;
+import com.ss.builder.jme.editor.part3d.impl.AbstractExtendableEditor3dPart;
 import com.ss.builder.manager.ExecutorManager;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.impl.AbstractExtendableEditor3dPart;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
 import com.ss.rlib.common.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

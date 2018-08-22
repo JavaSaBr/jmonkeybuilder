@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.property.impl.particle;
+package com.ss.builder.fx.control.property.impl.particle;
 
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.math.Vector2f;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.property.impl.Vector2fPropertyControl;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.control.property.impl.Vector2fPropertyControl;
 import org.jetbrains.annotations.NotNull;
 
 /**

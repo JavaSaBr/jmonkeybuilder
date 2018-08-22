@@ -1,14 +1,18 @@
-package com.ss.editor.plugin.api.editor;
+package com.ss.builder.plugin.api.editor;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
-import com.ss.editor.ui.component.editor.state.impl.Editor3dWithEditorToolEditorState;
-import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
-import com.ss.editor.ui.component.tab.EditorToolComponent;
-import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.editor.part3d.Advanced3dFileEditor3dEditorPart;
+import com.ss.builder.fx.component.editor.state.impl.Editor3dWithEditorToolEditorState;
+import com.ss.builder.fx.component.split.pane.EditorToolSplitPane;
+import com.ss.builder.fx.component.tab.EditorToolComponent;
+import com.ss.builder.fx.component.tab.ScrollableEditorToolComponent;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.event.Event;
 import javafx.scene.input.DragEvent;

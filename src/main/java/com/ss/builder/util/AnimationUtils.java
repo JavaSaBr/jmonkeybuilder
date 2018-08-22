@@ -1,4 +1,4 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
@@ -6,7 +6,8 @@ import com.jme3.animation.BoneTrack;
 import com.jme3.animation.Track;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.rlib.common.util.ClassUtils;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;

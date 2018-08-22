@@ -1,11 +1,10 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import static com.ss.rlib.common.util.ClassUtils.cast;
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.stream.Collectors.toList;
-
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetKey;
@@ -22,23 +21,23 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Platform;
-import com.ss.editor.JfxApplication;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.EditorConfig;
+import com.ss.builder.JfxApplication;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.analytics.google.GAnalytics;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.RequestedOpenFileEvent;
+import com.ss.builder.fx.scene.EditorFxScene;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.manager.ClasspathManager;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.manager.ResourceManager;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.manager.ClasspathManager;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ClassUtils;
@@ -1066,5 +1065,13 @@ public abstract class EditorUtils {
                 .map(EditorUtils::toAssetPath)
                 .map(constructor)
                 .orElseThrow(() -> new RuntimeException("Can't build an asset key for the file " + realFile));
+    }
+
+    /**
+     * Clear the asset cache.
+     */
+    @JmeThread
+    public static void clearAssetCache() {
+        getAssetManager().clearCache();
     }
 }

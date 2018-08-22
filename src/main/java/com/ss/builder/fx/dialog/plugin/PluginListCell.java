@@ -1,13 +1,13 @@
-package com.ss.builder.ui.dialog.plugin;
+package com.ss.builder.fx.dialog.plugin;
 
 import com.ss.builder.plugin.EditorPlugin;
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.builder.ui.util.DynamicIconSupport;
-import com.ss.editor.plugin.EditorPlugin;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.DynamicIconSupport;
+import com.ss.builder.plugin.EditorPlugin;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.DynamicIconSupport;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ListCell;

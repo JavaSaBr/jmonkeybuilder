@@ -1,10 +1,10 @@
-package com.ss.builder.control.transform;
+package com.ss.builder.jme.control.transform;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.scene.control.Control;
 
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

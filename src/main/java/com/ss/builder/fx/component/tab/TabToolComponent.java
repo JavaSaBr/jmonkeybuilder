@@ -1,6 +1,6 @@
-package com.ss.builder.ui.component.tab;
+package com.ss.builder.fx.component.tab;
 
-import com.ss.editor.ui.component.ScreenComponent;
+import com.ss.builder.fx.component.ScreenComponent;
 import com.ss.rlib.fx.util.FXUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;

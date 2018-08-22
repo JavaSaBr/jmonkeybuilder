@@ -1,4 +1,4 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
 import com.jme3.system.AppSettings;
 import org.jetbrains.annotations.NotNull;

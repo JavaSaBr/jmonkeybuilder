@@ -1,11 +1,11 @@
-package com.ss.builder.editor.part3d.control.impl;
+package com.ss.builder.jme.editor.part3d.control.impl;
 
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.ExtendableEditor3dPart;
-import com.ss.editor.editor.part3d.control.InputEditor3dPartControl;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.control.InputEditor3dPartControl;
 import com.ss.rlib.common.function.BooleanFloatConsumer;
 import com.ss.rlib.common.function.FloatFloatConsumer;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;

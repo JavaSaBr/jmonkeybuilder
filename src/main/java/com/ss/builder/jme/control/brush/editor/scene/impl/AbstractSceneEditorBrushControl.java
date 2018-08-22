@@ -1,9 +1,9 @@
-package com.ss.builder.control.brush.editor.scene.impl;
+package com.ss.builder.jme.control.brush.editor.scene.impl;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
-import com.ss.editor.control.brush.editor.scene.SceneEditorBrushControl;
+import com.ss.builder.jme.control.brush.editor.scene.SceneEditorBrushControl;
 import org.jetbrains.annotations.NotNull;
 
 /**

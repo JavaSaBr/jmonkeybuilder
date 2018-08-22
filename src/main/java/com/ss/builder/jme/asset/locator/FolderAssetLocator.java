@@ -1,4 +1,4 @@
-package com.ss.builder.asset.locator;
+package com.ss.builder.jme.asset.locator;
 
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
@@ -6,8 +6,8 @@ import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.config.EditorConfig;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.EditorConfig;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.EditorConfig;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

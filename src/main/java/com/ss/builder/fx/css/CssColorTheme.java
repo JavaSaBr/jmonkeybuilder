@@ -1,6 +1,6 @@
-package com.ss.builder.ui.css;
+package com.ss.builder.fx.css;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.ss.builder.ui.event;
+package com.ss.builder.fx.event;
 
 /**
  * The interface marker.

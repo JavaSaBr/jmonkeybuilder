@@ -1,4 +1,4 @@
-package com.ss.editor;
+package com.ss.builder;
 
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;

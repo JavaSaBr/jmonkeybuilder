@@ -1,15 +1,15 @@
-package com.ss.builder.ui.component.creator.impl;
+package com.ss.builder.fx.component.creator.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.creator.FileCreatorDescriptor;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

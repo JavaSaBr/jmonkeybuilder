@@ -1,11 +1,12 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.util.NodeUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.util.NodeUtils;
 import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

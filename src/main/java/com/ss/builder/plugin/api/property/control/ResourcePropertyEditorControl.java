@@ -1,12 +1,18 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.DynamicIconSupport;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.DynamicIconSupport;
+import com.ss.builder.fx.util.UiUtils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;

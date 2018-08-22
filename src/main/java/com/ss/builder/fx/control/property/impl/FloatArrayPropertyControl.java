@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.property.impl;
+package com.ss.builder.fx.control.property.impl;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.property.PropertyControl;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.property.PropertyControl;
 import com.ss.rlib.fx.control.input.FloatArrayTextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

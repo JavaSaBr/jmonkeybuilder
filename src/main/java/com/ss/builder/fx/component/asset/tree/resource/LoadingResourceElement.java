@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.asset.tree.resource;
+package com.ss.builder.fx.component.asset.tree.resource;
 
 import org.jetbrains.annotations.NotNull;
 

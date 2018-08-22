@@ -1,9 +1,11 @@
-package com.ss.editor.file.converter;
+package com.ss.builder.file.converter;
 
 import static com.ss.rlib.common.util.FileUtils.containsExtensions;
 import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.file.converter.impl.*;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.file.converter.impl.*;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.file.converter.impl.*;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;

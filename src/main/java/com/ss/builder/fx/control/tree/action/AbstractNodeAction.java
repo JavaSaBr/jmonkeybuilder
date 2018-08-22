@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.tree.action;
+package com.ss.builder.fx.control.tree.action;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
@@ -6,12 +6,12 @@ import com.ss.builder.analytics.google.GAEvent;
 import com.ss.builder.analytics.google.GAnalytics;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.analytics.google.GAEvent;
-import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.analytics.google.GAEvent;
+import com.ss.builder.analytics.google.GAnalytics;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;

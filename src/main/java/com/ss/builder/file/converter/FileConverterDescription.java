@@ -1,7 +1,8 @@
-package com.ss.editor.file.converter;
+package com.ss.builder.file.converter;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

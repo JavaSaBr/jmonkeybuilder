@@ -1,23 +1,16 @@
-package com.ss.builder.ui.component.painting.property;
+package com.ss.builder.fx.component.painting.property;
 
 import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.fx.component.painting.PaintingComponentContainer;
+import com.ss.builder.fx.component.painting.impl.AbstractPaintingComponent;
+import com.ss.builder.fx.component.painting.impl.AbstractPaintingStateWithEditorTool;
 import com.ss.builder.jme.control.painting.PaintingControl;
 import com.ss.builder.plugin.api.property.PropertyDefinition;
 import com.ss.builder.plugin.api.property.control.PropertyEditorControl;
 import com.ss.builder.plugin.api.property.control.PropertyEditorControlFactory;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingControl;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
-import com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory;
-import com.ss.editor.ui.component.painting.PaintingComponentContainer;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingComponent;
-import com.ss.editor.ui.component.painting.impl.AbstractPaintingStateWithEditorTool;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;

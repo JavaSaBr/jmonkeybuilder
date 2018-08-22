@@ -1,19 +1,15 @@
-package com.ss.editor.executor.impl;
+package com.ss.builder.executor.impl;
 
-import com.ss.editor.EditorThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.executor.EditorTaskExecutor;
-import com.ss.rlib.common.concurrent.lock.LockFactory;
-import com.ss.rlib.common.concurrent.lock.Lockable;
+import com.ss.builder.EditorThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.executor.EditorTaskExecutor;
 import com.ss.rlib.common.concurrent.util.ConcurrentUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
 
 /**
  * The base implementation of the {@link JmeThreadExecutor}.

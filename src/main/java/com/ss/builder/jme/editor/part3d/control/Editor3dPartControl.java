@@ -1,11 +1,11 @@
-package com.ss.builder.editor.part3d.control;
+package com.ss.builder.jme.editor.part3d.control;
 
 import com.jme3.app.Application;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.editor.part3d.event.Editor3dPartEvent;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.Editor3dPart;
-import com.ss.editor.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.Editor3dPart;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**

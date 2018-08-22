@@ -1,4 +1,4 @@
-package com.ss.builder.ui.css;
+package com.ss.builder.fx.css;
 
 import org.jetbrains.annotations.NotNull;
 

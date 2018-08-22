@@ -1,4 +1,4 @@
-package com.ss.builder.control.painting.impl;
+package com.ss.builder.jme.control.painting.impl;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -13,13 +13,13 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Sphere;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingControl;
-import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.ui.component.painting.PaintingComponent;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.LocalObjects;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.control.painting.PaintingControl;
+import com.ss.builder.jme.control.painting.PaintingInput;
+import com.ss.builder.fx.component.painting.PaintingComponent;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.action;
+package com.ss.builder.fx.component.asset.tree.context.menu.action;
 
 import com.ss.builder.Messages;
 import com.ss.builder.file.converter.FileConverterDescription;
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.Messages;
-import com.ss.editor.file.converter.FileConverterDescription;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.Messages;
+import com.ss.builder.file.converter.FileConverterDescription;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;

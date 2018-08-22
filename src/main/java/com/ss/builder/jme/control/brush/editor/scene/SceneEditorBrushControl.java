@@ -1,6 +1,6 @@
-package com.ss.builder.control.brush.editor.scene;
+package com.ss.builder.jme.control.brush.editor.scene;
 
-import com.ss.editor.control.brush.BrushControl;
+import com.ss.builder.jme.control.brush.BrushControl;
 
 /**
  * The interface to implement a brush in a scene editor.

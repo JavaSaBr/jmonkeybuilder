@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.painting.impl;
+package com.ss.builder.fx.component.painting.impl;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
@@ -6,18 +6,12 @@ import com.jme3.scene.Node;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.fx.component.editor.state.EditorState;
+import com.ss.builder.fx.component.painting.PaintingComponent;
+import com.ss.builder.fx.component.painting.PaintingComponentContainer;
 import com.ss.builder.jme.control.painting.PaintingControl;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingControl;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.painting.PaintingComponent;
-import com.ss.editor.ui.component.painting.PaintingComponentContainer;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import javafx.scene.layout.VBox;

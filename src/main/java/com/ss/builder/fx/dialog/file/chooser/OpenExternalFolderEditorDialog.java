@@ -1,7 +1,7 @@
-package com.ss.builder.ui.dialog.file.chooser;
+package com.ss.builder.fx.dialog.file.chooser;
 
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.dialog.EditorDialog;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.dialog.EditorDialog;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,7 +1,7 @@
-package com.ss.editor.model.undo.impl;
+package com.ss.builder.model.undo.impl;
 
 import com.jme3.scene.Spatial;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;

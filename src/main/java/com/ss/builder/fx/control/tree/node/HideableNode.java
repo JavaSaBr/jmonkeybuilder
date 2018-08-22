@@ -1,8 +1,8 @@
-package com.ss.builder.ui.control.tree.node;
+package com.ss.builder.fx.control.tree.node;
 
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.control.tree.NodeTree;
 
 import org.jetbrains.annotations.NotNull;
 

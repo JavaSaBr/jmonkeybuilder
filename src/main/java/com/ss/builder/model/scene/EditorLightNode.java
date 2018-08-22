@@ -1,6 +1,6 @@
-package com.ss.editor.model.scene;
+package com.ss.builder.model.scene;
 
-import static com.ss.editor.util.GeomUtils.getDirection;
+import static com.ss.builder.util.GeomUtils.getDirection;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
@@ -10,9 +10,11 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.util.LocalObjects;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,9 +1,12 @@
-package com.ss.editor.plugin.api.property.control;
+package com.ss.builder.plugin.api.property.control;
 
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.SimpleStringSuggestionProvider;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.SimpleStringSuggestionProvider;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.SimpleStringSuggestionProvider;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxControlUtils;

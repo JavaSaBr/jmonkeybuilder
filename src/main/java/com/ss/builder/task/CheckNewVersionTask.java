@@ -1,9 +1,9 @@
-package com.ss.editor.task;
+package com.ss.builder.task;
 
 import static org.apache.http.impl.client.HttpClients.createMinimal;
-import com.ss.editor.Messages;
-import com.ss.editor.config.Config;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.config.Config;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.Version;

@@ -1,18 +1,18 @@
-package com.ss.builder.ui.control.model;
+package com.ss.builder.fx.control.model;
 
-import static com.ss.editor.util.NodeUtils.findParent;
+import static com.ss.builder.util.NodeUtils.findParent;
 import com.jme3.material.Material;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ModelChangeConsumer;
-import com.ss.builder.ui.control.property.PropertyEditor;
+import com.ss.builder.fx.control.property.PropertyEditor;
 import com.ss.builder.util.NodeUtils;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.property.PropertyEditor;
+import com.ss.builder.model.undo.editor.ModelChangeConsumer;
+import com.ss.builder.fx.control.property.PropertyEditor;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;
 import org.jetbrains.annotations.NotNull;

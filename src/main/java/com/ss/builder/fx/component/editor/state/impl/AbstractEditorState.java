@@ -1,11 +1,11 @@
-package com.ss.builder.ui.component.editor.state.impl;
+package com.ss.builder.fx.component.editor.state.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.config.EditorConfig;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.component.editor.state.EditorState;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.fx.component.editor.state.EditorState;
 import com.ss.rlib.common.util.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

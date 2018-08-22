@@ -1,4 +1,4 @@
-package com.ss.editor.filter;
+package com.ss.builder.jme.filter;
 
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.texture.Texture;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class EditorFxaaFilter extends FXAAFilter {
+public class EditorFXAAFilter extends FXAAFilter {
 
     @Override
     protected boolean isRequiresDepthTexture() {

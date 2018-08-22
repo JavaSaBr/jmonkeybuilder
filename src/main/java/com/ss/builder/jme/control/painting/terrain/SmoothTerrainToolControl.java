@@ -1,6 +1,6 @@
-package com.ss.builder.control.painting.terrain;
+package com.ss.builder.jme.control.painting.terrain;
 
-import static com.ss.editor.util.PaintingUtils.isContains;
+import static com.ss.builder.util.PaintingUtils.isContains;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Float.isNaN;
 import static java.lang.Math.min;
@@ -14,11 +14,11 @@ import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.painting.PaintingInput;
-import com.ss.editor.ui.component.painting.terrain.TerrainPaintingComponent;
-import com.ss.editor.util.LocalObjects;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.control.painting.PaintingInput;
+import com.ss.builder.fx.component.painting.terrain.TerrainPaintingComponent;
+import com.ss.builder.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

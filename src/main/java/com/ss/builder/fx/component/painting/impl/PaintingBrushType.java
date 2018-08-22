@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.painting.impl;
+package com.ss.builder.fx.component.painting.impl;
 
 /**
  * The enum of brush types.

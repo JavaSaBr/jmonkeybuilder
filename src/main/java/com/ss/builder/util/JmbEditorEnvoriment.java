@@ -1,9 +1,12 @@
-package com.ss.editor.util;
+package com.ss.builder.util;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.editor.extension.integration.EditorEnvironment;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.util.UiUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

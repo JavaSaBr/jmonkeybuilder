@@ -1,6 +1,6 @@
-package com.ss.builder.ui.component.editor.event;
+package com.ss.builder.fx.component.editor.event;
 
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;

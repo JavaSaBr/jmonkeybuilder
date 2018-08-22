@@ -1,11 +1,11 @@
-package com.ss.builder.ui.component.asset;
+package com.ss.builder.fx.component.asset;
 
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.event.FxEventManager;
-import com.ss.builder.ui.event.impl.RequestedRefreshAssetEvent;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.RequestedRefreshAssetEvent;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.RequestedRefreshAssetEvent;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;

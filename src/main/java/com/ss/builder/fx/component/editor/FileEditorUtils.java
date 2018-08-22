@@ -1,9 +1,9 @@
-package com.ss.builder.ui.component.editor;
+package com.ss.builder.fx.component.editor;
 
-import com.ss.builder.editor.part3d.impl.Base3dSceneEditor3dPart;
-import com.ss.builder.ui.component.editor.state.impl.Editor3dEditorState;
-import com.ss.editor.editor.part3d.impl.Base3dSceneEditor3dPart;
-import com.ss.editor.ui.component.editor.state.impl.Editor3dEditorState;
+import com.ss.builder.jme.editor.part3d.impl.Base3dSceneEditor3dPart;
+import com.ss.builder.fx.component.editor.state.impl.Editor3dEditorState;
+import com.ss.builder.jme.editor.part3d.impl.Base3dSceneEditor3dPart;
+import com.ss.builder.fx.component.editor.state.impl.Editor3dEditorState;
 import org.jetbrains.annotations.NotNull;
 
 /**

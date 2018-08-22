@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.creator.impl;
+package com.ss.builder.fx.component.creator.impl;
 
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.export.binary.BinaryExporter;
@@ -7,11 +7,11 @@ import com.ss.builder.FileExtensions;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.component.creator.FileCreatorDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.tree.node.impl.spatial.particle.emitter.shape;
+package com.ss.builder.fx.control.tree.node.impl.spatial.particle.emitter.shape;
 
 import com.jme3.effect.shapes.EmitterMeshFaceShape;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

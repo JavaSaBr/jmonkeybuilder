@@ -1,8 +1,8 @@
-package com.ss.builder.ui.component.editor.state.impl;
+package com.ss.builder.fx.component.editor.state.impl;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.EditorState;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.state.EditorState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;

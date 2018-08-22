@@ -1,14 +1,14 @@
-package com.ss.builder.ui.dialog;
+package com.ss.builder.fx.dialog;
 
 import static javafx.geometry.Pos.CENTER;
-import com.ss.editor.JmeApplication;
-import com.ss.editor.analytics.google.GAEvent;
-import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.scene.EditorFxScene;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.JmeApplication;
+import com.ss.builder.analytics.google.GAEvent;
+import com.ss.builder.analytics.google.GAnalytics;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.scene.EditorFxScene;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.fx.util.FXUtils;

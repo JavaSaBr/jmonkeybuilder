@@ -1,7 +1,7 @@
-package com.ss.builder.ui.component.painting;
+package com.ss.builder.fx.component.painting;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;

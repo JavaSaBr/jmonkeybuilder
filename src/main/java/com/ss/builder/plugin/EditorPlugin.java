@@ -1,9 +1,9 @@
-package com.ss.editor.plugin;
+package com.ss.builder.plugin;
 
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.ui.css.CssRegistry;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.fx.css.CssRegistry;
+import com.ss.builder.manager.ResourceManager;
 import com.ss.rlib.common.plugin.PluginContainer;
 import com.ss.rlib.common.plugin.PluginSystem;
 import com.ss.rlib.common.plugin.extension.ExtensionPointManager;

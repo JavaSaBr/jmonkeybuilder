@@ -1,7 +1,7 @@
-package com.ss.editor;
+package com.ss.builder;
 
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.util.LocalObjects;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 /**

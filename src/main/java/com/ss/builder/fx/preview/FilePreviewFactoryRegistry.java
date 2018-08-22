@@ -1,9 +1,9 @@
-package com.ss.builder.ui.preview;
+package com.ss.builder.fx.preview;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.preview.impl.DefaultFilePreviewFactory;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.preview.impl.DefaultFilePreviewFactory;
+import com.ss.builder.fx.preview.impl.DefaultFilePreviewFactory;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.preview.impl.DefaultFilePreviewFactory;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;

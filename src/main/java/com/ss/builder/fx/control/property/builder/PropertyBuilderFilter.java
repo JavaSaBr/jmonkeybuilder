@@ -1,7 +1,7 @@
-package com.ss.builder.ui.control.property.builder;
+package com.ss.builder.fx.control.property.builder;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

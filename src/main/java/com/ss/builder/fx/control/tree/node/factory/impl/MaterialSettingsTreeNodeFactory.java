@@ -1,13 +1,13 @@
-package com.ss.builder.ui.control.tree.node.factory.impl;
+package com.ss.builder.fx.control.tree.node.factory.impl;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.node.material.*;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.node.material.*;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
-import com.ss.editor.ui.control.tree.node.impl.material.settings.*;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.node.material.*;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.fx.control.tree.node.factory.TreeNodeFactory;
+import com.ss.builder.fx.control.tree.node.impl.material.settings.*;
 import org.jetbrains.annotations.Nullable;
 
 /**

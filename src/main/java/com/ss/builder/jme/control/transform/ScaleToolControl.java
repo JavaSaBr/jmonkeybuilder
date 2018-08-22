@@ -1,4 +1,4 @@
-package com.ss.builder.control.transform;
+package com.ss.builder.jme.control.transform;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.lang.Math.abs;
@@ -13,12 +13,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.LocalObjects;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.jme.control.transform.EditorTransformSupport.TransformationMode;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 /**

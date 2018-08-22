@@ -1,11 +1,14 @@
-package com.ss.editor.model.undo.impl;
+package com.ss.builder.model.undo.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.editor.extension.action.ModifyingAction;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.util.JmbEditorEnvoriment;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.util.JmbEditorEnvoriment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

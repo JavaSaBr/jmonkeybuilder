@@ -1,9 +1,9 @@
-package com.ss.builder.ui.control.code;
+package com.ss.builder.fx.control.code;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.util.GlslType;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.util.GlslType;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.util.GlslType;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

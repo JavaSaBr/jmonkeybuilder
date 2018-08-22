@@ -1,15 +1,15 @@
-package com.ss.builder.ui.component.editor.impl;
+package com.ss.builder.fx.component.editor.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.manager.ExecutorManager;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.control.code.BaseCodeArea;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.control.code.BaseCodeArea;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.HBox;

@@ -1,8 +1,8 @@
-package com.ss.builder.ui.component.asset.tree.resource;
+package com.ss.builder.fx.component.asset.tree.resource;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.tooltip.ImagePreview;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.tooltip.ImagePreview;
 import javafx.scene.control.Tooltip;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

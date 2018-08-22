@@ -1,6 +1,7 @@
-package com.ss.editor.file.converter;
+package com.ss.builder.file.converter;
 
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.FxThread;
 
 import org.jetbrains.annotations.NotNull;
 

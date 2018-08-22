@@ -1,4 +1,4 @@
-package com.ss.builder.control.transform;
+package com.ss.builder.jme.control.transform;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.collision.CollisionResult;
@@ -9,9 +9,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;

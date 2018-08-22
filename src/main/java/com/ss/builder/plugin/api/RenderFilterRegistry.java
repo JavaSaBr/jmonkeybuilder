@@ -1,14 +1,22 @@
-package com.ss.editor.plugin.api;
+package com.ss.builder.plugin.api;
 
 import com.jme3.post.Filter;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.event.impl.AllPluginsExtensionsRegisteredEvent;
-import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.manager.AsyncEventManager;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.event.impl.AllPluginsExtensionsRegisteredEvent;
+import com.ss.builder.fx.event.impl.JmeContextCreatedEvent;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.event.impl.AllPluginsExtensionsRegisteredEvent;
+import com.ss.builder.fx.event.impl.JmeContextCreatedEvent;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.plugin.extension.ExtensionPoint;
@@ -51,7 +59,7 @@ public class RenderFilterRegistry {
 
     private RenderFilterRegistry() {
 
-        CombinedAsyncEventHandlerBuilder.of(this::applyExtensions)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::applyExtensions)
                 .add(AllPluginsExtensionsRegisteredEvent.EVENT_TYPE)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .buildAndRegister();

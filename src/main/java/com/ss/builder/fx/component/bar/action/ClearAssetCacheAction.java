@@ -1,12 +1,12 @@
-package com.ss.builder.ui.component.bar.action;
+package com.ss.builder.fx.component.bar.action;
 
 import com.jme3.asset.AssetManager;
 import com.ss.builder.Messages;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.Messages;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.util.EditorUtils;
 import javafx.scene.control.MenuItem;
 
 /**

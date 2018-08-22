@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.log;
+package com.ss.builder.fx.component.log;
 
 import static java.util.Collections.singleton;
 import com.jme3.material.Material;
@@ -8,10 +8,10 @@ import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.ColorSpace;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.manager.ExecutorManager;
-import com.ss.builder.ui.css.CssIds;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.css.CssIds;
+import com.ss.builder.fx.css.CssIds;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.fx.css.CssIds;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;

@@ -1,7 +1,7 @@
-package com.ss.builder.ui.event.impl;
+package com.ss.builder.fx.event.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.ui.event.SceneEvent;
+import com.ss.builder.fx.event.SceneEvent;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
 

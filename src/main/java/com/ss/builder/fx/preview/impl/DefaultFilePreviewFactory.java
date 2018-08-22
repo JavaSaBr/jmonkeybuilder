@@ -1,9 +1,9 @@
-package com.ss.builder.ui.preview.impl;
+package com.ss.builder.fx.preview.impl;
 
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.preview.FilePreview;
-import com.ss.editor.ui.preview.FilePreviewFactory;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.preview.FilePreview;
+import com.ss.builder.fx.preview.FilePreviewFactory;
 import com.ss.rlib.common.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.ss.editor.config;
+package com.ss.builder.config;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,13 +1,13 @@
-package com.ss.builder.asset.locator;
+package com.ss.builder.jme.asset.locator;
 
-import static com.ss.editor.util.EditorUtils.getAssetManager;
+import static com.ss.builder.util.EditorUtils.getAssetManager;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.util.EditorUtils;
-import com.ss.editor.annotation.FromAnyThread;
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;

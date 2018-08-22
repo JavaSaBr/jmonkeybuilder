@@ -1,12 +1,12 @@
-package com.ss.builder.ui.control.tree.node.impl.material.settings;
+package com.ss.builder.fx.control.tree.node.impl.material.settings;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.node.material.MaterialSettings;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.node.material.MaterialSettings;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.model.node.material.MaterialSettings;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.control;
+package com.ss.builder.jme.editor.part3d.control;
 
 import com.jme3.app.Application;
 import com.jme3.input.InputManager;
@@ -6,8 +6,8 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.JmeThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.JmeThread;
 import org.jetbrains.annotations.NotNull;
 
 /**

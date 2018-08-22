@@ -1,13 +1,15 @@
-package com.ss.editor.plugin.api.editor.part3d;
+package com.ss.builder.plugin.api.editor.part3d;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.plugin.api.editor.Advanced3dFileEditor;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.plugin.api.editor.Advanced3dFileEditor;
+import com.ss.builder.util.EditorUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

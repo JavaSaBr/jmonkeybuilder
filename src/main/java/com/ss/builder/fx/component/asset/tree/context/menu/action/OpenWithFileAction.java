@@ -1,13 +1,13 @@
-package com.ss.builder.ui.component.asset.tree.context.menu.action;
+package com.ss.builder.fx.component.asset.tree.context.menu.action;
 
 import com.ss.builder.Messages;
-import com.ss.builder.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.builder.ui.component.editor.EditorDescriptor;
-import com.ss.builder.ui.component.editor.EditorRegistry;
-import com.ss.editor.Messages;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.component.editor.EditorDescriptor;
-import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.component.editor.EditorDescriptor;
+import com.ss.builder.fx.component.editor.EditorRegistry;
+import com.ss.builder.Messages;
+import com.ss.builder.fx.component.asset.tree.resource.ResourceElement;
+import com.ss.builder.fx.component.editor.EditorDescriptor;
+import com.ss.builder.fx.component.editor.EditorRegistry;
 
 import org.jetbrains.annotations.NotNull;
 

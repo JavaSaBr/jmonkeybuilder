@@ -1,8 +1,8 @@
-package com.ss.builder.ui.control.scene;
+package com.ss.builder.fx.control.scene;
 
 import com.ss.builder.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.builder.model.undo.editor.SceneChangeConsumer;
+import com.ss.builder.fx.control.tree.NodeTree;
 import com.ss.rlib.common.util.array.Array;
 import javafx.scene.control.SelectionMode;
 import org.jetbrains.annotations.NotNull;

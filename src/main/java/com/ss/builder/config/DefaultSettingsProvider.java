@@ -1,25 +1,22 @@
-package com.ss.editor.config;
+package com.ss.builder.config;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Categories.EDITOR;
-import static com.ss.editor.config.DefaultSettingsProvider.Categories.GRAPHICS;
-import static com.ss.editor.config.DefaultSettingsProvider.Categories.OTHER;
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.*;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.*;
+import static com.ss.builder.config.DefaultSettingsProvider.Categories.*;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.*;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.*;
 import static com.ss.editor.extension.property.EditablePropertyType.*;
 import static com.ss.rlib.common.util.array.ArrayFactory.asArray;
 import com.jme3.math.Vector3f;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.settings.SettingsCategory;
-import com.ss.editor.plugin.api.settings.SettingsPropertyDefinition;
-import com.ss.editor.plugin.api.settings.SettingsProvider;
-import com.ss.editor.ui.css.CssColorTheme;
-import com.ss.editor.util.OpenGLVersion;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.css.CssColorTheme;
+import com.ss.builder.plugin.api.settings.SettingsCategory;
+import com.ss.builder.plugin.api.settings.SettingsPropertyDefinition;
+import com.ss.builder.plugin.api.settings.SettingsProvider;
+import com.ss.builder.util.OpenGLVersion;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -115,18 +112,19 @@ public class DefaultSettingsProvider implements SettingsProvider {
     @FxThread
     public @NotNull Array<SettingsPropertyDefinition> getDefinitions() {
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final OpenGLVersion glVersion = editorConfig.getEnum(PREF_OPEN_GL, PREF_DEFAULT_OPEN_GL);
-        final int anisotropy = editorConfig.getInteger(PREF_ANISOTROPY, PREF_DEFAULT_ANISOTROPY);
-        final boolean gammaCorrection = editorConfig.getBoolean(PREF_GAMMA_CORRECTION, PREF_DEFAULT_GAMMA_CORRECTION);
-        final int frameRate = editorConfig.getInteger(PREF_FRAME_RATE, PREF_DEFAULT_FRAME_RATE);
-        final int cameraAngle = editorConfig.getInteger(PREF_CAMERA_ANGLE, PREF_DEFAULT_CAMERA_ANGLE);
-        final boolean fxaa = editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER);
-        final boolean stopRenderOnLostFocus = editorConfig.getBoolean(PREF_STOP_RENDER_ON_LOST_FOCUS, PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS);
-        final boolean tonemapFilter = editorConfig.getBoolean(PREF_FILTER_TONEMAP, PREF_DEFAULT_TONEMAP_FILTER);
-        final Vector3f toneMapWhitePoint = editorConfig.getVector3f(PREF_FILTER_TONEMAP_WHITE_POINT, PREF_DEFAULT_TONEMAP_WHITE_POINT);
+        var editorConfig = EditorConfig.getInstance();
+        
+        var glVersion = editorConfig.getEnum(PREF_OPEN_GL, PREF_DEFAULT_OPEN_GL);
+        var anisotropy = editorConfig.getInteger(PREF_ANISOTROPY, PREF_DEFAULT_ANISOTROPY);
+        var gammaCorrection = editorConfig.getBoolean(PREF_GAMMA_CORRECTION, PREF_DEFAULT_GAMMA_CORRECTION);
+        var frameRate = editorConfig.getInteger(PREF_FRAME_RATE, PREF_DEFAULT_FRAME_RATE);
+        var cameraAngle = editorConfig.getInteger(PREF_CAMERA_ANGLE, PREF_DEFAULT_CAMERA_ANGLE);
+        var fxaa = editorConfig.getBoolean(PREF_FILTER_FXAA, PREF_DEFAULT_FXAA_FILTER);
+        var stopRenderOnLostFocus = editorConfig.getBoolean(PREF_STOP_RENDER_ON_LOST_FOCUS, PREF_DEFAULT_STOP_RENDER_ON_LOST_FOCUS);
+        var tonemapFilter = editorConfig.getBoolean(PREF_FILTER_TONEMAP, PREF_DEFAULT_TONEMAP_FILTER);
+        var toneMapWhitePoint = editorConfig.getVector3f(PREF_FILTER_TONEMAP_WHITE_POINT, PREF_DEFAULT_TONEMAP_WHITE_POINT);
 
-        final Array<SettingsPropertyDefinition> result = ArrayFactory.newArray(SettingsPropertyDefinition.class);
+        var result = Array.ofType(SettingsPropertyDefinition.class);
         result.add(new SettingsPropertyDefinition(ENUM, Messages.SETTINGS_PROPERTY_OPEN_GL, PREF_OPEN_GL, GRAPHICS, glVersion));
         result.add(new SettingsPropertyDefinition(OBJECT_FROM_LIST, Messages.SETTINGS_PROPERTY_ANISOTROPY, PREF_ANISOTROPY, GRAPHICS, anisotropy, ANISOTROPYCS));
         result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_GAMMA_CORRECTION, PREF_GAMMA_CORRECTION, GRAPHICS, gammaCorrection));
@@ -137,21 +135,21 @@ public class DefaultSettingsProvider implements SettingsProvider {
         result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_TONEMAP_FILTER, PREF_FILTER_TONEMAP, GRAPHICS, tonemapFilter));
         result.add(new SettingsPropertyDefinition(VECTOR_3F, asArray(PREF_FILTER_TONEMAP), Messages.SETTINGS_PROPERTY_TONEMAP_FILTER_WHITE_POINT, PREF_FILTER_TONEMAP_WHITE_POINT, GRAPHICS, toneMapWhitePoint));
 
-        final boolean tangentGeneration = editorConfig.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION);
-        final boolean flippedTextures = editorConfig.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES);
-        final boolean cameraLight = editorConfig.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
-        final Path fastSkyFolder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
+        var tangentGeneration = editorConfig.getBoolean(PREF_TANGENT_GENERATION, PREF_DEFAULT_TANGENT_GENERATION);
+        var flippedTextures = editorConfig.getBoolean(PREF_FLIPPED_TEXTURES, PREF_DEFAULT_FLIPPED_TEXTURES);
+        var cameraLight = editorConfig.getBoolean(PREF_CAMERA_LAMP, PREF_DEFAULT_CAMERA_LIGHT);
+        var fastSkyFolder = editorConfig.getFile(PREF_FAST_SKY_FOLDER);
 
         result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_PROPERTY_FAST_SKY_FOLDER, PREF_FAST_SKY_FOLDER, EDITOR, fastSkyFolder));
         result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_TANGENT_GENERATION, PREF_TANGENT_GENERATION, EDITOR, tangentGeneration));
         result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_FLIPPED_TEXTURE, PREF_FLIPPED_TEXTURES, EDITOR, flippedTextures));
         result.add(new SettingsPropertyDefinition(BOOLEAN, Messages.SETTINGS_PROPERTY_EDITOR_CAMERA_LAMP, PREF_CAMERA_LAMP, EDITOR, cameraLight));
 
-        final CssColorTheme theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
-        final Path libraryFolder = editorConfig.getFile(PREF_USER_LIBRARY_FOLDER);
-        final Path classesFolder = editorConfig.getFile(PREF_USER_CLASSES_FOLDER);
-        final boolean googleAnalytics = editorConfig.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE);
-        final boolean nativeFileChooser = editorConfig.getBoolean(PREF_NATIVE_FILE_CHOOSER, PREF_DEFAULT_NATIVE_FILE_CHOOSER);
+        var theme = editorConfig.getEnum(PREF_UI_THEME, PREF_DEFAULT_THEME);
+        var libraryFolder = editorConfig.getFile(PREF_USER_LIBRARY_FOLDER);
+        var classesFolder = editorConfig.getFile(PREF_USER_CLASSES_FOLDER);
+        var googleAnalytics = editorConfig.getBoolean(PREF_ANALYTICS_GOOGLE, PREF_DEFAULT_ANALYTICS_GOOGLE);
+        var nativeFileChooser = editorConfig.getBoolean(PREF_NATIVE_FILE_CHOOSER, PREF_DEFAULT_NATIVE_FILE_CHOOSER);
 
         result.add(new SettingsPropertyDefinition(ENUM, Messages.SETTINGS_PROPERTY_THEME, PREF_UI_THEME, OTHER, theme));
         result.add(new SettingsPropertyDefinition(EXTERNAL_FILE, Messages.SETTINGS_PROPERTY_USER_LIBRARIES_FOLDER, PREF_USER_LIBRARY_FOLDER, OTHER, libraryFolder));
@@ -164,19 +162,19 @@ public class DefaultSettingsProvider implements SettingsProvider {
 
     @Override
     @FxThread
-    public boolean isRequiredRestart(@NotNull final String propertyId) {
+    public boolean isRequiredRestart(@NotNull String propertyId) {
         return REQUIRED_RESTART_PREFS.contains(propertyId);
     }
 
     @Override
     @FxThread
-    public boolean isRequiredReshape3DView(@NotNull final String propertyId) {
+    public boolean isRequiredReshape3DView(@NotNull String propertyId) {
         return REQUIRED_RESHAPE_PREFS.contains(propertyId);
     }
 
     @Override
     @FxThread
-    public boolean isRequiredUpdateClasspath(@NotNull final String propertyId) {
+    public boolean isRequiredUpdateClasspath(@NotNull String propertyId) {
         return REQUIRED_UPDATE_CLASSPATH_PREFS.contains(propertyId);
     }
 }

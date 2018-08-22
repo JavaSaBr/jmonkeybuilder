@@ -1,12 +1,15 @@
-package com.ss.editor.plugin.api.editor;
+package com.ss.builder.plugin.api.editor;
 
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.component.editor.state.impl.EditorWithEditorToolEditorState;
-import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
-import com.ss.editor.ui.component.tab.EditorToolComponent;
-import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.state.impl.EditorWithEditorToolEditorState;
+import com.ss.builder.fx.component.split.pane.EditorToolSplitPane;
+import com.ss.builder.fx.component.tab.EditorToolComponent;
+import com.ss.builder.fx.component.tab.ScrollableEditorToolComponent;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.StackPane;

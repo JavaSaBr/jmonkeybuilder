@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.impl.scene.handler;
+package com.ss.builder.jme.editor.part3d.impl.scene.handler;
 
 import static com.ss.rlib.common.util.array.ArrayCollectors.toArray;
 
@@ -7,9 +7,9 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.util.ControlUtils;
-import com.ss.editor.util.NodeUtils;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.util.ControlUtils;
+import com.ss.builder.util.NodeUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;

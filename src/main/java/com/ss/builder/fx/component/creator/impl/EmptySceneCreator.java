@@ -1,4 +1,4 @@
-package com.ss.builder.ui.component.creator.impl;
+package com.ss.builder.fx.component.creator.impl;
 
 import static java.nio.file.StandardOpenOption.*;
 import com.jme3.export.binary.BinaryExporter;
@@ -8,15 +8,15 @@ import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.plugin.api.file.creator.GenericFileCreator;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
-import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
-import com.ss.editor.ui.component.creator.FileCreatorDescriptor;
+import com.ss.builder.plugin.api.file.creator.GenericFileCreator;
+import com.ss.builder.fx.component.creator.FileCreatorDescriptor;
 import com.ss.rlib.common.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 

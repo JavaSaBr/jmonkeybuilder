@@ -1,11 +1,11 @@
-package com.ss.builder.ui.dialog.geometry.lod;
+package com.ss.builder.fx.dialog.geometry.lod;
 
 import com.jme3.scene.Mesh;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.util.UiUtils;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.dialog.geometry.lod.GenerateLodLevelsDialog.ReductionMethod;
-import com.ss.editor.ui.util.UiUtils;
+import com.ss.builder.fx.util.UiUtils;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.dialog.geometry.lod.GenerateLodLevelsDialog.ReductionMethod;
+import com.ss.builder.fx.util.UiUtils;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;

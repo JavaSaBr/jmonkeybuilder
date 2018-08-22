@@ -1,20 +1,20 @@
-package com.ss.builder.ui.control.tree.node.impl.spatial;
+package com.ss.builder.fx.control.tree.node.impl.spatial;
 
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource;
 import com.jme3.audio.AudioSource.Status;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.control.model.ModelNodeTree;
-import com.ss.builder.ui.control.tree.action.impl.audio.PlayAudioNodeAction;
-import com.ss.builder.ui.control.tree.action.impl.audio.StopAudioNodeAction;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.ModelNodeTree;
-import com.ss.editor.ui.control.tree.action.impl.audio.PlayAudioNodeAction;
-import com.ss.editor.ui.control.tree.action.impl.audio.StopAudioNodeAction;
-import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.model.ModelNodeTree;
+import com.ss.builder.fx.control.tree.action.impl.audio.PlayAudioNodeAction;
+import com.ss.builder.fx.control.tree.action.impl.audio.StopAudioNodeAction;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.model.ModelNodeTree;
+import com.ss.builder.fx.control.tree.action.impl.audio.PlayAudioNodeAction;
+import com.ss.builder.fx.control.tree.action.impl.audio.StopAudioNodeAction;
+import com.ss.builder.fx.control.tree.NodeTree;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

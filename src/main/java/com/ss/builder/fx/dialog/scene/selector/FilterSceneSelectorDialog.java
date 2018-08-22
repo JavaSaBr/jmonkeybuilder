@@ -1,4 +1,4 @@
-package com.ss.builder.ui.dialog.scene.selector;
+package com.ss.builder.fx.dialog.scene.selector;
 
 import com.jme3.post.Filter;
 import com.ss.editor.extension.scene.SceneNode;

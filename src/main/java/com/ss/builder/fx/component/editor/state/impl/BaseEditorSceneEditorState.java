@@ -1,11 +1,8 @@
-package com.ss.builder.ui.component.editor.state.impl;
+package com.ss.builder.fx.component.editor.state.impl;
 
 import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.builder.jme.control.transform.EditorTransformSupport;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
-import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
-import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 
 /**
  * The base implementation of a state container for the {@link AbstractSceneFileEditor}.

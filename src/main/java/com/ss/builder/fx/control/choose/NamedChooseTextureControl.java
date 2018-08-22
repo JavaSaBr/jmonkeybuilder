@@ -1,10 +1,10 @@
-package com.ss.builder.ui.control.choose;
+package com.ss.builder.fx.control.choose;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.ui.control.property.PropertyControl;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.property.PropertyControl;
+import com.ss.builder.fx.control.property.PropertyControl;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.control.property.PropertyControl;
 import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.common.util.StringUtils;
 import javafx.scene.control.Label;

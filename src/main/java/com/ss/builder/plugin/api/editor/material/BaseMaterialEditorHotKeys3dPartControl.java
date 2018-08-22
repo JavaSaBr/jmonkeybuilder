@@ -1,9 +1,11 @@
-package com.ss.editor.plugin.api.editor.material;
+package com.ss.builder.plugin.api.editor.material;
 
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
-import com.ss.editor.editor.part3d.ExtendableEditor3dPart;
-import com.ss.editor.editor.part3d.control.impl.KeyEventRedirectEditor3dPartControl;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.control.impl.KeyEventRedirectEditor3dPartControl;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.control.impl.KeyEventRedirectEditor3dPartControl;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 

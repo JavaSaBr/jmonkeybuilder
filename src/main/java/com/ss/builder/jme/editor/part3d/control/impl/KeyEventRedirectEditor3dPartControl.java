@@ -1,4 +1,4 @@
-package com.ss.builder.editor.part3d.control.impl;
+package com.ss.builder.jme.editor.part3d.control.impl;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -7,12 +7,12 @@ import com.jme3.input.controls.KeyTrigger;
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.util.JmeUtils;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.Editor3dPart;
-import com.ss.editor.editor.part3d.ExtendableEditor3dPart;
-import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.util.JmeUtils;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.Editor3dPart;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.fx.component.editor.FileEditor;
+import com.ss.builder.util.JmeUtils;
 import com.ss.rlib.common.util.ObjectUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.scene.input.KeyCode;

@@ -1,16 +1,21 @@
-package com.ss.editor.file.delete.handler.impl;
+package com.ss.builder.file.delete.handler.impl;
 
-import static com.ss.editor.FileExtensions.JME_OBJECT;
-import static com.ss.editor.util.EditorUtils.getAssetFile;
-import static com.ss.editor.util.EditorUtils.toAssetPath;
+import static com.ss.builder.FileExtensions.JME_OBJECT;
+import static com.ss.builder.util.EditorUtils.getAssetFile;
+import static com.ss.builder.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
-import com.ss.editor.Messages;
-import com.ss.editor.ui.dialog.ConfirmDialog;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.NodeUtils;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.Messages;
+import com.ss.builder.fx.dialog.ConfirmDialog;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.NodeUtils;
+import com.ss.builder.Messages;
+import com.ss.builder.fx.dialog.ConfirmDialog;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.NodeUtils;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.common.util.array.Array;
@@ -43,8 +48,8 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         super.preDelete(file);
 
         final AssetManager assetManager = EditorUtils.getAssetManager();
-        final Path assetFile = notNull(getAssetFile(file));
-        final String assetPath = toAssetPath(assetFile);
+        final Path assetFile = notNull(EditorUtils.getAssetFile(file));
+        final String assetPath = EditorUtils.toAssetPath(assetFile);
 
         final Spatial model;
 
@@ -105,6 +110,6 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     @Override
     public boolean isNeedHandle(@NotNull final Path file) {
         final String extension = FileUtils.getExtension(file);
-        return JME_OBJECT.equals(extension);
+        return FileExtensions.JME_OBJECT.equals(extension);
     }
 }

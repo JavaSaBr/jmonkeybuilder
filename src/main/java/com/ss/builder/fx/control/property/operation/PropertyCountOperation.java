@@ -1,11 +1,11 @@
-package com.ss.builder.ui.control.property.operation;
+package com.ss.builder.fx.control.property.operation;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

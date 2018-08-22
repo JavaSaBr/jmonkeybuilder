@@ -1,15 +1,15 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
-import static com.ss.editor.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
-import static com.ss.editor.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
-import static com.ss.editor.util.EditorUtils.toAssetPath;
+import static com.ss.builder.config.DefaultSettingsProvider.Defaults.PREF_DEFAULT_THEME;
+import static com.ss.builder.config.DefaultSettingsProvider.Preferences.PREF_UI_THEME;
+import static com.ss.builder.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
-import com.ss.editor.FileExtensions;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.util.EditorUtils;
-import com.ss.editor.util.svg.SvgImageLoader;
+import com.ss.builder.FileExtensions;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.util.EditorUtils;
+import com.ss.builder.util.svg.SvgImageLoader;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;

@@ -1,17 +1,17 @@
-package com.ss.builder.ui.control.property;
+package com.ss.builder.fx.control.property;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.builder.ui.FxConstants;
-import com.ss.builder.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.editor.annotation.FxThread;
+import com.ss.builder.fx.FxConstants;
+import com.ss.builder.fx.control.property.builder.PropertyBuilderRegistry;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.annotation.FxThread;
 import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.FxConstants;
-import com.ss.editor.ui.control.UpdatableControl;
-import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.css.CssClasses;
+import com.ss.builder.model.undo.editor.ChangeConsumer;
+import com.ss.builder.fx.FxConstants;
+import com.ss.builder.fx.control.UpdatableControl;
+import com.ss.builder.fx.control.property.builder.PropertyBuilderRegistry;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;

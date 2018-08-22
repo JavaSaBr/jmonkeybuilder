@@ -1,15 +1,13 @@
-package com.ss.editor.manager;
+package com.ss.builder.manager;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.config.Config;
-import com.ss.editor.manager.AsyncEventManager.CombinedAsyncEventHandlerBuilder;
-import com.ss.editor.manager.ClasspathManager.Scope;
-import com.ss.editor.ui.event.impl.CoreClassesScannedEvent;
-import com.ss.editor.ui.event.impl.FxContextCreatedEvent;
-import com.ss.editor.ui.event.impl.JmeContextCreatedEvent;
-import com.ss.editor.util.TimeTracker;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.config.Config;
+import com.ss.builder.fx.event.impl.CoreClassesScannedEvent;
+import com.ss.builder.fx.event.impl.FxContextCreatedEvent;
+import com.ss.builder.fx.event.impl.JmeContextCreatedEvent;
+import com.ss.builder.manager.ClasspathManager.Scope;
 import com.ss.rlib.common.manager.InitializeManager;
 import com.ss.rlib.common.network.NetworkConfig;
 import com.ss.rlib.common.network.NetworkFactory;
@@ -75,11 +73,11 @@ public class RemoteControlManager {
             return;
         }
 
-        CombinedAsyncEventHandlerBuilder.of(this::createPacketRegistry)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::createPacketRegistry)
                 .add(CoreClassesScannedEvent.EVENT_TYPE)
                 .buildAndRegister();
 
-        CombinedAsyncEventHandlerBuilder.of(this::start)
+        AsyncEventManager.CombinedAsyncEventHandlerBuilder.of(this::start)
                 .add(JmeContextCreatedEvent.EVENT_TYPE)
                 .add(FxContextCreatedEvent.EVENT_TYPE)
                 .buildAndRegister();

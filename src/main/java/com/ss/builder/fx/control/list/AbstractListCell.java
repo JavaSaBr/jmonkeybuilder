@@ -1,20 +1,13 @@
-package com.ss.builder.ui.control.list;
+package com.ss.builder.fx.control.list;
 
 import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
+import com.ss.builder.fx.util.DynamicIconSupport;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
 import com.ss.builder.model.undo.impl.RenameEditableNameOperation;
-import com.ss.builder.ui.Icons;
-import com.ss.builder.ui.css.CssClasses;
-import com.ss.builder.ui.util.DynamicIconSupport;
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.EditableName;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.impl.RenameEditableNameOperation;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.css.CssClasses;
-import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.common.util.StringUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.geometry.Side;

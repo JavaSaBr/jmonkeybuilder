@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.tree.action.impl.particle.emitter.shape;
+package com.ss.builder.fx.control.tree.action.impl.particle.emitter.shape;
 
 import static com.ss.editor.extension.property.EditablePropertyType.GEOMETRY_FROM_ASSET_FOLDER;
 import static java.util.Collections.singletonList;
@@ -10,13 +10,13 @@ import com.jme3.scene.Mesh;
 import com.ss.builder.Messages;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.plugin.api.property.PropertyDefinition;
-import com.ss.builder.ui.Icons;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.Messages;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.plugin.api.property.PropertyDefinition;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.control.tree.NodeTree;
+import com.ss.builder.fx.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;

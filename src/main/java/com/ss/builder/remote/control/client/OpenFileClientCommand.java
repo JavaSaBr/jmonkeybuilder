@@ -1,13 +1,15 @@
-package com.ss.editor.remote.control.client;
+package com.ss.builder.remote.control.client;
 
-import com.ss.editor.annotation.BackgroundThread;
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.bar.action.OpenAssetAction;
-import com.ss.editor.ui.event.FxEventManager;
-import com.ss.editor.ui.event.impl.AssetComponentLoadedEvent;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.util.EditorUtils;
+import com.ss.builder.annotation.BackgroundThread;
+import com.ss.builder.annotation.FromAnyThread;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.config.EditorConfig;
+import com.ss.builder.fx.component.bar.action.OpenAssetAction;
+import com.ss.builder.fx.event.FxEventManager;
+import com.ss.builder.fx.event.impl.AssetComponentLoadedEvent;
+import com.ss.builder.fx.event.impl.RequestedOpenFileEvent;
+import com.ss.builder.manager.ExecutorManager;
+import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.network.ConnectionOwner;
 import com.ss.rlib.common.network.annotation.PacketDescription;
 import javafx.event.EventHandler;
@@ -25,9 +27,6 @@ import java.nio.file.Paths;
 @PacketDescription(id = 1)
 public class OpenFileClientCommand extends ClientCommand {
 
-    private static final FxEventManager FX_EVENT_MANAGER = FxEventManager.getInstance();
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
     @Override
     @BackgroundThread
     protected void readImpl(@NotNull ConnectionOwner owner, @NotNull ByteBuffer buffer) {
@@ -39,26 +38,35 @@ public class OpenFileClientCommand extends ClientCommand {
         var currentAsset = editorConfig.getCurrentAsset();
 
         if (assetPath.equals(currentAsset)) {
-            EXECUTOR_MANAGER.addFxTask(() -> openFile(fileToOpen));
+            openFileInCurrentAsset(fileToOpen);
         } else {
-            EXECUTOR_MANAGER.addFxTask(() -> {
 
-                final OpenAssetAction action = new OpenAssetAction();
+            var executorManager = ExecutorManager.getInstance();
+            executorManager.addFxTask(() -> {
+
+                var action = new OpenAssetAction();
                 action.openAssetFolder(assetPath);
 
+                var eventManager = FxEventManager.getInstance();
                 var eventHandler = new EventHandler<AssetComponentLoadedEvent>() {
 
                     @Override
                     public void handle(@NotNull AssetComponentLoadedEvent event) {
-                        FX_EVENT_MANAGER.removeEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, this);
+                        eventManager.removeEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, this);
                         openFile(fileToOpen);
                     }
                 };
 
-                FX_EVENT_MANAGER.addEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, eventHandler);
+                eventManager.addEventHandler(AssetComponentLoadedEvent.EVENT_TYPE, eventHandler);
             });
 
         }
+    }
+
+    @FromAnyThread
+    private void openFileInCurrentAsset(@NotNull Path fileToOpen) {
+        ExecutorManager.getInstance()
+                .addFxTask(() -> openFile(fileToOpen));
     }
 
     /**
@@ -66,8 +74,12 @@ public class OpenFileClientCommand extends ClientCommand {
      *
      * @param fileToOpen the file.
      */
+    @FxThread
     private void openFile(@NotNull Path fileToOpen) {
-        FX_EVENT_MANAGER.notify(new RequestedOpenFileEvent(fileToOpen));
+
+        FxEventManager.getInstance()
+                .notify(new RequestedOpenFileEvent(fileToOpen));
+
         EditorUtils.requestFxFocus();
     }
 }

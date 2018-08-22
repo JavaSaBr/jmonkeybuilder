@@ -1,6 +1,6 @@
-package com.ss.builder.ui.component.virtual.tree.resource;
+package com.ss.builder.fx.component.virtual.tree.resource;
 
-import com.ss.editor.ui.component.virtual.tree.VirtualResourceTree;
+import com.ss.builder.fx.component.virtual.tree.VirtualResourceTree;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,18 +1,18 @@
-package com.ss.builder.editor.part3d.control.impl;
+package com.ss.builder.jme.editor.part3d.control.impl;
 
-import static com.ss.editor.editor.part3d.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
+import static com.ss.builder.jme.editor.part3d.control.impl.InputStateEditor3dPartControl.PROP_IS_CONTROL_DOWN;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
 import com.ss.builder.util.JmeUtils;
-import com.ss.editor.annotation.JmeThread;
-import com.ss.editor.editor.part3d.ExtendableEditor3dPart;
-import com.ss.editor.editor.part3d.SavableEditor3dPart;
-import com.ss.editor.editor.part3d.UndoableEditor3dPart;
-import com.ss.editor.util.JmeUtils;
+import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.SavableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.UndoableEditor3dPart;
+import com.ss.builder.util.JmeUtils;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 

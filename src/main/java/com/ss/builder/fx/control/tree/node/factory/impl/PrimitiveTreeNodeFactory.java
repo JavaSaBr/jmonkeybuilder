@@ -1,4 +1,4 @@
-package com.ss.builder.ui.control.tree.node.factory.impl;
+package com.ss.builder.fx.control.tree.node.factory.impl;
 
 import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.jme3.bullet.objects.VehicleWheel;
@@ -6,14 +6,14 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.VertexBuffer;
 import com.ss.builder.annotation.FxThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.ui.control.tree.node.impl.BufferTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.PositionTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.VertexBufferTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.control.motion.MotionPathTreeNode;
-import com.ss.editor.ui.control.tree.node.impl.control.physics.vehicle.VehicleWheelTreeNode;
-import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
+import com.ss.builder.annotation.FxThread;
+import com.ss.builder.fx.control.tree.node.impl.BufferTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.PositionTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.VertexBufferTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.control.motion.MotionPathTreeNode;
+import com.ss.builder.fx.control.tree.node.impl.control.physics.vehicle.VehicleWheelTreeNode;
+import com.ss.builder.fx.control.tree.node.TreeNode;
+import com.ss.builder.fx.control.tree.node.factory.TreeNodeFactory;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.Buffer;
