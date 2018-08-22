@@ -1,0 +1,26 @@
+package com.ss.builder.ui.event.impl;
+
+import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.EventType;
+
+/**
+ * The event about that all plugins have already registered all
+ * interested resources in {@link ResourceManager}.
+ *
+ * @author JavaSaBr
+ */
+public class PluginsRegisteredResourcesEvent extends SceneEvent {
+
+    public static final EventType<PluginsRegisteredResourcesEvent> EVENT_TYPE;
+
+    static {
+        synchronized (EventType.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, PluginsRegisteredResourcesEvent.class.getSimpleName());
+        }
+    }
+
+    public PluginsRegisteredResourcesEvent() {
+        super(EVENT_TYPE);
+    }
+}
