@@ -3,7 +3,6 @@ package com.ss.builder.config;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Paths;
-import java.util.Map;
 
 /**
  * Parser the configuration from command-line arguments.
@@ -21,15 +20,16 @@ public class CommandLineConfig {
      */
     public static void args(@NotNull String[] args) {
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
+        var editorConfig = EditorConfig.getInstance();
 
-        for (final String arg : args) {
+        for (var arg : args) {
 
             if (!arg.contains("=")) {
                 continue;
             }
 
             var values = arg.split("=");
+
             if (values.length != 2) {
                 continue;
             }
@@ -61,7 +61,7 @@ public class CommandLineConfig {
         var env = System.getenv();
 
         if (env.containsKey(PREF_SERVER_API_VERSION)) {
-            final int version = Integer.parseInt(env.get(PREF_SERVER_API_VERSION));
+            var version = Integer.parseInt(env.get(PREF_SERVER_API_VERSION));
             if (version == Config.SERVER_API_VERSION) {
                 System.exit(100);
             } else {
@@ -72,6 +72,7 @@ public class CommandLineConfig {
         if (env.containsKey(PREF_SERVER_API_PORT)) {
             Config.REMOTE_CONTROL_PORT = Integer.parseInt(env.get(PREF_SERVER_API_PORT));
         }
+
         if (env.containsKey(PREF_EDITOR_ASSET_FOLDER)) {
             editorConfig.setCurrentAsset(Paths.get(env.get(PREF_EDITOR_ASSET_FOLDER)));
         }

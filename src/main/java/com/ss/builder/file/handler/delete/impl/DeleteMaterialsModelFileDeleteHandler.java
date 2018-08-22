@@ -1,17 +1,10 @@
-package com.ss.builder.file.delete.handler.impl;
+package com.ss.builder.file.handler.delete.impl;
 
-import static com.ss.builder.FileExtensions.JME_OBJECT;
-import static com.ss.builder.util.EditorUtils.getAssetFile;
-import static com.ss.builder.util.EditorUtils.toAssetPath;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.builder.FileExtensions;
-import com.ss.builder.Messages;
-import com.ss.builder.fx.dialog.ConfirmDialog;
-import com.ss.builder.util.EditorUtils;
-import com.ss.builder.util.NodeUtils;
 import com.ss.builder.Messages;
 import com.ss.builder.fx.dialog.ConfirmDialog;
 import com.ss.builder.util.EditorUtils;

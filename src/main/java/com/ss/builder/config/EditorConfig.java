@@ -1,16 +1,11 @@
 package com.ss.builder.config;
 
-import static com.ss.builder.config.DefaultSettingsProvider.Defaults.*;
-import static com.ss.builder.config.DefaultSettingsProvider.Preferences.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.jfx.injfx.JmeToJfxIntegrator;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
-import com.ss.builder.JmeApplication;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.util.EditorUtils;
 import com.ss.builder.JmeApplication;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.util.EditorUtils;
@@ -638,7 +633,7 @@ public final class EditorConfig implements AssetEventListener {
                 } else if (value instanceof Path) {
                     prefs.put(key, ((Path) value).toUri().toString());
                 } else if (value instanceof Vector3f) {
-                    final Vector3f vector = (Vector3f) value;
+                    var vector = (Vector3f) value;
                     prefs.put(key, vector.getX() + "," + vector.getY() + "," + vector.getZ());
                 } else {
                     prefs.put(key, value.toString());

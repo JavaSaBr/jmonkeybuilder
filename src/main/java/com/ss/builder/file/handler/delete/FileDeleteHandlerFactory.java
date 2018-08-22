@@ -1,9 +1,8 @@
-package com.ss.builder.file.delete.handler;
+package com.ss.builder.file.handler.delete;
 
 import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.file.delete.handler.impl.DeleteMaterialsModelFileDeleteHandler;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.file.delete.handler.impl.DeleteMaterialsModelFileDeleteHandler;
+import com.ss.builder.file.handler.delete.impl.DeleteMaterialsModelFileDeleteHandler;
+import com.ss.rlib.common.util.array.ArrayCollectors;
 import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
@@ -17,7 +16,6 @@ import java.nio.file.Path;
  */
 public class FileDeleteHandlerFactory {
 
-    @NotNull
     private static final Array<FileDeleteHandler> HANDLERS = ArrayFactory.newArray(FileDeleteHandler.class);
 
     static {
@@ -31,13 +29,10 @@ public class FileDeleteHandlerFactory {
      * @return the list of handlers.
      */
     @FromAnyThread
-    public static @NotNull Array<FileDeleteHandler> findFor(@NotNull final Path file) {
-
-        final Array<FileDeleteHandler> result = ArrayFactory.newArray(FileDeleteHandler.class);
-
-        HANDLERS.forEach(result, file, (handler, toCollect, f) -> handler.isNeedHandle(f),
-                (handler, toCollect, f) -> toCollect.add(handler.clone()));
-
-        return result;
+    public static @NotNull Array<FileDeleteHandler> findFor(@NotNull Path file) {
+        return HANDLERS.stream()
+                .filter(handler -> handler.isNeedHandle(file))
+                .map(FileDeleteHandler::clone)
+                .collect(ArrayCollectors.toArray(FileDeleteHandler.class));
     }
 }

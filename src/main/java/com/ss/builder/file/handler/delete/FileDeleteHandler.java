@@ -1,9 +1,7 @@
-package com.ss.builder.file.delete.handler;
+package com.ss.builder.file.handler.delete;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
-import com.ss.builder.annotation.FxThread;
-import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -21,7 +19,7 @@ public interface FileDeleteHandler extends Cloneable {
      * @param file the file to delete.
      */
     @FxThread
-    void preDelete(@NotNull final Path file);
+    void preDelete(@NotNull Path file);
 
     /**
      * Handle a file to delete after deleting.
@@ -29,7 +27,7 @@ public interface FileDeleteHandler extends Cloneable {
      * @param file the deleted file.
      */
     @FxThread
-    void postDelete(@NotNull final Path file);
+    void postDelete(@NotNull Path file);
 
     /**
      * Check that the file need to handle.

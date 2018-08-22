@@ -2,18 +2,14 @@ package com.ss.builder.executor.impl;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.util.EditorUtils;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.ArrayUtils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.array.ConcurrentArray;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The executor to execute tasks in the editor thread.
@@ -22,10 +18,8 @@ import com.ss.rlib.common.util.array.ConcurrentArray;
  */
 public class JmeThreadExecutor {
 
-    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JmeThreadExecutor.class);
 
-    @NotNull
     private static final JmeThreadExecutor INSTANCE = new JmeThreadExecutor();
 
     @FromAnyThread
@@ -56,8 +50,8 @@ public class JmeThreadExecutor {
      * @param task the task.
      */
     @FromAnyThread
-    public void addToExecute(@NotNull final Runnable task) {
-        ArrayUtils.runInWriteLock(waitTasks, task, (tasks, toAdd) -> tasks.add(task));
+    public void addToExecute(@NotNull Runnable task) {
+        waitTasks.runInWriteLock(task, (tasks, toAdd) -> tasks.add(task));
     }
 
     /**
@@ -70,7 +64,7 @@ public class JmeThreadExecutor {
             return;
         }
 
-        ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
+        waitTasks.runInWriteLock(execute, ArrayUtils::move);
         try {
             execute.forEach(JmeThreadExecutor::execute);
         } finally {
@@ -79,10 +73,10 @@ public class JmeThreadExecutor {
     }
 
     @JmeThread
-    private static void execute(@NotNull final Runnable runnable) {
+    private static void execute(@NotNull Runnable runnable) {
         try {
             runnable.run();
-        } catch (final Exception e) {
+        } catch (Exception e) {
             EditorUtils.handleException(LOGGER, getInstance(), e);
         }
     }

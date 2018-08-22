@@ -5,16 +5,12 @@ import com.eclipsesource.json.JsonObject;
 import com.ss.builder.JmeApplication;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.util.EditorUtils;
-import com.ss.builder.JmeApplication;
-import com.ss.builder.annotation.FromAnyThread;
-import com.ss.builder.util.EditorUtils;
 import com.ss.builder.util.TimeTracker;
 import com.ss.rlib.common.plugin.Version;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.os.OperatingSystem;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -32,55 +28,46 @@ public final class Config {
     /**
      * The path to config file in classpath.
      */
-    @NotNull
     private static final String CONFIG_RESOURCE_PATH = "/app-config.json";
 
     /**
      * The name of editor's folder in user home folder.
      */
-    @NotNull
     private static final String EDITOR_FOLDER_IN_USER_HOME = ".jmonkeybuilder";
 
     /**
      * The editor's title.
      */
-    @NotNull
     public static final String TITLE = "jMonkeyBuilder";
 
     /**
      * The editor's version.
      */
-    @NotNull
     public static final Version APP_VERSION = new Version("1.9.0");
 
     /**
      * The string version.
      */
-    @NotNull
     public static final String STRING_VERSION = APP_VERSION.toString();
 
     /**
      * The server API version.
      */
-    @NotNull
     public static final int SERVER_API_VERSION = 1;
 
     /**
      * The path to application folder.
      */
-    @NotNull
     public static final String PROJECT_PATH;
 
     /**
      * The graphics adapter.
      */
-    @Nullable
     private static GraphicsDevice graphicsDevice;
 
     /**
      * The operation system.
      */
-    @Nullable
     private static OperatingSystem operatingSystem;
 
     /**

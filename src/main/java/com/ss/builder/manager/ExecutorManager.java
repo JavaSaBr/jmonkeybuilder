@@ -8,7 +8,6 @@ import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.manager.InitializeManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -24,9 +23,6 @@ public class ExecutorManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(ExecutorManager.class);
 
-    private static final int PROP_BACKGROUND_TASK_EXECUTORS = 8;
-
-    @Nullable
     private static ExecutorManager instance;
 
     public static @NotNull ExecutorManager getInstance() {
