@@ -29,7 +29,7 @@ import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.builder.editor.EditorDescriptor;
-import com.ss.builder.editor.impl.AbstractFileEditor;
+import com.ss.builder.editor.impl.AbstractFileEditorLegacy;
 import com.ss.builder.fx.component.tab.EditorToolComponent;
 import com.ss.builder.fx.control.app.state.list.AppStateList;
 import com.ss.builder.fx.control.filter.list.FilterList;
@@ -52,7 +52,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * The implementation of the {@link AbstractFileEditor} for working with {@link SceneNode}.
+ * The implementation of the {@link AbstractFileEditorLegacy} for working with {@link SceneNode}.
  *
  * @author JavaSaBr
  */

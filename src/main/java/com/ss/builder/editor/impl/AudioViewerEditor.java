@@ -34,7 +34,7 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class AudioViewerEditor extends AbstractFileEditor<VBox> {
+public class AudioViewerEditor extends AbstractFileEditorLegacy<VBox> {
 
     public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
             AudioViewerEditor::new,

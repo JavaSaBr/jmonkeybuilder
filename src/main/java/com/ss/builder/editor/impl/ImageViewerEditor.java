@@ -22,7 +22,7 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class ImageViewerEditor extends AbstractFileEditor<VBox> {
+public class ImageViewerEditor extends AbstractFileEditorLegacy<VBox> {
 
     public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
             ImageViewerEditor::new,

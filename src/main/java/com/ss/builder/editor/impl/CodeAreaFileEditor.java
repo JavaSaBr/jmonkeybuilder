@@ -22,7 +22,7 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
+public abstract class CodeAreaFileEditor extends AbstractFileEditorLegacy<VBox> {
 
     /**
      * The code area.

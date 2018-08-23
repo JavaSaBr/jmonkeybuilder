@@ -26,7 +26,7 @@ import com.ss.builder.util.MaterialUtils;
 import com.ss.builder.util.NodeUtils;
 import com.ss.builder.manager.ResourceManager;
 import com.ss.builder.editor.EditorDescriptor;
-import com.ss.builder.editor.impl.AbstractFileEditor;
+import com.ss.builder.editor.impl.AbstractFileEditorLegacy;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxControlUtils;
 import com.ss.rlib.fx.util.FxUtils;
@@ -44,7 +44,7 @@ import java.nio.file.Path;
 import java.util.function.Supplier;
 
 /**
- * The implementation of the {@link AbstractFileEditor} for working with {@link Spatial}.
+ * The implementation of the {@link AbstractFileEditorLegacy} for working with {@link Spatial}.
  *
  * @author JavaSaBr
  */

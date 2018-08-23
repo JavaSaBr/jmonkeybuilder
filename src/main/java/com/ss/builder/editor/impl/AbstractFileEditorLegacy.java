@@ -3,6 +3,7 @@ package com.ss.builder.editor.impl;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import com.jme3.math.Vector3f;
+import com.ss.builder.Messages;
 import com.ss.builder.analytics.google.GAEvent;
 import com.ss.builder.analytics.google.GAnalytics;
 import com.ss.builder.annotation.BackgroundThread;
@@ -10,10 +11,14 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.editor.FileEditor;
 import com.ss.builder.editor.event.*;
+import com.ss.builder.fx.Icons;
+import com.ss.builder.fx.css.CssClasses;
 import com.ss.builder.fx.editor.layout.EditorLayout;
+import com.ss.builder.fx.editor.layout.impl.PaneEditorLayout;
 import com.ss.builder.fx.editor.part.ui.EditorUiPart;
 import com.ss.builder.fx.event.FxEventManager;
 import com.ss.builder.fx.event.impl.FileChangedEvent;
+import com.ss.builder.fx.util.DynamicIconSupport;
 import com.ss.builder.fx.util.UiUtils;
 import com.ss.builder.jme.editor.part3d.Editor3dPart;
 import com.ss.builder.manager.ExecutorManager;
@@ -23,14 +28,20 @@ import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,17 +54,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * The base implementation of a file editor.
+ * The base implementation of an editor.
  *
- * @param <L> the editor layout's type.
+ * @param <R> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractFileEditor<L extends EditorLayout> implements FileEditor {
+@Deprecated
+public abstract class AbstractFileEditorLegacy<R extends Pane> implements FileEditor {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
 
     /**
-     * The array of editor's 3d parts.
+     * The array of editor's 3D parts.
      */
     @NotNull
     private final Array<Editor3dPart> editor3dParts;
@@ -95,10 +107,16 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     private CompletableFuture<FileEditor> saveCallback;
 
     /**
+     * The root element of this editor.
+     */
+    @NotNull
+    private final R root;
+
+    /**
      * The editor's layout.
      */
     @NotNull
-    private final L layout;
+    private final EditorLayout layout;
 
     /**
      * The editing file.
@@ -126,13 +144,14 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
      */
     private volatile boolean saving;
 
-    protected AbstractFileEditor() {
+    protected AbstractFileEditorLegacy() {
         this.showedTime = LocalTime.now();
         this.editor3dParts = Array.ofType(Editor3dPart.class);
         this.editorUiParts = Array.ofType(EditorUiPart.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         this.initialized = new AtomicBoolean();
         this.fileChangedHandler = this::handleChangedFile;
+        this.root = createRoot();
         this.layout = createLayout();
     }
 
@@ -169,24 +188,48 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     @FxThread
     protected void buildUi() {
 
-        if (needListenEventsFromPage()) {
-            var rootPage = layout.getRootPage();
-            rootPage.setOnKeyPressed(this::processKeyPressed);
-            rootPage.setOnKeyReleased(this::processKeyReleased);
-            rootPage.setOnMouseReleased(this::processMouseReleased);
-            rootPage.setOnMousePressed(this::processMousePressed);
+        var container = new VBox();
+
+        var page = new StackPane(container);
+        page.setPickOnBounds(true);
+
+        HBox toolbar = null;
+
+        if (needToolbar()) {
+
+            toolbar = new HBox();
+            toolbar.prefWidthProperty()
+                    .bind(container.widthProperty());
+
+            createToolbar(toolbar);
+
+            FxUtils.addClass(toolbar, CssClasses.FILE_EDITOR_TOOLBAR);
+            FxUtils.addChild(container, toolbar);
         }
 
-        buildUi(layout);
-    }
 
-    /**
-     * Create editor's Ui.
-     *
-     * @param layout the editor's layout.
-     */
-    @FromAnyThread
-    protected abstract void buildUi(@NotNull L layout);
+        if (needListenEventsFromPage()) {
+            root.setOnKeyPressed(this::processKeyPressed);
+            root.setOnKeyReleased(this::processKeyReleased);
+            root.setOnMouseReleased(this::processMouseReleased);
+            root.setOnMousePressed(this::processMousePressed);
+        }
+
+        createContent(root);
+
+        FxUtils.addChild(container, root);
+
+        if (toolbar != null) {
+            root.prefHeightProperty()
+                    .bind(container.heightProperty().subtract(toolbar.heightProperty()));
+        } else {
+            root.prefHeightProperty()
+                    .bind(container.heightProperty());
+        }
+
+        root.prefWidthProperty()
+                .bind(container.widthProperty());
+    }
 
     /**
      * Return true if need to listen to events from root page of this editor.
@@ -296,6 +339,28 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     protected void createToolbar(@NotNull HBox container) {
     }
 
+    /**
+     * Create the save action.
+     *
+     * @return the button
+     */
+    @FxThread
+    protected @NotNull Button createSaveAction() {
+
+        var action = new Button();
+        action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
+        action.setOnAction(event -> save());
+        action.setGraphic(new ImageView(Icons.SAVE_16));
+        action.disableProperty().bind(dirtyProperty().not());
+
+        FxUtils.addClass(action,
+                CssClasses.FLAT_BUTTON, CssClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(action);
+
+        return action;
+    }
+
     @Override
     @FromAnyThread
     public @NotNull CompletableFuture<FileEditor> save() {
@@ -382,17 +447,46 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     /**
+     * Return true if this editor needs a toolbar.
+     *
+     * @return true if this editor needs a toolbar.
+     */
+    @FromAnyThread
+    protected boolean needToolbar() {
+        return false;
+    }
+
+    /**
+     * Create a root container.
+     *
+     * @return the new root container.
+     */
+    @FromAnyThread
+    protected abstract @NotNull R createRoot();
+
+    /**
      * Create an editor's layout.
      *
      * @return the editor's layout.
      */
     @BackgroundThread
-    protected abstract @NotNull L createLayout();
+    protected @NotNull EditorLayout createLayout() {
+        return new PaneEditorLayout();
+    }
+
+    /**
+     * Create editor's content.
+     *
+     * @param root the root container.
+     */
+    @FromAnyThread
+    protected abstract void createContent(@NotNull R root);
 
     @Override
     @FxThread
     public @NotNull Pane getUiPage() {
-        throw new UnsupportedOperationException();
+        return (Pane) root.getParent()
+                .getParent();
     }
 
     @Override

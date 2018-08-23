@@ -10,7 +10,7 @@ import com.ss.builder.model.undo.EditorOperation;
 import com.ss.builder.model.undo.EditorOperationControl;
 import com.ss.builder.model.undo.UndoableEditor;
 import com.ss.builder.model.undo.editor.ChangeConsumer;
-import com.ss.builder.editor.impl.AbstractFileEditor;
+import com.ss.builder.editor.impl.AbstractFileEditorLegacy;
 import com.ss.builder.editor.state.EditorState;
 import javafx.event.Event;
 import javafx.scene.input.KeyCode;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public abstract class BaseFileEditor<S extends EditorState> extends AbstractFileEditor<StackPane> implements
+public abstract class BaseFileEditor<S extends EditorState> extends AbstractFileEditorLegacy<StackPane> implements
         UndoableEditor, ChangeConsumer {
 
     /**

@@ -26,7 +26,7 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class TextFileEditor extends AbstractFileEditor<VBox> {
+public class TextFileEditor extends AbstractFileEditorLegacy<VBox> {
 
     public static final EditorDescriptor DESCRIPTOR = new EditorDescriptor(
             TextFileEditor::new,
