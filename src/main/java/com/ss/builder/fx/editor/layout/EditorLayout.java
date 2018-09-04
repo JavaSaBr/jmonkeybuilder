@@ -1,5 +1,6 @@
 package com.ss.builder.fx.editor.layout;
 
+import com.ss.builder.annotation.FromAnyThread;
 import javafx.scene.Parent;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface EditorLayout {
 
+    @FromAnyThread
     @NotNull Parent getRootPage();
 
+    @FromAnyThread
     @NotNull Parent getContainer();
 }

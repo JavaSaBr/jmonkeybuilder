@@ -36,14 +36,6 @@ public interface FileEditor {
     @NotNull Parent getUiPage();
 
     /**
-     * Get this editor's layout.
-     *
-     * @return this editor's layout.
-     */
-    @FxThread
-    @NotNull EditorLayout getLayout();
-
-    /**
      * Get an area to place 3D scene.
      *
      * @return the area to place 3D scene.
@@ -53,6 +45,14 @@ public interface FileEditor {
     default @Nullable BorderPane get3dArea() {
         return null;
     }
+
+    /**
+     * Get this editor's layout.
+     *
+     * @return this editor's layout.
+     */
+    @FxThread
+    @NotNull EditorLayout getLayout();
 
     /**
      * Get the file name of the current opened file.

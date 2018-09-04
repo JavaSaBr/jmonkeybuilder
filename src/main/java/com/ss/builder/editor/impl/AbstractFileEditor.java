@@ -2,7 +2,6 @@ package com.ss.builder.editor.impl;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import com.jme3.math.Vector3f;
 import com.ss.builder.analytics.google.GAEvent;
 import com.ss.builder.analytics.google.GAnalytics;
 import com.ss.builder.annotation.BackgroundThread;
@@ -10,6 +9,7 @@ import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.editor.FileEditor;
 import com.ss.builder.editor.event.*;
+import com.ss.builder.editor.impl.control.EditorControl;
 import com.ss.builder.fx.editor.layout.EditorLayout;
 import com.ss.builder.fx.editor.part.ui.EditorUiPart;
 import com.ss.builder.fx.event.FxEventManager;
@@ -28,8 +28,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,6 +61,12 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
      */
     @NotNull
     private final Array<EditorUiPart> editorUiParts;
+
+    /**
+     * The array of file editor controls.
+     */
+    @NotNull
+    private final Array<EditorControl> controls;
 
     /**
      * The file changes listener.
@@ -107,21 +111,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     private volatile Path file;
 
     /**
-     * True if the left button pressed.
-     */
-    private boolean buttonLeftDown;
-
-    /**
-     * True if the right button pressed.
-     */
-    private boolean buttonRightDown;
-
-    /**
-     * True if the middle button pressed.
-     */
-    private boolean buttonMiddleDown;
-
-    /**
      * True if the saving process is running now.
      */
     private volatile boolean saving;
@@ -130,6 +119,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
         this.showedTime = LocalTime.now();
         this.editor3dParts = Array.ofType(Editor3dPart.class);
         this.editorUiParts = Array.ofType(EditorUiPart.class);
+        this.controls = Array.ofType(EditorControl.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         this.initialized = new AtomicBoolean();
         this.fileChangedHandler = this::handleChangedFile;
@@ -157,6 +147,16 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     /**
+     * Add the new editor's control.
+     *
+     * @param control the editor's control.
+     */
+    @FromAnyThread
+    protected void addEditorControl(@NotNull EditorControl control) {
+        this.controls.add(control);
+    }
+
+    /**
      * Set the editing file.
      *
      * @param file the editing file.
@@ -167,17 +167,17 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     @FxThread
-    protected void buildUi() {
+    protected void initialize() {
 
         if (needListenEventsFromPage()) {
             var rootPage = layout.getRootPage();
             rootPage.setOnKeyPressed(this::processKeyPressed);
             rootPage.setOnKeyReleased(this::processKeyReleased);
-            rootPage.setOnMouseReleased(this::processMouseReleased);
-            rootPage.setOnMousePressed(this::processMousePressed);
         }
 
         buildUi(layout);
+
+        controls.forEach(EditorControl::initialize);
     }
 
     /**
@@ -198,26 +198,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     /**
-     * Handle the mouse released event.
-     */
-    @FxThread
-    private void processMouseReleased(@NotNull MouseEvent mouseEvent) {
-        setButtonLeftDown(mouseEvent.isPrimaryButtonDown());
-        setButtonMiddleDown(mouseEvent.isMiddleButtonDown());
-        setButtonRightDown(mouseEvent.isSecondaryButtonDown());
-    }
-
-    /**
-     * Handle the mouse pressed event.
-     */
-    @FxThread
-    private void processMousePressed(@NotNull MouseEvent mouseEvent) {
-        setButtonLeftDown(mouseEvent.isPrimaryButtonDown());
-        setButtonMiddleDown(mouseEvent.isMiddleButtonDown());
-        setButtonRightDown(mouseEvent.isSecondaryButtonDown());
-    }
-
-    /**
      * Handle the key released event.
      *
      * @param event the event
@@ -230,6 +210,25 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
         var isShiftDown = event.isShiftDown();
 
         if (handleKeyActionInFx(code, false, isControlDown, isShiftDown, false)) {
+            event.consume();
+        }
+    }
+
+    /**
+     * Handle the key pressed event.
+     *
+     * @param event the event.
+     */
+    @FxThread
+    protected void processKeyPressed(@NotNull KeyEvent event) {
+
+        var code = event.getCode();
+        var isControlDown = event.isControlDown();
+        var isShiftDown = event.isShiftDown();
+
+        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
+            save();
+        } else if (handleKeyActionInFx(code, true, isControlDown, isShiftDown, false)) {
             event.consume();
         }
     }
@@ -266,34 +265,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
             boolean isButtonMiddleDown
     ) {
         return false;
-    }
-
-    /**
-     * Handle the key pressed event.
-     *
-     * @param event the event.
-     */
-    @FxThread
-    protected void processKeyPressed(@NotNull KeyEvent event) {
-
-        var code = event.getCode();
-        var isControlDown = event.isControlDown();
-        var isShiftDown = event.isShiftDown();
-
-        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
-            save();
-        } else if (handleKeyActionInFx(code, true, isControlDown, isShiftDown, false)) {
-            event.consume();
-        }
-    }
-
-    /**
-     * Create a toolbar.
-     *
-     * @param container the container for the toolbar.
-     */
-    @FromAnyThread
-    protected void createToolbar(@NotNull HBox container) {
     }
 
     @Override
@@ -419,7 +390,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     public void openFile(@NotNull Path file) {
 
         if (initialized.compareAndSet(false, true)) {
-            buildUi();
+            initialize();
         }
 
         FxEventManager.getInstance()
@@ -542,25 +513,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     /**
-     * Notify about changed editor camera settings.
-     *
-     * @param cameraLocation the camera location.
-     * @param hRotation      the h rotation.
-     * @param vRotation      the v rotation.
-     * @param targetDistance the target distance.
-     * @param cameraSpeed    the camera speed.
-     */
-    @FxThread
-    public void notifyChangedCameraSettings(
-            @NotNull Vector3f cameraLocation,
-            float hRotation,
-            float vRotation,
-            float targetDistance,
-            float cameraSpeed
-    ) {
-    }
-
-    /**
      * Notify that this editor was showed.
      */
     @FxThread
@@ -659,66 +611,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     @FxThread
     private @NotNull EventHandler<FileChangedEvent> getFileChangedHandler() {
         return fileChangedHandler;
-    }
-
-    /**
-     * Set true if the left button is pressed.
-     *
-     * @param buttonLeftDown true if the left button is pressed.
-     */
-    @FxThread
-    protected void setButtonLeftDown(boolean buttonLeftDown) {
-        this.buttonLeftDown = buttonLeftDown;
-    }
-
-    /**
-     * Set true if the middle button is pressed.
-     *
-     * @param buttonMiddleDown true if the middle button is pressed.
-     */
-    @FxThread
-    protected void setButtonMiddleDown(boolean buttonMiddleDown) {
-        this.buttonMiddleDown = buttonMiddleDown;
-    }
-
-    /**
-     * Set true if the right button is pressed.
-     *
-     * @param buttonRightDown true if the right button is pressed.
-     */
-    @FxThread
-    protected void setButtonRightDown(boolean buttonRightDown) {
-        this.buttonRightDown = buttonRightDown;
-    }
-
-    /**
-     * Return true if left button is pressed.
-     *
-     * @return true if left button is pressed.
-     */
-    @FxThread
-    protected boolean isButtonLeftDown() {
-        return buttonLeftDown;
-    }
-
-    /**
-     * Return true if middle button is pressed.
-     *
-     * @return true if middle button is pressed.
-     */
-    @FxThread
-    protected boolean isButtonMiddleDown() {
-        return buttonMiddleDown;
-    }
-
-    /**
-     * Return true if right button is pressed.
-     *
-     * @return true if right button is pressed.
-     */
-    @FxThread
-    protected boolean isButtonRightDown() {
-        return buttonRightDown;
     }
 
     /**
