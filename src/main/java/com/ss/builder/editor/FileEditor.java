@@ -11,7 +11,6 @@ import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.Event;
 import javafx.scene.Parent;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -148,22 +147,4 @@ public interface FileEditor {
     default boolean isInside(double sceneX, double sceneY, @NotNull Class<? extends Event> eventType) {
         return false;
     }
-
-    /**
-     * Handle an external key action.
-     *
-     * @param keyCode            the key code.
-     * @param isPressed          true if key is pressed.
-     * @param isControlDown      true if control is down.
-     * @param isShiftDown        true if shift is down.
-     * @param isButtonMiddleDown true if mouse middle button is pressed.
-     */
-    @FromAnyThread
-    void handleKeyAction(
-            @NotNull KeyCode keyCode,
-            boolean isPressed,
-            boolean isControlDown,
-            boolean isShiftDown,
-            boolean isButtonMiddleDown
-    );
 }

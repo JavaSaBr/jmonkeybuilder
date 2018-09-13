@@ -29,6 +29,7 @@ import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import com.ss.rlib.fx.util.FxUtils;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
@@ -277,7 +278,6 @@ public abstract class AbstractFileEditorLegacy<R extends Pane> implements FileEd
         }
     }
 
-    @Override
     @FromAnyThread
     public void handleKeyAction(
             @NotNull KeyCode keyCode,
@@ -572,6 +572,12 @@ public abstract class AbstractFileEditorLegacy<R extends Pane> implements FileEd
     @FxThread
     public void notify(@NotNull FileEditorEvent event) {
 
+        if (!Platform.isFxApplicationThread()) {
+            ExecutorManager.getInstance()
+                    .addFxTask(() -> notify(event));
+            return;
+        }
+
         if (event instanceof ShowedFileEditorEvent) {
             notifyShowed();
         } else if (event instanceof HideFileEditorEvent) {
@@ -584,6 +590,12 @@ public abstract class AbstractFileEditorLegacy<R extends Pane> implements FileEd
         } else if (event instanceof FileRenamedFileEditorEvent) {
             var movedEvent = (FileRenamedFileEditorEvent) event;
             notifyFileRenamed(movedEvent.getPrevFile(), movedEvent.getNewFile());
+        } else if (event instanceof ExternalKeyActionFileEditorEvent) {
+
+            var keyEvent = (ExternalKeyActionFileEditorEvent) event;
+
+            handleKeyAction(keyEvent.getKeyCode(), keyEvent.isPressed(),
+                    keyEvent.isControlDown(), keyEvent.isShiftDown(), keyEvent.isButtonMiddleDown());
         }
     }
 

@@ -21,7 +21,6 @@ import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
-import com.ss.rlib.common.util.Utils;
 import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -49,6 +48,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class AbstractFileEditor<L extends EditorLayout> implements FileEditor {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
+
+    /**
+     * The executor manager.
+     */
+    @NotNull
+    protected final ExecutorManager executorManager;
+
+    /**
+     * The FX event manager.
+     */
+    @NotNull
+    protected final FxEventManager fxEventManager;
 
     /**
      * The array of editor's 3d parts.
@@ -116,6 +127,8 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     private volatile boolean saving;
 
     protected AbstractFileEditor() {
+        this.executorManager = ExecutorManager.getInstance();
+        this.fxEventManager = FxEventManager.getInstance();
         this.showedTime = LocalTime.now();
         this.editor3dParts = Array.ofType(Editor3dPart.class);
         this.editorUiParts = Array.ofType(EditorUiPart.class);
@@ -233,19 +246,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
         }
     }
 
-    @Override
-    @FromAnyThread
-    public void handleKeyAction(
-            @NotNull KeyCode keyCode,
-            boolean isPressed,
-            boolean isControlDown,
-            boolean isShiftDown,
-            boolean isButtonMiddleDown
-    ) {
-        ExecutorManager.getInstance()
-                .addFxTask(() -> handleKeyActionInFx(keyCode, isPressed, isControlDown, isShiftDown, isButtonMiddleDown));
-    }
-
     /**
      * Handle a key action in Fx thread.
      *
@@ -303,11 +303,8 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     @BackgroundThread
     protected void saveInBackground() {
 
-        var editorId = getDescriptor()
-                .getEditorId();
-
-        var tempFile = Utils.get(editorId,
-                prefix -> Files.createTempFile(prefix, "toSave.tmp"));
+        var editorId = getDescriptor().getEditorId();
+        var tempFile = FileUtils.createTempFile(editorId, "toSave.tmp");
 
         var stamp = EditorUtils.renderLock();
         try {
@@ -322,16 +319,12 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
 
         } catch (Throwable e) {
             EditorUtils.handleException(LOGGER, this, e);
-
-            ExecutorManager.getInstance()
-                    .addFxTask(this::notifyFinishSaving);
-
+            executorManager.addFxTask(this::notifyFinishSaving);
         } finally {
             EditorUtils.renderUnlock(stamp);
         }
 
-        ExecutorManager.getInstance()
-                .addFxTask(this::postSave);
+        executorManager.addFxTask(this::postSave);
     }
 
     /**
@@ -393,8 +386,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
             initialize();
         }
 
-        FxEventManager.getInstance()
-                .addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+        fxEventManager.addEventHandler(FileChangedEvent.EVENT_TYPE, fileChangedHandler);
 
         this.file = file;
         this.showedTime = LocalTime.now();
@@ -546,8 +538,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     @FxThread
     protected void notifyClosed() {
 
-        FxEventManager.getInstance()
-                .removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+        fxEventManager.removeEventHandler(FileChangedEvent.EVENT_TYPE, fileChangedHandler);
 
         var duration = Duration.between(showedTime, LocalTime.now());
         var seconds = (int) duration.getSeconds();
@@ -562,7 +553,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     /**
-     * Handle the event about some file was changed.
+     * Handle an event about some changed file.
      *
      * @param event the file changed event.
      */
@@ -570,13 +561,13 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     protected void handleChangedFile(@NotNull FileChangedEvent event) {
 
         var file = event.getFile();
-        var editFile = getFile();
+        var openedFile = getFile();
 
-        if (!file.equals(editFile)) {
+        if (!file.equals(openedFile)) {
             return;
         }
 
-        processChangedFileImpl(event);
+        handleChangedFileImpl(event);
 
         if (isSaving()) {
             notifyFinishSaving();
@@ -587,30 +578,20 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     /**
-     * Handle the event about the edited file was changed.
+     * Handle an event about that the opened file was changed.
      *
      * @param event the file changed event.
      */
     @FxThread
-    protected void processChangedFileImpl(@NotNull FileChangedEvent event) {
+    protected void handleChangedFileImpl(@NotNull FileChangedEvent event) {
     }
 
     /**
-     * Handle external changes of the edited file.
+     * Handle external changes of the opened file.
      */
     @FxThread
     protected void handleExternalChanges() {
 
-    }
-
-    /**
-     * Get the file changes listener.
-     *
-     * @return the file changes listener.
-     */
-    @FxThread
-    private @NotNull EventHandler<FileChangedEvent> getFileChangedHandler() {
-        return fileChangedHandler;
     }
 
     /**
