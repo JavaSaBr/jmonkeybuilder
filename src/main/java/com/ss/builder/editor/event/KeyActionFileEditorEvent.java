@@ -5,11 +5,11 @@ import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The event about a moved file.
+ * The event about a key event.
  *
  * @author JavaSaBr
  */
-public class ExternalKeyActionFileEditorEvent extends AbstractFileEditorEvent {
+public class KeyActionFileEditorEvent extends AbstractFileEditorEvent {
 
     @NotNull
     private final KeyCode keyCode;
@@ -19,7 +19,7 @@ public class ExternalKeyActionFileEditorEvent extends AbstractFileEditorEvent {
     private final boolean isShiftDown;
     private final boolean isButtonMiddleDown;
 
-    public ExternalKeyActionFileEditorEvent(
+    public KeyActionFileEditorEvent(
             @NotNull KeyCode keyCode,
             boolean isPressed,
             boolean isControlDown,

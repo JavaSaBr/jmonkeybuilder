@@ -590,9 +590,9 @@ public abstract class AbstractFileEditorLegacy<R extends Pane> implements FileEd
         } else if (event instanceof FileRenamedFileEditorEvent) {
             var movedEvent = (FileRenamedFileEditorEvent) event;
             notifyFileRenamed(movedEvent.getPrevFile(), movedEvent.getNewFile());
-        } else if (event instanceof ExternalKeyActionFileEditorEvent) {
+        } else if (event instanceof KeyActionFileEditorEvent) {
 
-            var keyEvent = (ExternalKeyActionFileEditorEvent) event;
+            var keyEvent = (KeyActionFileEditorEvent) event;
 
             handleKeyAction(keyEvent.getKeyCode(), keyEvent.isPressed(),
                     keyEvent.isControlDown(), keyEvent.isShiftDown(), keyEvent.isButtonMiddleDown());

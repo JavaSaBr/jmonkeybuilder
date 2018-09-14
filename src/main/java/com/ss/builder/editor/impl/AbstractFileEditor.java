@@ -25,8 +25,6 @@ import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -184,8 +182,8 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
 
         if (needListenEventsFromPage()) {
             var rootPage = layout.getRootPage();
-            rootPage.setOnKeyPressed(this::processKeyPressed);
-            rootPage.setOnKeyReleased(this::processKeyReleased);
+            //rootPage.setOnKeyPressed(this::processKeyPressed);
+            //rootPage.setOnKeyReleased(this::processKeyReleased);
         }
 
         buildUi(layout);
@@ -208,63 +206,6 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
      */
     protected boolean needListenEventsFromPage() {
         return true;
-    }
-
-    /**
-     * Handle the key released event.
-     *
-     * @param event the event
-     */
-    @FxThread
-    protected void processKeyReleased(@NotNull KeyEvent event) {
-
-        var code = event.getCode();
-        var isControlDown = event.isControlDown();
-        var isShiftDown = event.isShiftDown();
-
-        if (handleKeyActionInFx(code, false, isControlDown, isShiftDown, false)) {
-            event.consume();
-        }
-    }
-
-    /**
-     * Handle the key pressed event.
-     *
-     * @param event the event.
-     */
-    @FxThread
-    protected void processKeyPressed(@NotNull KeyEvent event) {
-
-        var code = event.getCode();
-        var isControlDown = event.isControlDown();
-        var isShiftDown = event.isShiftDown();
-
-        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
-            save();
-        } else if (handleKeyActionInFx(code, true, isControlDown, isShiftDown, false)) {
-            event.consume();
-        }
-    }
-
-    /**
-     * Handle a key action in Fx thread.
-     *
-     * @param keyCode            the key code.
-     * @param isPressed          true if key is pressed.
-     * @param isControlDown      true if control is down.
-     * @param isShiftDown        true if shift is down.
-     * @param isButtonMiddleDown true if mouse middle button is pressed.
-     * @return true if need to consume the event.
-     */
-    @FxThread
-    protected boolean handleKeyActionInFx(
-            @NotNull KeyCode keyCode,
-            boolean isPressed,
-            boolean isControlDown,
-            boolean isShiftDown,
-            boolean isButtonMiddleDown
-    ) {
-        return false;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ss.builder.editor.impl.control;
 
 import com.ss.builder.annotation.FxThread;
+import com.ss.builder.editor.event.FileEditorEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +16,14 @@ public interface EditorControl {
      */
     @FxThread
     default void initialize() {
+    }
+
+    /**
+     * Notify this control 
+     * @param event
+     */
+    @FxThread
+    default void notify(@NotNull FileEditorEvent event) {
     }
 
     /**
