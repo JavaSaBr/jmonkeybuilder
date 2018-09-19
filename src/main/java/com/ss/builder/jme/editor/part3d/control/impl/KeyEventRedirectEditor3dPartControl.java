@@ -6,6 +6,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.JmeThread;
+import com.ss.builder.editor.event.KeyActionFileEditorEvent;
 import com.ss.builder.util.JmeUtils;
 import com.ss.builder.jme.editor.part3d.Editor3dPart;
 import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
@@ -62,8 +63,8 @@ public class KeyEventRedirectEditor3dPartControl extends BaseInputEditor3dPartCo
         var isShiftDown = editor3dPart.getBooleanProperty(InputStateEditor3dPartControl.PROP_IS_SHIFT_DOWN);
         var isButtonMiddleDown =editor3dPart.getBooleanProperty(InputStateEditor3dPartControl.PROP_IS_BUTTON_MIDDLE_DOWN);
 
-        fileEditor.handleKeyAction(ObjectUtils.notNull(keyCode), isPressed,
-                isControlDown, isShiftDown, isButtonMiddleDown);
+        fileEditor.notify(new KeyActionFileEditorEvent(this, ObjectUtils.notNull(keyCode), isPressed,
+                isControlDown, isShiftDown, isButtonMiddleDown));
     }
 
     @Override

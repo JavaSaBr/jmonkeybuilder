@@ -11,7 +11,7 @@ import java.nio.file.Path;
  */
 public class FileMovedFileEditorEvent extends FilePathChangedFileEditorEvent {
 
-    public FileMovedFileEditorEvent(@NotNull Path prevFile, @NotNull Path newFile) {
-        super(prevFile, newFile);
+    public FileMovedFileEditorEvent(@NotNull Object source, @NotNull Path prevFile, @NotNull Path newFile) {
+        super(source, prevFile, newFile);
     }
 }

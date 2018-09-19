@@ -177,6 +177,12 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
     }
 
     /**
+     * The executor manager.
+     */
+    @NotNull
+    private final ExecutorManager executorManager;
+
+    /**
      * The editor camera.
      */
     @NotNull
@@ -254,6 +260,7 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
             boolean needMovableCamera
     ) {
         super(editor3dPart);
+        this.executorManager = ExecutorManager.getInstance();
         this.cameraFlying = new AtomicInteger();
         this.keyStates = new boolean[4];
         this.keyStateHandlers = new FloatConsumer[4];
@@ -760,8 +767,8 @@ public class CameraEditor3dPartControl extends BaseInputEditor3dPartControl<Exte
 
         var fileEditor = editor3dPart.getFileEditor();
 
-        ExecutorManager.getInstance()
-                .addFxTask(() -> fileEditor.notify(new CameraChangedFileEditorEvent(cameraState)));
+        executorManager.addFxTask(() ->
+                fileEditor.notify(new CameraChangedFileEditorEvent(this, cameraState)));
     }
 
     /**

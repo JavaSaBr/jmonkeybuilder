@@ -1,5 +1,6 @@
 package com.ss.builder.editor.event;
 
+import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.jme.editor.part3d.control.impl.CameraEditor3dPartControl.CameraState;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class CameraChangedFileEditorEvent extends AbstractFileEditorEvent {
+public class CameraChangedFileEditorEvent extends AbstractFileEditorEvent<Object> {
 
     /**
      * The new camera state.
@@ -16,7 +17,8 @@ public class CameraChangedFileEditorEvent extends AbstractFileEditorEvent {
     @NotNull
     private final CameraState cameraState;
 
-    public CameraChangedFileEditorEvent(@NotNull CameraState cameraState) {
+    public CameraChangedFileEditorEvent(@NotNull Object source, @NotNull CameraState cameraState) {
+        super(source);
         this.cameraState = cameraState;
     }
 
@@ -25,6 +27,7 @@ public class CameraChangedFileEditorEvent extends AbstractFileEditorEvent {
      *
      * @return the new camera state.
      */
+    @FromAnyThread
     public @NotNull CameraState getCameraState() {
         return cameraState;
     }

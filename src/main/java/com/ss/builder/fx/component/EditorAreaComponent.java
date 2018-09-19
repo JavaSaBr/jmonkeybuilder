@@ -232,7 +232,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 }
 
                 var fileEditor = requireFileEditor(tab);
-                fileEditor.notify(new FileRenamedFileEditorEvent(prevFile, newFile));
+                fileEditor.notify(new FileRenamedFileEditorEvent(this, prevFile, newFile));
 
                 if (fileEditor.isDirty()) {
                     tab.setText("*" + fileEditor.getFileName());

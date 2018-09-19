@@ -10,6 +10,7 @@ import com.ss.builder.annotation.FxThread;
 import com.ss.builder.editor.FileEditor;
 import com.ss.builder.editor.event.*;
 import com.ss.builder.editor.impl.control.EditorControl;
+import com.ss.builder.editor.impl.control.impl.FxInputEditorControl;
 import com.ss.builder.fx.editor.layout.EditorLayout;
 import com.ss.builder.fx.editor.part.ui.EditorUiPart;
 import com.ss.builder.fx.event.FxEventManager;
@@ -96,6 +97,12 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     private final AtomicBoolean initialized;
 
     /**
+     * The editor's layout.
+     */
+    @NotNull
+    private final L layout;
+
+    /**
      * The time when this editor was showed.
      */
     @NotNull
@@ -105,13 +112,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
      * The save callback.
      */
     @Nullable
-    private CompletableFuture<FileEditor> saveCallback;
-
-    /**
-     * The editor's layout.
-     */
-    @NotNull
-    private final L layout;
+    private volatile CompletableFuture<FileEditor> saveCallback;
 
     /**
      * The editing file.
@@ -135,6 +136,10 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
         this.initialized = new AtomicBoolean();
         this.fileChangedHandler = this::handleChangedFile;
         this.layout = createLayout();
+
+        if (needListenEventsFromPage()) {
+            addEditorControl(new FxInputEditorControl(this));
+        }
     }
 
     /**
@@ -179,15 +184,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
 
     @FxThread
     protected void initialize() {
-
-        if (needListenEventsFromPage()) {
-            var rootPage = layout.getRootPage();
-            //rootPage.setOnKeyPressed(this::processKeyPressed);
-            //rootPage.setOnKeyReleased(this::processKeyReleased);
-        }
-
         buildUi(layout);
-
         controls.forEach(EditorControl::initialize);
     }
 
@@ -211,12 +208,8 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     @Override
     @FromAnyThread
     public @NotNull CompletableFuture<FileEditor> save() {
-
         var result = new CompletableFuture<FileEditor>();
-
-        ExecutorManager.getInstance()
-                .addFxTask(() -> checkAndSaveIfNeed(result));
-
+        executorManager.addFxTask(() -> checkAndSaveIfNeed(result));
         return result;
     }
 
@@ -237,8 +230,7 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
 
         notifyStartSaving();
 
-        ExecutorManager.getInstance()
-                .addBackgroundTask(this::saveInBackground);
+        executorManager.addBackgroundTask(this::saveInBackground);
     }
 
     @BackgroundThread

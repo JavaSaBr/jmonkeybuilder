@@ -11,7 +11,7 @@ import java.nio.file.Path;
  */
 public class FileRenamedFileEditorEvent extends FilePathChangedFileEditorEvent {
 
-    public FileRenamedFileEditorEvent(@NotNull Path prevFile, @NotNull Path newFile) {
-        super(prevFile, newFile);
+    public FileRenamedFileEditorEvent(@NotNull Object source, @NotNull Path prevFile, @NotNull Path newFile) {
+        super(source, prevFile, newFile);
     }
 }

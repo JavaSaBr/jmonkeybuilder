@@ -1,5 +1,6 @@
 package com.ss.builder.editor.event;
 
+import com.ss.builder.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,5 +10,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface FileEditorEvent {
 
-    @NotNull Object getSource();
+    /**
+     * Get source of this event.
+     *
+     * @return the source or reference to this event.
+     */
+    @FromAnyThread
+    default @NotNull Object getSource() {
+        return this;
+    }
 }

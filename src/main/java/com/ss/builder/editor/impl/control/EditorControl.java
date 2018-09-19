@@ -19,8 +19,9 @@ public interface EditorControl {
     }
 
     /**
-     * Notify this control 
-     * @param event
+     * Notify this control about file editor's event.
+     *
+     * @param event the file editor event.
      */
     @FxThread
     default void notify(@NotNull FileEditorEvent event) {

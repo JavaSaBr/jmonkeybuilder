@@ -2,36 +2,56 @@ package com.ss.builder.editor.impl.control.impl;
 
 import com.ss.builder.annotation.FxThread;
 import com.ss.builder.editor.FileEditor;
+import com.ss.builder.editor.event.KeyActionFileEditorEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The control to save input state of {@link FileEditor}.
+ * The control to handle FX input of {@link FileEditor}.
  *
  * @author JavaSaBr
  */
-public class InputStateEditorControl extends AbstractEditorControl<FileEditor> {
+public class FxInputEditorControl extends AbstractEditorControl<FileEditor> {
 
     public static final String PROP_BUTTON_LEFT_DOWN = "InputStateEditorControl.buttonLeftDown";
     public static final String PROP_BUTTON_RIGHT_DOWN = "InputStateEditorControl.buttonRightDown";
     public static final String PROP_BUTTON_MIDDLE_DOWN = "InputStateEditorControl.buttonMiddleDown";
+    public static final String PROP_CONTROL_DOWN = "InputStateEditorControl.controlDown";
+    public static final String PROP_ALT_DOWN = "InputStateEditorControl.altDown";
+    public static final String PROP_SHIFT_DOWN = "InputStateEditorControl.shiftDown";
 
     /**
-     * True if the left button pressed.
+     * True if the left button is pressed.
      */
     private boolean buttonLeftDown;
 
     /**
-     * True if the right button pressed.
+     * True if the right button is pressed.
      */
     private boolean buttonRightDown;
 
     /**
-     * True if the middle button pressed.
+     * True if the middle button is pressed.
      */
     private boolean buttonMiddleDown;
 
-    public InputStateEditorControl(@NotNull FileEditor fileEditor) {
+    /**
+     * True if the control button is pressed.
+     */
+    private boolean controlDown;
+
+    /**
+     * True if the alt button is pressed.
+     */
+    private boolean altDown;
+
+    /**
+     * True if the shift button is pressed.
+     */
+    private boolean shiftDown;
+
+    public FxInputEditorControl(@NotNull FileEditor fileEditor) {
         super(fileEditor);
 
     }
@@ -45,6 +65,8 @@ public class InputStateEditorControl extends AbstractEditorControl<FileEditor> {
 
         rootPage.setOnMouseReleased(this::processMouseReleased);
         rootPage.setOnMousePressed(this::processMousePressed);
+        rootPage.setOnKeyPressed(this::handleKeyPressed);
+        rootPage.setOnKeyReleased(this::handleKeyReleased);
     }
 
     /**
@@ -67,6 +89,35 @@ public class InputStateEditorControl extends AbstractEditorControl<FileEditor> {
         buttonMiddleDown = mouseEvent.isSecondaryButtonDown();
     }
 
+    /**
+     * Handle the key released event.
+     */
+    @FxThread
+    private void handleKeyReleased(@NotNull KeyEvent keyEvent) {
+        updateKeyState(keyEvent);
+
+        fileEditor.notify(new KeyActionFileEditorEvent(this, keyEvent.getCode(), false,
+                controlDown, shiftDown, buttonMiddleDown));
+    }
+
+    /**
+     * Handle the key pressed event.
+     */
+    @FxThread
+    private void handleKeyPressed(@NotNull KeyEvent keyEvent) {
+        updateKeyState(keyEvent);
+
+        fileEditor.notify(new KeyActionFileEditorEvent(this, keyEvent.getCode(), true,
+                controlDown, shiftDown, buttonMiddleDown));
+    }
+
+    @FxThread
+    private void updateKeyState(@NotNull KeyEvent keyEvent) {
+        shiftDown = keyEvent.isShiftDown();
+        controlDown = keyEvent.isControlDown();
+        altDown = keyEvent.isAltDown();
+    }
+
     @Override
     @FxThread
     public boolean getBooleanProperty(@NotNull String propertyId) {
@@ -78,6 +129,12 @@ public class InputStateEditorControl extends AbstractEditorControl<FileEditor> {
                 return buttonMiddleDown;
             case PROP_BUTTON_RIGHT_DOWN:
                 return buttonRightDown;
+            case PROP_ALT_DOWN:
+                return altDown;
+            case PROP_SHIFT_DOWN:
+                return shiftDown;
+            case PROP_CONTROL_DOWN:
+                return controlDown;
         }
 
         return false;
@@ -91,6 +148,9 @@ public class InputStateEditorControl extends AbstractEditorControl<FileEditor> {
             case PROP_BUTTON_LEFT_DOWN:
             case PROP_BUTTON_MIDDLE_DOWN:
             case PROP_BUTTON_RIGHT_DOWN:
+            case PROP_ALT_DOWN:
+            case PROP_SHIFT_DOWN:
+            case PROP_CONTROL_DOWN:
                 return true;
         }
 

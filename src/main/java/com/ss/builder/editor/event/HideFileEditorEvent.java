@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class HideFileEditorEvent extends AbstractFileEditorEvent {
+public class HideFileEditorEvent extends WithoutSourceFileEditorEvent {
 
     private static final HideFileEditorEvent INSTANCE = new HideFileEditorEvent();
 

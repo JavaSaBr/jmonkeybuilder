@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class ShowedFileEditorEvent extends AbstractFileEditorEvent {
+public class ShowedFileEditorEvent extends WithoutSourceFileEditorEvent {
 
     private static final ShowedFileEditorEvent INSTANCE = new ShowedFileEditorEvent();
 

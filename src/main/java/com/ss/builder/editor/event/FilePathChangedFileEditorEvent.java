@@ -10,7 +10,7 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class FilePathChangedFileEditorEvent extends AbstractFileEditorEvent {
+public class FilePathChangedFileEditorEvent extends AbstractFileEditorEvent<Object> {
 
     /**
      * The previous file path.
@@ -24,7 +24,8 @@ public class FilePathChangedFileEditorEvent extends AbstractFileEditorEvent {
     @NotNull
     private final Path newFile;
 
-    public FilePathChangedFileEditorEvent(@NotNull Path prevFile, @NotNull Path newFile) {
+    public FilePathChangedFileEditorEvent(@NotNull Object source, @NotNull Path prevFile, @NotNull Path newFile) {
+        super(source);
         this.prevFile = prevFile;
         this.newFile = newFile;
     }

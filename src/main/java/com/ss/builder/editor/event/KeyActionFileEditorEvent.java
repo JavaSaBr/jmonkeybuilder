@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class KeyActionFileEditorEvent extends AbstractFileEditorEvent {
+public class KeyActionFileEditorEvent extends AbstractFileEditorEvent<Object> {
 
     @NotNull
     private final KeyCode keyCode;
@@ -20,12 +20,14 @@ public class KeyActionFileEditorEvent extends AbstractFileEditorEvent {
     private final boolean isButtonMiddleDown;
 
     public KeyActionFileEditorEvent(
+            @NotNull Object source,
             @NotNull KeyCode keyCode,
             boolean isPressed,
             boolean isControlDown,
             boolean isShiftDown,
             boolean isButtonMiddleDown
     ) {
+        super(source);
         this.keyCode = keyCode;
         this.isPressed = isPressed;
         this.isControlDown = isControlDown;
