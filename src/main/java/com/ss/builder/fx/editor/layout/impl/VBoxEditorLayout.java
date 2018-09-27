@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class SimpleEditorLayout extends AbstractEditorLayout<VBox, VBox> {
+public class VBoxEditorLayout extends AbstractEditorLayout<VBox, VBox> {
 
-    public SimpleEditorLayout() {
+    public VBoxEditorLayout() {
     }
 
     @Override

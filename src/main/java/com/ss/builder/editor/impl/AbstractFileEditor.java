@@ -194,7 +194,9 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
      * @param layout the editor's layout.
      */
     @FromAnyThread
-    protected abstract void buildUi(@NotNull L layout);
+    protected void buildUi(@NotNull L layout) {
+        editorUiParts.forEach(layout, EditorUiPart::buildUi);
+    }
 
     /**
      * Return true if need to listen to events from root page of this editor.

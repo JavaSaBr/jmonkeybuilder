@@ -6,7 +6,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource.Status;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.JmeThread;
-import com.ss.builder.editor.impl.AudioViewerEditor;
+import com.ss.builder.editor.impl.audio.AudioViewerEditor;
 import com.ss.builder.jme.editor.part3d.impl.AbstractExtendableEditor3dPart;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.rlib.common.util.ObjectUtils;

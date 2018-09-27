@@ -2,6 +2,7 @@ package com.ss.builder.editor;
 
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.editor.impl.*;
+import com.ss.builder.editor.impl.audio.AudioViewerEditor;
 import com.ss.builder.editor.impl.material.MaterialFileEditor;
 import com.ss.builder.editor.impl.model.ModelFileEditor;
 import com.ss.builder.editor.impl.scene.SceneFileEditor;
