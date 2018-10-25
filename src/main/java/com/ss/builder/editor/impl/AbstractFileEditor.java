@@ -415,8 +415,8 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
         }
     }
 
-    @FromAnyThread
     @Override
+    @FromAnyThread
     public void notify(@NotNull Editor3dPartEvent event) {
 
     }

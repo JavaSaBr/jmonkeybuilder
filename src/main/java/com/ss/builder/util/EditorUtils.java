@@ -87,7 +87,8 @@ public abstract class EditorUtils {
 
     public static void setJmeApplication(@NotNull JmeApplication jmeApplication) {
 
-        Class<?> callerClass = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE)
+        Class<?> callerClass = StackWalker
+                .getInstance(Option.RETAIN_CLASS_REFERENCE)
                 .getCallerClass();
 
         if (callerClass != JmeApplication.class) {
@@ -99,7 +100,8 @@ public abstract class EditorUtils {
 
     public static void setJfxApplication(@NotNull JfxApplication jfxApplication) {
 
-        Class<?> callerClass = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE)
+        Class<?> callerClass = StackWalker
+                .getInstance(Option.RETAIN_CLASS_REFERENCE)
                 .getCallerClass();
 
         if (callerClass != JfxApplication.class) {
@@ -353,8 +355,9 @@ public abstract class EditorUtils {
 
             var builder = new StringBuilder("copy\n");
 
-            paths.forEach(builder, (path, b) ->
-                    b.append(path.toUri().toASCIIString()).append('\n'));
+            paths.forEach(path -> builder.append(path.toUri()
+                    .toASCIIString())
+                    .append('\n'));
 
             builder.delete(builder.length() - 1, builder.length());
 
