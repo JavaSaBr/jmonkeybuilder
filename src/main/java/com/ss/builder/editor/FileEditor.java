@@ -7,6 +7,7 @@ import com.ss.builder.editor.event.FileEditorEvent;
 import com.ss.builder.fx.editor.layout.EditorLayout;
 import com.ss.builder.fx.editor.part.ui.EditorUiPart;
 import com.ss.builder.jme.editor.part3d.Editor3dPart;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
 import com.ss.rlib.common.util.array.Array;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.Event;
@@ -124,8 +125,16 @@ public interface FileEditor {
      *
      * @param event the editor's event.
      */
-    @FxThread
+    @FromAnyThread
     void notify(@NotNull FileEditorEvent event);
+
+    /**
+     * Notify this editor about the happened event.
+     *
+     * @param event the editor's event.
+     */
+    @FromAnyThread
+    void notify(@NotNull Editor3dPartEvent event);
 
     /**
      * Get the editor's descriptor.

@@ -7,6 +7,7 @@ import com.ss.builder.analytics.google.GAnalytics;
 import com.ss.builder.annotation.BackgroundThread;
 import com.ss.builder.annotation.FromAnyThread;
 import com.ss.builder.annotation.FxThread;
+import com.ss.builder.annotation.JmeThread;
 import com.ss.builder.editor.FileEditor;
 import com.ss.builder.editor.event.*;
 import com.ss.builder.editor.impl.control.EditorControl;
@@ -17,12 +18,15 @@ import com.ss.builder.fx.event.FxEventManager;
 import com.ss.builder.fx.event.impl.FileChangedEvent;
 import com.ss.builder.fx.util.UiUtils;
 import com.ss.builder.jme.editor.part3d.Editor3dPart;
+import com.ss.builder.jme.editor.part3d.ExtendableEditor3dPart;
+import com.ss.builder.jme.editor.part3d.event.Editor3dPartEvent;
 import com.ss.builder.manager.ExecutorManager;
 import com.ss.builder.util.EditorUtils;
 import com.ss.rlib.common.logging.Logger;
 import com.ss.rlib.common.logging.LoggerManager;
 import com.ss.rlib.common.util.FileUtils;
 import com.ss.rlib.common.util.array.Array;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
@@ -373,8 +377,28 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
     }
 
     @Override
-    @FxThread
+    @FromAnyThread
     public void notify(@NotNull FileEditorEvent event) {
+
+        if (Platform.isFxApplicationThread()) {
+            notifyImpl(event);
+        } else {
+            executorManager.addFxTask(() -> notifyImpl(event));
+        }
+
+        if (event instanceof Editor3dPartEvent) {
+
+            Editor3dPartEvent editor3dPartEvent = (Editor3dPartEvent) event;
+
+            editorUiParts.stream()
+                    .filter(ExtendableEditor3dPart.class::isInstance)
+                    .map(ExtendableEditor3dPart.class::cast)
+                    .forEach(part -> part.notify(editor3dPartEvent));
+        }
+    }
+
+    @JmeThread
+    protected void notifyImpl(@NotNull FileEditorEvent event) {
 
         if (event instanceof ShowedFileEditorEvent) {
             notifyShowed();
@@ -389,6 +413,12 @@ public abstract class AbstractFileEditor<L extends EditorLayout> implements File
             var movedEvent = (FileRenamedFileEditorEvent) event;
             notifyFileRenamed(movedEvent.getPrevFile(), movedEvent.getNewFile());
         }
+    }
+
+    @FromAnyThread
+    @Override
+    public void notify(@NotNull Editor3dPartEvent event) {
+
     }
 
     /**
